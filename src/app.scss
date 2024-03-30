@@ -1,0 +1,17 @@
+:root {
+    --bg0: #09090b;
+    --bg1: #151518;
+    --textColor: #ffffff;
+    --borderColor: #27272a;
+}
+
+:root {
+    background-color: var(--bg0);
+    font-family: 'Geist Variable';
+	color: var(--textColor);
+    font-size: 15px;
+}
+
+body {
+    margin: 0;
+}
