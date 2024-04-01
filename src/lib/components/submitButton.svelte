@@ -187,6 +187,13 @@
 		<Drawer.Content>
 			<Drawer.Header class="text-left">
 				<Drawer.Title>Submit</Drawer.Title>
+				<Alert.Root>
+					<ExclamationTriangle class="h-4 w-4" />
+					<Alert.Title>Attention!</Alert.Title>
+					<Alert.Description
+						>Read the <a href="/rules"><u>rules</u></a> before submitting.</Alert.Description
+					>
+				</Alert.Root>
 			</Drawer.Header>
 			<form class="grid items-start gap-4 px-4">
 				<div class="grid gap-2">
@@ -218,7 +225,6 @@
 					</Select.Root>
 					<Label for="comment">Comment</Label>
 					<Input id="comment" bind:value={submission.comment} />
-
 				</div>
 			</form>
 			<Drawer.Footer class="pt-2">
