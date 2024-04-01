@@ -1,5 +1,6 @@
 <script>
 	import * as Tabs from '$lib/components/ui/tabs';
+	import * as Popover from '$lib/components/ui/popover';
 	import { Button } from '$lib/components/ui/button';
 </script>
 
@@ -18,7 +19,12 @@
 			<Tabs.Trigger value="account">Levels</Tabs.Trigger>
 			<Tabs.Trigger value="password">Leaderboard</Tabs.Trigger>
 		</Tabs.List>
-		<Button variant="outline">Filter</Button>
+		<Popover.Root>
+			<Popover.Trigger>
+				<Button variant='outline'>Filter</Button>
+			</Popover.Trigger>
+			<Popover.Content>Place content for the popover here.</Popover.Content>
+		</Popover.Root>
 	</div>
 
 	<Tabs.Content value="account">Make changes to your account here.</Tabs.Content>
