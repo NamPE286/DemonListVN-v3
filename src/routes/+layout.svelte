@@ -5,7 +5,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
-	import { ModeWatcher, resetMode, setMode, toggleMode } from 'mode-watcher';
+	import { ModeWatcher, toggleMode } from 'mode-watcher';
 	import Search from '$lib/icons/search.svelte';
 
 	const links = [
@@ -19,12 +19,14 @@
 	let loggedIn = false;
 </script>
 
-<ModeWatcher defaultMode='dark'/>
+<ModeWatcher defaultMode='system'/>
 
 <div class="navbarWrapper">
 	<div class="right">
 		<a href="/" class="logo">
-			<img src="/favicon.png" alt="logo" id="logo" />
+			<div class="logo-img-wrapper">
+				<img src="/favicon.png" alt="logo" />
+			</div>
 			<span><b>Demon List VN</b></span>
 		</a>
 		{#each links as link}
@@ -53,11 +55,6 @@
 <slot />
 
 <style lang="scss">
-	#logo {
-		-webkit-filter: invert(1);
-		filter: invert(1);
-	}
-
 	.filler {
 		width: 100%;
 		height: 55px;
@@ -67,13 +64,13 @@
 		position: fixed;
 		width: 100%;
 		height: 55px;
-		background-color: var(--background);
+		background-color: var(--muted-background);
 		overflow: hidden;
 		display: flex;
 		align-items: center;
 		box-sizing: border-box;
 		padding-inline: 30px;
-		border-bottom: 1px solid var(--border);
+		border-bottom: 1px solid var(--border1);
 
 		.right {
 			display: flex;
