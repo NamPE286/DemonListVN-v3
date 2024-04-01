@@ -6,7 +6,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { user } from '$lib/client';
-	import Reader from 'svelte-radix/Reader.svelte';
+	import ExclamationTriangle from 'svelte-radix/ExclamationTriangle.svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 
 	const defaultValue = {
@@ -65,7 +65,7 @@
 			<Dialog.Title>Submit</Dialog.Title>
 		</Dialog.Header>
 		<Alert.Root>
-			<Reader class="h-4 w-4" />
+			<ExclamationTriangle class="h-4 w-4" />
 			<Alert.Title>Attention!</Alert.Title>
 			<Alert.Description
 				>Read the <a href="/rules"><u>rules</u></a> before submitting.</Alert.Description
