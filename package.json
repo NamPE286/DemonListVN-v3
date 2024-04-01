@@ -34,6 +34,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@supabase/supabase-js": "^2.41.1",
 		"bits-ui": "^0.21.1",
 		"clsx": "^2.1.0",
 		"mode-watcher": "^0.3.0",
