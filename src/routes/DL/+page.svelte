@@ -3,6 +3,10 @@
 	import { Button } from '$lib/components/ui/button';
 </script>
 
+<svelte:head>
+	<title>Demon List - Demon List VN</title>
+</svelte:head>
+
 <div class="title">
 	<h1>Demon List</h1>
 	<p>Hardest level beaten by Vietnamese</p>
@@ -26,13 +30,15 @@
 		display: flex;
 		justify-content: center;
 		gap: 10px;
+		margin-bottom: 25px;
 	}
+
 	.title {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		height: 200px;
 		margin-top: 120px;
+		margin-bottom: 50px;
 	}
 
 	h1 {
@@ -43,5 +49,15 @@
 	p {
 		font-size: 1.25rem;
 		color: var(--textColor2);
+	}
+
+	@media screen and (max-width: 900px) {
+		h1 {
+			font-size: 1.875rem;
+		}
+
+		.title {
+			margin-top: 80px;
+		}
 	}
 </style>
