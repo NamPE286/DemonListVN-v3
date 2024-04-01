@@ -2,14 +2,19 @@
 	import '../app.pcss';
 	import '../app.scss';
 	import 'non.geist';
+	import { resetMode, setMode, ModeWatcher } from 'mode-watcher';
+
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
 	import HamburgerMenu from 'svelte-radix/HamburgerMenu.svelte';
-	import { resetMode, setMode, ModeWatcher } from 'mode-watcher';
+	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
+
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
+
+	import Search from '$lib/components/search.svelte';
+
 	import supabase from '$lib/client/supabase';
 	import { user } from '$lib/client';
 
@@ -21,6 +26,9 @@
 		{ route: '/about', name: 'About' }
 	];
 
+	let searchQuery = '';
+	let searchToggled = false;
+
 	async function signIn() {
 		supabase.auth.signInWithOAuth({
 			provider: 'google'
@@ -29,6 +37,7 @@
 </script>
 
 <ModeWatcher defaultMode="system" />
+<Search bind:toggled={searchToggled} bind:value={searchQuery} />
 
 <div class="navbarWrapper">
 	<div class="right">
@@ -61,7 +70,7 @@
 		</div>
 	</div>
 	<div class="left">
-		<button class="clickable" on:click={() => console.log('ok')}>
+		<button class="clickable" on:click={() => searchToggled = true}>
 			<MagnifyingGlass />
 		</button>
 		{#if !$user.loggedIn}
