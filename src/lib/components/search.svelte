@@ -1,60 +1,95 @@
 <script lang="ts">
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Button } from '$lib/components/ui/button/index.js';
-	import { MagnifyingGlass } from 'svelte-radix';
-    import { fade } from 'svelte/transition';
+	import * as Command from '$lib/components/ui/command';
+	import * as Avatar from '$lib/components/ui/avatar';
 
 	export let toggled: boolean;
 	export let value: string = '';
+
+	let result: any = {
+		levels: [],
+		players: []
+	};
+
+	let state = 0;
+
+	$: toggled && onChange();
+
+	function onChange() {
+		result = {
+			levels: [],
+			players: []
+		};
+		value = '';
+		state = 0;
+	}
+
+	async function search() {
+		if (value == '') {
+			return;
+		}
+
+		state = 1;
+
+		fetch(`${import.meta.env.VITE_API_URL}/search/${value}`)
+			.then((res) => res.json())
+			.then((res) => {
+				result = res;
+				state = 2;
+			});
+	}
 </script>
 
-{#if toggled}
-	<!-- svelte-ignore a11y-click-events-have-key-events -->
-	<!-- svelte-ignore a11y-no-static-element-interactions -->
-	<div class="bg" transition:fade={{ duration: 150 }} on:click={() => toggled = false}/>
+<svelte:window
+	on:keydown={(e) => {
+		if (!toggled) {
+			return;
+		}
 
-	<div class="wrapper" transition:fade={{ duration: 150 }}>
-		<div class="searchWrapper">
-			<div class="inputWrapper">
-				<Input bind:value placeholder="Search" />
-			</div>
-			<Button type="submit">
-				<MagnifyingGlass size={20} />
-			</Button>
-		</div>
-	</div>
-{/if}
+		if (e.key == 'Enter') {
+			search();
+		}
+	}}
+/>
+
+<Command.Dialog bind:open={toggled}>
+	<Command.Input bind:value placeholder="Type and press Enter to search..." />
+	<Command.List>
+		{#if state != 0}
+			<Command.Empty>No results found.</Command.Empty>
+			{#if result.levels.length}
+				<Command.Group heading="Levels">
+					{#each result.levels as item}
+						<a href={`/level/${item.data.id}`}>
+							<Command.Item>{item.data.name} by {item.data.creator}</Command.Item>
+						</a>
+					{/each}
+				</Command.Group>
+			{/if}
+			{#if result.players.length}
+				<Command.Separator />
+				<Command.Group heading="Players">
+					{#each result.players as item}
+						<a href={`/player/${item.data.uid}`}>
+							<Command.Item>
+								<Avatar.Root>
+									<Avatar.Image
+										src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${item.data.uid}.jpg`}
+										alt="@shadcn"
+									/>
+									<Avatar.Fallback>{item.data.name[0]}</Avatar.Fallback>
+								</Avatar.Root>
+								<span class='playerName'>{item.data.name}</span>
+							</Command.Item>
+						</a>
+					{/each}
+				</Command.Group>
+			{/if}
+		{/if}
+	</Command.List>
+</Command.Dialog>
 
 <style lang="scss">
-	.bg {
-		position: fixed;
-		z-index: 10;
-		height: 100%;
-		width: 100%;
-		backdrop-filter: blur(10px);
-        
-	}
-
-	.wrapper {
-		position: fixed;
-		z-index: 11;
-		display: flex;
-		justify-content: center;
-		box-sizing: border-box;
-		padding-top: 50px;
-        left: 50%;
-        transform: translateX(-50%);
-	}
-
-	.inputWrapper {
-		background-color: var(--background);
-        border-radius: var(--radius);
-		width: 350px;
-        height: fit-content;
-	}
-
-	.searchWrapper {
-		display: flex;
-		gap: 10px;
+	.playerName {
+		margin-left: 10px;
 	}
 </style>

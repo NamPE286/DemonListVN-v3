@@ -8,7 +8,8 @@
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
-    --popover: 0 0% 100%;;
+    --popover: 0 0% 100%;
+    ;
     --popover-foreground: 240 10% 3.9%;
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
@@ -52,10 +53,9 @@
     --textColor: black;
     --textColor1: #272727;
     --textColor2: rgb(95, 95, 95);
-
     --border1: rgb(236, 236, 236);
 
-    .logo-img-wrapper {
+    --inverted: 1 .logo-img-wrapper {
       filter: invert(1);
     }
   }
@@ -64,8 +64,8 @@
     --textColor: white;
     --textColor1: #d4d4d4;
     --textColor2: rgb(155, 155, 155);
-
     --border1: rgb(31, 31, 31);
+    --inverted: 0;
 
     .logo-img-wrapper {
       filter: invert(0);

@@ -109,8 +109,8 @@
 				</Select.Root>
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
-				<Label for="name" class="text-right">Comment (optional)</Label>
-				<Input id="name" bind:value={submission.comment} class="col-span-3" />
+				<Label for="name" class="text-right">Comment</Label>
+				<Input id="name" bind:value={submission.comment} placeholder='optional' class="col-span-3" />
 			</div>
 		</div>
 		<Dialog.Footer>
