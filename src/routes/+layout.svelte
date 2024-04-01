@@ -34,6 +34,7 @@
 			provider: 'google'
 		});
 	}
+
 </script>
 
 <ModeWatcher defaultMode="system" />
@@ -70,16 +71,35 @@
 		</div>
 	</div>
 	<div class="left">
-		<button class="clickable" on:click={() => searchToggled = true}>
+		<button class="clickable" on:click={() => (searchToggled = true)}>
 			<MagnifyingGlass />
 		</button>
 		{#if !$user.loggedIn}
 			<Button variant="outline" on:click={signIn}>Sign In</Button>
 		{:else}
-			<Avatar.Root>
-				<Avatar.Image src={$user.data.avatar} alt="@shadcn" />
-				<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
-			</Avatar.Root>
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger asChild let:builder>
+					<Button
+						variant="outline"
+						size="icon"
+						class="overflow-hidden rounded-full"
+						builders={[builder]}
+					>
+						<Avatar.Root>
+							<Avatar.Image src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}.jpg`} alt="@shadcn" />
+							<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
+						</Avatar.Root>
+					</Button>
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content align="end">
+					<DropdownMenu.Label>{$user.data.name}</DropdownMenu.Label>
+					<DropdownMenu.Separator />
+					<DropdownMenu.Item>My profile</DropdownMenu.Item>
+					<DropdownMenu.Item>Settings</DropdownMenu.Item>
+					<DropdownMenu.Separator />
+					<DropdownMenu.Item>Sign out</DropdownMenu.Item>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
 		{/if}
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger asChild let:builder>
