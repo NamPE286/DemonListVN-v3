@@ -9,18 +9,19 @@
 	import HamburgerMenu from 'svelte-radix/HamburgerMenu.svelte';
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 
-	import { Button } from '$lib/components/ui/button/index.js';
+	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
 
 	import Search from '$lib/components/search.svelte';
+	import SubmitButton from '$lib/components/submitButton.svelte';
 
 	import supabase from '$lib/client/supabase';
 	import { user } from '$lib/client';
 
 	const links = [
 		{ route: '/DL', name: 'Demon List' },
-		{ route: '/PL', name: 'Platfromer List' },
+		{ route: '/PL', name: 'Platformer List' },
 		{ route: '/FL', name: 'Featured List' },
 		{ route: '/players', name: 'Players' },
 		{ route: '/about', name: 'About' }
@@ -29,12 +30,16 @@
 	let searchQuery = '';
 	let searchToggled = false;
 
-	async function signIn() {
+	function signIn() {
 		supabase.auth.signInWithOAuth({
 			provider: 'google'
 		});
 	}
 
+	function signOut() {
+		supabase.auth.signOut();
+		window.location.reload();
+	}
 </script>
 
 <ModeWatcher defaultMode="system" />
@@ -77,6 +82,7 @@
 		{#if !$user.loggedIn}
 			<Button variant="outline" on:click={signIn}>Sign In</Button>
 		{:else}
+			<SubmitButton />
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger asChild let:builder>
 					<Button
@@ -86,7 +92,10 @@
 						builders={[builder]}
 					>
 						<Avatar.Root>
-							<Avatar.Image src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}.jpg`} alt="@shadcn" />
+							<Avatar.Image
+								src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}.jpg`}
+								alt="@shadcn"
+							/>
 							<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
 						</Avatar.Root>
 					</Button>
@@ -97,7 +106,7 @@
 					<DropdownMenu.Item>My profile</DropdownMenu.Item>
 					<DropdownMenu.Item>Settings</DropdownMenu.Item>
 					<DropdownMenu.Separator />
-					<DropdownMenu.Item>Sign out</DropdownMenu.Item>
+					<DropdownMenu.Item on:click={signOut}>Sign out</DropdownMenu.Item>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		{/if}
