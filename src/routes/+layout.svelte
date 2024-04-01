@@ -7,7 +7,6 @@
 	import Moon from 'svelte-radix/Moon.svelte';
 	import { ModeWatcher, resetMode, setMode, toggleMode } from 'mode-watcher';
 	import Search from '$lib/icons/search.svelte';
-	import { onMount } from 'svelte';
 
 	const links = [
 		{ route: '/DL', name: 'Demon List' },
