@@ -5,16 +5,6 @@
 
 	export let level: any;
 	export let type: string;
-
-	function getPoint() {
-		if (type == 'dl') {
-			return level.data.rating;
-		}
-
-		if (type == 'fl') {
-			return level.data.flPt;
-		}
-	}
 </script>
 
 <div class="level">
@@ -35,11 +25,15 @@
 							<div class="top">#{level.data[`${type}Top`]}</div>
 							<div class="info">
 								<div class="levelName">
-									<div class='name'>
+									<div class="name">
 										{level.data.name}
 									</div>
 									<div class="pt">
-										{getPoint()}pt
+										{#if type == 'dl'}
+											{level.data.rating}pt
+										{:else if type == 'dl'}
+											{level.data.flPt}pt
+										{/if}
 									</div>
 								</div>
 								<div class="creator">by {level.data.creator}</div>
