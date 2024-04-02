@@ -54,12 +54,6 @@
 				}}>Leaderboard</Tabs.Trigger
 			>
 		</Tabs.List>
-		<Popover.Root>
-			<Popover.Trigger>
-				<Button variant="outline">Filter</Button>
-			</Popover.Trigger>
-			<Popover.Content>Place content for the popover here.</Popover.Content>
-		</Popover.Root>
 	</div>
 </Tabs.Root>
 

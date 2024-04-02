@@ -1,32 +1,24 @@
-<script>
+<script lang="ts">
 	import * as Tabs from '$lib/components/ui/tabs';
-	import * as Popover from '$lib/components/ui/popover';
 	import * as Pagination from '$lib/components/ui/pagination';
-	import { Button } from '$lib/components/ui/button';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
+	import type { PageData } from './$types';
 
-	let currentPage = new URLSearchParams(window.location.search).get('page') || 1;
-	let totalCount = 1;
-	let pageSize = 4;
+	export let data: PageData;
 
-	async function getTotalPage() {
-		const query = new URLSearchParams({
-			start: '0',
-			end: '0',
-			sortBy: 'dlTop',
-			ascending: 'false'
-		});
+	let curPage = -1;
 
-		fetch(`${import.meta.env.VITE_API_URL}/list/DL?${query.toString()}`)
-			.then((res) => res.json())
-			.then((res) => {
-				totalCount = res[0].data.dlTop;
-			});
+	async function update() {
+		curPage = parseInt($page.url.searchParams.get('page') || '1');
 	}
 
-	onMount(() => {
-		getTotalPage();
+	$: $page.url, update();
+
+	onMount(async () => {
+		document.getElementById(`page${curPage}`)?.click();
+		console.log(data)
 	});
 </script>
 
@@ -55,16 +47,10 @@
 				}}>Leaderboard</Tabs.Trigger
 			>
 		</Tabs.List>
-		<Popover.Root>
-			<Popover.Trigger>
-				<Button variant="outline">Filter</Button>
-			</Popover.Trigger>
-			<Popover.Content>Place content for the popover here.</Popover.Content>
-		</Popover.Root>
 	</div>
 </Tabs.Root>
 
-<Pagination.Root count={totalCount} perPage={pageSize} let:pages let:currentPage>
+<Pagination.Root count={data.count} perPage={30} let:pages let:currentPage>
 	<Pagination.Content>
 		<Pagination.Item>
 			<Pagination.PrevButton on:click={() => goto(`/DL?page=${currentPage - 1}`)} />
@@ -80,6 +66,7 @@
 						{page}
 						isActive={currentPage == page.value}
 						on:click={() => goto(`/DL?page=${page.value}`)}
+						id={`page${page.value}`}
 					>
 						{page.value}
 					</Pagination.Link>
