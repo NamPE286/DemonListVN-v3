@@ -1,28 +1,28 @@
-async function getTotalPage(fetch: any ) {
+async function getTotalPage(fetch: any) {
     const query = new URLSearchParams({
         start: '0',
         end: '0',
-        sortBy: 'dlTop',
+        sortBy: 'flTop',
         ascending: 'false'
     });
 
     const res = await (
-        await fetch(`${import.meta.env.VITE_API_URL}/list/DL?${query.toString()}`)
+        await fetch(`${import.meta.env.VITE_API_URL}/list/FL?${query.toString()}`)
     ).json();
 
-    return res[0].data.dlTop;
+    return res[0].data.flTop;
 }
 
 async function getLevels(fetch: any, page: number) {
     const query = new URLSearchParams({
         start: String((page - 1) * 20),
         end: String(page * 20 - 1),
-        sortBy: 'dlTop',
+        sortBy: 'flTop',
         ascending: 'true'
     });
 
     const res = await (
-        await fetch(`${import.meta.env.VITE_API_URL}/list/DL?${query.toString()}`)
+        await fetch(`${import.meta.env.VITE_API_URL}/list/FL?${query.toString()}`)
     ).json();
 
     return res

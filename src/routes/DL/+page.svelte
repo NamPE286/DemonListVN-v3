@@ -1,9 +1,6 @@
 <script lang="ts">
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Pagination from '$lib/components/ui/pagination';
-	import * as Card from '$lib/components/ui/card';
-	import * as ContextMenu from '$lib/components/ui/context-menu';
-	import { toast } from 'svelte-sonner';
 
 	import BigTitle from '$lib/components/bigTitle.svelte';
 	import LevelCard from '$lib/components/levelCard.svelte';
@@ -16,6 +13,7 @@
 	export let data: PageData;
 
 	let curPage = -1;
+	let calibrated = false;
 
 	async function update() {
 		curPage = parseInt($page.url.searchParams.get('page') || '1');
@@ -25,7 +23,6 @@
 
 	onMount(async () => {
 		document.getElementById(`page${curPage}`)?.click();
-		console.log(data);
 	});
 </script>
 
@@ -57,7 +54,7 @@
 <div class="levelsWrapper">
 	<div class="levels">
 		{#each data.levels as level}
-		<LevelCard level={level} type='dl' />
+			<LevelCard {level} type="dl" />
 		{/each}
 	</div>
 </div>
@@ -77,7 +74,12 @@
 					<Pagination.Link
 						{page}
 						isActive={currentPage == page.value}
-						on:click={() => goto(`/DL?page=${page.value}`)}
+						on:click={() => {
+							if (calibrated) {
+								goto(`/DL?page=${page.value}`);
+								calibrated = true;
+							}
+						}}
 						id={`page${page.value}`}
 					>
 						{page.value}

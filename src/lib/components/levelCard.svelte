@@ -12,7 +12,7 @@
 		}
 
 		if (type == 'fl') {
-			return level.data.flTop;
+			return level.data.flPt;
 		}
 	}
 </script>

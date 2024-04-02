@@ -13,7 +13,7 @@
 	import { Toaster } from '$lib/components/ui/sonner';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import { LoadingBar } from "svelte-loading-bar"
+	import { LoadingBar } from 'svelte-loading-bar';
 
 	import Search from '$lib/components/search.svelte';
 	import SubmitButton from '$lib/components/submitButton.svelte';
@@ -24,8 +24,8 @@
 
 	const links = [
 		{ route: '/DL', name: 'Demon List' },
-		{ route: '/PL', name: 'Platformer List' },
 		{ route: '/FL', name: 'Featured List' },
+		{ route: '/PL', name: 'Platformer List' },
 		{ route: '/players', name: 'Players' },
 		{ route: '/about', name: 'About' }
 	];
@@ -61,7 +61,7 @@
 		</a>
 		<div class="links">
 			{#each links as link}
-				<a href={link.route} class="link">{link.name}</a>
+				<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
 			{/each}
 		</div>
 		<div class="menu">
