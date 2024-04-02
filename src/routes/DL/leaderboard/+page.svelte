@@ -63,7 +63,7 @@
 						{page}
 						isActive={currentPage == page.value}
 						on:click={() => {
-							if (calibrated) {
+							if (!calibrated) {
 								calibrated = true;
 							} else {
 								goto(`/DL/leaderboard?page=${page.value}`);
