@@ -6,9 +6,8 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 
-	let currentPage = new URLSearchParams(window.location.search).get('page') || 1;
 	let totalCount = 1;
-	let pageSize = 4;
+	let pageSize = 30;
 
 	async function getTotalPage() {
 		const query = new URLSearchParams({
@@ -39,7 +38,7 @@
 	<p>Hardest level beaten by Vietnamese</p>
 </div>
 
-<Tabs.Root value="levels" class="tabs">
+<Tabs.Root value="leaderboard" class="tabs">
 	<div class="tabsWrapper">
 		<Tabs.List>
 			<Tabs.Trigger
@@ -67,7 +66,7 @@
 <Pagination.Root count={totalCount} perPage={pageSize} let:pages let:currentPage>
 	<Pagination.Content>
 		<Pagination.Item>
-			<Pagination.PrevButton on:click={() => goto(`/DL?page=${currentPage - 1}`)} />
+			<Pagination.PrevButton />
 		</Pagination.Item>
 		{#each pages as page (page.key)}
 			{#if page.type === 'ellipsis'}
@@ -76,18 +75,14 @@
 				</Pagination.Item>
 			{:else}
 				<Pagination.Item isVisible={currentPage == page.value}>
-					<Pagination.Link
-						{page}
-						isActive={currentPage == page.value}
-						on:click={() => goto(`/DL?page=${page.value}`)}
-					>
+					<Pagination.Link {page} isActive={currentPage == page.value}>
 						{page.value}
 					</Pagination.Link>
 				</Pagination.Item>
 			{/if}
 		{/each}
 		<Pagination.Item>
-			<Pagination.NextButton on:click={() => goto(`/DL?page=${currentPage + 1}`)} />
+			<Pagination.NextButton />
 		</Pagination.Item>
 	</Pagination.Content>
 </Pagination.Root>

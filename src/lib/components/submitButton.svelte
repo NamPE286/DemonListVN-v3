@@ -12,23 +12,23 @@
 	import ExclamationTriangle from 'svelte-radix/ExclamationTriangle.svelte';
 	import { mediaQuery } from 'svelte-legos';
 
-	const defaultValue = {
+	const defaultValue: any = {
 		levelid: NaN,
 		userid: $user.data.uid,
 		progress: NaN,
 		refreshRate: '',
 		videoLink: '',
-		mobile: false,
+		mobile: null,
 		comment: ''
 	};
 
-	let submission = {
+	let submission: any = {
 		levelid: NaN,
 		userid: $user.data.uid,
 		progress: NaN,
 		refreshRate: '',
 		videoLink: '',
-		mobile: false,
+		mobile: null,
 		comment: ''
 	};
 
@@ -224,7 +224,7 @@
 						<Select.Input name="platform" value={true} />
 					</Select.Root>
 					<Label for="comment">Comment</Label>
-					<Input id="comment" bind:value={submission.comment} />
+					<Input id="comment" placeholder='optional' bind:value={submission.comment} />
 				</div>
 			</form>
 			<Drawer.Footer class="pt-2">
