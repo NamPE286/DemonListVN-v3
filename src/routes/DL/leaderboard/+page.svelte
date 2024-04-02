@@ -89,32 +89,4 @@
 		gap: 10px;
 		margin-bottom: 25px;
 	}
-
-	.title {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		margin-top: 120px;
-		margin-bottom: 50px;
-	}
-
-	h1 {
-		font-size: 3.75rem;
-		font-weight: 800;
-	}
-
-	p {
-		font-size: 1.25rem;
-		color: var(--textColor2);
-	}
-
-	@media screen and (max-width: 900px) {
-		h1 {
-			font-size: 1.875rem;
-		}
-
-		.title {
-			margin-top: 80px;
-		}
-	}
 </style>
