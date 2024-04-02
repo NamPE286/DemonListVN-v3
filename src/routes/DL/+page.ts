@@ -15,8 +15,8 @@ async function getTotalPage() {
 
 async function getLevels(page: number) {
     const query = new URLSearchParams({
-        start: String((page - 1) * 30),
-        end: String(page * 30 - 1),
+        start: String((page - 1) * 20),
+        end: String(page * 20 - 1),
         sortBy: 'dlTop',
         ascending: 'true'
     });

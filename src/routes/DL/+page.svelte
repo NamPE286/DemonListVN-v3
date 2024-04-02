@@ -28,7 +28,7 @@
 	<title>Demon List - Demon List VN</title>
 </svelte:head>
 
-<BigTitle value='Demon List' description='Hardest level beaten by Vietnamese'/>
+<BigTitle value="Demon List" description="Hardest level beaten by Vietnamese" />
 
 <Tabs.Root value="levels" class="tabs">
 	<div class="tabsWrapper">
@@ -79,7 +79,7 @@
 	</div>
 </div>
 
-<Pagination.Root count={data.count} perPage={30} let:pages let:currentPage>
+<Pagination.Root count={data.count} perPage={20} let:pages let:currentPage>
 	<Pagination.Content>
 		<Pagination.Item>
 			<Pagination.PrevButton on:click={() => goto(`/DL?page=${currentPage - 1}`)} />
@@ -132,6 +132,7 @@
 		grid-template-columns: 500px 500px;
 		margin-inline: auto;
 		margin-bottom: 20px;
+		padding-inline: 10px;
 		.level {
 			.levelInfo {
 				margin-bottom: -10px;
@@ -165,4 +166,9 @@
 		margin-bottom: 25px;
 	}
 
+	@media screen and (max-width: 1100px) {
+		.levels {
+			grid-template-columns: 100%;
+		}
+	}
 </style>
