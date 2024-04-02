@@ -2,10 +2,15 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Pagination from '$lib/components/ui/pagination';
 	import * as Card from '$lib/components/ui/card';
+	import * as ContextMenu from '$lib/components/ui/context-menu';
+	import { toast } from 'svelte-sonner';
+
+	import BigTitle from '$lib/components/bigTitle.svelte';
+	import LevelCard from '$lib/components/levelCard.svelte';
+
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import BigTitle from '$lib/components/bigTitle.svelte';
 	import type { PageData } from './$types';
 
 	export let data: PageData;
@@ -52,29 +57,7 @@
 <div class="levelsWrapper">
 	<div class="levels">
 		{#each data.levels as level}
-			<div class="level">
-				<Card.Root>
-					<Card.Content>
-						<a href="#!">
-							<img
-								src={`https://img.youtube.com/vi/${level.data.videoID}/0.jpg`}
-								alt=""
-								loading="lazy"
-								class="thumbnail"
-							/>
-						</a>
-						<a href="#!">
-							<div class="levelInfo">
-								<div class="top">#{level.data.dlTop}</div>
-								<div class="info">
-									<div class="levelName">{level.data.name}</div>
-									<div class="creator">{level.data.creator}</div>
-								</div>
-							</div></a
-						>
-					</Card.Content>
-				</Card.Root>
-			</div>
+		<LevelCard level={level} type='dl' />
 		{/each}
 	</div>
 </div>
@@ -114,17 +97,6 @@
 		justify-content: center;
 	}
 
-	.thumbnail {
-		height: 200px;
-		width: 500px;
-		object-fit: cover;
-		margin-top: 20px;
-		border-radius: var(--radius);
-		border: 1px solid var(--border1);
-		margin-bottom: 15px;
-		margin-inline: auto;
-	}
-
 	.levels {
 		display: grid;
 		align-items: center;
@@ -133,30 +105,6 @@
 		margin-inline: auto;
 		margin-bottom: 20px;
 		padding-inline: 10px;
-		.level {
-			.levelInfo {
-				margin-bottom: -10px;
-				display: flex;
-				gap: 15px;
-				.top {
-					font-size: 40px;
-					font-weight: 600;
-				}
-				.info {
-					display: flex;
-					flex-direction: column;
-					line-height: 20px;
-					margin-top: 10px;
-					.levelName {
-						font-size: 18px;
-						font-weight: 500;
-					}
-					.creator {
-						color: var(--textColor2);
-					}
-				}
-			}
-		}
 	}
 
 	.tabsWrapper {

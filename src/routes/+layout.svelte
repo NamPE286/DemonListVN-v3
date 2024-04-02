@@ -10,6 +10,7 @@
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { Toaster } from "$lib/components/ui/sonner";
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
 
@@ -43,6 +44,7 @@
 </script>
 
 <ModeWatcher defaultMode="system" />
+<Toaster />
 <Search bind:toggled={searchToggled} bind:value={searchQuery} />
 
 <div class="navbarWrapper">

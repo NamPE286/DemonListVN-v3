@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Command from '$lib/components/ui/command';
 	import * as Avatar from '$lib/components/ui/avatar';
+	import { onMount } from 'svelte';
 
 	export let toggled: boolean;
 	export let value: string = '';
@@ -37,6 +38,20 @@
 				state = 2;
 			});
 	}
+
+	onMount(() => {
+		function handleKeydown(e: KeyboardEvent) {
+			if (e.key === 'm' && (e.metaKey || e.ctrlKey)) {
+				e.preventDefault();
+				toggled = !toggled;
+			}
+		}
+
+		document.addEventListener('keydown', handleKeydown);
+		return () => {
+			document.removeEventListener('keydown', handleKeydown);
+		};
+	});
 </script>
 
 <svelte:window
@@ -78,7 +93,7 @@
 									/>
 									<Avatar.Fallback>{item.data.name[0]}</Avatar.Fallback>
 								</Avatar.Root>
-								<span class='playerName'>{item.data.name}</span>
+								<span class="playerName">{item.data.name}</span>
 							</Command.Item>
 						</a>
 					{/each}
