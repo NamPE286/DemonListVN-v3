@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import BigTitle from '$lib/components/bigTitle.svelte';
 
 	let totalCount = 1;
 	let pageSize = 30;
@@ -25,10 +26,7 @@
 	<title>Demon List - Demon List VN</title>
 </svelte:head>
 
-<div class="title">
-	<h1>Demon List</h1>
-	<p>Hardest level beaten by Vietnamese</p>
-</div>
+<BigTitle value="Demon List" description="Hardest level beaten by Vietnamese" />
 
 <Tabs.Root value="leaderboard" class="tabs">
 	<div class="tabsWrapper">
@@ -68,7 +66,7 @@
 							if (calibrated) {
 								calibrated = true;
 							} else {
-								goto(`/DL?page=${page.value}`);
+								goto(`/DL/leaderboard?page=${page.value}`);
 							}
 						}}
 						id={`page${page.value}`}

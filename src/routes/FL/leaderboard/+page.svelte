@@ -1,17 +1,13 @@
-<script lang="ts">
+<script>
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Pagination from '$lib/components/ui/pagination';
-	
-	import BigTitle from '$lib/components/bigTitle.svelte';
-	import LevelCard from '$lib/components/levelCard.svelte';
-
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import type { PageData } from './$types';
+	import BigTitle from '$lib/components/bigTitle.svelte';
 
-	export let data: PageData;
-
+	let totalCount = 1;
+	let pageSize = 30;
 	let curPage = -1;
 	let calibrated = false;
 
@@ -21,18 +17,18 @@
 
 	$: $page.url, update();
 
-	onMount(async () => {
+	onMount(() => {
 		document.getElementById(`page${curPage}`)?.click();
 	});
 </script>
 
 <svelte:head>
-	<title>Demon List - Demon List VN</title>
+	<title>Featured List - Demon List VN</title>
 </svelte:head>
 
 <BigTitle value="Featured List" description="Hardest level made by Vietnamese" />
 
-<Tabs.Root value="levels" class="tabs">
+<Tabs.Root value="leaderboard" class="tabs">
 	<div class="tabsWrapper">
 		<Tabs.List>
 			<Tabs.Trigger
@@ -51,18 +47,10 @@
 	</div>
 </Tabs.Root>
 
-<div class="levelsWrapper">
-	<div class="levels">
-		{#each data.levels as level}
-			<LevelCard {level} type="fl" />
-		{/each}
-	</div>
-</div>
-
-<Pagination.Root count={data.count} perPage={20} let:pages let:currentPage>
+<Pagination.Root count={totalCount} perPage={pageSize} let:pages let:currentPage>
 	<Pagination.Content>
 		<Pagination.Item>
-			<Pagination.PrevButton on:click={() => goto(`/FL?page=${currentPage - 1}`)} />
+			<Pagination.PrevButton />
 		</Pagination.Item>
 		{#each pages as page (page.key)}
 			{#if page.type === 'ellipsis'}
@@ -78,7 +66,7 @@
 							if (calibrated) {
 								calibrated = true;
 							} else {
-								goto(`/FL?page=${page.value}`);
+								goto(`/FL/leaderboard?page=${page.value}`);
 							}
 						}}
 						id={`page${page.value}`}
@@ -89,27 +77,12 @@
 			{/if}
 		{/each}
 		<Pagination.Item>
-			<Pagination.NextButton on:click={() => goto(`/FL?page=${currentPage + 1}`)} />
+			<Pagination.NextButton />
 		</Pagination.Item>
 	</Pagination.Content>
 </Pagination.Root>
 
 <style lang="scss">
-	.levelsWrapper {
-		display: flex;
-		justify-content: center;
-	}
-
-	.levels {
-		display: grid;
-		align-items: center;
-		gap: 10px;
-		grid-template-columns: 500px 500px;
-		margin-inline: auto;
-		margin-bottom: 20px;
-		padding-inline: 10px;
-	}
-
 	.tabsWrapper {
 		display: flex;
 		justify-content: center;
@@ -117,9 +90,31 @@
 		margin-bottom: 25px;
 	}
 
-	@media screen and (max-width: 1100px) {
-		.levels {
-			grid-template-columns: 100%;
+	.title {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin-top: 120px;
+		margin-bottom: 50px;
+	}
+
+	h1 {
+		font-size: 3.75rem;
+		font-weight: 800;
+	}
+
+	p {
+		font-size: 1.25rem;
+		color: var(--textColor2);
+	}
+
+	@media screen and (max-width: 900px) {
+		h1 {
+			font-size: 1.875rem;
+		}
+
+		.title {
+			margin-top: 80px;
 		}
 	}
 </style>
