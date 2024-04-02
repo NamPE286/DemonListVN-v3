@@ -149,19 +149,20 @@
 		position: fixed;
 		width: 100%;
 		height: 55px;
-		background-color: var(--muted-background);
+		background-color: var(--navbar-bg);
 		overflow: hidden;
 		display: flex;
 		align-items: center;
 		box-sizing: border-box;
 		padding-inline: 30px;
 		border-bottom: 1px solid var(--border1);
+		backdrop-filter: blur(20px);
 
 		.right {
 			display: flex;
 
 			img {
-				filter: invert(1);
+				filter: invert(var(--inverted));
 				max-height: 22px;
 				max-width: 22px;
 			}

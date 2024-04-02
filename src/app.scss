@@ -54,10 +54,8 @@
     --textColor1: #272727;
     --textColor2: rgb(95, 95, 95);
     --border1: rgb(236, 236, 236);
-
-    --inverted: 1 .logo-img-wrapper {
-      filter: invert(1);
-    }
+    --inverted: 0;
+    --navbar-bg: hsla(0, 0%, 100%, 0.8);
   }
 
   .dark {
@@ -65,15 +63,12 @@
     --textColor1: #d4d4d4;
     --textColor2: rgb(155, 155, 155);
     --border1: rgb(31, 31, 31);
-    --inverted: 0;
-
-    .logo-img-wrapper {
-      filter: invert(0);
-    }
+    --inverted: 1;
+    --navbar-bg: hsla(240, 10%, 3.9%, 0.8);
   }
 
   :root {
-    background-color: var(--foreground);
+    background-color: hsl(var(--background));
     font-family: 'Geist Variable';
     color: var(--textColor);
     font-size: 15px;
@@ -81,6 +76,7 @@
 
   body {
     margin: 0;
+    padding-bottom: 100px;
   }
 
   .clickable {

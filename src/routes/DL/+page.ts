@@ -1,5 +1,3 @@
-import type { PageLoad } from './$types'
-
 async function getTotalPage() {
     const query = new URLSearchParams({
         start: '0',
