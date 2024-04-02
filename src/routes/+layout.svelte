@@ -13,6 +13,7 @@
 	import { Toaster } from '$lib/components/ui/sonner';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
+	import { LoadingBar } from "svelte-loading-bar"
 
 	import Search from '$lib/components/search.svelte';
 	import SubmitButton from '$lib/components/submitButton.svelte';
@@ -48,6 +49,7 @@
 <ModeWatcher defaultMode="system" />
 <Toaster />
 <Search bind:toggled={searchToggled} bind:value={searchQuery} />
+<LoadingBar />
 
 <div class="navbarWrapper">
 	<div class="right">
