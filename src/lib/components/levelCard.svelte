@@ -35,7 +35,9 @@
 							<div class="top">#{level.data[`${type}Top`]}</div>
 							<div class="info">
 								<div class="levelName">
-									{level.data.name}
+									<div class='name'>
+										{level.data.name}
+									</div>
 									<div class="pt">
 										{getPoint()}pt
 									</div>
@@ -82,12 +84,13 @@
 
 	.level {
 		.levelInfo {
-			margin-bottom: -10px;
+			margin-top: -5px;
+			margin-bottom: -15px;
 			display: flex;
 			gap: 15px;
-			
+
 			.top {
-				font-size: 40px;
+				font-size: 44px;
 				font-weight: 600;
 			}
 
@@ -107,10 +110,10 @@
 					.pt {
 						background-color: var(--textColor);
 						color: var(--textColorInverted);
-						padding: 5px;
-						font-size: 13px;
+						padding: 4px;
+						font-size: 11px;
 						border-radius: var(--radius);
-						line-height: 15px;
+						line-height: 18px;
 					}
 				}
 
