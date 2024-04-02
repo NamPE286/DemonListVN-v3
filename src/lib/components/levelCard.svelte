@@ -31,7 +31,7 @@
 									<div class="pt">
 										{#if type == 'dl'}
 											{level.data.rating}pt
-										{:else if type == 'dl'}
+										{:else if type == 'fl'}
 											{level.data.flPt}pt
 										{/if}
 									</div>
