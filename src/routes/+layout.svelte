@@ -10,7 +10,7 @@
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { Toaster } from "$lib/components/ui/sonner";
+	import { Toaster } from '$lib/components/ui/sonner';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
 
@@ -19,6 +19,7 @@
 
 	import supabase from '$lib/client/supabase';
 	import { user } from '$lib/client';
+	import { mediaQuery } from 'svelte-legos';
 
 	const links = [
 		{ route: '/DL', name: 'Demon List' },
@@ -30,6 +31,7 @@
 
 	let searchQuery = '';
 	let searchToggled = false;
+	const isDesktop = mediaQuery('(min-width: 1200px)');
 
 	function signIn() {
 		supabase.auth.signInWithOAuth({
@@ -78,9 +80,24 @@
 		</div>
 	</div>
 	<div class="left">
-		<button class="clickable" on:click={() => (searchToggled = true)}>
-			<MagnifyingGlass />
-		</button>
+		{#if $isDesktop}
+			<Button variant="outline" on:click={() => (searchToggled = true)}>
+				<div class="searchBtn">
+					<MagnifyingGlass />
+					<p>Search</p>
+					<kbd
+						class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
+					>
+						<span class="text-xs">Ctrl M</span>
+					</kbd>
+				</div>
+			</Button>
+		{:else}
+			<button class="clickable" on:click={() => (searchToggled = true)}>
+				<MagnifyingGlass />
+			</button>
+		{/if}
+
 		{#if !$user.loggedIn}
 			<Button variant="outline" on:click={signIn}>Sign In</Button>
 		{:else}
@@ -138,6 +155,17 @@
 <slot />
 
 <style lang="scss">
+	.searchBtn {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		color: var(--textColor2);
+
+		kbd {
+			margin-left: 100px;
+		}
+	}
+
 	.filler {
 		width: 100%;
 		height: 55px;
