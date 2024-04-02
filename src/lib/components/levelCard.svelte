@@ -4,7 +4,17 @@
 	import { toast } from 'svelte-sonner';
 
 	export let level: any;
-    export let type: string;
+	export let type: string;
+
+	function getPoint() {
+		if (type == 'dl') {
+			return level.data.rating;
+		}
+
+		if (type == 'fl') {
+			return level.data.flTop;
+		}
+	}
 </script>
 
 <div class="level">
@@ -24,7 +34,12 @@
 						<div class="levelInfo">
 							<div class="top">#{level.data[`${type}Top`]}</div>
 							<div class="info">
-								<div class="levelName">{level.data.name}</div>
+								<div class="levelName">
+									{level.data.name}
+									<div class="pt">
+										{getPoint()}pt
+									</div>
+								</div>
 								<div class="creator">by {level.data.creator}</div>
 							</div>
 						</div></a
@@ -70,19 +85,35 @@
 			margin-bottom: -10px;
 			display: flex;
 			gap: 15px;
+			
 			.top {
 				font-size: 40px;
 				font-weight: 600;
 			}
+
 			.info {
 				display: flex;
 				flex-direction: column;
 				line-height: 20px;
 				margin-top: 10px;
+
 				.levelName {
 					font-size: 18px;
 					font-weight: 500;
+					display: flex;
+					align-items: center;
+					gap: 10px;
+
+					.pt {
+						background-color: var(--textColor);
+						color: var(--textColorInverted);
+						padding: 5px;
+						font-size: 13px;
+						border-radius: var(--radius);
+						line-height: 15px;
+					}
 				}
+
 				.creator {
 					color: var(--textColor2);
 				}

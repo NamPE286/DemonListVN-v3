@@ -51,6 +51,7 @@
 
   :root {
     --textColor: black;
+    --textColorInverted: white;
     --textColor1: #272727;
     --textColor2: rgb(95, 95, 95);
     --border1: rgb(236, 236, 236);
@@ -60,6 +61,7 @@
 
   .dark {
     --textColor: white;
+    --textColorInverted: black;
     --textColor1: #d4d4d4;
     --textColor2: rgb(155, 155, 155);
     --border1: rgb(31, 31, 31);
