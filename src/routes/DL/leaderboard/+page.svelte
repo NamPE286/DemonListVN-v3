@@ -23,7 +23,7 @@
 </script>
 
 <svelte:head>
-	<title>Demon List - Demon List VN</title>
+	<title>Leaderboard - Demon List - Demon List VN</title>
 </svelte:head>
 
 <BigTitle value="Demon List" description="Hardest level beaten by Vietnamese" />

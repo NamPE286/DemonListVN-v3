@@ -27,7 +27,7 @@
 </script>
 
 <svelte:head>
-	<title>Demon List - Demon List VN</title>
+	<title>Featured List - Demon List VN</title>
 </svelte:head>
 
 <BigTitle value="Featured List" description="Hardest level made by Vietnamese" />
