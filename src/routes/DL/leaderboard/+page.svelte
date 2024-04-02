@@ -1,31 +1,23 @@
 <script>
 	import * as Tabs from '$lib/components/ui/tabs';
-	import * as Popover from '$lib/components/ui/popover';
 	import * as Pagination from '$lib/components/ui/pagination';
-	import { Button } from '$lib/components/ui/button';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import { page } from '$app/stores';
 
 	let totalCount = 1;
 	let pageSize = 30;
+	let curPage = -1;
+	let calibrated = false;
 
-	async function getTotalPage() {
-		const query = new URLSearchParams({
-			start: '0',
-			end: '0',
-			sortBy: 'dlTop',
-			ascending: 'false'
-		});
-
-		fetch(`${import.meta.env.VITE_API_URL}/list/DL?${query.toString()}`)
-			.then((res) => res.json())
-			.then((res) => {
-				totalCount = res[0].data.dlTop;
-			});
+	async function update() {
+		curPage = parseInt($page.url.searchParams.get('page') || '1');
 	}
 
+	$: $page.url, update();
+
 	onMount(() => {
-		getTotalPage();
+		document.getElementById(`page${curPage}`)?.click();
 	});
 </script>
 
@@ -69,7 +61,18 @@
 				</Pagination.Item>
 			{:else}
 				<Pagination.Item isVisible={currentPage == page.value}>
-					<Pagination.Link {page} isActive={currentPage == page.value}>
+					<Pagination.Link
+						{page}
+						isActive={currentPage == page.value}
+						on:click={() => {
+							if (calibrated) {
+								calibrated = true;
+							} else {
+								goto(`/DL?page=${page.value}`);
+							}
+						}}
+						id={`page${page.value}`}
+					>
 						{page.value}
 					</Pagination.Link>
 				</Pagination.Item>

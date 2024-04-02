@@ -76,8 +76,9 @@
 						isActive={currentPage == page.value}
 						on:click={() => {
 							if (calibrated) {
-								goto(`/DL?page=${page.value}`);
 								calibrated = true;
+							} else {
+								goto(`/DL?page=${page.value}`);
 							}
 						}}
 						id={`page${page.value}`}
