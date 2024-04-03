@@ -11,7 +11,7 @@
 <Popover.Root>
 	<Popover.Trigger>
 		<button class="clickable">
-			<Button variant="icon" size="icon">
+			<Button variant="ghost" size="icon" class="overflow-hidden rounded-full">
 				<Bell size={20} />
 			</Button>
 		</button>
