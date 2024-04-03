@@ -11,8 +11,6 @@ async function getTotalPage(fetch: any, list: string) {
         await fetch(`${import.meta.env.VITE_API_URL}/leaderboard/${list}?${query.toString()}`)
     ).json();
 
-    console.log
-
     return res[0].data[prop];
 }
 

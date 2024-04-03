@@ -2,7 +2,7 @@ async function getTotalPage(fetch: any, list: string ) {
     const query = new URLSearchParams({
         start: '0',
         end: '0',
-        sortBy: 'dlTop',
+        sortBy: list + 'Top',
         ascending: 'false'
     });
 
@@ -10,7 +10,7 @@ async function getTotalPage(fetch: any, list: string ) {
         await fetch(`${import.meta.env.VITE_API_URL}/list/${list}?${query.toString()}`)
     ).json();
 
-    return res[0].data.dlTop;
+    return res[0].data[list + 'Top'];
 }
 
 async function getLevels(fetch: any, list: string, page: number) {
