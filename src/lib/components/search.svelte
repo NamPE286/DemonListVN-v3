@@ -3,7 +3,7 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { onMount } from 'svelte';
 
-	export let toggled: boolean;
+	export let open: boolean;
 	export let value: string = '';
 
 	let result: any = {
@@ -13,7 +13,7 @@
 
 	let state = 0;
 
-	$: toggled && onChange();
+	$: open && onChange();
 
 	function onChange() {
 		result = {
@@ -43,7 +43,7 @@
 		function handleKeydown(e: KeyboardEvent) {
 			if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
 				e.preventDefault();
-				toggled = !toggled;
+				open = !open;
 			}
 		}
 
@@ -56,7 +56,7 @@
 
 <svelte:window
 	on:keydown={(e) => {
-		if (!toggled) {
+		if (!open) {
 			return;
 		}
 
@@ -66,7 +66,7 @@
 	}}
 />
 
-<Command.Dialog bind:open={toggled}>
+<Command.Dialog bind:open={open}>
 	<Command.Input bind:value placeholder="Type and press Enter to search..." />
 	<Command.List>
 		{#if state != 0}

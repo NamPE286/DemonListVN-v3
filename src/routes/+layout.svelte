@@ -21,6 +21,7 @@
 	import supabase from '$lib/client/supabase';
 	import { user } from '$lib/client';
 	import { mediaQuery } from 'svelte-legos';
+	import NotificationButton from '$lib/components/notificationButton.svelte';
 
 	const links = [
 		{ route: '/list/dl', name: 'Demon List' },
@@ -31,6 +32,7 @@
 
 	let searchQuery = '';
 	let searchToggled = false;
+	let notificationToggled = false;
 	const isDesktop = mediaQuery('(min-width: 1200px)');
 
 	function signIn() {
@@ -47,7 +49,7 @@
 
 <ModeWatcher defaultMode="system" />
 <Toaster />
-<Search bind:toggled={searchToggled} bind:value={searchQuery} />
+<Search bind:open={searchToggled} bind:value={searchQuery} />
 <LoadingBar />
 
 <div class="navbarWrapper">
@@ -84,7 +86,7 @@
 		{#if $isDesktop}
 			<Button variant="outline" on:click={() => (searchToggled = true)}>
 				<div class="searchBtn">
-					<MagnifyingGlass />
+					<MagnifyingGlass size={20} />
 					<p>Search</p>
 					<kbd
 						class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
@@ -95,7 +97,7 @@
 			</Button>
 		{:else}
 			<button class="clickable" on:click={() => (searchToggled = true)}>
-				<MagnifyingGlass />
+				<MagnifyingGlass size={20} />
 			</button>
 		{/if}
 
@@ -103,6 +105,7 @@
 			<Button variant="outline" on:click={signIn}>Sign In</Button>
 		{:else}
 			<SubmitButton />
+			<NotificationButton />
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger asChild let:builder>
 					<Button
@@ -229,7 +232,7 @@
 
 		.left {
 			display: flex;
-			gap: 15px;
+			gap: 10px;
 			align-items: center;
 			margin-left: auto;
 		}
