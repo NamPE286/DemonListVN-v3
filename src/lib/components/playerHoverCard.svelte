@@ -1,0 +1,127 @@
+<script lang="ts">
+	import * as Avatar from '$lib/components/ui/avatar';
+	import * as HoverCard from '$lib/components/ui/hover-card/index.js';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { Separator } from '$lib/components/ui/separator';
+	import { getTitle } from '$lib/client';
+
+	export let player: any;
+</script>
+
+<div class="wrapper">
+	<HoverCard.Root>
+		<HoverCard.Trigger
+			href="https://github.com/sveltejs"
+			target="_blank"
+			rel="noreferrer noopener"
+			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
+		>
+			{player.data.name}
+		</HoverCard.Trigger>
+		<HoverCard.Content class="w-80">
+			<a href="#!">
+				<div class="hoverName">
+					<Avatar.Root>
+						<Avatar.Image
+							src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.data.uid}.jpg`}
+							alt="@shadcn"
+						/>
+						<Avatar.Fallback>{player.data.name[0]}</Avatar.Fallback>
+					</Avatar.Root>
+					<h4 class="font-semibold">{player.data.name}</h4>
+				</div>
+			</a>
+			<Separator />
+			<div class="content">
+				<div class="rating">
+					<Tooltip.Root>
+						<Tooltip.Trigger>
+							<div class="leftCol">
+								<div
+									class="title"
+									style={`background-color: ${getTitle('dl', player.data.rating)?.color}`}
+								>
+									{player.data.rating}
+								</div>
+							</div>
+						</Tooltip.Trigger>
+						<Tooltip.Content>{getTitle('dl', player.data.rating)?.fullTitle}</Tooltip.Content>
+					</Tooltip.Root>
+					<div class='rankWrapper'>
+						Demon List rating
+						<div class="rank">
+							#{player.data.overallRank}
+						</div>
+					</div>
+				</div>
+				<div class="rating">
+					<div class="leftCol">
+						<div class="title">{player.data.totalFLpt}</div>
+					</div>
+					<div class='rankWrapper'>
+						Total Featured List point
+						<div class="rank">
+							#{player.data.flrank}
+						</div>
+					</div>
+				</div>
+			</div>
+		</HoverCard.Content>
+	</HoverCard.Root>
+</div>
+
+<style lang="scss">
+	.wrapper {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+
+	.leftCol {
+		width: 50px;
+		display: flex;
+		justify-content: center;
+	}
+
+	.hoverName {
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		padding-bottom: 10px;
+	}
+
+	.content {
+		padding-top: 10px;
+	}
+
+    .rankWrapper {
+        display: flex;
+        gap: 5px;
+
+        .rank {
+            background-color: var(--textColor);
+            color: var(--textColorInverted);
+            padding-inline: 6px;
+            height: fit-content;
+            border-radius: 5px;
+            font-weight: 600;
+        }
+    }
+
+	.rating {
+		.title {
+			padding: 2px;
+			padding-inline: 5px;
+			border-radius: 5px;
+			font-weight: bold;
+			font-size: 12px;
+			user-select: none;
+			width: fit-content;
+		}
+
+		display: flex;
+		gap: 10px;
+		align-items: center;
+		font-size: 13px;
+	}
+</style>

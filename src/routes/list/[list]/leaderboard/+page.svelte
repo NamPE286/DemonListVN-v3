@@ -1,13 +1,14 @@
 <script lang="ts">
 	import * as Pagination from '$lib/components/ui/pagination';
 	import * as Table from '$lib/components/ui/table';
-	import * as Avatar from '$lib/components/ui/avatar';
+	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 
 	import type { PageData } from './$types';
+	import { Play } from 'svelte-radix';
 
 	export let data: PageData;
 	let curPage = -1;
@@ -49,18 +50,7 @@
 							: player.data[$page.params.list + 'rank']}
 					</Table.Cell>
 					<Table.Cell>
-						<div class="playerName">
-							<a href="#!">
-								<Avatar.Root class="h-[32px] w-[32px]">
-									<Avatar.Image
-										src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.data.uid}.jpg`}
-										alt="@shadcn"
-									/>
-									<Avatar.Fallback>{player.data.name[0]}</Avatar.Fallback>
-								</Avatar.Root>
-							</a>
-							{player.data.name}
-						</div>
+						<PlayerHoverCard player={player} />
 					</Table.Cell>
 					<Table.Cell class="text-right">
 						{$page.params.list == 'dl'
@@ -116,9 +106,4 @@
 		max-width: calc(100% - 40px);
 	}
 
-	.playerName {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
 </style>
