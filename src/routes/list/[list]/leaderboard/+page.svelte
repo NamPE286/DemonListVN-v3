@@ -1,10 +1,12 @@
-<script>
+<script lang='ts'>
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Pagination from '$lib/components/ui/pagination';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import BigTitle from '$lib/components/bigTitle.svelte';
+	import type { PageData } from './$types';
+
+	export let data: PageData;
 
 	let totalCount = 1;
 	let pageSize = 30;
@@ -26,27 +28,6 @@
 	<title>Leaderboard - Demon List - Demon List VN</title>
 </svelte:head>
 
-<BigTitle value="Demon List" description="Hardest level beaten by Vietnamese" />
-
-<Tabs.Root value="leaderboard" class="tabs">
-	<div class="tabsWrapper">
-		<Tabs.List>
-			<Tabs.Trigger
-				value="levels"
-				on:click={() => {
-					goto('/DL');
-				}}>Levels</Tabs.Trigger
-			>
-			<Tabs.Trigger
-				value="leaderboard"
-				on:click={() => {
-					goto('/DL/leaderboard');
-				}}>Leaderboard</Tabs.Trigger
-			>
-		</Tabs.List>
-	</div>
-</Tabs.Root>
-
 <Pagination.Root count={totalCount} perPage={pageSize} let:pages let:currentPage>
 	<Pagination.Content>
 		<Pagination.Item>
@@ -66,7 +47,7 @@
 							if (!calibrated) {
 								calibrated = true;
 							} else {
-								goto(`/DL/leaderboard?page=${page.value}`);
+								goto(`/list/dl/leaderboard?page=${page.value}`);
 							}
 						}}
 						id={`page${page.value}`}
@@ -83,10 +64,5 @@
 </Pagination.Root>
 
 <style lang="scss">
-	.tabsWrapper {
-		display: flex;
-		justify-content: center;
-		gap: 10px;
-		margin-bottom: 25px;
-	}
+
 </style>
