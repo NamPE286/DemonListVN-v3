@@ -1,11 +1,87 @@
 <script lang="ts">
 	import { Bell } from 'svelte-radix';
 	import * as Popover from '$lib/components/ui/popover';
+	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
-	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
-	import { Separator } from '$lib/components/ui/separator';
+	import { user } from '$lib/client';
+	import supabase from '$lib/client/supabase';
 
-	let isEmpty = true;
+	let notifications: any[] = [];
+
+	function timeSince(date: any) {
+		var seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+		var interval = seconds / 31536000;
+
+		if (interval > 1) {
+			return Math.floor(interval) + ' years';
+		}
+
+		interval = seconds / 2592000;
+
+		if (interval > 1) {
+			return Math.floor(interval) + ' months';
+		}
+
+		interval = seconds / 86400;
+
+		if (interval > 1) {
+			return Math.floor(interval) + ' days';
+		}
+
+		interval = seconds / 3600;
+
+		if (interval > 1) {
+			return Math.floor(interval) + ' hours';
+		}
+
+		interval = seconds / 60;
+
+		if (interval > 1) {
+			return Math.floor(interval) + ' minutes';
+		}
+
+		return Math.floor(seconds) + ' seconds';
+	}
+	async function fetchNotifications() {
+		notifications = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/notifications/${$user.data.uid}`, {
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())!
+				}
+			})
+		).json();
+
+		const channel = supabase
+			.channel('table-db-changes')
+			.on(
+				'postgres_changes',
+				{
+					event: 'INSERT',
+					schema: 'public',
+					table: 'notifications',
+                    filter: `to=eq.${$user.data.uid}`
+				},
+				(payload) => {
+					notifications.unshift(payload.new);
+					notifications = notifications;
+				}
+			)
+			.subscribe();
+	}
+
+	async function clear() {
+		fetch(`${import.meta.env.VITE_API_URL}/notifications/${$user.data.uid}`, {
+            method: 'DELETE',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token())!
+			}
+		})
+            .then(res => {
+                notifications = []
+            })
+	}
+
+	$: $user, fetchNotifications();
 </script>
 
 <Popover.Root>
@@ -20,15 +96,21 @@
 		<div class="header">
 			<h4 class="font-medium leading-none">Notifications</h4>
 			<div class="buttonWrapper">
-				<Button variant="link">Clear all</Button>
+				<Button variant="link" on:click={clear}>Clear all</Button>
 			</div>
 		</div>
-		{#if isEmpty}
+		{#if notifications.length == 0}
 			<p class="noNoti">No notification</p>
 		{:else}
-			<Separator />
-			<div class="notifications">
-				<ScrollArea class="h-[300px]"></ScrollArea>
+			<div class="notiWrapper">
+				{#each notifications as notification}
+					<Card.Root>
+						<Card.Header>
+							<Card.Title>{notification.content}</Card.Title>
+							<Card.Description>{timeSince(notification.timestamp)} ago</Card.Description>
+						</Card.Header>
+					</Card.Root>
+				{/each}
 			</div>
 		{/if}
 	</Popover.Content>
@@ -45,8 +127,15 @@
 		margin-left: auto;
 	}
 
-	.notifications {
+	.notiWrapper {
 		margin-top: 10px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+        height: fit-content;
+		max-height: 300px;
+		overflow: scroll;
+		overflow-x: hidden;
 	}
 
 	.noNoti {
