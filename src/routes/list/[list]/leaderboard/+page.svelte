@@ -1,15 +1,15 @@
-<script lang='ts'>
-	import * as Tabs from '$lib/components/ui/tabs';
+<script lang="ts">
 	import * as Pagination from '$lib/components/ui/pagination';
+	import * as Table from '$lib/components/ui/table';
+	import * as Avatar from '$lib/components/ui/avatar';
+
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-
-	let totalCount = 1;
-	let pageSize = 30;
 	let curPage = -1;
 	let calibrated = false;
 
@@ -20,6 +20,7 @@
 	$: $page.url, update();
 
 	onMount(() => {
+		console.log(data);
 		document.getElementById(`page${curPage}`)?.click();
 	});
 </script>
@@ -28,7 +29,51 @@
 	<title>Leaderboard - Demon List - Demon List VN</title>
 </svelte:head>
 
-<Pagination.Root count={totalCount} perPage={pageSize} let:pages let:currentPage>
+<div class="tableWrapper">
+	<Table.Root>
+		<Table.Header>
+			<Table.Row>
+				<Table.Head class="w-[55px]">Rank</Table.Head>
+				<Table.Head>Player</Table.Head>
+				<Table.Head class="text-right">
+					{$page.params.list == 'dl' ? 'Rating' : 'Total point'}
+				</Table.Head>
+			</Table.Row>
+		</Table.Header>
+		<Table.Body>
+			{#each data.leaderboard as player}
+				<Table.Row>
+					<Table.Cell class="font-medium">
+						#{$page.params.list == 'dl'
+							? player.data.overallRank
+							: player.data[$page.params.list + 'rank']}
+					</Table.Cell>
+					<Table.Cell>
+						<div class="playerName">
+							<a href="#!">
+								<Avatar.Root class="h-[32px] w-[32px]">
+									<Avatar.Image
+										src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.data.uid}.jpg`}
+										alt="@shadcn"
+									/>
+									<Avatar.Fallback>{player.data.name[0]}</Avatar.Fallback>
+								</Avatar.Root>
+							</a>
+							{player.data.name}
+						</div>
+					</Table.Cell>
+					<Table.Cell class="text-right">
+						{$page.params.list == 'dl'
+							? player.data.rating
+							: player.data['total' + $page.params.list.toUpperCase() + 'pt']}
+					</Table.Cell>
+				</Table.Row>
+			{/each}
+		</Table.Body>
+	</Table.Root>
+</div>
+
+<Pagination.Root count={data.count} perPage={50} let:pages let:currentPage>
 	<Pagination.Content>
 		<Pagination.Item>
 			<Pagination.PrevButton />
@@ -64,5 +109,16 @@
 </Pagination.Root>
 
 <style lang="scss">
+	.tableWrapper {
+		margin-inline: auto;
+		margin-bottom: 25px;
+		width: 1000px;
+		max-width: calc(100% - 40px);
+	}
 
+	.playerName {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
 </style>

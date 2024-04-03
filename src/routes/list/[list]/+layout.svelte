@@ -4,7 +4,15 @@
 	import BigTitle from '$lib/components/bigTitle.svelte';
 
 	import { goto } from '$app/navigation';
-    import { page } from '$app/stores';
+	import { page } from '$app/stores';
+
+	let curTab = ($page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels');
+
+	function update() {
+		curTab = ($page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels');
+	}
+
+	$: $page.url, update()
 </script>
 
 <svelte:head>
@@ -17,7 +25,7 @@
 	<BigTitle value="Featured List" description="Hardest level created by Vietnamese" />
 {/if}
 
-<Tabs.Root value="levels" class="tabs">
+<Tabs.Root bind:value={curTab} class="tabs">
 	<div class="tabsWrapper">
 		<Tabs.List>
 			<Tabs.Trigger
@@ -46,4 +54,3 @@
 		margin-bottom: 25px;
 	}
 </style>
-
