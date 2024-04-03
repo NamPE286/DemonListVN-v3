@@ -30,7 +30,11 @@
 	<title>Demon List - Demon List VN</title>
 </svelte:head>
 
-<BigTitle value="Demon List" description="Hardest level beaten by Vietnamese" />
+{#if data.list == 'dl'}
+	<BigTitle value="Demon List" description="Hardest level beaten by Vietnamese" />
+{:else if data.list == 'fl'}
+	<BigTitle value="Featured List" description="Hardest level created by Vietnamese" />
+{/if}
 
 <Tabs.Root value="levels" class="tabs">
 	<div class="tabsWrapper">
@@ -38,13 +42,13 @@
 			<Tabs.Trigger
 				value="levels"
 				on:click={() => {
-					goto('/DL');
+					goto('/${data.list}');
 				}}>Levels</Tabs.Trigger
 			>
 			<Tabs.Trigger
 				value="leaderboard"
 				on:click={() => {
-					goto('/DL/leaderboard');
+					goto('/${data.list}/leaderboard');
 				}}>Leaderboard</Tabs.Trigger
 			>
 		</Tabs.List>
@@ -54,7 +58,7 @@
 <div class="levelsWrapper">
 	<div class="levels">
 		{#each data.levels as level}
-			<LevelCard {level} type="dl" />
+			<LevelCard {level} type={data.list} />
 		{/each}
 	</div>
 </div>
@@ -62,7 +66,7 @@
 <Pagination.Root count={data.count} perPage={20} let:pages let:currentPage>
 	<Pagination.Content>
 		<Pagination.Item>
-			<Pagination.PrevButton on:click={() => goto(`/DL?page=${currentPage - 1}`)} />
+			<Pagination.PrevButton on:click={() => goto(`/${data.list}?page=${currentPage - 1}`)} />
 		</Pagination.Item>
 		{#each pages as page (page.key)}
 			{#if page.type === 'ellipsis'}
@@ -78,7 +82,7 @@
 							if (!calibrated) {
 								calibrated = true;
 							} else {
-								goto(`/DL?page=${page.value}`);
+								goto(`/${data.list}?page=${page.value}`);
 							}
 						}}
 						id={`page${page.value}`}
@@ -89,7 +93,7 @@
 			{/if}
 		{/each}
 		<Pagination.Item>
-			<Pagination.NextButton on:click={() => goto(`/DL?page=${currentPage + 1}`)} />
+			<Pagination.NextButton on:click={() => goto(`/${data.list}?page=${currentPage + 1}`)} />
 		</Pagination.Item>
 	</Pagination.Content>
 </Pagination.Root>

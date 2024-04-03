@@ -23,9 +23,8 @@
 	import { mediaQuery } from 'svelte-legos';
 
 	const links = [
-		{ route: '/DL', name: 'Demon List' },
-		{ route: '/FL', name: 'Featured List' },
-		{ route: '/PL', name: 'Platformer List' },
+		{ route: '/list/dl', name: 'Demon List' },
+		{ route: '/list/fl', name: 'Featured List' },
 		{ route: '/players', name: 'Players' },
 		{ route: '/about', name: 'About' }
 	];
