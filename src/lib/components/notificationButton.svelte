@@ -42,6 +42,7 @@
 
 		return Math.floor(seconds) + ' seconds';
 	}
+
 	async function fetchNotifications() {
 		notifications = await (
 			await fetch(`${import.meta.env.VITE_API_URL}/notifications/${$user.data.uid}`, {
@@ -51,7 +52,7 @@
 			})
 		).json();
 
-		const channel = supabase
+		supabase
 			.channel('table-db-changes')
 			.on(
 				'postgres_changes',
