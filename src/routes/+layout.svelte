@@ -54,7 +54,7 @@
 
 <div class="navbarWrapper">
 	<div class="right">
-		<a href="/" class="logo">
+		<a href="/" class="logo" data-sveltekit-preload-data="tap">
 			<div class="logo-img-wrapper">
 				<img src="/favicon.png" alt="logo" />
 			</div>
@@ -74,7 +74,7 @@
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content align="end">
 					{#each links as link}
-						<a href={link.route}>
+						<a href={link.route} data-sveltekit-preload-data="tap">
 							<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
 						</a>
 					{/each}

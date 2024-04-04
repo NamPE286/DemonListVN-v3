@@ -74,7 +74,7 @@
 			{#if result.levels.length}
 				<Command.Group heading="Levels">
 					{#each result.levels as item}
-						<a href={`/level/${item.data.id}`}>
+						<a href={`/level/${item.data.id}`} data-sveltekit-preload-data="tap">
 							<Command.Item>{item.data.name} by {item.data.creator}</Command.Item>
 						</a>
 					{/each}
@@ -84,7 +84,7 @@
 				<Command.Separator />
 				<Command.Group heading="Players">
 					{#each result.players as item}
-						<a href={`/player/${item.data.uid}`}>
+						<a href={`/player/${item.data.uid}`} data-sveltekit-preload-data="tap">
 							<Command.Item>
 								<Avatar.Root>
 									<Avatar.Image
