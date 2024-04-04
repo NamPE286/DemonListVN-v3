@@ -33,6 +33,7 @@
 	};
 
 	let sendStatus = 0;
+	let open = false;
 	const isDesktop = mediaQuery('(min-width: 768px)');
 
 	async function submit() {
@@ -54,7 +55,7 @@
 </script>
 
 {#if $isDesktop}
-	<Dialog.Root>
+	<Dialog.Root bind:open>
 		<Dialog.Trigger
 			class={buttonVariants({ variant: 'outline' })}
 			on:click={() => {
@@ -68,12 +69,15 @@
 			<Dialog.Header>
 				<Dialog.Title>Submit</Dialog.Title>
 			</Dialog.Header>
+
 			<Alert.Root>
 				<ExclamationTriangle class="h-4 w-4" />
 				<Alert.Title>Attention!</Alert.Title>
-				<Alert.Description
-					>Read the <a href="/rules"><u>rules</u></a> before submitting.</Alert.Description
-				>
+				<Alert.Description>
+					Read the <button on:click={() => (open = false)}
+						><a href="/rules"><u>rules</u></a></button
+					> before submitting.
+				</Alert.Description>
 			</Alert.Root>
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-4 items-center gap-4">
@@ -151,7 +155,7 @@
 								</AlertDialog.Description>
 							</AlertDialog.Header>
 							<AlertDialog.Footer>
-								<AlertDialog.Cancel>Close</AlertDialog.Cancel>
+								<AlertDialog.Cancel on:click={() => (open = false)}>Close</AlertDialog.Cancel>
 							</AlertDialog.Footer>
 						</AlertDialog.Content>
 					{:else if sendStatus == 2}
@@ -164,7 +168,7 @@
 								</AlertDialog.Description>
 							</AlertDialog.Header>
 							<AlertDialog.Footer>
-								<AlertDialog.Cancel>Close</AlertDialog.Cancel>
+								<AlertDialog.Cancel on:click={() => (open = false)}>Close</AlertDialog.Cancel>
 							</AlertDialog.Footer>
 						</AlertDialog.Content>
 					{/if}
@@ -173,7 +177,7 @@
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
-	<Drawer.Root>
+	<Drawer.Root bind:open>
 		<Drawer.Trigger
 			class={buttonVariants({ variant: 'outline' })}
 			on:click={() => {
@@ -189,9 +193,11 @@
 				<Alert.Root>
 					<ExclamationTriangle class="h-4 w-4" />
 					<Alert.Title>Attention!</Alert.Title>
-					<Alert.Description
-						>Read the <a href="/rules"><u>rules</u></a> before submitting.</Alert.Description
-					>
+					<Alert.Description>
+						Read the <button on:click={() => (open = false)}
+							><a href="/rules"><u>rules</u></a></button
+						> before submitting.
+					</Alert.Description>
 				</Alert.Root>
 			</Drawer.Header>
 			<form class="grid items-start gap-4 px-4">
@@ -223,7 +229,7 @@
 						<Select.Input name="platform" value={true} />
 					</Select.Root>
 					<Label for="comment">Comment</Label>
-					<Input id="comment" placeholder='optional' bind:value={submission.comment} />
+					<Input id="comment" placeholder="optional" bind:value={submission.comment} />
 				</div>
 			</form>
 			<Drawer.Footer class="pt-2">
@@ -255,7 +261,7 @@
 								</AlertDialog.Description>
 							</AlertDialog.Header>
 							<AlertDialog.Footer>
-								<AlertDialog.Cancel>Close</AlertDialog.Cancel>
+								<AlertDialog.Cancel on:click={() => (open = false)}>Close</AlertDialog.Cancel>
 							</AlertDialog.Footer>
 						</AlertDialog.Content>
 					{:else if sendStatus == 2}
@@ -268,7 +274,7 @@
 								</AlertDialog.Description>
 							</AlertDialog.Header>
 							<AlertDialog.Footer>
-								<AlertDialog.Cancel>Close</AlertDialog.Cancel>
+								<AlertDialog.Cancel on:click={() => (open = false)}>Close</AlertDialog.Cancel>
 							</AlertDialog.Footer>
 						</AlertDialog.Content>
 					{/if}

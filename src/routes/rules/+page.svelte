@@ -2,4 +2,4 @@
     import BigTitle from '$lib/components/bigTitle.svelte'
 </script>
 
-<BigTitle value='About' description='' />
+<BigTitle value='Rules' description='Read the rules' />

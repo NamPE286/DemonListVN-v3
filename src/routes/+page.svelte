@@ -62,18 +62,6 @@
 	</Carousel.Root>
 </div>
 
-<div class="wrapper">
-	{#if $user.loggedIn}
-		<div class="right">
-			<Card.Root class="h-full">
-				<Card.Header>
-					<Card.Title>My submission</Card.Title>
-				</Card.Header>
-			</Card.Root>
-		</div>
-	{/if}
-</div>
-
 <style lang="scss">
 	.alertWrapper {
 		width: 550px;

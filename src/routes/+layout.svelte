@@ -123,10 +123,11 @@
 						</Avatar.Root>
 					</Button>
 				</DropdownMenu.Trigger>
-				<DropdownMenu.Content align="end">
+				<DropdownMenu.Content align="end" class="w-56">
 					<DropdownMenu.Label>{$user.data.name}</DropdownMenu.Label>
 					<DropdownMenu.Separator />
 					<DropdownMenu.Item>My profile</DropdownMenu.Item>
+					<DropdownMenu.Item>My Submission</DropdownMenu.Item>
 					<DropdownMenu.Item>Settings</DropdownMenu.Item>
 					<DropdownMenu.Separator />
 					<DropdownMenu.Item on:click={signOut}>Sign out</DropdownMenu.Item>
