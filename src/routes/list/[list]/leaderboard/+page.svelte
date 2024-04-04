@@ -8,7 +8,6 @@
 	import { page } from '$app/stores';
 
 	import type { PageData } from './$types';
-	import { Play } from 'svelte-radix';
 
 	export let data: PageData;
 	let curPage = -1;
