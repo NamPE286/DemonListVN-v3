@@ -129,7 +129,6 @@
 							type="submit"
 							builders={[builder]}
 							on:click={() => {
-								console.log('ok');
 								sendStatus = 0;
 								submit();
 							}}>Submit</Button
@@ -234,7 +233,6 @@
 							type="submit"
 							builders={[builder]}
 							on:click={() => {
-								console.log('ok');
 								sendStatus = 0;
 								submit();
 							}}>Submit</Button

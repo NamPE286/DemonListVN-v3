@@ -20,7 +20,6 @@
 	$: $page.url, update();
 
 	onMount(() => {
-		console.log(data);
 		document.getElementById(`page${curPage}`)?.click();
 	});
 </script>
