@@ -121,6 +121,7 @@
 		font-size: 18px;
 		margin-top: 30px;
 		margin-left: 25px;
+		padding-inline: 25px;
 	}
 
 	@media screen and (max-width: 900px) {
@@ -134,6 +135,10 @@
 
 		.right {
 			width: 100%;
+		}
+
+		h4 {
+			padding-inline: 10px;
 		}
 	}
 </style>
