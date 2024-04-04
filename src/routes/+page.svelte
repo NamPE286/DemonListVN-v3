@@ -7,7 +7,8 @@
 
 <div class="wrapper">
 	<h3>Dashboard</h3>
-	<h4>Recently added levels</h4>
+	<h4>Newest levels from Demon List</h4>
+	<h4>Newest levels from Featured List</h4>
 </div>
 
 <style lang="scss">

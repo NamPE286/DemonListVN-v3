@@ -1,5 +1,6 @@
 async function getTotalPage(fetch: any, list: string) {
     const prop = (list == 'dl' ? 'overallRank' : `${list}rank`);
+    
     const query = new URLSearchParams({
         start: '0',
         end: '0',
@@ -18,7 +19,7 @@ async function getLeaderboard(fetch: any, list: string, page: number) {
     const query = new URLSearchParams({
         start: String((page - 1) * 50),
         end: String(page * 50 - 1),
-        sortBy: `${list}rank`,
+        sortBy: list == 'dl' ? 'overallRank' : `${list}rank`,
         ascending: 'true'
     });
 
