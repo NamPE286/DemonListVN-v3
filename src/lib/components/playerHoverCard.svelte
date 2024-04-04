@@ -11,26 +11,23 @@
 <div class="wrapper">
 	<HoverCard.Root>
 		<HoverCard.Trigger
-			href="https://github.com/sveltejs"
-			target="_blank"
+			href={`/player/${player.data.uid}`}
 			rel="noreferrer noopener"
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
 			{player.data.name}
 		</HoverCard.Trigger>
 		<HoverCard.Content class="w-80">
-			<a href="#!">
-				<div class="hoverName">
-					<Avatar.Root>
-						<Avatar.Image
-							src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.data.uid}.jpg`}
-							alt="@shadcn"
-						/>
-						<Avatar.Fallback>{player.data.name[0]}</Avatar.Fallback>
-					</Avatar.Root>
-					<h4 class="font-semibold">{player.data.name}</h4>
-				</div>
-			</a>
+			<div class="hoverName">
+				<Avatar.Root>
+					<Avatar.Image
+						src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.data.uid}.jpg`}
+						alt="@shadcn"
+					/>
+					<Avatar.Fallback>{player.data.name[0]}</Avatar.Fallback>
+				</Avatar.Root>
+				<h4 class="font-semibold">{player.data.name}</h4>
+			</div>
 			<Separator />
 			<div class="content">
 				<div class="rating">
@@ -47,7 +44,7 @@
 						</Tooltip.Trigger>
 						<Tooltip.Content>{getTitle('dl', player.data.rating)?.fullTitle}</Tooltip.Content>
 					</Tooltip.Root>
-					<div class='rankWrapper'>
+					<div class="rankWrapper">
 						Demon List rating
 						<div class="rank">
 							#{player.data.overallRank}
@@ -58,7 +55,7 @@
 					<div class="leftCol">
 						<div class="title">{player.data.totalFLpt}</div>
 					</div>
-					<div class='rankWrapper'>
+					<div class="rankWrapper">
 						Total Featured List point
 						<div class="rank">
 							#{player.data.flrank}
@@ -94,19 +91,19 @@
 		padding-top: 10px;
 	}
 
-    .rankWrapper {
-        display: flex;
-        gap: 5px;
+	.rankWrapper {
+		display: flex;
+		gap: 5px;
 
-        .rank {
-            background-color: var(--textColor);
-            color: var(--textColorInverted);
-            padding-inline: 6px;
-            height: fit-content;
-            border-radius: 5px;
-            font-weight: 600;
-        }
-    }
+		.rank {
+			background-color: var(--textColor);
+			color: var(--textColorInverted);
+			padding-inline: 6px;
+			height: fit-content;
+			border-radius: 5px;
+			font-weight: 600;
+		}
+	}
 
 	.rating {
 		.title {

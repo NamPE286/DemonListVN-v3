@@ -12,7 +12,7 @@
 		<Card.Content>
 			<ContextMenu.Root>
 				<ContextMenu.Trigger>
-					<a href="#!">
+					<a href={`/level/${level.data.id}`}>
 						<img
 							src={`https://img.youtube.com/vi/${level.data.videoID}/0.jpg`}
 							alt=""
@@ -20,7 +20,7 @@
 							class="thumbnail"
 						/>
 					</a>
-					<a href="#!">
+					<a href={`/level/${level.data.id}`}>
 						<div class="levelInfo">
 							<div class="top">#{level.data[`${type}Top`]}</div>
 							<div class="info">

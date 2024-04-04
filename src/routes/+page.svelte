@@ -5,7 +5,6 @@
 	import DiscordLogo from 'svelte-radix/DiscordLogo.svelte';
 	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { user } from '$lib/client';
 
 	export let data: PageData;
 </script>
@@ -90,20 +89,6 @@
 		flex-direction: column;
 	}
 
-	.wrapper {
-		margin-top: 30px;
-		max-width: 100%;
-		padding-inline: 50px;
-		display: flex;
-	}
-
-	.right {
-		display: grid;
-		width: 500px;
-		grid-template-rows: 60px calc(100% - 60px - 20px);
-		gap: 20px;
-	}
-
 	h4 {
 		font-weight: 600;
 		font-size: 18px;
@@ -114,19 +99,11 @@
 
 	@media screen and (max-width: 900px) {
 		.alertWrapper {
-			padding-inline: 20px;
-		}
-
-		.wrapper {
-			padding-inline: 20px;
-		}
-
-		.right {
-			width: 100%;
+			padding-inline: 10px;
 		}
 
 		h4 {
-			padding-inline: 10px;
+			padding-inline: 0px;
 		}
 	}
 </style>

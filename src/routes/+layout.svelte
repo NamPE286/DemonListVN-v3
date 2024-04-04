@@ -192,7 +192,7 @@
 		padding-inline: 30px;
 		border-bottom: 1px solid var(--border1);
 		backdrop-filter: blur(20px);
-
+		z-index: 20;
 		.right {
 			display: flex;
 
