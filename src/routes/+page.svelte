@@ -22,7 +22,7 @@
 				<div class="header">
 					<Card.Title>Hey there!</Card.Title>
 				</div>
-				<Card.Description>Join our discord server for latest news and annoucement.</Card.Description
+				<Card.Description>Join our discord server for latest news and announcement.</Card.Description
 				>
 				<Button variant="outline">
 					<a href="https://discord.gg/MnGVdtjq49">Take me there</a>
