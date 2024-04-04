@@ -78,6 +78,7 @@
 </div>
 <div class="cardWrapper1 table">
 	<Table.Root>
+        <Table.Caption>Total record: {data.records.length}</Table.Caption>
 		<Table.Header>
 			<Table.Row>
 				<Table.Head class="w-[130px]">Player</Table.Head>
