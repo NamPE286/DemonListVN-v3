@@ -84,19 +84,19 @@ export function getTitle(list: string, rating: number) {
             return {
                 title: 'M',
                 fullTitle: 'Master',
-                color: 'blue'
+                color: 'darkorange'
             };
         if (rating >= 2800)
             return {
                 title: 'CM',
                 fullTitle: 'Candidate Master',
-                color: 'darkorange'
+                color: 'purple'
             };
         if (rating >= 2500)
             return {
                 title: 'EX',
                 fullTitle: 'Expert',
-                color: 'purple'
+                color: 'blue'
             };
         if (rating >= 2350)
             return {
