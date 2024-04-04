@@ -77,6 +77,8 @@
 	}
 
 	.level {
+		overflow: hidden;
+		
 		.levelInfo {
 			margin-top: -5px;
 			margin-bottom: -15px;
