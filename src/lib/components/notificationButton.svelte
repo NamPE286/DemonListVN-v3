@@ -60,7 +60,7 @@
 					event: 'INSERT',
 					schema: 'public',
 					table: 'notifications',
-                    filter: `to=eq.${$user.data.uid}`
+					filter: `to=eq.${$user.data.uid}`
 				},
 				(payload) => {
 					notifications.unshift(payload.new);
@@ -72,14 +72,13 @@
 
 	async function clear() {
 		fetch(`${import.meta.env.VITE_API_URL}/notifications/${$user.data.uid}`, {
-            method: 'DELETE',
+			method: 'DELETE',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())!
 			}
-		})
-            .then(res => {
-                notifications = []
-            })
+		}).then((res) => {
+			notifications = [];
+		});
 	}
 
 	$: $user, fetchNotifications();
@@ -89,7 +88,12 @@
 	<Popover.Trigger>
 		<button class="clickable">
 			<Button variant="ghost" size="icon" class="overflow-hidden rounded-full">
-				<Bell size={20} />
+				<div>
+					<Bell size={20} />
+					{#if notifications.length != 0}
+						<div class="whiteDot" />
+					{/if}
+				</div>
 			</Button>
 		</button>
 	</Popover.Trigger>
@@ -118,6 +122,15 @@
 </Popover.Root>
 
 <style lang="scss">
+	.whiteDot {
+		position: absolute;
+		width: 10px;
+		height: 10px;
+		background-color: var(--textColor);
+		border-radius: 50%;
+		transform: translateX(9px) translateY(-23px);
+	}
+
 	.header {
 		display: flex;
 		align-items: center;
@@ -133,7 +146,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 10px;
-        height: fit-content;
+		height: fit-content;
 		max-height: 300px;
 		overflow: scroll;
 		overflow-x: hidden;

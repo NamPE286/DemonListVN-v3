@@ -2,11 +2,8 @@
 	import '../app.pcss';
 	import '../app.scss';
 	import 'non.geist';
-	import { resetMode, setMode, ModeWatcher } from 'mode-watcher';
+	import { ModeWatcher } from 'mode-watcher';
 
-	import Sun from 'svelte-radix/Sun.svelte';
-	import Moon from 'svelte-radix/Moon.svelte';
-	import Gear from 'svelte-radix/Gear.svelte';
 	import HamburgerMenu from 'svelte-radix/HamburgerMenu.svelte';
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 
@@ -18,11 +15,13 @@
 
 	import Search from '$lib/components/search.svelte';
 	import SubmitButton from '$lib/components/submitButton.svelte';
+	import SettingButton from '$lib/components/settingButton.svelte';
 
 	import supabase from '$lib/client/supabase';
 	import { user } from '$lib/client';
 	import { mediaQuery } from 'svelte-legos';
 	import NotificationButton from '$lib/components/notificationButton.svelte';
+	import { goto } from '$app/navigation';
 
 	const links = [
 		{ route: '/list/dl', name: 'Demon List' },
@@ -127,26 +126,16 @@
 				<DropdownMenu.Content align="end" class="w-56">
 					<DropdownMenu.Label>{$user.data.name}</DropdownMenu.Label>
 					<DropdownMenu.Separator />
-					<DropdownMenu.Item>My profile</DropdownMenu.Item>
+					<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}>My profile</DropdownMenu.Item>
 					<DropdownMenu.Item>My Submission</DropdownMenu.Item>
 					<DropdownMenu.Separator />
-					<DropdownMenu.Item on:click={signOut}>Sign out</DropdownMenu.Item>
+					<DropdownMenu.Item on:click={signOut}>
+						<span style='color: red'>Sign out</span>
+					</DropdownMenu.Item>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		{/if}
-		<DropdownMenu.Root>
-			<DropdownMenu.Trigger asChild let:builder>
-				<Button builders={[builder]} variant="outline" size="icon">
-					<Gear class="h-[1.2rem] w-[1.2rem]" />
-					<span class="sr-only">Toggle theme</span>
-				</Button>
-			</DropdownMenu.Trigger>
-			<DropdownMenu.Content align="end">
-				<DropdownMenu.Item on:click={() => setMode('light')}>Light</DropdownMenu.Item>
-				<DropdownMenu.Item on:click={() => setMode('dark')}>Dark</DropdownMenu.Item>
-				<DropdownMenu.Item on:click={() => resetMode()}>System</DropdownMenu.Item>
-			</DropdownMenu.Content>
-		</DropdownMenu.Root>
+		<SettingButton />
 	</div>
 </div>
 

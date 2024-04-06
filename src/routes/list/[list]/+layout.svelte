@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-	<title>Demon List - Demon List VN</title>
+	<title>Leaderboard - {$page.params.list == 'dl' ? 'Demon' : 'Featured'} List - Demon List VN</title>
 </svelte:head>
 
 {#if $page.params.list == 'dl'}

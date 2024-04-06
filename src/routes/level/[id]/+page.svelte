@@ -10,6 +10,7 @@
 
 <svelte:head>
 	<title>{data.level.name} by {data.level.creator} - Demon List VN</title>
+	<meta name="description" content={data.levelAPI.description} />
 </svelte:head>
 
 <img class="bg" src={`https://img.youtube.com/vi/${data.level.videoID}/0.jpg`} alt="thumbnail" />

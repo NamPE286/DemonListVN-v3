@@ -25,7 +25,7 @@
 </script>
 
 <svelte:head>
-	<title>Demon List - Demon List VN</title>
+	<title>{$page.params.list == 'dl' ? 'Demon' : 'Featured'} List - Demon List VN</title>
 </svelte:head>
 
 <div class="levelsWrapper">
