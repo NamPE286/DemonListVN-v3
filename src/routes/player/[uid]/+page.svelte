@@ -128,8 +128,8 @@
 			</Table.Row>
 		</Table.Header>
 		<Table.Body>
-			<Table.Row>
-				{#each data.records[list] as record}
+			{#each data.records[list] as record}
+				<Table.Row>
 					<Table.Cell class="font-medium">
 						<a href={`/level/${record.data.levels.id}`} data-sveltekit-preload-data="tap">
 							{record.data.levels.name}
@@ -144,8 +144,8 @@
 							</a>
 						</button>
 					</Table.Cell>
-				{/each}
-			</Table.Row>
+				</Table.Row>
+			{/each}
 		</Table.Body>
 	</Table.Root>
 </div>
