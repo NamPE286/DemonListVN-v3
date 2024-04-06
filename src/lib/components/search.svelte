@@ -2,6 +2,8 @@
 	import * as Command from '$lib/components/ui/command';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import Loading from '$lib/components/animation/loading.svelte';
 
 	export let open: boolean;
 	export let value: string = '';
@@ -13,13 +15,19 @@
 
 	let state = 0;
 
+	$: $page.url, close()
 	$: open && onChange();
+
+	function close() {
+		open = false
+	}
 
 	function onChange() {
 		result = {
 			levels: [],
 			players: []
 		};
+		
 		value = '';
 		state = 0;
 	}
@@ -66,7 +74,7 @@
 	}}
 />
 
-<Command.Dialog bind:open={open}>
+<Command.Dialog bind:open>
 	<Command.Input bind:value placeholder="Type and press Enter to search..." />
 	<Command.List>
 		{#if state != 0}
