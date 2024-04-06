@@ -117,7 +117,7 @@
 						<Avatar.Root>
 							<Avatar.Image
 								src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}.jpg`}
-								alt="@shadcn"
+								alt=""
 							/>
 							<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
 						</Avatar.Root>

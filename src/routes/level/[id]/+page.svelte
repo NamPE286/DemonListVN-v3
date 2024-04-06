@@ -1,13 +1,16 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
-	import * as Pagination from '$lib/components/ui/pagination';
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import type { PageData } from './$types';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 
 	export let data: PageData;
 </script>
+
+<svelte:head>
+	<title>{data.level.name} by {data.level.creator} - Demon List VN</title>
+</svelte:head>
 
 <img class="bg" src={`https://img.youtube.com/vi/${data.level.videoID}/0.jpg`} alt="thumbnail" />
 <div class="head">
