@@ -15,11 +15,11 @@
 
 	let state = 0;
 
-	$: $page.url, close()
+	$: $page.url, close();
 	$: open && onChange();
 
 	function close() {
-		open = false
+		open = false;
 	}
 
 	function onChange() {
@@ -27,7 +27,7 @@
 			levels: [],
 			players: []
 		};
-		
+
 		value = '';
 		state = 0;
 	}
@@ -69,7 +69,9 @@
 		}
 
 		if (e.key == 'Enter') {
-			search();
+			if (state == 0) {
+				search();
+			}
 		}
 	}}
 />
@@ -78,7 +80,13 @@
 	<Command.Input bind:value placeholder="Type and press Enter to search..." />
 	<Command.List>
 		{#if state != 0}
-			<Command.Empty>No results found.</Command.Empty>
+			{#if state != 1}
+				<Command.Empty>No results found.</Command.Empty>
+			{:else}
+				<Command.Empty>
+					<Loading inverted={true} />
+				</Command.Empty>
+			{/if}
 			{#if result.levels.length}
 				<Command.Group heading="Levels">
 					{#each result.levels as item}
@@ -96,6 +104,7 @@
 							<Command.Item>
 								<Avatar.Root>
 									<Avatar.Image
+										class="object-cover"
 										src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${item.data.uid}.jpg`}
 										alt="@shadcn"
 									/>

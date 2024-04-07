@@ -32,12 +32,17 @@
 
 	let searchQuery = '';
 	let searchToggled = false;
-	let notificationToggled = false;
 	const isDesktop = mediaQuery('(min-width: 1200px)');
 
 	function signIn() {
 		supabase.auth.signInWithOAuth({
-			provider: 'google'
+			provider: 'google',
+			options: {
+				queryParams: {
+					access_type: 'offline',
+					prompt: 'consent'
+				}
+			}
 		});
 	}
 
@@ -116,6 +121,7 @@
 					>
 						<Avatar.Root>
 							<Avatar.Image
+								class="object-cover"
 								src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}.jpg`}
 								alt=""
 							/>
@@ -126,11 +132,13 @@
 				<DropdownMenu.Content align="end" class="w-56">
 					<DropdownMenu.Label>{$user.data.name}</DropdownMenu.Label>
 					<DropdownMenu.Separator />
-					<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}>My profile</DropdownMenu.Item>
+					<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
+						>My profile</DropdownMenu.Item
+					>
 					<DropdownMenu.Item>My Submission</DropdownMenu.Item>
 					<DropdownMenu.Separator />
 					<DropdownMenu.Item on:click={signOut}>
-						<span style='color: red'>Sign out</span>
+						<span style="color: red">Sign out</span>
 					</DropdownMenu.Item>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>

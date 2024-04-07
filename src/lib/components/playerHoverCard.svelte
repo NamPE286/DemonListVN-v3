@@ -21,6 +21,7 @@
 			<div class="hoverName">
 				<Avatar.Root>
 					<Avatar.Image
+						class="object-cover"
 						src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.data.uid}.jpg`}
 						alt="@shadcn"
 					/>

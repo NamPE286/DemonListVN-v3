@@ -21,7 +21,8 @@
 	<div class="playerInfo">
 		<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
 			<Avatar.Image
-				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}`}
+				class="object-cover"
+				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}.jpg`}
 				alt=""
 			/>
 			<Avatar.Fallback class="text-5xl lg:text-6xl">{data.player.name[0]}</Avatar.Fallback>
@@ -122,9 +123,11 @@
 		<Table.Header>
 			<Table.Row>
 				<Table.Head>Level</Table.Head>
+				<Table.Head class="w-[200px] text-center">Submitted on</Table.Head>
+				<Table.Head class="w-[100px] text-center">Device</Table.Head>
 				<Table.Head class="w-[80px] text-center">Point</Table.Head>
 				<Table.Head class="w-[80px] text-center">Progress</Table.Head>
-				<Table.Head class="w-[80px] text-center">Video link</Table.Head>
+				<Table.Head class="w-[0px] text-center"></Table.Head>
 			</Table.Row>
 		</Table.Header>
 		<Table.Body>
@@ -135,9 +138,15 @@
 							{record.data.levels.name}
 						</a>
 					</Table.Cell>
+					<Table.Cell class="text-center"
+						>{new Date(record.data.timestamp).toLocaleString()}</Table.Cell
+					>
+					<Table.Cell class="text-center"
+						>{record.data.mobile ? 'Mobile' : 'PC'} ({record.data.refreshRate}fps)</Table.Cell
+					>
 					<Table.Cell class="text-center">{record.data[list + 'Pt']}</Table.Cell>
 					<Table.Cell class="text-center">{record.data.progress}%</Table.Cell>
-					<Table.Cell class="w-[80px] text-center">
+					<Table.Cell class="text-center">
 						<button>
 							<a href={record.data.videoLink} target="_blank">
 								<ExternalLink size={20} />

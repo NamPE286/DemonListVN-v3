@@ -10,7 +10,6 @@ export async function load({ params, url, fetch }) {
         }
 
         if (i.data.flPt != null) {
-            console.log(i.data.flPt)
             flRec.push(i)
         }
     }

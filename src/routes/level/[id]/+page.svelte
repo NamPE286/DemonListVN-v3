@@ -62,14 +62,13 @@
 		<Card.Root>
 			<Card.Content>
 				<div class="content">
-					<p><b>Description:</b></p>
-					<p>{data.levelAPI.description}</p>
-					<p><b>Difficulty: </b>{data.levelAPI.difficulty}</p>
-					<p><b>ID: </b>{data.level.id}</p>
+					<p><b>Description:</b> <span>{data.levelAPI.description}</span></p>
+					<p><b>Difficulty: </b><span>{data.levelAPI.difficulty}</span></p>
+					<p><b>ID: </b><span>{data.level.id}</span></p>
 					<p>
 						<b>Song: </b>
 						{#if data.level.songID == null}
-							Avaliable on Newground
+							<span>Avaliable on Newground</span>
 						{:else}
 							<a href={`${import.meta.env.VITE_API_URL}/level/${data.level.id}/song`}
 								><u>Download</u></a
@@ -85,11 +84,11 @@
 			<Table.Caption>Total record: {data.records.length}</Table.Caption>
 			<Table.Header>
 				<Table.Row>
-					<Table.Head class="w-[130px]">Player</Table.Head>
-					<Table.Head class="w-[220px]">Submitted on</Table.Head>
-					<Table.Head>Device</Table.Head>
+					<Table.Head>Player</Table.Head>
+					<Table.Head class="w-[220px] text-center">Submitted on</Table.Head>
+					<Table.Head class='w-[100px] text-center'>Device</Table.Head>
 					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
-					<Table.Head class="w-[80px] text-center">Video link</Table.Head>
+					<Table.Head class="w-[0px] text-center"></Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -98,10 +97,10 @@
 						<Table.Cell class="font-medium">
 							<PlayerHoverCard player={{ data: record.data.players }} />
 						</Table.Cell>
-						<Table.Cell>
+						<Table.Cell class="text-center">
 							{new Date(record.data.timestamp).toLocaleString()}
 						</Table.Cell>
-						<Table.Cell>
+						<Table.Cell class="text-center">
 							{record.data.mobile ? 'Mobile' : 'PC'} ({record.data.refreshRate}fps)
 						</Table.Cell>
 						<Table.Cell class="text-center">
@@ -136,6 +135,16 @@
 			height: 280px;
 			margin-top: 20px;
 			border-radius: var(--radius);
+		}
+
+		.content {
+			p {
+				line-height: 20px;
+				margin-bottom: 5px;
+			}
+			span {
+				color: var(--textColor2);
+			}
 		}
 	}
 
