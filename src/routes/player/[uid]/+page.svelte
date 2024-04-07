@@ -7,7 +7,9 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Card from '$lib/components/ui/card';
+	import { user } from '$lib/client';
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
+	import ProfileEditButton from '$lib/components/profileEditButton.svelte';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' = 'dl';
@@ -28,7 +30,12 @@
 			<Avatar.Fallback class="text-5xl lg:text-6xl">{data.player.name[0]}</Avatar.Fallback>
 		</Avatar.Root>
 		<div class="info">
-			<h2>{data.player.name}</h2>
+			<h2>
+				{data.player.name}
+				{#if $user.loggedIn && data.player.uid == $user.data.uid}
+					<ProfileEditButton />
+				{/if}
+			</h2>
 			{#if data.player.province}
 				<div class="location">
 					<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
