@@ -14,8 +14,13 @@
 	import { onMount } from 'svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { mediaQuery } from 'svelte-legos';
+	import { page } from '$app/stores';
+	import { goto, invalidateAll } from '$app/navigation';
 
-	export let player: any;
+	export let data: any;
+	export let open = false;
+
+	let player = structuredClone(data);
 	let fileinput: any;
 	let provinces: any = {};
 	let provinceItem = {
@@ -29,6 +34,12 @@
 		value: player.city
 	};
 	const isDesktop = mediaQuery('(min-width: 768px)');
+
+	$: open, reset();
+
+	function reset() {
+		player = structuredClone(data);
+	}
 
 	async function getImage(e: any) {
 		let image = e.target.files[0];
@@ -64,6 +75,27 @@
 		});
 	}
 
+	async function saveChanges() {
+		const token = await $user.token();
+		const promise = fetch(`${import.meta.env.VITE_API_URL}/player`, {
+			method: 'PUT',
+			headers: {
+				Authorization: 'Bearer ' + token,
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(player)
+		});
+
+		toast.promise(promise, {
+			loading: 'Saving...',
+			success: 'Saved!',
+			error: 'Failed to save.'
+		});
+
+		data = player;
+		open = false;
+	}
+
 	onMount(() => {
 		fetch(`${import.meta.env.VITE_API_URL}/provinces`)
 			.then((res) => res.json())
@@ -82,7 +114,7 @@
 />
 
 {#if $isDesktop}
-	<Dialog.Root>
+	<Dialog.Root bind:open>
 		<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}><Pencil1 /></Dialog.Trigger>
 		<Dialog.Content>
 			<Dialog.Header>
@@ -156,13 +188,13 @@
 					</div>
 				</div>
 				<Dialog.Footer>
-					<Button type="submit">Save changes</Button>
+					<Button type="submit" on:click={saveChanges}>Save changes</Button>
 				</Dialog.Footer>
 			</Dialog.Header>
 		</Dialog.Content>
 	</Dialog.Root>
 {:else}
-	<Drawer.Root>
+	<Drawer.Root bind:open>
 		<Drawer.Trigger class={buttonVariants({ variant: 'outline' })}><Pencil1 /></Drawer.Trigger>
 		<Drawer.Content>
 			<Drawer.Header>
@@ -236,7 +268,7 @@
 					</div>
 				</div>
 				<Drawer.Footer>
-					<Button type="submit">Save changes</Button>
+					<Button type="submit" on:click={saveChanges}>Save changes</Button>
 				</Drawer.Footer>
 			</Drawer.Header>
 		</Drawer.Content>
