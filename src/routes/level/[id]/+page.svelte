@@ -4,6 +4,7 @@
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import type { PageData } from './$types';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import { fade } from 'svelte/transition';
 
 	export let data: PageData;
 </script>
@@ -13,7 +14,12 @@
 	<meta name="description" content={data.levelAPI.description} />
 </svelte:head>
 
-<img class="bg" src={`https://img.youtube.com/vi/${data.level.videoID}/0.jpg`} alt="thumbnail" />
+<img
+	in:fade={{ delay: 250, duration: 300 }}
+	class="bg"
+	src={`https://img.youtube.com/vi/${data.level.videoID}/0.jpg`}
+	alt="thumbnail"
+/>
 <div class="head">
 	<div class="cardWrapper">
 		<Card.Root>
@@ -86,7 +92,7 @@
 				<Table.Row>
 					<Table.Head>Player</Table.Head>
 					<Table.Head class="w-[220px] text-center">Submitted on</Table.Head>
-					<Table.Head class='w-[100px] text-center'>Device</Table.Head>
+					<Table.Head class="w-[100px] text-center">Device</Table.Head>
 					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
 				</Table.Row>
