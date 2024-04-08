@@ -165,12 +165,13 @@
 
 	.bg {
 		width: 100%;
-		height: 33vw;
+		height: 38vw;
 		max-height: 500px;
-		min-height: 300px;
+		min-height: 400px;
 		object-fit: cover;
 		position: fixed;
 		z-index: 0;
+		top: 0;
 	}
 
 	.detailWrapper {
