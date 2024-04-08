@@ -44,6 +44,7 @@
 		"non.geist": "^1.0.2",
 		"svelte-legos": "^0.2.2",
 		"svelte-loading-bar": "^1.2.0",
+		"svelte-markdown": "^0.4.1",
 		"svelte-radix": "^1.1.0",
 		"svelte-sonner": "^0.3.21",
 		"tailwind-merge": "^2.2.2",
