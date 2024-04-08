@@ -6,4 +6,4 @@
     <title>About - Demon List VN</title>
 </svelte:head>
 
-<BigTitle value='About' description='' />
+<BigTitle value='About' description='A list of Demon List VN maintainer' />

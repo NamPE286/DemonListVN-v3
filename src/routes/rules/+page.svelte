@@ -111,4 +111,10 @@
 			display: list-item;
 		}
 	}
+
+	@media screen and (max-width: 900px) {
+		.wrapper {
+			padding-inline: 15px;
+		}
+	}
 </style>
