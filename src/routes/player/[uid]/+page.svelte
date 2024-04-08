@@ -33,7 +33,7 @@
 			<h2>
 				{data.player.name}
 				{#if $user.loggedIn && data.player.uid == $user.data.uid}
-					<ProfileEditButton />
+					<ProfileEditButton player={data.player} />
 				{/if}
 			</h2>
 			{#if data.player.province}
