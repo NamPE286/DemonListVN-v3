@@ -45,7 +45,18 @@
 	/>
 {/if}
 
-<div class="head" style={$settingsValue.dashboardBackgroundURL == '' ? `max-height: 200px; min-height: 200px` : ''}>
+<div
+	class="head"
+	style={$settingsValue.dashboardBackgroundURL == '' ? `max-height: 200px; min-height: 200px` : ''}
+>
+	<p>{time}</p>
+	{#if $user.loggedIn}
+		<h2>{data.greeting}, {$user.data.name}!</h2>
+	{:else}
+		<h2>{data.greeting}!</h2>
+	{/if}
+</div>
+<div class="wrapper">
 	{#if $settingsValue.hideDiscord == 'false'}
 		<div class="alertWrapper">
 			<Card.Root>
@@ -66,14 +77,7 @@
 			</Card.Root>
 		</div>
 	{/if}
-	<p>{time}</p>
-	{#if $user.loggedIn}
-		<h2>{data.greeting}, {$user.data.name}!</h2>
-	{:else}
-		<h2>{data.greeting}!</h2>
-	{/if}
-</div>
-<div class="wrapper">
+
 	<h4>Newest levels from Demon List</h4>
 
 	<div class="carouselWrapper">
@@ -125,7 +129,7 @@
 
 	.head {
 		position: relative;
-		background: linear-gradient(rgba(0, 0, 0, 0) 20%, hsl(var(--background)) calc(60% + 10vw));
+		background: linear-gradient(rgba(0, 0, 0, 0) 10%, hsl(var(--background)) calc(60% + 10vw));
 		padding-bottom: 20px;
 		height: 33vw;
 		max-height: 500px;
