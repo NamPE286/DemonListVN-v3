@@ -13,8 +13,11 @@
 	export let data: PageData;
 	let time = new Date().toLocaleTimeString();
 	const settingsValue = settings.value;
+	let visible = false;
 
 	onMount(() => {
+		visible = true
+
 		const interval = setInterval(() => {
 			time = new Date().toLocaleTimeString();
 		}, 1000);
@@ -29,7 +32,7 @@
 	<title>Demon List VN</title>
 </svelte:head>
 
-{#if $settingsValue.dashboardBackgroundURL != ''}
+{#if visible && $settingsValue.dashboardBackgroundURL != ''}
 	<img
 		in:fade={{ delay: 250, duration: 300 }}
 		class="bg"
@@ -37,7 +40,8 @@
 		alt="thumbnail"
 	/>
 {/if}
-<div class="head" style={$settingsValue.dashboardBackgroundURL == '' ? `height: fit-content` : ''}>
+
+<div class="head">
 	<div class="alertWrapper">
 		<Card.Root>
 			<div class="content">
