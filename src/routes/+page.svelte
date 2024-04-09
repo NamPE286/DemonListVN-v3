@@ -34,7 +34,7 @@
 
 {#if visible && $settingsValue.dashboardBackgroundURL != ''}
 	<img
-		in:fade={{ delay: 250, duration: 300 }}
+		in:fade={{ delay: 300, duration: 300 }}
 		class="bg"
 		src={$settingsValue.dashboardBackgroundURL}
 		alt="thumbnail"
