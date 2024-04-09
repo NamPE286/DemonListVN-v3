@@ -37,6 +37,10 @@
 	const isDesktop = mediaQuery('(min-width: 768px)');
 
 	async function submit() {
+		if (submission.mobile != null) {
+			submission.mobile = submission.mobile.value;
+		}
+
 		fetch(`${import.meta.env.VITE_API_URL}/submission`, {
 			method: 'POST',
 			body: JSON.stringify(submission),
@@ -74,8 +78,7 @@
 				<ExclamationTriangle class="h-4 w-4" />
 				<Alert.Title>Attention!</Alert.Title>
 				<Alert.Description>
-					Read the <button on:click={() => (open = false)}
-						><a href="/rules"><u>rules</u></a></button
+					Read the <button on:click={() => (open = false)}><a href="/rules"><u>rules</u></a></button
 					> before submitting.
 				</Alert.Description>
 			</Alert.Root>
@@ -98,19 +101,15 @@
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="name" class="text-right">Platform</Label>
-					<Select.Root>
+					<Select.Root bind:selected={submission.mobile}>
 						<Select.Trigger class="col-span-3">
 							<Select.Value placeholder="Select a platform" />
 						</Select.Trigger>
 						<Select.Content>
 							<Select.Group>
 								<Select.Label>Platform</Select.Label>
-								<Select.Item value={false} on:click={() => (submission.mobile = false)} label="PC"
-									>PC</Select.Item
-								>
-								<Select.Item value={true} on:click={() => (submission.mobile = true)} label="Mobile"
-									>Mobile</Select.Item
-								>
+								<Select.Item value={false} label="PC">PC</Select.Item>
+								<Select.Item value={true} label="Mobile">Mobile</Select.Item>
 							</Select.Group>
 						</Select.Content>
 						<Select.Input name="platform" value={true} />
@@ -211,7 +210,7 @@
 					<Label for="videoLink">Video's Link</Label>
 					<Input id="videoLink" bind:value={submission.videoLink} />
 					<Label for="platform">Platform</Label>
-					<Select.Root>
+					<Select.Root bind:selected={submission.mobile}>
 						<Select.Trigger>
 							<Select.Value placeholder="Select a platform" />
 						</Select.Trigger>

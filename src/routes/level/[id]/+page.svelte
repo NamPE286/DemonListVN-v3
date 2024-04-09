@@ -91,7 +91,7 @@
 			<Table.Header>
 				<Table.Row>
 					<Table.Head>Player</Table.Head>
-					<Table.Head class="w-[220px] text-center">Submitted on</Table.Head>
+					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 					<Table.Head class="w-[100px] text-center">Device</Table.Head>
 					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
@@ -107,7 +107,7 @@
 							{new Date(record.data.timestamp).toLocaleString()}
 						</Table.Cell>
 						<Table.Cell class="text-center">
-							{record.data.mobile ? 'Mobile' : 'PC'} ({record.data.refreshRate}fps)
+							{record.data.mobile ? 'Mobile' : 'PC'}<br />({record.data.refreshRate}fps)
 						</Table.Cell>
 						<Table.Cell class="text-center">
 							{record.data.progress}%

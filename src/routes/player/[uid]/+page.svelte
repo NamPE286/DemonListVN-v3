@@ -130,7 +130,7 @@
 		<Table.Header>
 			<Table.Row>
 				<Table.Head>Level</Table.Head>
-				<Table.Head class="w-[200px] text-center">Submitted on</Table.Head>
+				<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 				<Table.Head class="w-[100px] text-center">Device</Table.Head>
 				<Table.Head class="w-[80px] text-center">Point</Table.Head>
 				<Table.Head class="w-[80px] text-center">Progress</Table.Head>
@@ -148,9 +148,9 @@
 					<Table.Cell class="text-center"
 						>{new Date(record.data.timestamp).toLocaleString()}</Table.Cell
 					>
-					<Table.Cell class="text-center"
-						>{record.data.mobile ? 'Mobile' : 'PC'} ({record.data.refreshRate}fps)</Table.Cell
-					>
+					<Table.Cell class="text-center">
+						{record.data.mobile ? 'Mobile' : 'PC'}<br />({record.data.refreshRate}fps)
+					</Table.Cell>
 					<Table.Cell class="text-center">{record.data[list + 'Pt']}</Table.Cell>
 					<Table.Cell class="text-center">{record.data.progress}%</Table.Cell>
 					<Table.Cell class="text-center">

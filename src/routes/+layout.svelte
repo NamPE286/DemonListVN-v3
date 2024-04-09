@@ -135,7 +135,9 @@
 					<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
 						>My profile</DropdownMenu.Item
 					>
-					<DropdownMenu.Item>My Submission</DropdownMenu.Item>
+					<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
+						>My Submission</DropdownMenu.Item
+					>
 					<DropdownMenu.Separator />
 					<DropdownMenu.Item on:click={signOut}>
 						<span style="color: red">Sign out</span>
