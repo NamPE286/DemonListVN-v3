@@ -17,8 +17,6 @@
 		const { uid } = $user.data;
 		const token = await $user.token();
 
-		console.log(uid, lvID);
-
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/record/${uid}/${lvID}`, {
 				method: 'DELETE',
