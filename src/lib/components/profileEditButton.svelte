@@ -14,8 +14,6 @@
 	import { onMount } from 'svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { mediaQuery } from 'svelte-legos';
-	import { page } from '$app/stores';
-	import { goto, invalidateAll } from '$app/navigation';
 
 	export let data: any;
 	export let open = false;
