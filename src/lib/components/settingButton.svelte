@@ -3,8 +3,9 @@
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { setMode } from 'mode-watcher';
-	import { toast } from "svelte-sonner";
+	import { toast } from 'svelte-sonner';
 	import { settings } from '$lib/client/settings';
+	import { Switch } from '$lib/components/ui/switch/index.js';
 	import Gear from 'svelte-radix/Gear.svelte';
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
@@ -12,9 +13,10 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import Input from '$lib/components/ui/input/input.svelte';
 
-	const settingsValue = settings.value
-	let bgURL = $settingsValue.dashboardBackgroundURL
-	let bgURLOpened = false
+	const settingsValue = settings.value;
+	let bgURL = $settingsValue.dashboardBackgroundURL;
+	let bgURLOpened = false;
+	let hideDiscord = $settingsValue.hideDiscord == 'true';
 </script>
 
 <Dialog.Root>
@@ -96,16 +98,30 @@
 							</div>
 						</Dialog.Header>
 						<Dialog.Footer>
-							<Button type="submit" on:click={() => {
-								console.log(bgURL)
-								settings.set('dashboardBackgroundURL', bgURL)
-								toast.success('Changed background image!')
-								bgURLOpened = false
-							}}>Apply</Button>
+							<Button
+								type="submit"
+								on:click={() => {
+									console.log(bgURL);
+									settings.set('dashboardBackgroundURL', bgURL);
+									toast.success('Changed background image!');
+									bgURLOpened = false;
+								}}>Apply</Button
+							>
 						</Dialog.Footer>
 					</Dialog.Content>
 				</Dialog.Root>
 			</div>
+		</div>
+		<div class="setting">
+			<Label for="discord">Hide Discord invite</Label>
+			<Switch
+				class="ml-auto"
+				id="discord"
+				bind:checked={hideDiscord}
+				on:click={() => {
+					settings.set('hideDiscord', hideDiscord ? 'true' : 'false');
+				}}
+			/>
 		</div>
 	</Dialog.Content>
 </Dialog.Root>

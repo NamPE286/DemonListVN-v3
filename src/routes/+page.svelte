@@ -30,6 +30,10 @@
 
 <svelte:head>
 	<title>Demon List VN</title>
+	<meta
+		name="description"
+		content="Welcome to Demon List VN, this is where we keep track of the hardest demons created, verified and hardest demon beaten by Vietnamese!"
+	/>
 </svelte:head>
 
 {#if visible && $settingsValue.dashboardBackgroundURL != ''}
@@ -41,25 +45,27 @@
 	/>
 {/if}
 
-<div class="head" style={$settingsValue.dashboardBackgroundURL == '' ? `height: fit-content` : ''}>
-	<div class="alertWrapper">
-		<Card.Root>
-			<div class="content">
-				<DiscordLogo />
-				<div>
-					<div class="header">
-						<Card.Title>Hey there!</Card.Title>
+<div class="head" style={$settingsValue.dashboardBackgroundURL == '' ? `max-height: 200px; min-height: 200px` : ''}>
+	{#if $settingsValue.hideDiscord == 'false'}
+		<div class="alertWrapper">
+			<Card.Root>
+				<div class="content">
+					<DiscordLogo />
+					<div>
+						<div class="header">
+							<Card.Title>Hey there!</Card.Title>
+						</div>
+						<Card.Description
+							>Join our discord server for latest news and announcement.</Card.Description
+						>
+						<Button variant="outline">
+							<a href="https://discord.gg/MnGVdtjq49">Take me there</a>
+						</Button>
 					</div>
-					<Card.Description
-						>Join our discord server for latest news and announcement.</Card.Description
-					>
-					<Button variant="outline">
-						<a href="https://discord.gg/MnGVdtjq49">Take me there</a>
-					</Button>
 				</div>
-			</div>
-		</Card.Root>
-	</div>
+			</Card.Root>
+		</div>
+	{/if}
 	<p>{time}</p>
 	{#if $user.loggedIn}
 		<h2>{data.greeting}, {$user.data.name}!</h2>
@@ -119,10 +125,11 @@
 
 	.head {
 		position: relative;
-		background: linear-gradient(rgba(0, 0, 0, 0) 0%, hsl(var(--background)) calc(60% + 200px));
+		background: linear-gradient(rgba(0, 0, 0, 0) 20%, hsl(var(--background)) calc(60% + 10vw));
+		padding-bottom: 20px;
 		height: 33vw;
-		max-height: 700px;
-		min-height: 400px;
+		max-height: 500px;
+		min-height: 200px;
 		z-index: 10;
 		display: flex;
 		flex-direction: column-reverse;
