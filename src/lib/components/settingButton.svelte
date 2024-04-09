@@ -89,6 +89,7 @@
 					<Dialog.Content>
 						<Dialog.Header>
 							<Dialog.Title>Change background image</Dialog.Title>
+							<Dialog.Description>Leave blank to disable</Dialog.Description>
 							<div class="grid grid-cols-4 items-center gap-4">
 								<Label for="bgURL" class="text-right">Image URL</Label>
 								<Input id="bgURL" bind:value={bgURL} class="col-span-3" />
