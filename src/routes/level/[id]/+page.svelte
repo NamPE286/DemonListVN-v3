@@ -228,7 +228,7 @@
 
 	.head {
 		position: relative;
-		background: linear-gradient(rgba(0, 0, 0, 0) 0%, hsl(var(--background)) 400px);
+		background: linear-gradient(rgba(0, 0, 0, 0) 10%, hsl(var(--background)) 400px);
 		height: 33vw;
 		max-height: 500px;
 		min-height: 300px;

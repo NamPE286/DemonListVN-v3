@@ -8,7 +8,9 @@
 	import { toast } from 'svelte-sonner';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import Loading from '$lib/components/animation/loading.svelte';
+	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import type { PageData } from './$types';
+	import { REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/supabase-js';
 
 	export let data: PageData;
 	let players: any[] = [];
@@ -17,7 +19,7 @@
 		province: null,
 		city: null,
 		sortBy: null,
-		ascending: true
+		ascending: false
 	};
 
 	let filter = structuredClone(defaultValue);
@@ -26,6 +28,7 @@
 
 	function reset() {
 		filter = structuredClone(defaultValue);
+		state = 0;
 	}
 
 	async function apply() {
@@ -34,7 +37,7 @@
 
 		try {
 			x.province = x.province.value;
-			x.city = x.city.value;
+			x.city = x.city ? x.city.value : '';
 			x.sortBy = x.sortBy.value;
 		} catch {
 			toast.error('Invalid query.');
@@ -42,10 +45,20 @@
 			return;
 		}
 
-		pointProp = x.sortBy.value;
-		const query = new URLSearchParams(x);
+		try {
+			pointProp = x.sortBy;
 
-		toast.error('An error occured.');
+			const query = new URLSearchParams(x);
+			const res = await (
+				await fetch(`${import.meta.env.VITE_API_URL}/players?${query.toString()}`)
+			).json();
+
+			players = res;
+			state = 2;
+			console.log(x, pointProp);
+		} catch {
+			toast.error('An error occured.');
+		}
 	}
 </script>
 
@@ -118,16 +131,26 @@
 			<Table.Header>
 				<Table.Row>
 					<Table.Head>Player</Table.Head>
-					<Table.Head class="w-[80px] text-center">
+					<Table.Head class="w-[100px] text-center">
 						{pointProp == 'rating' ? 'Rating' : 'Total point'}
 					</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				<Table.Row>
-					<Table.Cell class="font-medium">INV001</Table.Cell>
-					<Table.Cell class="text-center">$250.00</Table.Cell>
-				</Table.Row>
+				{#each players as player}
+					<Table.Row>
+						<Table.Cell class="font-medium">
+							<PlayerHoverCard player={{ data: player }} />
+						</Table.Cell>
+						<Table.Cell class="text-center">
+							{#if pointProp == 'rating'}
+								{player.rating}
+							{:else if pointProp == 'totalFLpt'}
+								{player.totalFLpt}
+							{/if}
+						</Table.Cell>
+					</Table.Row>
+				{/each}
 			</Table.Body>
 		</Table.Root>
 	{/if}
