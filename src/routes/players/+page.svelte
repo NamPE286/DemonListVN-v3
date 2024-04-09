@@ -10,7 +10,6 @@
 	import Loading from '$lib/components/animation/loading.svelte';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import type { PageData } from './$types';
-	import { REALTIME_POSTGRES_CHANGES_LISTEN_EVENT } from '@supabase/supabase-js';
 
 	export let data: PageData;
 	let players: any[] = [];
@@ -55,7 +54,6 @@
 
 			players = res;
 			state = 2;
-			console.log(x, pointProp);
 		} catch {
 			toast.error('An error occured.');
 		}

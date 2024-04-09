@@ -101,7 +101,6 @@
 							<Button
 								type="submit"
 								on:click={() => {
-									console.log(bgURL);
 									settings.set('dashboardBackgroundURL', bgURL);
 									toast.success('Changed background image!');
 									bgURLOpened = false;
