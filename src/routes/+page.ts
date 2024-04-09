@@ -20,10 +20,13 @@ async function getRecentFeaturedListLevel(fetch: any) {
 
 
 export async function load({ fetch }) {
+    const greetings = ['Hello', 'Sup', 'Howdy', 'Hi', 'Hola', 'Greetings']
+
     return {
         recent: {
             dl: await getRecentDemonListLevel(fetch),
             fl: await getRecentFeaturedListLevel(fetch)
-        }
+        },
+        greeting: greetings[Math.floor(Math.random() * greetings.length)]
     }
 };

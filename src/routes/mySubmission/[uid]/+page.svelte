@@ -39,6 +39,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>My submission - Demon List VN</title>
+</svelte:head>
+
 <AlertDialog.Root bind:open={alertOpened}>
 	<AlertDialog.Content>
 		<AlertDialog.Header>

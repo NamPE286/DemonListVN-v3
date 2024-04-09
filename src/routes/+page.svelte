@@ -5,67 +5,135 @@
 	import DiscordLogo from 'svelte-radix/DiscordLogo.svelte';
 	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { fade } from 'svelte/transition';
+	import { user } from '$lib/client';
+	import { onMount } from 'svelte';
+	import { settings } from '$lib/client';
 
 	export let data: PageData;
+	let time = new Date().toLocaleTimeString();
+	const settingsValue = settings.value;
+
+	onMount(() => {
+		const interval = setInterval(() => {
+			time = new Date().toLocaleTimeString();
+		}, 1000);
+
+		return () => {
+			clearInterval(interval);
+		};
+	});
 </script>
 
 <svelte:head>
 	<title>Demon List VN</title>
-	<script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
 </svelte:head>
-<div class="alertWrapper">
-	<Card.Root>
-		<div class="content">
-			<DiscordLogo />
-			<div>
-				<div class="header">
-					<Card.Title>Hey there!</Card.Title>
+
+{#if $settingsValue.dashboardBackgroundURL != ''}
+	<img
+		in:fade={{ delay: 250, duration: 300 }}
+		class="bg"
+		src={$settingsValue.dashboardBackgroundURL}
+		alt="thumbnail"
+	/>
+{/if}
+<div class="head" style={$settingsValue.dashboardBackgroundURL == '' ? `height: fit-content` : ''}>
+	<div class="alertWrapper">
+		<Card.Root>
+			<div class="content">
+				<DiscordLogo />
+				<div>
+					<div class="header">
+						<Card.Title>Hey there!</Card.Title>
+					</div>
+					<Card.Description
+						>Join our discord server for latest news and announcement.</Card.Description
+					>
+					<Button variant="outline">
+						<a href="https://discord.gg/MnGVdtjq49">Take me there</a>
+					</Button>
 				</div>
-				<Card.Description>Join our discord server for latest news and announcement.</Card.Description
-				>
-				<Button variant="outline">
-					<a href="https://discord.gg/MnGVdtjq49">Take me there</a>
-				</Button>
 			</div>
-		</div>
-	</Card.Root>
+		</Card.Root>
+	</div>
+	<p>{time}</p>
+	{#if $user.loggedIn}
+		<h2>{data.greeting}, {$user.data.name}!</h2>
+	{:else}
+		<h2>{data.greeting}!</h2>
+	{/if}
 </div>
+<div class="wrapper">
+	<h4>Newest levels from Demon List</h4>
 
-<h4>Newest levels from Demon List</h4>
-
-<div class="carouselWrapper">
-	<Carousel.Root>
-		<Carousel.Content>
-			{#each data.recent.dl as level}
-				<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-					<LevelCard {level} type="dl" />
-				</Carousel.Item>
-			{/each}
-		</Carousel.Content>
-		<Carousel.Previous />
-		<Carousel.Next />
-	</Carousel.Root>
-</div>
-<h4>Newest levels from Featured List</h4>
-<div class="carouselWrapper">
-	<Carousel.Root>
-		<Carousel.Content>
-			{#each data.recent.fl as level}
-				<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-					<LevelCard {level} type="fl" />
-				</Carousel.Item>
-			{/each}
-		</Carousel.Content>
-		<Carousel.Previous />
-		<Carousel.Next />
-	</Carousel.Root>
+	<div class="carouselWrapper">
+		<Carousel.Root>
+			<Carousel.Content>
+				{#each data.recent.dl as level}
+					<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+						<LevelCard {level} type="dl" />
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous />
+			<Carousel.Next />
+		</Carousel.Root>
+	</div>
+	<h4>Newest levels from Featured List</h4>
+	<div class="carouselWrapper">
+		<Carousel.Root>
+			<Carousel.Content>
+				{#each data.recent.fl as level}
+					<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+						<LevelCard {level} type="fl" />
+					</Carousel.Item>
+				{/each}
+			</Carousel.Content>
+			<Carousel.Previous />
+			<Carousel.Next />
+		</Carousel.Root>
+	</div>
 </div>
 
 <style lang="scss">
+	.bg {
+		width: 100%;
+		height: 42vw;
+		max-height: 700px;
+		min-height: 400px;
+		object-fit: cover;
+		position: fixed;
+		z-index: 0;
+		top: 0;
+	}
+
+	.wrapper {
+		position: relative;
+		z-index: 1;
+		background-color: hsl(var(--background));
+	}
+
+	.head {
+		position: relative;
+		background: linear-gradient(rgba(0, 0, 0, 0) 0%, hsl(var(--background)) calc(60% + 200px));
+		height: 33vw;
+		max-height: 700px;
+		min-height: 400px;
+		z-index: 10;
+		display: flex;
+		flex-direction: column-reverse;
+		padding-inline: 50px;
+
+		h2 {
+			font-size: 35px;
+			font-weight: 600;
+		}
+	}
+
 	.alertWrapper {
 		width: 550px;
 		margin-inline: auto;
-		margin-top: 20px;
+		padding-top: 50px;
 		max-width: 100%;
 
 		.header {
@@ -92,14 +160,14 @@
 	h4 {
 		font-weight: 600;
 		font-size: 18px;
-		margin-top: 30px;
+		padding-top: 30px;
 		margin-left: 25px;
 		padding-inline: 25px;
 	}
 
 	@media screen and (max-width: 900px) {
-		.alertWrapper {
-			padding-inline: 10px;
+		.head {
+			padding-inline: 25px;
 		}
 
 		h4 {
