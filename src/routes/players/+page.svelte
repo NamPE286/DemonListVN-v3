@@ -11,7 +11,7 @@
 	import type { PageData } from './$types';
 
 	export let data: PageData;
-    let players: any[] = []
+	let players: any[] = [];
 
 	const defaultValue: any = {
 		province: null,
@@ -22,7 +22,7 @@
 
 	let filter = structuredClone(defaultValue);
 	let state = 0;
-    let pointProp: string = 'rating'
+	let pointProp: string = 'rating';
 
 	function reset() {
 		filter = structuredClone(defaultValue);
@@ -42,7 +42,7 @@
 			return;
 		}
 
-        pointProp = x.sortBy.value
+		pointProp = x.sortBy.value;
 		const query = new URLSearchParams(x);
 
 		toast.error('An error occured.');
@@ -54,7 +54,7 @@
 </svelte:head>
 
 <div class="wrapper">
-	<Card.Root class="ml-auto mr-auto max-w-[1000px] mb-[50px]">
+	<Card.Root class="mb-[50px] ml-auto mr-auto max-w-[1000px]">
 		<Card.Header>
 			<Card.Title>Filter</Card.Title>
 		</Card.Header>
@@ -107,32 +107,30 @@
 		</Card.Content>
 		<Card.Footer>
 			<Button variant="outline" class="ml-auto" on:click={reset}>Reset</Button>
-			<Button type="submit" class="ml-[10px] transition-all" on:click={apply}>
-				{#if state == 0}
-					Apply
-				{:else}
-					<Loading />
-				{/if}
-			</Button>
+			<Button type="submit" class="ml-[10px] transition-all" on:click={apply}>Apply</Button>
 		</Card.Footer>
 	</Card.Root>
-	<Table.Root>
-		<Table.Caption>Total player: {players.length}</Table.Caption>
-		<Table.Header>
-			<Table.Row>
-				<Table.Head>Player</Table.Head>
-				<Table.Head class="w-[80px] text-center">
-                    {pointProp == 'rating' ? 'Rating' : 'Total point'}
-                </Table.Head>
-			</Table.Row>
-		</Table.Header>
-		<Table.Body>
-			<Table.Row>
-				<Table.Cell class="font-medium">INV001</Table.Cell>
-				<Table.Cell class="text-center">$250.00</Table.Cell>
-			</Table.Row>
-		</Table.Body>
-	</Table.Root>
+	{#if state == 1}
+		<Loading inverted />
+	{:else if state == 2}
+		<Table.Root>
+			<Table.Caption>Total player: {players.length}</Table.Caption>
+			<Table.Header>
+				<Table.Row>
+					<Table.Head>Player</Table.Head>
+					<Table.Head class="w-[80px] text-center">
+						{pointProp == 'rating' ? 'Rating' : 'Total point'}
+					</Table.Head>
+				</Table.Row>
+			</Table.Header>
+			<Table.Body>
+				<Table.Row>
+					<Table.Cell class="font-medium">INV001</Table.Cell>
+					<Table.Cell class="text-center">$250.00</Table.Cell>
+				</Table.Row>
+			</Table.Body>
+		</Table.Root>
+	{/if}
 </div>
 
 <style lang="scss">
