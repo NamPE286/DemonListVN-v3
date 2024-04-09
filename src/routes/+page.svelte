@@ -16,7 +16,7 @@
 	let visible = false;
 
 	onMount(() => {
-		visible = true
+		visible = true;
 
 		const interval = setInterval(() => {
 			time = new Date().toLocaleTimeString();
@@ -41,7 +41,7 @@
 	/>
 {/if}
 
-<div class="head">
+<div class="head" style={$settingsValue.dashboardBackgroundURL == '' ? `height: fit-content` : ''}>
 	<div class="alertWrapper">
 		<Card.Root>
 			<div class="content">
