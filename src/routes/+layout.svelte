@@ -41,7 +41,8 @@
 				queryParams: {
 					access_type: 'offline',
 					prompt: 'consent'
-				}
+				},
+				redirectTo: window.location.origin
 			}
 		});
 	}
