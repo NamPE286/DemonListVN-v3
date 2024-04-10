@@ -11,6 +11,7 @@
 	import { Toaster } from '$lib/components/ui/sonner';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
+	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { LoadingBar } from 'svelte-loading-bar';
 
 	import Search from '$lib/components/search.svelte';
@@ -22,6 +23,7 @@
 	import { mediaQuery } from 'svelte-legos';
 	import NotificationButton from '$lib/components/notificationButton.svelte';
 	import { goto } from '$app/navigation';
+	import { onMount } from 'svelte';
 
 	const links = [
 		{ route: '/list/dl', name: 'Demon List' },
@@ -32,6 +34,7 @@
 
 	let searchQuery = '';
 	let searchToggled = false;
+	let isVisible = false;
 	const isDesktop = mediaQuery('(min-width: 1200px)');
 
 	function signIn() {
@@ -51,6 +54,10 @@
 		supabase.auth.signOut();
 		window.location.reload();
 	}
+
+	onMount(() => {
+		isVisible = true;
+	});
 </script>
 
 <ModeWatcher defaultMode="system" />
@@ -106,45 +113,48 @@
 				<MagnifyingGlass size={20} />
 			</button>
 		{/if}
-
-		{#if !$user.loggedIn}
-			<Button variant="outline" on:click={signIn}>Sign In</Button>
+		{#if $user.checked && isVisible}
+			{#if !$user.loggedIn}
+				<Button variant="outline" on:click={signIn}>Sign In</Button>
+			{:else}
+				<SubmitButton />
+				<NotificationButton />
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger asChild let:builder>
+						<Button
+							variant="outline"
+							size="icon"
+							class="overflow-hidden rounded-full"
+							builders={[builder]}
+						>
+							<Avatar.Root>
+								<Avatar.Image
+									class="object-cover"
+									src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}.jpg`}
+									alt=""
+								/>
+								<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
+							</Avatar.Root>
+						</Button>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content align="end" class="w-56">
+						<DropdownMenu.Label>{$user.data.name}</DropdownMenu.Label>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
+							>My profile</DropdownMenu.Item
+						>
+						<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
+							>My Submission</DropdownMenu.Item
+						>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item on:click={signOut}>
+							<span style="color: red">Sign out</span>
+						</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
+			{/if}
 		{:else}
-			<SubmitButton />
-			<NotificationButton />
-			<DropdownMenu.Root>
-				<DropdownMenu.Trigger asChild let:builder>
-					<Button
-						variant="outline"
-						size="icon"
-						class="overflow-hidden rounded-full"
-						builders={[builder]}
-					>
-						<Avatar.Root>
-							<Avatar.Image
-								class="object-cover"
-								src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}.jpg`}
-								alt=""
-							/>
-							<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
-						</Avatar.Root>
-					</Button>
-				</DropdownMenu.Trigger>
-				<DropdownMenu.Content align="end" class="w-56">
-					<DropdownMenu.Label>{$user.data.name}</DropdownMenu.Label>
-					<DropdownMenu.Separator />
-					<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
-						>My profile</DropdownMenu.Item
-					>
-					<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
-						>My Submission</DropdownMenu.Item
-					>
-					<DropdownMenu.Separator />
-					<DropdownMenu.Item on:click={signOut}>
-						<span style="color: red">Sign out</span>
-					</DropdownMenu.Item>
-				</DropdownMenu.Content>
-			</DropdownMenu.Root>
+			<Skeleton class="h-[30px] w-[150px]" />
 		{/if}
 		<SettingButton />
 	</div>

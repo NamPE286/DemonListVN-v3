@@ -5,6 +5,7 @@ interface userType {
     data: any,
     token: () => Promise<string | undefined>,
     loggedIn: boolean
+    checked: boolean
 }
 
 let userData: userType = {
@@ -12,7 +13,8 @@ let userData: userType = {
     token: async () => {
         return (await supabase.auth.getSession()).data.session?.access_token
     },
-    loggedIn: false
+    loggedIn: false,
+    checked: false
 }
 
 export const user = writable(userData)
@@ -40,6 +42,8 @@ async function getUser() {
     const { data, error } = await supabase.auth.getUser()
 
     if (error) {
+        userData.checked = true
+        user.set(userData)
         return
     }
 
@@ -48,6 +52,7 @@ async function getUser() {
         .then(res => {
             userData.data = res
             userData.loggedIn = true
+            userData.checked = true
             user.set(userData)
         })
         .catch((err) => {
@@ -57,11 +62,11 @@ async function getUser() {
                     .then(res => {
                         userData.data = res
                         userData.loggedIn = true
+                        userData.checked = true
                         user.set(userData)
                     })
             })
         })
-
 }
 
 getUser()
