@@ -128,6 +128,7 @@
 			<Table.Caption>Total player: {players.length}</Table.Caption>
 			<Table.Header>
 				<Table.Row>
+					<Table.Head class="w-[75px] text-center">No.</Table.Head>
 					<Table.Head>Player</Table.Head>
 					<Table.Head class="w-[100px] text-center">
 						{pointProp == 'rating' ? 'Rating' : 'Total point'}
@@ -135,8 +136,11 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{#each players as player}
+				{#each players as player, index}
 					<Table.Row>
+						<Table.Cell class="font-medium text-center">
+							#{index + 1}
+						</Table.Cell>
 						<Table.Cell class="font-medium">
 							<PlayerHoverCard player={{ data: player }} />
 						</Table.Cell>

@@ -8,7 +8,6 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import Loading from '$lib/components/animation/loading.svelte';
-	import TableRow from '$lib/components/ui/table/table-row.svelte';
 
 	export let data: PageData;
 	let levelAPI: any = null;
