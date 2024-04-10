@@ -71,6 +71,9 @@
 	}
 
 	async function saveChanges() {
+		player.province = provinceItem.value;
+		player.city = cityItem.value;
+
 		const token = await $user.token();
 		const promise = fetch(`${import.meta.env.VITE_API_URL}/player`, {
 			method: 'PUT',
@@ -155,7 +158,12 @@
 									.toSorted((a, b) => {
 										return a.name > b.name ? 1 : -1;
 									}) as province}
-									<Select.Item value={province.name}>{province.name}</Select.Item>
+									<Select.Item
+										value={province.name}
+										on:click={() => {
+											cityItem.value = cityItem.label = null;
+										}}>{province.name}</Select.Item
+									>
 								{/each}
 							</ScrollArea>
 						</Select.Content>

@@ -79,7 +79,7 @@
 					<Select.Content>
 						<ScrollArea class="h-[300px]">
 							{#each data.provinces.list as province}
-								<Select.Item value={province.name} on:click={() => (filter = filter)}
+								<Select.Item value={province.name} on:click={() => (filter.city = null)}
 									>{province.name}</Select.Item
 								>
 							{/each}
@@ -138,7 +138,7 @@
 			<Table.Body>
 				{#each players as player, index}
 					<Table.Row>
-						<Table.Cell class="font-medium text-center">
+						<Table.Cell class="text-center font-medium">
 							#{index + 1}
 						</Table.Cell>
 						<Table.Cell class="font-medium">
