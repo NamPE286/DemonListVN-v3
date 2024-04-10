@@ -69,6 +69,7 @@
 			<Card.Content>
 				<div class="content">
 					<p><b>Description:</b> <span>{data.levelAPI.description}</span></p>
+					<p><b>Minimum progress:</b> <span>{data.level.minProgress}%</span></p>
 					<p><b>Difficulty: </b><span>{data.levelAPI.difficulty}</span></p>
 					<p><b>ID: </b><span>{data.level.id}</span></p>
 					<p>

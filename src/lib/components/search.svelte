@@ -77,7 +77,7 @@
 />
 
 <Command.Dialog bind:open>
-	<Command.Input bind:value placeholder="Type and press Enter to search..." />
+	<Command.Input bind:value placeholder="Type and press Enter to search..." disabled={state == 2} />
 	<Command.List>
 		{#if state != 0}
 			{#if state != 1}
