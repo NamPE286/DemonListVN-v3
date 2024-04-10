@@ -118,7 +118,7 @@
 				id="discord"
 				bind:checked={hideDiscord}
 				on:click={() => {
-					settings.set('hideDiscord', hideDiscord ? 'true' : 'false');
+					settings.set('hideDiscord', hideDiscord ? 'false' : 'true');
 				}}
 			/>
 		</div>
