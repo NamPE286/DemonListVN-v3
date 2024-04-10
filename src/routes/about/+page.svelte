@@ -14,12 +14,12 @@
 	<ul>
 		<li>
 			Frontend: <a href="https://github.com/NamPE286/DemonListVN-v2"
-				>https://github.com/NamPE286/DemonListVN-v2</a
+				>https://github.com/NamPE286/DemonListVN-v3</a
 			>
 		</li>
 		<li>
 			Backend: <a href="https://github.com/NamPE286/DemonListVN-api"
-				>https://github.com/NamPE286/DemonListVN-api</a
+				>https://github.com/NamPE286/DemonListVN-v3-api</a
 			>
 		</li>
 		<li>Database: Supabase</li>
