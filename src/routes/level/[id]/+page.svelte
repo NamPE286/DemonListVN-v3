@@ -5,13 +5,28 @@
 	import type { PageData } from './$types';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import { fade } from 'svelte/transition';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import Loading from '$lib/components/animation/loading.svelte';
+	import TableRow from '$lib/components/ui/table/table-row.svelte';
 
 	export let data: PageData;
+	let levelAPI: any = null;
+	let records: any[] | null = null;
+
+	onMount(() => {
+		fetch(`https://gdbrowser.com/api/level/${$page.params.id}`)
+			.then((res) => res.json())
+			.then((res) => (levelAPI = res));
+
+		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/records?end=500`)
+			.then((res) => res.json())
+			.then((res) => (records = res));
+	});
 </script>
 
 <svelte:head>
 	<title>{data.level.name} by {data.level.creator} - Demon List VN</title>
-	<meta name="description" content={data.levelAPI.description} />
 </svelte:head>
 
 <img
@@ -68,27 +83,33 @@
 		<Card.Root>
 			<Card.Content>
 				<div class="content">
-					<p><b>Description:</b> <span>{data.levelAPI.description}</span></p>
-					<p><b>Minimum progress:</b> <span>{data.level.minProgress}%</span></p>
-					<p><b>Difficulty: </b><span>{data.levelAPI.difficulty}</span></p>
-					<p><b>ID: </b><span>{data.level.id}</span></p>
-					<p>
-						<b>Song: </b>
-						{#if data.level.songID == null}
-							<span>Avaliable on Newground</span>
-						{:else}
-							<a href={`${import.meta.env.VITE_API_URL}/level/${data.level.id}/song`}
-								><u>Download</u></a
-							>
-						{/if}
-					</p>
+					{#if levelAPI}
+						<p><b>Description:</b> <span>{levelAPI.description}</span></p>
+						<p><b>Minimum progress:</b> <span>{data.level.minProgress}%</span></p>
+						<p><b>Difficulty: </b><span>{levelAPI.difficulty}</span></p>
+						<p><b>ID: </b><span>{data.level.id}</span></p>
+						<p>
+							<b>Song: </b>
+							{#if data.level.songID == null}
+								<span>Avaliable on Newground</span>
+							{:else}
+								<a href={`${import.meta.env.VITE_API_URL}/level/${data.level.id}/song`}
+									><u>Download</u></a
+								>
+							{/if}
+						</p>
+					{:else}
+						<Loading inverted />
+					{/if}
 				</div>
 			</Card.Content>
 		</Card.Root>
 	</div>
 	<div class="cardWrapper1 table">
 		<Table.Root>
-			<Table.Caption>Total record: {data.records.length}</Table.Caption>
+			{#if records}
+				<Table.Caption>Total record: {records.length}</Table.Caption>
+			{/if}
 			<Table.Header>
 				<Table.Row>
 					<Table.Head>Player</Table.Head>
@@ -99,33 +120,39 @@
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
-				{#each data.records as record}
-					<Table.Row>
-						<Table.Cell class="font-medium">
-							<PlayerHoverCard player={{ data: record.data.players }} />
-						</Table.Cell>
-						<Table.Cell class="text-center">
-							{new Date(record.data.timestamp).toLocaleString()}
-						</Table.Cell>
-						<Table.Cell class="text-center">
-							{record.data.mobile ? 'Mobile' : 'PC'}<br />({record.data.refreshRate}fps)
-						</Table.Cell>
-						<Table.Cell class="text-center">
-							{record.data.progress}%
-						</Table.Cell>
-						<Table.Cell class="text-center">
-							<button>
-								<a href={record.data.videoLink} target="_blank">
-									<ExternalLink size={20} />
-								</a>
-							</button>
-						</Table.Cell>
-					</Table.Row>
-				{/each}
+				{#if records}
+					{#each records as record}
+						<Table.Row>
+							<Table.Cell class="font-medium">
+								<PlayerHoverCard player={{ data: record.data.players }} />
+							</Table.Cell>
+							<Table.Cell class="text-center">
+								{new Date(record.data.timestamp).toLocaleString()}
+							</Table.Cell>
+							<Table.Cell class="text-center">
+								{record.data.mobile ? 'Mobile' : 'PC'}<br />({record.data.refreshRate}fps)
+							</Table.Cell>
+							<Table.Cell class="text-center">
+								{record.data.progress}%
+							</Table.Cell>
+							<Table.Cell class="text-center">
+								<button>
+									<a href={record.data.videoLink} target="_blank">
+										<ExternalLink size={20} />
+									</a>
+								</button>
+							</Table.Cell>
+						</Table.Row>
+					{/each}
+				{/if}
 			</Table.Body>
 		</Table.Root>
 	</div>
 </div>
+
+{#if !records}
+	<Loading inverted />
+{/if}
 
 <style lang="scss">
 	.table {
