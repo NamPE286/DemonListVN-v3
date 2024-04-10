@@ -63,7 +63,10 @@
 <ModeWatcher defaultMode="system" />
 <Toaster />
 <Search bind:open={searchToggled} bind:value={searchQuery} />
-<LoadingBar />
+<LoadingBar
+	--loading-bar-background-color="rgb(0 100 160 / 80%)"
+	--loading-bar-train-background-color="rgb(0 100 220 / 90%)"
+/>
 
 <div class="navbarWrapper">
 	<div class="right">
