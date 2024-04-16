@@ -80,7 +80,7 @@
 	<div class="wrapper">
 		{#if l == r - 1}
 			{#if lvStart && lvEnd}
-				<p>Estimated rating range: {lvStart.rating} - {lvEnd.rating}</p>
+				<p>Estimated rating range: {lvEnd.rating} - {lvStart.rating}</p>
 				<div class="finWrapper">
 					<LevelCard level={{ data: lvStart }} type="dl" />
 					<LevelCard level={{ data: lvEnd }} type="dl" />
