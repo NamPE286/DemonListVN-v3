@@ -1,13 +1,21 @@
 <script lang="ts">
 	import Title from '$lib/components/Title.svelte';
 	import { user } from '$lib/client';
+	import { Button } from '$lib/components/ui/button/index.js';
+	import { toast } from 'svelte-sonner';
+
+	async function copyToken() {
+		await navigator.clipboard.writeText((await $user.token())!);
+		toast('Copied to clipboard!')
+	}
 </script>
 
 {#if $user.loggedIn && $user.data.isAdmin}
 	<Title value="Admin" />
 
 	<div class="wrapper">
-		<a href="/admin/ratingEstimator">Rating estimator</a>
+		<a href="/admin/ratingEstimator">Rating estimator</a><br>
+		<Button on:click={copyToken}>Copy token</Button>
 	</div>
 {/if}
 
