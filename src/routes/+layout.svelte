@@ -29,6 +29,7 @@
 		{ route: '/list/dl', name: 'Demon List' },
 		{ route: '/list/fl', name: 'Featured List' },
 		{ route: '/players', name: 'Players' },
+		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
 		{ route: '/about', name: 'About' }
 	];
 
@@ -156,10 +157,10 @@
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
 			{/if}
+			<SettingButton />
 		{:else}
-			<Skeleton class="h-[30px] w-[150px]" />
+			<Skeleton class="h-[30px] w-[200px]" />
 		{/if}
-		<SettingButton />
 	</div>
 </div>
 

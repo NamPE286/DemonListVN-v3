@@ -10,6 +10,7 @@
 	import { user } from '$lib/client';
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import ProfileEditButton from '$lib/components/profileEditButton.svelte';
+	import Heatmap from '$lib/components/heatmap.svelte';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' = 'dl';
@@ -76,47 +77,52 @@
 			</div>
 		</div>
 	</div>
-	<Card.Root>
-		<Card.Header>
-			<Card.Title tag="h1">Player's statistic</Card.Title>
-		</Card.Header>
-		<Card.Content>
-			<div class="content">
-				<div class="rating">
-					<Tooltip.Root>
-						<Tooltip.Trigger>
-							<div class="leftCol">
-								<div
-									class="title"
-									style={`background-color: ${getTitle('dl', data.player.rating)?.color}`}
-								>
-									{data.player.rating}
+	<div class="playerInfo2Wrapper">
+		<div class="playerInfo2">
+			<Card.Root>
+				<Card.Header>
+					<Card.Title tag="h1">Player's statistic</Card.Title>
+				</Card.Header>
+				<Card.Content>
+					<div class="content">
+						<div class="rating">
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									<div class="leftCol">
+										<div
+											class="title"
+											style={`background-color: ${getTitle('dl', data.player.rating)?.color}`}
+										>
+											{data.player.rating}
+										</div>
+									</div>
+								</Tooltip.Trigger>
+								<Tooltip.Content>{getTitle('dl', data.player.rating)?.fullTitle}</Tooltip.Content>
+							</Tooltip.Root>
+							<div class="rankWrapper">
+								Demon List rating
+								<div class="rank">
+									#{data.player.overallRank}
 								</div>
 							</div>
-						</Tooltip.Trigger>
-						<Tooltip.Content>{getTitle('dl', data.player.rating)?.fullTitle}</Tooltip.Content>
-					</Tooltip.Root>
-					<div class="rankWrapper">
-						Demon List rating
-						<div class="rank">
-							#{data.player.overallRank}
+						</div>
+						<div class="rating">
+							<div class="leftCol">
+								<div class="title">{data.player.totalFLpt}</div>
+							</div>
+							<div class="rankWrapper">
+								Total Featured List point
+								<div class="rank">
+									#{data.player.flrank}
+								</div>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="rating">
-					<div class="leftCol">
-						<div class="title">{data.player.totalFLpt}</div>
-					</div>
-					<div class="rankWrapper">
-						Total Featured List point
-						<div class="rank">
-							#{data.player.flrank}
-						</div>
-					</div>
-				</div>
-			</div>
-		</Card.Content>
-	</Card.Root>
+				</Card.Content>
+			</Card.Root>
+		</div>
+		<Heatmap uid={data.player.uid} />
+	</div>
 	<Tabs.Root value="dl">
 		<div class="tabs">
 			<Tabs.List class="grid w-full grid-cols-2 lg:w-[400px]">
@@ -167,6 +173,16 @@
 </div>
 
 <style lang="scss">
+	.playerInfo2 {
+		min-width: 370px;
+	}
+	.playerInfo2Wrapper {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 30px;
+	}
+
 	h2 {
 		font-size: 28px;
 		font-weight: bold;
@@ -247,6 +263,17 @@
 		justify-content: center;
 		margin-top: 20px;
 		margin-bottom: 10px;
+	}
+
+	@media screen and (max-width: 1020px) {
+		.playerInfo2 {
+			width: 100%;
+			min-width: 0;
+		}
+
+		.playerInfo2Wrapper {
+			flex-direction: column;
+		}
 	}
 
 	@media screen and (max-width: 900px) {
