@@ -31,7 +31,7 @@
 		}
 
 		let opacity = data[x] / 2500;
-		opacity = Math.max(opacity, 0.1);
+		opacity = Math.max(opacity, 0.2);
 		opacity = Math.min(opacity, 1);
 
 		return `rgba(0, 255, 0, ${opacity})`;
@@ -52,8 +52,8 @@
 		<Switch bind:checked={splitByMonth} id="split" />
 	</div>
 	<div class="heatmapWrapper">
-		{#if splitByMonth}
-			{#key data}
+		{#key data}
+			{#if splitByMonth}
 				{#each { length: 12 } as _, month}
 					<div class="month">
 						{#each { length: monthOffset(year, month) } as _}
@@ -77,10 +77,8 @@
 						{/each}
 					</div>
 				{/each}
-			{/key}
-		{/if}
-		{#if !splitByMonth}
-			{#key data}
+			{/if}
+			{#if !splitByMonth}
 				<div class="month">
 					{#each { length: monthOffset(year, 0) } as _}
 						<div class="emptyCell" />
@@ -104,8 +102,8 @@
 						{/each}
 					{/each}
 				</div>
-			{/key}
-		{/if}
+			{/if}
+		{/key}
 	</div>
 </div>
 
