@@ -121,7 +121,7 @@
 				</Card.Content>
 			</Card.Root>
 		</div>
-		<Heatmap />
+		<Heatmap uid={data.player.uid} />
 	</div>
 	<Tabs.Root value="dl">
 		<div class="tabs">
@@ -264,7 +264,7 @@
 		margin-top: 20px;
 		margin-bottom: 10px;
 	}
-	
+
 	@media screen and (max-width: 1020px) {
 		.playerInfo2 {
 			width: 100%;
