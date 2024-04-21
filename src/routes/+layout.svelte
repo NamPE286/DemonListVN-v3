@@ -156,10 +156,10 @@
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
 			{/if}
+			<SettingButton />
 		{:else}
-			<Skeleton class="h-[30px] w-[150px]" />
+			<Skeleton class="h-[30px] w-[200px]" />
 		{/if}
-		<SettingButton />
 	</div>
 </div>
 
