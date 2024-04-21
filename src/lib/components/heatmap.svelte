@@ -1,10 +1,13 @@
 <script lang="ts">
+	import { Label } from '$lib/components/ui/label/index.js';
+	import { Switch } from '$lib/components/ui/switch/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { onMount } from 'svelte';
 
 	export let uid: string;
 	let year: number = new Date().getFullYear();
 	let data: number[] = Array(366).fill(0);
+	let splitByMonth = true;
 
 	function daysInMonth(year: number, month: number) {
 		return new Date(year, month, 0).getDate();
@@ -35,7 +38,7 @@
 	}
 
 	onMount(async () => {
-		fetch(`${import.meta.env.VITE_API_URL}/player/${uid}/heatmap`)
+		fetch(`${import.meta.env.VITE_API_URL}/player/${uid}/heatmap/${new Date().getFullYear()}`)
 			.then((res) => res.json())
 			.then((res) => {
 				data = res.days;
@@ -43,35 +46,75 @@
 	});
 </script>
 
-<div class="heatmapWrapper">
-	{#key data}
-		{#each { length: 12 } as _, month}
-			<div class="month">
-				{#each { length: monthOffset(year, month) } as item}
-					<div class="emptyCell" />
+<div class="wrapper">
+	<div class="flex items-center space-x-2">
+		<Label for="split">Split by month</Label>
+		<Switch bind:checked={splitByMonth} id="split" />
+	</div>
+	<div class="heatmapWrapper">
+		{#if splitByMonth}
+			{#key data}
+				{#each { length: 12 } as _, month}
+					<div class="month">
+						{#each { length: monthOffset(year, month) } as _}
+							<div class="emptyCell" />
+						{/each}
+						{#each { length: daysInMonth(year, month + 1) } as _, date}
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									<div
+										class="cell"
+										style={`background-color: ${getColor(dayOfYear(year, month, date + 1))}`}
+									/>
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p>
+										{new Date(year, month, date + 1).toLocaleDateString('en-IN')}
+										({data[dayOfYear(year, month, date + 1)]} attempts)
+									</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
+						{/each}
+					</div>
 				{/each}
-				{#each { length: daysInMonth(year, month + 1) } as item, date}
-					<Tooltip.Root>
-						<Tooltip.Trigger>
-							<div
-								class="cell"
-								style={`background-color: ${getColor(dayOfYear(year, month, date + 1))}`}
-							/>
-						</Tooltip.Trigger>
-						<Tooltip.Content>
-							<p>
-								{new Date(year, month, date + 1).toLocaleDateString('en-IN')}
-								({data[dayOfYear(year, month, date + 1)]} attempts)
-							</p>
-						</Tooltip.Content>
-					</Tooltip.Root>
-				{/each}
-			</div>
-		{/each}
-	{/key}
+			{/key}
+		{/if}
+		{#if !splitByMonth}
+			{#key data}
+				<div class="month">
+					{#each { length: monthOffset(year, 0) } as _}
+						<div class="emptyCell" />
+					{/each}
+					{#each { length: 12 } as _, month}
+						{#each { length: daysInMonth(year, month + 1) } as _, date}
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									<div
+										class="cell"
+										style={`background-color: ${getColor(dayOfYear(year, month, date + 1))}`}
+									/>
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p>
+										{new Date(year, month, date + 1).toLocaleDateString('en-IN')}
+										({data[dayOfYear(year, month, date + 1)]} attempts)
+									</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
+						{/each}
+					{/each}
+				</div>
+			{/key}
+		{/if}
+	</div>
 </div>
 
 <style lang="scss">
+	.wrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
 	.heatmapWrapper {
 		display: flex;
 		flex-wrap: wrap;
