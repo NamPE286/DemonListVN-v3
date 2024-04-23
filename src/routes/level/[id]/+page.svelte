@@ -8,19 +8,91 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import Loading from '$lib/components/animation/loading.svelte';
+	import Chart from 'chart.js/auto';
 
 	export let data: PageData;
 	let levelAPI: any = null;
-	let records: any[] | null = null;
+	let records: any[] = [];
+	let deathCount: any[] = Array(100).fill(0);
 
-	onMount(() => {
+	function convertToPercent(arr: any[]) {
+		let sum = 0;
+
+		for (const i of arr) {
+			sum += i;
+		}
+
+		sum += records.length;
+
+		for (let i = 0; i < arr.length; i++) {
+			arr[i] = (arr[i] / sum) * 100;
+			arr[i] = Math.floor(arr[i] * 100) / 100;
+		}
+
+		return arr;
+	}
+
+	function genPercent() {
+		const res = Array(100);
+
+		for (let i = 0; i < 100; i++) {
+			res[i] = `${i}%`;
+		}
+
+		return res;
+	}
+
+	onMount(async () => {
 		fetch(`https://gdbrowser.com/api/level/${$page.params.id}`)
 			.then((res) => res.json())
 			.then((res) => (levelAPI = res));
 
-		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/records?end=500`)
+		records = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/records?end=500`)
+		).json();
+
+		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/deathCount`)
 			.then((res) => res.json())
-			.then((res) => (records = res));
+			.then((res) => {
+				deathCount = convertToPercent(res.count);
+				const ctx: any = document.getElementById('chart');
+
+				new Chart(ctx, {
+					type: 'bar',
+					data: {
+						labels: genPercent(),
+						datasets: [
+							{
+								label: 'Death rate',
+								data: deathCount,
+								borderWidth: 1
+							}
+						]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						scales: {
+							y: {
+								beginAtZero: true
+							}
+						},
+						plugins: {
+							tooltip: {
+								callbacks: {
+									label: function (context) {
+										var label = context.dataset.label || '';
+										if (context.parsed.y !== null) {
+											label += ' ' + context.parsed.y + '%';
+										}
+										return label;
+									}
+								}
+							}
+						}
+					}
+				});
+			});
 	});
 </script>
 
@@ -84,7 +156,9 @@
 				<div class="content">
 					{#if levelAPI}
 						<p><b>Description:</b> <span>{levelAPI.description}</span></p>
-						<p><b>Minimum progress:</b> <span>{data.level.minProgress}%</span></p>
+						{#if data.level.rating}
+							<p><b>Minimum progress:</b> <span>{data.level.minProgress}%</span></p>
+						{/if}
 						<p><b>Difficulty: </b><span>{levelAPI.difficulty}</span></p>
 						<p><b>ID: </b><span>{data.level.id}</span></p>
 						<p>
@@ -103,6 +177,9 @@
 				</div>
 			</Card.Content>
 		</Card.Root>
+	</div>
+	<div class="chartWrapper cardWrapper1">
+		<canvas id="chart" />
 	</div>
 	<div class="cardWrapper1 table">
 		<Table.Root>
@@ -156,6 +233,14 @@
 <style lang="scss">
 	.table {
 		margin-bottom: 20px;
+	}
+
+	.chartWrapper {
+		height: 200px;
+		display: flex;
+		justify-content: center;
+		margin-top: 20px;
+		width: 100%;
 	}
 
 	.detail {
