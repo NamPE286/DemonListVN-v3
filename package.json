@@ -37,6 +37,7 @@
 		"@supabase/supabase-js": "^2.41.1",
 		"bits-ui": "^0.21.2",
 		"browser-image-compression": "^2.0.2",
+		"chart.js": "^4.4.2",
 		"clsx": "^2.1.0",
 		"cmdk-sv": "^0.0.17",
 		"embla-carousel-svelte": "^8.0.1",
