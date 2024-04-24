@@ -13,7 +13,9 @@
 	export let data: PageData;
 	let levelAPI: any = null;
 	let records: any[] = [];
-	let deathCount: any[] = Array(100).fill(0);
+	let deathCount: any[] = [];
+	let chart: any = null;
+	let loaded = false;
 
 	function convertToPercent(arr: any[]) {
 		let sum = 0;
@@ -42,7 +44,57 @@
 		return res;
 	}
 
-	onMount(async () => {
+	function createChart(node: any) {
+		if (chart != null) {
+			chart.destroy();
+		}
+		
+		chart = new Chart(node, {
+			type: 'bar',
+			data: {
+				labels: genPercent(),
+				datasets: [
+					{
+						label: 'Death rate',
+						data: deathCount,
+						borderWidth: 1
+					}
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					y: {
+						beginAtZero: true
+					}
+				},
+				plugins: {
+					tooltip: {
+						callbacks: {
+							label: function (context) {
+								var label = context.dataset.label || '';
+								if (context.parsed.y !== null) {
+									label += ' ' + context.parsed.y + '%';
+								}
+								return label;
+							}
+						}
+					}
+				}
+			}
+		});
+	}
+
+	async function fetchData() {
+		if (!loaded) {
+			return;
+		}
+
+		levelAPI = null;
+		records = [];
+		deathCount = [];
+
 		fetch(`https://gdbrowser.com/api/level/${$page.params.id}`)
 			.then((res) => res.json())
 			.then((res) => (levelAPI = res));
@@ -55,44 +107,14 @@
 			.then((res) => res.json())
 			.then((res) => {
 				deathCount = convertToPercent(res.count);
-				const ctx: any = document.getElementById('chart');
-
-				new Chart(ctx, {
-					type: 'bar',
-					data: {
-						labels: genPercent(),
-						datasets: [
-							{
-								label: 'Death rate',
-								data: deathCount,
-								borderWidth: 1
-							}
-						]
-					},
-					options: {
-						responsive: true,
-						maintainAspectRatio: false,
-						scales: {
-							y: {
-								beginAtZero: true
-							}
-						},
-						plugins: {
-							tooltip: {
-								callbacks: {
-									label: function (context) {
-										var label = context.dataset.label || '';
-										if (context.parsed.y !== null) {
-											label += ' ' + context.parsed.y + '%';
-										}
-										return label;
-									}
-								}
-							}
-						}
-					}
-				});
 			});
+	}
+
+	$: $page.params.id, fetchData();
+
+	onMount(() => {
+		loaded = true;
+		fetchData();
 	});
 </script>
 
@@ -179,7 +201,12 @@
 		</Card.Root>
 	</div>
 	<div class="chartWrapper cardWrapper1">
-		<canvas id="chart" />
+		{#if !deathCount.length}
+			<Loading inverted />
+		{:else}
+			<canvas id="chart" use:createChart />
+		{/if}
+
 	</div>
 	<div class="cardWrapper1 table">
 		<Table.Root>
