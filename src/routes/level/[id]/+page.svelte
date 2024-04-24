@@ -17,17 +17,12 @@
 	let chart: any = null;
 	let loaded = false;
 
-	function convertToPercent(arr: any[]) {
-		let sum = 0;
+	function processData(arr: any[]) {
+		let cnt = records.length;
 
-		for (const i of arr) {
-			sum += i;
-		}
-
-		sum += records.length;
-
-		for (let i = 0; i < arr.length; i++) {
-			arr[i] = (arr[i] / sum) * 100;
+		for (let i = 99; i >= 0; i--) {
+			cnt += arr[i];
+			arr[i] = (arr[i] / cnt) * 100;
 			arr[i] = Math.floor(arr[i] * 100) / 100;
 		}
 
@@ -48,7 +43,7 @@
 		if (chart != null) {
 			chart.destroy();
 		}
-		
+
 		chart = new Chart(node, {
 			type: 'bar',
 			data: {
@@ -106,7 +101,7 @@
 		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/deathCount`)
 			.then((res) => res.json())
 			.then((res) => {
-				deathCount = convertToPercent(res.count);
+				deathCount = processData(res.count);
 			});
 	}
 
@@ -206,7 +201,6 @@
 		{:else}
 			<canvas id="chart" use:createChart />
 		{/if}
-
 	</div>
 	<div class="cardWrapper1 table">
 		<Table.Root>
