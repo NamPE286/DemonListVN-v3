@@ -1,8 +1,10 @@
 <script lang="ts">
 	import * as Pagination from '$lib/components/ui/pagination';
 	import * as Table from '$lib/components/ui/table';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 
+	import { getTitle } from '$lib/client';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
@@ -48,7 +50,22 @@
 							: player.data[$page.params.list + 'rank']}
 					</Table.Cell>
 					<Table.Cell>
-						<PlayerHoverCard player={player} />
+						<div class="playerNameWrapper">
+							{#if $page.params.list == 'dl'}
+								<Tooltip.Root>
+									<Tooltip.Trigger>
+										<div
+											class="rank"
+											style={`background-color: ${getTitle('dl', player.data.rating)?.color}`}
+										>
+											<span>{getTitle('dl', player.data.rating)?.title}</span>
+										</div>
+									</Tooltip.Trigger>
+									<Tooltip.Content>{getTitle('dl', player.data.rating)?.fullTitle}</Tooltip.Content>
+								</Tooltip.Root>
+							{/if}
+							<PlayerHoverCard {player} />
+						</div>
 					</Table.Cell>
 					<Table.Cell class="text-right">
 						{$page.params.list == 'dl'
@@ -97,11 +114,24 @@
 </Pagination.Root>
 
 <style lang="scss">
+	.playerNameWrapper {
+		display: flex;
+		gap: 10px;
+
+		.rank {
+			color: white;
+			font-size: 10px;
+			width: fit-content;
+			padding-inline: 5px;
+			border-radius: 5px;
+			font-weight: 600;
+		}
+	}
+
 	.tableWrapper {
 		margin-inline: auto;
 		margin-bottom: 25px;
 		width: 1000px;
 		max-width: calc(100% - 40px);
 	}
-
 </style>
