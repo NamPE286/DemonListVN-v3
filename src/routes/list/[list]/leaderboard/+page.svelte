@@ -81,34 +81,38 @@
 <Pagination.Root count={data.count} perPage={50} let:pages let:currentPage>
 	<Pagination.Content>
 		<Pagination.Item>
-			<Pagination.PrevButton />
+			<Pagination.PrevButton
+				on:click={() => goto(`/list/${$page.params.list}/leaderboard?page=${currentPage - 1}`)}
+			/>
 		</Pagination.Item>
-		{#each pages as page (page.key)}
-			{#if page.type === 'ellipsis'}
+		{#each pages as p (p.key)}
+			{#if p.type === 'ellipsis'}
 				<Pagination.Item>
 					<Pagination.Ellipsis />
 				</Pagination.Item>
 			{:else}
-				<Pagination.Item isVisible={currentPage == page.value}>
+				<Pagination.Item isVisible={currentPage == p.value}>
 					<Pagination.Link
-						{page}
-						isActive={currentPage == page.value}
+						page={p}
+						isActive={currentPage == p.value}
 						on:click={() => {
 							if (!calibrated) {
 								calibrated = true;
 							} else {
-								goto(`/list/dl/leaderboard?page=${page.value}`);
+								goto(`/list/${$page.params.list}/leaderboard?page=${p.value}`);
 							}
 						}}
-						id={`page${page.value}`}
+						id={`page${p.value}`}
 					>
-						{page.value}
+						{p.value}
 					</Pagination.Link>
 				</Pagination.Item>
 			{/if}
 		{/each}
 		<Pagination.Item>
-			<Pagination.NextButton />
+			<Pagination.NextButton
+				on:click={() => goto(`/list/${$page.params.list}/leaderboard?page=${currentPage + 1}`)}
+			/>
 		</Pagination.Item>
 	</Pagination.Content>
 </Pagination.Root>
