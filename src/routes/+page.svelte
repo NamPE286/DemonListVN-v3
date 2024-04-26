@@ -2,6 +2,7 @@
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import * as Card from '$lib/components/ui/card';
 	import LevelCard from '$lib/components/levelCard.svelte';
+	import Loading from '$lib/components/animation/loading.svelte';
 	import DiscordLogo from 'svelte-radix/DiscordLogo.svelte';
 	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -14,9 +15,40 @@
 	let time = new Date().toLocaleTimeString();
 	const settingsValue = settings.value;
 	let visible = false;
+	let recent: any = {
+		dl: null,
+		fl: null
+	};
+
+	async function getRecentDemonListLevel() {
+		const query = new URLSearchParams({
+			end: '9',
+			sortBy: 'created_at',
+			ascending: 'false'
+		});
+
+		return await (
+			await fetch(`${import.meta.env.VITE_API_URL}/list/dl?${query.toString()}`)
+		).json();
+	}
+
+	async function getRecentFeaturedListLevel() {
+		const query = new URLSearchParams({
+			end: '9',
+			sortBy: 'created_at',
+			ascending: 'false'
+		});
+
+		return await (
+			await fetch(`${import.meta.env.VITE_API_URL}/list/fl?${query.toString()}`)
+		).json();
+	}
 
 	onMount(() => {
 		visible = true;
+
+		getRecentDemonListLevel().then((data) => (recent.dl = data));
+		getRecentFeaturedListLevel().then((data) => (recent.fl = data));
 
 		const interval = setInterval(() => {
 			time = new Date().toLocaleTimeString();
@@ -81,35 +113,52 @@
 	<h4>Newest levels from Demon List</h4>
 
 	<div class="carouselWrapper">
-		<Carousel.Root>
-			<Carousel.Content>
-				{#each data.recent.dl as level}
-					<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-						<LevelCard {level} type="dl" />
-					</Carousel.Item>
-				{/each}
-			</Carousel.Content>
-			<Carousel.Previous />
-			<Carousel.Next />
-		</Carousel.Root>
+		{#if recent.dl}
+			<Carousel.Root>
+				<Carousel.Content>
+					{#each recent.dl as level}
+						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+							<LevelCard {level} type="dl" />
+						</Carousel.Item>
+					{/each}
+				</Carousel.Content>
+				<Carousel.Previous />
+				<Carousel.Next />
+			</Carousel.Root>
+		{:else}
+			<div class="loadingWrapper">
+				<Loading inverted />
+			</div>
+		{/if}
 	</div>
 	<h4>Newest levels from Featured List</h4>
 	<div class="carouselWrapper">
-		<Carousel.Root>
-			<Carousel.Content>
-				{#each data.recent.fl as level}
-					<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-						<LevelCard {level} type="fl" />
-					</Carousel.Item>
-				{/each}
-			</Carousel.Content>
-			<Carousel.Previous />
-			<Carousel.Next />
-		</Carousel.Root>
+		{#if recent.fl}
+			<Carousel.Root>
+				<Carousel.Content>
+					{#each recent.fl as level}
+						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+							<LevelCard {level} type="fl" />
+						</Carousel.Item>
+					{/each}
+				</Carousel.Content>
+				<Carousel.Previous />
+				<Carousel.Next />
+			</Carousel.Root>
+		{:else}
+			<div class="loadingWrapper">
+				<Loading inverted />
+			</div>
+		{/if}
 	</div>
 </div>
 
 <style lang="scss">
+	.loadingWrapper {
+		display: flex;
+		justify-content: center;
+	}
+
 	.bg {
 		width: 100%;
 		height: 42vw;
