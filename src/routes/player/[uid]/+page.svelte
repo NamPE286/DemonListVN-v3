@@ -121,7 +121,9 @@
 				</Card.Content>
 			</Card.Root>
 		</div>
-		<Heatmap uid={data.player.uid} />
+		{#key data.player.uid}
+			<Heatmap uid={data.player.uid} />
+		{/key}
 	</div>
 	<Tabs.Root value="dl">
 		<div class="tabs">
