@@ -68,16 +68,9 @@
 		<li>Rating distribution:</li>
 		<ul>
 			<li>C: > 0</li>
-			<li>C+: >= 600</li>
-			<li>B-: >= 800</li>
 			<li>B: >= 1000</li>
-			<li>B+: >= 1200</li>
-			<li>A-: >= 1400</li>
 			<li>A: >= 1600</li>
-			<li>A+: >= 1800</li>
-			<li>S-: >= 2000</li>
-			<li>S: >= 2200</li>
-			<li>S+: >= 2350</li>
+			<li>Specialist: >= 2000</li>
 			<li>Expert: >= 2500</li>
 			<li>Candidate Master: >= 2800 and ranked below 100 </li>
 			<li>Master: >= 3200 and ranked below 65</li>
