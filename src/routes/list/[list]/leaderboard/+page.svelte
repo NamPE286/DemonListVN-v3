@@ -56,12 +56,12 @@
 									<Tooltip.Trigger>
 										<div
 											class="rank"
-											style={`background-color: ${getTitle('dl', player.data.rating)?.color}`}
+											style={`background-color: ${getTitle('dl', player.data)?.color}`}
 										>
-											<span>{getTitle('dl', player.data.rating)?.title}</span>
+											<span>{getTitle('dl', player.data)?.title}</span>
 										</div>
 									</Tooltip.Trigger>
-									<Tooltip.Content>{getTitle('dl', player.data.rating)?.fullTitle}</Tooltip.Content>
+									<Tooltip.Content>{getTitle('dl', player.data)?.fullTitle}</Tooltip.Content>
 								</Tooltip.Root>
 							{/if}
 							<PlayerHoverCard {player} />

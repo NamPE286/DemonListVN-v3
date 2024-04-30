@@ -1,26 +1,43 @@
 <script lang="ts">
-	import * as Pagination from '$lib/components/ui/pagination';
-
 	import LevelCard from '$lib/components/levelCard.svelte';
-
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
+	let curPage = 1;
+	let loaded = true
 
-	let curPage = -1;
-	let calibrated = false;
+	async function fetchData() {
+		if(!loaded) {
+			return;
+		}
 
-	async function update() {
-		curPage = parseInt($page.url.searchParams.get('page') || '1');
+		console.log('ok')
+		curPage++;
+		loaded = false
+
+		const query = new URLSearchParams({
+			start: String((curPage - 1) * 20),
+			end: String(curPage * 20 - 1),
+			sortBy: `${$page.params.list}Top`,
+			ascending: 'true'
+		});
+
+		const res = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/list/${$page.params.list}?${query.toString()}`)
+		).json();
+
+		data.levels = data.levels.concat(res)
+		loaded = true
 	}
 
-	$: $page.url, update();
-
-	onMount(async () => {
-		document.getElementById(`page${curPage}`)?.click();
+	onMount(() => {
+		window.onscroll = function (ev) {
+			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1200) {
+				fetchData();
+			}
+		};
 	});
 </script>
 
@@ -35,41 +52,6 @@
 		{/each}
 	</div>
 </div>
-
-<Pagination.Root count={data.count} perPage={20} let:pages let:currentPage>
-	<Pagination.Content>
-		<Pagination.Item>
-			<Pagination.PrevButton on:click={() => goto(`/list/${$page.params.list}?page=${currentPage - 1}`)} />
-		</Pagination.Item>
-		{#each pages as page_1 (page_1.key)}
-			{#if page_1.type === 'ellipsis'}
-				<Pagination.Item>
-					<Pagination.Ellipsis />
-				</Pagination.Item>
-			{:else}
-				<Pagination.Item isVisible={currentPage == page_1.value}>
-					<Pagination.Link
-						page={page_1}
-						isActive={currentPage == page_1.value}
-						on:click={() => {
-							if (!calibrated) {
-								calibrated = true;
-							} else {
-								goto(`/list/${$page.params.list}?page=${page_1.value}`);
-							}
-						}}
-						id={`page${page_1.value}`}
-					>
-						{page_1.value}
-					</Pagination.Link>
-				</Pagination.Item>
-			{/if}
-		{/each}
-		<Pagination.Item>
-			<Pagination.NextButton on:click={() => goto(`/list/${$page.params.list}?page=${currentPage + 1}`)} />
-		</Pagination.Item>
-	</Pagination.Content>
-</Pagination.Root>
 
 <style lang="scss">
 	.levelsWrapper {

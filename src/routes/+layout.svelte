@@ -30,6 +30,7 @@
 		{ route: '/list/fl', name: 'Featured List' },
 		{ route: '/players', name: 'Players' },
 		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
+		{ route: '/rules', name: 'Rules' },
 		{ route: '/about', name: 'About' }
 	];
 

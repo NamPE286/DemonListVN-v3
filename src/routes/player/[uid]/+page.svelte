@@ -91,13 +91,13 @@
 									<div class="leftCol">
 										<div
 											class="title"
-											style={`background-color: ${getTitle('dl', data.player.rating)?.color}`}
+											style={`background-color: ${getTitle('dl', data.player)?.color}`}
 										>
 											{data.player.rating}
 										</div>
 									</div>
 								</Tooltip.Trigger>
-								<Tooltip.Content>{getTitle('dl', data.player.rating)?.fullTitle}</Tooltip.Content>
+								<Tooltip.Content>{getTitle('dl', data.player)?.fullTitle}</Tooltip.Content>
 							</Tooltip.Root>
 							<div class="rankWrapper">
 								Demon List rating

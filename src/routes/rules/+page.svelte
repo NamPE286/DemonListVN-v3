@@ -79,10 +79,10 @@
 			<li>S: >= 2200</li>
 			<li>S+: >= 2350</li>
 			<li>Expert: >= 2500</li>
-			<li>Candidate Master: >= 2800</li>
-			<li>Master: >= 3000</li>
-			<li>Grandmaster: >= 3600</li>
-			<li>Legendary Grandmaster: >= 4200</li>
+			<li>Candidate Master: >= 2800 and ranked below 100 </li>
+			<li>Master: >= 3200 and ranked below 65</li>
+			<li>Grandmaster: >= 3700 and ranked below 30</li>
+			<li>Legendary Grandmaster: >= 4200 and ranked below 15</li>
 		</ul>
 	</ul>
 </div>
