@@ -15,8 +15,8 @@ async function getTotalPage(fetch: any, list: string ) {
 
 async function getLevels(fetch: any, list: string, page: number) {
     const query = new URLSearchParams({
-        start: String((page - 1) * 20),
-        end: String(page * 20 - 1),
+        start: String((page - 1) * 50),
+        end: String(page * 50 - 1),
         sortBy: `${list}Top`,
         ascending: 'true'
     });

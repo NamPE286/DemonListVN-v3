@@ -18,8 +18,8 @@
 		loaded = false
 
 		const query = new URLSearchParams({
-			start: String((curPage - 1) * 20),
-			end: String(curPage * 20 - 1),
+			start: String((curPage - 1) * 50),
+			end: String(curPage * 50 - 1),
 			sortBy: `${$page.params.list}Top`,
 			ascending: 'true'
 		});
@@ -34,7 +34,7 @@
 
 	onMount(() => {
 		window.onscroll = function (ev) {
-			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1200) {
+			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1500) {
 				fetchData();
 			}
 		};
