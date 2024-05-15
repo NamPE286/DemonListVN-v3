@@ -118,7 +118,7 @@
 				<Carousel.Content>
 					{#each recent.dl as level}
 						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-							<LevelCard {level} type="dl" />
+							<LevelCard level={level} type="dl" />
 						</Carousel.Item>
 					{/each}
 				</Carousel.Content>
@@ -126,9 +126,17 @@
 				<Carousel.Next />
 			</Carousel.Root>
 		{:else}
-			<div class="loadingWrapper">
-				<Loading inverted />
-			</div>
+			<Carousel.Root>
+				<Carousel.Content>
+					{#each { length: 5 } as _}
+						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+							<LevelCard level={null} type="dl" />
+						</Carousel.Item>
+					{/each}
+				</Carousel.Content>
+				<Carousel.Previous />
+				<Carousel.Next />
+			</Carousel.Root>
 		{/if}
 	</div>
 	<h4>Newest levels from Featured List</h4>
@@ -138,7 +146,7 @@
 				<Carousel.Content>
 					{#each recent.fl as level}
 						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-							<LevelCard {level} type="fl" />
+							<LevelCard level={level} type="fl" />
 						</Carousel.Item>
 					{/each}
 				</Carousel.Content>
@@ -146,19 +154,22 @@
 				<Carousel.Next />
 			</Carousel.Root>
 		{:else}
-			<div class="loadingWrapper">
-				<Loading inverted />
-			</div>
+			<Carousel.Root>
+				<Carousel.Content>
+					{#each { length: 5 } as _}
+						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+							<LevelCard level={null} type="dl" />
+						</Carousel.Item>
+					{/each}
+				</Carousel.Content>
+				<Carousel.Previous />
+				<Carousel.Next />
+			</Carousel.Root>
 		{/if}
 	</div>
 </div>
 
 <style lang="scss">
-	.loadingWrapper {
-		display: flex;
-		justify-content: center;
-	}
-
 	.bg {
 		width: 100%;
 		height: 42vw;
