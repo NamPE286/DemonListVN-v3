@@ -4,6 +4,11 @@
 	import Chart from 'chart.js/auto';
 	import Loading from '$lib/components/animation/loading.svelte';
 	import DialogDescription from '$lib/components/ui/dialog/dialog-description.svelte';
+	import { Button } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input';
+	import { Pencil1 } from 'svelte-radix';
+	import { user } from '$lib/client';
+	import { toast } from 'svelte-sonner';
 
 	export let uid: string;
 	export let levelID: number;
@@ -11,6 +16,8 @@
 
 	let record: any = null;
 	let chart: any = null;
+	let open1 = false;
+	let disableBtn = false
 
 	function processData(arr: any[], initValue: number) {
 		let cnt = initValue;
@@ -102,6 +109,30 @@
 		console.log(record);
 	}
 
+	async function change() {
+		disableBtn = true
+		toast.promise(
+			fetch(
+				`${import.meta.env.VITE_API_URL}/record/${uid}/${levelID}/changeSuggestedRating/${record.data.suggestedRating}`,
+				{
+					method: 'PUT',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token())!
+					}
+				}
+			),
+			{
+				loading: 'Updating...',
+				success: (data) => {
+					open1 = false
+					disableBtn = false
+					return 'Updated!'
+				},
+				error: 'An error occured'
+			}
+		);
+	}
+
 	$: open, fetchData();
 </script>
 
@@ -136,8 +167,24 @@
 						<b>Progress:</b>
 						{record.data.progress}% <br />
 						<b>Suggested rating:</b>
-						{record.data.suggestedRating ? record.data.suggestedRating : '(No rating provided)'}<br
-						/>
+						{record.data.suggestedRating ? record.data.suggestedRating : '(No rating provided)'}
+						{#if record.data.progress == 100 && $user.loggedIn && $user.data.uid == record.data.players.uid}
+							<Dialog.Root bind:open={open1}>
+								<Dialog.Trigger>
+									<Button variant="outline" size="icon" class="h-[30px]"
+										><Pencil1 size={18} /></Button
+									>
+								</Dialog.Trigger>
+								<Dialog.Content>
+									<Dialog.Header>
+										<Dialog.Title>Change suggested rating</Dialog.Title>
+										<Input type="number" bind:value={record.data.suggestedRating} />
+									</Dialog.Header>
+									<Button bind:disable={disableBtn} on:click={change}>Change</Button>
+								</Dialog.Content>
+							</Dialog.Root>
+						{/if}
+						<br />
 						<b>Comment:</b>
 						{record.data.comment ? record.data.comment : '(No comment provided)'}
 					</Tabs.Content>
