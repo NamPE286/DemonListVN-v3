@@ -105,8 +105,6 @@
 		//@ts-ignore
 		tmp.deathCount = processData(tmp.deathCount.count, tmp.data.progress == 100 ? 1 : 0);
 		record = tmp;
-
-		console.log(record);
 	}
 
 	async function change() {
