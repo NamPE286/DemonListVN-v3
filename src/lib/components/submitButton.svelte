@@ -17,6 +17,7 @@
 		refreshRate: '',
 		videoLink: '',
 		mobile: null,
+		suggestedRating: NaN,
 		comment: ''
 	};
 
@@ -27,6 +28,7 @@
 		refreshRate: '',
 		videoLink: '',
 		mobile: null,
+		suggestedRating: NaN,
 		comment: ''
 	};
 
@@ -110,6 +112,17 @@
 					</Select.Content>
 					<Select.Input name="platform" value={true} />
 				</Select.Root>
+			</div>
+			<div class="grid grid-cols-4 items-center gap-4">
+				<Label for="name" class="text-right">Rating suggestion</Label>
+				<Input
+					id="name"
+					type="number"
+					disabled={submission.progress != 100}
+					bind:value={submission.suggestedRating}
+					placeholder={submission.progress == 100 ? 'optional' : 'progress must be 100%'}
+					class="col-span-3"
+				/>
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
 				<Label for="name" class="text-right">Comment</Label>
