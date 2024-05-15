@@ -8,17 +8,27 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Card from '$lib/components/ui/card';
 	import { user } from '$lib/client';
-	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import ProfileEditButton from '$lib/components/profileEditButton.svelte';
 	import Heatmap from '$lib/components/heatmap.svelte';
+	import RecordDetail from '$lib/components/recordDetail.svelte';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' = 'dl';
+	let recordDetailOpened = false;
+	let selectedRecord: any = null;
 </script>
 
 <svelte:head>
 	<title>{data.player.name}'s profile - Demon List VN</title>
 </svelte:head>
+
+{#if selectedRecord}
+	<RecordDetail
+		bind:open={recordDetailOpened}
+		bind:uid={selectedRecord.data.userid}
+		bind:levelID={selectedRecord.data.levelid}
+	/>
+{/if}
 
 <div class="wrapper">
 	<div class="playerInfo">
@@ -142,12 +152,21 @@
 				<Table.Head class="w-[100px] text-center">Device</Table.Head>
 				<Table.Head class="w-[80px] text-center">Point</Table.Head>
 				<Table.Head class="w-[80px] text-center">Progress</Table.Head>
-				<Table.Head class="w-[0px] text-center"></Table.Head>
 			</Table.Row>
 		</Table.Header>
 		<Table.Body>
 			{#each data.records[list] as record}
-				<Table.Row>
+				<Table.Row
+					on:click={(e) => {
+						// @ts-ignore
+						if (e.target.nodeName == 'A') {
+							return;
+						}
+
+						selectedRecord = record;
+						recordDetailOpened = true;
+					}}
+				>
 					<Table.Cell class="font-medium">
 						<a href={`/level/${record.data.levels.id}`} data-sveltekit-preload-data="tap">
 							{record.data.levels.name}
@@ -161,13 +180,6 @@
 					</Table.Cell>
 					<Table.Cell class="text-center">{record.data[list + 'Pt']}</Table.Cell>
 					<Table.Cell class="text-center">{record.data.progress}%</Table.Cell>
-					<Table.Cell class="text-center">
-						<button>
-							<a href={record.data.videoLink} target="_blank">
-								<ExternalLink size={20} />
-							</a>
-						</button>
-					</Table.Cell>
 				</Table.Row>
 			{/each}
 		</Table.Body>
