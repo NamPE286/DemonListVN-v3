@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
-	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
+	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import type { PageData } from './$types';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import { fade } from 'svelte/transition';
@@ -16,6 +16,8 @@
 	let deathCount: any[] = [];
 	let chart: any = null;
 	let loaded = false;
+	let recordDetailOpened = false;
+	let selectedRecord: any = null;
 
 	function processData(arr: any[]) {
 		let cnt = records.length;
@@ -117,6 +119,14 @@
 	<title>{data.level.name} by {data.level.creator} - Demon List VN</title>
 </svelte:head>
 
+{#if selectedRecord}
+	<RecordDetail
+		bind:open={recordDetailOpened}
+		bind:uid={selectedRecord.data.userid}
+		bind:levelID={selectedRecord.data.levelid}
+	/>
+{/if}
+
 <img
 	in:fade={{ delay: 250, duration: 300 }}
 	class="bg"
@@ -213,13 +223,22 @@
 					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 					<Table.Head class="w-[100px] text-center">Device</Table.Head>
 					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
-					<Table.Head class="w-[0px] text-center"></Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
 				{#if records}
 					{#each records as record}
-						<Table.Row>
+						<Table.Row
+							on:click={(e) => {
+								// @ts-ignore
+								if (e.target.nodeName == 'A') {
+									return;
+								}
+
+								selectedRecord = record;
+								recordDetailOpened = true;
+							}}
+						>
 							<Table.Cell class="font-medium">
 								<PlayerHoverCard player={{ data: record.data.players }} />
 							</Table.Cell>
@@ -231,13 +250,6 @@
 							</Table.Cell>
 							<Table.Cell class="text-center">
 								{record.data.progress}%
-							</Table.Cell>
-							<Table.Cell class="text-center">
-								<button>
-									<a href={record.data.videoLink} target="_blank">
-										<ExternalLink size={20} />
-									</a>
-								</button>
 							</Table.Cell>
 						</Table.Row>
 					{/each}

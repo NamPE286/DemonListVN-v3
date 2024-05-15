@@ -13,7 +13,6 @@
 			return;
 		}
 
-		console.log('ok')
 		curPage++;
 		loaded = false
 
