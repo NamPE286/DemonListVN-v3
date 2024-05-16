@@ -6,25 +6,25 @@ export function getTitle(list: string, player: any) {
                 fullTitle: 'Legendary Grandmaster',
                 color: 'darkred'
             };
-        if (player.rating >= 3700)
+        if (player.rating >= 3800)
             return {
                 title: 'GM',
                 fullTitle: 'Grandmaster',
                 color: 'red'
             };
-        if (player.rating >= 3200)
+        if (player.rating >= 3500)
             return {
                 title: 'M',
                 fullTitle: 'Master',
                 color: 'hsla(321, 100%, 50%, 1)'
             };
-        if (player.rating >= 2800)
+        if (player.rating >= 3200)
             return {
                 title: 'CM',
                 fullTitle: 'Candidate Master',
                 color: 'purple'
             };
-        if (player.rating >= 2500)
+        if (player.rating >= 2700)
             return {
                 title: 'EX',
                 fullTitle: 'Expert',
