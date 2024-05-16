@@ -71,10 +71,10 @@
 			<li>B: >= 1000</li>
 			<li>A: >= 1600</li>
 			<li>Specialist: >= 2000</li>
-			<li>Expert: >= 2500</li>
-			<li>Candidate Master: >= 2800</li>
-			<li>Master: >= 3200</li>
-			<li>Grandmaster: >= 3700</li>
+			<li>Expert: >= 2700</li>
+			<li>Candidate Master: >= 3200</li>
+			<li>Master: >= 3500</li>
+			<li>Grandmaster: >= 3800</li>
 			<li>Legendary Grandmaster: >= 4200</li>
 		</ul>
 	</ul>
