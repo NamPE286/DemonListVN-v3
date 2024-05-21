@@ -76,6 +76,10 @@
 			<li>Master: >= 3500</li>
 			<li>Grandmaster: >= 3800</li>
 			<li>Legendary Grandmaster: >= 4200</li>
+			<li>Legendary Grandmaster ✦: >= 4500</li>
+			<li>Legendary Grandmaster ★: >= 4700</li>
+			<li>Legendary Grandmaster ★★: >= 5000</li>
+			<li>Legendary Grandmaster ★★★: >= 5200</li>
 		</ul>
 	</ul>
 </div>

@@ -1,5 +1,29 @@
 export function getTitle(list: string, player: any) {
     if (list == 'dl') {
+        if (player.rating >= 5200)
+            return {
+                title: '★★★',
+                fullTitle: 'Legendary Grandmaster ★★★',
+                color: 'darkred'
+            };
+        if (player.rating >= 5000)
+            return {
+                title: '★★',
+                fullTitle: 'Legendary Grandmaster ★★',
+                color: 'darkred'
+            };
+        if (player.rating >= 4700)
+            return {
+                title: '★',
+                fullTitle: 'Legendary Grandmaster ★',
+                color: 'darkred'
+            };
+        if (player.rating >= 4500)
+            return {
+                title: '✦',
+                fullTitle: 'Legendary Grandmaster ✦',
+                color: 'darkred'
+            };
         if (player.rating >= 4200)
             return {
                 title: 'LGM',
