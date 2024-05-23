@@ -76,8 +76,9 @@
 			<ExclamationTriangle class="h-4 w-4" />
 			<Alert.Title>Attention!</Alert.Title>
 			<Alert.Description>
-				Read the <button on:click={() => (open = false)}><a href="/rules"><u>rules</u></a></button> before
-				submitting.
+				- Read the <button on:click={() => (open = false)}><a href="/rules"><u>rules</u></a></button> before
+				submitting.<br/>
+				- Optional field can be left blank.
 			</Alert.Description>
 		</Alert.Root>
 		<div class="grid gap-4 py-4">
