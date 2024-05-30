@@ -4,6 +4,8 @@
 	import Chart from 'chart.js/auto';
 	import Loading from '$lib/components/animation/loading.svelte';
 	import DialogDescription from '$lib/components/ui/dialog/dialog-description.svelte';
+	import { Label } from '$lib/components/ui/label';
+	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Pencil1 } from 'svelte-radix';
@@ -17,7 +19,8 @@
 	let record: any = null;
 	let chart: any = null;
 	let open1 = false;
-	let disableBtn = false
+	let disableBtn = false;
+	let verdict = '';
 
 	function processData(arr: any[], initValue: number) {
 		let cnt = initValue;
@@ -105,10 +108,11 @@
 		//@ts-ignore
 		tmp.deathCount = processData(tmp.deathCount.count, tmp.data.progress == 100 ? 1 : 0);
 		record = tmp;
+		console.log(record.data.needMod);
 	}
 
 	async function change() {
-		disableBtn = true
+		disableBtn = true;
 		toast.promise(
 			fetch(
 				`${import.meta.env.VITE_API_URL}/record/${uid}/${levelID}/changeSuggestedRating/${record.data.suggestedRating}`,
@@ -122,13 +126,24 @@
 			{
 				loading: 'Updating...',
 				success: (data) => {
-					open1 = false
-					disableBtn = false
-					return 'Updated!'
+					open1 = false;
+					disableBtn = false;
+					return 'Updated!';
 				},
 				error: 'An error occured'
 			}
 		);
+	}
+
+	async function submitVerdict() {
+		const data = {
+			userid: record.data.userid,
+			levelid: record.data.levelid,
+			needMod: verdict == 'option-two',
+			isChecked: verdict == 'option-one'
+		};
+
+
 	}
 
 	$: open, fetchData();
@@ -148,10 +163,13 @@
 					>{record.data.players.name}'s {record.data.levels.name} record</DialogDescription
 				>
 
-				<Tabs.Root value="detail" class="w-[400px]">
+				<Tabs.Root value="detail" class="w-100">
 					<Tabs.List>
 						<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
 						<Tabs.Trigger value="deathRate">Death rate</Tabs.Trigger>
+						{#if record.data.reviewer == $user.data.uid && record.data.needMod == false}
+							<Tabs.Trigger value="review">Review</Tabs.Trigger>
+						{/if}
 					</Tabs.List>
 					<Tabs.Content value="detail">
 						<b>Video link:</b>
@@ -191,6 +209,21 @@
 							<canvas id="chart" use:createChart />
 						</div>
 					</Tabs.Content>
+					<Tabs.Content value="review">
+						<RadioGroup.Root bind:value={verdict}>
+							<div class="flex items-center space-x-2">
+								<RadioGroup.Item value="option-one" id="option-one" />
+								<Label for="option-one">This record is legitimate.</Label>
+							</div>
+							<div class="flex items-center space-x-2">
+								<RadioGroup.Item value="option-two" id="option-two" />
+								<Label for="option-two"
+									>Need further inspection (This record will be transfer to a moderator).</Label
+								>
+							</div>
+							<Button on:click={submitVerdict}>Submit verdict</Button>
+						</RadioGroup.Root>
+					</Tabs.Content>
 				</Tabs.Root>
 			{:else}
 				<Loading inverted />
@@ -208,7 +241,7 @@
 	.chartWrapper {
 		display: flex;
 		justify-content: center;
-		width: calc(100% + 20px);
+		width: 100%;
 		height: 200px;
 	}
 </style>

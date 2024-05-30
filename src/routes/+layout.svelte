@@ -151,6 +151,9 @@
 						<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
 							>My Submission</DropdownMenu.Item
 						>
+						{#if $user.data.isTrusted || $user.data.isAdmin}
+							<DropdownMenu.Item on:click={() => goto(`/overwatch`)}>Overwatch</DropdownMenu.Item>
+						{/if}
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item on:click={signOut}>
 							<span style="color: red">Sign out</span>
