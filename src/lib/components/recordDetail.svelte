@@ -11,7 +11,7 @@
 	import { Pencil1 } from 'svelte-radix';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
-	import { toNumber } from 'svelte-legos';
+	import { Textarea } from '$lib/components/ui/textarea';
 
 	export let uid: string;
 	export let levelID: number;
@@ -22,6 +22,7 @@
 	let open1 = false;
 	let disableBtn = false;
 	let verdict = '';
+	let cmt = '';
 
 	function processData(arr: any[], initValue: number) {
 		let cnt = initValue;
@@ -149,7 +150,8 @@
 			userid: record.data.userid,
 			levelid: record.data.levelid,
 			needMod: verdict == 'option-two',
-			isChecked: verdict == 'option-one'
+			isChecked: verdict == 'option-one',
+			reviewerComment: cmt
 		};
 
 		toast.promise(
@@ -247,6 +249,7 @@
 									>Need further inspection (This record will be forwarded to a moderator).</Label
 								>
 							</div>
+							<Textarea bind:value={cmt} placeholder="Additional comment (optional)" />
 							<Button on:click={submitVerdict}>Submit verdict</Button>
 						</RadioGroup.Root>
 					</Tabs.Content>
