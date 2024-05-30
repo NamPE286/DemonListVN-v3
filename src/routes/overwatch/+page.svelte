@@ -16,7 +16,13 @@
 					'Content-Type': 'application/json'
 				}
 			})
-				.then((res) => res.json())
+				.then((res) => {
+					if(res.status == 429) {
+						throw 429
+					}
+
+					return res.json();
+				})
 				.then((res) => {
 					userID = res.userid;
 					levelID = res.levelid;
@@ -25,7 +31,13 @@
 			{
 				loading: 'Retrieving record...',
 				success: 'Retrieved record!',
-				error: 'Failed to retrieve.'
+				error: (err) => {
+					if(err == 429) {
+						return 'On cooldown. Please try again later.'
+					}
+
+					return 'Failed to retrieve'
+				}
 			}
 		);
 	}
@@ -61,9 +73,7 @@
 				After reviewing a record, you have to wait for a cooldown period before reviewing another
 				record.
 			</li>
-			<li>
-				You cannot review your own record.
-			</li>
+			<li>You cannot review your own record.</li>
 			<li>
 				A blatant error of judgment will result in a temporary or permanent ban from accessing
 				Overwatch.
