@@ -17,8 +17,8 @@
 				}
 			})
 				.then((res) => {
-					if(res.status == 429) {
-						throw 429
+					if (res.status == 429) {
+						throw 429;
 					}
 
 					return res.json();
@@ -32,11 +32,11 @@
 				loading: 'Retrieving record...',
 				success: 'Retrieved record!',
 				error: (err) => {
-					if(err == 429) {
-						return 'On cooldown. Please try again later.'
+					if (err == 429) {
+						return 'On cooldown. Please try again later.';
 					}
 
-					return 'Failed to retrieve'
+					return 'Failed to retrieve';
 				}
 			}
 		);
@@ -73,6 +73,8 @@
 				After reviewing a record, you have to wait for a cooldown period before reviewing another
 				record.
 			</li>
+			<li>You can only review records which level's rating lower than your rating plus 500.</li>
+			<li>After retrieving a record, you must provide a verdict before reviewing other records.</li>
 			<li>You cannot review your own record.</li>
 			<li>
 				A blatant error of judgment will result in a temporary or permanent ban from accessing
