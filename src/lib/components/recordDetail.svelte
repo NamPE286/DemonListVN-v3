@@ -11,6 +11,7 @@
 	import { Pencil1 } from 'svelte-radix';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
+	import { toNumber } from 'svelte-legos';
 
 	export let uid: string;
 	export let levelID: number;
@@ -90,9 +91,8 @@
 		if (!open) {
 			return;
 		}
-
 		record = null;
-		let tmp = {
+		let tmp: any = {
 			data: null,
 			deathCount: null
 		};
@@ -101,14 +101,18 @@
 			await fetch(`${import.meta.env.VITE_API_URL}/record/${uid}/${levelID}`)
 		).json();
 
-		tmp.deathCount = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/deathCount/${uid}/${levelID}`)
-		).json();
+		try {
+			tmp.deathCount = await (
+				await fetch(`${import.meta.env.VITE_API_URL}/deathCount/${uid}/${levelID}`)
+			).json();
+
+			tmp.deathCount = processData(tmp.deathCount.count, tmp.data.progress == 100 ? 1 : 0);
+		} catch {
+			tmp.deathCount = Array(100).fill(0);
+		}
 
 		//@ts-ignore
-		tmp.deathCount = processData(tmp.deathCount.count, tmp.data.progress == 100 ? 1 : 0);
 		record = tmp;
-		console.log(record.data.needMod);
 	}
 
 	async function change() {
@@ -136,6 +140,11 @@
 	}
 
 	async function submitVerdict() {
+		if (verdict == '') {
+			toast.warning('Please select a verdict.');
+			return;
+		}
+
 		const data = {
 			userid: record.data.userid,
 			levelid: record.data.levelid,
@@ -143,7 +152,24 @@
 			isChecked: verdict == 'option-one'
 		};
 
-
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/submitVerdict`, {
+				method: 'PUT',
+				body: JSON.stringify(data),
+				headers: {
+					Authorization: `Bearer ${await $user.token()}`,
+					'Content-Type': 'application/json'
+				}
+			}),
+			{
+				success: () => {
+					open = false;
+					return 'Verdict sent!';
+				},
+				loading: 'Sending...',
+				error: 'An error occured.'
+			}
+		);
 	}
 
 	$: open, fetchData();
