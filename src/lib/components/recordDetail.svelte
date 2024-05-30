@@ -244,7 +244,7 @@
 							<div class="flex items-center space-x-2">
 								<RadioGroup.Item value="option-two" id="option-two" />
 								<Label for="option-two"
-									>Need further inspection (This record will be transfer to a moderator).</Label
+									>Need further inspection (This record will be forwarded to a moderator).</Label
 								>
 							</div>
 							<Button on:click={submitVerdict}>Submit verdict</Button>
