@@ -96,9 +96,9 @@
 			.then((res) => res.json())
 			.then((res) => (levelAPI = res));
 
-		records = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/records?end=500`)
-		).json();
+		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/records?end=500`)
+			.then((res) => res.json())
+			.then((res) => (records = res));
 
 		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/deathCount`)
 			.then((res) => res.json())
