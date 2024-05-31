@@ -12,6 +12,8 @@
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 	import { Textarea } from '$lib/components/ui/textarea';
+	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import { ModeWatcher } from 'mode-watcher';
 
 	export let uid: string;
 	export let levelID: number;
@@ -195,7 +197,7 @@
 					<Tabs.List>
 						<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
 						<Tabs.Trigger value="deathRate">Death rate</Tabs.Trigger>
-						{#if record.data.reviewer.uid == $user.data.uid && record.data.needMod == false}
+						{#if record.data.reviewer != null && record.data.reviewer.uid == $user.data.uid && record.data.needMod == false}
 							<Tabs.Trigger value="review">Review</Tabs.Trigger>
 						{/if}
 					</Tabs.List>
@@ -230,7 +232,15 @@
 						{/if}
 						<br />
 						<b>Comment:</b>
-						{record.data.comment ? record.data.comment : '(No comment provided)'}
+						{record.data.comment ? record.data.comment : '(No comment provided)'}<br />
+						<div class='flex gap-[5px]'>
+							<b>Reviewed by:</b>
+							{#if record.data.reviewer != null}
+								<PlayerHoverCard player={{ data: record.data.reviewer }} />
+							{:else}
+								Moderator
+							{/if}
+						</div>
 					</Tabs.Content>
 					<Tabs.Content value="deathRate">
 						<div class="chartWrapper">
