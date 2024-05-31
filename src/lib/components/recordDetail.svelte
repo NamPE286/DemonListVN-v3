@@ -195,7 +195,7 @@
 					<Tabs.List>
 						<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
 						<Tabs.Trigger value="deathRate">Death rate</Tabs.Trigger>
-						{#if record.data.reviewer == $user.data.uid && record.data.needMod == false}
+						{#if record.data.reviewer.uid == $user.data.uid && record.data.needMod == false}
 							<Tabs.Trigger value="review">Review</Tabs.Trigger>
 						{/if}
 					</Tabs.List>
