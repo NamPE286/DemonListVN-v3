@@ -1,14 +1,21 @@
 <script lang="ts">
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import Title from '$lib/components/Title.svelte';
+	import { Label } from '$lib/components/ui/label';
+	import { Button } from '$lib/components/ui/button';
 	import * as Table from '$lib/components/ui/table';
+	import * as Select from '$lib/components/ui/select';
 	import CrossCircled from 'svelte-radix/CrossCircled.svelte';
 	import CheckCircled from 'svelte-radix/CheckCircled.svelte';
 	import type { PageData } from './$types';
 	import { user } from '$lib/client';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 
+	let originalData: PageData = {
+		data: []
+	};
 	let isOpen = false;
 	let userID: string, levelID: number;
 
@@ -29,7 +36,7 @@
 				'Content-Type': 'application/json'
 			}
 		});
-		
+
 		window.location.reload();
 	}
 
@@ -47,6 +54,40 @@
 
 		window.location.reload();
 	}
+
+	function filter(value: string) {
+		let filtered: PageData = {
+			data: []
+		};
+
+		if (value == 'all') {
+			filtered = originalData;
+		} else if (value == 'needMod') {
+			for (const i of originalData.data) {
+				if (i.data.needMod) {
+					filtered.data.push(i);
+				}
+			}
+		} else if (value == 'dl') {
+			for (const i of originalData.data) {
+				if (i.data.levels.rating) {
+					filtered.data.push(i);
+				}
+			}
+		} else if (value == 'fl') {
+			for (const i of originalData.data) {
+				if (i.data.levels.flPt) {
+					filtered.data.push(i);
+				}
+			}
+		}
+
+		data = filtered;
+	}
+
+	onMount(() => {
+		originalData = structuredClone(data);
+	});
 </script>
 
 <RecordDetail bind:open={isOpen} uid={userID} {levelID} />
@@ -54,6 +95,32 @@
 <Title value="Submission" />
 
 <div class="wrapper">
+	<div class="flex items-center gap-[5px]">
+		<Label>Filter</Label>
+		<Select.Root
+			onSelectedChange={(e) => {
+				if (!e) {
+					return;
+				}
+
+				filter(e.value);
+			}}
+			selected={{
+				label: 'All',
+				value: 'all'
+			}}
+		>
+			<Select.Trigger class="w-[250px]">
+				<Select.Value />
+			</Select.Trigger>
+			<Select.Content>
+				<Select.Item value="all">All</Select.Item>
+				<Select.Item value="needMod">Need further inspection</Select.Item>
+				<Select.Item value="dl">Demon List</Select.Item>
+				<Select.Item value="fl">Featured List</Select.Item>
+			</Select.Content>
+		</Select.Root>
+	</div>
 	<Table.Root>
 		<Table.Caption>Total record: {data.data.length}</Table.Caption>
 		<Table.Header>
@@ -71,7 +138,7 @@
 				<Table.Row
 					on:click={(e) => {
 						// @ts-ignore
-						if (e.target.nodeName == 'A' || e.target.nodeName == 'svg') {
+						if (e.target.nodeName != 'TD') {
 							return;
 						}
 
@@ -99,7 +166,9 @@
 								accept(record.data.players.uid, record.data.levels.id);
 							}}
 						>
-							<CheckCircled size={20} />
+							<Button variant="icon">
+								<CheckCircled size={20} />
+							</Button>
 						</button>
 					</Table.Cell>
 					<Table.Cell class="text-center">
@@ -108,7 +177,9 @@
 								reject(record.data.players.uid, record.data.levels.id);
 							}}
 						>
-							<CrossCircled size={20} />
+							<Button variant="icon">
+								<CrossCircled size={20} />
+							</Button>
 						</button>
 					</Table.Cell>
 				</Table.Row>
