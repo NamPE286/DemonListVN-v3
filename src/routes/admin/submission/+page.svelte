@@ -80,6 +80,12 @@
 					filtered.data.push(i);
 				}
 			}
+		} else if (value == 'newLevel') {
+			for (const i of originalData.data) {
+				if (!i.data.levels.flPt && !i.data.levels.rating) {
+					filtered.data.push(i);
+				}
+			}
 		}
 
 		data = filtered;
@@ -116,6 +122,7 @@
 			<Select.Content>
 				<Select.Item value="all">All</Select.Item>
 				<Select.Item value="needMod">Need further inspection</Select.Item>
+				<Select.Item value="newLevel">New level</Select.Item>
 				<Select.Item value="dl">Demon List</Select.Item>
 				<Select.Item value="fl">Featured List</Select.Item>
 			</Select.Content>

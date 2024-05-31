@@ -71,13 +71,13 @@
 	}
 
 	async function clear() {
+		notifications = [];
+		
 		fetch(`${import.meta.env.VITE_API_URL}/notifications/${$user.data.uid}`, {
 			method: 'DELETE',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())!
 			}
-		}).then((res) => {
-			notifications = [];
 		});
 	}
 
