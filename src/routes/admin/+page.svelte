@@ -10,11 +10,16 @@
 	}
 </script>
 
+<svelte:head>
+
+</svelte:head>
+
 {#if $user.loggedIn && $user.data.isAdmin}
 	<Title value="Admin" />
 
 	<div class="wrapper">
 		<a href="/admin/ratingEstimator">Rating estimator</a><br>
+		<a href="/admin/submission">Submission</a><br>
 		<Button on:click={copyToken}>Copy token</Button>
 	</div>
 {/if}

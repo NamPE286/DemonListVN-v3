@@ -43,6 +43,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Overwatch - Demon List VN</title>
+</svelte:head>
+
 <RecordDetail bind:open={isOpen} uid={userID} {levelID} />
 
 {#if $user.loggedIn && ($user.data.isAdmin || $user.data.isTrusted)}
