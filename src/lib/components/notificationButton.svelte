@@ -111,7 +111,7 @@
 				{#each notifications as notification}
 					<Card.Root>
 						<Card.Header>
-							<Card.Title>{notification.content}</Card.Title>
+							<Card.Title><p class="notiContent">{notification.content}</p></Card.Title>
 							<Card.Description>{timeSince(notification.timestamp)} ago</Card.Description>
 						</Card.Header>
 					</Card.Root>
@@ -128,7 +128,11 @@
 		height: 10px;
 		background-color: var(--textColor);
 		border-radius: 50%;
-		transform: translateX(9px) translateY(-23px);
+		transform: translateX(12px) translateY(-23px);
+	}
+
+	.notiContent {
+		font-weight: 400;
 	}
 
 	.header {
