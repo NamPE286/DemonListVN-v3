@@ -2,15 +2,51 @@
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import Title from '$lib/components/Title.svelte';
 	import * as Table from '$lib/components/ui/table';
-	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import CrossCircled from 'svelte-radix/CrossCircled.svelte';
 	import CheckCircled from 'svelte-radix/CheckCircled.svelte';
 	import type { PageData } from './$types';
+	import { user } from '$lib/client';
 
 	export let data: PageData;
 
 	let isOpen = false;
 	let userID: string, levelID: number;
+
+	async function accept(userID: string, levelID: number) {
+		if (!confirm('Accept this record?')) {
+			return;
+		}
+
+		await fetch(`${import.meta.env.VITE_API_URL}/record`, {
+			method: 'PUT',
+			body: JSON.stringify({
+				userid: userID,
+				levelid: levelID,
+				isChecked: true
+			}),
+			headers: {
+				Authorization: `Bearer ${await $user.token()}`,
+				'Content-Type': 'application/json'
+			}
+		});
+		
+		window.location.reload();
+	}
+
+	async function reject(userID: string, levelID: number) {
+		if (!confirm('Reject this record?')) {
+			return;
+		}
+
+		await fetch(`${import.meta.env.VITE_API_URL}/record/${userID}/${levelID}`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: `Bearer ${await $user.token()}`
+			}
+		});
+
+		window.location.reload();
+	}
 </script>
 
 <RecordDetail bind:open={isOpen} uid={userID} {levelID} />
@@ -35,13 +71,13 @@
 				<Table.Row
 					on:click={(e) => {
 						// @ts-ignore
-						if (e.target.nodeName == 'A') {
+						if (e.target.nodeName == 'A' || e.target.nodeName == 'svg') {
 							return;
 						}
 
-						userID = record.data.players.uid
-						levelID = record.data.levels.id
-						isOpen = true
+						userID = record.data.players.uid;
+						levelID = record.data.levels.id;
+						isOpen = true;
 					}}
 				>
 					<Table.Cell class="font-medium">
@@ -58,12 +94,20 @@
 					</Table.Cell>
 					<Table.Cell class="text-center">{record.data.progress}%</Table.Cell>
 					<Table.Cell class="text-center">
-						<button on:click={() => {}}>
+						<button
+							on:click={() => {
+								accept(record.data.players.uid, record.data.levels.id);
+							}}
+						>
 							<CheckCircled size={20} />
 						</button>
 					</Table.Cell>
 					<Table.Cell class="text-center">
-						<button on:click={() => {}}>
+						<button
+							on:click={() => {
+								reject(record.data.players.uid, record.data.levels.id);
+							}}
+						>
 							<CrossCircled size={20} />
 						</button>
 					</Table.Cell>
