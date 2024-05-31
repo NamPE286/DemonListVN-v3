@@ -202,43 +202,49 @@
 						{/if}
 					</Tabs.List>
 					<Tabs.Content value="detail">
-						<b>Video link:</b>
-						<a href={record.data.videoLink} target="_blank"
-							>{record.data.videoLink.slice(0, 25)}...</a
-						><br />
-						<b>Submitted on:</b>
-						{new Date(record.data.timestamp).toLocaleString()}<br />
-						<b>Device:</b>
-						{record.data.isMobile ? 'Mobile' : 'PC'} ({record.data.refreshRate}fps) <br />
-						<b>Progress:</b>
-						{record.data.progress}% <br />
-						<b>Suggested rating:</b>
-						{record.data.suggestedRating ? record.data.suggestedRating : '(No rating provided)'}
-						{#if record.data.progress == 100 && $user.loggedIn && $user.data.uid == record.data.players.uid}
-							<Dialog.Root bind:open={open1}>
-								<Dialog.Trigger>
-									<Button variant="outline" size="icon" class="h-[30px]"
-										><Pencil1 size={18} /></Button
-									>
-								</Dialog.Trigger>
-								<Dialog.Content>
-									<Dialog.Header>
-										<Dialog.Title>Change suggested rating</Dialog.Title>
-										<Input type="number" bind:value={record.data.suggestedRating} />
-									</Dialog.Header>
-									<Button bind:disable={disableBtn} on:click={change}>Change</Button>
-								</Dialog.Content>
-							</Dialog.Root>
-						{/if}
-						<br />
-						<b>Comment:</b>
-						{record.data.comment ? record.data.comment : '(No comment provided)'}<br />
-						<div class='flex gap-[5px]'>
-							<b>Reviewed by:</b>
-							{#if record.data.reviewer != null}
-								<PlayerHoverCard player={{ data: record.data.reviewer }} />
-							{:else}
-								Moderator
+						<div class="detailWrapper">
+							<b>Video link:</b>
+							<a href={record.data.videoLink} target="_blank"
+								>{record.data.videoLink.slice(0, 25)}...</a
+							><br />
+							<b>Submitted on:</b>
+							{new Date(record.data.timestamp).toLocaleString()}<br />
+							<b>Device:</b>
+							{record.data.isMobile ? 'Mobile' : 'PC'} ({record.data.refreshRate}fps) <br />
+							<b>Progress:</b>
+							{record.data.progress}% <br />
+							<b>Suggested rating:</b>
+							{record.data.suggestedRating ? record.data.suggestedRating : '(No rating provided)'}
+							{#if record.data.progress == 100 && $user.loggedIn && $user.data.uid == record.data.players.uid}
+								<Dialog.Root bind:open={open1}>
+									<Dialog.Trigger>
+										<Button variant="outline" size="icon" class="h-[30px]"
+											><Pencil1 size={18} /></Button
+										>
+									</Dialog.Trigger>
+									<Dialog.Content>
+										<Dialog.Header>
+											<Dialog.Title>Change suggested rating</Dialog.Title>
+											<Input type="number" bind:value={record.data.suggestedRating} />
+										</Dialog.Header>
+										<Button bind:disable={disableBtn} on:click={change}>Change</Button>
+									</Dialog.Content>
+								</Dialog.Root>
+							{/if}
+							<br />
+							<b>Comment:</b>
+							{record.data.comment ? record.data.comment : '(No comment provided)'}<br />
+							<div class="flex gap-[5px]">
+								<b>Reviewed by:</b>
+								{#if record.data.reviewer != null}
+									<PlayerHoverCard player={{ data: record.data.reviewer }} />
+								{:else}
+									Moderator
+								{/if}
+							</div>
+							{#if $user.loggedIn && $user.data.isAdmin}
+								<b>Reviewer's comment:</b>
+								{record.data.reviewerComment ? record.data.reviewerComment : '(No comment provided)'}<br />
 							{/if}
 						</div>
 					</Tabs.Content>
@@ -272,6 +278,10 @@
 </Dialog.Root>
 
 <style lang="scss">
+	.detailWrapper {
+		width: 100%;
+		word-wrap: break-word;
+	}
 	a {
 		text-decoration: underline;
 		color: #99c3ff;
