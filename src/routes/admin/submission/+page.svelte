@@ -45,7 +45,7 @@
 			body: JSON.stringify({
 				to: userID,
 				status: 1,
-				content: `Your ${level.name} submission has been accepted by a moderator`
+				content: `Your ${level.name} (${level.id}) submission has been accepted by a moderator`
 			}),
 			headers: {
 				Authorization: `Bearer ${await $user.token()}`,
@@ -75,7 +75,7 @@
 			body: JSON.stringify({
 				to: userID,
 				status: 2,
-				content: `Your ${level.name} submission has been rejected by a moderator`
+				content: `Your ${level.name} (${level.id}) submission has been rejected by a moderator`
 			}),
 			headers: {
 				Authorization: `Bearer ${await $user.token()}`,
