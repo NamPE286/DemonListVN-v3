@@ -10,6 +10,7 @@
 	import type { PageData } from './$types';
 	import { user } from '$lib/client';
 	import { onMount } from 'svelte';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
 
@@ -19,17 +20,32 @@
 	let isOpen = false;
 	let userID: string, levelID: number;
 
-	async function accept(userID: string, levelID: number) {
+	async function accept(userID: string, level: any) {
 		if (!confirm('Accept this record?')) {
 			return;
 		}
+
+		toast.loading('Submitting verdict... This page will be refreshed.')
 
 		await fetch(`${import.meta.env.VITE_API_URL}/record`, {
 			method: 'PUT',
 			body: JSON.stringify({
 				userid: userID,
-				levelid: levelID,
+				levelid: level.id,
 				isChecked: true
+			}),
+			headers: {
+				Authorization: `Bearer ${await $user.token()}`,
+				'Content-Type': 'application/json'
+			}
+		});
+
+		await fetch(`${import.meta.env.VITE_API_URL}/notification`, {
+			method: 'POST',
+			body: JSON.stringify({
+				to: userID,
+				status: 1,
+				content: `Your ${level.name} submission has been accepted by a moderator`
 			}),
 			headers: {
 				Authorization: `Bearer ${await $user.token()}`,
@@ -40,15 +56,30 @@
 		window.location.reload();
 	}
 
-	async function reject(userID: string, levelID: number) {
+	async function reject(userID: string, level: any) {
 		if (!confirm('Reject this record?')) {
 			return;
 		}
 
-		await fetch(`${import.meta.env.VITE_API_URL}/record/${userID}/${levelID}`, {
+		toast.loading('Submitting verdict... This page will be refreshed.')
+
+		await fetch(`${import.meta.env.VITE_API_URL}/record/${userID}/${level.id}`, {
 			method: 'DELETE',
 			headers: {
 				Authorization: `Bearer ${await $user.token()}`
+			}
+		});
+
+		await fetch(`${import.meta.env.VITE_API_URL}/notification`, {
+			method: 'POST',
+			body: JSON.stringify({
+				to: userID,
+				status: 2,
+				content: `Your ${level.name} submission has been rejected by a moderator`
+			}),
+			headers: {
+				Authorization: `Bearer ${await $user.token()}`,
+				'Content-Type': 'application/json'
 			}
 		});
 
@@ -170,7 +201,7 @@
 					<Table.Cell class="text-center">
 						<button
 							on:click={() => {
-								accept(record.data.players.uid, record.data.levels.id);
+								accept(record.data.players.uid, record.data.levels);
 							}}
 						>
 							<Button variant="icon">
@@ -181,7 +212,7 @@
 					<Table.Cell class="text-center">
 						<button
 							on:click={() => {
-								reject(record.data.players.uid, record.data.levels.id);
+								reject(record.data.players.uid, record.data.levels);
 							}}
 						>
 							<Button variant="icon">
