@@ -8,10 +8,13 @@
 	import CrossCircled from 'svelte-radix/CrossCircled.svelte';
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
+	import RecordDetail from '$lib/components/recordDetail.svelte';
 
 	export let data: PageData;
 	let alertOpened = false;
 	let lvID: number;
+	let userID: string, levelID: number;
+	let recordDetailOpened = false;
 
 	async function deleteRecord() {
 		const { uid } = $user.data;
@@ -31,7 +34,7 @@
 						return x.data.levelid != lvID;
 					});
 
-					return 'Submission cancelled!'
+					return 'Submission cancelled!';
 				},
 				error: 'Failed to cancel submission.'
 			}
@@ -42,6 +45,8 @@
 <svelte:head>
 	<title>My submission - Demon List VN</title>
 </svelte:head>
+
+<RecordDetail bind:open={recordDetailOpened} uid={userID} {levelID} />
 
 <AlertDialog.Root bind:open={alertOpened}>
 	<AlertDialog.Content>
@@ -73,7 +78,20 @@
 			</Table.Header>
 			<Table.Body>
 				{#each data.data as record}
-					<Table.Row>
+					<Table.Row
+						on:click={(e) => {
+							// @ts-ignore
+							if (e.target.nodeName != 'TD') {
+								return;
+							}
+
+							console.log(record)
+
+							userID = record.data.userid;
+							levelID = record.data.levels.id;
+							recordDetailOpened = true;
+						}}
+					>
 						<Table.Cell class="font-medium">
 							<a href={`/level/${record.data.levels.id}`} data-sveltekit-preload-data="tap">
 								{record.data.levels.name}
