@@ -74,35 +74,33 @@
 	});
 </script>
 
-{#if $user.loggedIn && $user.data.isAdmin}
-	<Title value="Rating estimator" />
+<Title value="Rating estimator" />
 
-	<div class="wrapper">
-		{#if l == r - 1}
-			{#if lvStart && lvEnd}
-				<p>Estimated rating range: {lvEnd.rating} - {lvStart.rating}</p>
-				<div class="finWrapper">
-					<LevelCard level={{ data: lvStart }} type="dl" />
-					<LevelCard level={{ data: lvEnd }} type="dl" />
-				</div>
-			{:else}
-				<Loading inverted />
-			{/if}
-		{:else if level}
-			<div class="lvWrapper">
-				<LevelCard level={{ data: level }} type="dl" />
-				<div class="btn">
-					<Button on:click={setEasier}>Easier</Button>
-					<span>or</span>
-					<Button on:click={setHarder}>Harder</Button>
-				</div>
-				<div>Placement range: {r} - {l}</div>
+<div class="wrapper">
+	{#if l == r - 1}
+		{#if lvStart && lvEnd}
+			<p>Estimated rating range: {lvEnd.rating} - {lvStart.rating}</p>
+			<div class="finWrapper">
+				<LevelCard level={{ data: lvStart }} type="dl" />
+				<LevelCard level={{ data: lvEnd }} type="dl" />
 			</div>
 		{:else}
 			<Loading inverted />
 		{/if}
-	</div>
-{/if}
+	{:else if level}
+		<div class="lvWrapper">
+			<LevelCard level={{ data: level }} type="dl" />
+			<div class="btn">
+				<Button on:click={setEasier}>Easier</Button>
+				<span>or</span>
+				<Button on:click={setHarder}>Harder</Button>
+			</div>
+			<div>Placement range: {r} - {l}</div>
+		</div>
+	{:else}
+		<Loading inverted />
+	{/if}
+</div>
 
 <style lang="scss">
 	.lvWrapper {
