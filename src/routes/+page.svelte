@@ -198,6 +198,7 @@
 		display: flex;
 		flex-direction: column-reverse;
 		padding-inline: 50px;
+		margin-bottom: -2px;
 
 		h2 {
 			font-size: 35px;
