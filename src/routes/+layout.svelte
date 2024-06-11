@@ -146,10 +146,13 @@
 						<DropdownMenu.Label>{$user.data.name}</DropdownMenu.Label>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
-							>My profile</DropdownMenu.Item
+							>Profile</DropdownMenu.Item
 						>
 						<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
-							>My Submission</DropdownMenu.Item
+							>Submission</DropdownMenu.Item
+						>
+						<DropdownMenu.Item on:click={() => goto(`/clan`)}
+							>Clan</DropdownMenu.Item
 						>
 						{#if $user.data.isTrusted || $user.data.isAdmin}
 							<DropdownMenu.Item on:click={() => goto(`/overwatch`)}>Overwatch</DropdownMenu.Item>

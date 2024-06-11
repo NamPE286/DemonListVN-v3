@@ -2,7 +2,6 @@
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import * as Card from '$lib/components/ui/card';
 	import LevelCard from '$lib/components/levelCard.svelte';
-	import Loading from '$lib/components/animation/loading.svelte';
 	import DiscordLogo from 'svelte-radix/DiscordLogo.svelte';
 	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button/index.js';
