@@ -10,12 +10,14 @@
 	import StarFilled from 'svelte-radix/StarFilled.svelte';
 	import type { PageData } from './$types';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { user } from '$lib/client';
 
 	export let data: PageData;
 	let editedData = data;
-	let currentTab: string = 'members'
+	let currentTab: string = 'members';
 	let members: any[] = [];
 	let records: any[] = [];
 	let membersFilter = {
@@ -30,6 +32,8 @@
 		sortBy: 'timestamp',
 		ascending: false
 	};
+	let opened = false;
+	let uid: string, levelID: number;
 
 	function fetchMembers() {
 		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/members`)
@@ -56,6 +60,8 @@
 <svelte:head>
 	<title>{data.name}'s clan info - Demon List VN</title>
 </svelte:head>
+
+<RecordDetail {levelID} {uid} bind:open={opened} />
 
 <div class="wrapper">
 	<div class="banner">
@@ -87,23 +93,40 @@
 			<Tabs.List class="mb-[5px] w-fit">
 				<Tabs.Trigger value="members">Members</Tabs.Trigger>
 				<Tabs.Trigger value="records">Records</Tabs.Trigger>
-				<Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+				{#if $user.loggedIn && $user.data.clan == $page.params.id}
+					<Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+				{/if}
 			</Tabs.List>
 			<Tabs.Content value="members" class="w-full">
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head class="w-[100px]">No.</Table.Head>
+							<Table.Head class="w-[50px]">No.</Table.Head>
 							<Table.Head>Player</Table.Head>
-							<Table.Head class="text-right">Rating</Table.Head>
+							{#if membersFilter.sortBy == 'rating'}
+								<Table.Head class="w-[100px] text-right">Rating</Table.Head>
+							{:else if membersFilter.sortBy == 'flrank'}
+								<Table.Head class="w-[100px] text-right">Total FL point</Table.Head>
+							{:else}
+								<Table.Head class="w-[100px] text-right">Rating</Table.Head>
+								<Table.Head class="w-[100px] text-right">Total FL point</Table.Head>
+							{/if}
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{#each { length: 10 } as item, index}
+						{#each members as item, index}
 							<Table.Row>
-								<Table.Cell class="font-medium">#{index + 1}</Table.Cell>
-								<Table.Cell>Player name</Table.Cell>
-								<Table.Cell class="text-right">1000</Table.Cell>
+								<Table.Cell class="font-medium">
+									#{index + 1}
+									{#if membersFilter.sortBy == 'rating'}
+										({item.rating})
+									{:else if membersFilter.sortBy == 'flrank'}
+										({item.flrank})
+									{/if}
+								</Table.Cell>
+								<Table.Cell><PlayerHoverCard player={{ data: item }} /></Table.Cell>
+								<Table.Cell class="text-right">{item.rating}</Table.Cell>
+								<Table.Cell class="text-right">{item.totalFLpt}</Table.Cell>
 							</Table.Row>
 						{/each}
 					</Table.Body>
@@ -113,55 +136,71 @@
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head>Player</Table.Head>
+							<Table.Head class="w-[50px]">No.</Table.Head>
+							<Table.Head class="w-[100px]">Player</Table.Head>
+							<Table.Head>Level</Table.Head>
 							<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 							<Table.Head class="w-[100px] text-center">Device</Table.Head>
 							<Table.Head class="w-[80px] text-center">Progress</Table.Head>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
-						{#each { length: 10 } as item, index}
+						{#each records as item, index}
 							<Table.Row
 								on:click={(e) => {
 									// @ts-ignore
-									if (e.target.nodeName == 'A') {
+									if (e.target.nodeName != 'TD') {
 										return;
 									}
+
+									uid = item.players.uid;
+									levelID = item.levels.id;
+									opened = true;
 								}}
 							>
-								<Table.Cell class="font-medium">Player name</Table.Cell>
-								<Table.Cell class="text-center">
-									{new Date().toLocaleString()}
+								<Table.Cell class="font-medium">
+									#{index + 1}
+								</Table.Cell>
+								<Table.Cell>
+									<PlayerHoverCard player={{ data: item.players }} />
+								</Table.Cell>
+								<Table.Cell>
+									<a href={`/level/${item.levels.id}`}>{item.levels.name}</a>
 								</Table.Cell>
 								<Table.Cell class="text-center">
-									PC<br />(144fps)
+									{new Date(item.timestamp).toLocaleString()}
 								</Table.Cell>
-								<Table.Cell class="text-center">100%</Table.Cell>
+								<Table.Cell class="text-center">
+									{item.mobile ? 'Mobile' : 'PC'}<br />({item.refreshRate}fps)
+								</Table.Cell>
+								<Table.Cell class="text-center">{item.progress}%</Table.Cell>
 							</Table.Row>
 						{/each}
 					</Table.Body>
 				</Table.Root>
 			</Tabs.Content>
 			<Tabs.Content value="settings">
-				<section>
-					<h3>Basic info</h3>
-					<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
-						<Label for="name" class="text-right">Clan's name</Label>
-						<Input id="name" class="col-span-3" bind:value={editedData.name} />
-					</div>
-					<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
-						<Label for="tag" class="text-right">Clan's tag</Label>
-						<Input id="tag" class="col-span-3" bind:value={editedData.tag} />
-					</div>
-					<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
-						<Label for="public" class="text-right">Public</Label>
-						<Switch id="tag" class="col-span-3" bind:value={editedData.isPublic} />
-					</div>
-					<Button variant="outline" class="mb-[10px] w-full">Change clan photo</Button>
-					<div class="applyBtnWrapper">
-						<Button>Apply</Button>
-					</div>
-				</section>
+				{#if $user.loggedIn && data.owner == $user.data.uid}
+					<section>
+						<h3>Basic info</h3>
+						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Clan's name</Label>
+							<Input id="name" class="col-span-3" bind:value={editedData.name} />
+						</div>
+						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
+							<Label for="tag" class="text-right">Clan's tag</Label>
+							<Input id="tag" class="col-span-3" bind:value={editedData.tag} />
+						</div>
+						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
+							<Label for="public" class="text-right">Public</Label>
+							<Switch id="tag" class="col-span-3" bind:value={editedData.isPublic} />
+						</div>
+						<Button variant="outline" class="mb-[10px] w-full">Change clan photo</Button>
+						<div class="applyBtnWrapper">
+							<Button>Apply</Button>
+						</div>
+					</section>
+				{/if}
 				<section>
 					<h3>Danger zone</h3>
 					<Button class="w-full text-red-500" variant="outline">Leave clan</Button>
