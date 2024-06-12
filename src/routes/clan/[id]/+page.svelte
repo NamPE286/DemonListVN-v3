@@ -1,6 +1,7 @@
 <script lang="ts">
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Table from '$lib/components/ui/table';
+	import * as Select from '$lib/components/ui/select';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Switch } from '$lib/components/ui/switch';
@@ -20,13 +21,13 @@
 	let currentTab: string = 'members';
 	let members: any[] = [];
 	let records: any[] = [];
-	let membersFilter = {
+	let membersFilter: any = {
 		start: 0,
 		end: 50,
 		sortBy: 'name',
 		ascending: true
 	};
-	let recordsFilter = {
+	let recordsFilter: any = {
 		start: 0,
 		end: 50,
 		sortBy: 'timestamp',
@@ -36,7 +37,9 @@
 	let uid: string, levelID: number;
 
 	function fetchMembers() {
-		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/members`)
+		fetch(
+			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/members?${new URLSearchParams(membersFilter).toString()}`
+		)
 			.then((res) => res.json())
 			.then((res) => {
 				members = res;
@@ -44,7 +47,9 @@
 	}
 
 	function fetchRecords() {
-		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/records`)
+		fetch(
+			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/records?${new URLSearchParams(recordsFilter).toString()}`
+		)
 			.then((res) => res.json())
 			.then((res) => {
 				records = res;
@@ -85,6 +90,15 @@
 					<StarFilled size={20} />
 					<PlayerHoverCard player={{ data: data.players }} />
 				</div>
+				<div class="bannerBtn">
+					{#if $user.loggedIn}
+						{#if $user.data.clan == $page.params.id}
+							<Button variant="outline" class="w-full">Invite</Button>
+						{:else}
+							<Button variant="outline" class="w-full">Join</Button>
+						{/if}
+					{/if}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -98,6 +112,26 @@
 				{/if}
 			</Tabs.List>
 			<Tabs.Content value="members" class="w-full">
+				<div class="filter">
+					<div class="filterItem">
+						<Label>Sort by</Label>
+						<Select.Root>
+							<Select.Trigger class="w-[200px]">
+								<Select.Value placeholder="Select item to sort by" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value="name">A-Z</Select.Item>
+								<Select.Item value="rating">Demon List Rating</Select.Item>
+								<Select.Item value="flrank">Total FL point</Select.Item>
+							</Select.Content>
+						</Select.Root>
+					</div>
+					<div class="filterItem">
+						<Label>Ascending</Label>
+						<Switch />
+					</div>
+					<Button variant="outline">Apply</Button>
+				</div>
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
@@ -133,6 +167,26 @@
 				</Table.Root>
 			</Tabs.Content>
 			<Tabs.Content value="records" class="w-full">
+				<div class="filter">
+					<div class="filterItem">
+						<Label>Sort by</Label>
+						<Select.Root>
+							<Select.Trigger class="w-[200px]">
+								<Select.Value placeholder="Select item to sort by" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value="name">Timestamp</Select.Item>
+								<Select.Item value="rating">Demon List Rating</Select.Item>
+								<Select.Item value="flrank">FL point</Select.Item>
+							</Select.Content>
+						</Select.Root>
+					</div>
+					<div class="filterItem">
+						<Label>Ascending</Label>
+						<Switch />
+					</div>
+					<Button variant="outline">Apply</Button>
+				</div>
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
@@ -203,7 +257,14 @@
 				{/if}
 				<section>
 					<h3>Danger zone</h3>
-					<Button class="w-full text-red-500" variant="outline">Leave clan</Button>
+					{#if $user.loggedIn && $user.data.uid == data.owner}
+						<Button class="mb-[10px] w-full text-red-500" variant="outline"
+							>Transfer ownership</Button
+						>
+						<Button class="mb-[10px] w-full text-red-500" variant="outline">Delete clan</Button>
+					{:else}
+						<Button class="w-full text-red-500" variant="outline">Leave clan</Button>
+					{/if}
 				</section>
 			</Tabs.Content>
 		</Tabs.Root>
@@ -211,6 +272,12 @@
 </div>
 
 <style lang="scss">
+	section {
+		h3 {
+			margin-bottom: 10px;
+		}
+	}
+
 	.wrapper {
 		margin-top: 100px;
 		display: grid;
@@ -233,17 +300,18 @@
 				width: 100%;
 				height: 100%;
 				border: 1px solid var(--border1);
+				padding-bottom: 20%;
 			}
 
 			.bannerContentWrapper {
 				border-radius: var(--radius);
 				background: rgb(0, 0, 0);
-				background: linear-gradient(0deg, rgb(0, 0, 0) 17.5%, rgba(255, 255, 255, 0) 50%);
+				background: linear-gradient(0deg, rgb(0, 0, 0) 20%, rgba(255, 255, 255, 0) 65%);
 				position: absolute;
 				z-index: 1;
 				height: 100%;
 				width: 100%;
-				padding-bottom: 30px;
+				padding-bottom: 18px;
 				padding-inline: 18px;
 				display: flex;
 				flex-direction: column-reverse;
@@ -263,6 +331,14 @@
 					flex-direction: column;
 					gap: 5px;
 				}
+
+				.bannerBtn {
+					width: 100%;
+					display: flex;
+					justify-content: space-between;
+					gap: 10px;
+					margin-top: 10px;
+				}
 			}
 		}
 
@@ -281,6 +357,26 @@
 			section {
 				margin-bottom: 20px;
 			}
+		}
+	}
+
+	.filter {
+		display: flex;
+		gap: 30px;
+		margin-bottom: 10px;
+		justify-content: center;
+		border-radius: var(--radius);
+		border: 1px solid var(--border1);
+		padding-top: 10px;
+		padding-bottom: 10px;
+		width: fit-content;
+		padding-inline: 20px;
+		margin-inline: auto;
+
+		.filterItem {
+			display: flex;
+			gap: 10px;
+			align-items: center;
 		}
 	}
 </style>
