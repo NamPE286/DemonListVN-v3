@@ -15,6 +15,9 @@
 			rel="noreferrer noopener"
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
+			{#if player.data.clan}
+				[{player.data.clans.tag}]
+			{/if}
 			{player.data.name}
 		</HoverCard.Trigger>
 		<HoverCard.Content class="w-80">

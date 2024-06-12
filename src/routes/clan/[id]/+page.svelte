@@ -56,6 +56,15 @@
 			});
 	}
 
+	async function joinClan() {
+		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/join`, {
+			method: 'PUT',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token())
+			}
+		}).then((res) => window.location.reload());
+	}
+
 	async function leaveClan() {
 		if (!confirm('Are you sure to leave this clan?')) {
 			return;
@@ -109,8 +118,8 @@
 							{#if data.isPublic || data.owner == $user.data.uid}
 								<Button variant="outline" class="w-full">Invite</Button>
 							{/if}
-						{:else}
-							<Button variant="outline" class="w-full">Join</Button>
+						{:else if data.isPublic}
+							<Button variant="outline" class="w-full" on:click={joinClan}>Join</Button>
 						{/if}
 					{/if}
 				</div>
@@ -220,7 +229,7 @@
 					<Table.Header>
 						<Table.Row>
 							<Table.Head class="w-[50px]">No.</Table.Head>
-							<Table.Head class="w-[100px]">Player</Table.Head>
+							<Table.Head class="w-[160px]">Player</Table.Head>
 							<Table.Head>Level</Table.Head>
 							<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 							<Table.Head class="w-[100px] text-center">Device</Table.Head>
