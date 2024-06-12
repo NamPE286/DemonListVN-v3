@@ -56,6 +56,19 @@
 			});
 	}
 
+	async function leaveClan() {
+		if (!confirm('Are you sure to leave this clan?')) {
+			return;
+		}
+
+		fetch(`${import.meta.env.VITE_API_URL}/clan/leave`, {
+			method: 'PUT',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token())
+			}
+		}).then((res) => window.location.reload());
+	}
+
 	onMount(async () => {
 		fetchMembers();
 		fetchRecords();
@@ -93,7 +106,9 @@
 				<div class="bannerBtn">
 					{#if $user.loggedIn}
 						{#if $user.data.clan == $page.params.id}
-							<Button variant="outline" class="w-full">Invite</Button>
+							{#if data.isPublic || data.owner == $user.data.uid}
+								<Button variant="outline" class="w-full">Invite</Button>
+							{/if}
 						{:else}
 							<Button variant="outline" class="w-full">Join</Button>
 						{/if}
@@ -115,7 +130,11 @@
 				<div class="filter">
 					<div class="filterItem">
 						<Label>Sort by</Label>
-						<Select.Root>
+						<Select.Root
+							onSelectedChange={(e) => {
+								membersFilter.sortBy = e?.value;
+							}}
+						>
 							<Select.Trigger class="w-[200px]">
 								<Select.Value placeholder="Select item to sort by" />
 							</Select.Trigger>
@@ -128,14 +147,14 @@
 					</div>
 					<div class="filterItem">
 						<Label>Ascending</Label>
-						<Switch />
+						<Switch bind:checked={membersFilter.ascending} />
 					</div>
-					<Button variant="outline">Apply</Button>
+					<Button variant="outline" on:click={fetchMembers}>Apply</Button>
 				</div>
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head class="w-[50px]">No.</Table.Head>
+							<Table.Head class="w-[80px]">No.</Table.Head>
 							<Table.Head>Player</Table.Head>
 							{#if membersFilter.sortBy == 'rating'}
 								<Table.Head class="w-[100px] text-right">Rating</Table.Head>
@@ -159,8 +178,14 @@
 									{/if}
 								</Table.Cell>
 								<Table.Cell><PlayerHoverCard player={{ data: item }} /></Table.Cell>
-								<Table.Cell class="text-right">{item.rating}</Table.Cell>
-								<Table.Cell class="text-right">{item.totalFLpt}</Table.Cell>
+								{#if membersFilter.sortBy == 'rating'}
+									<Table.Cell class="text-right">{item.rating}</Table.Cell>
+								{:else if membersFilter.sortBy == 'flrank'}
+									<Table.Cell class="text-right">{item.totalFLpt}</Table.Cell>
+								{:else}
+									<Table.Cell class="text-right">{item.rating}</Table.Cell>
+									<Table.Cell class="text-right">{item.totalFLpt}</Table.Cell>
+								{/if}
 							</Table.Row>
 						{/each}
 					</Table.Body>
@@ -170,7 +195,11 @@
 				<div class="filter">
 					<div class="filterItem">
 						<Label>Sort by</Label>
-						<Select.Root>
+						<Select.Root
+							onSelectedChange={(e) => {
+								recordsFilter.sortBy = e?.value;
+							}}
+						>
 							<Select.Trigger class="w-[200px]">
 								<Select.Value placeholder="Select item to sort by" />
 							</Select.Trigger>
@@ -183,9 +212,9 @@
 					</div>
 					<div class="filterItem">
 						<Label>Ascending</Label>
-						<Switch />
+						<Switch bind:checked={recordsFilter.ascending} />
 					</div>
-					<Button variant="outline">Apply</Button>
+					<Button variant="outline" on:click={fetchRecords}>Apply</Button>
 				</div>
 				<Table.Root>
 					<Table.Header>
@@ -247,7 +276,7 @@
 						</div>
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
 							<Label for="public" class="text-right">Public</Label>
-							<Switch id="tag" class="col-span-3" bind:value={editedData.isPublic} />
+							<Switch id="tag" class="col-span-3" bind:checked={editedData.isPublic} />
 						</div>
 						<Button variant="outline" class="mb-[10px] w-full">Change clan photo</Button>
 						<div class="applyBtnWrapper">
@@ -263,7 +292,9 @@
 						>
 						<Button class="mb-[10px] w-full text-red-500" variant="outline">Delete clan</Button>
 					{:else}
-						<Button class="w-full text-red-500" variant="outline">Leave clan</Button>
+						<Button class="w-full text-red-500" variant="outline" on:click={leaveClan}
+							>Leave clan</Button
+						>
 					{/if}
 				</section>
 			</Tabs.Content>
@@ -279,7 +310,7 @@
 	}
 
 	.wrapper {
-		margin-top: 100px;
+		margin-top: 35px;
 		display: grid;
 		grid-template-columns: 400px calc(100% - 400px);
 		gap: 40px;
@@ -306,7 +337,7 @@
 			.bannerContentWrapper {
 				border-radius: var(--radius);
 				background: rgb(0, 0, 0);
-				background: linear-gradient(0deg, rgb(0, 0, 0) 20%, rgba(255, 255, 255, 0) 65%);
+				background: linear-gradient(0deg, rgb(0, 0, 0) 20%, rgba(255, 255, 255, 0) 50%);
 				position: absolute;
 				z-index: 1;
 				height: 100%;

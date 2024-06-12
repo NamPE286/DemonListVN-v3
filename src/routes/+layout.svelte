@@ -151,9 +151,11 @@
 						<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
 							>Submission</DropdownMenu.Item
 						>
-						<DropdownMenu.Item on:click={() => goto(`/clan`)}
-							>Clan</DropdownMenu.Item
-						>
+						{#if $user.data.clan}
+							<DropdownMenu.Item on:click={() => goto(`/clan/${$user.data.clan}`)}
+								>Clan</DropdownMenu.Item
+							>
+						{/if}
 						{#if $user.data.isTrusted || $user.data.isAdmin}
 							<DropdownMenu.Item on:click={() => goto(`/overwatch`)}>Overwatch</DropdownMenu.Item>
 						{/if}
