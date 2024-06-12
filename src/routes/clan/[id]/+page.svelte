@@ -2,6 +2,7 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Table from '$lib/components/ui/table';
 	import * as Select from '$lib/components/ui/select';
+	import * as Dialog from '$lib/components/ui/dialog';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Switch } from '$lib/components/ui/switch';
@@ -15,9 +16,12 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { user } from '$lib/client';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
 	let editedData = data;
+	let invitePlayerUID = '';
+	let inviteOpened = false;
 	let currentTab: string = 'members';
 	let members: any[] = [];
 	let records: any[] = [];
@@ -78,6 +82,24 @@
 		}).then((res) => window.location.reload());
 	}
 
+	async function invitePlayer() {
+		inviteOpened = false;
+
+		toast.promise(fetch(`${import.meta.env.VITE_API_URL}/clan/invite/${invitePlayerUID}`, {
+			method: 'POST',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token())
+			}
+		}), {
+			success: () => {
+				invitePlayerUID = ''
+				return 'Player invited!'
+			},
+			loading: 'Sending invitation...',
+			error: 'Failed to invite player.'
+		})
+	}
+
 	onMount(async () => {
 		fetchMembers();
 		fetchRecords();
@@ -116,7 +138,20 @@
 					{#if $user.loggedIn}
 						{#if $user.data.clan == $page.params.id}
 							{#if data.isPublic || data.owner == $user.data.uid}
-								<Button variant="outline" class="w-full">Invite</Button>
+								<Dialog.Root bind:open={inviteOpened}>
+									<Dialog.Trigger class="w-full">
+										<Button variant="outline" class="w-full">Invite</Button>
+									</Dialog.Trigger>
+									<Dialog.Content>
+										<Dialog.Header>
+											<Dialog.Title>Invite new player</Dialog.Title>
+										</Dialog.Header>
+										<Input placeholder="Player's UID" bind:value={invitePlayerUID} />
+										<Button on:click={invitePlayer} disabled={invitePlayerUID.length == 0}
+											>Invite</Button
+										>
+									</Dialog.Content>
+								</Dialog.Root>
 							{/if}
 						{:else if data.isPublic}
 							<Button variant="outline" class="w-full" on:click={joinClan}>Join</Button>
