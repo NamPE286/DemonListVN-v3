@@ -19,7 +19,7 @@
 	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
-	let editedData = data;
+	let editedData = structuredClone(data);
 	let invitePlayerUID = '';
 	let inviteOpened = false;
 	let currentTab: string = 'members';
@@ -85,19 +85,47 @@
 	async function invitePlayer() {
 		inviteOpened = false;
 
-		toast.promise(fetch(`${import.meta.env.VITE_API_URL}/clan/invite/${invitePlayerUID}`, {
-			method: 'POST',
-			headers: {
-				Authorization: 'Bearer ' + (await $user.token())
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/clan/invite/${invitePlayerUID}`, {
+				method: 'POST',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			}),
+			{
+				success: () => {
+					invitePlayerUID = '';
+					return 'Player invited!';
+				},
+				loading: 'Sending invitation...',
+				error: 'Failed to invite player.'
 			}
-		}), {
-			success: () => {
-				invitePlayerUID = ''
-				return 'Player invited!'
-			},
-			loading: 'Sending invitation...',
-			error: 'Failed to invite player.'
-		})
+		);
+	}
+
+	async function updateClan() {
+		delete editedData.id;
+		delete editedData.created_at;
+		delete editedData.players;
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
+				method: 'PATCH',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(editedData)
+			}),
+			{
+				success: () => {
+					window.location.reload()
+					return 'Updated! This page will be refreshed.'
+				},
+				loading: 'Updating...',
+				error: 'Failed to update.'
+			}
+		);
 	}
 
 	onMount(async () => {
@@ -324,7 +352,7 @@
 						</div>
 						<Button variant="outline" class="mb-[10px] w-full">Change clan photo</Button>
 						<div class="applyBtnWrapper">
-							<Button>Apply</Button>
+							<Button on:click={updateClan}>Apply</Button>
 						</div>
 					</section>
 				{/if}

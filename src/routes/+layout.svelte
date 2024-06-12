@@ -29,6 +29,7 @@
 		{ route: '/list/dl', name: 'Demon List' },
 		{ route: '/list/fl', name: 'Featured List' },
 		{ route: '/players', name: 'Players' },
+		{ route: '/clans', name: 'Clans' },
 		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
 		{ route: '/rules', name: 'Rules' },
 		{ route: '/about', name: 'About' }
@@ -257,7 +258,7 @@
 		}
 	}
 
-	@media screen and (max-width: 900px) {
+	@media screen and (max-width: 950px) {
 		.navbarWrapper {
 			padding-inline: 15px;
 			.right {
