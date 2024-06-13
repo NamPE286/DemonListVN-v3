@@ -23,7 +23,10 @@
 					<Tooltip.Content>{getTitle('dl', player.data)?.fullTitle}</Tooltip.Content>
 				</Tooltip.Root>
 			{/if}
-			<a href={`/clan/${player.data.clan}`} class={badgeVariants({ variant: 'secondary' })}
+			<a
+				href={`/clan/${player.data.clan}`}
+				class={badgeVariants({ variant: 'secondary' })}
+				style={`background-color: ${player.data.clans.tagBgColor}; color: ${player.data.clans.tagTextColor};`}
 				>{player.data.clans.tag}</a
 			>
 		{/if}

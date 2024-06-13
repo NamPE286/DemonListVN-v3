@@ -7,6 +7,7 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Switch } from '$lib/components/ui/switch';
 	import { Button } from '$lib/components/ui/button';
+	import { Badge } from '$lib/components/ui/badge';
 	import LockClosed from 'svelte-radix/LockClosed.svelte';
 	import Globe from 'svelte-radix/Globe.svelte';
 	import StarFilled from 'svelte-radix/StarFilled.svelte';
@@ -437,6 +438,21 @@
 						<Button variant="outline" class="mb-[10px] w-full" on:click={() => fileinput.click()}
 							>Change clan photo</Button
 						>
+						<div class="mb-[10px] flex gap-[10px]">
+							<Badge
+								class="mb-auto mt-auto h-[20px]"
+								style={`background-color: ${editedData.tagBgColor}; color: ${editedData.tagTextColor};`}
+								>{data.tag}</Badge
+							>
+							<Input type="color" bind:value={editedData.tagBgColor} />
+							<Input type="color" bind:value={editedData.tagTextColor} />
+							<Button
+								variant="outline"
+								on:click={() => {
+									editedData.tagTextColor = editedData.tagBgColor = null;
+								}}>Reset</Button
+							>
+						</div>
 						<div class="applyBtnWrapper">
 							<Button on:click={updateClan}>Apply</Button>
 						</div>
@@ -508,7 +524,7 @@
 			.bannerContentWrapper {
 				border-radius: var(--radius);
 				background: rgb(0, 0, 0);
-				background: linear-gradient(0deg, rgb(0, 0, 0) 20%, rgba(255, 255, 255, 0) 50%);
+				background: linear-gradient(0deg, var(--textColorInverted) 20%, rgba(255, 255, 255, 0) 50%);
 				position: absolute;
 				z-index: 1;
 				height: 100%;
