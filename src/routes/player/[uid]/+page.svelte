@@ -44,8 +44,12 @@
 		<div class="info">
 			<div class="flex gap-[10px]">
 				{#if data.player.clan}
-					<a href={`/clan/${data.player.clan}`} class={badgeVariants({ variant: 'secondary' })}>
-						<span class='text-[15px]'>
+					<a
+						href={`/clan/${data.player.clan}`}
+						class={badgeVariants({ variant: 'secondary' })}
+						style={`background-color: ${data.player.clans.tagBgColor}; color: ${data.player.clans.tagTextColor};`}
+					>
+						<span class="text-[15px]">
 							{data.player.clans.tag}
 						</span>
 					</a>

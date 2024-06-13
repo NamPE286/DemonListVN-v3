@@ -48,7 +48,10 @@
 					<Avatar.Fallback>{player.data.name[0]}</Avatar.Fallback>
 				</Avatar.Root>
 				{#if player.data.clan}
-					<a href={`/clan/${player.data.clan}`} class={badgeVariants({ variant: 'secondary' })}
+					<a
+						href={`/clan/${player.data.clan}`}
+						class={badgeVariants({ variant: 'secondary' })}
+						style={`background-color: ${player.data.clans.tagBgColor}; color: ${player.data.clans.tagTextColor};`}
 						>{player.data.clans.tag}</a
 					>
 				{/if}
