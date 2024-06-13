@@ -17,6 +17,7 @@
 	import { page } from '$app/stores';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
@@ -130,8 +131,10 @@
 	}
 
 	async function transferOwnership() {
+		const tmp = editedData.owner
 		editedData.owner = transferUID;
 		await updateClan();
+		editedData.owner = tmp
 	}
 
 	async function deleteClan() {
@@ -148,7 +151,7 @@
 			}),
 			{
 				success: () => {
-					window.location.reload();
+					goto('/clans')
 					return 'Deleted!';
 				},
 				loading: 'Deleting...',
