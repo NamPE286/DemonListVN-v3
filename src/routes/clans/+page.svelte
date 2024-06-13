@@ -7,13 +7,20 @@
 	import { Switch } from '$lib/components/ui/switch';
 	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/client';
-	import * as Tabs from "$lib/components/ui/tabs";
+	import * as Tabs from '$lib/components/ui/tabs';
+	import type { PageData } from './$types';
+	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import { onMount } from 'svelte';
+	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 
+	export let data: PageData;
 	const newClanData = {
 		name: '',
 		tag: '',
 		isPublic: false
 	};
+	let invitations: any = [];
+	let searchQuery = '';
 
 	async function createClan() {
 		if (
@@ -40,6 +47,43 @@
 			}
 		}).then((res) => window.location.reload());
 	}
+
+	async function acceptInvitation(clanID: number) {
+		fetch(`${import.meta.env.VITE_API_URL}/clan/${clanID}/invite`, {
+			method: 'PATCH',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token())
+			}
+		}).then((res) => window.location.reload());
+	}
+
+	async function rejectInvitation(clanID: number) {
+		fetch(`${import.meta.env.VITE_API_URL}/clan/${clanID}/invite`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token())
+			}
+		}).then((res) => window.location.reload());
+	}
+
+	async function fetchClanList() {
+		data = {
+			data: await (
+				await fetch(`${import.meta.env.VITE_API_URL}/clans?searchQuery=${searchQuery}`)
+			).json()
+		};
+	}
+
+	onMount(async () => {
+		fetch(`${import.meta.env.VITE_API_URL}/clan/invitations`, {
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token()),
+				'Content-Type': 'application/json'
+			}
+		})
+			.then((res) => res.json())
+			.then((res) => (invitations = res));
+	});
 </script>
 
 <svelte:head>
@@ -83,6 +127,62 @@
 		</Dialog.Content>
 	</Dialog.Root>
 </div>
+<Tabs.Root value="clans" class="flex w-[100%] flex-col items-center">
+	<Tabs.List class="mb-[5px] w-fit">
+		<Tabs.Trigger value="clans">Clan listing</Tabs.Trigger>
+		<Tabs.Trigger value="invitation">Invitation</Tabs.Trigger>
+	</Tabs.List>
+	<Tabs.Content value="clans" class="w-full">
+		<div class="flex justify-center gap-[10px]">
+			<Input placeholder="Search" class="mb-[20px] w-[400px] max-w-full" bind:value={searchQuery} />
+			<Button on:click={fetchClanList}><MagnifyingGlass /></Button>
+		</div>
+		<div class="clans">
+			{#each data.data as clan, index}
+				<div class="clan">
+					<a href={`/clan/${clan.id}`}>
+						<img
+							src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${clan.id}.jpg`}
+							alt=""
+						/>
+					</a>
+					<div class="info">
+						<a href={`/clan/${clan.id}`}><h3>{clan.name}</h3></a>
+						<span class="flex gap-[10px]"
+							>Owned by <PlayerHoverCard player={{ data: clan.players }} /></span
+						>
+					</div>
+				</div>
+			{/each}
+		</div>
+	</Tabs.Content>
+	<Tabs.Content value="invitation" class="w-full">
+		<div class="invitationsWrapper">
+			{#each invitations as invitation, index}
+				<div class="clan">
+					<a href={`/clan/${invitation.clans.id}`}>
+						<img
+							src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${invitation.clans.id}.jpg`}
+							alt=""
+						/>
+					</a>
+					<div class="info">
+						<a href={`/clan/${invitation.clans.id}`}><h3>{invitation.clans.name}</h3></a>
+						<span class="flex gap-[10px]"
+							>Owned by <PlayerHoverCard player={{ data: invitation.clans.players }} /></span
+						>
+						<div class="mt-[20px]">
+							<Button on:click={() => acceptInvitation(invitation.clans.id)}>Accept</Button>
+							<Button on:click={() => rejectInvitation(invitation.clans.id)} variant="outline"
+								>Reject</Button
+							>
+						</div>
+					</div>
+				</div>
+			{/each}
+		</div>
+	</Tabs.Content>
+</Tabs.Root>
 
 <style lang="scss">
 	.titleWrapper {
@@ -92,8 +192,39 @@
 		padding-right: 100px;
 	}
 
-	.btn {
+	.clans {
+		padding-inline: 200px;
+		display: grid;
+		grid-template-columns: calc(50% - 5px) calc(50% - 5px);
+		gap: 10px;
+	}
+
+	.clan {
+		width: 100%;
+		height: 150px;
+		border-radius: var(--radius);
+		border: 1px solid var(--border1);
 		display: flex;
-		align-items: center !important;
+		gap: 25px;
+
+		.info {
+			padding-top: 15px;
+
+			h3 {
+				font-size: 20px;
+				font-weight: bold;
+			}
+		}
+
+		img {
+			height: 100%;
+			width: 150px;
+			object-fit: cover;
+			border-radius: var(--radius) 0 0 var(--radius);
+		}
+	}
+
+	.invitationsWrapper {
+		padding-inline: 200px;
 	}
 </style>

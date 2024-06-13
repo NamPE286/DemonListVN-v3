@@ -20,10 +20,7 @@
 	import { goto } from '$app/navigation';
 	import supabase from '$lib/client/supabase';
 	import imageCompression from 'browser-image-compression';
-	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { getTitle } from '$lib/client';
-	import Badge from '$lib/components/ui/badge/badge.svelte';
-
+	
 	export let data: PageData;
 	let editedData = structuredClone(data);
 	let transferUID = '';

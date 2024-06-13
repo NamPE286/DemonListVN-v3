@@ -13,7 +13,7 @@
 <div class="wrapper">
 	<HoverCard.Root>
 		{#if player.data.clan}
-			{#if showTitle}
+			{#if showTitle && getTitle('dl', player.data)}
 				<Tooltip.Root>
 					<Tooltip.Trigger>
 						<div class="rank" style={`background-color: ${getTitle('dl', player.data)?.color}`}>
