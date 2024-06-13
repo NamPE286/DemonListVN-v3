@@ -20,7 +20,7 @@
 	import { goto } from '$app/navigation';
 	import supabase from '$lib/client/supabase';
 	import imageCompression from 'browser-image-compression';
-	
+
 	export let data: PageData;
 	let editedData = structuredClone(data);
 	let transferUID = '';
@@ -302,7 +302,7 @@
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head class="w-[80px]">No.</Table.Head>
+							<Table.Head class="w-[50px]">No.</Table.Head>
 							<Table.Head>Player</Table.Head>
 							{#if membersFilter.sortBy == 'rating'}
 								<Table.Head class="w-[100px] text-right">Rating</Table.Head>
@@ -310,7 +310,7 @@
 								<Table.Head class="w-[100px] text-right">Total FL point</Table.Head>
 							{:else}
 								<Table.Head class="w-[100px] text-right">Rating</Table.Head>
-								<Table.Head class="w-[100px] text-right">Total FL point</Table.Head>
+								<Table.Head class="w-[80px] text-right">Total FL point</Table.Head>
 							{/if}
 						</Table.Row>
 					</Table.Header>
@@ -501,7 +501,8 @@
 				width: 100%;
 				height: 100%;
 				border: 1px solid var(--border1);
-				padding-bottom: 20%;
+				box-sizing: border-box;
+				padding-bottom: 100px;
 			}
 
 			.bannerContentWrapper {
@@ -578,6 +579,22 @@
 			display: flex;
 			gap: 10px;
 			align-items: center;
+		}
+	}
+
+	@media screen and (max-width: 1200px) {
+		.wrapper {
+			display: flex;
+			margin-top: 10px;
+			flex-direction: column;
+			gap: 10px;
+			padding-inline: 10px;
+		}
+
+		.filter {
+			flex-direction: column;
+			margin-bottom: 20px;
+			gap: 15px;
 		}
 	}
 </style>

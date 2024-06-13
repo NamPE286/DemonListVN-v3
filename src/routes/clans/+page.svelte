@@ -226,5 +226,21 @@
 
 	.invitationsWrapper {
 		padding-inline: 200px;
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+	}
+
+	@media screen and (max-width: 1200px) {
+		.clans {
+			padding-inline: 10px;
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+		}
+
+		.invitationsWrapper {
+			padding-inline: 10px;
+		}
 	}
 </style>
