@@ -20,6 +20,7 @@
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
+	let transferUID = '';
 	let invitePlayerUID = '';
 	let inviteOpened = false;
 	let currentTab: string = 'members';
@@ -119,11 +120,39 @@
 			}),
 			{
 				success: () => {
-					window.location.reload()
-					return 'Updated! This page will be refreshed.'
+					window.location.reload();
+					return 'Updated! This page will be refreshed.';
 				},
 				loading: 'Updating...',
 				error: 'Failed to update.'
+			}
+		);
+	}
+
+	async function transferOwnership() {
+		editedData.owner = transferUID;
+		await updateClan();
+	}
+
+	async function deleteClan() {
+		if (!confirm('Do you wish to delete this clan?')) {
+			return;
+		}
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			}),
+			{
+				success: () => {
+					window.location.reload();
+					return 'Deleted!';
+				},
+				loading: 'Deleting...',
+				error: 'Failed to delete. Please make sure that this clan only have 1 member.'
 			}
 		);
 	}
@@ -359,10 +388,22 @@
 				<section>
 					<h3>Danger zone</h3>
 					{#if $user.loggedIn && $user.data.uid == data.owner}
-						<Button class="mb-[10px] w-full text-red-500" variant="outline"
-							>Transfer ownership</Button
+						<Dialog.Root>
+							<Dialog.Trigger class="mb-[10px] w-full">
+								<Button class="w-full text-red-500" variant="outline">Transfer ownership</Button
+								></Dialog.Trigger
+							>
+							<Dialog.Content>
+								<Dialog.Header>
+									<Dialog.Title>Transfer ownership</Dialog.Title>
+								</Dialog.Header>
+								<Input bind:value={transferUID} placeholder="New owner UID" />
+								<Button on:click={transferOwnership}>Transfer</Button>
+							</Dialog.Content>
+						</Dialog.Root>
+						<Button class="mb-[10px] w-full text-red-500" variant="outline" on:click={deleteClan}
+							>Delete clan</Button
 						>
-						<Button class="mb-[10px] w-full text-red-500" variant="outline">Delete clan</Button>
 					{:else}
 						<Button class="w-full text-red-500" variant="outline" on:click={leaveClan}
 							>Leave clan</Button

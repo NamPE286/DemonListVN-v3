@@ -4,20 +4,22 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { Separator } from '$lib/components/ui/separator';
 	import { getTitle } from '$lib/client';
-
+	import { badgeVariants } from '$lib/components/ui/badge';
 	export let player: any;
 </script>
 
 <div class="wrapper">
 	<HoverCard.Root>
+		{#if player.data.clan}
+			<a href={`/clan/${player.data.clan}`} class={badgeVariants({ variant: 'secondary' })}
+				>{player.data.clans.tag}</a
+			>
+		{/if}
 		<HoverCard.Trigger
 			href={`/player/${player.data.uid}`}
 			rel="noreferrer noopener"
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
-			{#if player.data.clan}
-				[{player.data.clans.tag}]
-			{/if}
 			{player.data.name}
 		</HoverCard.Trigger>
 		<HoverCard.Content class="w-80">
@@ -30,6 +32,11 @@
 					/>
 					<Avatar.Fallback>{player.data.name[0]}</Avatar.Fallback>
 				</Avatar.Root>
+				{#if player.data.clan}
+					<a href={`/clan/${player.data.clan}`} class={badgeVariants({ variant: 'secondary' })}
+						>{player.data.clans.tag}</a
+					>
+				{/if}
 				<h4 class="font-semibold">{player.data.name}</h4>
 			</div>
 			<Separator />

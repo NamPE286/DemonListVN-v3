@@ -11,6 +11,7 @@
 	import ProfileEditButton from '$lib/components/profileEditButton.svelte';
 	import Heatmap from '$lib/components/heatmap.svelte';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
+	import { badgeVariants } from '$lib/components/ui/badge';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' = 'dl';
@@ -41,12 +42,22 @@
 			<Avatar.Fallback class="text-5xl lg:text-6xl">{data.player.name[0]}</Avatar.Fallback>
 		</Avatar.Root>
 		<div class="info">
-			<h2>
-				{data.player.name}
-				{#if $user.loggedIn && data.player.uid == $user.data.uid}
-					<ProfileEditButton bind:data={data.player} />
+			<div class="flex gap-[10px]">
+				{#if data.player.clan}
+					<a href={`/clan/${data.player.clan}`} class={badgeVariants({ variant: 'secondary' })}>
+						<span class='text-[15px]'>
+							{data.player.clans.tag}
+						</span>
+					</a>
 				{/if}
-			</h2>
+				<h2>
+					{data.player.name}
+					{#if $user.loggedIn && data.player.uid == $user.data.uid}
+						<ProfileEditButton bind:data={data.player} />
+					{/if}
+				</h2>
+			</div>
+
 			{#if data.player.province}
 				<div class="location">
 					<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
