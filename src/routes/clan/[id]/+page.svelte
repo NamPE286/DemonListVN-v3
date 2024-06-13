@@ -18,6 +18,11 @@
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
+	import supabase from '$lib/client/supabase';
+	import imageCompression from 'browser-image-compression';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { getTitle } from '$lib/client';
+	import Badge from '$lib/components/ui/badge/badge.svelte';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
@@ -41,6 +46,7 @@
 	};
 	let opened = false;
 	let uid: string, levelID: number;
+	let fileinput: any;
 
 	function fetchMembers() {
 		fetch(
@@ -131,10 +137,10 @@
 	}
 
 	async function transferOwnership() {
-		const tmp = editedData.owner
+		const tmp = editedData.owner;
 		editedData.owner = transferUID;
 		await updateClan();
-		editedData.owner = tmp
+		editedData.owner = tmp;
 	}
 
 	async function deleteClan() {
@@ -151,13 +157,47 @@
 			}),
 			{
 				success: () => {
-					goto('/clans')
+					goto('/clans');
 					return 'Deleted!';
 				},
 				loading: 'Deleting...',
 				error: 'Failed to delete. Please make sure that this clan only have 1 member.'
 			}
 		);
+	}
+
+	async function getImage(e: any) {
+		let image = e.target.files[0];
+		const options = {
+			maxSizeMB: 0.5,
+			maxWidthOrHeight: 480,
+			useWebWorker: true
+		};
+
+		const cImg = await imageCompression(image, options);
+		const upload = new Promise((resolve, reject) => {
+			supabase.storage
+				.from('clanPhotos')
+				.upload(`/${$page.params.id}.jpg`, cImg, {
+					cacheControl: '0',
+					upsert: true
+				})
+				.then((res) => {
+					const { data, error } = res;
+
+					if (error) {
+						reject();
+					} else {
+						resolve({});
+					}
+				});
+		});
+
+		toast.promise(upload, {
+			loading: 'Uploading...',
+			success: 'Uploaded! It may take a while to take effect.	',
+			error: 'Upload failed.'
+		});
 	}
 
 	onMount(async () => {
@@ -170,13 +210,20 @@
 	<title>{data.name}'s clan info - Demon List VN</title>
 </svelte:head>
 
+<input
+	style="display:none"
+	type="file"
+	accept=".jpg, .jpeg"
+	on:change={(e) => getImage(e)}
+	bind:this={fileinput}
+/>
 <RecordDetail {levelID} {uid} bind:open={opened} />
 
 <div class="wrapper">
 	<div class="banner">
 		<img
 			class="bg"
-			src="https://img.goodfon.com/wallpaper/nbig/8/64/navi-logo-yellow-background.webp"
+			src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${$page.params.id}.jpg`}
 			alt="bg"
 		/>
 		<div class="bannerContentWrapper">
@@ -276,12 +323,17 @@
 								<Table.Cell class="font-medium">
 									#{index + 1}
 									{#if membersFilter.sortBy == 'rating'}
-										({item.rating})
+										({item.overallRank})
 									{:else if membersFilter.sortBy == 'flrank'}
 										({item.flrank})
 									{/if}
 								</Table.Cell>
-								<Table.Cell><PlayerHoverCard player={{ data: item }} /></Table.Cell>
+								<Table.Cell
+									><PlayerHoverCard
+										player={{ data: item }}
+										showTitle={membersFilter.sortBy == 'rating'}
+									/></Table.Cell
+								>
 								{#if membersFilter.sortBy == 'rating'}
 									<Table.Cell class="text-right">{item.rating}</Table.Cell>
 								{:else if membersFilter.sortBy == 'flrank'}
@@ -309,8 +361,8 @@
 							</Select.Trigger>
 							<Select.Content>
 								<Select.Item value="name">Timestamp</Select.Item>
-								<Select.Item value="rating">Demon List Rating</Select.Item>
-								<Select.Item value="flrank">FL point</Select.Item>
+								<Select.Item value="dlPt">Demon List Rating</Select.Item>
+								<Select.Item value="flPt">FL point</Select.Item>
 							</Select.Content>
 						</Select.Root>
 					</div>
@@ -324,7 +376,7 @@
 					<Table.Header>
 						<Table.Row>
 							<Table.Head class="w-[50px]">No.</Table.Head>
-							<Table.Head class="w-[160px]">Player</Table.Head>
+							<Table.Head class="w-[200px]">Player</Table.Head>
 							<Table.Head>Level</Table.Head>
 							<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 							<Table.Head class="w-[100px] text-center">Device</Table.Head>
@@ -349,7 +401,10 @@
 									#{index + 1}
 								</Table.Cell>
 								<Table.Cell>
-									<PlayerHoverCard player={{ data: item.players }} />
+									<PlayerHoverCard
+										player={{ data: item.players }}
+										showTitle={recordsFilter.sortBy == 'dlPt'}
+									/>
 								</Table.Cell>
 								<Table.Cell>
 									<a href={`/level/${item.levels.id}`}>{item.levels.name}</a>
@@ -382,7 +437,9 @@
 							<Label for="public" class="text-right">Public</Label>
 							<Switch id="tag" class="col-span-3" bind:checked={editedData.isPublic} />
 						</div>
-						<Button variant="outline" class="mb-[10px] w-full">Change clan photo</Button>
+						<Button variant="outline" class="mb-[10px] w-full" on:click={() => fileinput.click()}
+							>Change clan photo</Button
+						>
 						<div class="applyBtnWrapper">
 							<Button on:click={updateClan}>Apply</Button>
 						</div>

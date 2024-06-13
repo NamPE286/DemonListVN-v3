@@ -5,12 +5,24 @@
 	import { Separator } from '$lib/components/ui/separator';
 	import { getTitle } from '$lib/client';
 	import { badgeVariants } from '$lib/components/ui/badge';
+
 	export let player: any;
+	export let showTitle = false;
 </script>
 
 <div class="wrapper">
 	<HoverCard.Root>
 		{#if player.data.clan}
+			{#if showTitle}
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						<div class="rank" style={`background-color: ${getTitle('dl', player.data)?.color}`}>
+							<span>{getTitle('dl', player.data)?.title}</span>
+						</div>
+					</Tooltip.Trigger>
+					<Tooltip.Content>{getTitle('dl', player.data)?.fullTitle}</Tooltip.Content>
+				</Tooltip.Root>
+			{/if}
 			<a href={`/clan/${player.data.clan}`} class={badgeVariants({ variant: 'secondary' })}
 				>{player.data.clans.tag}</a
 			>
@@ -131,5 +143,14 @@
 		gap: 10px;
 		align-items: center;
 		font-size: 13px;
+	}
+
+	.rank {
+		color: white;
+		font-size: 10px;
+		width: fit-content;
+		padding-inline: 5px;
+		border-radius: 5px;
+		font-weight: 600;
 	}
 </style>
