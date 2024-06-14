@@ -42,6 +42,8 @@
 		sortBy: 'timestamp',
 		ascending: false
 	};
+	let appliedMembersFilter = membersFilter
+	let appliedRecordsFilter = recordsFilter
 	let opened = false;
 	let uid: string, levelID: number;
 	let fileinput: any;
@@ -320,21 +322,21 @@
 							<Table.Row>
 								<Table.Cell class="font-medium">
 									#{index + 1}
-									{#if membersFilter.sortBy == 'rating'}
+									{#if appliedMembersFilter.sortBy == 'rating'}
 										({item.overallRank})
-									{:else if membersFilter.sortBy == 'flrank'}
+									{:else if appliedMembersFilter.sortBy == 'flrank'}
 										({item.flrank})
 									{/if}
 								</Table.Cell>
 								<Table.Cell
 									><PlayerHoverCard
 										player={{ data: item }}
-										showTitle={membersFilter.sortBy == 'rating'}
+										showTitle={appliedMembersFilter.sortBy == 'rating'}
 									/></Table.Cell
 								>
-								{#if membersFilter.sortBy == 'rating'}
+								{#if appliedMembersFilter.sortBy == 'rating'}
 									<Table.Cell class="text-right">{item.rating}</Table.Cell>
-								{:else if membersFilter.sortBy == 'flrank'}
+								{:else if appliedMembersFilter.sortBy == 'flrank'}
 									<Table.Cell class="text-right">{item.totalFLpt}</Table.Cell>
 								{:else}
 									<Table.Cell class="text-right">{item.rating}</Table.Cell>
@@ -401,7 +403,7 @@
 								<Table.Cell>
 									<PlayerHoverCard
 										player={{ data: item.players }}
-										showTitle={recordsFilter.sortBy == 'dlPt'}
+										showTitle={appliedRecordsFilter.sortBy == 'dlPt'}
 									/>
 								</Table.Cell>
 								<Table.Cell>
