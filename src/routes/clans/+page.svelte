@@ -234,7 +234,7 @@
 
 		img {
 			height: 100%;
-			width: 150px;
+			width: 95px;
 			object-fit: cover;
 			border-radius: var(--radius) 0 0 var(--radius);
 		}
