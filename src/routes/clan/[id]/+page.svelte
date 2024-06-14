@@ -42,13 +42,15 @@
 		sortBy: 'timestamp',
 		ascending: false
 	};
-	let appliedMembersFilter = membersFilter
-	let appliedRecordsFilter = recordsFilter
+	let appliedMembersFilter = structuredClone(membersFilter);
+	let appliedRecordsFilter = structuredClone(recordsFilter);
 	let opened = false;
 	let uid: string, levelID: number;
 	let fileinput: any;
 
 	function fetchMembers() {
+		appliedMembersFilter = structuredClone(membersFilter);
+
 		fetch(
 			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/members?${new URLSearchParams(membersFilter).toString()}`
 		)
@@ -59,6 +61,8 @@
 	}
 
 	function fetchRecords() {
+		appliedRecordsFilter = structuredClone(recordsFilter);
+
 		fetch(
 			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/records?${new URLSearchParams(recordsFilter).toString()}`
 		)
@@ -307,9 +311,9 @@
 						<Table.Row>
 							<Table.Head class="w-[50px]">No.</Table.Head>
 							<Table.Head>Player</Table.Head>
-							{#if membersFilter.sortBy == 'rating'}
+							{#if appliedMembersFilter.sortBy == 'rating'}
 								<Table.Head class="w-[100px] text-right">Rating</Table.Head>
-							{:else if membersFilter.sortBy == 'flrank'}
+							{:else if appliedMembersFilter.sortBy == 'flrank'}
 								<Table.Head class="w-[100px] text-right">Total FL point</Table.Head>
 							{:else}
 								<Table.Head class="w-[100px] text-right">Rating</Table.Head>
