@@ -33,13 +33,13 @@
 	let records: any[] = [];
 	let membersFilter: any = {
 		start: 0,
-		end: 50,
+		end: 49,
 		sortBy: 'name',
 		ascending: true
 	};
 	let recordsFilter: any = {
 		start: 0,
-		end: 50,
+		end: 49,
 		sortBy: 'timestamp',
 		ascending: false
 	};
@@ -48,8 +48,24 @@
 	let opened = false;
 	let uid: string, levelID: number;
 	let fileinput: any;
+	let membersState = 0;
+	let recordsState = 0;
 
-	function fetchMembers() {
+	function fetchMembers(e: any, append = false) {
+		membersState = 1;
+
+		if (append) {
+			if (membersState == 2) {
+				return;
+			}
+
+			membersFilter.start = membersFilter.end + 1;
+			membersFilter.end += 50;
+		} else {
+			membersFilter.start = 0;
+			membersFilter.end += 49;
+		}
+
 		appliedMembersFilter = structuredClone(membersFilter);
 
 		fetch(
@@ -57,11 +73,35 @@
 		)
 			.then((res) => res.json())
 			.then((res) => {
-				members = res;
+				if (append) {
+					members = members.concat(res);
+				} else {
+					members = res;
+				}
+
+				if (res.length) {
+					membersState = 0;
+				} else {
+					membersState = 2;
+				}
 			});
 	}
 
-	function fetchRecords() {
+	function fetchRecords(e: any, append = false) {
+		recordsState = 1;
+
+		if (append) {
+			if (recordsState == 2) {
+				return;
+			}
+
+			recordsFilter.start = recordsFilter.end + 1;
+			recordsFilter.end += 50;
+		} else {
+			recordsFilter.start = 0;
+			recordsFilter.end = 49;
+		}
+
 		appliedRecordsFilter = structuredClone(recordsFilter);
 
 		fetch(
@@ -69,7 +109,17 @@
 		)
 			.then((res) => res.json())
 			.then((res) => {
-				records = res;
+				if (append) {
+					records = records.concat(res);
+				} else {
+					records = res;
+				}
+
+				if (res.length) {
+					recordsState = 0;
+				} else {
+					recordsState = 2;
+				}
 			});
 	}
 
@@ -206,8 +256,20 @@
 	}
 
 	onMount(async () => {
-		fetchMembers();
-		fetchRecords();
+		fetchMembers(null);
+		fetchRecords(null);
+
+		window.onscroll = function (ev) {
+			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1500) {
+				if (currentTab == 'members' && membersState == 0) {
+					fetchMembers(null, true);
+				}
+
+				if (currentTab == 'records' && recordsState == 0) {
+					fetchRecords(null, true);
+				}
+			}
+		};
 	});
 </script>
 
