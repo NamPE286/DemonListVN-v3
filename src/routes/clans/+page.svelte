@@ -138,7 +138,7 @@
 	<Tabs.List class="mb-[5px] w-fit">
 		<Tabs.Trigger value="clans">Clan listing</Tabs.Trigger>
 		{#if $user.loggedIn && !$user.data.clan}
-			<Tabs.Trigger value="invitation">Invitation</Tabs.Trigger>
+			<Tabs.Trigger value="invitations">Invitations</Tabs.Trigger>
 		{/if}
 	</Tabs.List>
 	<Tabs.Content value="clans" class="w-full">
@@ -172,7 +172,7 @@
 			{/each}
 		</div>
 	</Tabs.Content>
-	<Tabs.Content value="invitation" class="w-full">
+	<Tabs.Content value="invitations" class="w-full">
 		<div class="invitationsWrapper">
 			{#each invitations as invitation, index}
 				<div class="clan">
