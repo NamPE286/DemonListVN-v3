@@ -36,7 +36,7 @@
 			<Table.Row>
 				<Table.Head class="w-[55px]">Rank</Table.Head>
 				<Table.Head>Player</Table.Head>
-				<Table.Head class="text-right">
+				<Table.Head class="text-right w-[70px]">
 					{$page.params.list == 'dl' ? 'Rating' : 'Total point'}
 				</Table.Head>
 			</Table.Row>
