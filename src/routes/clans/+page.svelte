@@ -14,7 +14,6 @@
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 	import LockClosed from 'svelte-radix/LockClosed.svelte';
 	import Globe from 'svelte-radix/Globe.svelte';
-	import { Description } from '$lib/components/ui/alert';
 
 	export let data: PageData;
 	const newClanData = {
@@ -78,14 +77,16 @@
 	}
 
 	onMount(async () => {
-		fetch(`${import.meta.env.VITE_API_URL}/clan/invitations`, {
-			headers: {
-				Authorization: 'Bearer ' + (await $user.token()),
-				'Content-Type': 'application/json'
-			}
-		})
-			.then((res) => res.json())
-			.then((res) => (invitations = res));
+		if ($user.loggedIn) {
+			fetch(`${import.meta.env.VITE_API_URL}/clan/invitations`, {
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				}
+			})
+				.then((res) => res.json())
+				.then((res) => (invitations = res));
+		}
 	});
 </script>
 
