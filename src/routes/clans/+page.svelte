@@ -104,7 +104,9 @@
 		<Dialog.Content>
 			<Dialog.Header>
 				<Dialog.Title>Create new clan</Dialog.Title>
-				<Dialog.Description>Additional configurations can be found in clan's settings after creation</Dialog.Description>
+				<Dialog.Description
+					>Additional configurations can be found in clan's settings after creation</Dialog.Description
+				>
 			</Dialog.Header>
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-4 items-center gap-4">
@@ -134,7 +136,9 @@
 <Tabs.Root value="clans" class="flex w-[100%] flex-col items-center">
 	<Tabs.List class="mb-[5px] w-fit">
 		<Tabs.Trigger value="clans">Clan listing</Tabs.Trigger>
-		<Tabs.Trigger value="invitation">Invitation</Tabs.Trigger>
+		{#if $user.loggedIn && !$user.data.clan}
+			<Tabs.Trigger value="invitation">Invitation</Tabs.Trigger>
+		{/if}
 	</Tabs.List>
 	<Tabs.Content value="clans" class="w-full">
 		<div class="flex justify-center gap-[10px]">
@@ -246,7 +250,7 @@
 		.titleWrapper {
 			padding-right: 20px;
 		}
-		
+
 		.clans {
 			padding-inline: 10px;
 			display: flex;
