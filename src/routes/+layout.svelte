@@ -31,8 +31,7 @@
 		{ route: '/players', name: 'Players' },
 		{ route: '/clans', name: 'Clans' },
 		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
-		{ route: '/rules', name: 'Rules' },
-		{ route: '/about', name: 'About' }
+		{ route: '/rules', name: 'Rules' }
 	];
 
 	let searchQuery = '';
@@ -178,7 +177,42 @@
 
 <slot />
 
+<footer>
+	<p>
+		© Copyright 2017-2024 demonlistvn.com.<br />
+		All rights reserved demonlistvn.com and Demon List VN are in no way affiliated with RobTopGamesAB ®
+	</p>
+	<div class="links">
+		<a href="/about">About</a>
+		<a href="/privacyPolicy">Privacy Policy</a>
+		<a href="/tos">Terms of service</a>
+	</div>
+</footer>
+
 <style lang="scss">
+	footer {
+		height: 100px;
+		border-top: 1px solid var(--border1);
+		padding-top: 20px;
+		margin-top: 100px;
+		margin-bottom: -100px;
+		color: var(--textColor2);
+
+		.links {
+			display: flex;
+			justify-content: center;
+			gap: 10px;
+
+			a {
+				text-decoration: underline;
+			}
+		}
+
+		p {
+			text-align: center;
+		}
+	}
+
 	.searchBtn {
 		display: flex;
 		align-items: center;
