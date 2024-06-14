@@ -428,7 +428,7 @@
 								<Select.Value placeholder="Select item to sort by" />
 							</Select.Trigger>
 							<Select.Content>
-								<Select.Item value="name">Timestamp</Select.Item>
+								<Select.Item value="timestamp">Date submitted</Select.Item>
 								<Select.Item value="dlPt">Demon List Rating</Select.Item>
 								<Select.Item value="flPt">FL point</Select.Item>
 							</Select.Content>
