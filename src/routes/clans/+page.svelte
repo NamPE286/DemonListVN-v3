@@ -142,7 +142,7 @@
 		{/if}
 	</Tabs.List>
 	<Tabs.Content value="clans" class="w-full">
-		<div class="flex justify-center gap-[10px] pr-[10px] pl-[10px]">
+		<div class="flex justify-center gap-[10px] pl-[10px] pr-[10px]">
 			<Input placeholder="Search" class="mb-[20px] w-[400px] max-w-full" bind:value={searchQuery} />
 			<Button on:click={fetchClanList}><MagnifyingGlass /></Button>
 		</div>
@@ -153,6 +153,7 @@
 						<img
 							src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${clan.id}.jpg`}
 							alt=""
+							loading="lazy"
 						/>
 					</a>
 					<div class="info">
@@ -180,6 +181,7 @@
 						<img
 							src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${invitation.clans.id}.jpg`}
 							alt=""
+							loading="lazy"
 						/>
 					</a>
 					<div class="info">
