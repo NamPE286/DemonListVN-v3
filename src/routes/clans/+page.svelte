@@ -14,6 +14,7 @@
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 	import LockClosed from 'svelte-radix/LockClosed.svelte';
 	import Globe from 'svelte-radix/Globe.svelte';
+	import { Description } from '$lib/components/ui/alert';
 
 	export let data: PageData;
 	const newClanData = {
@@ -103,6 +104,7 @@
 		<Dialog.Content>
 			<Dialog.Header>
 				<Dialog.Title>Create new clan</Dialog.Title>
+				<Dialog.Description>Additional configurations can be found in clan's settings after creation</Dialog.Description>
 			</Dialog.Header>
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-4 items-center gap-4">
