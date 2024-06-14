@@ -190,7 +190,7 @@
 			<Dialog.Title>Record's detail</Dialog.Title>
 			{#if record}
 				<DialogDescription
-					>[{record.data.players.clans.tag}] {record.data.players.name}'s {record.data.levels.name} record</DialogDescription
+					>{record.data.players.name}'s {record.data.levels.name} record</DialogDescription
 				>
 
 				<Tabs.Root value="detail" class="w-100">

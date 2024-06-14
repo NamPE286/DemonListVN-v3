@@ -12,6 +12,8 @@
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import { onMount } from 'svelte';
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
+	import LockClosed from 'svelte-radix/LockClosed.svelte';
+	import Globe from 'svelte-radix/Globe.svelte';
 
 	export let data: PageData;
 	const newClanData = {
@@ -25,7 +27,7 @@
 	async function createClan() {
 		if (
 			!/^[a-zA-Z0-9]*$/gm.test(newClanData.tag) ||
-			!(3 <= newClanData.tag.length && newClanData.tag.length <= 6)
+			!(2 <= newClanData.tag.length && newClanData.tag.length <= 6)
 		) {
 			toast.error('Tag must be alphanumericm contains no space and must have 3-6 characters.');
 			return;
@@ -111,7 +113,7 @@
 					<Label class="text-right">Tag</Label>
 					<Input
 						class="col-span-3"
-						placeholder="3-6 characters, alphanumeric, no space"
+						placeholder="2-6 characters, alphanumeric, no space"
 						bind:value={newClanData.tag}
 						maxlength={6}
 					/>
@@ -151,6 +153,13 @@
 						<span class="flex gap-[10px]"
 							>Owned by <PlayerHoverCard player={{ data: clan.players }} /></span
 						>
+						<div class="flex items-center gap-[5px]">
+							{#if clan.isPublic}
+								<Globe size={20} /> Public
+							{:else}
+								<LockClosed size={20} /> Invite only
+							{/if}
+						</div>
 					</div>
 				</div>
 			{/each}
@@ -201,7 +210,7 @@
 
 	.clan {
 		width: 100%;
-		height: 150px;
+		height: 108px;
 		border-radius: var(--radius);
 		border: 1px solid var(--border1);
 		display: flex;

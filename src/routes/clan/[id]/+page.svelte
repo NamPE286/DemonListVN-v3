@@ -159,7 +159,7 @@
 					return 'Deleted!';
 				},
 				loading: 'Deleting...',
-				error: 'Failed to delete. Please make sure that this clan only have 1 member.'
+				error: 'Failed to delete.'
 			}
 		);
 	}
@@ -232,7 +232,7 @@
 					{#if data.isPublic}
 						<Globe size={20} /> Public
 					{:else}
-						<LockClosed size={20} /> Private
+						<LockClosed size={20} /> Invite only
 					{/if}
 				</div>
 				<div class="flex items-center gap-[5px]">
