@@ -21,6 +21,7 @@
 	import { goto } from '$app/navigation';
 	import supabase from '$lib/client/supabase';
 	import imageCompression from 'browser-image-compression';
+	import { fade } from 'svelte/transition';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
@@ -226,6 +227,7 @@
 <div class="wrapper">
 	<div class="banner">
 		<img
+			in:fade={{ delay: 250, duration: 300 }}
 			class="bg"
 			src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${$page.params.id}.jpg`}
 			alt="bg"
