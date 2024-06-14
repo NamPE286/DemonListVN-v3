@@ -179,7 +179,7 @@
 
 <footer>
 	<p>
-		© Copyright 2017-2024 demonlistvn.com.<br />
+		© Copyright 2020-2024 demonlistvn.com.<br />
 		All rights reserved demonlistvn.com and Demon List VN are in no way affiliated with RobTopGamesAB ®
 	</p>
 	<div class="links">
