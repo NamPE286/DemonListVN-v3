@@ -155,7 +155,7 @@
 							<ScrollArea class="h-72">
 								{#each Object.keys(provinces)
 									.map((key) => provinces[key])
-									.toSorted((a, b) => {
+									.sort((a, b) => {
 										return a.name > b.name ? 1 : -1;
 									}) as province}
 									<Select.Item
