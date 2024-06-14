@@ -241,6 +241,10 @@
 	}
 
 	@media screen and (max-width: 1200px) {
+		.titleWrapper {
+			padding-right: 20px;
+		}
+		
 		.clans {
 			padding-inline: 10px;
 			display: flex;
