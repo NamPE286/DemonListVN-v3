@@ -6,20 +6,35 @@
 
 	async function copyToken() {
 		await navigator.clipboard.writeText((await $user.token())!);
-		toast('Copied to clipboard!')
+		toast('Copied to clipboard!');
+	}
+
+	async function refresh() {
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/refresh`, {
+				method: 'PATCH',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			}),
+			{
+				success: 'Refreshed!',
+				loading: 'Refreshing...',
+				error: 'Failed to refresh.'
+			}
+		);
 	}
 </script>
 
-<svelte:head>
-
-</svelte:head>
+<svelte:head></svelte:head>
 
 {#if $user.loggedIn && $user.data.isAdmin}
 	<Title value="Admin" />
 
 	<div class="wrapper">
-		<a href="/admin/ratingEstimator">Rating estimator</a><br>
-		<a href="/admin/submission">Submission</a><br>
+		<Button on:click={refresh}>Refresh</Button><br />
+		<a href="/admin/ratingEstimator">Rating estimator</a><br />
+		<a href="/admin/submission">Submission</a><br />
 		<Button on:click={copyToken}>Copy token</Button>
 	</div>
 {/if}
