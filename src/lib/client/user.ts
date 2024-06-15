@@ -6,6 +6,7 @@ interface userType {
     token: () => Promise<string | undefined>,
     loggedIn: boolean
     checked: boolean
+    refresh: any
 }
 
 let userData: userType = {
@@ -14,7 +15,37 @@ let userData: userType = {
         return (await supabase.auth.getSession()).data.session?.access_token
     },
     loggedIn: false,
-    checked: false
+    checked: false,
+    refresh: async () => {
+        const { data, error } = await supabase.auth.getUser()
+
+        if (error) {
+            userData.checked = true
+            user.set(userData)
+            return
+        }
+
+        fetch(`${import.meta.env.VITE_API_URL}/player/${data.user.id}?cached=true`)
+            .then(res => res.json())
+            .then(res => {
+                userData.data = res
+                userData.loggedIn = true
+                userData.checked = true
+                user.set(userData)
+            })
+            .catch((err) => {
+                addNewUser().then(() => {
+                    fetch(`${import.meta.env.VITE_API_URL}/player/${data.user.id}?cached=true`)
+                        .then(res => res.json())
+                        .then(res => {
+                            userData.data = res
+                            userData.loggedIn = true
+                            userData.checked = true
+                            user.set(userData)
+                        })
+                })
+            })
+    }
 }
 
 export const user = writable(userData)
@@ -38,35 +69,4 @@ async function addNewUser() {
     })
 }
 
-async function getUser() {
-    const { data, error } = await supabase.auth.getUser()
-
-    if (error) {
-        userData.checked = true
-        user.set(userData)
-        return
-    }
-
-    fetch(`${import.meta.env.VITE_API_URL}/player/${data.user.id}?cached=true`)
-        .then(res => res.json())
-        .then(res => {
-            userData.data = res
-            userData.loggedIn = true
-            userData.checked = true
-            user.set(userData)
-        })
-        .catch((err) => {
-            addNewUser().then(() => {
-                fetch(`${import.meta.env.VITE_API_URL}/player/${data.user.id}?cached=true`)
-                    .then(res => res.json())
-                    .then(res => {
-                        userData.data = res
-                        userData.loggedIn = true
-                        userData.checked = true
-                        user.set(userData)
-                    })
-            })
-        })
-}
-
-getUser()
+userData.refresh()

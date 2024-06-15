@@ -10,6 +10,7 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import LockClosed from 'svelte-radix/LockClosed.svelte';
 	import Globe from 'svelte-radix/Globe.svelte';
+	import Person from 'svelte-radix/Person.svelte';
 	import StarFilled from 'svelte-radix/StarFilled.svelte';
 	import type { PageData } from './$types';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
@@ -50,6 +51,7 @@
 	let fileinput: any;
 	let membersState = 0;
 	let recordsState = 0;
+	let invitation: any = null;
 
 	function fetchMembers(e: any, append = false) {
 		membersState = 1;
@@ -213,6 +215,7 @@
 			{
 				success: () => {
 					goto('/clans');
+					$user.refresh();
 					return 'Deleted!';
 				},
 				loading: 'Deleting...',
@@ -255,9 +258,33 @@
 		});
 	}
 
+	async function acceptInvitation(clanID: number) {
+		fetch(`${import.meta.env.VITE_API_URL}/clan/${clanID}/invite`, {
+			method: 'PATCH',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token())
+			}
+		}).then((res) => window.location.reload());
+	}
+
+	async function rejectInvitation(clanID: number) {
+		fetch(`${import.meta.env.VITE_API_URL}/clan/${clanID}/invite`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token())
+			}
+		}).then((res) => window.location.reload());
+	}
+
 	onMount(async () => {
 		fetchMembers(null);
 		fetchRecords(null);
+
+		if ($user.loggedIn) {
+			fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/invitation/${$user.data.uid}`)
+				.then((res) => res.json())
+				.then((res) => (invitation = res));
+		}
 
 		window.onscroll = function (ev) {
 			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1500) {
@@ -309,9 +336,30 @@
 					<StarFilled size={20} />
 					<PlayerHoverCard player={{ data: data.players }} />
 				</div>
+				<div class="flex items-center gap-[5px]">
+					<Person size={20} />
+					{data.memberCount}/{data.memberLimit} Members
+				</div>
+				{#if invitation}
+					<p class="mb-[-10px] text-center">You've been invited to this clan</p>
+				{/if}
 				<div class="bannerBtn">
 					{#if $user.loggedIn}
-						{#if $user.data.clan == $page.params.id}
+						{#if invitation}
+							<Button
+								class="w-full"
+								on:click={() => {
+									acceptInvitation(parseInt($page.params.id));
+								}}>Accept</Button
+							>
+							<Button
+								variant="outline"
+								class="w-full"
+								on:click={() => {
+									acceptInvitation(parseInt($page.params.id));
+								}}>Reject</Button
+							>
+						{:else if $user.data.clan == $page.params.id}
 							{#if data.isPublic || data.owner == $user.data.uid}
 								<Dialog.Root bind:open={inviteOpened}>
 									<Dialog.Trigger class="w-full">
@@ -500,6 +548,15 @@
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
 							<Label for="tag" class="text-right">Clan's tag</Label>
 							<Input id="tag" class="col-span-3" bind:value={editedData.tag} />
+						</div>
+						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
+							<Label for="limit" class="text-right">Member limit</Label>
+							<Input
+								id="limit"
+								class="col-span-3"
+								bind:value={editedData.memberLimit}
+								type="number"
+							/>
 						</div>
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
 							<Label for="public" class="text-right">Public</Label>

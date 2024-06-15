@@ -72,7 +72,7 @@
 
 	async function clear() {
 		notifications = [];
-		
+
 		fetch(`${import.meta.env.VITE_API_URL}/notifications/${$user.data.uid}`, {
 			method: 'DELETE',
 			headers: {
@@ -111,7 +111,11 @@
 				{#each notifications as notification}
 					<Card.Root>
 						<Card.Header>
-							<Card.Title><p class="notiContent">{notification.content}</p></Card.Title>
+							<Card.Title>
+								<a class="notiContent" href={notification.redirect ? notification.redirect : '#!'}
+									>{notification.content}</a
+								></Card.Title
+							>
 							<Card.Description>{timeSince(notification.timestamp)} ago</Card.Description>
 						</Card.Header>
 					</Card.Root>

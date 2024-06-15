@@ -13,12 +13,16 @@
 	import { onMount } from 'svelte';
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 	import LockClosed from 'svelte-radix/LockClosed.svelte';
+	import StarFilled from 'svelte-radix/StarFilled.svelte';
 	import Globe from 'svelte-radix/Globe.svelte';
+	import Person from 'svelte-radix/Person.svelte';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 	const newClanData = {
 		name: '',
 		tag: '',
+		memberLimit: 10,
 		isPublic: false
 	};
 	let invitations: any = [];
@@ -38,16 +42,26 @@
 			return;
 		}
 
-		toast.loading('Creating new clan...');
-
-		fetch(`${import.meta.env.VITE_API_URL}/clan`, {
-			method: 'POST',
-			body: JSON.stringify(newClanData),
-			headers: {
-				Authorization: 'Bearer ' + (await $user.token()),
-				'Content-Type': 'application/json'
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/clan`, {
+				method: 'POST',
+				body: JSON.stringify(newClanData),
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				}
+			})
+				.then((res) => res.json())
+				.then(async (res) => {
+					goto(`/clan/${res.data.id}`);
+					$user.refresh();
+				}),
+			{
+				success: 'Clan created!',
+				loading: 'Creating clan...',
+				error: 'Failed to create new clan.'
 			}
-		}).then((res) => window.location.reload());
+		);
 	}
 
 	async function acceptInvitation(clanID: number) {
@@ -124,6 +138,10 @@
 					/>
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
+					<Label class="text-right">Member limit</Label>
+					<Input class="col-span-3" bind:value={newClanData.memberLimit} type="number" />
+				</div>
+				<div class="grid grid-cols-4 items-center gap-4">
 					<Label class="text-right">Public</Label>
 					<Switch bind:checked={newClanData.isPublic} />
 				</div>
@@ -159,14 +177,20 @@
 					<div class="info">
 						<a href={`/clan/${clan.id}`}><h3>{clan.name}</h3></a>
 						<span class="flex gap-[10px]"
-							>Owned by <PlayerHoverCard player={{ data: clan.players }} /></span
+							><StarFilled size={20} /> <PlayerHoverCard player={{ data: clan.players }} /></span
 						>
-						<div class="flex items-center gap-[5px]">
-							{#if clan.isPublic}
-								<Globe size={20} /> Public
-							{:else}
-								<LockClosed size={20} /> Invite only
-							{/if}
+						<div class="flex gap-[10px]">
+							<div class="flex items-center gap-[5px]">
+								{#if clan.isPublic}
+									<Globe size={20} /> Public
+								{:else}
+									<LockClosed size={20} /> Invite only
+								{/if}
+							</div>
+							<div class="flex items-center gap-[5px]">
+								<Person size={20} />
+								{clan.memberCount}/{clan.memberLimit} Members
+							</div>
 						</div>
 					</div>
 				</div>
@@ -219,7 +243,7 @@
 
 	.clan {
 		width: 100%;
-		height: 108px;
+		height: 110px;
 		border-radius: var(--radius);
 		border: 1px solid var(--border1);
 		display: flex;
