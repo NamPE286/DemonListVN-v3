@@ -31,6 +31,14 @@
 	/>
 {/if}
 
+{#if data.player.isBanned}
+	<div class="flex h-[50px] items-center justify-center bg-red-600">
+		This player has been banned.
+	</div>
+{:else if data.player.isHidden}
+	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
+{/if}
+
 <div class="wrapper">
 	<div class="playerInfo">
 		<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
