@@ -13,7 +13,6 @@
 	import { toast } from 'svelte-sonner';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
-	import { ModeWatcher } from 'mode-watcher';
 
 	export let uid: string;
 	export let levelID: number;
