@@ -5,6 +5,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { user } from '$lib/client';
 	import supabase from '$lib/client/supabase';
+	import { redirect } from '@sveltejs/kit';
 
 	let notifications: any[] = [];
 
@@ -113,8 +114,11 @@
 						<Card.Header>
 							<Card.Title>
 								<a class="notiContent" href={notification.redirect ? notification.redirect : '#!'}
-									>{notification.content}</a
-								></Card.Title
+									>{notification.content}
+									{#if notification.redirect}
+										<span class="navigate"> - Click to navigate</span>
+									{/if}
+								</a></Card.Title
 							>
 							<Card.Description>{timeSince(notification.timestamp)} ago</Card.Description>
 						</Card.Header>
@@ -126,6 +130,10 @@
 </Popover.Root>
 
 <style lang="scss">
+	.navigate {
+		color: var(--textColor2);
+	}
+
 	.whiteDot {
 		position: absolute;
 		width: 10px;

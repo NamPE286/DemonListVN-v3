@@ -9,6 +9,25 @@ interface userType {
     refresh: any
 }
 
+async function addNewUser() {
+    const { data, error } = await supabase.auth.getUser()
+
+    if (error) {
+        throw error
+    }
+
+    await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+        method: 'PUT',
+        body: JSON.stringify({
+            name: data.user.user_metadata.full_name
+        }),
+        headers: {
+            "Authorization": `Bearer ${await userData.token()}`,
+            "Content-Type": "application/json"
+        }
+    })
+}
+
 let userData: userType = {
     data: undefined,
     token: async () => {
@@ -49,24 +68,5 @@ let userData: userType = {
 }
 
 export const user = writable(userData)
-
-async function addNewUser() {
-    const { data, error } = await supabase.auth.getUser()
-
-    if (error) {
-        throw error
-    }
-
-    await fetch(`${import.meta.env.VITE_API_URL}/player`, {
-        method: 'PUT',
-        body: JSON.stringify({
-            name: data.user.user_metadata.full_name
-        }),
-        headers: {
-            "Authorization": `Bearer ${await userData.token()}`,
-            "Content-Type": "application/json"
-        }
-    })
-}
 
 userData.refresh()

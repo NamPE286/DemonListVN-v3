@@ -277,15 +277,56 @@
 		}).then((res) => window.location.reload());
 	}
 
+	async function kickPlayer(player: any) {
+		if (!confirm(`Kick ${player.name}?`)) {
+			return;
+		}
+
+		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/kick/${player.uid}`, {
+			method: 'PATCH',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token())
+			}
+		}).then((res) => window.location.reload());
+	}
+
+	async function banPlayer(player: any) {
+		if (!confirm(`Ban ${player.name}?`)) {
+			return;
+		}
+
+		const reason = prompt('Reason for banning');
+
+		if (!reason) {
+			alert('Must provide a reason');
+			return;
+		}
+
+		fetch(
+			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/ban/${player.uid}?reason=${reason}`,
+			{
+				method: 'POST',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			}
+		).then((res) => window.location.reload());
+	}
+
+	$: $user,
+		(() => {
+			if ($user.loggedIn) {
+				fetch(
+					`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/invitation/${$user.data.uid}`
+				)
+					.then((res) => res.json())
+					.then((res) => (invitation = res));
+			}
+		})();
+
 	onMount(async () => {
 		fetchMembers(null);
 		fetchRecords(null);
-
-		if ($user.loggedIn) {
-			fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/invitation/${$user.data.uid}`)
-				.then((res) => res.json())
-				.then((res) => (invitation = res));
-		}
 
 		window.onscroll = function (ev) {
 			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1500) {
@@ -377,7 +418,7 @@
 									</Dialog.Content>
 								</Dialog.Root>
 							{/if}
-						{:else if data.isPublic}
+						{:else if data.isPublic && data.memberCount < data.memberLimit}
 							<Button variant="outline" class="w-full" on:click={joinClan}>Join</Button>
 						{/if}
 					{/if}
@@ -445,12 +486,31 @@
 										({item.flrank})
 									{/if}
 								</Table.Cell>
-								<Table.Cell
-									><PlayerHoverCard
-										player={{ data: item }}
-										showTitle={appliedMembersFilter.sortBy == 'rating'}
-									/></Table.Cell
-								>
+								<Table.Cell>
+									{#if $user.loggedIn && $user.data.uid == data.owner}
+										<ContextMenu.Root>
+											<ContextMenu.Trigger>
+												<PlayerHoverCard
+													player={{ data: item }}
+													showTitle={appliedMembersFilter.sortBy == 'rating'}
+												/>
+											</ContextMenu.Trigger>
+											<ContextMenu.Content>
+												<ContextMenu.Item on:click={() => kickPlayer(item)}
+													>Kick player</ContextMenu.Item
+												>
+												<!-- <ContextMenu.Item on:click={() => banPlayer(item)}
+													>Ban player</ContextMenu.Item
+												> -->
+											</ContextMenu.Content>
+										</ContextMenu.Root>
+									{:else}
+										<PlayerHoverCard
+											player={{ data: item }}
+											showTitle={appliedMembersFilter.sortBy == 'rating'}
+										/>
+									{/if}
+								</Table.Cell>
 								{#if appliedMembersFilter.sortBy == 'rating'}
 									<Table.Cell class="text-right">{item.rating}</Table.Cell>
 								{:else if appliedMembersFilter.sortBy == 'flrank'}
