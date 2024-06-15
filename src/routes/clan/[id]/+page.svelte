@@ -11,6 +11,7 @@
 	import LockClosed from 'svelte-radix/LockClosed.svelte';
 	import Globe from 'svelte-radix/Globe.svelte';
 	import Person from 'svelte-radix/Person.svelte';
+	import CrossCircled from 'svelte-radix/CrossCircled.svelte';
 	import StarFilled from 'svelte-radix/StarFilled.svelte';
 	import type { PageData } from './$types';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
@@ -33,6 +34,7 @@
 	let currentTab: string = 'members';
 	let members: any[] = [];
 	let records: any[] = [];
+	let invitations: any[] = [];
 	let membersFilter: any = {
 		start: 0,
 		end: 49,
@@ -124,6 +126,12 @@
 					recordsState = 2;
 				}
 			});
+	}
+
+	function fetchInvitations() {
+		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/invitations`)
+			.then((res) => res.json())
+			.then((res) => (invitations = res));
 	}
 
 	async function joinClan() {
@@ -313,6 +321,19 @@
 		).then((res) => window.location.reload());
 	}
 
+	async function revokeInvitation(uid: string) {
+		if (!confirm('Revoke invitation?')) {
+			return;
+		}
+
+		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/invitation/${uid}`, {
+			method: 'DELETE',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token())
+			}
+		}).then((res) => window.location.reload());
+	}
+
 	$: $user,
 		(() => {
 			if ($user.loggedIn) {
@@ -327,6 +348,7 @@
 	onMount(async () => {
 		fetchMembers(null);
 		fetchRecords(null);
+		fetchInvitations();
 
 		window.onscroll = function (ev) {
 			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1500) {
@@ -432,6 +454,7 @@
 				<Tabs.Trigger value="members">Members</Tabs.Trigger>
 				<Tabs.Trigger value="records">Records</Tabs.Trigger>
 				{#if $user.loggedIn && $user.data.clan == $page.params.id}
+					<Tabs.Trigger value="invitations">Invitations</Tabs.Trigger>
 					<Tabs.Trigger value="settings">Settings</Tabs.Trigger>
 				{/if}
 			</Tabs.List>
@@ -496,12 +519,14 @@
 												/>
 											</ContextMenu.Trigger>
 											<ContextMenu.Content>
-												<ContextMenu.Item on:click={() => kickPlayer(item)}
-													>Kick player</ContextMenu.Item
-												>
-												<!-- <ContextMenu.Item on:click={() => banPlayer(item)}
+												{#if item.uid != $user.data.uid}
+													<ContextMenu.Item on:click={() => kickPlayer(item)}
+														>Kick player</ContextMenu.Item
+													>
+													<!-- <ContextMenu.Item on:click={() => banPlayer(item)}
 													>Ban player</ContextMenu.Item
 												> -->
+												{/if}
 											</ContextMenu.Content>
 										</ContextMenu.Root>
 									{:else}
@@ -593,6 +618,37 @@
 									{item.mobile ? 'Mobile' : 'PC'}<br />({item.refreshRate}fps)
 								</Table.Cell>
 								<Table.Cell class="text-center">{item.progress}%</Table.Cell>
+							</Table.Row>
+						{/each}
+					</Table.Body>
+				</Table.Root>
+			</Tabs.Content>
+			<Tabs.Content value="invitations" class="w-full">
+				<Table.Root>
+					<Table.Header>
+						<Table.Row>
+							<Table.Head>Player</Table.Head>
+							<Table.Head>Sent since</Table.Head>
+							<Table.Head class="text-right"></Table.Head>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						{#each invitations as invitation}
+							<Table.Row>
+								<Table.Cell>
+									<PlayerHoverCard player={{ data: invitation.players }} />
+								</Table.Cell>
+								<Table.Cell>
+									{new Date(invitation.created_at).toLocaleString()}
+								</Table.Cell>
+								<Table.Cell class="text-right">
+									<Button
+										variant="icon"
+										on:click={() => {
+											revokeInvitation(invitation.players.uid);
+										}}><CrossCircled size={20} /></Button
+									>
+								</Table.Cell>
 							</Table.Row>
 						{/each}
 					</Table.Body>
