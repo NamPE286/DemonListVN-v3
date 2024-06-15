@@ -37,6 +37,10 @@
 	}
 
 	async function getImage(e: any) {
+		if(player.isBanned) {
+			return
+		}
+
 		let image = e.target.files[0];
 		const options = {
 			maxSizeMB: 0.035,
