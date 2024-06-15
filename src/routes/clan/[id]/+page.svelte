@@ -23,6 +23,7 @@
 	import supabase from '$lib/client/supabase';
 	import imageCompression from 'browser-image-compression';
 	import { fade } from 'svelte/transition';
+	import * as ContextMenu from '$lib/components/ui/context-menu';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
@@ -356,7 +357,7 @@
 								variant="outline"
 								class="w-full"
 								on:click={() => {
-									acceptInvitation(parseInt($page.params.id));
+									rejectInvitation(parseInt($page.params.id));
 								}}>Reject</Button
 							>
 						{:else if $user.data.clan == $page.params.id}
