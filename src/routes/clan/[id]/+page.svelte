@@ -463,6 +463,10 @@
 					<div class="filterItem">
 						<Label>Sort by</Label>
 						<Select.Root
+							selected={{
+								label: 'A-Z',
+								value: 'name'
+							}}
 							onSelectedChange={(e) => {
 								membersFilter.sortBy = e?.value;
 							}}
@@ -554,6 +558,10 @@
 					<div class="filterItem">
 						<Label>Sort by</Label>
 						<Select.Root
+							selected={{
+								label: 'Date submitted',
+								value: 'timestamp'
+							}}
 							onSelectedChange={(e) => {
 								recordsFilter.sortBy = e?.value;
 							}}
@@ -562,7 +570,7 @@
 								<Select.Value placeholder="Select item to sort by" />
 							</Select.Trigger>
 							<Select.Content>
-								<Select.Item value="timestamp">Date submitted</Select.Item>
+								<Select.Item value="timestamp" selected>Date submitted</Select.Item>
 								<Select.Item value="dlPt">Demon List Rating</Select.Item>
 								<Select.Item value="flPt">FL point</Select.Item>
 							</Select.Content>
