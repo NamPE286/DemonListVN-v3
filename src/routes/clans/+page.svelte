@@ -113,7 +113,11 @@
 	<Dialog.Root>
 		{#if $user.loggedIn && !$user.data.clan}
 			<Dialog.Trigger>
-				<Button>Create clan</Button>
+				{#if $user.data.rating || $user.data.totalFLpt}
+					<Button>Create clan</Button>
+				{:else}
+					<Button disabled>Create clan</Button>
+				{/if}
 			</Dialog.Trigger>
 		{/if}
 		<Dialog.Content>
