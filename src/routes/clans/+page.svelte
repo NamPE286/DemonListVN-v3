@@ -22,7 +22,7 @@
 	const newClanData = {
 		name: '',
 		tag: '',
-		memberLimit: 10,
+		memberLimit: NaN,
 		isPublic: false
 	};
 	let invitations: any = [];
@@ -139,7 +139,12 @@
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label class="text-right">Member limit</Label>
-					<Input class="col-span-3" bind:value={newClanData.memberLimit} type="number" />
+					<Input
+						class="col-span-3"
+						bind:value={newClanData.memberLimit}
+						type="number"
+						placeholder="Enter 0 for unlimited"
+					/>
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label class="text-right">Public</Label>
@@ -189,7 +194,11 @@
 							</div>
 							<div class="flex items-center gap-[5px]">
 								<Person size={20} />
-								{clan.memberCount}/{clan.memberLimit} Members
+								{#if clan.memberLimit}
+									{clan.memberCount}/{clan.memberLimit} Members
+								{:else}
+									{clan.memberCount}/∞
+								{/if}
 							</div>
 						</div>
 					</div>

@@ -402,7 +402,11 @@
 				</div>
 				<div class="flex items-center gap-[5px]">
 					<Person size={20} />
-					{data.memberCount}/{data.memberLimit} Members
+					{#if data.memberLimit}
+						{data.memberCount}/{data.memberLimit} Members
+					{:else}
+						{data.memberCount}/∞
+					{/if}
 				</div>
 				{#if invitation}
 					<p class="mb-[-10px] text-center">You've been invited to this clan</p>
@@ -681,6 +685,7 @@
 								class="col-span-3"
 								bind:value={editedData.memberLimit}
 								type="number"
+								placeholder="Enter 0 for unlimited"
 							/>
 						</div>
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
