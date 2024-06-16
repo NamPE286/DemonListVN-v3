@@ -403,9 +403,9 @@
 				<div class="flex items-center gap-[5px]">
 					<Person size={20} />
 					{#if data.memberLimit}
-						{data.memberCount}/{data.memberLimit} Members
+						{data.memberCount}/{data.memberLimit}meembers
 					{:else}
-						{data.memberCount}/∞
+						{data.memberCount}/∞ members
 					{/if}
 				</div>
 				{#if invitation}

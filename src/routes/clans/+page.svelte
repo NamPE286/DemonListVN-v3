@@ -195,9 +195,9 @@
 							<div class="flex items-center gap-[5px]">
 								<Person size={20} />
 								{#if clan.memberLimit}
-									{clan.memberCount}/{clan.memberLimit} Members
+									{clan.memberCount}/{clan.memberLimit} members
 								{:else}
-									{clan.memberCount}/∞
+									{clan.memberCount}/∞ members
 								{/if}
 							</div>
 						</div>
