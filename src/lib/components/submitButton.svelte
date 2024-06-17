@@ -122,7 +122,7 @@
 					type="number"
 					disabled={submission.progress != 100}
 					bind:value={submission.suggestedRating}
-					placeholder={submission.progress == 100 ? 'optional' : 'progress must be 100%'}
+					placeholder={submission.progress == 100 ? 'optional (không ghi cũng được)' : 'progress must be 100%'}
 					class="col-span-3"
 				/>
 			</div>
@@ -131,7 +131,7 @@
 				<Input
 					id="name"
 					bind:value={submission.comment}
-					placeholder="optional"
+					placeholder="optional (không ghi cũng được)"
 					class="col-span-3"
 				/>
 			</div>
