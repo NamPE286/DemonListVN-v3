@@ -76,9 +76,10 @@
 			<ExclamationTriangle class="h-4 w-4" />
 			<Alert.Title>Attention!</Alert.Title>
 			<Alert.Description>
-				- Read the <button on:click={() => (open = false)}><a href="/rules"><u>rules</u></a></button> before
-				submitting.<br/>
-				- Optional field can be left blank.<br/>
+				- Read the <button on:click={() => (open = false)}><a href="/rules"><u>rules</u></a></button
+				>
+				before submitting.<br />
+				- Optional field can be left blank.<br />
 				- Suggested rating is Demon List VN level's rating, not level's stars or placement.
 			</Alert.Description>
 		</Alert.Root>
@@ -122,7 +123,9 @@
 					type="number"
 					disabled={submission.progress != 100}
 					bind:value={submission.suggestedRating}
-					placeholder={submission.progress == 100 ? 'optional (không ghi cũng được)' : 'progress must be 100%'}
+					placeholder={submission.progress == 100
+						? 'optional (không ghi cũng được)'
+						: 'progress must be 100%'}
 					class="col-span-3"
 				/>
 			</div>
