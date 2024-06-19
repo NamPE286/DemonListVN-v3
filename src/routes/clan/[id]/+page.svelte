@@ -481,7 +481,7 @@
 							<Select.Content>
 								<Select.Item value="name">A-Z</Select.Item>
 								<Select.Item value="rating">Demon List Rating</Select.Item>
-								<Select.Item value="flrank">Total FL point</Select.Item>
+								<Select.Item value="totalFLpt">Total FL point</Select.Item>
 							</Select.Content>
 						</Select.Root>
 					</div>
@@ -498,7 +498,7 @@
 							<Table.Head>Player</Table.Head>
 							{#if appliedMembersFilter.sortBy == 'rating'}
 								<Table.Head class="w-[100px] text-right">Rating</Table.Head>
-							{:else if appliedMembersFilter.sortBy == 'flrank'}
+							{:else if appliedMembersFilter.sortBy == 'totalFLpt'}
 								<Table.Head class="w-[100px] text-right">Total FL point</Table.Head>
 							{:else}
 								<Table.Head class="w-[100px] text-right">Rating</Table.Head>
@@ -513,7 +513,7 @@
 									#{index + 1}
 									{#if appliedMembersFilter.sortBy == 'rating'}
 										({item.overallRank})
-									{:else if appliedMembersFilter.sortBy == 'flrank'}
+									{:else if appliedMembersFilter.sortBy == 'totalFLpt'}
 										({item.flrank})
 									{/if}
 								</Table.Cell>
@@ -546,7 +546,7 @@
 								</Table.Cell>
 								{#if appliedMembersFilter.sortBy == 'rating'}
 									<Table.Cell class="text-right">{item.rating}</Table.Cell>
-								{:else if appliedMembersFilter.sortBy == 'flrank'}
+								{:else if appliedMembersFilter.sortBy == 'totalFLpt'}
 									<Table.Cell class="text-right">{item.totalFLpt}</Table.Cell>
 								{:else}
 									<Table.Cell class="text-right">{item.rating}</Table.Cell>
