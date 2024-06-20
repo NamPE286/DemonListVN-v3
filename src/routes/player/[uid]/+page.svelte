@@ -33,7 +33,7 @@
 
 {#if data.player.isBanned}
 	<div class="flex h-[50px] items-center justify-center bg-red-600">
-		This player is banned.
+		This player is banned. If this is your profile, contact with a moderator to appeal this decision.
 	</div>
 {:else if data.player.isHidden}
 	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
