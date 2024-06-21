@@ -89,7 +89,7 @@
 	{/if}
 </div>
 <div class="wrapper">
-	<Ads />
+	<Ads dataAdFormat="horizontal" />
 	{#if $settingsValue.hideDiscord == 'false'}
 		<div class="alertWrapper">
 			<Card.Root>
