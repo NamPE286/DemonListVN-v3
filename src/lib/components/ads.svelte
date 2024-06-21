@@ -17,9 +17,9 @@
 	});
 </script>
 
-<div class="mb-[20px] mt-[20px] w-full">
+<div class="ad mb-[20px] mt-[20px] w-full max-w-[100%] text-center">
 	<ins
-		class="adsbygoogle ad"
+		class="adsbygoogle"
 		style="display:block"
 		data-ad-client="ca-pub-4605218533506777"
 		data-ad-slot="7284584064"
@@ -33,7 +33,7 @@
 		margin-inline: auto;
 		width: 320px;
 	}
-	
+
 	@media (min-width: 500px) {
 		.ad {
 			width: 468px;
