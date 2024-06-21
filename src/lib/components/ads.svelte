@@ -23,13 +23,13 @@
 		margin-bottom: 20px;
 	}
 
-	@media screen and (max-width: 1200px) {
+	@media screen and (min-width: 1200px) {
 		.mobile {
 			display: none;
 		}
 	}
 
-	@media screen and (min-width: 1200px) {
+	@media screen and (max-width: 1200px) {
 		.desktop {
 			display: none;
 		}
