@@ -14,25 +14,6 @@
 	});
 </script>
 
-<div id="ad-container">
-	<div class="desktop">
-		<ins
-			class="adsbygoogle"
-			style="display:inline-block;width:728px;height:90px"
-			data-ad-client="ca-pub-4605218533506777"
-			data-ad-slot="7284584064"
-		></ins>
-	</div>
-	<div class="mobile">
-		<ins
-			class="adsbygoogle"
-			style="display:inline-block;width:320px;height:100px"
-			data-ad-client="ca-pub-4605218533506777"
-			data-ad-slot="8384269781"
-		></ins>
-	</div>
-</div>
-
 <style lang="scss">
 	#ad-container {
 		width: 100%;
@@ -54,3 +35,22 @@
 		}
 	}
 </style>
+
+<div id="ad-container">
+	<div class="desktop">
+		<ins
+			class="adsbygoogle"
+			style="display:inline-block;width:728px;height:90px"
+			data-ad-client="ca-pub-4605218533506777"
+			data-ad-slot="7284584064"
+		></ins>
+	</div>
+	<div class="mobile">
+		<ins
+			class="adsbygoogle"
+			style="display:inline-block;width:320px;height:100px"
+			data-ad-client="ca-pub-4605218533506777"
+			data-ad-slot="8384269781"
+		></ins>
+	</div>
+</div>
