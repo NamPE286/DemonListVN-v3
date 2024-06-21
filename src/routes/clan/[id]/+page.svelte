@@ -379,82 +379,85 @@
 <RecordDetail {levelID} {uid} bind:open={opened} />
 
 <div class="wrapper">
-	<div class="banner">
-		<img
-			in:fade={{ delay: 250, duration: 300 }}
-			class="bg"
-			src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${$page.params.id}.jpg`}
-			alt="bg"
-		/>
-		<div class="bannerContentWrapper">
-			<div class="bannerContent">
-				<h3>{data.tag}</h3>
-				<h2>{data.name}</h2>
-				<div class="flex items-center gap-[5px]">
-					{#if data.isPublic}
-						<Globe size={20} /> Public
-					{:else}
-						<LockClosed size={20} /> Invite only
-					{/if}
-				</div>
-				<div class="flex items-center gap-[5px]">
-					<StarFilled size={20} />
-					<PlayerHoverCard player={{ data: data.players }} />
-				</div>
-				<div class="flex items-center gap-[5px]">
-					<Person size={20} />
-					{#if data.memberLimit}
-						{data.memberCount}/{data.memberLimit}
-					{:else}
-						{data.memberCount}/∞
-					{/if}
-				</div>
-				{#if invitation}
-					<p class="mb-[-10px] text-center">You've been invited to this clan</p>
-				{/if}
-				<div class="bannerBtn">
-					{#if $user.loggedIn}
-						{#if invitation}
-							<Button
-								class="w-full"
-								on:click={() => {
-									acceptInvitation(parseInt($page.params.id));
-								}}>Accept</Button
-							>
-							<Button
-								variant="outline"
-								class="w-full"
-								on:click={() => {
-									rejectInvitation(parseInt($page.params.id));
-								}}>Reject</Button
-							>
-						{:else if $user.data.clan == $page.params.id}
-							{#if data.isPublic || data.owner == $user.data.uid}
-								<Dialog.Root bind:open={inviteOpened}>
-									<Dialog.Trigger class="w-full">
-										<Button variant="outline" class="w-full">Invite</Button>
-									</Dialog.Trigger>
-									<Dialog.Content>
-										<Dialog.Header>
-											<Dialog.Title>Invite new player</Dialog.Title>
-										</Dialog.Header>
-										<Input placeholder="Player's UID" bind:value={invitePlayerUID} />
-										<Button on:click={invitePlayer} disabled={invitePlayerUID.length == 0}
-											>Invite</Button
-										>
-									</Dialog.Content>
-								</Dialog.Root>
-							{/if}
-						{:else if data.isPublic && data.memberCount < data.memberLimit}
-							<Button variant="outline" class="w-full" on:click={joinClan}>Join</Button>
+	<div class="leftWrapper">
+		<div class="banner">
+			<img
+				in:fade={{ delay: 250, duration: 300 }}
+				class="bg"
+				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${$page.params.id}.jpg`}
+				alt="bg"
+			/>
+			<div class="bannerContentWrapper">
+				<div class="bannerContent">
+					<h3>{data.tag}</h3>
+					<h2>{data.name}</h2>
+					<div class="flex items-center gap-[5px]">
+						{#if data.isPublic}
+							<Globe size={20} /> Public
+						{:else}
+							<LockClosed size={20} /> Invite only
 						{/if}
+					</div>
+					<div class="flex items-center gap-[5px]">
+						<StarFilled size={20} />
+						<PlayerHoverCard player={{ data: data.players }} />
+					</div>
+					<div class="flex items-center gap-[5px]">
+						<Person size={20} />
+						{#if data.memberLimit}
+							{data.memberCount}/{data.memberLimit}
+						{:else}
+							{data.memberCount}/∞
+						{/if}
+					</div>
+					{#if invitation}
+						<p class="mb-[-10px] text-center">You've been invited to this clan</p>
 					{/if}
+					<div class="bannerBtn">
+						{#if $user.loggedIn}
+							{#if invitation}
+								<Button
+									class="w-full"
+									on:click={() => {
+										acceptInvitation(parseInt($page.params.id));
+									}}>Accept</Button
+								>
+								<Button
+									variant="outline"
+									class="w-full"
+									on:click={() => {
+										rejectInvitation(parseInt($page.params.id));
+									}}>Reject</Button
+								>
+							{:else if $user.data.clan == $page.params.id}
+								{#if data.isPublic || data.owner == $user.data.uid}
+									<Dialog.Root bind:open={inviteOpened}>
+										<Dialog.Trigger class="w-full">
+											<Button variant="outline" class="w-full">Invite</Button>
+										</Dialog.Trigger>
+										<Dialog.Content>
+											<Dialog.Header>
+												<Dialog.Title>Invite new player</Dialog.Title>
+											</Dialog.Header>
+											<Input placeholder="Player's UID" bind:value={invitePlayerUID} />
+											<Button on:click={invitePlayer} disabled={invitePlayerUID.length == 0}
+												>Invite</Button
+											>
+										</Dialog.Content>
+									</Dialog.Root>
+								{/if}
+							{:else if data.isPublic && data.memberCount < data.memberLimit}
+								<Button variant="outline" class="w-full" on:click={joinClan}>Join</Button>
+							{/if}
+						{/if}
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-	<div class="content">
 		<Ads />
+	</div>
+
+	<div class="content">
 		<Tabs.Root bind:value={currentTab} class="flex w-[100%] flex-col items-center">
 			<Tabs.List class="mb-[5px] w-fit">
 				<Tabs.Trigger value="members">Members</Tabs.Trigger>
