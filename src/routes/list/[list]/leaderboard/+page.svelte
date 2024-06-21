@@ -10,6 +10,7 @@
 	import { page } from '$app/stores';
 
 	import type { PageData } from './$types';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let curPage = -1;
@@ -116,6 +117,8 @@
 		</Pagination.Item>
 	</Pagination.Content>
 </Pagination.Root>
+
+<Ads />
 
 <style lang="scss">
 	.playerNameWrapper {

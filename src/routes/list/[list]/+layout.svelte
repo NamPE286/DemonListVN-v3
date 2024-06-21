@@ -28,8 +28,6 @@
 	<BigTitle value="Featured List" description="Hardest level created by Vietnamese" />
 {/if}
 
-<Ads dataAdFormat="horizontal" />
-
 <Tabs.Root bind:value={curTab} class="tabs">
 	<div class="tabsWrapper">
 		<Tabs.List>

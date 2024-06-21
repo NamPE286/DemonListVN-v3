@@ -3,8 +3,10 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
+	let prefix = data.levels.slice(0, 6);
 	let curPage = 1;
 	let loaded = true;
 
@@ -46,7 +48,13 @@
 
 <div class="levelsWrapper">
 	<div class="levels">
-		{#each data.levels as level}
+		{#each prefix as level}
+			<LevelCard {level} type={$page.params.list} />
+		{/each}
+	</div>
+	<Ads />
+	<div class="levels">
+		{#each data.levels.slice(6) as level}
 			<LevelCard {level} type={$page.params.list} />
 		{/each}
 	</div>
@@ -55,7 +63,8 @@
 <style lang="scss">
 	.levelsWrapper {
 		display: flex;
-		justify-content: center;
+		align-items: center;
+		flex-direction: column;
 	}
 
 	.levels {

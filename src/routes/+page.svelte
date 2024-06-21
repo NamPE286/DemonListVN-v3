@@ -89,7 +89,6 @@
 	{/if}
 </div>
 <div class="wrapper">
-	<Ads dataAdFormat="horizontal" />
 	{#if $settingsValue.hideDiscord == 'false'}
 		<div class="alertWrapper">
 			<Card.Root>
@@ -112,7 +111,6 @@
 	{/if}
 
 	<h4>Newest levels from Demon List</h4>
-
 	<div class="carouselWrapper">
 		{#if recent.dl}
 			<Carousel.Root>
