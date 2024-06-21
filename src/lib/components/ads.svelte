@@ -20,7 +20,7 @@
 		} catch (err) {
 			console.log('failed to load ads');
 			console.error(err);
-		}
+		} 
 	});
 </script>
 

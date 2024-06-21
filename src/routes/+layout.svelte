@@ -63,7 +63,7 @@
 </script>
 
 <ModeWatcher defaultMode="system" />
-<Toaster />
+<Toaster position="top-center" />
 <Search bind:open={searchToggled} bind:value={searchQuery} />
 <LoadingBar
 	--loading-bar-background-color="rgb(0 100 160 / 80%)"
