@@ -81,6 +81,8 @@
 	</Table.Root>
 </div>
 
+<Ads dataAdFormat="rectangle" />
+
 <Pagination.Root count={data.count} perPage={50} let:pages let:currentPage>
 	<Pagination.Content>
 		<Pagination.Item>
@@ -119,8 +121,6 @@
 		</Pagination.Item>
 	</Pagination.Content>
 </Pagination.Root>
-
-<Ads />
 
 <style lang="scss">
 	.playerNameWrapper {

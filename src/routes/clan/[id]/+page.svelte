@@ -454,7 +454,7 @@
 				</div>
 			</div>
 		</div>
-		<Ads />
+		<Ads dataAdFormat="vertical" />
 	</div>
 
 	<div class="content">
