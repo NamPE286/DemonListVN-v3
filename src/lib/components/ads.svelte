@@ -3,16 +3,6 @@
 
 	onMount(() => {
 		try {
-			let ins = document.createElement('ins');
-			ins.className = 'adsbygoogle';
-			ins.style.display = 'block';
-			ins.setAttribute('data-ad-client', 'ca-pub-4605218533506777');
-			ins.setAttribute('data-ad-slot', '7284584064');
-			ins.setAttribute('data-ad-format', 'auto');
-			ins.setAttribute('data-full-width-responsive', 'true');
-
-			//@ts-ignore
-			document.getElementById('ad-container').appendChild(ins);
 			window.addEventListener('load', () => {
 				// @ts-ignore
 				(adsbygoogle = window.adsbygoogle || []).push({});
@@ -24,7 +14,16 @@
 	});
 </script>
 
-<div id="ad-container" />
+<div id="ad-container">
+	<ins
+		class="adsbygoogle"
+		style="display:block"
+		data-ad-client="ca-pub-4605218533506777"
+		data-ad-slot="7284584064"
+		data-ad-format="rectangle"
+		data-full-width-responsive="true"
+	></ins>
+</div>
 
 <style lang="scss">
 	#ad-container {
