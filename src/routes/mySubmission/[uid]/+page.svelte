@@ -85,8 +85,6 @@
 								return;
 							}
 
-							console.log(record)
-
 							userID = record.data.userid;
 							levelID = record.data.levels.id;
 							recordDetailOpened = true;

@@ -5,13 +5,16 @@
 	let mounted = false;
 
 	onMount(() => {
-		console.log(mounted);
+		if (mounted) {
+			return;
+		}
+
 		mounted = true;
+
 		try {
 			// @ts-ignore
 			(window.adsbygoogle = window.adsbygoogle || []).push({});
 		} catch (err) {
-			console.log('failed to load ads');
 			console.error(err);
 		}
 	});
