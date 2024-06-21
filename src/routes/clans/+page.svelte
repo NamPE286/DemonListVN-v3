@@ -248,7 +248,7 @@
 	}
 
 	.clans {
-		padding-inline: 200px;
+		padding-inline: 250px;
 		display: grid;
 		grid-template-columns: calc(50% - 5px) calc(50% - 5px);
 		gap: 10px;
