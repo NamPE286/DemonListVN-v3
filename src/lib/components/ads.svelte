@@ -5,10 +5,10 @@
 
 	onMount(() => {
 		try {
-			// window.addEventListener('load', () => {
-			// 	// @ts-ignore
-			// 	(adsbygoogle = window.adsbygoogle || []).push({});
-			// });
+			window.addEventListener('load', () => {
+				// @ts-ignore
+				(adsbygoogle = window.adsbygoogle || []).push({});
+			});
 		} catch (err) {
 			console.log('failed to load ads');
 			console.error(err);
