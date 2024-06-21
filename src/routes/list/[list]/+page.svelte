@@ -3,18 +3,19 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let curPage = 1;
-	let loaded = true
+	let loaded = true;
 
 	async function fetchData() {
-		if(!loaded) {
+		if (!loaded) {
 			return;
 		}
 
 		curPage++;
-		loaded = false
+		loaded = false;
 
 		const query = new URLSearchParams({
 			start: String((curPage - 1) * 50),
@@ -27,8 +28,8 @@
 			await fetch(`${import.meta.env.VITE_API_URL}/list/${$page.params.list}?${query.toString()}`)
 		).json();
 
-		data.levels = data.levels.concat(res)
-		loaded = true
+		data.levels = data.levels.concat(res);
+		loaded = true;
 	}
 
 	onMount(() => {
@@ -43,6 +44,8 @@
 <svelte:head>
 	<title>{$page.params.list == 'dl' ? 'Demon' : 'Featured'} List - Demon List VN</title>
 </svelte:head>
+
+<Ads />
 
 <div class="levelsWrapper">
 	<div class="levels">

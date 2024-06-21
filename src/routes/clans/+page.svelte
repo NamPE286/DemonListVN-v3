@@ -17,6 +17,7 @@
 	import Globe from 'svelte-radix/Globe.svelte';
 	import Person from 'svelte-radix/Person.svelte';
 	import { goto } from '$app/navigation';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	const newClanData = {
@@ -173,6 +174,7 @@
 			<Input placeholder="Search" class="mb-[20px] w-[400px] max-w-full" bind:value={searchQuery} />
 			<Button on:click={fetchClanList}><MagnifyingGlass /></Button>
 		</div>
+		<Ads />
 		<div class="clans">
 			{#each data.data as clan, index}
 				<div class="clan">

@@ -10,6 +10,7 @@
 	import Loading from '$lib/components/animation/loading.svelte';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import type { PageData } from './$types';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let players: any[] = [];
@@ -121,6 +122,7 @@
 			<Button type="submit" class="ml-[10px] transition-all" on:click={apply}>Apply</Button>
 		</Card.Footer>
 	</Card.Root>
+	<Ads />
 	{#if state == 1}
 		<Loading inverted />
 	{:else if state == 2}

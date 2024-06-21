@@ -2,9 +2,13 @@
 	import { onMount } from 'svelte';
 	import { mediaQuery } from 'svelte-legos';
 
-	const isDesktop = mediaQuery('(min-width: 1200px)');
+	let isDesktop = true;
 
 	onMount(() => {
+		if (mediaQuery('(min-width: 1200px)')) {
+			isDesktop = true;
+		}
+
 		try {
 			window.addEventListener('load', () => {
 				// @ts-ignore
@@ -18,12 +22,21 @@
 </script>
 
 <div id="ad-container">
-	<ins
-		class="adsbygoogle"
-		style="display:inline-block;width:728px;height:90px"
-		data-ad-client="ca-pub-4605218533506777"
-		data-ad-slot="7284584064"
-	></ins>
+	{#if isDesktop}
+		<ins
+			class="adsbygoogle"
+			style="display:inline-block;width:728px;height:90px"
+			data-ad-client="ca-pub-4605218533506777"
+			data-ad-slot="7284584064"
+		></ins>
+	{:else}
+		<ins
+			class="adsbygoogle"
+			style="display:inline-block;width:320px;height:100px"
+			data-ad-client="ca-pub-4605218533506777"
+			data-ad-slot="8384269781"
+		></ins>
+	{/if}
 </div>
 
 <style lang="scss">

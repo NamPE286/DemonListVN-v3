@@ -10,6 +10,7 @@
 	import { page } from '$app/stores';
 
 	import type { PageData } from './$types';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let curPage = -1;
@@ -30,13 +31,15 @@
 	<title>Leaderboard - Demon List - Demon List VN</title>
 </svelte:head>
 
+<Ads />
+
 <div class="tableWrapper">
 	<Table.Root>
 		<Table.Header>
 			<Table.Row>
 				<Table.Head class="w-[55px]">Rank</Table.Head>
 				<Table.Head>Player</Table.Head>
-				<Table.Head class="text-right w-[70px]">
+				<Table.Head class="w-[70px] text-right">
 					{$page.params.list == 'dl' ? 'Rating' : 'Total point'}
 				</Table.Head>
 			</Table.Row>

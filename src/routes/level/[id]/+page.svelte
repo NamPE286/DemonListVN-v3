@@ -9,6 +9,7 @@
 	import { page } from '$app/stores';
 	import Loading from '$lib/components/animation/loading.svelte';
 	import Chart from 'chart.js/auto';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let levelAPI: any = null;
@@ -205,6 +206,7 @@
 			</Card.Content>
 		</Card.Root>
 	</div>
+	<Ads />
 	<div class="chartWrapper cardWrapper1">
 		{#if !deathCount.length}
 			<Loading inverted />
