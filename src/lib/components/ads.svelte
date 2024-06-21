@@ -5,10 +5,10 @@
 
 	onMount(() => {
 		try {
-			window.addEventListener('load', () => {
-				// @ts-ignore
-				(adsbygoogle = window.adsbygoogle || []).push({});
-			});
+			// window.addEventListener('load', () => {
+			// 	// @ts-ignore
+			// 	(adsbygoogle = window.adsbygoogle || []).push({});
+			// });
 		} catch (err) {
 			console.log('failed to load ads');
 			console.error(err);
@@ -16,7 +16,7 @@
 	});
 </script>
 
-<div id="ad-container" class="ml-auto mr-auto w-fit bg-white">
+<div id="ad-container" class="ml-auto mr-auto w-fit bg-white h-[100px]">
 	<ins
 		class="adsbygoogle"
 		style="display:block"
