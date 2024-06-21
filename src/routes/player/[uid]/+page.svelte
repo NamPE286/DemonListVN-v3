@@ -160,7 +160,7 @@
 			<Heatmap uid={data.player.uid} />
 		{/key}
 	</div>
-	<Ads />
+	<Ads dataAdFormat="horizontal" />
 	<Tabs.Root value="dl">
 		<div class="tabs">
 			<Tabs.List class="grid w-full grid-cols-2 lg:w-[400px]">

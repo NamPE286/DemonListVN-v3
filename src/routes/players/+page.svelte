@@ -122,7 +122,7 @@
 			<Button type="submit" class="ml-[10px] transition-all" on:click={apply}>Apply</Button>
 		</Card.Footer>
 	</Card.Root>
-	<Ads />
+	<Ads dataAdFormat="horizontal" />
 	{#if state == 1}
 		<Loading inverted />
 	{:else if state == 2}
