@@ -267,7 +267,7 @@
 
 <style lang="scss">
 	.table {
-		margin-bottom: 20px;
+		padding-bottom: 20px;
 	}
 
 	.chartWrapper {

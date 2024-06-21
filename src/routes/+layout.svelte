@@ -194,7 +194,6 @@
 		height: 100px;
 		border-top: 1px solid var(--border1);
 		padding-top: 20px;
-		margin-top: 100px;
 		margin-bottom: -80px;
 		color: var(--textColor2);
 
