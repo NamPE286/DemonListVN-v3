@@ -2,11 +2,14 @@
 	import { onMount } from 'svelte';
 
 	export let dataAdFormat = 'auto';
+	let mounted = false
 
 	onMount(() => {
+		console.log(mounted)
+		mounted = true
 		try {
 			// @ts-ignore
-			(window.adsbygoogle = window.adsbygoogle || []).push({});
+			(adsbygoogle = window.adsbygoogle || []).push({});
 		} catch (err) {
 			console.log('failed to load ads');
 			console.error(err);

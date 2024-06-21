@@ -33,6 +33,12 @@
 		loaded = true;
 	}
 
+	function update() {
+		prefix = data.levels.slice(0, 6)
+	}
+
+	$: data, update()
+
 	onMount(() => {
 		window.onscroll = function (ev) {
 			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1500) {
