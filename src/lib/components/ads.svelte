@@ -15,12 +15,12 @@
 </script>
 
 <div id="ad-container">
-	<ins
-		class="adsbygoogle"
-		style="display:inline-block;width:728px;height:90px"
-		data-ad-client="ca-pub-4605218533506777"
-		data-ad-slot="7284584064"
-	></ins>
+	<ins class="adsbygoogle"
+	style="display:block"
+	data-ad-client="ca-pub-4605218533506777"
+	data-ad-slot="7284584064"
+	data-ad-format="auto"
+	data-full-width-responsive="true"></ins>
 </div>
 
 <style lang="scss">
