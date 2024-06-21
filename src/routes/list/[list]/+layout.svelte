@@ -5,18 +5,21 @@
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Ads from '$lib/components/ads.svelte';
 
-	let curTab = ($page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels');
+	let curTab = $page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels';
 
 	function update() {
-		curTab = ($page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels');
+		curTab = $page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels';
 	}
 
-	$: $page.url, update()
+	$: $page.url, update();
 </script>
 
 <svelte:head>
-	<title>Leaderboard - {$page.params.list == 'dl' ? 'Demon' : 'Featured'} List - Demon List VN</title>
+	<title
+		>Leaderboard - {$page.params.list == 'dl' ? 'Demon' : 'Featured'} List - Demon List VN</title
+	>
 </svelte:head>
 
 {#if $page.params.list == 'dl'}
@@ -24,6 +27,8 @@
 {:else if $page.params.list == 'fl'}
 	<BigTitle value="Featured List" description="Hardest level created by Vietnamese" />
 {/if}
+
+<Ads />
 
 <Tabs.Root bind:value={curTab} class="tabs">
 	<div class="tabsWrapper">

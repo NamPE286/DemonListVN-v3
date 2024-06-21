@@ -12,6 +12,7 @@
 	import Heatmap from '$lib/components/heatmap.svelte';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import { badgeVariants } from '$lib/components/ui/badge';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' = 'dl';
@@ -33,7 +34,8 @@
 
 {#if data.player.isBanned}
 	<div class="flex h-[50px] items-center justify-center bg-red-600">
-		This player is banned. If this is your profile, contact with a moderator to appeal this decision.
+		This player is banned. If this is your profile, contact with a moderator to appeal this
+		decision.
 	</div>
 {:else if data.player.isHidden}
 	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
@@ -158,6 +160,7 @@
 			<Heatmap uid={data.player.uid} />
 		{/key}
 	</div>
+	<Ads />
 	<Tabs.Root value="dl">
 		<div class="tabs">
 			<Tabs.List class="grid w-full grid-cols-2 lg:w-[400px]">

@@ -10,7 +10,6 @@
 	import { page } from '$app/stores';
 
 	import type { PageData } from './$types';
-	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let curPage = -1;
@@ -30,8 +29,6 @@
 <svelte:head>
 	<title>Leaderboard - Demon List - Demon List VN</title>
 </svelte:head>
-
-<Ads />
 
 <div class="tableWrapper">
 	<Table.Root>
