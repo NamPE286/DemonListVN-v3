@@ -25,6 +25,7 @@
 	import imageCompression from 'browser-image-compression';
 	import { fade } from 'svelte/transition';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
@@ -453,6 +454,7 @@
 		</div>
 	</div>
 	<div class="content">
+		<Ads />
 		<Tabs.Root bind:value={currentTab} class="flex w-[100%] flex-col items-center">
 			<Tabs.List class="mb-[5px] w-fit">
 				<Tabs.Trigger value="members">Members</Tabs.Trigger>
