@@ -2,11 +2,11 @@
 	import { onMount } from 'svelte';
 
 	export let dataAdFormat = 'auto';
-	let mounted = false
+	let mounted = false;
 
 	onMount(() => {
-		console.log(mounted)
-		mounted = true
+		console.log(mounted);
+		mounted = true;
 		try {
 			// @ts-ignore
 			(window.adsbygoogle = window.adsbygoogle || []).push({});
@@ -17,9 +17,9 @@
 	});
 </script>
 
-<div id="ad-container" class="mb-[20px] mt-[20px] w-full text-center">
+<div class="mb-[20px] mt-[20px] w-full">
 	<ins
-		class="adsbygoogle"
+		class="adsbygoogle ad"
 		style="display:block"
 		data-ad-client="ca-pub-4605218533506777"
 		data-ad-slot="7284584064"
@@ -27,3 +27,22 @@
 		data-full-width-responsive="true"
 	></ins>
 </div>
+
+<style>
+	.ad {
+		margin-inline: auto;
+		width: 320px;
+	}
+	
+	@media (min-width: 500px) {
+		.ad {
+			width: 468px;
+		}
+	}
+
+	@media (min-width: 800px) {
+		.ad {
+			width: 728px;
+		}
+	}
+</style>

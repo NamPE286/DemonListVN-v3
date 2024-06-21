@@ -31,6 +31,8 @@
 	<title>Leaderboard - Demon List - Demon List VN</title>
 </svelte:head>
 
+<Ads dataAdFormat="horizontal" />
+
 <div class="tableWrapper">
 	<Table.Root>
 		<Table.Header>

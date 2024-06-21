@@ -52,6 +52,8 @@
 	<title>{$page.params.list == 'dl' ? 'Demon' : 'Featured'} List - Demon List VN</title>
 </svelte:head>
 
+<Ads dataAdFormat="horizontal" />
+
 <div class="levelsWrapper">
 	<div class="levels">
 		{#each prefix as level}
