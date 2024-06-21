@@ -18,21 +18,12 @@
 </script>
 
 <div id="ad-container">
-	{#if isDesktop}
-		<ins
-			class="adsbygoogle"
-			style="display:inline-block;width:728px;height:90px"
-			data-ad-client="ca-pub-4605218533506777"
-			data-ad-slot="7284584064"
-		></ins>
-	{:else}
-		<ins
-			class="adsbygoogle"
-			style="display:inline-block;width:300px;height:90px"
-			data-ad-client="ca-pub-4605218533506777"
-			data-ad-slot="8384269781"
-		></ins>
-	{/if}
+	<ins
+		class="adsbygoogle"
+		style="display:inline-block;width:728px;height:90px"
+		data-ad-client="ca-pub-4605218533506777"
+		data-ad-slot="7284584064"
+	></ins>
 </div>
 
 <style lang="scss">

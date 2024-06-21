@@ -89,7 +89,6 @@
 	{/if}
 </div>
 <div class="wrapper">
-	<Ads />
 	{#if $settingsValue.hideDiscord == 'false'}
 		<div class="alertWrapper">
 			<Card.Root>
@@ -140,6 +139,9 @@
 			</Carousel.Root>
 		{/if}
 	</div>
+
+	<Ads />
+
 	<h4>Newest levels from Featured List</h4>
 	<div class="carouselWrapper">
 		{#if recent.fl}
