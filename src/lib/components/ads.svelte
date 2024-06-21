@@ -20,7 +20,7 @@
 		} catch (err) {
 			console.log('failed to load ads');
 			console.error(err);
-		} 
+		}
 	});
 </script>
 
@@ -31,5 +31,6 @@
 		width: 100%;
 		display: flex;
 		justify-content: center;
+		height: 200px;
 	}
 </style>
