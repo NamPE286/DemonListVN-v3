@@ -142,7 +142,7 @@
 							</Avatar.Root>
 						</Button>
 					</DropdownMenu.Trigger>
-					<DropdownMenu.Content align="end" class="w-56">
+					<DropdownMenu.Content align="end" class="w-56 z-99999">
 						<DropdownMenu.Label>{$user.data.name}</DropdownMenu.Label>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}

@@ -98,7 +98,7 @@
 			</Button>
 		</button>
 	</Popover.Trigger>
-	<Popover.Content class="w-[350px]">
+	<Popover.Content class="w-[350px] z-99999">
 		<div class="header">
 			<h4 class="font-medium leading-none">Notifications</h4>
 			<div class="buttonWrapper">
