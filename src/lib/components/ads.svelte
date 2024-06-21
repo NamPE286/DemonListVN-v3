@@ -1,5 +1,8 @@
 <script>
 	import { onMount } from 'svelte';
+	import { mediaQuery } from 'svelte-legos';
+
+	const isDesktop = mediaQuery('(min-width: 1200px)');
 
 	onMount(() => {
 		try {
@@ -15,12 +18,21 @@
 </script>
 
 <div id="ad-container">
-	<ins class="adsbygoogle"
-	style="display:block"
-	data-ad-client="ca-pub-4605218533506777"
-	data-ad-slot="7284584064"
-	data-ad-format="auto"
-	data-full-width-responsive="true"></ins>
+	{#if isDesktop}
+		<ins
+			class="adsbygoogle"
+			style="display:inline-block;width:728px;height:90px"
+			data-ad-client="ca-pub-4605218533506777"
+			data-ad-slot="7284584064"
+		></ins>
+	{:else}
+		<ins
+			class="adsbygoogle"
+			style="display:inline-block;width:300px;height:90px"
+			data-ad-client="ca-pub-4605218533506777"
+			data-ad-slot="8384269781"
+		></ins>
+	{/if}
 </div>
 
 <style lang="scss">
