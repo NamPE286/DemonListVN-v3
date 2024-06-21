@@ -14,7 +14,7 @@
 	});
 </script>
 
-<div id="ad-container" class="mb-[20px] ml-auto mr-auto mt-[20px] w-full h-fit max-w-[800px]">
+<div id="ad-container" class="mb-[20px] mt-[20px] w-full h-fit text-center">
 	<ins
 		class="adsbygoogle"
 		style="display:block"
