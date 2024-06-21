@@ -16,7 +16,6 @@
 
 <style lang="scss">
 	#ad-container {
-		background-color: gray;
 		width: fit-content;
 		margin-inline: auto;
 		margin-top: 20px;
