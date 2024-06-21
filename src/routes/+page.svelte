@@ -9,6 +9,7 @@
 	import { user } from '$lib/client';
 	import { onMount } from 'svelte';
 	import { settings } from '$lib/client';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let time = new Date().toLocaleTimeString();
@@ -88,6 +89,7 @@
 	{/if}
 </div>
 <div class="wrapper">
+	<Ads />
 	{#if $settingsValue.hideDiscord == 'false'}
 		<div class="alertWrapper">
 			<Card.Root>
@@ -117,7 +119,7 @@
 				<Carousel.Content>
 					{#each recent.dl as level}
 						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-							<LevelCard level={level} type="dl" />
+							<LevelCard {level} type="dl" />
 						</Carousel.Item>
 					{/each}
 				</Carousel.Content>
@@ -145,7 +147,7 @@
 				<Carousel.Content>
 					{#each recent.fl as level}
 						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
-							<LevelCard level={level} type="fl" />
+							<LevelCard {level} type="fl" />
 						</Carousel.Item>
 					{/each}
 				</Carousel.Content>
