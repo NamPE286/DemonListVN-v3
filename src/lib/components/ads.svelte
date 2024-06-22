@@ -20,14 +20,16 @@
 	});
 </script>
 
-<ins
-	class="adsbygoogle ad"
-	style="display:block"
-	data-ad-client="ca-pub-4605218533506777"
-	data-ad-slot="7284584064"
-	data-ad-format={dataAdFormat}
-	data-full-width-responsive="true"
-></ins>
+<div class="text-center">
+	<ins
+		class="adsbygoogle ad"
+		style="display:block"
+		data-ad-client="ca-pub-4605218533506777"
+		data-ad-slot="7284584064"
+		data-ad-format={dataAdFormat}
+		data-full-width-responsive="true"
+	></ins>
+</div>
 
 <style>
 	.ad {
