@@ -221,6 +221,7 @@
 			{/if}
 			<Table.Header>
 				<Table.Row>
+					<Table.Head class="w-[35px]">No.</Table.Head>
 					<Table.Head>Player</Table.Head>
 					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 					<Table.Head class="w-[100px] text-center">Device</Table.Head>
@@ -229,7 +230,7 @@
 			</Table.Header>
 			<Table.Body>
 				{#if records}
-					{#each records as record}
+					{#each records as record, index}
 						<Table.Row
 							on:click={(e) => {
 								// @ts-ignore
@@ -241,7 +242,10 @@
 								recordDetailOpened = true;
 							}}
 						>
-							<Table.Cell class="font-medium">
+							<Table.Cell  class="font-medium">
+								#{index + 1}
+							</Table.Cell>
+							<Table.Cell>
 								<PlayerHoverCard player={{ data: record.data.players }} />
 							</Table.Cell>
 							<Table.Cell class="text-center">
