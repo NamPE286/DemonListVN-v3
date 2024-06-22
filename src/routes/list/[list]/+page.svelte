@@ -34,10 +34,10 @@
 	}
 
 	function update() {
-		prefix = data.levels.slice(0, 6)
+		prefix = data.levels.slice(0, 6);
 	}
 
-	$: data, update()
+	$: data, update();
 
 	onMount(() => {
 		window.onscroll = function (ev) {
@@ -58,7 +58,7 @@
 			<LevelCard {level} type={$page.params.list} />
 		{/each}
 	</div>
-	<Ads />
+	<Ads dataAdFormat="rectangle" />
 	<div class="levels">
 		{#each data.levels.slice(6) as level}
 			<LevelCard {level} type={$page.params.list} />
