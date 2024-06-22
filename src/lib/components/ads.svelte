@@ -20,9 +20,9 @@
 	});
 </script>
 
-<div class="ad mb-[20px] mt-[20px] w-full max-w-[100%] text-center">
+<div class="mb-[20px] mt-[20px] w-full max-w-[100%] text-center">
 	<ins
-		class="adsbygoogle"
+		class="adsbygoogle ad"
 		style="display:block"
 		data-ad-client="ca-pub-4605218533506777"
 		data-ad-slot="7284584064"
