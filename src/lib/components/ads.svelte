@@ -20,20 +20,20 @@
 	});
 </script>
 
-<div class="mb-[20px] mt-[20px] w-full max-w-[100%] text-center">
-	<ins
-		class="adsbygoogle ad"
-		style="display:block"
-		data-ad-client="ca-pub-4605218533506777"
-		data-ad-slot="7284584064"
-		data-ad-format={dataAdFormat}
-		data-full-width-responsive="true"
-	></ins>
-</div>
+<ins
+	class="adsbygoogle ad"
+	style="display:block"
+	data-ad-client="ca-pub-4605218533506777"
+	data-ad-slot="7284584064"
+	data-ad-format={dataAdFormat}
+	data-full-width-responsive="true"
+></ins>
 
 <style>
 	.ad {
 		margin-inline: auto;
+		margin-top: 20px;
+		margin-bottom: 20px;
 		width: 320px;
 		max-width: 100%;
 	}
