@@ -35,6 +35,7 @@
 	.ad {
 		margin-inline: auto;
 		width: 320px;
+		max-width: 100%;
 	}
 
 	@media (min-width: 500px) {
