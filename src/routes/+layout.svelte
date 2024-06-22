@@ -24,6 +24,7 @@
 	import NotificationButton from '$lib/components/notificationButton.svelte';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import Ads from '$lib/components/ads.svelte';
 
 	const links = [
 		{ route: '/list/dl', name: 'Demon List' },
@@ -142,7 +143,7 @@
 							</Avatar.Root>
 						</Button>
 					</DropdownMenu.Trigger>
-					<DropdownMenu.Content align="end" class="w-56 z-[99999]">
+					<DropdownMenu.Content align="end" class="z-[99999] w-56">
 						<DropdownMenu.Label>{$user.data.name}</DropdownMenu.Label>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
@@ -178,9 +179,13 @@
 <slot />
 
 <footer>
+	<div class="footerFiller">
+		<Ads />
+	</div>
 	<p>
 		© Copyright 2020-2024 demonlistvn.com.<br />
-		All rights reserved demonlistvn.com and Demon List VN are in no way affiliated with RobTopGamesAB ®
+		All rights reserved demonlistvn.com and Demon List VN are in no way affiliated with RobTopGamesAB
+		®
 	</p>
 	<div class="links">
 		<a href="/about">About</a>
@@ -191,11 +196,17 @@
 
 <style lang="scss">
 	footer {
-		height: 100px;
-		border-top: 1px solid var(--border1);
+		height: fit-content;
 		padding-top: 20px;
 		margin-bottom: -80px;
 		color: var(--textColor2);
+		background-color: var(--background);
+
+		.footerFiller {
+			height: 100px;
+			border-bottom: 1px solid var(--border1);
+			margin-bottom: 20px;
+		}
 
 		.links {
 			display: flex;
