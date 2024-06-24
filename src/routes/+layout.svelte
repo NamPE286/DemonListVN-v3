@@ -180,7 +180,6 @@
 
 <footer>
 	<div class="footerFiller">
-		<Ads />
 	</div>
 	<p>
 		© Copyright 2020-2024 demonlistvn.com.<br />
