@@ -6,7 +6,7 @@
 	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
-	let prefix = data.levels.slice(0, 6);
+	let prefix = data.levels.slice(0, 4);
 	let curPage = 1;
 	let loaded = true;
 
@@ -60,7 +60,7 @@
 	</div>
 	<Ads dataAdFormat="rectangle" />
 	<div class="levels">
-		{#each data.levels.slice(6) as level}
+		{#each data.levels.slice(4) as level}
 			<LevelCard {level} type={$page.params.list} />
 		{/each}
 	</div>
