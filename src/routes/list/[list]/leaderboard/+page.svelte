@@ -31,6 +31,8 @@
 	<title>Leaderboard - Demon List - Demon List VN</title>
 </svelte:head>
 
+<Ads dataAdFormat="rectangle" />
+
 <div class="tableWrapper">
 	<Table.Root>
 		<Table.Header>
@@ -78,8 +80,6 @@
 		</Table.Body>
 	</Table.Root>
 </div>
-
-<Ads dataAdFormat="rectangle" />
 
 <Pagination.Root count={data.count} perPage={50} let:pages let:currentPage>
 	<Pagination.Content>
