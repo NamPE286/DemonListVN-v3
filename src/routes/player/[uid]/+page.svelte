@@ -164,7 +164,7 @@
 	<Ads />
 	<Alert.Root class='w-fit ml-auto mr-auto'>
 		<Alert.Description>
-		  Some records may take a while to appear after being accepted. Please wait at least 30 minutes and check again.
+		  Some records may take a while to appear after being accepted.
 		</Alert.Description>
 	  </Alert.Root>
 	<Tabs.Root value="dl">
