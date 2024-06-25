@@ -7,6 +7,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Card from '$lib/components/ui/card';
+	import * as Alert from "$lib/components/ui/alert";
 	import { user } from '$lib/client';
 	import ProfileEditButton from '$lib/components/profileEditButton.svelte';
 	import Heatmap from '$lib/components/heatmap.svelte';
@@ -161,6 +162,11 @@
 		{/key}
 	</div>
 	<Ads />
+	<Alert.Root class='w-fit ml-auto mr-auto'>
+		<Alert.Description>
+		  Some records may take a while to appear after being accepted. Please wait at least 30 minutes and check again.
+		</Alert.Description>
+	  </Alert.Root>
 	<Tabs.Root value="dl">
 		<div class="tabs">
 			<Tabs.List class="grid w-full grid-cols-2 lg:w-[400px]">
