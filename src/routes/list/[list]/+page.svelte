@@ -34,7 +34,7 @@
 	}
 
 	function update() {
-		prefix = data.levels.slice(0, 6);
+		prefix = data.levels.slice(0, 4);
 	}
 
 	$: data, update();
