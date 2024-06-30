@@ -75,7 +75,7 @@
 			<li>Candidate Master: >= 2700</li>
 			<li>Master: >= 3200</li>
 			<li>Grandmaster: >= 3800</li>
-			<li>Legendary Grandmaster: >= 4500</li>
+			<li>Legendary Grandmaster: >= 5000</li>
 		</ul>
 	</ul>
 </div>
