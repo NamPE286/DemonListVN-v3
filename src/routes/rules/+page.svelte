@@ -72,8 +72,8 @@
 			<li>A: >= 1000</li>
 			<li>Specialist: >= 1600</li>
 			<li>Expert: >= 2200</li>
-			<li>Candidate Master: >= 2700</li>
-			<li>Master: >= 3200</li>
+			<li>Candidate Master: >= 2800</li>
+			<li>Master: >= 3500</li>
 			<li>Grandmaster: >= 4200</li>
 			<li>Legendary Grandmaster: >= 5000</li>
 		</ul>

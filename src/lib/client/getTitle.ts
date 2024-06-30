@@ -12,13 +12,13 @@ export function getTitle(list: string, player: any) {
                 fullTitle: 'Grandmaster',
                 color: 'red'
             };
-        if (player.rating >= 3200)
+        if (player.rating >= 3500)
             return {
                 title: 'M',
                 fullTitle: 'Master',
                 color: 'hsla(321, 100%, 50%, 1)'
             };
-        if (player.rating >= 2700)
+        if (player.rating >= 2800)
             return {
                 title: 'CM',
                 fullTitle: 'Candidate Master',
