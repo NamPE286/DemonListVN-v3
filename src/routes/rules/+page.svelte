@@ -54,7 +54,7 @@
 	<ul>
 		<li>Overview:</li>
 		<ul>
-			<li>Rating is a metric represents player potential to beat levels in their rating range.</li>
+			<li>Rating is a metric represents player potential to beat levels.</li>
 			<li>
 				Rating is based on player's best performance and performance on other levels on Demon List
 				(Note: grinding is not a viable way to increase player's rating)
@@ -68,18 +68,14 @@
 		<li>Rating distribution:</li>
 		<ul>
 			<li>C: > 0</li>
-			<li>B: >= 1000</li>
-			<li>A: >= 1600</li>
-			<li>Specialist: >= 2000</li>
-			<li>Expert: >= 2700</li>
-			<li>Candidate Master: >= 3200</li>
-			<li>Master: >= 3500</li>
+			<li>B: >= 500</li>
+			<li>A: >= 1000</li>
+			<li>Specialist: >= 1600</li>
+			<li>Expert: >= 2200</li>
+			<li>Candidate Master: >= 2700</li>
+			<li>Master: >= 3200</li>
 			<li>Grandmaster: >= 3800</li>
-			<li>Legendary Grandmaster: >= 4200</li>
-			<li>Legendary Grandmaster ✦: >= 4500</li>
-			<li>Legendary Grandmaster ★: >= 4700</li>
-			<li>Legendary Grandmaster ★★: >= 5000</li>
-			<li>Legendary Grandmaster ★★★: >= 5200</li>
+			<li>Legendary Grandmaster: >= 4500</li>
 		</ul>
 	</ul>
 </div>

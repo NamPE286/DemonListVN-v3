@@ -1,30 +1,6 @@
 export function getTitle(list: string, player: any) {
     if (list == 'dl') {
-        if (player.rating >= 5200)
-            return {
-                title: '★★★',
-                fullTitle: 'Legendary Grandmaster ★★★',
-                color: 'darkred'
-            };
-        if (player.rating >= 5000)
-            return {
-                title: '★★',
-                fullTitle: 'Legendary Grandmaster ★★',
-                color: 'darkred'
-            };
-        if (player.rating >= 4700)
-            return {
-                title: '★',
-                fullTitle: 'Legendary Grandmaster ★',
-                color: 'darkred'
-            };
         if (player.rating >= 4500)
-            return {
-                title: '✦',
-                fullTitle: 'Legendary Grandmaster ✦',
-                color: 'darkred'
-            };
-        if (player.rating >= 4200)
             return {
                 title: 'LGM',
                 fullTitle: 'Legendary Grandmaster',
@@ -36,37 +12,37 @@ export function getTitle(list: string, player: any) {
                 fullTitle: 'Grandmaster',
                 color: 'red'
             };
-        if (player.rating >= 3500)
+        if (player.rating >= 3200)
             return {
                 title: 'M',
                 fullTitle: 'Master',
                 color: 'hsla(321, 100%, 50%, 1)'
             };
-        if (player.rating >= 3200)
+        if (player.rating >= 2700)
             return {
                 title: 'CM',
                 fullTitle: 'Candidate Master',
                 color: 'purple'
             };
-        if (player.rating >= 2700)
+        if (player.rating >= 2200)
             return {
                 title: 'EX',
                 fullTitle: 'Expert',
                 color: 'blue'
             };
-        if (player.rating >= 2000)
+        if (player.rating >= 1600)
             return {
                 title: 'SP',
                 fullTitle: 'Specialist',
                 color: 'darkcyan'
             };
-        if (player.rating >= 1600)
+        if (player.rating >= 1000)
             return {
                 title: 'A',
                 fullTitle: 'A',
                 color: 'green'
             };
-        if (player.rating >= 1000)
+        if (player.rating >= 500)
             return {
                 title: 'B',
                 fullTitle: 'B',
