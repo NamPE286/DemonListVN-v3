@@ -10,6 +10,7 @@
 	import Loading from '$lib/components/animation/loading.svelte';
 
 	import ExclamationTriangle from 'svelte-radix/ExclamationTriangle.svelte';
+	import { toast } from 'svelte-sonner';
 
 	const defaultValue: any = {
 		levelid: NaN,
@@ -74,6 +75,7 @@
 					nextDisabled = false;
 				})
 				.catch(() => {
+					toast.error('Invalid level ID');
 					nextDisabled = false;
 					step--;
 				});
@@ -155,7 +157,13 @@
 				{#if step == 3}
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">Progress</Label>
-						<Input id="name" type="number" bind:value={submission.progress} placeholder='0 for CBF or unlimited FPS' class="col-span-3" />
+						<Input
+							id="name"
+							type="number"
+							bind:value={submission.progress}
+							placeholder="0 for CBF or unlimited FPS"
+							class="col-span-3"
+						/>
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">FPS</Label>
