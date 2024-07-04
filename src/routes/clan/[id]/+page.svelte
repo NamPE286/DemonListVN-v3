@@ -632,7 +632,10 @@
 									{new Date(item.timestamp).toLocaleString()}
 								</Table.Cell>
 								<Table.Cell class="text-center">
-									{item.mobile ? 'Mobile' : 'PC'}<br />({item.refreshRate}fps)
+									{item.mobile ? 'Mobile' : 'PC'}
+									{#if item.refreshRate}
+										<br />({item.refreshRate}fps)
+									{/if}
 								</Table.Cell>
 								<Table.Cell class="text-center">{item.progress}%</Table.Cell>
 							</Table.Row>

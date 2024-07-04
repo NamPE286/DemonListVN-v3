@@ -7,7 +7,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Card from '$lib/components/ui/card';
-	import * as Alert from "$lib/components/ui/alert";
+	import * as Alert from '$lib/components/ui/alert';
 	import { user } from '$lib/client';
 	import ProfileEditButton from '$lib/components/profileEditButton.svelte';
 	import Heatmap from '$lib/components/heatmap.svelte';
@@ -162,11 +162,11 @@
 		{/key}
 	</div>
 	<Ads />
-	<Alert.Root class='w-fit ml-auto mr-auto'>
+	<Alert.Root class="ml-auto mr-auto w-fit">
 		<Alert.Description>
-		  Some records may take a while to appear after being accepted.
+			Some records may take a while to appear after being accepted.
 		</Alert.Description>
-	  </Alert.Root>
+	</Alert.Root>
 	<Tabs.Root value="dl">
 		<div class="tabs">
 			<Tabs.List class="grid w-full grid-cols-2 lg:w-[400px]">
@@ -208,7 +208,10 @@
 						>{new Date(record.data.timestamp).toLocaleString()}</Table.Cell
 					>
 					<Table.Cell class="text-center">
-						{record.data.mobile ? 'Mobile' : 'PC'}<br />({record.data.refreshRate}fps)
+						{record.data.mobile ? 'Mobile' : 'PC'}
+						{#if record.data.refreshRate}
+							<br />({record.data.refreshRate}fps)
+						{/if}
 					</Table.Cell>
 					<Table.Cell class="text-center">{record.data[list + 'Pt']}</Table.Cell>
 					<Table.Cell class="text-center">{record.data.progress}%</Table.Cell>

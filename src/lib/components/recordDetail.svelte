@@ -209,7 +209,10 @@
 							<b>Submitted on:</b>
 							{new Date(record.data.timestamp).toLocaleString()}<br />
 							<b>Device:</b>
-							{record.data.isMobile ? 'Mobile' : 'PC'} ({record.data.refreshRate}fps) <br />
+							{record.data.isMobile ? 'Mobile' : 'PC'}
+							{#if record.data.refreshRate}
+								({record.data.refreshRate}fps)
+							{/if} <br />
 							<b>Progress:</b>
 							{record.data.progress}% <br />
 							<b>Suggested rating:</b>
@@ -243,7 +246,9 @@
 							</div>
 							{#if $user.loggedIn && $user.data.isAdmin}
 								<b>Reviewer's comment:</b>
-								{record.data.reviewerComment ? record.data.reviewerComment : '(No comment provided)'}<br />
+								{record.data.reviewerComment
+									? record.data.reviewerComment
+									: '(No comment provided)'}<br />
 							{/if}
 						</div>
 					</Tabs.Content>

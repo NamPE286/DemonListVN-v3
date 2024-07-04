@@ -99,7 +99,10 @@
 							>{new Date(record.data.timestamp).toLocaleString()}</Table.Cell
 						>
 						<Table.Cell class="text-center">
-							{record.data.mobile ? 'Mobile' : 'PC'}<br />({record.data.refreshRate}fps)
+							{record.data.mobile ? 'Mobile' : 'PC'}
+							{#if record.data.refreshRate}
+								<br />({record.data.refreshRate}fps)
+							{/if}
 						</Table.Cell>
 						<Table.Cell class="text-center">{record.data.progress}%</Table.Cell>
 						<Table.Cell class="text-center">
