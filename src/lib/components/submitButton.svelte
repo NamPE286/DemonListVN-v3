@@ -157,17 +157,17 @@
 				{#if step == 3}
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">Progress</Label>
-						<Input
-							id="name"
-							type="number"
-							bind:value={submission.progress}
-							placeholder="0 for CBF or unlimited FPS"
-							class="col-span-3"
-						/>
+						<Input id="name" type="number" bind:value={submission.progress} class="col-span-3" />
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">FPS</Label>
-						<Input id="name" type="number" bind:value={submission.refreshRate} class="col-span-3" />
+						<Input
+							id="name"
+							type="number"
+							bind:value={submission.refreshRate}
+							placeholder="0 for CBF or unlimited FPS"
+							class="col-span-3"
+						/>
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">Video's link</Label>
