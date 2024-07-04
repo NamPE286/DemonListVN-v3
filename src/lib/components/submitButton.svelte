@@ -81,6 +81,18 @@
 				});
 		}
 
+		if (step == 3) {
+			if (
+				!submission.progress ||
+				!submission.refreshRate ||
+				!submission.videoLink ||
+				!submission.mobile
+			) {
+				toast.error('Please fill in all required fields');
+				return;
+			}
+		}
+
 		step++;
 	}
 </script>
@@ -105,9 +117,9 @@
 				{:else if step == 1 || step == 2}
 					Level
 				{:else if step == 3}
-					Required field
+					Required fields
 				{:else if step == 4}
-					Optional field
+					Optional fields
 				{/if}
 			</Dialog.Title>
 		</Dialog.Header>
@@ -219,26 +231,30 @@
 		<Dialog.Footer>
 			<AlertDialog.Root>
 				<AlertDialog.Trigger asChild let:builder>
-					{#if step > 0}
-						<Button
-							on:click={() => {
-								step--;
-							}}
-							variant="outline">Back</Button
-						>
-					{/if}
-					{#if step == 4}
-						<Button
-							type="submit"
-							builders={[builder]}
-							on:click={() => {
-								sendStatus = 0;
-								submit();
-							}}>Submit</Button
-						>
-					{:else}
-						<Button on:click={next} bind:disabled={nextDisabled}>Next</Button>
-					{/if}
+					<div class="flex gap-[10px]">
+						{#if step > 0}
+							<Button
+								class="w-full"
+								on:click={() => {
+									step--;
+								}}
+								variant="outline">Back</Button
+							>
+						{/if}
+						{#if step == 4}
+							<Button
+								class="w-full"
+								type="submit"
+								builders={[builder]}
+								on:click={() => {
+									sendStatus = 0;
+									submit();
+								}}>Submit</Button
+							>
+						{:else}
+							<Button class="w-full" on:click={next} bind:disabled={nextDisabled}>Next</Button>
+						{/if}
+					</div>
 				</AlertDialog.Trigger>
 				{#if sendStatus == 0}
 					<AlertDialog.Content>
