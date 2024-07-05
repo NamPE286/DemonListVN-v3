@@ -152,8 +152,8 @@
 						><a href="/rules"><u>rules</u></a></button
 					>
 					before submitting.<br />
-					- Suggested rating is Demon List VN level's rating, not level's stars or placement. - Raw is
-					recording from the beginning to the end of the recording session without editing.
+					- Suggested rating is Demon List VN level's rating, not level's stars or placement. <br />
+					- Raw is recording from the beginning to the end of the recording session without editing.
 				</Alert.Description>
 			</Alert.Root>
 		{/if}
