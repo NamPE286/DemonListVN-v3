@@ -37,6 +37,7 @@
 	};
 
 	let apiLevel: any = null;
+	let level: any = null;
 	let sendStatus = 0;
 	let open = false;
 	let step = 0;
@@ -64,6 +65,12 @@
 	}
 
 	async function fetchLevel() {
+		try {
+			level = await (
+				await fetch(`${import.meta.env.VITE_API_URL}/level/${submission.levelid}`)
+			).json();
+		} catch {}
+
 		apiLevel = await (await fetch(`https://gdbrowser.com/api/level/${submission.levelid}`)).json();
 	}
 
@@ -94,6 +101,11 @@
 				toast.error('Please fill in all required fields');
 				return;
 			}
+
+			if (level && submission.progress < level.minProgress) {
+				toast.error('Not enough progress');
+				return;
+			}
 		}
 
 		step++;
@@ -109,6 +121,7 @@
 				submission[i] = defaultValue[i];
 				step = 0;
 				apiLevel = null;
+				level = null;
 			}
 		}}>Submit</Dialog.Trigger
 	>
@@ -135,8 +148,8 @@
 						><a href="/rules"><u>rules</u></a></button
 					>
 					before submitting.<br />
-					- Suggested rating is Demon List VN level's rating, not level's stars or placement.
-					- Raw is recording from the beginning to the end of the recording session without editing.
+					- Suggested rating is Demon List VN level's rating, not level's stars or placement. - Raw is
+					recording from the beginning to the end of the recording session without editing.
 				</Alert.Description>
 			</Alert.Root>
 		{/if}
@@ -173,7 +186,13 @@
 				{#if step == 3}
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">Progress</Label>
-						<Input id="name" type="number" bind:value={submission.progress} class="col-span-3" />
+						<Input
+							id="name"
+							type="number"
+							bind:value={submission.progress}
+							placeholder={`Minimum ${level.minProgress}%`}
+							class="col-span-3"
+						/>
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">FPS</Label>
