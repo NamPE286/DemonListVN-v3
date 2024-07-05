@@ -150,7 +150,7 @@
 							>Profile</DropdownMenu.Item
 						>
 						<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
-							>Submission</DropdownMenu.Item
+							>Submissions</DropdownMenu.Item
 						>
 						{#if $user.data.clan}
 							<DropdownMenu.Item on:click={() => goto(`/clan/${$user.data.clan}`)}

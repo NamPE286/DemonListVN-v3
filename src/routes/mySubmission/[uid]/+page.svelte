@@ -43,7 +43,7 @@
 </script>
 
 <svelte:head>
-	<title>My submission - Demon List VN</title>
+	<title>My submissions - Demon List VN</title>
 </svelte:head>
 
 <RecordDetail bind:open={recordDetailOpened} uid={userID} {levelID} />
@@ -62,7 +62,7 @@
 </AlertDialog.Root>
 
 {#if $user.loggedIn && $user.data.uid == $page.params.uid}
-	<Title value="My submission" />
+	<Title value="My submissions" />
 	<div class="wrapper">
 		<Table.Root>
 			<Table.Caption>Total record: {data.data.length}</Table.Caption>

@@ -41,7 +41,9 @@
 	</ul>
 	<h2>Demon List rule</h2>
 	<ul>
-		<li>All levels must be insane or extreme demons at the time of submission.</li>
+		<li>All levels must be insane or extreme demons at the time of submission. Some lower tier insane demon may not be accepted.</li>
+		<li>All records must be 360p 25fps or better</li>
+		<li>Raw is required for all records.</li>
 	</ul>
 	<h2>Featured List rule</h2>
 	<ul>
@@ -54,10 +56,9 @@
 	<ul>
 		<li>Overview:</li>
 		<ul>
-			<li>Rating is a metric represents player potential to beat levels.</li>
+			<li>Rating is a metric represents player potential.</li>
 			<li>
-				Rating is based on player's best performance and performance on other levels on Demon List
-				(Note: grinding is not a viable way to increase player's rating)
+				Rating is based on player's best performance and performance on other levels on Demon List.
 			</li>
 		</ul>
 		<li>Rules:</li>

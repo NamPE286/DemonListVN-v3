@@ -18,6 +18,7 @@
 		progress: NaN,
 		refreshRate: '',
 		videoLink: '',
+		raw: '',
 		mobile: null,
 		suggestedRating: NaN,
 		comment: ''
@@ -29,6 +30,7 @@
 		progress: NaN,
 		refreshRate: '',
 		videoLink: '',
+		raw: '',
 		mobile: null,
 		suggestedRating: NaN,
 		comment: ''
@@ -86,7 +88,8 @@
 				!submission.progress ||
 				!submission.refreshRate ||
 				!submission.videoLink ||
-				!submission.mobile
+				!submission.mobile ||
+				!submission.raw
 			) {
 				toast.error('Please fill in all required fields');
 				return;
@@ -133,6 +136,7 @@
 					>
 					before submitting.<br />
 					- Suggested rating is Demon List VN level's rating, not level's stars or placement.
+					- Raw is recording from the beginning to the end of the recording session without editing.
 				</Alert.Description>
 			</Alert.Root>
 		{/if}
@@ -184,6 +188,10 @@
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">Video's link</Label>
 						<Input id="name" bind:value={submission.videoLink} class="col-span-3" />
+					</div>
+					<div class="grid grid-cols-4 items-center gap-4">
+						<Label for="name" class="text-right">Raw</Label>
+						<Input id="name" bind:value={submission.raw} class="col-span-3" />
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">Platform</Label>
