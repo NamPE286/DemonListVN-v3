@@ -95,9 +95,13 @@
 				!submission.progress ||
 				!submission.refreshRate ||
 				!submission.videoLink ||
-				!submission.mobile ||
-				!submission.raw
+				!submission.mobile
 			) {
+				toast.error('Please fill in all required fields');
+				return;
+			}
+
+			if (!level || ((!level.flTop || level.rating) && !submission.raw)) {
 				toast.error('Please fill in all required fields');
 				return;
 			}
@@ -208,10 +212,12 @@
 						<Label for="name" class="text-right">Video's link</Label>
 						<Input id="name" bind:value={submission.videoLink} class="col-span-3" />
 					</div>
-					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="name" class="text-right">Raw</Label>
-						<Input id="name" bind:value={submission.raw} class="col-span-3" />
-					</div>
+					{#if level && (!level.flTop || level.rating)}
+						<div class="grid grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Raw</Label>
+							<Input id="name" bind:value={submission.raw} class="col-span-3" />
+						</div>
+					{/if}
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">Platform</Label>
 						<Select.Root bind:selected={submission.mobile}>
