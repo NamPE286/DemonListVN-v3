@@ -101,7 +101,12 @@
 				return;
 			}
 
-			if (!level || ((!level.flTop || level.rating) && !submission.raw)) {
+			if (level) {
+				if ((!level.flTop || level.rating) && !submission.raw) {
+					toast.error('Please fill in all required fields');
+					return;
+				}
+			} else if (!submission.raw) {
 				toast.error('Please fill in all required fields');
 				return;
 			}
@@ -194,7 +199,7 @@
 							id="name"
 							type="number"
 							bind:value={submission.progress}
-							placeholder={`Minimum ${level.minProgress}%`}
+							placeholder={level ? `Minimum ${level.minProgress}%` : 'Minimum 0%'}
 							class="col-span-3"
 						/>
 					</div>
@@ -212,7 +217,7 @@
 						<Label for="name" class="text-right">Video's link</Label>
 						<Input id="name" bind:value={submission.videoLink} class="col-span-3" />
 					</div>
-					{#if level && (!level.flTop || level.rating)}
+					{#if !level || !level.flTop || level.rating}
 						<div class="grid grid-cols-4 items-center gap-4">
 							<Label for="name" class="text-right">Raw</Label>
 							<Input id="name" bind:value={submission.raw} class="col-span-3" />
