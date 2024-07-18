@@ -1,24 +1,60 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 	import { toast } from 'svelte-sonner';
+	import { Label } from '$lib/components/ui/label';
+	import { Switch } from '$lib/components/ui/switch';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { getTitle } from '$lib/client';
 	import * as Table from '$lib/components/ui/table';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Card from '$lib/components/ui/card';
-	import * as Alert from '$lib/components/ui/alert';
+	import * as Select from '$lib/components/ui/select';
 	import { user } from '$lib/client';
 	import ProfileEditButton from '$lib/components/profileEditButton.svelte';
 	import Heatmap from '$lib/components/heatmap.svelte';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import Ads from '$lib/components/ads.svelte';
+	import { getTitle } from '$lib/client';
+	import { Button } from '$lib/components/ui/button';
+	import { page } from '$app/stores';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' = 'dl';
 	let recordDetailOpened = false;
 	let selectedRecord: any = null;
+	let filter = {
+		sortBy: 'pt',
+		ascending: false
+	};
+
+	async function applyFilter() {
+		const records = await (
+			await fetch(
+				`${import.meta.env.VITE_API_URL}/player/${$page.params.uid}/records?sortBy=${filter.sortBy}&ascending=${filter.ascending}&end=500`
+			)
+		).json();
+
+		const dlRec = [],
+			flRec = [];
+
+		for (const i of records) {
+			if (i.data.dlPt != null) {
+				dlRec.push(i);
+			}
+
+			if (i.data.flPt != null) {
+				flRec.push(i);
+			}
+		}
+
+		data.records = {
+			dl: dlRec,
+			fl: flRec
+		};
+
+		data = data
+	}
 </script>
 
 <svelte:head>
@@ -162,11 +198,36 @@
 		{/key}
 	</div>
 	<Ads />
-	<Alert.Root class="ml-auto mr-auto w-fit">
-		<Alert.Description>
-			Some records may take a while to appear after being accepted.
-		</Alert.Description>
-	</Alert.Root>
+	<div class="filter">
+		<div class="filterItem">
+			<Label>Sort by</Label>
+			<Select.Root
+				selected={{
+					label: 'Point',
+					value: 'pt'
+				}}
+				onSelectedChange={(e) => {
+					// @ts-ignore
+					filter.sortBy = e.value;
+				}}
+			>
+				<Select.Trigger class="w-[180px]">
+					<Select.Value placeholder="Select item to sort by" />
+				</Select.Trigger>
+				<Select.Content>
+					<Select.Item value="pt">Point</Select.Item>
+					<Select.Item value="timestamp">Date submitted</Select.Item>
+				</Select.Content>
+			</Select.Root>
+		</div>
+		<div class="filterItem">
+			<Label>Ascending</Label>
+			<Switch bind:checked={filter.ascending} />
+		</div>
+		<div class="filterItem">
+			<Button variant="outline" on:click={applyFilter}>Apply</Button>
+		</div>
+	</div>
 	<Tabs.Root value="dl">
 		<div class="tabs">
 			<Tabs.List class="grid w-full grid-cols-2 lg:w-[400px]">
@@ -222,6 +283,26 @@
 </div>
 
 <style lang="scss">
+	.filter {
+		display: flex;
+		gap: 30px;
+		margin-bottom: 10px;
+		justify-content: center;
+		border-radius: var(--radius);
+		border: 1px solid var(--border1);
+		padding-top: 10px;
+		padding-bottom: 10px;
+		width: fit-content;
+		padding-inline: 20px;
+		margin-inline: auto;
+
+		.filterItem {
+			display: flex;
+			gap: 10px;
+			align-items: center;
+		}
+	}
+
 	.playerInfo2 {
 		min-width: 370px;
 	}
@@ -310,7 +391,7 @@
 	.tabs {
 		display: flex;
 		justify-content: center;
-		margin-top: 20px;
+		margin-top: 10px;
 		margin-bottom: 10px;
 	}
 
