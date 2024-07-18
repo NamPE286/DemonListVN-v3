@@ -27,7 +27,7 @@
 		sortBy: 'pt',
 		ascending: false
 	};
-
+	
 	async function applyFilter() {
 		const records = await (
 			await fetch(
@@ -35,25 +35,10 @@
 			)
 		).json();
 
-		const dlRec = [],
-			flRec = [];
+		console.log(filter, records)
 
-		for (const i of records) {
-			if (i.data.dlPt != null) {
-				dlRec.push(i);
-			}
-
-			if (i.data.flPt != null) {
-				flRec.push(i);
-			}
-		}
-
-		data.records = {
-			dl: dlRec,
-			fl: flRec
-		};
-
-		data = data
+		data.records = records
+		data = data;
 	}
 </script>
 
@@ -261,21 +246,21 @@
 					}}
 				>
 					<Table.Cell class="font-medium">
-						<a href={`/level/${record.data.levels.id}`} data-sveltekit-preload-data="tap">
-							{record.data.levels.name}
+						<a href={`/level/${record.levels.id}`} data-sveltekit-preload-data="tap">
+							{record.levels.name}
 						</a>
 					</Table.Cell>
 					<Table.Cell class="text-center"
-						>{new Date(record.data.timestamp).toLocaleString()}</Table.Cell
+						>{new Date(record.timestamp).toLocaleString()}</Table.Cell
 					>
 					<Table.Cell class="text-center">
-						{record.data.mobile ? 'Mobile' : 'PC'}
-						{#if record.data.refreshRate}
-							<br />({record.data.refreshRate}fps)
+						{record.mobile ? 'Mobile' : 'PC'}
+						{#if record.refreshRate}
+							<br />({record.refreshRate}fps)
 						{/if}
 					</Table.Cell>
-					<Table.Cell class="text-center">{record.data[list + 'Pt']}</Table.Cell>
-					<Table.Cell class="text-center">{record.data.progress}%</Table.Cell>
+					<Table.Cell class="text-center">{record[list + 'Pt']}</Table.Cell>
+					<Table.Cell class="text-center">{record.progress}%</Table.Cell>
 				</Table.Row>
 			{/each}
 		</Table.Body>
