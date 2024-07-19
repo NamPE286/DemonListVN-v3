@@ -85,29 +85,29 @@
 								return;
 							}
 
-							userID = record.data.userid;
-							levelID = record.data.levels.id;
+							userID = record.userid;
+							levelID = record.levels.id;
 							recordDetailOpened = true;
 						}}
 					>
 						<Table.Cell class="font-medium">
-							<a href={`/level/${record.data.levels.id}`} data-sveltekit-preload-data="tap">
-								{record.data.levels.name}
+							<a href={`/level/${record.levels.id}`} data-sveltekit-preload-data="tap">
+								{record.levels.name}
 							</a>
 						</Table.Cell>
 						<Table.Cell class="text-center"
-							>{new Date(record.data.timestamp).toLocaleString()}</Table.Cell
+							>{new Date(record.timestamp).toLocaleString()}</Table.Cell
 						>
 						<Table.Cell class="text-center">
-							{record.data.mobile ? 'Mobile' : 'PC'}
-							{#if record.data.refreshRate}
-								<br />({record.data.refreshRate}fps)
+							{record.mobile ? 'Mobile' : 'PC'}
+							{#if record.refreshRate}
+								<br />({record.refreshRate}fps)
 							{/if}
 						</Table.Cell>
-						<Table.Cell class="text-center">{record.data.progress}%</Table.Cell>
+						<Table.Cell class="text-center">{record.progress}%</Table.Cell>
 						<Table.Cell class="text-center">
 							<button>
-								<a href={record.data.videoLink} target="_blank">
+								<a href={record.videoLink} target="_blank">
 									<ExternalLink size={20} />
 								</a>
 							</button>
@@ -115,7 +115,7 @@
 						<Table.Cell class="text-center">
 							<button
 								on:click={() => {
-									lvID = record.data.levelid;
+									lvID = record.levelid;
 									alertOpened = true;
 								}}
 							>
