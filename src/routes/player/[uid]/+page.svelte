@@ -49,8 +49,8 @@
 {#if selectedRecord}
 	<RecordDetail
 		bind:open={recordDetailOpened}
-		bind:uid={selectedRecord.data.userid}
-		bind:levelID={selectedRecord.data.levelid}
+		bind:uid={selectedRecord.userid}
+		bind:levelID={selectedRecord.levelid}
 	/>
 {/if}
 
