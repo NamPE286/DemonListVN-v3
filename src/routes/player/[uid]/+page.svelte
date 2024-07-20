@@ -27,7 +27,7 @@
 		sortBy: 'pt',
 		ascending: false
 	};
-	
+
 	async function applyFilter() {
 		const records = await (
 			await fetch(
@@ -35,9 +35,9 @@
 			)
 		).json();
 
-		console.log(filter, records)
+		console.log(filter, records);
 
-		data.records = records
+		data.records = records;
 		data = data;
 	}
 </script>
@@ -250,9 +250,7 @@
 							{record.levels.name}
 						</a>
 					</Table.Cell>
-					<Table.Cell class="text-center"
-						>{new Date(record.timestamp).toLocaleString()}</Table.Cell
-					>
+					<Table.Cell class="text-center">{new Date(record.timestamp).toLocaleString()}</Table.Cell>
 					<Table.Cell class="text-center">
 						{record.mobile ? 'Mobile' : 'PC'}
 						{#if record.refreshRate}
@@ -394,6 +392,14 @@
 	@media screen and (max-width: 900px) {
 		.wrapper {
 			padding-inline: 20px;
+		}
+	}
+
+	@media screen and (max-width: 1200px) {
+		.filter {
+			flex-direction: column;
+			margin-bottom: 20px;
+			gap: 15px;
 		}
 	}
 </style>
