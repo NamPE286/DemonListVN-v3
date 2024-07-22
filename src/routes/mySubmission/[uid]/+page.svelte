@@ -31,12 +31,15 @@
 				loading: 'Cancelling submission...',
 				success: () => {
 					data.data = data.data.filter((x) => {
-						return x.data.levelid != lvID;
+						return x.levelid != lvID;
 					});
 
 					return 'Submission cancelled!';
 				},
-				error: 'Failed to cancel submission.'
+				error: (err) => {
+					console.log(err)
+					return 'Failed to cancel submission.'
+				}
 			}
 		);
 	}
