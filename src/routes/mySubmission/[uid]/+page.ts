@@ -3,10 +3,23 @@ export async function load({ params, fetch }) {
         end: '500',
         isChecked: 'false',
     })
+    interface Result {
+        dl: any[],
+        fl: any[]
+    }
 
-    const res: any[] = await (await fetch(`${import.meta.env.VITE_API_URL}/player/${params.uid}/records?${query.toString()}`)).json()
+    const res: Result = await (await fetch(`${import.meta.env.VITE_API_URL}/player/${params.uid}/records?${query.toString()}`)).json()
+    const data = res.dl.concat(res.fl)
+
+    data.sort((a, b) => {
+        if (a.timestamp < b.timestamp) {
+            return -1;
+        }
+
+        return 1;
+    })
 
     return {
-        data: res
+        data: data
     }
 };
