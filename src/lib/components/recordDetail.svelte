@@ -206,10 +206,11 @@
 							<a href={record.data.videoLink} target="_blank"
 								>{record.data.videoLink.slice(0, 25)}...</a
 							><br />
-							<b>Raw:</b>
-							<a href={record.data.raw} target="_blank"
-								>{record.data.raw.slice(0, 25)}...</a
-							><br />
+							{#if $user.loggedIn && $user.data.isAdmin}
+								<b>Raw:</b>
+								<a href={record.data.raw} target="_blank">{record.data.raw.slice(0, 25)}...</a><br
+								/>
+							{/if}
 							<b>Submitted on:</b>
 							{new Date(record.data.timestamp).toLocaleString()}<br />
 							<b>Device:</b>
