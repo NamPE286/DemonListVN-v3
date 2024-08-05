@@ -7,7 +7,10 @@ export async function load({ params, url, fetch }) {
         if (!('demonList' in gdbrowserLevel)) {
             return {
                 gdbrowser: gdbrowserLevel,
-                pointercrate: null
+                pointercrate: {
+                    video: 'https://www.youtube.com/watch?v=XIMLoLxmTDw',
+                    requirement: -1
+                }
             }
         }
 

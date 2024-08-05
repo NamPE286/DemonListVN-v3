@@ -196,7 +196,7 @@
 							Featured List point: {data.level.flPt}
 							<div class="top">#{data.level.flTop}</div>
 						</div>
-					{:else}
+					{:else if 'pointercrate' in data && data.pointercrate.requirement != -1}
 						<div class="pointLabel">
 							Pointercrate:
 							<div class="top">
@@ -243,12 +243,12 @@
 				<div class="content">
 					{#if levelAPI}
 						<p><b>Description:</b> <span>{levelAPI.description}</span></p>
-						{#if 'gdbrowser' in data && data.pointercrate}
+						{#if 'pointercrate' in data && data.pointercrate.requirement != -1}
 							<p>
 								<b>Minimum progress:</b>
 								<span>{data.pointercrate.requirement}% (Pointercrate)</span>
 							</p>
-						{:else if data.level.rating}
+						{:else if 'level' in data && data.level.rating}
 							<p><b>Minimum progress:</b> <span>{data.level.minProgress}%</span></p>
 						{/if}
 						<p><b>Difficulty: </b><span>{levelAPI.difficulty}</span></p>
