@@ -41,8 +41,26 @@
 
 		fetch(`${import.meta.env.VITE_API_URL}/search/${value}`)
 			.then((res) => res.json())
-			.then((res) => {
+			.then(async (res) => {
 				result = res;
+
+				if (result.levels.length == 0 && parseInt(value)) {
+					try {
+						let gdbrowserLevel: any = await (
+							await fetch(`https://gdbrowser.com/api/level/${value}`)
+						).json();
+
+						result.levels.push({
+							data: {
+								id: gdbrowserLevel.id,
+								name: gdbrowserLevel.name,
+								creator: gdbrowserLevel.author,
+								other: true
+							}
+						});
+					} catch {}
+				}
+
 				state = 2;
 			});
 	}
@@ -90,9 +108,17 @@
 			{#if result.levels.length}
 				<Command.Group heading="Levels">
 					{#each result.levels as item}
-						<a href={`/level/${item.data.id}`} data-sveltekit-preload-data="tap">
-							<Command.Item>{item.data.name} by {item.data.creator}</Command.Item>
-						</a>
+						{#if 'other' in item.data}
+							<a href={`/level/${item.data.id}?list=other`} data-sveltekit-preload-data="tap">
+								<Command.Item>{item.data.name} by {item.data.creator} ({item.data.id}) (Not added)</Command.Item
+								>
+							</a>
+						{:else}
+							<a href={`/level/${item.data.id}`} data-sveltekit-preload-data="tap">
+								<Command.Item>{item.data.name} by {item.data.creator} ({item.data.id})</Command.Item
+								>
+							</a>
+						{/if}
 					{/each}
 				</Command.Group>
 			{/if}
