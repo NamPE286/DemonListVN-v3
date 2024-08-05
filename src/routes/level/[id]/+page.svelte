@@ -10,6 +10,8 @@
 	import Loading from '$lib/components/animation/loading.svelte';
 	import Chart from 'chart.js/auto';
 	import Ads from '$lib/components/ads.svelte';
+	import * as Tabs from '$lib/components/ui/tabs';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 	let levelAPI: any = null;
@@ -111,13 +113,18 @@
 	$: $page.params.id, fetchData();
 
 	onMount(() => {
+		console.log(data);
 		loaded = true;
 		fetchData();
 	});
 </script>
 
 <svelte:head>
-	<title>{data.level.name} by {data.level.creator} - Demon List VN</title>
+	{#if 'gdbrowser' in data}
+		<title>{data.gdbrowser.name} by {data.gdbrowser.author} - Demon List VN</title>
+	{:else}
+		<title>{data.level.name} by {data.level.creator} - Demon List VN</title>
+	{/if}
 </svelte:head>
 
 {#if selectedRecord}
@@ -127,25 +134,52 @@
 		bind:levelID={selectedRecord.data.levelid}
 	/>
 {/if}
-
-<img
-	in:fade={{ delay: 250, duration: 300 }}
-	class="bg"
-	src={`https://img.youtube.com/vi/${data.level.videoID}/0.jpg`}
-	alt="thumbnail"
-/>
+{#if 'pointercrate' in data}
+	<img
+		in:fade={{ delay: 250, duration: 300 }}
+		class="bg"
+		src={`https://img.youtube.com/vi/${new URL(data.pointercrate.video).searchParams.get('v')}/0.jpg`}
+		alt="thumbnail"
+	/>
+{:else}
+	<img
+		in:fade={{ delay: 250, duration: 300 }}
+		class="bg"
+		src={`https://img.youtube.com/vi/${data.level.videoID}/0.jpg`}
+		alt="thumbnail"
+	/>
+{/if}
 <div class="head">
 	<div class="cardWrapper">
 		<Card.Root>
 			<Card.Content>
 				<div class="content">
 					<div class="levelName">
-						<h2>{data.level.name}</h2>
-						<span class="creator">by {data.level.creator}</span>
+						{#if 'gdbrowser' in data}
+							<h2>{data.gdbrowser.name}</h2>
+							<span class="creator">by {data.gdbrowser.author}</span>
+						{:else}
+							<h2>{data.level.name}</h2>
+							<span class="creator">by {data.level.creator}</span>
+						{/if}
 					</div>
 				</div>
 			</Card.Content>
 		</Card.Root>
+		<Tabs.Root value={'gdbrowser' in data ? 'other' : 'dlvn'} class="mt-[20px]">
+			<Tabs.List class="grid h-[50px] w-full grid-cols-2">
+				<Tabs.Trigger
+					class="h-[40px]"
+					value="dlvn"
+					on:click={() => goto(`/level/${$page.params.id}`)}>Demon List VN</Tabs.Trigger
+				>
+				<Tabs.Trigger
+					class="h-[40px]"
+					value="other"
+					on:click={() => goto(`/level/${$page.params.id}?list=other`)}>Other lists</Tabs.Trigger
+				>
+			</Tabs.List>
+		</Tabs.Root>
 	</div>
 </div>
 <div class="detailWrapper">
@@ -153,14 +187,28 @@
 		<Card.Root>
 			<Card.Content>
 				<div class="content">
-					<div class="pointLabel">
-						Rating: {data.level.rating}
-						<div class="top">#{data.level.dlTop}</div>
-					</div>
-					<div class="pointLabel">
-						Featured List point: {data.level.flPt}
-						<div class="top">#{data.level.flTop}</div>
-					</div>
+					{#if 'level' in data}
+						<div class="pointLabel">
+							Rating: {data.level.rating}
+							<div class="top">#{data.level.dlTop}</div>
+						</div>
+						<div class="pointLabel">
+							Featured List point: {data.level.flPt}
+							<div class="top">#{data.level.flTop}</div>
+						</div>
+					{:else}
+						<div class="pointLabel">
+							Pointercrate:
+							<div class="top">
+								#{data.pointercrate.position}
+								{#if 150 <= data.pointercrate.position && data.pointercrate.position < 75}
+									(Extended)
+								{:else if data.pointercrate.position > 150}
+									(Legacy)
+								{/if}
+							</div>
+						</div>
+					{/if}
 				</div>
 			</Card.Content>
 		</Card.Root>
@@ -168,37 +216,55 @@
 	<div class="cardWrapper1 detail">
 		<Card.Root>
 			<Card.Content>
-				<iframe
-					src={`https://www.youtube.com/embed/${data.level.videoID}?si=3M9vP_nLFlxX-0hE`}
-					title="YouTube video player"
-					frameborder="0"
-					allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-					referrerpolicy="strict-origin-when-cross-origin"
-					allowfullscreen
-				></iframe>
+				{#if !('pointercrate' in data)}
+					<iframe
+						src={`https://www.youtube.com/embed/${data.level.videoID}?si=3M9vP_nLFlxX-0hE`}
+						title="YouTube video player"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						referrerpolicy="strict-origin-when-cross-origin"
+						allowfullscreen
+					></iframe>
+				{/if}
+				{#if 'pointercrate' in data}
+					<iframe
+						src={`https://www.youtube.com/embed/${new URL(data.pointercrate.video).searchParams.get('v')}?si=3M9vP_nLFlxX-0hE`}
+						title="YouTube video player"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						referrerpolicy="strict-origin-when-cross-origin"
+						allowfullscreen
+					></iframe>
+				{/if}
 			</Card.Content>
 		</Card.Root>
-
 		<Card.Root>
 			<Card.Content>
 				<div class="content">
 					{#if levelAPI}
 						<p><b>Description:</b> <span>{levelAPI.description}</span></p>
-						{#if data.level.rating}
+						{#if 'gdbrowser' in data && data.pointercrate}
+							<p>
+								<b>Minimum progress:</b>
+								<span>{data.pointercrate.requirement}% (Pointercrate)</span>
+							</p>
+						{:else if data.level.rating}
 							<p><b>Minimum progress:</b> <span>{data.level.minProgress}%</span></p>
 						{/if}
 						<p><b>Difficulty: </b><span>{levelAPI.difficulty}</span></p>
-						<p><b>ID: </b><span>{data.level.id}</span></p>
-						<p>
-							<b>Song: </b>
-							{#if data.level.songID == null}
-								<span>Avaliable on Newground</span>
-							{:else}
-								<a href={`${import.meta.env.VITE_API_URL}/level/${data.level.id}/song`}
-									><u>Download</u></a
-								>
-							{/if}
-						</p>
+						<p><b>ID: </b><span>{levelAPI.id}</span></p>
+						{#if 'level' in data}
+							<p>
+								<b>Song: </b>
+								{#if data.level.songID == null}
+									<span>Avaliable on Newground</span>
+								{:else}
+									<a href={`${import.meta.env.VITE_API_URL}/level/${data.level.id}/song`}
+										><u>Download</u></a
+									>
+								{/if}
+							</p>
+						{/if}
 					{:else}
 						<Loading inverted />
 					{/if}
@@ -207,13 +273,15 @@
 		</Card.Root>
 	</div>
 	<Ads />
-	<div class="chartWrapper cardWrapper1">
-		{#if !deathCount.length}
-			<Loading inverted />
-		{:else}
-			<canvas id="chart" use:createChart />
-		{/if}
-	</div>
+	{#if 'level' in data}
+		<div class="chartWrapper cardWrapper1">
+			{#if !deathCount.length}
+				<Loading inverted />
+			{:else}
+				<canvas id="chart" use:createChart />
+			{/if}
+		</div>
+	{/if}
 	<div class="cardWrapper1 table">
 		<Table.Root>
 			{#if records}
