@@ -134,21 +134,16 @@
 		bind:levelID={selectedRecord.data.levelid}
 	/>
 {/if}
-{#if 'pointercrate' in data}
-	<img
-		in:fade={{ delay: 250, duration: 300 }}
-		class="bg"
-		src={`https://img.youtube.com/vi/${new URL(data.pointercrate.video).searchParams.get('v')}/0.jpg`}
-		alt="thumbnail"
-	/>
-{:else}
-	<img
-		in:fade={{ delay: 250, duration: 300 }}
-		class="bg"
-		src={`https://img.youtube.com/vi/${data.level.videoID}/0.jpg`}
-		alt="thumbnail"
-	/>
-{/if}
+
+<img
+	in:fade={{ delay: 500, duration: 300 }}
+	class="bg"
+	src={'pointercrate' in data
+		? `https://img.youtube.com/vi/${new URL(data.pointercrate.video).searchParams.get('v')}/0.jpg`
+		: `https://img.youtube.com/vi/${data.level.videoID}/0.jpg`}
+	alt="thumbnail"
+/>
+
 <div class="head">
 	<div class="cardWrapper">
 		<Card.Root>
