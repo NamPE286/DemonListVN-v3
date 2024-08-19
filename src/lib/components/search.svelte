@@ -45,31 +45,37 @@
 
 		Promise.all([
 			fetch(`${import.meta.env.VITE_API_URL}/search/${value}`).then((res) => res.json()),
-
 			fetch(`https://gdbrowser.com/api/search/${value}?page=0&count=5&diff=-2`).then((res) =>
 				res.json()
 			)
-		]).then((res) => {
-			result = {
-				levels: res[0].levels,
-				gdBrowserLevels: [],
-				players: res[0].players
-			};
+		])
+			.then((res) => {
+				if (!res[0] || !res[1]) {
+					return;
+				}
 
-			for (let i of res[1]) {
-				result.gdBrowserLevels.push({
-					data: {
-						id: i.id,
-						name: i.name,
-						creator: i.author,
-						other: true
-					}
-				});
-			}
+				result = {
+					levels: res[0].levels,
+					gdBrowserLevels: [],
+					players: res[0].players
+				};
 
-			state = 2;
-			console.log(result);
-		});
+				for (let i of res[1]) {
+					result.gdBrowserLevels.push({
+						data: {
+							id: i.id,
+							name: i.name,
+							creator: i.author,
+							other: true
+						}
+					});
+				}
+
+				state = 2;
+			})
+			.catch((err) => {
+				state = 2;
+			});
 	}
 
 	onMount(() => {
