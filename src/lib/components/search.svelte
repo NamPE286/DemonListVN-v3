@@ -4,12 +4,15 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import Loading from '$lib/components/animation/loading.svelte';
+	import * as ContextMenu from '$lib/components/ui/context-menu';
+	import { toast } from 'svelte-sonner';
 
 	export let open: boolean;
 	export let value: string = '';
 
 	let result: any = {
 		levels: [],
+		gdBrowserLevels: [],
 		players: []
 	};
 
@@ -25,6 +28,7 @@
 	function onChange() {
 		result = {
 			levels: [],
+			gdBrowserLevels: [],
 			players: []
 		};
 
@@ -39,30 +43,33 @@
 
 		state = 1;
 
-		fetch(`${import.meta.env.VITE_API_URL}/search/${value}`)
-			.then((res) => res.json())
-			.then(async (res) => {
-				result = res;
+		Promise.all([
+			fetch(`${import.meta.env.VITE_API_URL}/search/${value}`).then((res) => res.json()),
 
-				if (result.levels.length == 0 && parseInt(value)) {
-					try {
-						let gdbrowserLevel: any = await (
-							await fetch(`https://gdbrowser.com/api/level/${value}`)
-						).json();
+			fetch(`https://gdbrowser.com/api/search/${value}?page=0&count=5&diff=-2`).then((res) =>
+				res.json()
+			)
+		]).then((res) => {
+			result = {
+				levels: res[0].levels,
+				gdBrowserLevels: [],
+				players: res[0].players
+			};
 
-						result.levels.push({
-							data: {
-								id: gdbrowserLevel.id,
-								name: gdbrowserLevel.name,
-								creator: gdbrowserLevel.author,
-								other: true
-							}
-						});
-					} catch {}
-				}
+			for (let i of res[1]) {
+				result.gdBrowserLevels.push({
+					data: {
+						id: i.id,
+						name: i.name,
+						creator: i.author,
+						other: true
+					}
+				});
+			}
 
-				state = 2;
-			});
+			state = 2;
+			console.log(result);
+		});
 	}
 
 	onMount(() => {
@@ -105,43 +112,82 @@
 					<Loading inverted={true} />
 				</Command.Empty>
 			{/if}
-			{#if result.levels.length}
-				<Command.Group heading="Levels">
-					{#each result.levels as item}
-						{#if 'other' in item.data}
-							<a href={`/level/${item.data.id}?list=other`} data-sveltekit-preload-data="tap">
-								<Command.Item>{item.data.name} by {item.data.creator} ({item.data.id}) (Not added)</Command.Item
-								>
-							</a>
-						{:else}
-							<a href={`/level/${item.data.id}`} data-sveltekit-preload-data="tap">
-								<Command.Item>{item.data.name} by {item.data.creator} ({item.data.id})</Command.Item
-								>
-							</a>
-						{/if}
-					{/each}
-				</Command.Group>
-			{/if}
-			{#if result.players.length}
-				<Command.Separator />
-				<Command.Group heading="Players">
-					{#each result.players as item}
-						<a href={`/player/${item.data.uid}`} data-sveltekit-preload-data="tap">
-							<Command.Item>
-								<Avatar.Root>
-									<Avatar.Image
-										class="object-cover"
-										src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${item.data.uid}.jpg`}
-										alt="@shadcn"
-									/>
-									<Avatar.Fallback>{item.data.name[0]}</Avatar.Fallback>
-								</Avatar.Root>
-								<span class="playerName">{item.data.name}</span>
-							</Command.Item>
-						</a>
-					{/each}
-				</Command.Group>
-			{/if}
+			<Command.Group heading="Levels from Demon List VN">
+				{#each result.levels as item}
+					<ContextMenu.Root>
+						<ContextMenu.Trigger>
+							{#if 'other' in item.data}
+								<a href={`/level/${item.data.id}?list=other`} data-sveltekit-preload-data="tap">
+									<Command.Item
+										>{item.data.name} by {item.data.creator} ({item.data.id}) (Not added)</Command.Item
+									>
+								</a>
+							{:else}
+								<a href={`/level/${item.data.id}`} data-sveltekit-preload-data="tap">
+									<Command.Item
+										>{item.data.name} by {item.data.creator} ({item.data.id})</Command.Item
+									>
+								</a>
+							{/if}
+						</ContextMenu.Trigger>
+						<ContextMenu.Content>
+							<ContextMenu.Item
+								on:click={async () => {
+									await navigator.clipboard.writeText(item.data.id);
+									toast.success('Copied to clipboard!');
+								}}>Copy level's ID</ContextMenu.Item
+							>
+						</ContextMenu.Content>
+					</ContextMenu.Root>
+				{/each}
+			</Command.Group>
+			<Command.Group heading="Levels from Geometry Dash">
+				{#each result.gdBrowserLevels as item}
+					<ContextMenu.Root>
+						<ContextMenu.Trigger>
+							{#if 'other' in item.data}
+								<a href={`/level/${item.data.id}?list=other`} data-sveltekit-preload-data="tap">
+									<Command.Item
+										>{item.data.name} by {item.data.creator} ({item.data.id})</Command.Item
+									>
+								</a>
+							{:else}
+								<a href={`/level/${item.data.id}`} data-sveltekit-preload-data="tap">
+									<Command.Item
+										>{item.data.name} by {item.data.creator} ({item.data.id})</Command.Item
+									>
+								</a>
+							{/if}
+						</ContextMenu.Trigger>
+						<ContextMenu.Content>
+							<ContextMenu.Item
+								on:click={async () => {
+									await navigator.clipboard.writeText(item.data.id);
+									toast.success('Copied to clipboard!');
+								}}>Copy level's ID</ContextMenu.Item
+							>
+						</ContextMenu.Content>
+					</ContextMenu.Root>
+				{/each}
+			</Command.Group>
+			<Command.Separator />
+			<Command.Group heading="Players">
+				{#each result.players as item}
+					<a href={`/player/${item.data.uid}`} data-sveltekit-preload-data="tap">
+						<Command.Item>
+							<Avatar.Root>
+								<Avatar.Image
+									class="object-cover"
+									src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${item.data.uid}.jpg`}
+									alt="@shadcn"
+								/>
+								<Avatar.Fallback>{item.data.name[0]}</Avatar.Fallback>
+							</Avatar.Root>
+							<span class="playerName">{item.data.name}</span>
+						</Command.Item>
+					</a>
+				{/each}
+			</Command.Group>
 		{/if}
 	</Command.List>
 </Command.Dialog>
