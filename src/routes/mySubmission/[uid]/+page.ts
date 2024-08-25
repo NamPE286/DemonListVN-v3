@@ -12,8 +12,6 @@ export async function load({ params, fetch }) {
     const res: Result = await (await fetch(`${import.meta.env.VITE_API_URL}/player/${params.uid}/records?${query.toString()}`)).json()
     const data = res.dl.concat(res.fl)
 
-    console.log(data)
-
     data.sort((a, b) => {
         if (a.timestamp < b.timestamp) {
             return -1;
