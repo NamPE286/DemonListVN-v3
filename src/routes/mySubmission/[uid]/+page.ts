@@ -2,6 +2,7 @@ export async function load({ params, fetch }) {
     const query = new URLSearchParams({
         end: '500',
         isChecked: 'false',
+        sortBy: 'timestamp'
     })
     interface Result {
         dl: any[],
