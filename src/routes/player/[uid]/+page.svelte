@@ -88,7 +88,7 @@
 				{/if}
 				<h2>
 					{data.player.name}
-					{#if $user.loggedIn && data.player.uid == $user.data.uid}
+					{#if $user.loggedIn && data.player.uid == $user.data.uid && $user.data.recordCount != 0}
 						<ProfileEditButton bind:data={data.player} />
 					{/if}
 				</h2>
