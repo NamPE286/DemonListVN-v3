@@ -45,9 +45,9 @@
 
 		Promise.all([
 			fetch(`${import.meta.env.VITE_API_URL}/search/${value}`).then((res) => res.json()),
-			fetch(`https://gdbrowser.com/api/search/${value}?page=0&count=5&diff=-2`).then((res) =>
-				res.json()
-			)
+			fetch(`https://gdbrowser.com/api/search/${value}?page=0&count=5&diff=-2`)
+				.then((res) => res.json())
+				.catch((err) => [])
 		])
 			.then((res) => {
 				if (!res[0] || !res[1]) {
