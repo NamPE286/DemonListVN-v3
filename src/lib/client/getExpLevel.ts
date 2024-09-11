@@ -34,7 +34,9 @@ export function getExpLevel(exp: number) {
         }
     }
 
-    res.progress = Math.round(((res.upperBound - exp) / (res.upperBound - res.lowerBound)) * 1000) / 10
+    console.log(exp, res)
+
+    res.progress = Math.round(((exp - res.lowerBound) / (res.upperBound - res.lowerBound)) * 1000) / 10
 
     return res
 }
