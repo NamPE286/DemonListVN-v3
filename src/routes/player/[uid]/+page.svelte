@@ -153,6 +153,7 @@
 									<b>{expLevel.progress}%</b>
 								</div>
 							</div>
+							{data.player.exp}/{expLevel.upperBound}
 						</div>
 						<div class="rating">
 							<Tooltip.Root>
