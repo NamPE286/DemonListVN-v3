@@ -18,6 +18,7 @@
 	import { getTitle } from '$lib/client';
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
+	import { getExpLevel } from '$lib/client/getExpLevel';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' = 'dl';
@@ -27,6 +28,7 @@
 		sortBy: 'pt',
 		ascending: false
 	};
+	let expLevel = getExpLevel(data.player.exp);
 
 	async function applyFilter() {
 		const records = await (
@@ -34,8 +36,6 @@
 				`${import.meta.env.VITE_API_URL}/player/${$page.params.uid}/records?sortBy=${filter.sortBy}&ascending=${filter.ascending}&end=500`
 			)
 		).json();
-
-		console.log(filter, records);
 
 		data.records = records;
 		data = data;
@@ -141,7 +141,17 @@
 					<Card.Title tag="h1">Player's statistic</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<div class="content">
+					<div class="flex flex-col gap-[3px]">
+						<div class="rating">
+							<div class="leftCol">
+								<b>Lv.{expLevel.level}</b>
+							</div>
+							<div class="progressBar">
+								<div class="progress" style={`width: ${expLevel.progress}%`}>
+									<b>{expLevel.progress}%</b>
+								</div>
+							</div>
+						</div>
 						<div class="rating">
 							<Tooltip.Root>
 								<Tooltip.Trigger>
@@ -266,6 +276,24 @@
 </div>
 
 <style lang="scss">
+	.progressBar {
+		margin-left: 10px;
+		background-color: gray;
+		width: 100%;
+		border-radius: 10px;
+		overflow: hidden;
+
+		b {
+			color: var(--textColorInverted);
+			margin-right: 5px;
+		}
+
+		.progress {
+			background-color: var(--textColor);
+			text-align: right;
+			border-radius: 10px;
+		}
+	}
 	.filter {
 		display: flex;
 		gap: 30px;
