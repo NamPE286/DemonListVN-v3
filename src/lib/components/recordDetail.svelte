@@ -6,13 +6,14 @@
 	import DialogDescription from '$lib/components/ui/dialog/dialog-description.svelte';
 	import { Label } from '$lib/components/ui/label';
 	import * as RadioGroup from '$lib/components/ui/radio-group';
-	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Pencil1 } from 'svelte-radix';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 	import { Textarea } from '$lib/components/ui/textarea';
+	import { Switch } from '$lib/components/ui/switch';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	export let uid: string;
 	export let levelID: number;
@@ -175,6 +176,33 @@
 		);
 	}
 
+	async function applyEdit() {
+		const data = structuredClone(record.data);
+		delete data.levels;
+		delete data.players;
+
+		console.log(data);
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/record`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+					Authorization: 'Bearer ' + (await $user.token())!
+				},
+				body: JSON.stringify(data)
+			}),
+			{
+				success: () => {
+					open = false;
+					return 'Changed applied';
+				},
+				loading: 'Applying changes...',
+				error: 'An error occured'
+			}
+		);
+	}
+
 	$: open, fetchData();
 </script>
 
@@ -199,6 +227,9 @@
 						{#if record.data.reviewer != null && $user.loggedIn && record.data.reviewer.uid == $user.data.uid && record.data.needMod == false}
 							<Tabs.Trigger value="review">Review</Tabs.Trigger>
 						{/if}
+						{#if $user.loggedIn && $user.data.isAdmin}
+							<Tabs.Trigger value="edit">Edit</Tabs.Trigger>
+						{/if}
 					</Tabs.List>
 					<Tabs.Content value="detail">
 						<div class="detailWrapper">
@@ -214,7 +245,7 @@
 							<b>Submitted on:</b>
 							{new Date(record.data.timestamp).toLocaleString()}<br />
 							<b>Device:</b>
-							{record.data.isMobile ? 'Mobile' : 'PC'}
+							{record.data.mobile ? 'Mobile' : 'PC'}
 							{#if record.data.refreshRate}
 								({record.data.refreshRate}fps)
 							{/if} <br />
@@ -277,6 +308,27 @@
 							<Textarea bind:value={cmt} placeholder="Additional comment (optional)" />
 							<Button on:click={submitVerdict}>Submit verdict</Button>
 						</RadioGroup.Root>
+					</Tabs.Content>
+					<Tabs.Content value="edit">
+						<div class="flex flex-col gap-[10px]">
+							<div class="flex items-center gap-[10px]">
+								<Label for="videoLink" class="w-[100px]">Video's Link</Label>
+								<Input id="videoLink" bind:value={record.data.videoLink} />
+							</div>
+							<div class="flex items-center gap-[10px]">
+								<Label for="raw" class="w-[100px]">Raw</Label>
+								<Input id="raw" bind:value={record.data.raw} />
+							</div>
+							<div class="flex items-center gap-[10px]">
+								<Label for="Refresh rate" class="w-[100px]">Refresh rate</Label>
+								<Input id="refreshRate" type="number" bind:value={record.data.refreshRate} />
+							</div>
+							<div class="flex items-center gap-[10px]">
+								<Label for="mobile" class="w-[80px]">Mobile</Label>
+								<Switch id="mobile" bind:checked={record.data.mobile} />
+							</div>
+							<Button class="mt-[10px]" on:click={applyEdit}>Apply</Button>
+						</div>
 					</Tabs.Content>
 				</Tabs.Root>
 			{:else}

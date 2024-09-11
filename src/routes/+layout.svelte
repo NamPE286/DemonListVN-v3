@@ -24,7 +24,6 @@
 	import NotificationButton from '$lib/components/notificationButton.svelte';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import Ads from '$lib/components/ads.svelte';
 
 	const links = [
 		{ route: '/list/dl', name: 'Demon List' },
