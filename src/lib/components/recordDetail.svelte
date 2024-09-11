@@ -181,8 +181,6 @@
 		delete data.levels;
 		delete data.players;
 
-		console.log(data);
-
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/record`, {
 				method: 'PUT',
@@ -195,9 +193,34 @@
 			{
 				success: () => {
 					open = false;
-					return 'Changed applied';
+					window.location.reload();
+					return 'Changed applied. This page will be refreshed';
 				},
 				loading: 'Applying changes...',
+				error: 'An error occured'
+			}
+		);
+	}
+
+	async function deleteRecord() {
+		if (!confirm('Delete this record?')) {
+			return;
+		}
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/record/${record.data.userid}/${record.data.levelid}`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())!
+				}
+			}),
+			{
+				success: () => {
+					open = false;
+					window.location.reload();
+					return 'Deleted. This page will be refreshed';
+				},
+				loading: 'Deleting...',
 				error: 'An error occured'
 			}
 		);
@@ -332,6 +355,8 @@
 								<Switch id="mobile" bind:checked={record.data.mobile} />
 							</div>
 							<Button class="mt-[10px]" on:click={applyEdit}>Apply</Button>
+							<Button class="mt-[10px]" variant="destructive" on:click={deleteRecord}>Delete</Button
+							>
 						</div>
 					</Tabs.Content>
 				</Tabs.Root>
