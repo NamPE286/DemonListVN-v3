@@ -143,8 +143,10 @@
 				<Card.Content>
 					<div class="flex flex-col gap-[3px]">
 						<div class="rating">
-							<div class="leftCol">
-								<b>Lv.{expLevel.level}</b>
+							<div class="flex justify-center">
+								<div class="leftCol">
+									<b>Lv.{expLevel.level}</b>
+								</div>
 							</div>
 							<div class="progressBar">
 								<div class="progress" style={`width: ${expLevel.progress}%`}>
@@ -277,8 +279,7 @@
 
 <style lang="scss">
 	.progressBar {
-		margin-left: 10px;
-		background-color: gray;
+		background-color: rgba(255, 255, 255, 0.253);
 		width: 100%;
 		border-radius: 10px;
 		overflow: hidden;
@@ -294,6 +295,7 @@
 			border-radius: 10px;
 		}
 	}
+
 	.filter {
 		display: flex;
 		gap: 30px;

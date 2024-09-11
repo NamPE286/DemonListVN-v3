@@ -5,9 +5,11 @@
 	import { Separator } from '$lib/components/ui/separator';
 	import { getTitle } from '$lib/client';
 	import { badgeVariants } from '$lib/components/ui/badge';
+	import { getExpLevel } from '$lib/client/getExpLevel';
 
 	export let player: any;
 	export let showTitle = false;
+	let expLevel = getExpLevel(player.data.exp);
 </script>
 
 <div class="wrapper">
@@ -60,6 +62,18 @@
 			<Separator />
 			<div class="content">
 				<div class="rating">
+					<div class="flex justify-center">
+						<div class="leftCol">
+							<b>Lv.{expLevel.level}</b>
+						</div>
+					</div>
+					<div class="progressBar">
+						<div class="progress" style={`width: ${expLevel.progress}%`}>
+							<b>{expLevel.progress}%</b>
+						</div>
+					</div>
+				</div>
+				<div class="rating">
 					<Tooltip.Root>
 						<Tooltip.Trigger>
 							<div class="leftCol">
@@ -97,6 +111,24 @@
 </div>
 
 <style lang="scss">
+	.progressBar {
+		background-color: rgba(255, 255, 255, 0.253);
+		width: 100%;
+		border-radius: 10px;
+		overflow: hidden;
+
+		b {
+			color: var(--textColorInverted);
+			margin-right: 5px;
+		}
+
+		.progress {
+			background-color: var(--textColor);
+			text-align: right;
+			border-radius: 10px;
+		}
+	}
+
 	.wrapper {
 		display: flex;
 		align-items: center;
