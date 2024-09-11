@@ -320,8 +320,12 @@
 								<Input id="raw" bind:value={record.data.raw} />
 							</div>
 							<div class="flex items-center gap-[10px]">
-								<Label for="Refresh rate" class="w-[100px]">Refresh rate</Label>
+								<Label for="refreshRate" class="w-[100px]">Refresh rate</Label>
 								<Input id="refreshRate" type="number" bind:value={record.data.refreshRate} />
+							</div>
+							<div class="flex items-center gap-[10px]">
+								<Label for="progress" class="w-[100px]">Progress</Label>
+								<Input id="progress" type="number" bind:value={record.data.progress} />
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="mobile" class="w-[80px]">Mobile</Label>
