@@ -28,18 +28,16 @@
 
 <svelte:head></svelte:head>
 
-{#if $user.loggedIn && $user.data.isAdmin}
-	<Title value="Admin" />
+<Title value="Admin" />
 
-	<div class="wrapper">
-		<Button on:click={refresh}>Refresh</Button><br />
-		<a href="/admin/ratingEstimator">Rating estimator</a><br />
-		<a href="/admin/submission">Submission</a><br />
-		<a href="/admin/level">Level manager</a><br />
-		<a href="/admin/accountMerger">Account merger</a><br />
-		<Button on:click={copyToken}>Copy token</Button>
-	</div>
-{/if}
+<div class="wrapper">
+	<Button on:click={refresh}>Refresh</Button><br />
+	<a href="/admin/ratingEstimator">Rating estimator</a><br />
+	<a href="/admin/submission">Submission</a><br />
+	<a href="/admin/level">Level manager</a><br />
+	<a href="/admin/accountMerger">Account merger</a><br />
+	<Button on:click={copyToken}>Copy token</Button>
+</div>
 
 <style lang="scss">
 	a {
