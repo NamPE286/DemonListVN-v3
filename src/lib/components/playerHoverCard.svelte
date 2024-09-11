@@ -116,7 +116,7 @@
 		width: 100%;
 		border-radius: 10px;
 		overflow: hidden;
-
+		scale: 0.7;
 		b {
 			color: var(--textColorInverted);
 			margin-right: 5px;
