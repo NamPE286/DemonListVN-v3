@@ -3,13 +3,11 @@
 	import * as Card from '$lib/components/ui/card';
 	import LevelCard from '$lib/components/levelCard.svelte';
 	import DiscordLogo from 'svelte-radix/DiscordLogo.svelte';
+	import Clock from 'svelte-radix/Clock.svelte';
 	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button/index.js';
-	import { fade } from 'svelte/transition';
-	import { user } from '$lib/client';
 	import { onMount } from 'svelte';
 	import { settings } from '$lib/client';
-	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let time = new Date().toLocaleTimeString();
@@ -68,26 +66,34 @@
 	/>
 </svelte:head>
 
-{#if visible && $settingsValue.dashboardBackgroundURL != ''}
-	<img
-		in:fade={{ delay: 300, duration: 300 }}
-		class="bg"
-		src={$settingsValue.dashboardBackgroundURL}
-		alt="thumbnail"
-	/>
-{/if}
-
-<div
-	class="head"
-	style={$settingsValue.dashboardBackgroundURL == '' ? `max-height: 200px; min-height: 200px` : ''}
->
-	<p>{time}</p>
-	{#if $user.loggedIn}
-		<h2>{data.greeting}, {$user.data.name}!</h2>
-	{:else}
-		<h2>{data.greeting}!</h2>
-	{/if}
+<div class="w-full pl-[50px] pr-[50px]">
+	<Carousel.Root class="h-fit w-full">
+		<Carousel.Content>
+			{#each Array(5) as _, i (i)}
+				<Carousel.Item>
+					<div class="p-1">
+						<div
+							class="promotion"
+							style={`background-image: url('https://cdn.discordapp.com/attachments/1111955632707346432/1284173698588475516/113845204_p0_master1200.png?ex=66e5ab74&is=66e459f4&hm=01fac78b5267c518067577e25b24569661bdc7e50663c8e972bdbc0fc0044e6d&')`}
+						>
+							<div class="promotionContent">
+								<div class="period">
+									<Clock size={18}/>
+									1d 7h
+								</div>
+								<h2>Demon List VN Cup 2025</h2>
+								<p>Coming soon</p>
+							</div>
+						</div>
+					</div>
+				</Carousel.Item>
+			{/each}
+		</Carousel.Content>
+		<Carousel.Previous />
+		<Carousel.Next />
+	</Carousel.Root>
 </div>
+
 <div class="wrapper">
 	{#if $settingsValue.hideDiscord == 'false'}
 		<div class="alertWrapper">
@@ -169,40 +175,47 @@
 </div>
 
 <style lang="scss">
-	.bg {
-		width: 100%;
-		height: 42vw;
-		max-height: 700px;
-		min-height: 400px;
-		object-fit: cover;
-		position: fixed;
-		z-index: 0;
-		top: 0;
+	.promotion {
+		border: 1px solid hsl(var(--border));
+		border-radius: 10px;
+		background-position: center;
+		aspect-ratio: 40 / 10;
+		background-size: cover;
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		margin-top: 30px;
+
+		.period {
+			background-color: var(--textColor);
+			width: fit-content;
+			padding-inline: 8px;
+			color: var(--textColorInverted);
+			font-weight: 600;
+			text-shadow: none;
+			border-radius: 10px;
+			display: flex;
+			align-items: center;
+			gap: 5px;
+		}
+
+		.promotionContent {
+			margin-top: auto;
+			height: 45%;
+			padding: 21px;
+			text-shadow: black 1px 0 10px;
+		}
+
+		h2 {
+			font-weight: bold;
+			font-size: 28px;
+		}
 	}
 
 	.wrapper {
 		position: relative;
 		z-index: 1;
 		background-color: hsl(var(--background));
-	}
-
-	.head {
-		position: relative;
-		background: linear-gradient(rgba(0, 0, 0, 0) 10%, hsl(var(--background)) calc(60% + 10vw));
-		padding-bottom: 20px;
-		height: 33vw;
-		max-height: 500px;
-		min-height: 200px;
-		z-index: 10;
-		display: flex;
-		flex-direction: column-reverse;
-		padding-inline: 50px;
-		margin-bottom: -2px;
-
-		h2 {
-			font-size: 35px;
-			font-weight: 600;
-		}
 	}
 
 	.alertWrapper {
@@ -241,10 +254,6 @@
 	}
 
 	@media screen and (max-width: 900px) {
-		.head {
-			padding-inline: 25px;
-		}
-
 		h4 {
 			padding-inline: 0px;
 		}
