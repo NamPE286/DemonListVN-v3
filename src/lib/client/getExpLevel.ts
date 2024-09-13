@@ -21,10 +21,10 @@ export function getExpLevel(exp: number) {
             res.upperBound = Math.round(res.upperBound * 2)
         } else if (res.level <= 50) {
             res.lowerBound = res.upperBound
-            res.upperBound = Math.round(res.upperBound * 1.2)
+            res.upperBound = Math.round(res.upperBound * 1.15)
         } else {
             res.lowerBound = res.upperBound
-            res.upperBound = Math.round(res.upperBound * 1.01)
+            res.upperBound = Math.round(res.upperBound * 1.05)
         }
 
         res.level++;
