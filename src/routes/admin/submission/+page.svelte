@@ -77,7 +77,7 @@
 			body: JSON.stringify({
 				to: userID,
 				status: 2,
-				content: `Your ${level.name} (${level.id}) submission has been rejected by a moderator.\nReason: ${reason}`
+				content: `Your ${level.name} (${level.id}) submission has been rejected by a moderator. Reason: ${reason}`
 			}),
 			headers: {
 				Authorization: `Bearer ${await $user.token()}`,
