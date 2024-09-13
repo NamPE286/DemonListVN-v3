@@ -57,6 +57,8 @@
 	}
 
 	async function reject(userID: string, level: any) {
+		const reason = prompt('Reason for rejection')
+
 		if (!confirm('Reject this record?')) {
 			return;
 		}
@@ -75,7 +77,7 @@
 			body: JSON.stringify({
 				to: userID,
 				status: 2,
-				content: `Your ${level.name} (${level.id}) submission has been rejected by a moderator`
+				content: `Your ${level.name} (${level.id}) submission has been rejected by a moderator. Reason: ${reason}`
 			}),
 			headers: {
 				Authorization: `Bearer ${await $user.token()}`,
