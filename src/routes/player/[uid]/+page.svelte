@@ -153,7 +153,12 @@
 									<b>{expLevel.progress}%</b>
 								</div>
 							</div>
-							{data.player.exp}/{expLevel.upperBound}
+							<Tooltip.Root>
+								<Tooltip.Trigger>{data.player.exp}/{expLevel.upperBound}</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p>{expLevel.upperBound - data.player.exp} EXP to next level</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
 						</div>
 						<div class="rating">
 							<Tooltip.Root>
@@ -280,7 +285,7 @@
 
 <style lang="scss">
 	.progressBar {
-		background-color: rgba(255, 255, 255, 0.253);
+		background-color: gray;
 		width: 100%;
 		border-radius: 10px;
 		overflow: hidden;

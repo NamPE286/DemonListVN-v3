@@ -111,7 +111,7 @@
 
 <style lang="scss">
 	.progressBar {
-		background-color: rgba(255, 255, 255, 0.253);
+		background-color: gray;
 		width: 100%;
 		border-radius: 10px;
 		overflow: hidden;
