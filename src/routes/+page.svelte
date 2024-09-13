@@ -74,7 +74,7 @@
 					<div class="p-1">
 						<div
 							class="promotion"
-							style={`background-image: url('https://cdn.discordapp.com/attachments/1111955632707346432/1284173698588475516/113845204_p0_master1200.png?ex=66e5ab74&is=66e459f4&hm=01fac78b5267c518067577e25b24569661bdc7e50663c8e972bdbc0fc0044e6d&')`}
+							style={`background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSYbl1xiecZolTDFI54hT0emEyea-Tpx1ECA&s')`}
 						>
 							<div class="promotionContent">
 								<div class="period">
@@ -185,12 +185,13 @@
 		flex-direction: column;
 		overflow: hidden;
 		margin-top: 30px;
+		color: white;
 
 		.period {
-			background-color: var(--textColor);
+			background-color: white;
 			width: fit-content;
 			padding-inline: 8px;
-			color: var(--textColorInverted);
+			color: black;
 			font-weight: 600;
 			text-shadow: none;
 			border-radius: 10px;
