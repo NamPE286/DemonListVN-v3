@@ -4,12 +4,11 @@
 	import LevelCard from '$lib/components/levelCard.svelte';
 	import DiscordLogo from 'svelte-radix/DiscordLogo.svelte';
 	import Clock from 'svelte-radix/Clock.svelte';
-	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { onMount } from 'svelte';
 	import { settings } from '$lib/client';
+	import { Skeleton } from '$lib/components/ui/skeleton';
 
-	export let data: PageData;
 	let time = new Date().toLocaleTimeString();
 	const settingsValue = settings.value;
 	let visible = false;
@@ -17,6 +16,7 @@
 		dl: null,
 		fl: null
 	};
+	let events: any = null;
 
 	async function getRecentDemonListLevel() {
 		const query = new URLSearchParams({
@@ -42,11 +42,24 @@
 		).json();
 	}
 
+	async function getEvents() {
+		return await (await fetch(`${import.meta.env.VITE_API_URL}/events/ongoing`)).json();
+	}
+
+	function getInterval(end: string) {
+		const second = (new Date(end).getTime() - new Date().getTime()) / 1000;
+		const day = Math.floor(second / 86400);
+		const hour = Math.floor((second - day * 86400) / 3600);
+		
+		return `${day}d ${hour}h`
+	}
+
 	onMount(() => {
 		visible = true;
 
 		getRecentDemonListLevel().then((data) => (recent.dl = data));
 		getRecentFeaturedListLevel().then((data) => (recent.fl = data));
+		getEvents().then((data) => (events = data));
 
 		const interval = setInterval(() => {
 			time = new Date().toLocaleTimeString();
@@ -69,25 +82,38 @@
 <div class="w-full pl-[50px] pr-[50px]">
 	<Carousel.Root class="h-fit w-full">
 		<Carousel.Content>
-			{#each Array(5) as _, i (i)}
+			{#if events}
+				{#each events as item, index}
+					<Carousel.Item>
+						<div class="p-1">
+							<div class="promotion" style={`background-image: url('${item.imgUrl}')`}>
+								<div class="promotionContent">
+									<div class="period">
+										<Clock size={18} />
+										{getInterval(item.end)}
+									</div>
+									<h2>{item.title}</h2>
+									<p>{item.description}</p>
+								</div>
+							</div>
+						</div>
+					</Carousel.Item>
+				{/each}
+			{:else}
 				<Carousel.Item>
 					<div class="p-1">
-						<div
-							class="promotion"
-							style={`background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRSYbl1xiecZolTDFI54hT0emEyea-Tpx1ECA&s')`}
-						>
+						<div class="promotion">
 							<div class="promotionContent">
-								<div class="period">
-									<Clock size={18}/>
-									1d 7h
+								<div class="flex flex-col gap-[10px]">
+									<Skeleton class="h-[20px] w-[75px]" />
+									<Skeleton class="h-[45px] w-[200px]" />
+									<Skeleton class="h-[25px] w-[150px]" />
 								</div>
-								<h2>Demon List VN Cup 2025</h2>
-								<p>Coming soon</p>
 							</div>
 						</div>
 					</div>
 				</Carousel.Item>
-			{/each}
+			{/if}
 		</Carousel.Content>
 		<Carousel.Previous />
 		<Carousel.Next />
