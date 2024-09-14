@@ -178,8 +178,7 @@
 <slot />
 
 <footer>
-	<div class="footerFiller">
-	</div>
+	<div class="footerFiller"></div>
 	<p>
 		© Copyright 2020-2024 demonlistvn.com.<br />
 		All rights reserved demonlistvn.com and Demon List VN are in no way affiliated with RobTopGamesAB
@@ -193,6 +192,90 @@
 </footer>
 
 <style lang="scss">
+	:global(.markdown) {
+		:global(h1) {
+			display: block;
+			font-size: 2em;
+			margin-top: 0.67em;
+			margin-bottom: 0.67em;
+			margin-left: 0;
+			margin-right: 0;
+			font-weight: bold;
+		}
+
+		:global(h2) {
+			display: block;
+			font-size: 1.5em;
+			margin-top: 0.83em;
+			margin-bottom: 0.83em;
+			margin-left: 0;
+			margin-right: 0;
+			font-weight: bold;
+		}
+
+		:global(h3) {
+			display: block;
+			font-size: 1.17em;
+			margin-top: 1em;
+			margin-bottom: 1em;
+			margin-left: 0;
+			margin-right: 0;
+			font-weight: bold;
+		}
+
+		:global(h4) {
+			display: block;
+			margin-top: 1.33em;
+			margin-bottom: 1.33em;
+			margin-left: 0;
+			margin-right: 0;
+			font-weight: bold;
+		}
+
+		:global(h5) {
+			display: block;
+			font-size: 0.83em;
+			margin-top: 1.67em;
+			margin-bottom: 1.67em;
+			margin-left: 0;
+			margin-right: 0;
+			font-weight: bold;
+		}
+
+		:global(h6) {
+			display: block;
+			font-size: 0.67em;
+			margin-top: 2.33em;
+			margin-bottom: 2.33em;
+			margin-left: 0;
+			margin-right: 0;
+			font-weight: bold;
+		}
+
+		:global(ul) {
+			list-style: initial;
+			margin: initial;
+			padding: 0 0 0 40px;
+		}
+
+		:global(li) {
+			display: list-item;
+		}
+
+		:global(table) {
+			border: solid 1px var(--textColor);
+		}
+
+		:global(th) {
+			border: solid 1px var(--textColor);
+			padding-inline: 10px;
+		}
+
+		:global(td) {
+			border: solid 1px var(--textColor);
+			padding-inline: 10px;
+		}
+	}
 	footer {
 		height: fit-content;
 		padding-top: 20px;

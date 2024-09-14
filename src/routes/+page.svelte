@@ -50,8 +50,8 @@
 		const second = (new Date(end).getTime() - new Date().getTime()) / 1000;
 		const day = Math.floor(second / 86400);
 		const hour = Math.floor((second - day * 86400) / 3600);
-		
-		return `${day}d ${hour}h`
+
+		return `${day}d ${hour}h`;
 	}
 
 	onMount(() => {
@@ -85,18 +85,20 @@
 			{#if events}
 				{#each events as item, index}
 					<Carousel.Item>
-						<div class="p-1">
-							<div class="promotion" style={`background-image: url('${item.imgUrl}')`}>
-								<div class="promotionContent">
-									<div class="period">
-										<Clock size={18} />
-										{getInterval(item.end)}
+						<a href={`/event/${item.id}`}>
+							<div class="p-1">
+								<div class="promotion" style={`background-image: url('${item.imgUrl}')`}>
+									<div class="promotionContent">
+										<div class="period">
+											<Clock size={18} />
+											{getInterval(item.end)}
+										</div>
+										<h2>{item.title}</h2>
+										<p>{item.description}</p>
 									</div>
-									<h2>{item.title}</h2>
-									<p>{item.description}</p>
 								</div>
 							</div>
-						</div>
+						</a>
 					</Carousel.Item>
 				{/each}
 			{:else}
@@ -212,6 +214,8 @@
 		overflow: hidden;
 		margin-top: 30px;
 		color: white;
+		min-height: 250px;
+		max-width: 100%;
 
 		.period {
 			background-color: white;
@@ -228,7 +232,7 @@
 
 		.promotionContent {
 			margin-top: auto;
-			height: 45%;
+			height: 175px;
 			padding: 21px;
 			text-shadow: black 1px 0 10px;
 		}
