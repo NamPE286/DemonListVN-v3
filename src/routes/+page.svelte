@@ -1,16 +1,13 @@
 <script lang="ts">
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
-	import * as Card from '$lib/components/ui/card';
 	import LevelCard from '$lib/components/levelCard.svelte';
-	import DiscordLogo from 'svelte-radix/DiscordLogo.svelte';
+	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import Clock from 'svelte-radix/Clock.svelte';
-	import { Button } from '$lib/components/ui/button/index.js';
 	import { onMount } from 'svelte';
-	import { settings } from '$lib/client';
 	import { Skeleton } from '$lib/components/ui/skeleton';
+	import Autoplay from 'embla-carousel-autoplay';
 
 	let time = new Date().toLocaleTimeString();
-	const settingsValue = settings.value;
 	let visible = false;
 	let recent: any = {
 		dl: null,
@@ -46,7 +43,11 @@
 		return await (await fetch(`${import.meta.env.VITE_API_URL}/events/ongoing`)).json();
 	}
 
-	function getInterval(end: string) {
+	function getInterval(end: string | null) {
+		if (!end) {
+			return 'Permanent';
+		}
+
 		const second = (new Date(end).getTime() - new Date().getTime()) / 1000;
 		const day = Math.floor(second / 86400);
 		const hour = Math.floor((second - day * 86400) / 3600);
@@ -80,7 +81,14 @@
 </svelte:head>
 
 <div class="w-full pl-[50px] pr-[50px]">
-	<Carousel.Root class="h-fit w-full">
+	<Carousel.Root
+		class="h-fit w-full"
+		plugins={[
+			Autoplay({
+				delay: 4000
+			})
+		]}
+	>
 		<Carousel.Content>
 			{#if events}
 				{#each events as item, index}
@@ -89,11 +97,26 @@
 							<div class="p-1">
 								<div class="promotion" style={`background-image: url('${item.imgUrl}')`}>
 									<div class="promotionContent">
-										<div class="period">
-											<Clock size={18} />
-											{getInterval(item.end)}
+										<div class="flex gap-[10px]">
+											<div class="period">
+												<Clock size={16} />
+												{getInterval(item.end)}
+											</div>
+											{#if item.exp}
+												<div class="period">
+													{item.exp} EXP
+												</div>
+											{/if}
 										</div>
 										<h2>{item.title}</h2>
+										{#if item.redirect}
+											<a href={item.redirect} target="_blank">
+												<div class="flex gap-[10px]">
+													<ExternalLink />
+													{item.redirect}
+												</div>
+											</a>
+										{/if}
 										<p>{item.description}</p>
 									</div>
 								</div>
@@ -123,27 +146,6 @@
 </div>
 
 <div class="wrapper">
-	{#if $settingsValue.hideDiscord == 'false'}
-		<div class="alertWrapper">
-			<Card.Root>
-				<div class="content">
-					<DiscordLogo />
-					<div>
-						<div class="header">
-							<Card.Title>Hey there!</Card.Title>
-						</div>
-						<Card.Description
-							>Join our discord server for latest news and announcement.</Card.Description
-						>
-						<Button variant="outline">
-							<a href="https://discord.gg/MnGVdtjq49">Take me there</a>
-						</Button>
-					</div>
-				</div>
-			</Card.Root>
-		</div>
-	{/if}
-
 	<h4>Newest levels from Demon List</h4>
 	<div class="carouselWrapper">
 		{#if recent.dl}
@@ -228,6 +230,9 @@
 			display: flex;
 			align-items: center;
 			gap: 5px;
+			line-height: 0;
+			padding-top: 3px;
+			padding-bottom: 3px;
 		}
 
 		.promotionContent {

@@ -9,7 +9,6 @@
 	import { setMode } from 'mode-watcher';
 	import { toast } from 'svelte-sonner';
 	import { settings } from '$lib/client/settings';
-	import { Switch } from '$lib/components/ui/switch/index.js';
 	import Gear from 'svelte-radix/Gear.svelte';
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
@@ -166,17 +165,6 @@
 							</Dialog.Content>
 						</Dialog.Root>
 					</div>
-				</div>
-				<div class="setting">
-					<Label for="discord">Hide Discord invite</Label>
-					<Switch
-						class="ml-auto"
-						id="discord"
-						bind:checked={hideDiscord}
-						on:click={() => {
-							settings.set('hideDiscord', hideDiscord ? 'false' : 'true');
-						}}
-					/>
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="api">

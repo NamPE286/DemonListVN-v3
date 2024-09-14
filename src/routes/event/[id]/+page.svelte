@@ -2,8 +2,13 @@
 	import type { PageData } from './$types';
 	import Clock from 'svelte-radix/Clock.svelte';
 	import SvelteMarkdown from 'svelte-markdown';
+	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 
-	function getInterval(end: string) {
+	function getInterval(end: string | null) {
+		if (!end) {
+			return 'Permanent';
+		}
+
 		const second = (new Date(end).getTime() - new Date().getTime()) / 1000;
 		const day = Math.floor(second / 86400);
 		const hour = Math.floor((second - day * 86400) / 3600);
@@ -11,19 +16,32 @@
 		return `${day}d ${hour}h`;
 	}
 
-	function resetStyle() {}
-
 	export let data: PageData;
 </script>
 
 <div class="p-1">
 	<div class="promotion" style={`background-image: url('${data.imgUrl}')`}>
 		<div class="promotionContent">
-			<div class="period">
-				<Clock size={18} />
-				{getInterval(data.end)}
+			<div class="flex gap-[10px]">
+				<div class="period">
+					<Clock size={16} />
+					{getInterval(data.end)}
+				</div>
+				{#if data.exp}
+					<div class="period">
+						{data.exp} EXP
+					</div>
+				{/if}
 			</div>
 			<h2>{data.title}</h2>
+			{#if data.redirect}
+				<a href={data.redirect} target="_blank">
+					<div class="flex gap-[10px]">
+						<ExternalLink />
+						{data.redirect}
+					</div>
+				</a>
+			{/if}
 			<p>{data.description}</p>
 		</div>
 	</div>
@@ -62,6 +80,9 @@
 			display: flex;
 			align-items: center;
 			gap: 5px;
+			line-height: 0;
+			padding-top: 3px;
+			padding-bottom: 3px;
 		}
 
 		.promotionContent {
