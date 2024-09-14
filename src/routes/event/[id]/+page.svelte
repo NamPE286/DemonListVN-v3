@@ -6,6 +6,9 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Textarea } from '$lib/components/ui/textarea';
+	import { Skeleton } from '$lib/components/ui/skeleton';
+
+	let rewardState = 0;
 
 	function getInterval(end: string | null) {
 		if (!end) {
@@ -55,18 +58,26 @@
 </div>
 {#if data.exp}
 	<div class="md-[15px] mt-[15px] flex justify-center">
-		<Dialog.Root>
-			<Dialog.Trigger>
-				<Button class="w-[200px]">Claim reward</Button>
-			</Dialog.Trigger>
-			<Dialog.Content>
-				<Dialog.Header>
-					<Dialog.Title>Claim reward</Dialog.Title>
-				</Dialog.Header>
-				<Textarea class="h-[125px]" placeholder="Provide proof" />
-				<Button>Continue</Button>
-			</Dialog.Content>
-		</Dialog.Root>
+		{#if rewardState == 0}
+			<Skeleton class="h-[35px] w-[200px]" />
+		{:else if rewardState == 1}
+			<Button class="w-[200px]" disabled>Claimed</Button>
+		{:else if rewardState == 2}
+			<Button class="w-[200px]" disabled>Waiting for approval</Button>
+		{:else if rewardState == 3}
+			<Dialog.Root>
+				<Dialog.Trigger>
+					<Button class="w-[200px]">Claim reward</Button>
+				</Dialog.Trigger>
+				<Dialog.Content>
+					<Dialog.Header>
+						<Dialog.Title>Claim reward</Dialog.Title>
+					</Dialog.Header>
+					<Textarea class="h-[125px]" placeholder="Provide proof" />
+					<Button>Continue</Button>
+				</Dialog.Content>
+			</Dialog.Root>
+		{/if}
 	</div>
 {/if}
 <div class="content markdown">
