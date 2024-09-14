@@ -3,6 +3,9 @@
 	import Clock from 'svelte-radix/Clock.svelte';
 	import SvelteMarkdown from 'svelte-markdown';
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
+	import { Button } from '$lib/components/ui/button';
+	import * as Dialog from '$lib/components/ui/dialog';
+	import { Textarea } from '$lib/components/ui/textarea';
 
 	function getInterval(end: string | null) {
 		if (!end) {
@@ -18,6 +21,10 @@
 
 	export let data: PageData;
 </script>
+
+<svelte:head>
+	<title>{data.title} - Demon List VN</title>
+</svelte:head>
 
 <div class="p-1">
 	<div class="promotion" style={`background-image: url('${data.imgUrl}')`}>
@@ -42,18 +49,38 @@
 					</div>
 				</a>
 			{/if}
-			<p>{data.description}</p>
+			<p class="desc">{data.description}</p>
 		</div>
 	</div>
 </div>
-
+{#if data.exp}
+	<div class="md-[15px] mt-[15px] flex justify-center">
+		<Dialog.Root>
+			<Dialog.Trigger>
+				<Button class="w-[200px]">Claim reward</Button>
+			</Dialog.Trigger>
+			<Dialog.Content>
+				<Dialog.Header>
+					<Dialog.Title>Claim reward</Dialog.Title>
+				</Dialog.Header>
+				<Textarea class="h-[125px]" placeholder="Provide proof" />
+				<Button>Continue</Button>
+			</Dialog.Content>
+		</Dialog.Root>
+	</div>
+{/if}
 <div class="content markdown">
 	<SvelteMarkdown source={data.content} />
 </div>
 
 <style lang="scss">
+	.desc {
+		width: 650px;
+		max-width: 100%;
+	}
+
 	.content {
-		padding-inline: 100px;
+		padding-inline: 200px;
 	}
 
 	.promotion {
@@ -95,6 +122,12 @@
 		h2 {
 			font-weight: bold;
 			font-size: 28px;
+		}
+	}
+
+	@media screen and (max-width: 900px) {
+		.content {
+			padding-inline: 10px;
 		}
 	}
 </style>

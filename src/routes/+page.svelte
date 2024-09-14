@@ -117,7 +117,7 @@
 												</div>
 											</a>
 										{/if}
-										<p>{item.description}</p>
+										<p class="desc">{item.description}</p>
 									</div>
 								</div>
 							</div>
@@ -205,6 +205,10 @@
 </div>
 
 <style lang="scss">
+	.desc {
+		width: 650px;
+	}
+
 	.promotion {
 		border: 1px solid hsl(var(--border));
 		border-radius: 10px;
@@ -252,25 +256,6 @@
 		position: relative;
 		z-index: 1;
 		background-color: hsl(var(--background));
-	}
-
-	.alertWrapper {
-		width: 550px;
-		margin-inline: auto;
-		padding-top: 50px;
-		max-width: 100%;
-
-		.header {
-			margin-bottom: 5px;
-		}
-
-		.content {
-			padding-top: 15px;
-			padding-bottom: 5px;
-			padding-inline: 20px;
-			display: flex;
-			gap: 15px;
-		}
 	}
 
 	.carouselWrapper {
