@@ -80,7 +80,7 @@
 	/>
 </svelte:head>
 
-<div class="w-full pl-[50px] pr-[50px]">
+<div class="w-full pl-[50px] pr-[50px] promotionWrapper">
 	<Carousel.Root
 		class="h-fit w-full"
 		plugins={[
@@ -207,6 +207,7 @@
 <style lang="scss">
 	.desc {
 		width: 650px;
+		max-width: 100%;
 	}
 
 	.promotion {
@@ -249,6 +250,9 @@
 		h2 {
 			font-weight: bold;
 			font-size: 28px;
+			line-height: 32px;
+			margin-top: 5px;
+			margin-bottom: 5px;
 		}
 	}
 
@@ -277,6 +281,11 @@
 	@media screen and (max-width: 900px) {
 		h4 {
 			padding-inline: 0px;
+		}
+
+		.promotionWrapper {
+			margin-left: -50px;
+			width: calc(100% + 104px);
 		}
 	}
 </style>
