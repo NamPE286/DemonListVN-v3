@@ -7,8 +7,16 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
+	import { user } from '$lib/client';
+	import { toast } from 'svelte-sonner';
 
+	export let data: PageData;
 	let rewardState = 0;
+	let proof = '';
+	let claimOpened = false;
+	let cancelOpened = false;
 
 	function getInterval(end: string | null) {
 		if (!end) {
@@ -22,7 +30,81 @@
 		return `${day}d ${hour}h`;
 	}
 
-	export let data: PageData;
+	function getRewardState() {
+		fetch(`${import.meta.env.VITE_API_URL}/event/${$page.params.id}/proof/${$user.data.uid}`)
+			.then((res) => {
+				if (!res.ok) {
+					rewardState = 3;
+				}
+
+				return res.json();
+			})
+			.then((res) => {
+				if (res.accepted) {
+					rewardState = 1;
+				} else {
+					rewardState = 2;
+				}
+			});
+	}
+
+	async function claimReward() {
+		claimOpened = false;
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event/proof`, {
+				method: 'POST',
+				body: JSON.stringify({
+					eventID: parseInt($page.params.id),
+					content: proof
+				}),
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())!,
+					'Content-Type': 'application/json'
+				}
+			}),
+			{
+				success: () => {
+					rewardState = 2;
+					proof = '';
+
+					return 'Sent!';
+				},
+				loading: 'Sending proof...',
+				error: 'An error occured'
+			}
+		);
+	}
+
+	async function cancelProof() {
+		cancelOpened = false;
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event/${$page.params.id}/proof/${$user.data.uid}`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())!
+				}
+			}),
+			{
+				success: () => {
+					rewardState = 3;
+
+					return 'Cancelled';
+				},
+				loading: 'Cancelling...',
+				error: 'An error occured'
+			}
+		);
+	}
+
+	$: $user.loggedIn && getRewardState();
+
+	onMount(() => {
+		if ($user.loggedIn) {
+			getRewardState();
+		}
+	});
 </script>
 
 <svelte:head>
@@ -56,16 +138,27 @@
 		</div>
 	</div>
 </div>
-{#if data.exp}
+{#if data.exp && $user.loggedIn}
 	<div class="md-[15px] mt-[15px] flex justify-center">
 		{#if rewardState == 0}
 			<Skeleton class="h-[35px] w-[200px]" />
 		{:else if rewardState == 1}
 			<Button class="w-[200px]" disabled>Claimed</Button>
 		{:else if rewardState == 2}
-			<Button class="w-[200px]" disabled>Waiting for approval</Button>
+			<Dialog.Root bind:open={cancelOpened}>
+				<Dialog.Trigger>
+					<Button class="w-[200px]" variant="destructive">Cancel reward claim</Button>
+				</Dialog.Trigger>
+				<Dialog.Content>
+					<Dialog.Header>
+						<Dialog.Title>Cancel?</Dialog.Title>
+						<Dialog.Description>This action cannot be undone.</Dialog.Description>
+					</Dialog.Header>
+					<Button variant="destructive" on:click={cancelProof}>Proceed</Button>
+				</Dialog.Content>
+			</Dialog.Root>
 		{:else if rewardState == 3}
-			<Dialog.Root>
+			<Dialog.Root bind:open={claimOpened}>
 				<Dialog.Trigger>
 					<Button class="w-[200px]">Claim reward</Button>
 				</Dialog.Trigger>
@@ -73,8 +166,8 @@
 					<Dialog.Header>
 						<Dialog.Title>Claim reward</Dialog.Title>
 					</Dialog.Header>
-					<Textarea class="h-[125px]" placeholder="Provide proof" />
-					<Button>Continue</Button>
+					<Textarea class="h-[125px]" placeholder="Provide proof" bind:value={proof} />
+					<Button on:click={claimReward}>Continue</Button>
 				</Dialog.Content>
 			</Dialog.Root>
 		{/if}
