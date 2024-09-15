@@ -31,6 +31,11 @@
 	}
 
 	function getRewardState() {
+		if (data.end && new Date().getTime() > new Date(data.end).getTime()) {
+			rewardState = 4;
+			return;
+		}
+
 		if (!$user.loggedIn || !data.exp) {
 			return;
 		}
@@ -38,7 +43,7 @@
 		fetch(`${import.meta.env.VITE_API_URL}/event/${$page.params.id}/proof/${$user.data.uid}`)
 			.then((res) => {
 				if (!res.ok) {
-					rewardState = 3;
+					rewardState = 4;
 				}
 
 				return res.json();
@@ -92,7 +97,7 @@
 			}),
 			{
 				success: () => {
-					rewardState = 3;
+					rewardState = 4;
 
 					return 'Cancelled';
 				},
@@ -141,7 +146,7 @@
 	</div>
 </div>
 {#if data.exp && $user.loggedIn}
-	<div class="md-[15px] mt-[15px] flex justify-center">
+	<div class="md-[15px] mb-[15px] mt-[15px] flex justify-center">
 		{#if rewardState == 0}
 			<Skeleton class="h-[35px] w-[200px]" />
 		{:else if rewardState == 1}
@@ -160,6 +165,8 @@
 				</Dialog.Content>
 			</Dialog.Root>
 		{:else if rewardState == 3}
+			<Button class="w-[200px]" disabled>Event ended</Button>
+		{:else if rewardState == 4}
 			<Dialog.Root bind:open={claimOpened}>
 				<Dialog.Trigger>
 					<Button class="w-[200px]">Claim reward</Button>
