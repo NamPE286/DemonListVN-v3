@@ -5,7 +5,6 @@
 	import { Button } from '$lib/components/ui/button';
 	import { user } from '$lib/client';
 	import supabase from '$lib/client/supabase';
-	import { redirect } from '@sveltejs/kit';
 
 	let notifications: any[] = [];
 

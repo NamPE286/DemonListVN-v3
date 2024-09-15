@@ -31,6 +31,10 @@
 	}
 
 	function getRewardState() {
+		if (!$user.loggedIn || !data.exp) {
+			return;
+		}
+
 		fetch(`${import.meta.env.VITE_API_URL}/event/${$page.params.id}/proof/${$user.data.uid}`)
 			.then((res) => {
 				if (!res.ok) {
@@ -101,9 +105,7 @@
 	$: $user.loggedIn && getRewardState();
 
 	onMount(() => {
-		if ($user.loggedIn) {
-			getRewardState();
-		}
+		getRewardState();
 	});
 </script>
 
@@ -174,7 +176,9 @@
 	</div>
 {/if}
 <div class="content markdown">
-	<SvelteMarkdown source={data.content} />
+	{#if data.content}
+		<SvelteMarkdown source={data.content} />
+	{/if}
 </div>
 
 <style lang="scss">
