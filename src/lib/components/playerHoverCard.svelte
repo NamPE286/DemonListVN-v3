@@ -9,6 +9,8 @@
 
 	export let player: any;
 	export let showTitle = false;
+
+	let exp = player.data.exp + player.data.extraExp;
 </script>
 
 <div class="wrapper">
@@ -63,12 +65,12 @@
 				<div class="rating">
 					<div class="flex justify-center">
 						<div class="leftCol">
-							<b>Lv.{getExpLevel(player.data.exp).level}</b>
+							<b>Lv.{getExpLevel(exp).level}</b>
 						</div>
 					</div>
 					<div class="progressBar">
-						<div class="progress" style={`width: ${getExpLevel(player.data.exp).progress}%`}>
-							<b>{getExpLevel(player.data.exp).progress}%</b>
+						<div class="progress" style={`width: ${getExpLevel(exp).progress}%`}>
+							<b>{getExpLevel(exp).progress}%</b>
 						</div>
 					</div>
 				</div>

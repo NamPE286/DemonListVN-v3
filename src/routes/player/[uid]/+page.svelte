@@ -28,7 +28,9 @@
 		sortBy: 'pt',
 		ascending: false
 	};
-	let expLevel = getExpLevel(data.player.exp);
+
+	let exp = data.player.exp + data.player.extraExp
+	let expLevel = getExpLevel(exp);
 
 	async function applyFilter() {
 		const records = await (
@@ -154,9 +156,9 @@
 								</div>
 							</div>
 							<Tooltip.Root>
-								<Tooltip.Trigger>{data.player.exp}/{expLevel.upperBound}</Tooltip.Trigger>
+								<Tooltip.Trigger>{exp}/{expLevel.upperBound}</Tooltip.Trigger>
 								<Tooltip.Content>
-									<p>{expLevel.upperBound - data.player.exp} EXP to next level</p>
+									<p>{expLevel.upperBound - exp} EXP to next level</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 						</div>
