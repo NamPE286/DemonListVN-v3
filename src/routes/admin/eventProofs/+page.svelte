@@ -30,7 +30,7 @@
 			body: JSON.stringify({
 				to: item.players.uid,
 				status: 1,
-				content: `${item.events.title} event reward claimed!`
+				content: `${item.events.title} event's reward claimed!`
 			}),
 			headers: {
 				Authorization: `Bearer ${await $user.token()}`,
@@ -62,7 +62,7 @@
 			body: JSON.stringify({
 				to: item.players.uid,
 				status: 2,
-				content: `${item.events.title} event reward claim request rejected. Reason: ${reason}`
+				content: `${item.events.title} event's reward claim request rejected. Reason: ${reason}`
 			}),
 			headers: {
 				Authorization: `Bearer ${await $user.token()}`,
