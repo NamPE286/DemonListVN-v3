@@ -4,6 +4,8 @@
 	import type { PageData } from './$types';
 	import { onMount } from 'svelte';
 	import Ads from '$lib/components/ads.svelte';
+	import { user } from '$lib/client';
+	import { goto } from '$app/navigation';
 
 	export let data: PageData;
 	let prefix = data.levels.slice(0, 4);
@@ -22,7 +24,8 @@
 			start: String((curPage - 1) * 50),
 			end: String(curPage * 50 - 1),
 			sortBy: `${$page.params.list}Top`,
-			ascending: 'true'
+			ascending: 'true',
+			uid: $user.loggedIn ? $user.data.uid : ''
 		});
 
 		const res = await (
@@ -33,13 +36,34 @@
 		loaded = true;
 	}
 
+	function redirect() {
+		if (!$user.checked) {
+			return;
+		}
+
+		if ($page.url.searchParams.get('uid')) {
+			return;
+		}
+
+		if ($user.loggedIn) {
+			goto(`/list/${$page.params.list}?uid=${$user.data.uid}`);
+		}
+	}
+
 	function update() {
 		prefix = data.levels.slice(0, 4);
+		redirect();
 	}
 
 	$: data, update();
 
 	onMount(() => {
+		user.subscribe((value) => {
+			if (value.loggedIn) {
+				redirect();
+			}
+		});
+
 		window.onscroll = function (ev) {
 			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1500) {
 				fetchData();

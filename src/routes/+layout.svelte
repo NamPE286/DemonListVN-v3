@@ -25,7 +25,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 
-	const links = [
+	let links = [
 		{ route: '/list/dl', name: 'Demon List' },
 		{ route: '/list/fl', name: 'Featured List' },
 		{ route: '/players', name: 'Players' },
@@ -59,6 +59,15 @@
 
 	onMount(() => {
 		isVisible = true;
+
+		user.subscribe((data) => {
+			if (!data.loggedIn) {
+				return;
+			}
+
+			links[0].route = `/list/dl?uid=${data.data.uid}`;
+			links[1].route = `/list/dl?uid=${data.data.uid}`;
+		});
 	});
 </script>
 
