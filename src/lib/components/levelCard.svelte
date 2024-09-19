@@ -3,6 +3,8 @@
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { toast } from 'svelte-sonner';
 	import { Skeleton } from '$lib/components/ui/skeleton';
+	import Check from 'svelte-radix/Check.svelte';
+	import Clock from 'svelte-radix/Clock.svelte';
 
 	export let level: any;
 	export let type: string;
@@ -40,8 +42,21 @@
 									</div>
 									<div class="creator">by {level.data.creator}</div>
 								</div>
-							</div></a
-						>
+								{#if level.data.record}
+									<div class="progress">
+										{#if level.data.record.isChecked}
+											{#if level.data.record.progress == 100}
+												<Check />
+											{:else}
+												{level.data.record.progress}%
+											{/if}
+										{:else}
+											<Clock />
+										{/if}
+									</div>
+								{/if}
+							</div>
+						</a>
 					</ContextMenu.Trigger>
 					<ContextMenu.Content class="w-64">
 						<ContextMenu.Item
@@ -72,14 +87,14 @@
 				<ContextMenu.Root>
 					<ContextMenu.Trigger>
 						<a href="#!" data-sveltekit-preload-data="tap">
-							<Skeleton class="h-[200px] w-full mt-[20px] mb-[15px]" />
+							<Skeleton class="mb-[15px] mt-[20px] h-[200px] w-full" />
 						</a>
 						<a href="#!" data-sveltekit-preload-data="tap">
 							<div class="levelInfo">
-								<div class="top"><Skeleton class="h-[60px] w-[60px] mb-[10px] mt-[10px]" /></div>
+								<div class="top"><Skeleton class="mb-[10px] mt-[10px] h-[60px] w-[60px]" /></div>
 								<div class="info">
 									<div class="levelName">
-										<div class="name"><Skeleton class="h-[30px] w-[200px] mb-[10px]" /></div>
+										<div class="name"><Skeleton class="mb-[10px] h-[30px] w-[200px]" /></div>
 									</div>
 									<div class="creator"><Skeleton class="h-[20px] w-[100px]" /></div>
 								</div>
@@ -112,6 +127,7 @@
 			margin-bottom: -15px;
 			display: flex;
 			gap: 15px;
+			align-items: center;
 
 			.top {
 				font-size: 44px;
@@ -122,7 +138,6 @@
 				display: flex;
 				flex-direction: column;
 				line-height: 20px;
-				margin-top: 10px;
 
 				.levelName {
 					font-size: 18px;
@@ -144,6 +159,11 @@
 				.creator {
 					color: var(--textColor2);
 				}
+			}
+
+			.progress {
+				margin-left: auto;
+				font-weight: 500;
 			}
 		}
 	}
