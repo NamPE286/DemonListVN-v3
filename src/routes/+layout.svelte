@@ -66,7 +66,7 @@
 			}
 
 			links[0].route = `/list/dl?uid=${data.data.uid}`;
-			links[1].route = `/list/dl?uid=${data.data.uid}`;
+			links[1].route = `/list/fl?uid=${data.data.uid}`;
 		});
 	});
 </script>
