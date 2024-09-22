@@ -42,6 +42,7 @@
 	let open = false;
 	let step = 0;
 	let nextDisabled = false;
+	let errorMessage = '';
 
 	async function submit() {
 		if (submission.mobile != null) {
@@ -55,12 +56,14 @@
 				Authorization: `Bearer ${await $user.token()}`,
 				'Content-Type': 'application/json'
 			}
-		}).then((res) => {
+		}).then(async (res) => {
 			if (res.ok) {
 				sendStatus = 1;
 			} else {
 				sendStatus = 2;
 			}
+
+			errorMessage = (await res.json()).message;
 		});
 	}
 
@@ -108,6 +111,9 @@
 				}
 			} else if (!submission.raw) {
 				toast.error('Please fill in all required fields');
+				return;
+			} else if (submission.raw == submission.videoLink) {
+				toast.error('Raw is not completion video.');
 				return;
 			}
 
@@ -320,7 +326,8 @@
 							<AlertDialog.Title>Something happened</AlertDialog.Title>
 							<AlertDialog.Description>
 								We are unable to send your submission. If this problem presist, please contact with
-								a moderator to resolve this issue.
+								a moderator to resolve this issue.<br />
+								Error: {errorMessage}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
