@@ -325,7 +325,7 @@
 						<AlertDialog.Header>
 							<AlertDialog.Title>Something happened</AlertDialog.Title>
 							<AlertDialog.Description>
-								We are unable to send your submission. If this problem presist, please contact a
+								We are unable to send your submission. If this problem persist, please contact a
 								moderator to resolve this issue.<br />
 								Error: {errorMessage}
 							</AlertDialog.Description>
