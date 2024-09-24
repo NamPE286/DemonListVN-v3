@@ -18,9 +18,7 @@
 	import Input from '$lib/components/ui/input/input.svelte';
 
 	const settingsValue = settings.value;
-	let bgURL = $settingsValue.dashboardBackgroundURL;
 	let bgURLOpened = false;
-	let hideDiscord = $settingsValue.hideDiscord == 'true';
 	let APIKeys: any[] = [];
 
 	async function fetchAPIKeys() {
@@ -134,36 +132,6 @@
 								<p>Dark</p>
 							</Tooltip.Content>
 						</Tooltip.Root>
-					</div>
-				</div>
-				<div class="setting">
-					<Label>Background image</Label>
-					<div class="right">
-						<Dialog.Root bind:open={bgURLOpened}>
-							<Dialog.Trigger let:builder>
-								<Button variant="outline" builders={[builder]}>Change</Button>
-							</Dialog.Trigger>
-							<Dialog.Content>
-								<Dialog.Header>
-									<Dialog.Title>Change background image</Dialog.Title>
-									<Dialog.Description>Leave blank to disable</Dialog.Description>
-									<div class="grid grid-cols-4 items-center gap-4">
-										<Label for="bgURL" class="text-right">Image URL</Label>
-										<Input id="bgURL" bind:value={bgURL} class="col-span-3" />
-									</div>
-								</Dialog.Header>
-								<Dialog.Footer>
-									<Button
-										type="submit"
-										on:click={() => {
-											settings.set('dashboardBackgroundURL', bgURL);
-											toast.success('Changed background image!');
-											bgURLOpened = false;
-										}}>Apply</Button
-									>
-								</Dialog.Footer>
-							</Dialog.Content>
-						</Dialog.Root>
 					</div>
 				</div>
 			</Tabs.Content>

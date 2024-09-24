@@ -6,8 +6,6 @@ function get(key: string, defaultValue: string) {
 }
 
 const settingsValue = {
-    dashboardBackgroundURL: get('dashboardBackgroundURL', ''),
-    hideDiscord: get('hideDiscord', 'false')
 }
 
 class Settings {
