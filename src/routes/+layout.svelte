@@ -31,7 +31,8 @@
 		{ route: '/players', name: 'Players' },
 		{ route: '/clans', name: 'Clans' },
 		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
-		{ route: '/rules', name: 'Rules' }
+		{ route: '/rules', name: 'Rules' },
+		{ route: 'https://ko-fi.com/demonlistvn', name: 'Donate' }
 	];
 
 	let searchQuery = '';
