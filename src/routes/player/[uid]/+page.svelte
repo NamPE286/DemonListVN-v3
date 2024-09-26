@@ -90,7 +90,7 @@
 				{/if}
 				<h2>
 					{data.player.name}
-					{#if $user.loggedIn && data.player.uid == $user.data.uid && $user.data.recordCount != 0}
+					{#if $user.loggedIn && data.player.uid == $user.data.uid && $user.data.recordCount != 0 && !$user.data.isBanned}
 						<ProfileEditButton bind:data={data.player} />
 					{/if}
 				</h2>
