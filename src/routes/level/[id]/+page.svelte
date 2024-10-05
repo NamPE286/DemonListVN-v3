@@ -130,8 +130,8 @@
 {#if selectedRecord}
 	<RecordDetail
 		bind:open={recordDetailOpened}
-		bind:uid={selectedRecord.data.userid}
-		bind:levelID={selectedRecord.data.levelid}
+		bind:uid={selectedRecord.userid}
+		bind:levelID={selectedRecord.levelid}
 	/>
 {/if}
 
@@ -309,19 +309,19 @@
 								#{index + 1}
 							</Table.Cell>
 							<Table.Cell>
-								<PlayerHoverCard player={{ data: record.data.players }} />
+								<PlayerHoverCard player={{ data: record.players }} />
 							</Table.Cell>
 							<Table.Cell class="text-center">
-								{new Date(record.data.timestamp).toLocaleString()}
+								{new Date(record.timestamp).toLocaleString()}
 							</Table.Cell>
 							<Table.Cell class="text-center">
-								{record.data.mobile ? 'Mobile' : 'PC'}
-								{#if record.data.refreshRate}
-									<br />({record.data.refreshRate}fps)
+								{record.mobile ? 'Mobile' : 'PC'}
+								{#if record.refreshRate}
+									<br />({record.refreshRate}fps)
 								{/if}
 							</Table.Cell>
 							<Table.Cell class="text-center">
-								{record.data.progress}%
+								{record.progress}%
 							</Table.Cell>
 						</Table.Row>
 					{/each}

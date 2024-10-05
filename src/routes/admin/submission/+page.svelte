@@ -182,31 +182,31 @@
 							return;
 						}
 
-						userID = record.data.players.uid;
-						levelID = record.data.levels.id;
+						userID = record.players.uid;
+						levelID = record.levels.id;
 						isOpen = true;
 					}}
 				>
 					<Table.Cell class="font-medium">
-						<a href={`/level/${record.data.levels.id}`} data-sveltekit-preload-data="tap">
-							{record.data.levels.name}
+						<a href={`/level/${record.levels.id}`} data-sveltekit-preload-data="tap">
+							{record.levels.name}
 						</a>
 					</Table.Cell>
 					<Table.Cell class="text-center"
-						><a href={`/player/${record.data.players.uid}`}>{record.data.players.name}</a
+						><a href={`/player/${record.players.uid}`}>{record.players.name}</a
 						></Table.Cell
 					>
 					<Table.Cell class="text-center">
-						{record.data.mobile ? 'Mobile' : 'PC'}
-						{#if record.data.refreshRate}
-							<br />({record.data.refreshRate}fps)
+						{record.mobile ? 'Mobile' : 'PC'}
+						{#if record.refreshRate}
+							<br />({record.refreshRate}fps)
 						{/if}
 					</Table.Cell>
-					<Table.Cell class="text-center">{record.data.progress}%</Table.Cell>
+					<Table.Cell class="text-center">{record.progress}%</Table.Cell>
 					<Table.Cell class="text-center">
 						<button
 							on:click={() => {
-								accept(record.data.players.uid, record.data.levels);
+								accept(record.players.uid, record.levels);
 							}}
 						>
 							<Button variant="icon">
@@ -217,7 +217,7 @@
 					<Table.Cell class="text-center">
 						<button
 							on:click={() => {
-								reject(record.data.players.uid, record.data.levels);
+								reject(record.players.uid, record.levels);
 							}}
 						>
 							<Button variant="icon">

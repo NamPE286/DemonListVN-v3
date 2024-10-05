@@ -122,7 +122,7 @@
 		disableBtn = true;
 		toast.promise(
 			fetch(
-				`${import.meta.env.VITE_API_URL}/record/${uid}/${levelID}/changeSuggestedRating/${record.data.suggestedRating}`,
+				`${import.meta.env.VITE_API_URL}/record/${uid}/${levelID}/changeSuggestedRating/${record.suggestedRating}`,
 				{
 					method: 'PUT',
 					headers: {
@@ -149,8 +149,8 @@
 		}
 
 		const data = {
-			userid: record.data.userid,
-			levelid: record.data.levelid,
+			userid: record.userid,
+			levelid: record.levelid,
 			needMod: verdict == 'option-two',
 			isChecked: verdict == 'option-one',
 			reviewerComment: cmt
@@ -177,7 +177,7 @@
 	}
 
 	async function applyEdit() {
-		const data = structuredClone(record.data);
+		const data = structuredClone(record);
 		delete data.levels;
 		delete data.players;
 
@@ -208,7 +208,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/record/${record.data.userid}/${record.data.levelid}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/record/${record.userid}/${record.levelid}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())!
@@ -240,14 +240,14 @@
 			<Dialog.Title>Record's detail</Dialog.Title>
 			{#if record}
 				<DialogDescription
-					>{record.data.players.name}'s {record.data.levels.name} record</DialogDescription
+					>{record.players.name}'s {record.levels.name} record</DialogDescription
 				>
 
 				<Tabs.Root value="detail" class="w-100">
 					<Tabs.List>
 						<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
 						<Tabs.Trigger value="deathRate">Death rate</Tabs.Trigger>
-						{#if record.data.reviewer != null && $user.loggedIn && record.data.reviewer.uid == $user.data.uid && record.data.needMod == false}
+						{#if record.reviewer != null && $user.loggedIn && record.reviewer.uid == $user.data.uid && record.needMod == false}
 							<Tabs.Trigger value="review">Review</Tabs.Trigger>
 						{/if}
 						{#if $user.loggedIn && $user.data.isAdmin}
@@ -257,26 +257,26 @@
 					<Tabs.Content value="detail">
 						<div class="detailWrapper">
 							<b>Video link:</b>
-							<a href={record.data.videoLink} target="_blank"
-								>{record.data.videoLink.slice(0, 25)}...</a
+							<a href={record.videoLink} target="_blank"
+								>{record.videoLink.slice(0, 25)}...</a
 							><br />
 							{#if $user.loggedIn && ($user.data.isAdmin || $user.data.isTrusted)}
 								<b>Raw:</b>
-								<a href={record.data.raw} target="_blank">{record.data.raw.slice(0, 25)}...</a><br
+								<a href={record.raw} target="_blank">{record.raw.slice(0, 25)}...</a><br
 								/>
 							{/if}
 							<b>Submitted on:</b>
-							{new Date(record.data.timestamp).toLocaleString()}<br />
+							{new Date(record.timestamp).toLocaleString()}<br />
 							<b>Device:</b>
-							{record.data.mobile ? 'Mobile' : 'PC'}
-							{#if record.data.refreshRate}
-								({record.data.refreshRate}fps)
+							{record.mobile ? 'Mobile' : 'PC'}
+							{#if record.refreshRate}
+								({record.refreshRate}fps)
 							{/if} <br />
 							<b>Progress:</b>
-							{record.data.progress}% <br />
+							{record.progress}% <br />
 							<b>Suggested rating:</b>
-							{record.data.suggestedRating ? record.data.suggestedRating : '(No rating provided)'}
-							{#if record.data.progress == 100 && $user.loggedIn && $user.data.uid == record.data.players.uid}
+							{record.suggestedRating ? record.suggestedRating : '(No rating provided)'}
+							{#if record.progress == 100 && $user.loggedIn && $user.data.uid == record.players.uid}
 								<Dialog.Root bind:open={open1}>
 									<Dialog.Trigger>
 										<Button variant="outline" size="icon" class="h-[30px]"
@@ -286,7 +286,7 @@
 									<Dialog.Content>
 										<Dialog.Header>
 											<Dialog.Title>Change suggested rating</Dialog.Title>
-											<Input type="number" bind:value={record.data.suggestedRating} />
+											<Input type="number" bind:value={record.suggestedRating} />
 										</Dialog.Header>
 										<Button bind:disable={disableBtn} on:click={change}>Change</Button>
 									</Dialog.Content>
@@ -294,19 +294,19 @@
 							{/if}
 							<br />
 							<b>Comment:</b>
-							{record.data.comment ? record.data.comment : '(No comment provided)'}<br />
+							{record.comment ? record.comment : '(No comment provided)'}<br />
 							<div class="flex gap-[5px]">
 								<b>Reviewed by:</b>
-								{#if record.data.reviewer != null}
-									<PlayerHoverCard player={{ data: record.data.reviewer }} />
+								{#if record.reviewer != null}
+									<PlayerHoverCard player={{ data: record.reviewer }} />
 								{:else}
 									Moderator
 								{/if}
 							</div>
 							{#if $user.loggedIn && $user.data.isAdmin}
 								<b>Reviewer's comment:</b>
-								{record.data.reviewerComment
-									? record.data.reviewerComment
+								{record.reviewerComment
+									? record.reviewerComment
 									: '(No comment provided)'}<br />
 							{/if}
 						</div>
@@ -336,23 +336,23 @@
 						<div class="flex flex-col gap-[10px]">
 							<div class="flex items-center gap-[10px]">
 								<Label for="videoLink" class="w-[100px]">Video's Link</Label>
-								<Input id="videoLink" bind:value={record.data.videoLink} />
+								<Input id="videoLink" bind:value={record.videoLink} />
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="raw" class="w-[100px]">Raw</Label>
-								<Input id="raw" bind:value={record.data.raw} />
+								<Input id="raw" bind:value={record.raw} />
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="refreshRate" class="w-[100px]">Refresh rate</Label>
-								<Input id="refreshRate" type="number" bind:value={record.data.refreshRate} />
+								<Input id="refreshRate" type="number" bind:value={record.refreshRate} />
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="progress" class="w-[100px]">Progress</Label>
-								<Input id="progress" type="number" bind:value={record.data.progress} />
+								<Input id="progress" type="number" bind:value={record.progress} />
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="mobile" class="w-[80px]">Mobile</Label>
-								<Switch id="mobile" bind:checked={record.data.mobile} />
+								<Switch id="mobile" bind:checked={record.mobile} />
 							</div>
 							<Button class="mt-[10px]" on:click={applyEdit}>Apply</Button>
 							<Button class="mt-[10px]" variant="destructive" on:click={deleteRecord}>Delete</Button
