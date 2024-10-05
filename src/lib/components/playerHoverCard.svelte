@@ -10,55 +10,55 @@
 	export let player: any;
 	export let showTitle = false;
 
-	let exp = player.data.exp + player.data.extraExp;
+	let exp = player.exp + player.extraExp;
 </script>
 
 <div class="wrapper">
 	<HoverCard.Root>
-		{#if player.data.clan}
-			{#if showTitle && getTitle('dl', player.data)}
+		{#if player.clan}
+			{#if showTitle && getTitle('dl', player)}
 				<Tooltip.Root>
 					<Tooltip.Trigger>
-						<div class="rank" style={`background-color: ${getTitle('dl', player.data)?.color}`}>
-							<span>{getTitle('dl', player.data)?.title}</span>
+						<div class="rank" style={`background-color: ${getTitle('dl', player)?.color}`}>
+							<span>{getTitle('dl', player)?.title}</span>
 						</div>
 					</Tooltip.Trigger>
-					<Tooltip.Content>{getTitle('dl', player.data)?.fullTitle}</Tooltip.Content>
+					<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
 				</Tooltip.Root>
 			{/if}
 			<a
-				href={`/clan/${player.data.clan}`}
+				href={`/clan/${player.clan}`}
 				class={badgeVariants({ variant: 'secondary' })}
-				style={`background-color: ${player.data.clans.tagBgColor}; color: ${player.data.clans.tagTextColor};`}
-				>{player.data.clans.tag}</a
+				style={`background-color: ${player.clans.tagBgColor}; color: ${player.clans.tagTextColor};`}
+				>{player.clans.tag}</a
 			>
 		{/if}
 		<HoverCard.Trigger
-			href={`/player/${player.data.uid}`}
+			href={`/player/${player.uid}`}
 			rel="noreferrer noopener"
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
-			{player.data.name}
+			{player.name}
 		</HoverCard.Trigger>
 		<HoverCard.Content class="w-80">
 			<div class="hoverName">
 				<Avatar.Root>
 					<Avatar.Image
 						class="object-cover"
-						src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.data.uid}.jpg`}
+						src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.uid}.jpg`}
 						alt="@shadcn"
 					/>
-					<Avatar.Fallback>{player.data.name[0]}</Avatar.Fallback>
+					<Avatar.Fallback>{player.name[0]}</Avatar.Fallback>
 				</Avatar.Root>
-				{#if player.data.clan}
+				{#if player.clan}
 					<a
-						href={`/clan/${player.data.clan}`}
+						href={`/clan/${player.clan}`}
 						class={badgeVariants({ variant: 'secondary' })}
-						style={`background-color: ${player.data.clans.tagBgColor}; color: ${player.data.clans.tagTextColor};`}
-						>{player.data.clans.tag}</a
+						style={`background-color: ${player.clans.tagBgColor}; color: ${player.clans.tagTextColor};`}
+						>{player.clans.tag}</a
 					>
 				{/if}
-				<h4 class="font-semibold">{player.data.name}</h4>
+				<h4 class="font-semibold">{player.name}</h4>
 			</div>
 			<Separator />
 			<div class="content">
@@ -80,29 +80,29 @@
 							<div class="leftCol">
 								<div
 									class="title"
-									style={`background-color: ${getTitle('dl', player.data)?.color}`}
+									style={`background-color: ${getTitle('dl', player)?.color}`}
 								>
-									{player.data.rating}
+									{player.rating}
 								</div>
 							</div>
 						</Tooltip.Trigger>
-						<Tooltip.Content>{getTitle('dl', player.data)?.fullTitle}</Tooltip.Content>
+						<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
 					</Tooltip.Root>
 					<div class="rankWrapper">
 						Demon List rating
 						<div class="rank">
-							#{player.data.overallRank}
+							#{player.overallRank}
 						</div>
 					</div>
 				</div>
 				<div class="rating">
 					<div class="leftCol">
-						<div class="title">{player.data.totalFLpt}</div>
+						<div class="title">{player.totalFLpt}</div>
 					</div>
 					<div class="rankWrapper">
 						Total Featured List point
 						<div class="rank">
-							#{player.data.flrank}
+							#{player.flrank}
 						</div>
 					</div>
 				</div>

@@ -49,8 +49,8 @@
 				<Table.Row>
 					<Table.Cell class="font-medium">
 						#{$page.params.list == 'dl'
-							? player.data.overallRank
-							: player.data[$page.params.list + 'rank']}
+							? player.overallRank
+							: player[$page.params.list + 'rank']}
 					</Table.Cell>
 					<Table.Cell>
 						<div class="playerNameWrapper">
@@ -59,12 +59,12 @@
 									<Tooltip.Trigger>
 										<div
 											class="rank"
-											style={`background-color: ${getTitle('dl', player.data)?.color}`}
+											style={`background-color: ${getTitle('dl', player)?.color}`}
 										>
-											<span>{getTitle('dl', player.data)?.title}</span>
+											<span>{getTitle('dl', player)?.title}</span>
 										</div>
 									</Tooltip.Trigger>
-									<Tooltip.Content>{getTitle('dl', player.data)?.fullTitle}</Tooltip.Content>
+									<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
 								</Tooltip.Root>
 							{/if}
 							<PlayerHoverCard {player} />
@@ -72,8 +72,8 @@
 					</Table.Cell>
 					<Table.Cell class="text-right">
 						{$page.params.list == 'dl'
-							? player.data.rating
-							: player.data['total' + $page.params.list.toUpperCase() + 'pt']}
+							? player.rating
+							: player['total' + $page.params.list.toUpperCase() + 'pt']}
 					</Table.Cell>
 				</Table.Row>
 			{/each}
