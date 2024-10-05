@@ -35,6 +35,7 @@
 	<Button on:click={copyToken}>Copy token</Button><br />
 	<a href="/admin/ratingEstimator">Rating estimator</a><br />
 	<a href="/admin/submission">Submission</a><br />
+	<a href="/admin/addRecord">Add record</a><br />
 	<a href="/admin/eventProofs">Event proofs</a><br />
 	<a href="/admin/level">Level manager</a><br />
 	<a href="/admin/accountMerger">Account merger</a><br />
