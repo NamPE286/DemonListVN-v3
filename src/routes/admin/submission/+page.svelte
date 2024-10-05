@@ -97,25 +97,25 @@
 			filtered = originalData;
 		} else if (value == 'needMod') {
 			for (const i of originalData.data) {
-				if (i.data.needMod) {
+				if (i.needMod) {
 					filtered.data.push(i);
 				}
 			}
 		} else if (value == 'dl') {
 			for (const i of originalData.data) {
-				if (i.data.levels.rating) {
+				if (i.levels.rating) {
 					filtered.data.push(i);
 				}
 			}
 		} else if (value == 'fl') {
 			for (const i of originalData.data) {
-				if (i.data.levels.flPt) {
+				if (i.levels.flPt) {
 					filtered.data.push(i);
 				}
 			}
 		} else if (value == 'newLevel') {
 			for (const i of originalData.data) {
-				if (!i.data.levels.flPt && !i.data.levels.rating) {
+				if (!i.levels.flPt && !i.levels.rating) {
 					filtered.data.push(i);
 				}
 			}
