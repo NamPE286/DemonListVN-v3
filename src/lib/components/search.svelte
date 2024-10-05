@@ -122,16 +122,16 @@
 				{#each result.levels as item}
 					<ContextMenu.Root>
 						<ContextMenu.Trigger>
-							{#if 'other' in item.data}
-								<a href={`/level/${item.data.id}?list=other`} data-sveltekit-preload-data="tap">
+							{#if 'other' in item}
+								<a href={`/level/${item.id}?list=other`} data-sveltekit-preload-data="tap">
 									<Command.Item
-										>{item.data.name} by {item.data.creator} ({item.data.id}) (Not added)</Command.Item
+										>{item.name} by {item.creator} ({item.id}) (Not added)</Command.Item
 									>
 								</a>
 							{:else}
-								<a href={`/level/${item.data.id}`} data-sveltekit-preload-data="tap">
+								<a href={`/level/${item.id}`} data-sveltekit-preload-data="tap">
 									<Command.Item
-										>{item.data.name} by {item.data.creator} ({item.data.id})</Command.Item
+										>{item.name} by {item.creator} ({item.id})</Command.Item
 									>
 								</a>
 							{/if}
@@ -139,7 +139,7 @@
 						<ContextMenu.Content>
 							<ContextMenu.Item
 								on:click={async () => {
-									await navigator.clipboard.writeText(item.data.id);
+									await navigator.clipboard.writeText(item.id);
 									toast.success('Copied to clipboard!');
 								}}>Copy level's ID</ContextMenu.Item
 							>
@@ -151,16 +151,16 @@
 				{#each result.gdBrowserLevels as item}
 					<ContextMenu.Root>
 						<ContextMenu.Trigger>
-							{#if 'other' in item.data}
-								<a href={`/level/${item.data.id}?list=other`} data-sveltekit-preload-data="tap">
+							{#if 'other' in item}
+								<a href={`/level/${item.id}?list=other`} data-sveltekit-preload-data="tap">
 									<Command.Item
-										>{item.data.name} by {item.data.creator} ({item.data.id})</Command.Item
+										>{item.name} by {item.creator} ({item.id})</Command.Item
 									>
 								</a>
 							{:else}
-								<a href={`/level/${item.data.id}`} data-sveltekit-preload-data="tap">
+								<a href={`/level/${item.id}`} data-sveltekit-preload-data="tap">
 									<Command.Item
-										>{item.data.name} by {item.data.creator} ({item.data.id})</Command.Item
+										>{item.name} by {item.creator} ({item.id})</Command.Item
 									>
 								</a>
 							{/if}
@@ -168,7 +168,7 @@
 						<ContextMenu.Content>
 							<ContextMenu.Item
 								on:click={async () => {
-									await navigator.clipboard.writeText(item.data.id);
+									await navigator.clipboard.writeText(item.id);
 									toast.success('Copied to clipboard!');
 								}}>Copy level's ID</ContextMenu.Item
 							>
@@ -179,17 +179,17 @@
 			<Command.Separator />
 			<Command.Group heading="Players">
 				{#each result.players as item}
-					<a href={`/player/${item.data.uid}`} data-sveltekit-preload-data="tap">
+					<a href={`/player/${item.uid}`} data-sveltekit-preload-data="tap">
 						<Command.Item>
 							<Avatar.Root>
 								<Avatar.Image
 									class="object-cover"
-									src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${item.data.uid}.jpg`}
+									src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${item.uid}.jpg`}
 									alt="@shadcn"
 								/>
-								<Avatar.Fallback>{item.data.name[0]}</Avatar.Fallback>
+								<Avatar.Fallback>{item.name[0]}</Avatar.Fallback>
 							</Avatar.Root>
-							<span class="playerName">{item.data.name}</span>
+							<span class="playerName">{item.name}</span>
 						</Command.Item>
 					</a>
 				{/each}
