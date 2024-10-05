@@ -16,39 +16,39 @@
 			<Card.Content>
 				<ContextMenu.Root>
 					<ContextMenu.Trigger>
-						<a href={`/level/${level.data.id}`} data-sveltekit-preload-data="tap">
+						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
 							<img
-								src={`https://img.youtube.com/vi/${level.data.videoID}/0.jpg`}
+								src={`https://img.youtube.com/vi/${level.videoID}/0.jpg`}
 								alt=""
 								loading="lazy"
 								class="thumbnail"
 							/>
 						</a>
-						<a href={`/level/${level.data.id}`} data-sveltekit-preload-data="tap">
+						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
 							<div class="levelInfo">
-								<div class="top">#{level.data[`${type}Top`]}</div>
+								<div class="top">#{level[`${type}Top`]}</div>
 								<div class="info">
 									<div class="levelName">
 										<div class="name">
-											{level.data.name}
+											{level.name}
 										</div>
 										<div class="pt">
 											{#if type == 'dl'}
-												{level.data.rating}pt
+												{level.rating}pt
 											{:else if type == 'fl'}
-												{level.data.flPt}pt
+												{level.flPt}pt
 											{/if}
 										</div>
 									</div>
-									<div class="creator">by {level.data.creator}</div>
+									<div class="creator">by {level.creator}</div>
 								</div>
-								{#if level.data.record}
+								{#if level.record}
 									<div class="progress">
-										{#if level.data.record.isChecked}
-											{#if level.data.record.progress == 100}
+										{#if level.record.isChecked}
+											{#if level.record.progress == 100}
 												<Check />
 											{:else}
-												{level.data.record.progress}%
+												{level.record.progress}%
 											{/if}
 										{:else}
 											<Clock />
@@ -62,7 +62,7 @@
 						<ContextMenu.Item
 							inset
 							on:click={async () => {
-								await navigator.clipboard.writeText(String(level.data.id));
+								await navigator.clipboard.writeText(String(level.id));
 								toast.success('Copied to clipboard!');
 							}}>Copy level ID</ContextMenu.Item
 						>
@@ -70,7 +70,7 @@
 							inset
 							on:click={async () => {
 								await navigator.clipboard.writeText(
-									`https://img.youtube.com/vi/${level.data.videoID}/0.jpg`
+									`https://img.youtube.com/vi/${level.videoID}/0.jpg`
 								);
 								toast.success('Copied to clipboard!');
 							}}>Copy thumbnail image URL</ContextMenu.Item

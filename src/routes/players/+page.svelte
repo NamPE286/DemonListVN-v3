@@ -144,7 +144,7 @@
 							#{index + 1}
 						</Table.Cell>
 						<Table.Cell class="font-medium">
-							<PlayerHoverCard player={{ data: player }} />
+							<PlayerHoverCard {player} />
 						</Table.Cell>
 						<Table.Cell class="text-center">
 							{#if pointProp == 'rating'}

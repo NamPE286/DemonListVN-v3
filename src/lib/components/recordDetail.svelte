@@ -239,9 +239,7 @@
 		<Dialog.Header>
 			<Dialog.Title>Record's detail</Dialog.Title>
 			{#if record}
-				<DialogDescription
-					>{record.players.name}'s {record.levels.name} record</DialogDescription
-				>
+				<DialogDescription>{record.players.name}'s {record.levels.name} record</DialogDescription>
 
 				<Tabs.Root value="detail" class="w-100">
 					<Tabs.List>
@@ -257,13 +255,11 @@
 					<Tabs.Content value="detail">
 						<div class="detailWrapper">
 							<b>Video link:</b>
-							<a href={record.videoLink} target="_blank"
-								>{record.videoLink.slice(0, 25)}...</a
-							><br />
+							<a href={record.videoLink} target="_blank">{record.videoLink.slice(0, 25)}...</a><br
+							/>
 							{#if $user.loggedIn && ($user.data.isAdmin || $user.data.isTrusted)}
 								<b>Raw:</b>
-								<a href={record.raw} target="_blank">{record.raw.slice(0, 25)}...</a><br
-								/>
+								<a href={record.raw} target="_blank">{record.raw.slice(0, 25)}...</a><br />
 							{/if}
 							<b>Submitted on:</b>
 							{new Date(record.timestamp).toLocaleString()}<br />
@@ -298,16 +294,14 @@
 							<div class="flex gap-[5px]">
 								<b>Reviewed by:</b>
 								{#if record.reviewer != null}
-									<PlayerHoverCard player={{ data: record.reviewer }} />
+									<PlayerHoverCard player={record.reviewer} />
 								{:else}
 									Moderator
 								{/if}
 							</div>
 							{#if $user.loggedIn && $user.data.isAdmin}
 								<b>Reviewer's comment:</b>
-								{record.reviewerComment
-									? record.reviewerComment
-									: '(No comment provided)'}<br />
+								{record.reviewerComment ? record.reviewerComment : '(No comment provided)'}<br />
 							{/if}
 						</div>
 					</Tabs.Content>

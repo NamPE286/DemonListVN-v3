@@ -81,15 +81,15 @@
 		{#if lvStart && lvEnd}
 			<p>Estimated rating range: {lvEnd.rating} - {lvStart.rating}</p>
 			<div class="finWrapper">
-				<LevelCard level={{ data: lvStart }} type="dl" />
-				<LevelCard level={{ data: lvEnd }} type="dl" />
+				<LevelCard level={lvStart} type="dl" />
+				<LevelCard level={lvEnd} type="dl" />
 			</div>
 		{:else}
 			<Loading inverted />
 		{/if}
 	{:else if level}
 		<div class="lvWrapper">
-			<LevelCard level={{ data: level }} type="dl" />
+			<LevelCard {level} type="dl" />
 			<div class="btn">
 				<Button on:click={setEasier}>Easier</Button>
 				<span>or</span>

@@ -188,7 +188,7 @@
 					<div class="info">
 						<a href={`/clan/${clan.id}`}><h3>{clan.name}</h3></a>
 						<span class="flex gap-[10px]"
-							><StarFilled size={20} /> <PlayerHoverCard player={{ data: clan.players }} /></span
+							><StarFilled size={20} /> <PlayerHoverCard player={clan.players} /></span
 						>
 						<div class="flex gap-[10px]">
 							<div class="flex items-center gap-[5px]">
@@ -226,7 +226,7 @@
 					<div class="info">
 						<a href={`/clan/${invitation.clans.id}`}><h3>{invitation.clans.name}</h3></a>
 						<span class="flex gap-[10px]"
-							>Owned by <PlayerHoverCard player={{ data: invitation.clans.players }} /></span
+							>Owned by <PlayerHoverCard player={invitation.clans.players} /></span
 						>
 						<div class="mt-[20px]">
 							<Button on:click={() => acceptInvitation(invitation.clans.id)}>Accept</Button>

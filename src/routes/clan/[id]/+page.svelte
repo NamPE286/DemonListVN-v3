@@ -400,7 +400,7 @@
 					</div>
 					<div class="flex items-center gap-[5px]">
 						<StarFilled size={20} />
-						<PlayerHoverCard player={{ data: data.players }} />
+						<PlayerHoverCard player={data.players} />
 					</div>
 					<div class="flex items-center gap-[5px]">
 						<Person size={20} />
@@ -527,7 +527,7 @@
 										<ContextMenu.Root>
 											<ContextMenu.Trigger>
 												<PlayerHoverCard
-													player={{ data: item }}
+													player={item}
 													showTitle={appliedMembersFilter.sortBy == 'rating'}
 												/>
 											</ContextMenu.Trigger>
@@ -544,7 +544,7 @@
 										</ContextMenu.Root>
 									{:else}
 										<PlayerHoverCard
-											player={{ data: item }}
+											player={item}
 											showTitle={appliedMembersFilter.sortBy == 'rating'}
 										/>
 									{/if}
@@ -621,7 +621,7 @@
 								</Table.Cell>
 								<Table.Cell>
 									<PlayerHoverCard
-										player={{ data: item.players }}
+										player={item.players}
 										showTitle={appliedRecordsFilter.sortBy == 'dlPt'}
 									/>
 								</Table.Cell>
@@ -656,7 +656,7 @@
 						{#each invitations as invitation}
 							<Table.Row>
 								<Table.Cell>
-									<PlayerHoverCard player={{ data: invitation.players }} />
+									<PlayerHoverCard player={invitation.players} />
 								</Table.Cell>
 								<Table.Cell>
 									{new Date(invitation.created_at).toLocaleString()}

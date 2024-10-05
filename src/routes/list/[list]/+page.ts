@@ -10,7 +10,7 @@ async function getTotalPage(fetch: any, list: string) {
         await fetch(`${import.meta.env.VITE_API_URL}/list/${list}?${query.toString()}`)
     ).json();
 
-    return res[0].data[list + 'Top'];
+    return res[0][list + 'Top'];
 }
 
 async function getLevels(fetch: any, list: string, page: number, uid: string | null) {

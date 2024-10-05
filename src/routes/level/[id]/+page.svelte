@@ -309,7 +309,7 @@
 								#{index + 1}
 							</Table.Cell>
 							<Table.Cell>
-								<PlayerHoverCard player={{ data: record.players }} />
+								<PlayerHoverCard player={record.players} />
 							</Table.Cell>
 							<Table.Cell class="text-center">
 								{new Date(record.timestamp).toLocaleString()}
