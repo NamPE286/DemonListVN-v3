@@ -12,7 +12,7 @@ async function getTotalPage(fetch: any, list: string) {
         await fetch(`${import.meta.env.VITE_API_URL}/leaderboard/${list}?${query.toString()}`)
     ).json();
 
-    return res[0].data[prop];
+    return res[0][prop];
 }
 
 async function getLeaderboard(fetch: any, list: string, page: number) {
