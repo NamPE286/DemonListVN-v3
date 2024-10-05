@@ -51,12 +51,14 @@
 					Authorization: 'Bearer ' + (await $user.token()),
 					'Content-Type': 'application/json'
 				}
-			})
-				.then((res) => res.json())
-				.then(async (res) => {
-					goto(`/clan/${res.data.id}`);
-					$user.refresh();
-				}),
+			}).then(async (res) => {
+				if (res.ok) {
+					await $user.refresh();
+					goto(`/clan/${$user.data.clan}`);
+				} else {
+					throw new Error();
+				}
+			}),
 			{
 				success: 'Clan created!',
 				loading: 'Creating clan...',

@@ -136,6 +136,7 @@
 	}
 
 	async function joinClan() {
+		toast.loading("Joining clan...")
 		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/join`, {
 			method: 'PUT',
 			headers: {
@@ -148,6 +149,8 @@
 		if (!confirm('Are you sure to leave this clan?')) {
 			return;
 		}
+
+		toast.loading("Leaving clan...")
 
 		fetch(`${import.meta.env.VITE_API_URL}/clan/leave`, {
 			method: 'PUT',
@@ -446,7 +449,7 @@
 										</Dialog.Content>
 									</Dialog.Root>
 								{/if}
-							{:else if data.isPublic && data.memberCount < data.memberLimit}
+							{:else if data.isPublic && (data.memberCount < data.memberLimit || data.memberLimit == 0)}
 								<Button variant="outline" class="w-full" on:click={joinClan}>Join</Button>
 							{/if}
 						{/if}

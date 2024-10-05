@@ -44,7 +44,7 @@ let userData: userType = {
             return
         }
 
-        fetch(`${import.meta.env.VITE_API_URL}/player/${data.user.id}?cached=true`)
+        const tmp = fetch(`${import.meta.env.VITE_API_URL}/player/${data.user.id}?cached=true`)
             .then(res => res.json())
             .then(res => {
                 userData.data = res
@@ -64,6 +64,8 @@ let userData: userType = {
                         })
                 })
             })
+
+        await tmp
     }
 }
 
