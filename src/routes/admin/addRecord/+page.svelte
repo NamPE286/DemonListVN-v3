@@ -45,7 +45,7 @@
 	</div>
 	<div class="flex items-center">
 		<Label class="w-[150px]">Level's ID</Label>
-		<Input bind:value={data.levelid} type="number" />
+		<Input bind:value={data.levelid} type="number" inputmode="numeric" />
 	</div>
 	<div class="flex items-center">
 		<Label class="w-[150px]">Video's link</Label>

@@ -286,7 +286,7 @@
 									<Dialog.Content>
 										<Dialog.Header>
 											<Dialog.Title>Change suggested rating</Dialog.Title>
-											<Input type="number" bind:value={record.data.suggestedRating} />
+											<Input type="number" inputmode="numeric" bind:value={record.data.suggestedRating} />
 										</Dialog.Header>
 										<Button bind:disable={disableBtn} on:click={change}>Change</Button>
 									</Dialog.Content>
@@ -344,11 +344,11 @@
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="refreshRate" class="w-[100px]">Refresh rate</Label>
-								<Input id="refreshRate" type="number" bind:value={record.data.refreshRate} />
+								<Input id="refreshRate" type="number" inputmode="numeric" bind:value={record.data.refreshRate} />
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="progress" class="w-[100px]">Progress</Label>
-								<Input id="progress" type="number" bind:value={record.data.progress} />
+								<Input id="progress" type="number" inputmode="numeric" bind:value={record.data.progress} />
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="mobile" class="w-[80px]">Mobile</Label>

@@ -695,7 +695,7 @@
 								id="limit"
 								class="col-span-3"
 								bind:value={editedData.memberLimit}
-								type="number"
+								type="number" inputmode="numeric"
 								placeholder="Enter 0 for unlimited"
 							/>
 						</div>

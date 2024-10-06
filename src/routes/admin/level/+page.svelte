@@ -83,7 +83,7 @@
 <div class="wrapper">
 	<div class="input">
 		<Label for="id" class="w-[100px]">Level's ID</Label>
-		<Input id="id" type="number" class="w-[300px]" bind:value={level.id} />
+		<Input id="id" type="number" inputmode="numeric" class="w-[300px]" bind:value={level.id} />
 		<Button on:click={fetchLevel}>Fetch</Button>
 	</div>
 	{#if state == 2}
@@ -129,13 +129,13 @@
 		</div>
 		<div class="input">
 			<Label for="flTop" class="w-[100px]">FL Top</Label>
-			<Input id="flTop" type="number" class="w-[300px]" bind:value={level.flTop} />
+			<Input id="flTop" type="number" inputmode="numeric" class="w-[300px]" bind:value={level.flTop} />
 		</div>
 		<div class="input">
 			<Label for="minProgress" class="w-[100px]">Minimum progress</Label>
 			<Input
 				id="minProgress"
-				type="number"
+				type="number" inputmode="numeric"
 				class="w-[300px]"
 				placeholder="Required"
 				required
@@ -144,7 +144,7 @@
 		</div>
 		<div class="input">
 			<Label for="rating" class="w-[100px]">Rating</Label>
-			<Input id="rating" type="number" class="w-[300px]" bind:value={level.rating} />
+			<Input id="rating" type="number" inputmode="numeric" class="w-[300px]" bind:value={level.rating} />
 		</div>
 		<div class="flex w-[150px] flex-col gap-[15px]">
 			<Button on:click={updateLevel}>{state == 1 ? 'Update' : 'Add new level'}</Button>

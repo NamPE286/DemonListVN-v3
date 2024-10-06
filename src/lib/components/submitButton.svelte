@@ -173,7 +173,7 @@
 				{#if step == 1}
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">Level ID</Label>
-						<Input id="name" type="number" bind:value={submission.levelid} class="col-span-3" />
+						<Input id="name" type="number" inputmode="numeric" bind:value={submission.levelid} class="col-span-3" />
 					</div>
 				{/if}
 				{#if step == 2}
@@ -181,7 +181,7 @@
 						<Label for="name" class="text-right">Level ID</Label>
 						<Input
 							id="name"
-							type="number"
+							type="number" inputmode="numeric"
 							bind:value={submission.levelid}
 							class="col-span-3"
 							disabled={true}
@@ -203,7 +203,7 @@
 						<Label for="name" class="text-right">Progress</Label>
 						<Input
 							id="name"
-							type="number"
+							type="number" inputmode="numeric"
 							bind:value={submission.progress}
 							placeholder={level ? `Minimum ${level.minProgress}%` : 'Minimum 0%'}
 							class="col-span-3"
@@ -213,7 +213,7 @@
 						<Label for="name" class="text-right">FPS</Label>
 						<Input
 							id="name"
-							type="number"
+							type="number" inputmode="numeric"
 							bind:value={submission.refreshRate}
 							placeholder="0 for CBF or unlimited FPS"
 							class="col-span-3"
@@ -251,7 +251,7 @@
 						<Label for="name" class="text-right">Rating suggestion</Label>
 						<Input
 							id="name"
-							type="number"
+							type="number" inputmode="numeric"
 							disabled={submission.progress != 100}
 							bind:value={submission.suggestedRating}
 							placeholder={submission.progress == 100

@@ -149,7 +149,7 @@
 					<Input
 						class="col-span-3"
 						bind:value={newClanData.memberLimit}
-						type="number"
+						type="number" inputmode="numeric"
 						placeholder="Enter 0 for unlimited"
 					/>
 				</div>
