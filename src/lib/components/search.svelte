@@ -62,12 +62,10 @@
 
 				for (let i of res[1]) {
 					result.gdBrowserLevels.push({
-						data: {
-							id: i.id,
-							name: i.name,
-							creator: i.author,
-							other: true
-						}
+						id: i.id,
+						name: i.name,
+						creator: i.author,
+						other: true
 					});
 				}
 
@@ -124,15 +122,11 @@
 						<ContextMenu.Trigger>
 							{#if 'other' in item}
 								<a href={`/level/${item.id}?list=other`} data-sveltekit-preload-data="tap">
-									<Command.Item
-										>{item.name} by {item.creator} ({item.id}) (Not added)</Command.Item
-									>
+									<Command.Item>{item.name} by {item.creator} ({item.id}) (Not added)</Command.Item>
 								</a>
 							{:else}
 								<a href={`/level/${item.id}`} data-sveltekit-preload-data="tap">
-									<Command.Item
-										>{item.name} by {item.creator} ({item.id})</Command.Item
-									>
+									<Command.Item>{item.name} by {item.creator} ({item.id})</Command.Item>
 								</a>
 							{/if}
 						</ContextMenu.Trigger>
@@ -153,15 +147,11 @@
 						<ContextMenu.Trigger>
 							{#if 'other' in item}
 								<a href={`/level/${item.id}?list=other`} data-sveltekit-preload-data="tap">
-									<Command.Item
-										>{item.name} by {item.creator} ({item.id})</Command.Item
-									>
+									<Command.Item>{item.name} by {item.creator} ({item.id})</Command.Item>
 								</a>
 							{:else}
 								<a href={`/level/${item.id}`} data-sveltekit-preload-data="tap">
-									<Command.Item
-										>{item.name} by {item.creator} ({item.id})</Command.Item
-									>
+									<Command.Item>{item.name} by {item.creator} ({item.id})</Command.Item>
 								</a>
 							{/if}
 						</ContextMenu.Trigger>
