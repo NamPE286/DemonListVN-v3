@@ -26,18 +26,6 @@
 	let verdict = '';
 	let cmt = '';
 
-	function processData(arr: any[], initValue: number) {
-		let cnt = initValue;
-
-		for (let i = 99; i >= 0; i--) {
-			cnt += arr[i];
-			arr[i] = (arr[i] / cnt) * 100;
-			arr[i] = Math.floor(arr[i] * 100) / 100;
-		}
-
-		return arr;
-	}
-
 	function genPercent() {
 		const res = Array(100);
 
@@ -59,7 +47,7 @@
 				labels: genPercent(),
 				datasets: [
 					{
-						label: 'Death rate',
+						label: 'Death count',
 						data: record.deathCount,
 						borderWidth: 1
 					}
@@ -77,11 +65,7 @@
 					tooltip: {
 						callbacks: {
 							label: function (context) {
-								var label = context.dataset.label || '';
-								if (context.parsed.y !== null) {
-									label += ' ' + context.parsed.y + '%';
-								}
-								return label;
+								return String(context.parsed.y);
 							}
 						}
 					}
@@ -108,8 +92,6 @@
 			tmp.deathCount = await (
 				await fetch(`${import.meta.env.VITE_API_URL}/deathCount/${uid}/${levelID}`)
 			).json();
-
-			tmp.deathCount = processData(tmp.deathCount.count, tmp.data.progress == 100 ? 1 : 0);
 		} catch {
 			tmp.deathCount = Array(100).fill(0);
 		}
@@ -246,7 +228,7 @@
 				<Tabs.Root value="detail" class="w-100">
 					<Tabs.List>
 						<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
-						<Tabs.Trigger value="deathRate">Death rate</Tabs.Trigger>
+						<Tabs.Trigger value="deathCount">Death count</Tabs.Trigger>
 						{#if record.data.reviewer != null && $user.loggedIn && record.data.reviewer.uid == $user.data.uid && record.data.needMod == false}
 							<Tabs.Trigger value="review">Review</Tabs.Trigger>
 						{/if}
@@ -286,7 +268,11 @@
 									<Dialog.Content>
 										<Dialog.Header>
 											<Dialog.Title>Change suggested rating</Dialog.Title>
-											<Input type="number" inputmode="numeric" bind:value={record.data.suggestedRating} />
+											<Input
+												type="number"
+												inputmode="numeric"
+												bind:value={record.data.suggestedRating}
+											/>
 										</Dialog.Header>
 										<Button bind:disable={disableBtn} on:click={change}>Change</Button>
 									</Dialog.Content>
@@ -311,7 +297,7 @@
 							{/if}
 						</div>
 					</Tabs.Content>
-					<Tabs.Content value="deathRate">
+					<Tabs.Content value="deathCount">
 						<div class="chartWrapper">
 							<canvas id="chart" use:createChart />
 						</div>
@@ -344,11 +330,21 @@
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="refreshRate" class="w-[100px]">Refresh rate</Label>
-								<Input id="refreshRate" type="number" inputmode="numeric" bind:value={record.data.refreshRate} />
+								<Input
+									id="refreshRate"
+									type="number"
+									inputmode="numeric"
+									bind:value={record.data.refreshRate}
+								/>
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="progress" class="w-[100px]">Progress</Label>
-								<Input id="progress" type="number" inputmode="numeric" bind:value={record.data.progress} />
+								<Input
+									id="progress"
+									type="number"
+									inputmode="numeric"
+									bind:value={record.data.progress}
+								/>
 							</div>
 							<div class="flex items-center gap-[10px]">
 								<Label for="mobile" class="w-[80px]">Mobile</Label>

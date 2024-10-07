@@ -22,18 +22,6 @@
 	let recordDetailOpened = false;
 	let selectedRecord: any = null;
 
-	function processData(arr: any[]) {
-		let cnt = records.length;
-
-		for (let i = 99; i >= 0; i--) {
-			cnt += arr[i];
-			arr[i] = (arr[i] / cnt) * 100;
-			arr[i] = Math.floor(arr[i] * 100) / 100;
-		}
-
-		return arr;
-	}
-
 	function genPercent() {
 		const res = Array(100);
 
@@ -55,7 +43,7 @@
 				labels: genPercent(),
 				datasets: [
 					{
-						label: 'Death rate',
+						label: 'Death count',
 						data: deathCount,
 						borderWidth: 1
 					}
@@ -73,11 +61,7 @@
 					tooltip: {
 						callbacks: {
 							label: function (context) {
-								var label = context.dataset.label || '';
-								if (context.parsed.y !== null) {
-									label += ' ' + context.parsed.y + '%';
-								}
-								return label;
+								return String(context.parsed.y);
 							}
 						}
 					}
@@ -106,7 +90,7 @@
 		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/deathCount`)
 			.then((res) => res.json())
 			.then((res) => {
-				deathCount = processData(res.count);
+				deathCount = res.count;
 			});
 	}
 
