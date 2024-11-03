@@ -38,6 +38,20 @@
 	}
 
 	async function updateLevel() {
+		console.log(level);
+
+		//@ts-ignore
+		if (level.flTop == '') {
+			//@ts-ignore
+			level.flTop = null;
+		}
+
+		//@ts-ignore
+		if (level.rating == '') {
+			//@ts-ignore
+			level.rating = null;
+		}
+
 		fetch(`${import.meta.env.VITE_API_URL}/level`, {
 			method: 'PUT',
 			body: JSON.stringify(level),
@@ -129,13 +143,20 @@
 		</div>
 		<div class="input">
 			<Label for="flTop" class="w-[100px]">FL Top</Label>
-			<Input id="flTop" type="number" inputmode="numeric" class="w-[300px]" bind:value={level.flTop} />
+			<Input
+				id="flTop"
+				type="number"
+				inputmode="numeric"
+				class="w-[300px]"
+				bind:value={level.flTop}
+			/>
 		</div>
 		<div class="input">
 			<Label for="minProgress" class="w-[100px]">Minimum progress</Label>
 			<Input
 				id="minProgress"
-				type="number" inputmode="numeric"
+				type="number"
+				inputmode="numeric"
 				class="w-[300px]"
 				placeholder="Required"
 				required
@@ -144,7 +165,13 @@
 		</div>
 		<div class="input">
 			<Label for="rating" class="w-[100px]">Rating</Label>
-			<Input id="rating" type="number" inputmode="numeric" class="w-[300px]" bind:value={level.rating} />
+			<Input
+				id="rating"
+				type="number"
+				inputmode="numeric"
+				class="w-[300px]"
+				bind:value={level.rating}
+			/>
 		</div>
 		<div class="flex w-[150px] flex-col gap-[15px]">
 			<Button on:click={updateLevel}>{state == 1 ? 'Update' : 'Add new level'}</Button>
