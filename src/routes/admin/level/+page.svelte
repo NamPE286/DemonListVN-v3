@@ -38,18 +38,12 @@
 	}
 
 	async function updateLevel() {
-		console.log(level);
-
-		//@ts-ignore
-		if (level.flTop == '') {
-			//@ts-ignore
-			level.flTop = null;
-		}
-
-		//@ts-ignore
-		if (level.rating == '') {
-			//@ts-ignore
-			level.rating = null;
+		for (const i in level) {
+			// @ts-ignore
+			if (level[i] == '') {
+				// @ts-ignore
+				level[i] = null;
+			}
 		}
 
 		fetch(`${import.meta.env.VITE_API_URL}/level`, {
