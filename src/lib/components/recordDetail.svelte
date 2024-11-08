@@ -284,7 +284,7 @@
 							<div class="flex gap-[5px]">
 								<b>Reviewed by:</b>
 								{#if record.data.reviewer != null}
-									<PlayerHoverCard player={{ data: record.data.reviewer }} />
+									<PlayerHoverCard player={record.data.reviewer} />
 								{:else}
 									Moderator
 								{/if}
