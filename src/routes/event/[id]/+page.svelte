@@ -167,22 +167,26 @@
 		{:else if rewardState == 3}
 			<Button class="w-[200px]" disabled>Event ended</Button>
 		{:else if rewardState == 4}
-			<Dialog.Root bind:open={claimOpened}>
-				<Dialog.Trigger>
-					<Button class="w-[200px]">Participate</Button>
-				</Dialog.Trigger>
-				<Dialog.Content>
-					<Dialog.Header>
-						<Dialog.Title>Participate</Dialog.Title>
-					</Dialog.Header>
-					{#if data.needProof}
-						<Textarea class="h-[125px]" placeholder="Provide proof" bind:value={proof} />
-					{:else}
-						<Textarea class="h-[125px]" placeholder="Message (optional)" bind:value={proof} />
-					{/if}
-					<Button on:click={claimReward}>Continue</Button>
-				</Dialog.Content>
-			</Dialog.Root>
+			{#if $user.data.exp < data.minExp}
+				<Button class="w-[300px]" disabled>Not enough EXP ({data.minExp} EXP minimum)</Button>
+			{:else}
+				<Dialog.Root bind:open={claimOpened}>
+					<Dialog.Trigger>
+						<Button class="w-[200px]">Participate</Button>
+					</Dialog.Trigger>
+					<Dialog.Content>
+						<Dialog.Header>
+							<Dialog.Title>Participate</Dialog.Title>
+						</Dialog.Header>
+						{#if data.needProof}
+							<Textarea class="h-[125px]" placeholder="Provide proof" bind:value={proof} />
+						{:else}
+							<Textarea class="h-[125px]" placeholder="Message (optional)" bind:value={proof} />
+						{/if}
+						<Button on:click={claimReward}>Continue</Button>
+					</Dialog.Content>
+				</Dialog.Root>
+			{/if}
 		{/if}
 	</div>
 {/if}
