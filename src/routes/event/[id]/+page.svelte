@@ -154,7 +154,7 @@
 		{:else if rewardState == 2}
 			<Dialog.Root bind:open={cancelOpened}>
 				<Dialog.Trigger>
-					<Button class="w-[200px]" variant="destructive">Cancel proof</Button>
+					<Button class="w-[200px]" variant="destructive">Cancel participation</Button>
 				</Dialog.Trigger>
 				<Dialog.Content>
 					<Dialog.Header>
@@ -175,7 +175,11 @@
 					<Dialog.Header>
 						<Dialog.Title>Participate</Dialog.Title>
 					</Dialog.Header>
-					<Textarea class="h-[125px]" placeholder="Provide proof" bind:value={proof} />
+					{#if data.needProof}
+						<Textarea class="h-[125px]" placeholder="Provide proof" bind:value={proof} />
+					{:else}
+						<Textarea class="h-[125px]" placeholder="Message (optional)" bind:value={proof} />
+					{/if}
 					<Button on:click={claimReward}>Continue</Button>
 				</Dialog.Content>
 			</Dialog.Root>
