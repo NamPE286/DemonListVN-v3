@@ -85,7 +85,7 @@
 		class="h-fit w-full"
 		plugins={[
 			Autoplay({
-				delay: 4000
+				delay: 10000
 			})
 		]}
 	>
