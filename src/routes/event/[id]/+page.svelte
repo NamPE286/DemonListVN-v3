@@ -150,11 +150,11 @@
 		{#if rewardState == 0}
 			<Skeleton class="h-[35px] w-[200px]" />
 		{:else if rewardState == 1}
-			<Button class="w-[200px]" disabled>Claimed</Button>
+			<Button class="w-[200px]" disabled>Reward claimed</Button>
 		{:else if rewardState == 2}
 			<Dialog.Root bind:open={cancelOpened}>
 				<Dialog.Trigger>
-					<Button class="w-[200px]" variant="destructive">Cancel reward claim</Button>
+					<Button class="w-[200px]" variant="destructive">Cancel proof</Button>
 				</Dialog.Trigger>
 				<Dialog.Content>
 					<Dialog.Header>
@@ -169,11 +169,11 @@
 		{:else if rewardState == 4}
 			<Dialog.Root bind:open={claimOpened}>
 				<Dialog.Trigger>
-					<Button class="w-[200px]">Claim reward</Button>
+					<Button class="w-[200px]">Participate</Button>
 				</Dialog.Trigger>
 				<Dialog.Content>
 					<Dialog.Header>
-						<Dialog.Title>Claim reward</Dialog.Title>
+						<Dialog.Title>Participate</Dialog.Title>
 					</Dialog.Header>
 					<Textarea class="h-[125px]" placeholder="Provide proof" bind:value={proof} />
 					<Button on:click={claimReward}>Continue</Button>
