@@ -48,7 +48,7 @@
 				datasets: [
 					{
 						label: 'Death count',
-						data: record.deathCount,
+						data: record.deathCount.count,
 						borderWidth: 1
 					}
 				]
