@@ -10,8 +10,6 @@
 	export let player: any;
 	export let showTitle = false;
 
-	console.log(player)
-
 	let exp = player.exp + player.extraExp;
 </script>
 

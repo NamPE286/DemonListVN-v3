@@ -97,7 +97,6 @@
 	$: $page.params.id, fetchData();
 
 	onMount(() => {
-		console.log(data);
 		loaded = true;
 		fetchData();
 	});

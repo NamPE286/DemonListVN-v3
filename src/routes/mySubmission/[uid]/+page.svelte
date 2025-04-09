@@ -37,7 +37,6 @@
 					return 'Submission cancelled!';
 				},
 				error: (err) => {
-					console.log(err)
 					return 'Failed to cancel submission.'
 				}
 			}
