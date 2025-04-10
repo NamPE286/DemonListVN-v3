@@ -2,6 +2,7 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Switch } from '$lib/components/ui/switch/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import * as Select from '$lib/components/ui/select';
 	import { onMount } from 'svelte';
 
 	export let uid: string;
@@ -37,19 +38,47 @@
 		return `rgba(0, 255, 0, ${opacity})`;
 	}
 
-	onMount(async () => {
-		fetch(`${import.meta.env.VITE_API_URL}/player/${uid}/heatmap/${new Date().getFullYear()}`)
+	function fetchData() {
+		fetch(`${import.meta.env.VITE_API_URL}/player/${uid}/heatmap/${year}`)
 			.then((res) => res.json())
 			.then((res) => {
 				data = res.days;
 			});
-	});
+	}
+
+	onMount(fetchData);
 </script>
 
 <div class="wrapper">
-	<div class="flex items-center space-x-2">
-		<Label for="split">Split by month</Label>
-		<Switch bind:checked={splitByMonth} id="split" />
+	<div class="flex">
+		<div class="flex items-center space-x-2">
+			<Label for="split">Split by month</Label>
+			<Switch bind:checked={splitByMonth} id="split" />
+		</div>
+		<div class="ml-auto">
+			<Select.Root
+				selected={{
+					label: String(new Date().getFullYear()),
+					value: new Date().getFullYear()
+				}}
+				onSelectedChange={(e) => {
+					// @ts-ignore
+					year = e.value;
+					fetchData();
+				}}
+			>
+				<Select.Trigger class="w-[90px]">
+					<Select.Value placeholder="Theme" />
+				</Select.Trigger>
+				<Select.Content>
+					{#each { length: new Date().getFullYear() - 2020 + 1 } as _, index}
+						<Select.Item value={new Date().getFullYear() - index}>
+							{new Date().getFullYear() - index}
+						</Select.Item>
+					{/each}
+				</Select.Content>
+			</Select.Root>
+		</div>
 	</div>
 	<div class="heatmapWrapper">
 		{#key data}
