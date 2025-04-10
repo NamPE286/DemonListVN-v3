@@ -71,7 +71,7 @@
 					<Select.Value placeholder="Theme" />
 				</Select.Trigger>
 				<Select.Content>
-					{#each { length: new Date().getFullYear() - 2020 + 1 } as _, index}
+					{#each { length: new Date().getFullYear() - 2024 + 1 } as _, index}
 						<Select.Item value={new Date().getFullYear() - index}>
 							{new Date().getFullYear() - index}
 						</Select.Item>
