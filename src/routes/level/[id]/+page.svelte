@@ -235,7 +235,7 @@
 							<p>
 								<b>Song: </b>
 								{#if data.level.songID == null}
-									<span>Avaliable on Newground</span>
+									<span>Available on Newground</span>
 								{:else}
 									<a href={`${import.meta.env.VITE_API_URL}/level/${data.level.id}/song`}
 										><u>Download</u></a
