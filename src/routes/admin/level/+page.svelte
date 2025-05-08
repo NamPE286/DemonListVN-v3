@@ -3,6 +3,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
+	import { Switch } from '$lib/components/ui/switch';
 	import * as Alert from '$lib/components/ui/alert';
 	import { user } from '$lib/client';
 
@@ -15,7 +16,8 @@
 		minProgress: NaN,
 		flTop: NaN,
 		rating: NaN,
-		songID: NaN
+		songID: NaN,
+		isPlatformer: false
 	};
 
 	async function fetchLevel() {
@@ -38,9 +40,14 @@
 	}
 
 	async function updateLevel() {
+		if(!level.isPlatformer) {
+			console.log('ok')
+			level.isPlatformer = false;
+		}
+
 		for (const i in level) {
 			// @ts-ignore
-			if (level[i] == '') {
+			if (level[i] === '') {
 				// @ts-ignore
 				level[i] = null;
 			}
@@ -166,6 +173,10 @@
 				class="w-[300px]"
 				bind:value={level.rating}
 			/>
+		</div>
+		<div class="input">
+			<Label for="rating" class="w-[100px]">Platformer</Label>
+			<Switch bind:checked={level.isPlatformer}></Switch>
 		</div>
 		<div class="flex w-[150px] flex-col gap-[15px]">
 			<Button on:click={updateLevel}>{state == 1 ? 'Update' : 'Add new level'}</Button>
