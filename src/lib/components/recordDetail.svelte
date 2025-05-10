@@ -14,6 +14,7 @@
 	import { Switch } from '$lib/components/ui/switch';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import { Button } from '$lib/components/ui/button';
+	import { page } from '$app/stores';
 
 	export let uid: string;
 	export let levelID: number;
@@ -209,7 +210,7 @@
 	}
 
 	function getShareLink() {
-		return `${window.location.origin}/level/${record.data.levelid}?record=${record.data.userid}`;
+		return `${$page.url.origin}/level/${record.data.levelid}?record=${record.data.userid}`;
 	}
 
 	$: open, fetchData();

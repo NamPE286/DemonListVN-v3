@@ -99,6 +99,15 @@
 	onMount(() => {
 		loaded = true;
 		fetchData();
+
+		if($page.url.searchParams.get("record")) {
+			console.log($page.url.searchParams.get("record"), $page.params.id)
+			recordDetailOpened = true;
+			selectedRecord = {
+				userid: $page.url.searchParams.get("record"),
+				levelid: $page.params.id
+			}
+		}
 	});
 </script>
 
