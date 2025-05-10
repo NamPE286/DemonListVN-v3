@@ -208,6 +208,10 @@
 		);
 	}
 
+	function getShareLink() {
+		return `${window.location.origin}/level/${record.data.levelid}?record=${record.data.userid}`;
+	}
+
 	$: open, fetchData();
 </script>
 
@@ -229,6 +233,7 @@
 					<Tabs.List>
 						<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
 						<Tabs.Trigger value="deathCount">Death count</Tabs.Trigger>
+						<Tabs.Trigger value="share">Share</Tabs.Trigger>
 						{#if record.data.reviewer != null && $user.loggedIn && record.data.reviewer.uid == $user.data.uid && record.data.needMod == false}
 							<Tabs.Trigger value="review">Review</Tabs.Trigger>
 						{/if}
@@ -300,6 +305,17 @@
 					<Tabs.Content value="deathCount">
 						<div class="chartWrapper">
 							<canvas id="chart" use:createChart />
+						</div>
+					</Tabs.Content>
+					<Tabs.Content value="share">
+						<div class="flex gap-[10px]">
+							<Input value={getShareLink()} readonly />
+							<Button
+								on:click={async () => {
+									await navigator.clipboard.writeText(getShareLink());
+									toast.success('Copied to clipboard!');
+								}}>Copy</Button
+							>
 						</div>
 					</Tabs.Content>
 					<Tabs.Content value="review">
