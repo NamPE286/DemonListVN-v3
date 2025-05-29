@@ -20,7 +20,7 @@
 	});
 </script>
 
-<div class="text-center">
+<!-- <div class="text-center">
 	<ins
 		class="adsbygoogle ad"
 		style="display:block"
@@ -29,7 +29,7 @@
 		data-ad-format={dataAdFormat}
 		data-full-width-responsive="true"
 	></ins>
-</div>
+</div> -->
 
 <style>
 	.ad {
