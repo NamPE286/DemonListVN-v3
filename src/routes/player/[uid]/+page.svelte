@@ -29,7 +29,7 @@
 		ascending: false
 	};
 
-	let exp = data.player.exp + data.player.extraExp
+	let exp = data.player.exp + data.player.extraExp;
 	let expLevel = getExpLevel(exp);
 
 	async function applyFilter() {
@@ -58,8 +58,7 @@
 
 {#if data.player.isBanned}
 	<div class="flex h-[50px] items-center justify-center bg-red-600">
-		This player is banned. If this is your profile, contact a moderator to appeal this
-		decision.
+		This player is banned. If this is your profile, contact a moderator to appeal this decision.
 	</div>
 {:else if data.player.isHidden}
 	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
@@ -167,7 +166,7 @@
 								<Tooltip.Trigger>
 									<div class="leftCol">
 										<div
-											class="title"
+											class="title text-white"
 											style={`background-color: ${getTitle('dl', data.player)?.color}`}
 										>
 											{data.player.rating}
@@ -266,9 +265,20 @@
 					}}
 				>
 					<Table.Cell class="font-medium">
-						<a href={`/level/${record.levels.id}`} data-sveltekit-preload-data="tap">
-							{record.levels.name}
-						</a>
+						<div class="relative flex">
+							<img
+								class="levelBG absolute ml-[-8px] mt-[-16px] box-border h-[53.5px] w-[350px] max-w-full object-cover"
+								src={`https://img.youtube.com/vi/${record.levels.videoID}/0.jpg`}
+								alt="bg"
+							/>
+							<a
+								class="levelName z-10"
+								href={`/level/${record.levels.id}`}
+								data-sveltekit-preload-data="tap"
+							>
+								{record.levels.name}
+							</a>
+						</div>
 					</Table.Cell>
 					<Table.Cell class="text-center">{new Date(record.timestamp).toLocaleString()}</Table.Cell>
 					<Table.Cell class="text-center">
@@ -286,6 +296,34 @@
 </div>
 
 <style lang="scss">
+	.levelBG {
+		padding-right: 10px;
+		mask-image: linear-gradient(
+			90deg,
+			rgba(0, 0, 0, 1) 0%,
+			rgba(0, 0, 0, 1) 50%,
+			rgba(0, 0, 0, 0) 90%,
+			rgba(0, 0, 0, 0) 100%
+		);
+		opacity: 0.5;
+		transition: opacity 0.3s;
+	}
+
+	.levelBG:hover {
+		opacity: 1;
+	}
+
+	@keyframes clipFade {
+		100% {
+			mask-position: 100px 0%;
+			mask-repeat: no-repeat;
+		}
+	}
+
+	.levelName {
+		text-shadow: 0px 1px 2px var(--textColorInverted);
+	}
+
 	.progressBar {
 		background-color: gray;
 		width: 100%;

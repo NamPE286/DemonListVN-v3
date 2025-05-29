@@ -79,7 +79,7 @@
 						<Tooltip.Trigger>
 							<div class="leftCol">
 								<div
-									class="title"
+									class="title text-white"
 									style={`background-color: ${getTitle('dl', player)?.color}`}
 								>
 									{player.rating}
