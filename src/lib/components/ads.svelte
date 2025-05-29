@@ -4,20 +4,20 @@
 	export let dataAdFormat = 'auto';
 	let mounted = false;
 
-	onMount(() => {
-		if (mounted) {
-			return;
-		}
+	// onMount(() => {
+	// 	if (mounted) {
+	// 		return;
+	// 	}
 
-		mounted = true;
+	// 	mounted = true;
 
-		try {
-			// @ts-ignore
-			(window.adsbygoogle = window.adsbygoogle || []).push({});
-		} catch (err) {
-			console.error(err);
-		}
-	});
+	// 	try {
+	// 		// @ts-ignore
+	// 		(window.adsbygoogle = window.adsbygoogle || []).push({});
+	// 	} catch (err) {
+	// 		console.error(err);
+	// 	}
+	// });
 </script>
 
 <!-- <div class="text-center">
@@ -32,7 +32,7 @@
 </div> -->
 
 <style>
-	.ad {
+	/* .ad {
 		margin-inline: auto;
 		margin-top: 20px;
 		margin-bottom: 20px;
@@ -50,5 +50,5 @@
 		.ad {
 			width: 728px;
 		}
-	}
+	} */
 </style>
