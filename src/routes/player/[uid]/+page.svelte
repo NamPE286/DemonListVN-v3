@@ -287,7 +287,7 @@
 							<br />({record.refreshRate}fps)
 						{/if}
 					</Table.Cell>
-					<Table.Cell class="text-center">{record[list + 'Pt']}</Table.Cell>
+					<Table.Cell class="text-center">{Math.round(record[list + 'Pt'] * 10) / 10}</Table.Cell>
 					<Table.Cell class="text-center">{record.progress}%</Table.Cell>
 				</Table.Row>
 			{/each}
