@@ -267,7 +267,7 @@
 					<Table.Cell class="font-medium">
 						<div class="relative flex">
 							<img
-								class="levelBG absolute ml-[-8px] mt-[-16px] box-border h-[53.5px] w-[350px] max-w-full object-cover"
+								class="levelBG absolute ml-[-18px] mt-[-16px] box-border h-[53.5px] w-[350px] max-w-full object-cover"
 								src={`https://img.youtube.com/vi/${record.levels.videoID}/0.jpg`}
 								alt="bg"
 							/>
@@ -300,7 +300,8 @@
 		padding-right: 10px;
 		mask-image: linear-gradient(
 			90deg,
-			rgba(0, 0, 0, 1) 0%,
+			rgba(0, 0, 0, 0) 0%,
+			rgba(0, 0, 0, 1) 20%,
 			rgba(0, 0, 0, 1) 50%,
 			rgba(0, 0, 0, 0) 90%,
 			rgba(0, 0, 0, 0) 100%
