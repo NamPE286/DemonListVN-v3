@@ -19,6 +19,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
 	import { getExpLevel } from '$lib/client/getExpLevel';
+	import { fade } from 'svelte/transition';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' = 'dl';
@@ -64,13 +65,15 @@
 	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
 {/if}
 <div class="relative">
-	{#if data.records[list].length}
-		<img
-			class="bgGradient absolute z-0 h-[400px] w-full object-cover"
-			src={`https://img.youtube.com/vi/${data.records[list][0].levels.videoID}/0.jpg`}
-			alt="bg"
-		/>
-	{/if}
+	<div in:fade={{ delay: 500, duration: 300 }}>
+		{#if data.records[list].length}
+			<img
+				class="bgGradient absolute z-0 h-[400px] w-full object-cover"
+				src={`https://img.youtube.com/vi/${data.records[list][0].levels.videoID}/0.jpg`}
+				alt="bg"
+			/>
+		{/if}
+	</div>
 
 	<div class="wrapper z-1 relative">
 		<div class="playerInfo">
@@ -310,10 +313,7 @@
 	.bgGradient {
 		filter: blur(150px);
 		margin-top: -60px;
-		mask-image: linear-gradient(
-			rgba(0, 0, 0, 1) 0%,
-			rgba(0, 0, 0, 0) 100%
-		);
+		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
 	}
 
 	.levelBG {
