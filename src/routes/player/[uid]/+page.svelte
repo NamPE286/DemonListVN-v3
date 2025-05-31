@@ -63,239 +63,258 @@
 {:else if data.player.isHidden}
 	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
 {/if}
+<div class="relative">
+	{#if data.records[list].length}
+		<img
+			class="bgGradient absolute z-0 h-[400px] w-full object-cover"
+			src={`https://img.youtube.com/vi/${data.records[list][0].levels.videoID}/0.jpg`}
+			alt="bg"
+		/>
+	{/if}
 
-<div class="wrapper">
-	<div class="playerInfo">
-		<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
-			<Avatar.Image
-				class="object-cover"
-				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}.jpg`}
-				alt=""
-			/>
-			<Avatar.Fallback class="text-5xl lg:text-6xl">{data.player.name[0]}</Avatar.Fallback>
-		</Avatar.Root>
-		<div class="info">
-			<div class="flex gap-[10px]">
-				{#if data.player.clan}
-					<a
-						href={`/clan/${data.player.clan}`}
-						class={badgeVariants({ variant: 'secondary' })}
-						style={`background-color: ${data.player.clans.tagBgColor}; color: ${data.player.clans.tagTextColor};`}
-					>
-						<span class="text-[15px]">
-							{data.player.clans.tag}
-						</span>
-					</a>
-				{/if}
-				<h2>
-					{data.player.name}
-					{#if $user.loggedIn && data.player.uid == $user.data.uid && $user.data.recordCount != 0 && !$user.data.isBanned}
-						<ProfileEditButton bind:data={data.player} />
+	<div class="wrapper z-1 relative">
+		<div class="playerInfo">
+			<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
+				<Avatar.Image
+					class="object-cover"
+					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}.jpg`}
+					alt=""
+				/>
+				<Avatar.Fallback class="text-5xl lg:text-6xl">{data.player.name[0]}</Avatar.Fallback>
+			</Avatar.Root>
+			<div class="info">
+				<div class="flex gap-[10px]">
+					{#if data.player.clan}
+						<a
+							href={`/clan/${data.player.clan}`}
+							class={badgeVariants({ variant: 'secondary' })}
+							style={`background-color: ${data.player.clans.tagBgColor}; color: ${data.player.clans.tagTextColor};`}
+						>
+							<span class="text-[15px]">
+								{data.player.clans.tag}
+							</span>
+						</a>
 					{/if}
-				</h2>
-			</div>
+					<h2>
+						{data.player.name}
+						{#if $user.loggedIn && data.player.uid == $user.data.uid && $user.data.recordCount != 0 && !$user.data.isBanned}
+							<ProfileEditButton bind:data={data.player} />
+						{/if}
+					</h2>
+				</div>
 
-			{#if data.player.province}
-				<div class="location">
-					<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
-						><path
-							d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"
-						/></svg
-					>
-					{#if data.player.city}
-						{data.player.province}, {data.player.city}
-					{:else}
-						{data.player.province}
+				{#if data.player.province}
+					<div class="location">
+						<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24"
+							><path
+								d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"
+							/></svg
+						>
+						{#if data.player.city}
+							{data.player.province}, {data.player.city}
+						{:else}
+							{data.player.province}
+						{/if}
+					</div>
+				{/if}
+				<div class="social">
+					{#if data.player.youtube}
+						<a href={data.player.youtube} target="_blank">
+							<img id="social" src="/youtube.svg" alt="" />
+						</a>
+					{/if}
+					{#if data.player.facebook}
+						<a href={data.player.facebook} target="_blank">
+							<img id="social" src="/facebook.svg" alt="" />
+						</a>
+					{/if}
+					{#if data.player.discord}
+						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<button
+							class="clickable"
+							on:click={() => {
+								navigator.clipboard.writeText(data.player.discord);
+								toast('Copied Discord username to clipboard!');
+							}}
+						>
+							<img id="social" src="/discord.svg" alt="" />
+						</button>
 					{/if}
 				</div>
-			{/if}
-			<div class="social">
-				{#if data.player.youtube}
-					<a href={data.player.youtube} target="_blank">
-						<img id="social" src="/youtube.svg" alt="" />
-					</a>
-				{/if}
-				{#if data.player.facebook}
-					<a href={data.player.facebook} target="_blank">
-						<img id="social" src="/facebook.svg" alt="" />
-					</a>
-				{/if}
-				{#if data.player.discord}
-					<!-- svelte-ignore a11y-click-events-have-key-events -->
-					<button
-						class="clickable"
-						on:click={() => {
-							navigator.clipboard.writeText(data.player.discord);
-							toast('Copied Discord username to clipboard!');
-						}}
-					>
-						<img id="social" src="/discord.svg" alt="" />
-					</button>
-				{/if}
 			</div>
 		</div>
-	</div>
-	<div class="playerInfo2Wrapper">
-		<div class="playerInfo2">
-			<Card.Root>
-				<Card.Header>
-					<Card.Title tag="h1">Player's statistic</Card.Title>
-				</Card.Header>
-				<Card.Content>
-					<div class="flex flex-col gap-[3px]">
-						<div class="rating">
-							<div class="flex justify-center">
-								<div class="leftCol">
-									<b>Lv.{expLevel.level}</b>
-								</div>
-							</div>
-							<div class="progressBar">
-								<div class="progress" style={`width: ${expLevel.progress}%`}>
-									<b>{expLevel.progress}%</b>
-								</div>
-							</div>
-							<Tooltip.Root>
-								<Tooltip.Trigger>{exp}/{expLevel.upperBound}</Tooltip.Trigger>
-								<Tooltip.Content>
-									<p>{expLevel.upperBound - exp} EXP to next level</p>
-								</Tooltip.Content>
-							</Tooltip.Root>
-						</div>
-						<div class="rating">
-							<Tooltip.Root>
-								<Tooltip.Trigger>
+		<div class="playerInfo2Wrapper">
+			<div class="playerInfo2">
+				<Card.Root>
+					<Card.Header>
+						<Card.Title tag="h1">Player's statistic</Card.Title>
+					</Card.Header>
+					<Card.Content>
+						<div class="flex flex-col gap-[3px]">
+							<div class="rating">
+								<div class="flex justify-center">
 									<div class="leftCol">
-										<div
-											class="title text-white"
-											style={`background-color: ${getTitle('dl', data.player)?.color}`}
-										>
-											{data.player.rating}
-										</div>
+										<b>Lv.{expLevel.level}</b>
 									</div>
-								</Tooltip.Trigger>
-								<Tooltip.Content>{getTitle('dl', data.player)?.fullTitle}</Tooltip.Content>
-							</Tooltip.Root>
-							<div class="rankWrapper">
-								Demon List rating
-								<div class="rank">
-									#{data.player.overallRank}
+								</div>
+								<div class="progressBar">
+									<div class="progress" style={`width: ${expLevel.progress}%`}>
+										<b>{expLevel.progress}%</b>
+									</div>
+								</div>
+								<Tooltip.Root>
+									<Tooltip.Trigger>{exp}/{expLevel.upperBound}</Tooltip.Trigger>
+									<Tooltip.Content>
+										<p>{expLevel.upperBound - exp} EXP to next level</p>
+									</Tooltip.Content>
+								</Tooltip.Root>
+							</div>
+							<div class="rating">
+								<Tooltip.Root>
+									<Tooltip.Trigger>
+										<div class="leftCol">
+											<div
+												class="title text-white"
+												style={`background-color: ${getTitle('dl', data.player)?.color}`}
+											>
+												{data.player.rating}
+											</div>
+										</div>
+									</Tooltip.Trigger>
+									<Tooltip.Content>{getTitle('dl', data.player)?.fullTitle}</Tooltip.Content>
+								</Tooltip.Root>
+								<div class="rankWrapper">
+									Demon List rating
+									<div class="rank">
+										#{data.player.overallRank}
+									</div>
+								</div>
+							</div>
+							<div class="rating">
+								<div class="leftCol">
+									<div class="title">{data.player.totalFLpt}</div>
+								</div>
+								<div class="rankWrapper">
+									Total Featured List point
+									<div class="rank">
+										#{data.player.flrank}
+									</div>
 								</div>
 							</div>
 						</div>
-						<div class="rating">
-							<div class="leftCol">
-								<div class="title">{data.player.totalFLpt}</div>
-							</div>
-							<div class="rankWrapper">
-								Total Featured List point
-								<div class="rank">
-									#{data.player.flrank}
-								</div>
-							</div>
-						</div>
-					</div>
-				</Card.Content>
-			</Card.Root>
+					</Card.Content>
+				</Card.Root>
+			</div>
+			{#key data.player.uid}
+				<Heatmap uid={data.player.uid} />
+			{/key}
 		</div>
-		{#key data.player.uid}
-			<Heatmap uid={data.player.uid} />
-		{/key}
-	</div>
-	<Ads />
-	<div class="filter">
-		<div class="filterItem">
-			<Label>Sort by</Label>
-			<Select.Root
-				selected={{
-					label: 'Point',
-					value: 'pt'
-				}}
-				onSelectedChange={(e) => {
-					// @ts-ignore
-					filter.sortBy = e.value;
-				}}
-			>
-				<Select.Trigger class="w-[180px]">
-					<Select.Value placeholder="Select item to sort by" />
-				</Select.Trigger>
-				<Select.Content>
-					<Select.Item value="pt">Point</Select.Item>
-					<Select.Item value="timestamp">Date submitted</Select.Item>
-				</Select.Content>
-			</Select.Root>
-		</div>
-		<div class="filterItem">
-			<Label>Ascending</Label>
-			<Switch bind:checked={filter.ascending} />
-		</div>
-		<div class="filterItem">
-			<Button variant="outline" on:click={applyFilter}>Apply</Button>
-		</div>
-	</div>
-	<Tabs.Root value="dl">
-		<div class="tabs">
-			<Tabs.List class="grid w-full grid-cols-2 lg:w-[400px]">
-				<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Demon List</Tabs.Trigger>
-				<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured List</Tabs.Trigger>
-			</Tabs.List>
-		</div>
-	</Tabs.Root>
-	<Table.Root>
-		<Table.Caption>Total record: {data.records[list].length}</Table.Caption>
-		<Table.Header>
-			<Table.Row>
-				<Table.Head>Level</Table.Head>
-				<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
-				<Table.Head class="w-[100px] text-center">Device</Table.Head>
-				<Table.Head class="w-[80px] text-center">Point</Table.Head>
-				<Table.Head class="w-[80px] text-center">Progress</Table.Head>
-			</Table.Row>
-		</Table.Header>
-		<Table.Body>
-			{#each data.records[list] as record}
-				<Table.Row
-					on:click={(e) => {
+		<Ads />
+		<div class="filter">
+			<div class="filterItem">
+				<Label>Sort by</Label>
+				<Select.Root
+					selected={{
+						label: 'Point',
+						value: 'pt'
+					}}
+					onSelectedChange={(e) => {
 						// @ts-ignore
-						if (e.target.nodeName == 'A') {
-							return;
-						}
-
-						selectedRecord = record;
-						recordDetailOpened = true;
+						filter.sortBy = e.value;
 					}}
 				>
-					<Table.Cell class="font-medium">
-						<div class="relative flex">
-							<img
-								class="levelBG absolute ml-[-18px] mt-[-16px] box-border h-[53.5px] w-[350px] max-w-full object-cover"
-								src={`https://img.youtube.com/vi/${record.levels.videoID}/0.jpg`}
-								alt="bg"
-							/>
-							<a
-								class="levelName z-10"
-								href={`/level/${record.levels.id}`}
-								data-sveltekit-preload-data="tap"
-							>
-								{record.levels.name}
-							</a>
-						</div>
-					</Table.Cell>
-					<Table.Cell class="text-center">{new Date(record.timestamp).toLocaleString()}</Table.Cell>
-					<Table.Cell class="text-center">
-						{record.mobile ? 'Mobile' : 'PC'}
-						{#if record.refreshRate}
-							<br />({record.refreshRate}fps)
-						{/if}
-					</Table.Cell>
-					<Table.Cell class="text-center">{Math.round(record[list + 'Pt'] * 10) / 10}</Table.Cell>
-					<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+					<Select.Trigger class="w-[180px]">
+						<Select.Value placeholder="Select item to sort by" />
+					</Select.Trigger>
+					<Select.Content>
+						<Select.Item value="pt">Point</Select.Item>
+						<Select.Item value="timestamp">Date submitted</Select.Item>
+					</Select.Content>
+				</Select.Root>
+			</div>
+			<div class="filterItem">
+				<Label>Ascending</Label>
+				<Switch bind:checked={filter.ascending} />
+			</div>
+			<div class="filterItem">
+				<Button variant="outline" on:click={applyFilter}>Apply</Button>
+			</div>
+		</div>
+		<Tabs.Root value="dl">
+			<div class="tabs">
+				<Tabs.List class="grid w-full grid-cols-2 lg:w-[400px]">
+					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Demon List</Tabs.Trigger>
+					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured List</Tabs.Trigger>
+				</Tabs.List>
+			</div>
+		</Tabs.Root>
+		<Table.Root>
+			<Table.Caption>Total record: {data.records[list].length}</Table.Caption>
+			<Table.Header>
+				<Table.Row>
+					<Table.Head>Level</Table.Head>
+					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
+					<Table.Head class="w-[100px] text-center">Device</Table.Head>
+					<Table.Head class="w-[80px] text-center">Point</Table.Head>
+					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
 				</Table.Row>
-			{/each}
-		</Table.Body>
-	</Table.Root>
+			</Table.Header>
+			<Table.Body>
+				{#each data.records[list] as record}
+					<Table.Row
+						on:click={(e) => {
+							// @ts-ignore
+							if (e.target.nodeName == 'A') {
+								return;
+							}
+
+							selectedRecord = record;
+							recordDetailOpened = true;
+						}}
+					>
+						<Table.Cell class="font-medium">
+							<div class="relative flex">
+								<img
+									class="levelBG absolute ml-[-18px] mt-[-16px] box-border h-[53.5px] w-[350px] max-w-full object-cover"
+									src={`https://img.youtube.com/vi/${record.levels.videoID}/0.jpg`}
+									alt="bg"
+								/>
+								<a
+									class="levelName z-10"
+									href={`/level/${record.levels.id}`}
+									data-sveltekit-preload-data="tap"
+								>
+									{record.levels.name}
+								</a>
+							</div>
+						</Table.Cell>
+						<Table.Cell class="text-center"
+							>{new Date(record.timestamp).toLocaleString()}</Table.Cell
+						>
+						<Table.Cell class="text-center">
+							{record.mobile ? 'Mobile' : 'PC'}
+							{#if record.refreshRate}
+								<br />({record.refreshRate}fps)
+							{/if}
+						</Table.Cell>
+						<Table.Cell class="text-center">{Math.round(record[list + 'Pt'] * 10) / 10}</Table.Cell>
+						<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+					</Table.Row>
+				{/each}
+			</Table.Body>
+		</Table.Root>
+	</div>
 </div>
 
 <style lang="scss">
+	.bgGradient {
+		filter: blur(150px);
+		mask-image: linear-gradient(
+			rgba(0, 0, 0, 1) 0%,
+			rgba(0, 0, 0, 0) 90%
+		);
+	}
+
 	.levelBG {
 		padding-right: 10px;
 		mask-image: linear-gradient(
