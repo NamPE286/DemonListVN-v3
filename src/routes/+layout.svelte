@@ -23,7 +23,7 @@
 	import { mediaQuery } from 'svelte-legos';
 	import NotificationButton from '$lib/components/notificationButton.svelte';
 	import { goto } from '$app/navigation';
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 
 	let links = [
 		{ route: '/list/dl', name: 'Demon List' },
@@ -58,6 +58,17 @@
 		window.location.reload();
 	}
 
+	function updateNavbarOnTop() {
+		const navbar = document.getElementsByClassName('navbarWrapper')[0];
+
+		if (window.scrollY === 0) {
+			console.log('ok');
+			navbar.classList.add('navbarWrapperOnTop');
+		} else {
+			navbar.classList.remove('navbarWrapperOnTop');
+		}
+	}
+
 	onMount(() => {
 		isVisible = true;
 
@@ -69,6 +80,9 @@
 			links[0].route = `/list/dl?uid=${data.data.uid}`;
 			links[1].route = `/list/fl?uid=${data.data.uid}`;
 		});
+
+		updateNavbarOnTop();
+		window.addEventListener('scroll', updateNavbarOnTop);
 	});
 </script>
 
@@ -80,7 +94,7 @@
 	--loading-bar-train-background-color="rgb(0 100 220 / 90%)"
 />
 
-<div class="navbarWrapper">
+<div class="navbarWrapper navbarWrapperOnTop">
 	<div class="right">
 		<a href="/" class="logo" data-sveltekit-preload-data="tap">
 			<div class="logo-img-wrapper">
@@ -335,6 +349,7 @@
 	}
 
 	.navbarWrapper {
+		transition: all 0.3s;
 		position: fixed;
 		width: 100%;
 		height: 55px;
@@ -344,7 +359,8 @@
 		align-items: center;
 		box-sizing: border-box;
 		padding-inline: 30px;
-		border-bottom: 1px solid var(--border1);
+		border-bottom: 1px solid;
+		border-color: var(--border1);
 		backdrop-filter: blur(20px);
 		z-index: 20;
 		.right {
@@ -391,6 +407,11 @@
 			align-items: center;
 			margin-left: auto;
 		}
+	}
+
+	.navbarWrapperOnTop {
+		background-color: transparent;
+		border-color: transparent;
 	}
 
 	@media screen and (max-width: 950px) {

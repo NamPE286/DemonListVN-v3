@@ -309,9 +309,10 @@
 <style lang="scss">
 	.bgGradient {
 		filter: blur(150px);
+		margin-top: -60px;
 		mask-image: linear-gradient(
 			rgba(0, 0, 0, 1) 0%,
-			rgba(0, 0, 0, 0) 90%
+			rgba(0, 0, 0, 0) 100%
 		);
 	}
 
