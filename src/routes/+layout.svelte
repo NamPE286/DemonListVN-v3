@@ -62,7 +62,6 @@
 		const navbar = document.getElementsByClassName('navbarWrapper')[0];
 
 		if (window.scrollY === 0) {
-			console.log('ok');
 			navbar.classList.add('navbarWrapperOnTop');
 		} else {
 			navbar.classList.remove('navbarWrapperOnTop');
