@@ -15,11 +15,11 @@ async function addNewUser() {
     if (error) {
         throw error
     }
-
+    
     await fetch(`${import.meta.env.VITE_API_URL}/player`, {
         method: 'PUT',
         body: JSON.stringify({
-            name: data.user.user_metadata.full_name
+            name: data.user.id
         }),
         headers: {
             "Authorization": `Bearer ${await userData.token()}`,
