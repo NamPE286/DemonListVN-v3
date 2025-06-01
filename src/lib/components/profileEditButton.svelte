@@ -37,8 +37,8 @@
 	}
 
 	async function getImage(e: any) {
-		if(player.isBanned) {
-			return
+		if (player.isBanned) {
+			return;
 		}
 
 		let image = e.target.files[0];
@@ -77,6 +77,11 @@
 	async function saveChanges() {
 		player.province = provinceItem.value;
 		player.city = cityItem.value;
+
+		if (!/^[A-Za-z0-9]+$/.test(player.name)) {
+			toast.error('Name must contain only letters and numbers.');
+			return;
+		}
 
 		const token = await $user.token();
 		const promise = fetch(`${import.meta.env.VITE_API_URL}/player`, {
