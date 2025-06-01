@@ -5,6 +5,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { user } from '$lib/client';
 	import supabase from '$lib/client/supabase';
+	import { dateStore } from 'svelte-legos';
 
 	let notifications: any[] = [];
 
@@ -44,13 +45,15 @@
 	}
 
 	async function fetchNotifications() {
-		notifications = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/notifications/${$user.data.uid}`, {
-				headers: {
-					Authorization: 'Bearer ' + (await $user.token())!
-				}
-			})
-		).json();
+		try {
+			notifications = await (
+				await fetch(`${import.meta.env.VITE_API_URL}/notifications/${$user.data.uid}`, {
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token())!
+					}
+				})
+			).json();
+		} catch {}
 
 		supabase
 			.channel('table-db-changes')
@@ -68,10 +71,30 @@
 				}
 			)
 			.subscribe();
+
+		if ($user.data.exp === 0) {
+			notifications = [
+				{
+					content:
+						'You must submit a record before you can do with anything else. This notification will disappear when your record is accepted.',
+					timestamp: new Date().toISOString()
+				}
+			];
+		}
 	}
 
 	async function clear() {
 		notifications = [];
+
+		if ($user.data.exp === 0) {
+			notifications = [
+				{
+					content:
+						'You must submit a record before you can do with anything else. This notification will disappear when your record is accepted.',
+					timestamp: new Date().toISOString()
+				}
+			];
+		}
 
 		fetch(`${import.meta.env.VITE_API_URL}/notifications/${$user.data.uid}`, {
 			method: 'DELETE',
@@ -97,7 +120,7 @@
 			</Button>
 		</button>
 	</Popover.Trigger>
-	<Popover.Content class="w-[350px] z-[99999]">
+	<Popover.Content class="z-[99999] w-[350px]">
 		<div class="header">
 			<h4 class="font-medium leading-none">Notifications</h4>
 			<div class="buttonWrapper">
