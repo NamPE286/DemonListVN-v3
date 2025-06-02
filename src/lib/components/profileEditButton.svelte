@@ -131,7 +131,7 @@
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="name" class="text-right">Name</Label>
-					<Input id="name" bind:value={player.name} class="col-span-3" />
+					<Input id="name" bind:value={player.name} class="col-span-3" disabled={player.isTrusted && !player.isAdmin}/>
 				</div>
 				<Button
 					class="w-full"
