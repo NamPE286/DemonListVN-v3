@@ -39,6 +39,11 @@
 												{level.flPt}pt
 											{/if}
 										</div>
+										{#if level.minProgress != 100 && type == 'dl'}
+											<div class="pt">
+												{level.minProgress}% Min
+											</div>
+										{/if}
 									</div>
 									<div class="creator">by {level.creator}</div>
 								</div>
@@ -108,6 +113,9 @@
 {/if}
 
 <style lang="scss">
+	.name {
+		margin-right: 3px;
+	}
 	.thumbnail {
 		height: 200px;
 		width: 500px;
@@ -144,7 +152,7 @@
 					font-weight: 500;
 					display: flex;
 					align-items: center;
-					gap: 10px;
+					gap: 5px;
 
 					.pt {
 						background-color: var(--textColor);
