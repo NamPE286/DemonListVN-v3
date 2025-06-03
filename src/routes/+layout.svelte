@@ -38,7 +38,7 @@
 	let searchQuery = '';
 	let searchToggled = false;
 	let isVisible = false;
-	const isDesktop = mediaQuery('(min-width: 1200px)');
+	const isDesktop = mediaQuery('(min-width: 1400px)');
 
 	function signIn() {
 		supabase.auth.signInWithOAuth({
@@ -413,7 +413,7 @@
 		border-color: transparent;
 	}
 
-	@media screen and (max-width: 950px) {
+	@media screen and (max-width: 1200px) {
 		.navbarWrapper {
 			padding-inline: 15px;
 			.right {
