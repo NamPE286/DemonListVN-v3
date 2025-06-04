@@ -31,8 +31,7 @@
 		{ route: '/players', name: 'Players' },
 		{ route: '/clans', name: 'Clans' },
 		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
-		{ route: '/rules', name: 'Rules' },
-		{ route: '/supporter', name: 'Get Supporter' }
+		{ route: '/rules', name: 'Rules' }
 	];
 
 	let searchQuery = '';
@@ -114,6 +113,11 @@
 				<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
 			{/each}
 		</div>
+		{#if $user.loggedIn && supporterValid($user.data.supporterUntil)}
+			<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
+		{:else}
+			<Button class="bg-yellow-400 hover:bg-yellow-500" href="/supporter">Support Us</Button>
+		{/if}
 		<div class="menu">
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger asChild let:builder>
@@ -175,7 +179,7 @@
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end" class="z-[99999] w-56">
 						<DropdownMenu.Label>
-							{#if supporterValid($user.data.supporterUntil)}
+							{#if $user.loggedIn && supporterValid($user.data.supporterUntil)}
 								<span class="text-yellow-400">{$user.data.name}</span>
 							{:else}
 								{$user.data.name}
