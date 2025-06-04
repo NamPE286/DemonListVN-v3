@@ -44,11 +44,7 @@
 		data = data;
 	}
 
-	function supporterValid() {
-		if (!data.player.supporterUntil) {
-			return false;
-		}
-
+	function supporterValid(supporterUntil: string | null) {
 		return new Date(data.player.supporterUntil) > new Date();
 	}
 </script>
@@ -106,7 +102,7 @@
 							</span>
 						</a>
 					{/if}
-					{#if supporterValid()}
+					{#if supporterValid(data.player.supporterUntil)}
 						<h2 class="text-yellow-400">
 							{data.player.name}
 						</h2>
