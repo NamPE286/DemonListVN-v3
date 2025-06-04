@@ -4,6 +4,7 @@
 	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/client';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import { fade } from 'svelte/transition';
 
 	async function purchase() {
 		toast.loading('You will be redirected to our payment portal');
@@ -26,57 +27,74 @@
 	<title>Get Supporter - Demon List VN</title>
 </svelte:head>
 
-<BigTitle value="Become a Supporter 💖" description="Get exclusive perks and help us grow!" />
-<div class="mt-[-20px] flex flex-col items-center">
-	<Button on:click={purchase}>22.000₫/month</Button>
-	<h1 class="mb-[40px] mt-[75px] text-3xl font-bold">Why should you support Demon List VN</h1>
-	<div class="flex gap-[10px]">
-		<Card.Root>
-			<Card.Header>
-				<Card.Title>Support the Team</Card.Title>
-				<Card.Description
-					>A <s>small</s> single person team develops <br />and runs Demon List VN. <br />Your
-					support gives <s>them</s> him the motivation to <br />develop and maintain the website.</Card.Description
-				>
-			</Card.Header>
-		</Card.Root>
-		<Card.Root>
-			<Card.Header>
-				<Card.Title>Server Infrastructure</Card.Title>
-				<Card.Description
-					>Contributions go towards the servers for <br /> running the website</Card.Description
-				>
-			</Card.Header>
-		</Card.Root>
-		<Card.Root>
-			<Card.Header>
-				<Card.Title>Keep Demon List VN self-sustaining</Card.Title>
-				<Card.Description
-					>Your contributions help keep the<br /> game independent and completely free <br />from
-					ads and outside sponsors.</Card.Description
-				>
-			</Card.Header>
-		</Card.Root>
-	</div>
-	<h1 class="mb-[40px] mt-[40px] text-3xl font-bold">What perks will you get</h1>
-	<div class="flex gap-[10px]">
-		<Card.Root>
-			<Card.Header>
-				<Card.Title>Highlighted name</Card.Title>
-				<Card.Description
-					>Stand out on the leaderboard with a <br />flashy golden name.</Card.Description
-				>
-			</Card.Header>
-		</Card.Root>
-		<Card.Root>
-			<Card.Header>
-				<Card.Title>Umm... that pretty much it</Card.Title>
-				<Card.Description
-					>Don't worry. More feature for supporter <br />will be added in the future.</Card.Description
-				>
-			</Card.Header>
-		</Card.Root>
-	</div>
-	<h1 class="mb-[40px] mt-[40px] text-3xl font-bold">So... Have you made your decision?</h1>
-	<Button on:click={purchase}>22.000₫/month</Button>
+<div in:fade={{ delay: 500, duration: 300 }}>
+	<img
+		class="bgGradient absolute z-0 h-[550px] w-full object-cover"
+		src={`https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`}
+		alt="bg"
+	/>
 </div>
+<div class="relative">
+	<BigTitle value="Become a Supporter 💖" description="Get exclusive perks and help us grow!" />
+	<div class="mt-[-20px] flex flex-col items-center">
+		<Button on:click={purchase}>22.000₫/month</Button>
+		<h1 class="mb-[40px] mt-[75px] text-3xl font-bold">Why should you support Demon List VN</h1>
+		<div class="flex gap-[10px]">
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Support the Team</Card.Title>
+					<Card.Description
+						>A <s>small</s> single person team develops <br />and runs Demon List VN. <br />Your
+						support gives <s>them</s> him the motivation to <br />develop and maintain the website.</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Server Infrastructure</Card.Title>
+					<Card.Description
+						>Contributions go towards the servers for <br /> running the website</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Keep Demon List VN self-sustaining</Card.Title>
+					<Card.Description
+						>Your contributions help keep the<br /> game independent and completely free <br />from
+						ads and outside sponsors.</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+		</div>
+		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold">What perks will you get</h1>
+		<div class="flex gap-[10px]">
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Highlighted name</Card.Title>
+					<Card.Description
+						>Stand out on the leaderboard with a <br />flashy golden name.</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Umm... that pretty much it</Card.Title>
+					<Card.Description
+						>Don't worry. More feature for supporter <br />will be added in the future.</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+		</div>
+		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold">So... Have you made your decision?</h1>
+		<Button on:click={purchase}>Support us with just 22.000₫/month</Button>
+	</div>
+</div>
+
+<style lang="scss">
+	.bgGradient {
+		filter: blur(150px);
+		margin-top: -60px;
+		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+	}
+</style>
