@@ -18,6 +18,15 @@
 	let giftTo: any;
 	let fetchState: number = 0;
 
+	function reset() {
+		state = 0;
+		nextState = 0;
+		quantity = [1];
+		giftToUID = '';
+		giftTo = undefined;
+		fetchState = 0;
+	}
+
 	async function fetchPlayer() {
 		fetchState = 1;
 
@@ -58,9 +67,7 @@
 	<Dialog.Trigger
 		class={buttonVariants()}
 		disabled={!$user.loggedIn}
-		on:click={() => {
-			state = 0;
-		}}>{title}</Dialog.Trigger
+		on:click={reset}>{title}</Dialog.Trigger
 	>
 	<Dialog.Content>
 		{#if state == 0}
