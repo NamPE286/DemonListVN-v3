@@ -97,7 +97,7 @@
 			</Dialog.Header>
 			<div>
 				<div class="mb-[20px] flex gap-[10px]">
-					<Input bind:value={giftToUID} placeholder="Player' UID" />
+					<Input bind:value={giftToUID} placeholder="Player's UID" />
 					<Button on:click={fetchPlayer} disabled={fetchState != 0}>Select</Button>
 				</div>
 				<div class="flex justify-center">
