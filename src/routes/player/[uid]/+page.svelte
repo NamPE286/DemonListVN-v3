@@ -43,6 +43,14 @@
 		data.records = records;
 		data = data;
 	}
+
+	function supporterValid() {
+		if (!data.player.supporterUntil) {
+			return false;
+		}
+
+		return new Date(data.player.supporterUntil) > new Date();
+	}
 </script>
 
 <svelte:head>
@@ -86,7 +94,7 @@
 				<Avatar.Fallback class="text-5xl lg:text-6xl">{data.player.name[0]}</Avatar.Fallback>
 			</Avatar.Root>
 			<div class="info">
-				<div class="flex gap-[10px]">
+				<div class="flex items-center gap-[10px]">
 					{#if data.player.clan}
 						<a
 							href={`/clan/${data.player.clan}`}
@@ -98,12 +106,18 @@
 							</span>
 						</a>
 					{/if}
-					<h2>
-						{data.player.name}
-						{#if $user.loggedIn && data.player.uid == $user.data.uid && $user.data.recordCount != 0 && !$user.data.isBanned}
-							<ProfileEditButton bind:data={data.player} />
-						{/if}
-					</h2>
+					{#if supporterValid()}
+						<h2 class="text-yellow-400">
+							{data.player.name}
+						</h2>
+					{:else}
+						<h2>
+							{data.player.name}
+						</h2>
+					{/if}
+					{#if $user.loggedIn && data.player.uid == $user.data.uid && $user.data.recordCount != 0 && !$user.data.isBanned}
+						<ProfileEditButton bind:data={data.player} />
+					{/if}
 				</div>
 
 				{#if data.player.province}
