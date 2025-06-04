@@ -163,7 +163,7 @@
 		<div class="playerInfo2Wrapper">
 			<div class="playerInfo2">
 				<Card.Root>
-					<Card.Header class='bg-white'>
+					<Card.Header>
 						<Card.Title tag="h1">Player's statistic</Card.Title>
 					</Card.Header>
 					<Card.Content>
