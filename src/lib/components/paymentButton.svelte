@@ -139,7 +139,7 @@
 				<Dialog.Title>Review your order</Dialog.Title>
 			</Dialog.Header>
 			<div class="flex text-sm">
-				<p>Demon List VN Supporter Role ({quantity[0]} month)</p>
+				<p>Demon List VN Supporter Role ({quantity[0]} month{quantity[0] > 1 ? 's' : ''})</p>
 				<p class="ml-auto"><b>{formatPrice(22000 * quantity[0])}₫</b></p>
 			</div>
 			<div class="flex text-sm">
@@ -154,7 +154,9 @@
 					</b>
 				</p>
 			</div>
-			<p class='text-sm italic text-gray-500'>Please do not close the payment window until you are redirected back to Demon List VN</p>
+			<p class="text-sm italic text-gray-500">
+				Please do not close the payment window until you are redirected back to Demon List VN
+			</p>
 			<Dialog.Footer>
 				<Button on:click={purchase}>Proceed to Payment</Button>
 			</Dialog.Footer>
