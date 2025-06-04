@@ -113,11 +113,6 @@
 				<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
 			{/each}
 		</div>
-		{#if $user.loggedIn && supporterValid($user.data.supporterUntil)}
-			<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
-		{:else}
-			<Button class="bg-yellow-400 hover:bg-yellow-500" href="/supporter">Support Us</Button>
-		{/if}
 		<div class="menu">
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger asChild let:builder>
@@ -134,6 +129,11 @@
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		</div>
+		{#if $user.loggedIn && supporterValid($user.data.supporterUntil)}
+			<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
+		{:else}
+			<Button class="bg-yellow-400 hover:bg-yellow-500 ml-[10px]" href="/supporter">Support Us</Button>
+		{/if}
 	</div>
 	<div class="left">
 		{#if $isDesktop}
