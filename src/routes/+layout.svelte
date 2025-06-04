@@ -37,7 +37,7 @@
 	let searchQuery = '';
 	let searchToggled = false;
 	let isVisible = false;
-	const isDesktop = mediaQuery('(min-width: 1400px)');
+	const isDesktop = mediaQuery('(min-width: 1200px)');
 
 	function signIn() {
 		supabase.auth.signInWithOAuth({
@@ -112,6 +112,13 @@
 			{#each links as link}
 				<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
 			{/each}
+			{#if $user.loggedIn && supporterValid($user.data.supporterUntil)}
+				<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
+			{:else}
+				<Button class="ml-[10px] bg-yellow-400 hover:bg-yellow-500" href="/supporter"
+					>Support Us</Button
+				>
+			{/if}
 		</div>
 		<div class="menu">
 			<DropdownMenu.Root>
@@ -126,14 +133,18 @@
 							<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
 						</a>
 					{/each}
+					<DropdownMenu.Item>
+						{#if $user.loggedIn && supporterValid($user.data.supporterUntil)}
+							<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
+						{:else}
+							<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter"
+								>Support Us</Button
+							>
+						{/if}
+					</DropdownMenu.Item>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		</div>
-		{#if $user.loggedIn && supporterValid($user.data.supporterUntil)}
-			<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
-		{:else}
-			<Button class="bg-yellow-400 hover:bg-yellow-500 ml-[10px]" href="/supporter">Support Us</Button>
-		{/if}
 	</div>
 	<div class="left">
 		{#if $isDesktop}
@@ -431,7 +442,7 @@
 		border-color: transparent;
 	}
 
-	@media screen and (max-width: 1200px) {
+	@media screen and (max-width: 950px) {
 		.navbarWrapper {
 			padding-inline: 15px;
 			.right {
