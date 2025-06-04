@@ -11,6 +11,14 @@
 	export let showTitle = false;
 
 	let exp = player.exp + player.extraExp;
+
+	function supporterValid() {
+		if (!player.supporterUntil) {
+			return false;
+		}
+
+		return new Date(player.supporterUntil) > new Date();
+	}
 </script>
 
 <div class="wrapper">
@@ -38,7 +46,13 @@
 			rel="noreferrer noopener"
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
-			{player.name}
+			{#if supporterValid()}
+				<span class="text-yellow-400">
+					{player.name}
+				</span>
+			{:else}
+				{player.name}
+			{/if}
 		</HoverCard.Trigger>
 		<HoverCard.Content class="w-80">
 			<div class="hoverName">
@@ -58,7 +72,15 @@
 						>{player.clans.tag}</a
 					>
 				{/if}
-				<h4 class="font-semibold">{player.name}</h4>
+				<h4 class="font-semibold">
+					{#if supporterValid()}
+						<span class="text-yellow-400">
+							{player.name}
+						</span>
+					{:else}
+						{player.name}
+					{/if}
+				</h4>
 			</div>
 			<Separator />
 			<div class="content">
