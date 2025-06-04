@@ -21,7 +21,7 @@
 	<div class="mt-[-20px] flex flex-col items-center">
 		<PaymentButton title="22.000₫/month" />
 		<h1 class="mb-[40px] mt-[75px] text-3xl font-bold">Why should you support Demon List VN</h1>
-		<div class="flex gap-[10px]">
+		<div class="flex gap-[10px] flex-col lg:flex-row">
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Support the Team</Card.Title>
@@ -50,7 +50,7 @@
 			</Card.Root>
 		</div>
 		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold">What perks will you get</h1>
-		<div class="flex gap-[10px]">
+		<div class="flex gap-[10px] flex-col md:flex-row">
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Highlighted name</Card.Title>
@@ -70,7 +70,7 @@
 		</div>
 		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold">So... Have you made your decision?</h1>
 		<PaymentButton title="Support us with just 22.000₫/month" />
-		<div class="w-full pl-[50px] text-gray-400">
+		<div class="text-sm w-full pl-[50px] mt-[100px] text-gray-400">
 			<p>Note:</p>
 			<ul>
 				<li>- Demon List VN Supporter roles are non-recurring payments</li>
