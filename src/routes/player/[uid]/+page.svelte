@@ -45,7 +45,11 @@
 	}
 
 	function supporterValid(supporterUntil: string | null) {
-		return new Date(data.player.supporterUntil) > new Date();
+		if (!supporterUntil) {
+			return false;
+		}
+
+		return new Date(supporterUntil) > new Date();
 	}
 </script>
 

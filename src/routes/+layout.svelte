@@ -68,6 +68,14 @@
 		}
 	}
 
+	function supporterValid(supporterUntil: string | null) {
+		if (!supporterUntil) {
+			return false;
+		}
+
+		return new Date(supporterUntil) > new Date();
+	}
+
 	onMount(() => {
 		isVisible = true;
 
@@ -166,7 +174,13 @@
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end" class="z-[99999] w-56">
-						<DropdownMenu.Label>{$user.data.name}</DropdownMenu.Label>
+						<DropdownMenu.Label>
+							{#if supporterValid($user.data.supporterUntil)}
+								<span class="text-yellow-400">{$user.data.name}</span>
+							{:else}
+								{$user.data.name}
+							{/if}
+						</DropdownMenu.Label>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
 							>Profile</DropdownMenu.Item
