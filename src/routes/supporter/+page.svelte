@@ -1,26 +1,8 @@
 <script lang="ts">
-	import BigTitle from '$lib/components/bigTitle.svelte';
-	import { Button } from '$lib/components/ui/button';
-	import { toast } from 'svelte-sonner';
-	import { user } from '$lib/client';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import BigTitle from '$lib/components/bigTitle.svelte';
 	import { fade } from 'svelte/transition';
-
-	async function purchase() {
-		toast.loading('You will be redirected to our payment portal');
-
-		const res: any = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/payment/getPaymentLink/1/1`, {
-				method: 'GET',
-				headers: {
-					Authorization: 'Bearer ' + (await $user.token()),
-					'Content-Type': 'application/json'
-				}
-			})
-		).json();
-
-		window.location.href = res.checkoutUrl;
-	}
+	import PaymentButton from '$lib/components/paymentButton.svelte';
 </script>
 
 <svelte:head>
@@ -37,7 +19,7 @@
 <div class="relative">
 	<BigTitle value="Become a Supporter 💖" description="Get exclusive perks and help us grow!" />
 	<div class="mt-[-20px] flex flex-col items-center">
-		<Button on:click={purchase}>22.000₫/month</Button>
+		<PaymentButton title="22.000₫/month" />
 		<h1 class="mb-[40px] mt-[75px] text-3xl font-bold">Why should you support Demon List VN</h1>
 		<div class="flex gap-[10px]">
 			<Card.Root>
@@ -45,7 +27,7 @@
 					<Card.Title>Support the Team</Card.Title>
 					<Card.Description
 						>A <s>small</s> single person team develops <br />and runs Demon List VN. <br />Your
-						support gives <s>them</s> him the motivation to <br />develop and maintain the website.</Card.Description
+						support gives <s>them</s> him the motivation <br /> to develop and maintain the website.</Card.Description
 					>
 				</Card.Header>
 			</Card.Root>
@@ -87,7 +69,7 @@
 			</Card.Root>
 		</div>
 		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold">So... Have you made your decision?</h1>
-		<Button on:click={purchase} class="mb-[100px]">Support us with just 22.000₫/month</Button>
+		<PaymentButton title="Support us with just 22.000₫/month" />
 		<div class="w-full pl-[50px] text-gray-400">
 			<p>Note:</p>
 			<ul>
