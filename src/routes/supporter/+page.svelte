@@ -9,18 +9,18 @@
 	<title>Get Supporter - Demon List VN</title>
 </svelte:head>
 
-<div in:fade={{ delay: 500, duration: 300 }}>
+<div in:fade={{ delay: 300, duration: 1000 }}>
 	<img
 		class="bgGradient absolute z-0 h-[550px] w-full object-cover"
 		src={`https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D`}
 		alt="bg"
 	/>
 </div>
-<div class="relative">
+<div class="relative pl-[10px] pr-[10px]">
 	<BigTitle value="Become a Supporter 💖" description="Get exclusive perks and help us grow!" />
 	<div class="mt-[-20px] flex flex-col items-center">
 		<PaymentButton title="22.000₫/month" />
-		<h1 class="mb-[40px] mt-[75px] text-3xl font-bold">Why should you support Demon List VN</h1>
+		<h1 class="mb-[40px] mt-[75px] text-3xl font-bold text-center">Why should you support Demon List VN</h1>
 		<div class="flex gap-[10px] flex-col lg:flex-row">
 			<Card.Root>
 				<Card.Header>
@@ -49,7 +49,7 @@
 				</Card.Header>
 			</Card.Root>
 		</div>
-		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold">What perks will you get</h1>
+		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold text-center">What perks will you get</h1>
 		<div class="flex gap-[10px] flex-col md:flex-row">
 			<Card.Root>
 				<Card.Header>
@@ -86,8 +86,8 @@
 
 <style lang="scss">
 	.bgGradient {
-		filter: blur(150px);
-		margin-top: -60px;
+		filter: blur(175px);
+		margin-top: -50px;
 		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
 	}
 </style>
