@@ -26,6 +26,11 @@
 		}
 
 		const second = (new Date(end).getTime() - new Date().getTime()) / 1000;
+
+		if(second < 0) {
+			return "Expired"
+		}
+
 		const day = Math.floor(second / 86400);
 		const hour = Math.floor((second - day * 86400) / 3600);
 
