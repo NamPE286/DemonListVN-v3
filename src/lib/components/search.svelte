@@ -7,7 +7,7 @@
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { toast } from 'svelte-sonner';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
-	
+
 	export let open: boolean;
 	export let value: string = '';
 
@@ -182,7 +182,11 @@
 								/>
 								<Avatar.Fallback>{item.name[0]}</Avatar.Fallback>
 							</Avatar.Root>
-							<span class="playerName">{item.name}</span>
+							{#if isSupporterActive(item.supporterUntil)}
+								<span class="ml-[10px] text-yellow-400">{item.name}</span>
+							{:else}
+								<span class="ml-[10px]">{item.name}</span>
+							{/if}
 						</Command.Item>
 					</a>
 				{/each}
@@ -190,9 +194,3 @@
 		{/if}
 	</Command.List>
 </Command.Dialog>
-
-<style lang="scss">
-	.playerName {
-		margin-left: 10px;
-	}
-</style>
