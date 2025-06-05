@@ -19,6 +19,7 @@
 
 	let player = structuredClone(data);
 	let fileinput: any;
+	let fileinput1: any;
 	let provinces: any = {};
 	let provinceItem = {
 		disabled: false,
@@ -37,7 +38,7 @@
 		player = structuredClone(data);
 	}
 
-	async function getImage(e: any) {
+	async function getAvatar(e: any) {
 		if (player.isBanned) {
 			return;
 		}
@@ -54,11 +55,11 @@
 					})
 					.then(async (res) => {
 						player.isAvatarGif = true;
-						
+
 						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
 							method: 'PUT',
 							headers: {
-								Authorization: 'Bearer ' + await $user.token(),
+								Authorization: 'Bearer ' + (await $user.token()),
 								'Content-Type': 'application/json'
 							},
 							body: JSON.stringify(player)
@@ -71,8 +72,6 @@
 						} else {
 							resolve({});
 						}
-
-						location.reload();
 					});
 			});
 
@@ -96,10 +95,110 @@
 						cacheControl: '0',
 						upsert: true
 					})
-					.then((res) => {
+					.then(async (res) => {
+						player.isAvatarGif = false;
+
+						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+							method: 'PUT',
+							headers: {
+								Authorization: 'Bearer ' + (await $user.token()),
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(player)
+						});
+
 						const { data, error } = res;
 
 						if (error) {
+							reject();
+						} else {
+							resolve({});
+						}
+					});
+			});
+
+			toast.promise(upload, {
+				loading: 'Uploading...',
+				success: 'Uploaded! It may take a while to take effect.	',
+				error: 'Upload failed.'
+			});
+		}
+	}
+
+	async function getBanner(e: any) {
+		if (player.isBanned) {
+			return;
+		}
+
+		let image = e.target.files[0];
+
+		if (image.name.endsWith('.gif')) {
+			const upload = new Promise((resolve, reject) => {
+				supabase.storage
+					.from('banners')
+					.upload(`/${$user.data.uid}.gif`, image, {
+						cacheControl: '0',
+						upsert: true
+					})
+					.then(async (res) => {
+						player.isBannerGif = true;
+
+						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+							method: 'PUT',
+							headers: {
+								Authorization: 'Bearer ' + (await $user.token()),
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(player)
+						});
+
+						const { data, error } = res;
+
+						if (error) {
+							console.error(error);
+							reject();
+						} else {
+							resolve({});
+						}
+					});
+			});
+
+			toast.promise(upload, {
+				loading: 'Uploading...',
+				success: 'Uploaded! It may take a while to take effect.	',
+				error: 'Upload failed.'
+			});
+		} else {
+			const options = {
+				maxSizeMB: 4.5,
+				maxWidthOrHeight: 1920,
+				useWebWorker: true
+			};
+
+			const cImg = await imageCompression(image, options);
+			const upload = new Promise((resolve, reject) => {
+				supabase.storage
+					.from('banners')
+					.upload(`/${$user.data.uid}.jpg`, cImg, {
+						cacheControl: '0',
+						upsert: true
+					})
+					.then(async (res) => {
+						player.isBannerGif = false;
+
+						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+							method: 'PUT',
+							headers: {
+								Authorization: 'Bearer ' + (await $user.token()),
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(player)
+						});
+
+						const { data, error } = res;
+
+						if (error) {
+							console.error(error);
 							reject();
 						} else {
 							resolve({});
@@ -157,8 +256,16 @@
 	style="display:none"
 	type="file"
 	accept={isSupporterActive($user.data.supporterUntil) ? '.jpg, .jpeg, .gif' : '.jpg, .jpeg'}
-	on:change={(e) => getImage(e)}
+	on:change={(e) => getAvatar(e)}
 	bind:this={fileinput}
+/>
+
+<input
+	style="display:none"
+	type="file"
+	accept={'.jpg, .jpeg, .gif'}
+	on:change={(e) => getBanner(e)}
+	bind:this={fileinput1}
 />
 
 <Dialog.Root bind:open>
@@ -179,15 +286,28 @@
 						disabled={player.isTrusted && !player.isAdmin}
 					/>
 				</div>
-				<Button
-					class="w-full"
-					variant="outline"
-					id="avatar"
-					placeholder="Avatar"
-					on:click={() => {
-						fileinput.click();
-					}}>Upload avatar</Button
-				>
+				<div class="flex gap-[10px]">
+					<Button
+						class="w-full"
+						variant="outline"
+						id="avatar"
+						placeholder="Avatar"
+						on:click={() => {
+							fileinput.click();
+						}}>Upload avatar</Button
+					>
+					<Button
+						class="w-full"
+						variant="outline"
+						id="avatar"
+						placeholder="Avatar"
+						disabled={!isSupporterActive(player.supporterUntil)}
+						on:click={() => {
+							fileinput1.click();
+						}}>Upload banner</Button
+					>
+				</div>
+
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="youtube" class="text-right">YouTube</Label>
 					<Input id="youtube" bind:value={player.youtube} class="col-span-3" />
