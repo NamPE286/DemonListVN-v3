@@ -254,7 +254,7 @@
 								/>
 							{/if}
 							<b>Submitted on:</b>
-							{new Date(record.data.timestamp).toLocaleString()}<br />
+							{new Date(record.data.timestamp).toLocaleString("vi-VN")}<br />
 							<b>Device:</b>
 							{record.data.mobile ? 'Mobile' : 'PC'}
 							{#if record.data.refreshRate}

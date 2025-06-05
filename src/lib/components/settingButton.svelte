@@ -15,7 +15,7 @@
 	import Moon from 'svelte-radix/Moon.svelte';
 	import Desktop from 'svelte-radix/Desktop.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
-	import Input from '$lib/components/ui/input/input.svelte';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	const settingsValue = settings.value;
 	let bgURLOpened = false;
@@ -82,6 +82,7 @@
 			<Tabs.List>
 				<Tabs.Trigger value="general">General</Tabs.Trigger>
 				<Tabs.Trigger value="api">API</Tabs.Trigger>
+				<Tabs.Trigger value="sub">Subscription</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="general">
 				<div class="setting">
@@ -152,7 +153,7 @@
 										{key.key}
 									</button>
 								</Table.Cell>
-								<Table.Cell>{new Date(key.created_at).toLocaleString()}</Table.Cell>
+								<Table.Cell>{new Date(key.created_at).toLocaleString('vi-VN')}</Table.Cell>
 								<Table.Cell class="text-right">
 									<AlertDialog.Root>
 										<AlertDialog.Trigger asChild let:builder>
@@ -199,6 +200,30 @@
 						</AlertDialog.Footer>
 					</AlertDialog.Content>
 				</AlertDialog.Root>
+			</Tabs.Content>
+			<Tabs.Content value="sub">
+				<Table.Root>
+					<Table.Caption>A list of your recent invoices.</Table.Caption>
+					<Table.Header>
+						<Table.Row>
+							<Table.Head class="w-[120px]">Name</Table.Head>
+							<Table.Head>Active Untils</Table.Head>
+						</Table.Row>
+					</Table.Header>
+					<Table.Body>
+						<Table.Row>
+							<Table.Cell class="font-medium">Supporter Role</Table.Cell>
+							{#if $user.data.supporterUntil == null}
+								<Table.Cell>Not activated</Table.Cell>
+							{:else}
+								<Table.Cell
+									>{new Date($user.data.supporterUntil).toLocaleString('vi-VN')}
+									{isSupporterActive($user.data.supporterUntil) ? '' : '(Expired)'}</Table.Cell
+								>
+							{/if}
+						</Table.Row>
+					</Table.Body>
+				</Table.Root>
 			</Tabs.Content>
 		</Tabs.Root>
 	</Dialog.Content>

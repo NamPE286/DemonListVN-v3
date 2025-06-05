@@ -8,7 +8,7 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import Autoplay from 'embla-carousel-autoplay';
 
-	let time = new Date().toLocaleTimeString();
+	let time = new Date().toLocaleTimeString("vi-VN");
 	let visible = false;
 	let recent: any = {
 		dl: null,
@@ -64,7 +64,7 @@
 		getEvents().then((data) => (events = data));
 
 		const interval = setInterval(() => {
-			time = new Date().toLocaleTimeString();
+			time = new Date().toLocaleTimeString("vi-VN");
 		}, 1000);
 
 		return () => {

@@ -632,7 +632,7 @@
 									<a href={`/level/${item.levels.id}`}>{item.levels.name}</a>
 								</Table.Cell>
 								<Table.Cell class="text-center">
-									{new Date(item.timestamp).toLocaleString()}
+									{new Date(item.timestamp).toLocaleString("vi-VN")}
 								</Table.Cell>
 								<Table.Cell class="text-center">
 									{item.mobile ? 'Mobile' : 'PC'}
@@ -662,7 +662,7 @@
 									<PlayerHoverCard player={invitation.players} />
 								</Table.Cell>
 								<Table.Cell>
-									{new Date(invitation.created_at).toLocaleString()}
+									{new Date(invitation.created_at).toLocaleString("vi-VN")}
 								</Table.Cell>
 								<Table.Cell class="text-right">
 									<Button

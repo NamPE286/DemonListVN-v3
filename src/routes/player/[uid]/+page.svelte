@@ -308,7 +308,7 @@
 							</div>
 						</Table.Cell>
 						<Table.Cell class="text-center"
-							>{new Date(record.timestamp).toLocaleString()}</Table.Cell
+							>{new Date(record.timestamp).toLocaleString("vi-VN")}</Table.Cell
 						>
 						<Table.Cell class="text-center">
 							{record.mobile ? 'Mobile' : 'PC'}

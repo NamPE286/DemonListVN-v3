@@ -303,7 +303,7 @@
 								<PlayerHoverCard player={record.players} />
 							</Table.Cell>
 							<Table.Cell class="text-center">
-								{new Date(record.timestamp).toLocaleString()}
+								{new Date(record.timestamp).toLocaleString("vi-VN")}
 							</Table.Cell>
 							<Table.Cell class="text-center">
 								{record.mobile ? 'Mobile' : 'PC'}

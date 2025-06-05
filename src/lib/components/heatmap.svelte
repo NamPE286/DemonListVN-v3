@@ -98,7 +98,7 @@
 								</Tooltip.Trigger>
 								<Tooltip.Content>
 									<p>
-										{new Date(year, month, date + 1).toLocaleDateString('en-IN')}
+										{new Date(year, month, date + 1).toLocaleDateString('vi-VN')}
 										({data[dayOfYear(year, month, date + 1)]} attempts)
 									</p>
 								</Tooltip.Content>
@@ -123,7 +123,7 @@
 								</Tooltip.Trigger>
 								<Tooltip.Content>
 									<p>
-										{new Date(year, month, date + 1).toLocaleDateString('en-IN')}
+										{new Date(year, month, date + 1).toLocaleDateString('vi-VN')}
 										({data[dayOfYear(year, month, date + 1)]} attempts)
 									</p>
 								</Tooltip.Content>
