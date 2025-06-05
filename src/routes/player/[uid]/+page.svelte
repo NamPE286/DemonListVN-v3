@@ -112,6 +112,11 @@
 							{data.player.name}
 						</h2>
 					{/if}
+					{#if data.player.name}
+						<div class="w-[18px] rounded-full bg-black dark:invert">
+							<img class="invert" src="/tick-svgrepo-com.svg" alt="tick" />
+						</div>
+					{/if}
 					{#if $user.loggedIn && data.player.uid == $user.data.uid && $user.data.recordCount != 0 && !$user.data.isBanned}
 						<ProfileEditButton bind:data={data.player} />
 					{/if}

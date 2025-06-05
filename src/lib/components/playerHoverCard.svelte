@@ -48,13 +48,20 @@
 			rel="noreferrer noopener"
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
-			{#if isSupporterActive(player.supporterUntil)}
-				<span class="text-yellow-400">
+			<div class="flex items-center gap-[5px]">
+				{#if isSupporterActive(player.supporterUntil)}
+					<span class="text-yellow-400">
+						{player.name}
+					</span>
+				{:else}
 					{player.name}
-				</span>
-			{:else}
-				{player.name}
-			{/if}
+				{/if}
+				{#if player.isTrusted}
+					<div class="mb-[2.5px] h-[12px] w-[12px] rounded-full bg-black dark:invert">
+						<img class="invert" src="/tick-svgrepo-com.svg" alt="tick" />
+					</div>
+				{/if}
+			</div>
 		</HoverCard.Trigger>
 		<HoverCard.Content class="w-80">
 			<div class="hoverName">
