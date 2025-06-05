@@ -93,7 +93,6 @@
 					{/if}
 				</h4>
 			</div>
-			<Separator />
 			<div class="content">
 				<div class="rating">
 					<div class="flex justify-center">

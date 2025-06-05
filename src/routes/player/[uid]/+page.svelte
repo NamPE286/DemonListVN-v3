@@ -66,15 +66,7 @@
 	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
 {/if}
 <div class="relative">
-	<div in:fade={{ delay: 500, duration: 300 }}>
-		{#if data.records[list].length}
-			<img
-				class="bgGradient absolute z-0 h-[400px] w-full object-cover"
-				src={`https://img.youtube.com/vi/${data.records[list][0].levels.videoID}/0.jpg`}
-				alt="bg"
-			/>
-		{/if}
-	</div>
+
 
 	<div class="wrapper z-1 relative">
 		<div class="playerInfo">
@@ -326,12 +318,6 @@
 </div>
 
 <style lang="scss">
-	.bgGradient {
-		filter: blur(150px);
-		margin-top: -60px;
-		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
-	}
-
 	.levelBG {
 		padding-right: 10px;
 		mask-image: linear-gradient(
