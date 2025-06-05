@@ -59,15 +59,13 @@
 	}
 
 	function formatPrice(x: number) {
-		return x.toLocaleString('de-DE');
+		return x.toLocaleString('vi-VN');
 	}
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger
-		class={buttonVariants()}
-		disabled={!$user.loggedIn}
-		on:click={reset}>{title}</Dialog.Trigger
+	<Dialog.Trigger class={buttonVariants()} disabled={!$user.loggedIn} on:click={reset}
+		>{title}</Dialog.Trigger
 	>
 	<Dialog.Content>
 		{#if state == 0}
@@ -107,7 +105,7 @@
 					<Input bind:value={giftToUID} placeholder="Player's UID" />
 					<Button on:click={fetchPlayer} disabled={fetchState != 0}>Select</Button>
 				</div>
-				<div class="flex justify-center">
+				<div class="flex items-center justify-center">
 					{#if fetchState == 1}
 						<Loading inverted={true} />
 					{:else if fetchState == 2}
