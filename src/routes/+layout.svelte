@@ -174,7 +174,11 @@
 							<Avatar.Root>
 								<Avatar.Image
 									class="object-cover"
-									src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}.jpg`}
+									src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}${
+										isSupporterActive($user.data.supporterUntil) && $user.data.isAvatarGif
+											? '.gif'
+											: '.jpg'
+									}`}
 									alt=""
 								/>
 								<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>

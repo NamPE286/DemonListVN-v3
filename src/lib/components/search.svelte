@@ -6,7 +6,8 @@
 	import Loading from '$lib/components/animation/loading.svelte';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { toast } from 'svelte-sonner';
-
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	
 	export let open: boolean;
 	export let value: string = '';
 
@@ -174,7 +175,9 @@
 							<Avatar.Root>
 								<Avatar.Image
 									class="object-cover"
-									src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${item.uid}.jpg`}
+									src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${item.uid}${
+										isSupporterActive(item.supporterUntil) && item.isAvatarGif ? '.gif' : '.jpg'
+									}`}
 									alt="@shadcn"
 								/>
 								<Avatar.Fallback>{item.name[0]}</Avatar.Fallback>

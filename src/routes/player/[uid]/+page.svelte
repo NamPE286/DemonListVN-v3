@@ -81,7 +81,11 @@
 			<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
 				<Avatar.Image
 					class="object-cover"
-					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}.jpg`}
+					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}${
+						isSupporterActive(data.player.supporterUntil) && data.player.isAvatarGif
+							? '.gif'
+							: '.jpg'
+					}`}
 					alt=""
 				/>
 				<Avatar.Fallback class="text-5xl lg:text-6xl">{data.player.name[0]}</Avatar.Fallback>

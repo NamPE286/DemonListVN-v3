@@ -52,8 +52,12 @@
 				<Avatar.Root>
 					<Avatar.Image
 						class="object-cover"
-						src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.uid}.jpg`}
-						alt="@shadcn"
+						src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.uid}${
+							isSupporterActive(player.supporterUntil) && player.isAvatarGif
+								? '.gif'
+								: '.jpg'
+						}`}
+						alt=""
 					/>
 					<Avatar.Fallback>{player.name[0]}</Avatar.Fallback>
 				</Avatar.Root>
