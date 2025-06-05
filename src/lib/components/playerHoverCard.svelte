@@ -11,6 +11,7 @@
 	export let showTitle = false;
 
 	let exp = player.exp + player.extraExp;
+	let isBannerFailedToLoad = false;
 </script>
 
 <div class="wrapper">
@@ -63,16 +64,19 @@
 			</div>
 		</HoverCard.Trigger>
 		<HoverCard.Content class="w-80">
-			{#if isSupporterActive(player.supporterUntil)}
+			{#if isSupporterActive(player.supporterUntil) && !isBannerFailedToLoad}
 				<img
-					class="bgGradient absolute top-[50px] z-0 ml-[-15px] h-[80px] w-full object-cover rounded"
+					on:error={() => {
+						isBannerFailedToLoad = true;
+					}}
+					class="bgGradient absolute top-[50px] z-0 ml-[-15px] h-[80px] w-full rounded object-cover"
 					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${player.uid}${
 						player.isBannerGif ? '.gif' : '.jpg'
 					}`}
 					alt=""
 				/>
 			{/if}
-			<div class='relative'>
+			<div class="relative">
 				<div class="hoverName">
 					<Avatar.Root>
 						<Avatar.Image

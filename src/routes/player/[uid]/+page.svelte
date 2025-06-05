@@ -19,7 +19,6 @@
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
 	import { getExpLevel } from '$lib/client/getExpLevel';
-	import { fade } from 'svelte/transition';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
@@ -33,6 +32,7 @@
 
 	let exp = data.player.exp + data.player.extraExp;
 	let expLevel = getExpLevel(exp);
+	let isBannerFailedToLoad = false;
 
 	async function applyFilter() {
 		const records = await (
@@ -43,6 +43,14 @@
 
 		data.records = records;
 		data = data;
+	}
+
+	function getCardStyle(player: any) {
+		if (isSupporterActive(player.supporterUntil)) {
+			return `border-[${player.borderColor}] bg-[${player.bgColor}] text-white`;
+		}
+
+		return '';
 	}
 </script>
 
@@ -66,8 +74,11 @@
 	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
 {/if}
 <div class="relative">
-	{#if isSupporterActive(data.player.supporterUntil)}
+	{#if isSupporterActive(data.player.supporterUntil) && !isBannerFailedToLoad}
 		<img
+			on:error={() => {
+				isBannerFailedToLoad = true;
+			}}
 			class="bgGradient absolute z-0 h-[350px] w-full object-cover"
 			src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.player.uid}${
 				data.player.isBannerGif ? '.gif' : '.jpg'
@@ -164,7 +175,7 @@
 		</div>
 		<div class="playerInfo2Wrapper">
 			<div class="playerInfo2">
-				<Card.Root>
+				<Card.Root class={getCardStyle(data.player)}>
 					<Card.Header>
 						<Card.Title tag="h1">Player's statistic</Card.Title>
 					</Card.Header>
