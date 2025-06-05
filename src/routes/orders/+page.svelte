@@ -107,7 +107,11 @@
 								on:click={() => pay(order)}
 								disabled={order.state != 'PENDING'}>Pay</Button
 							>
-							<Button variant="secondary" on:click={() => restore(order)}>Restore</Button>
+							<Button
+								variant="secondary"
+								on:click={() => restore(order)}
+								disabled={order.state == 'CANCELLED'}>Restore</Button
+							>
 						</Table.Cell>
 					</Table.Row>
 				{/each}
