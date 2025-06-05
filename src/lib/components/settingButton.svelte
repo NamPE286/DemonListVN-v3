@@ -203,7 +203,6 @@
 			</Tabs.Content>
 			<Tabs.Content value="sub">
 				<Table.Root>
-					<Table.Caption>A list of your recent invoices.</Table.Caption>
 					<Table.Header>
 						<Table.Row>
 							<Table.Head class="w-[120px]">Name</Table.Head>
