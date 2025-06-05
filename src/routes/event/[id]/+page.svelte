@@ -11,6 +11,8 @@
 	import { page } from '$app/stores';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
+	import Star from 'svelte-radix/Star.svelte';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 	let rewardState = 0;
@@ -126,6 +128,12 @@
 					<Clock size={16} />
 					{getInterval(data.end)}
 				</div>
+				{#if data.isSupporterOnly}
+					<div class="period">
+						<Star size={16} />
+						Supporter Only
+					</div>
+				{/if}
 				{#if data.exp}
 					<div class="period">
 						{data.exp} EXP
@@ -146,49 +154,55 @@
 	</div>
 </div>
 {#if data.exp && $user.loggedIn}
-	<div class="md-[15px] mb-[15px] mt-[15px] flex justify-center">
-		{#if rewardState == 0}
-			<Skeleton class="h-[35px] w-[200px]" />
-		{:else if rewardState == 1}
-			<Button class="w-[200px]" disabled>Reward claimed</Button>
-		{:else if rewardState == 2}
-			<Dialog.Root bind:open={cancelOpened}>
-				<Dialog.Trigger>
-					<Button class="w-[200px]" variant="destructive">Cancel participation</Button>
-				</Dialog.Trigger>
-				<Dialog.Content>
-					<Dialog.Header>
-						<Dialog.Title>Cancel?</Dialog.Title>
-						<Dialog.Description>This action cannot be undone.</Dialog.Description>
-					</Dialog.Header>
-					<Button variant="destructive" on:click={cancelProof}>Proceed</Button>
-				</Dialog.Content>
-			</Dialog.Root>
-		{:else if rewardState == 3}
-			<Button class="w-[200px]" disabled>Event ended</Button>
-		{:else if rewardState == 4}
-			{#if $user.data.exp < data.minExp}
-				<Button class="w-[300px]" disabled>Not enough EXP ({data.minExp} EXP minimum)</Button>
-			{:else}
-				<Dialog.Root bind:open={claimOpened}>
+	{#if !data.supporterOnly || isSupporterActive($user.data.supporterUntil)}
+		<div class="md-[15px] mb-[15px] mt-[15px] flex justify-center">
+			{#if rewardState == 0}
+				<Skeleton class="h-[35px] w-[200px]" />
+			{:else if rewardState == 1}
+				<Button class="w-[200px]" disabled>Reward claimed</Button>
+			{:else if rewardState == 2}
+				<Dialog.Root bind:open={cancelOpened}>
 					<Dialog.Trigger>
-						<Button class="w-[200px]">Participate</Button>
+						<Button class="w-[200px]" variant="destructive">Cancel participation</Button>
 					</Dialog.Trigger>
 					<Dialog.Content>
 						<Dialog.Header>
-							<Dialog.Title>Participate</Dialog.Title>
+							<Dialog.Title>Cancel?</Dialog.Title>
+							<Dialog.Description>This action cannot be undone.</Dialog.Description>
 						</Dialog.Header>
-						{#if data.needProof}
-							<Textarea class="h-[125px]" placeholder="Provide proof" bind:value={proof} />
-						{:else}
-							<Textarea class="h-[125px]" placeholder="Message (optional)" bind:value={proof} />
-						{/if}
-						<Button on:click={claimReward}>Continue</Button>
+						<Button variant="destructive" on:click={cancelProof}>Proceed</Button>
 					</Dialog.Content>
 				</Dialog.Root>
+			{:else if rewardState == 3}
+				<Button class="w-[200px]" disabled>Event ended</Button>
+			{:else if rewardState == 4}
+				{#if $user.data.exp < data.minExp}
+					<Button class="w-[300px]" disabled>Not enough EXP ({data.minExp} EXP minimum)</Button>
+				{:else}
+					<Dialog.Root bind:open={claimOpened}>
+						<Dialog.Trigger>
+							<Button class="w-[200px]">Participate</Button>
+						</Dialog.Trigger>
+						<Dialog.Content>
+							<Dialog.Header>
+								<Dialog.Title>Participate</Dialog.Title>
+							</Dialog.Header>
+							{#if data.needProof}
+								<Textarea class="h-[125px]" placeholder="Provide proof" bind:value={proof} />
+							{:else}
+								<Textarea class="h-[125px]" placeholder="Message (optional)" bind:value={proof} />
+							{/if}
+							<Button on:click={claimReward}>Continue</Button>
+						</Dialog.Content>
+					</Dialog.Root>
+				{/if}
 			{/if}
-		{/if}
-	</div>
+		</div>
+	{:else}
+		<div class="md-[15px] mb-[15px] mt-[15px] flex justify-center">
+			<Button class="w-[200px]" disabled>Not eligible</Button>
+		</div>
+	{/if}
 {/if}
 <div class="content markdown">
 	{#if data.content}

@@ -3,6 +3,7 @@
 	import LevelCard from '$lib/components/levelCard.svelte';
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import Clock from 'svelte-radix/Clock.svelte';
+	import Star from 'svelte-radix/Star.svelte';
 	import { onMount } from 'svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import Autoplay from 'embla-carousel-autoplay';
@@ -80,7 +81,7 @@
 	/>
 </svelte:head>
 
-<div class="w-full pl-[50px] pr-[50px] promotionWrapper">
+<div class="promotionWrapper w-full pl-[50px] pr-[50px]">
 	<Carousel.Root
 		class="h-fit w-full"
 		plugins={[
@@ -102,6 +103,12 @@
 												<Clock size={16} />
 												{getInterval(item.end)}
 											</div>
+											{#if item.isSupporterOnly}
+												<div class="period">
+													<Star size={16} />
+													Supporter Only
+												</div>
+											{/if}
 											{#if item.exp}
 												<div class="period">
 													{item.exp} EXP
