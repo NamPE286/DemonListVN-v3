@@ -82,7 +82,7 @@
 			<Tabs.List>
 				<Tabs.Trigger value="general">General</Tabs.Trigger>
 				<Tabs.Trigger value="api">API</Tabs.Trigger>
-				<Tabs.Trigger value="sub">Subscription</Tabs.Trigger>
+				<Tabs.Trigger value="sub">Subscriptions</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="general">
 				<div class="setting">
