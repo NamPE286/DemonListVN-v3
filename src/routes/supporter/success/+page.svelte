@@ -30,7 +30,7 @@
 		fallDistance="100vh"
 	/>
 </div>
-<div class="flex h-[100vh] flex-col items-center justify-center">
+<div class="flex h-[100vh] flex-col items-center justify-center text-center pl-[10px] pr-[10px]">
 	<div class="mb-[100px] h-[200px] w-[200px] rounded-full bg-green-500 shadow-xl">
 		<img class="invert" src="/tick-svgrepo-com.svg" alt="tick" />
 	</div>
