@@ -6,7 +6,6 @@
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
-	import { onMount } from 'svelte';
 
 	export let player: any;
 	export let showTitle = false;
@@ -64,7 +63,12 @@
 				{/if}
 			</div>
 		</HoverCard.Trigger>
-		<HoverCard.Content class="w-80" style={`background-color: ${player.bgColor}; border-color: ${player.borderColor}`}>
+		<HoverCard.Content
+			class="w-80"
+			style={isSupporterActive(player.supporterUntil)
+				? `background-color: ${player.bgColor}; border-color: ${player.borderColor}`
+				: ''}
+		>
 			{#if isSupporterActive(player.supporterUntil) && !isBannerFailedToLoad}
 				<img
 					on:error={() => {
@@ -161,7 +165,7 @@
 <style lang="scss">
 	.bgGradient {
 		margin-top: -50px;
-		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%,rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 0) 100%);
+		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 25%, rgba(0, 0, 0, 0) 100%);
 	}
 	.progressBar {
 		background-color: gray;

@@ -169,7 +169,9 @@
 		<div class="playerInfo2Wrapper">
 			<div class="playerInfo2">
 				<Card.Root
-					style={`background-color: ${data.player.bgColor}; border-color: ${data.player.borderColor}`}
+					style={isSupporterActive(data.player.supporterUntil)
+						? `background-color: ${data.player.bgColor}; border-color: ${data.player.borderColor}`
+						: ''}
 				>
 					<Card.Header>
 						<Card.Title tag="h1">Player's statistic</Card.Title>
