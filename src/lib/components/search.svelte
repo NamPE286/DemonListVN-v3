@@ -121,13 +121,28 @@
 				{#each result.levels as item}
 					<ContextMenu.Root>
 						<ContextMenu.Trigger>
+							<!--View levels rank-->
 							{#if 'other' in item}
 								<a href={`/level/${item.id}?list=other`} data-sveltekit-preload-data="tap">
-									<Command.Item>{item.name} by {item.creator} ({item.id}) (Not added)</Command.Item>
+									<Command.Item>
+										{#if item.dlTop}
+											<span class="text-white font-bold mr-1">#{item.dlTop} DL</span>
+										{:else if item.flTop}
+											<span class="text-white font-bold mr-1">#{item.flTop} FL</span>
+										{/if}
+										{item.name} by {item.creator} ({item.id}) (Not added)
+									</Command.Item>
 								</a>
 							{:else}
 								<a href={`/level/${item.id}`} data-sveltekit-preload-data="tap">
-									<Command.Item>{item.name} by {item.creator} ({item.id})</Command.Item>
+									<Command.Item>
+										{#if item.dlTop}
+											<span class="text-white font-bold mr-1">#{item.dlTop} DL</span>
+										{:else if item.flTop}
+											<span class="text-white font-bold mr-1">#{item.flTop} FL</span>
+										{/if}
+										{item.name} by {item.creator} ({item.id})
+									</Command.Item>
 								</a>
 							{/if}
 						</ContextMenu.Trigger>
