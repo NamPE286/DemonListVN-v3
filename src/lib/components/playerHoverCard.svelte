@@ -66,7 +66,7 @@
 		<HoverCard.Content
 			class="w-80"
 			style={isSupporterActive(player.supporterUntil)
-				? `background-color: ${player.bgColor}; border-color: ${player.borderColor}`
+				? `background-color: ${player.bgColor}; border-color: ${player.borderColor}; color: white`
 				: ''}
 		>
 			{#if isSupporterActive(player.supporterUntil) && !isBannerFailedToLoad}

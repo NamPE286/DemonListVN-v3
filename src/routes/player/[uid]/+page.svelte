@@ -170,7 +170,7 @@
 			<div class="playerInfo2">
 				<Card.Root
 					style={isSupporterActive(data.player.supporterUntil)
-						? `background-color: ${data.player.bgColor}; border-color: ${data.player.borderColor}`
+						? `background-color: ${data.player.bgColor}; border-color: ${data.player.borderColor}; color: white`
 						: ''}
 				>
 					<Card.Header>
