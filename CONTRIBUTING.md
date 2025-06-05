@@ -12,7 +12,7 @@ Upon submission of a PR, Contributor hereby grants NamPE (Bùi Hùng Nam) a worl
 NamPE reserves the right to designate any submitted feature as supporter-exclusive content. In such cases:  
 - Contributor will receive compensation of no less than 100,000 VND (negotiable) per supporter-exclusive feature.  
 - NamPE shall provide proper credit to the Contributor in connection with the use of the supporter-exclusive feature, even if the PR is closed.  
-- If NamPE fails to provide agreed-upon compensation or credit, the feature shall be made freely available to all users.
+- If NamPE fails to provide agreed-upon compensation or credit, unless NamPE has reached a separate agreement with the Contributor, the feature shall be made freely available to all users.
 
 ## 3. Explicit Assignment of Rights  
 Should the Contributor expressly agree in writing (including but not limited to email, chat, or other written digital communication), NamPE shall obtain full and exclusive rights to use, modify, distribute, and monetize the submitted contributions without further obligation to provide credit or compensation.
