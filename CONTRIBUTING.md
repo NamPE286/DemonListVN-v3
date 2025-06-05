@@ -1,7 +1,7 @@
 # Resources
 - [Demon List VN API server](https://github.com/NamPE286/DemonListVN-v3-api)
 
-# Contribution Agreement
+# Contribution Terms and Conditions
 
 By submitting a Pull Request (“PR”) to this repository, you (“Contributor”) acknowledge and agree to the following terms and conditions:
 
@@ -22,6 +22,7 @@ By submitting a PR, Contributor agrees to:
 - Refrain from modifying or deleting any existing features or components related to payment functionalities.  
 - Not remove or alter credits attributed to other contributors, nor insert credits where not warranted.  
 - Ensure that submitted features do not interfere with existing design, functionality, or visibility of other features. Contributor is encouraged to place credit in a discreet manner, such as within an easter egg.  
+- Contributor is responsible for any bugs or issues arising from their submitted contributions and agrees to address such problems if requested.  
 - Failure to comply with these obligations may result in immediate closure or rejection of the PR.
 
 ## 5. Miscellaneous  
