@@ -20,57 +20,68 @@
 	<BigTitle value="Become a Supporter 💖" description="Get exclusive perks and help us grow!" />
 	<div class="mt-[-20px] flex flex-col items-center">
 		<PaymentButton title="22.000₫/month" />
-		<h1 class="mb-[40px] mt-[75px] text-3xl font-bold text-center">Why should you support Demon List VN</h1>
-		<div class="flex flex-wrap gap-[10px] justify-center">
+		<h1 class="mb-[40px] mt-[75px] text-center text-3xl font-bold">
+			Why should you support Demon List VN
+		</h1>
+		<div class="flex flex-wrap justify-center gap-[10px]">
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Support the Team</Card.Title>
-					<Card.Description
-						>A <s>small</s> single person team develops <br />and runs Demon List VN. <br />Your
-						support gives <s>them</s> him the motivation <br /> to develop and maintain the website.</Card.Description
+					<Card.Description class="w-[250px]"
+						>A <s>small</s> single person team develops and runs Demon List VN. Your support gives
+						<s>them</s> him the motivation to develop and maintain the website.</Card.Description
 					>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Server Infrastructure</Card.Title>
-					<Card.Description
-						>Contributions go towards the servers for <br /> running the website</Card.Description
+					<Card.Description class="w-[250px]"
+						>Contributions go towards the servers for running the website</Card.Description
 					>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Keep Demon List VN self-sustaining</Card.Title>
-					<Card.Description
-						>Your contributions help keep the<br /> game independent and completely free <br />from
-						ads and outside sponsors.</Card.Description
+					<Card.Description class="w-[250px]"
+						>Your contributions help keep the game independent and completely free from ads and
+						outside sponsors.</Card.Description
 					>
 				</Card.Header>
 			</Card.Root>
 		</div>
-		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold text-center">What perks will you get</h1>
-		<div class="flex flex-wrap gap-[10px] justify-center">
+		<h1 class="mb-[40px] mt-[40px] text-center text-3xl font-bold">What perks will you get</h1>
+		<div class="flex flex-wrap justify-center gap-[10px]">
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Highlighted name</Card.Title>
-					<Card.Description
-						>Stand out on the leaderboard with a <br />flashy golden name.</Card.Description
+					<Card.Description class="w-[250px]"
+						>Stand out on the leaderboard with a flashy golden name.</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Animated Avatar and Banner</Card.Title>
+					<Card.Description class="w-[250px]"
+						>Catch everyone's eye with a dynamic avatar and banner that bring your profile to life
+						on the leaderboard</Card.Description
 					>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Umm... that pretty much it</Card.Title>
-					<Card.Description
-						>Don't worry. More feature for supporters <br />will be added in the future.</Card.Description
+					<Card.Description class="w-[250px]"
+						>Don't worry. More feature for supporters will be added in the future.</Card.Description
 					>
 				</Card.Header>
 			</Card.Root>
 		</div>
 		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold">So... Have you made your decision?</h1>
 		<PaymentButton title="Support us with just 22.000₫/month" />
-		<div class="text-sm w-full pl-[50px] mt-[100px] text-gray-400">
+		<div class="mt-[100px] w-full pl-[50px] text-sm text-gray-400">
 			<p>Note:</p>
 			<ul>
 				<li>- Demon List VN Supporter roles are non-recurring payments</li>
