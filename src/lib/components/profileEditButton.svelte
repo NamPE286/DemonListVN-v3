@@ -13,6 +13,7 @@
 	import { onMount } from 'svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { Badge } from '$lib/components/ui/badge';
 
 	export let data: any;
 	export let open = false;
@@ -307,7 +308,20 @@
 						}}>Upload banner</Button
 					>
 				</div>
-
+				{#if isSupporterActive(player.supporterUntil)}
+					<div class="mb-[10px] flex items-center gap-[10px] text-sm">
+						Border
+						<Input type="color" bind:value={player.borderColor} />
+						Background
+						<Input type="color" bind:value={player.bgColor} />
+						<Button
+							variant="outline"
+							on:click={() => {
+								player.borderColor = player.bgColor = null;
+							}}>Reset</Button
+						>
+					</div>
+				{/if}
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="youtube" class="text-right">YouTube</Label>
 					<Input id="youtube" bind:value={player.youtube} class="col-span-3" />
