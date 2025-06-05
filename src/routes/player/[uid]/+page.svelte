@@ -20,6 +20,7 @@
 	import { page } from '$app/stores';
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' = 'dl';
@@ -43,14 +44,6 @@
 
 		data.records = records;
 		data = data;
-	}
-
-	function getCardStyle(player: any) {
-		if (isSupporterActive(player.supporterUntil)) {
-			return `border-[${player.borderColor}] bg-[${player.bgColor}] text-white`;
-		}
-
-		return '';
 	}
 </script>
 
@@ -175,7 +168,9 @@
 		</div>
 		<div class="playerInfo2Wrapper">
 			<div class="playerInfo2">
-				<Card.Root class={getCardStyle(data.player)}>
+				<Card.Root
+					style={`background-color: ${data.player.bgColor}; border-color: ${data.player.borderColor}`}
+				>
 					<Card.Header>
 						<Card.Title tag="h1">Player's statistic</Card.Title>
 					</Card.Header>
