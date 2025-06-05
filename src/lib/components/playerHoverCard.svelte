@@ -2,7 +2,6 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import * as HoverCard from '$lib/components/ui/hover-card/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import { Separator } from '$lib/components/ui/separator';
 	import { getTitle } from '$lib/client';
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import { getExpLevel } from '$lib/client/getExpLevel';
@@ -64,77 +63,88 @@
 			</div>
 		</HoverCard.Trigger>
 		<HoverCard.Content class="w-80">
-			<div class="hoverName">
-				<Avatar.Root>
-					<Avatar.Image
-						class="object-cover"
-						src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.uid}${
-							isSupporterActive(player.supporterUntil) && player.isAvatarGif ? '.gif' : '.jpg'
-						}`}
-						alt=""
-					/>
-					<Avatar.Fallback>{player.name[0]}</Avatar.Fallback>
-				</Avatar.Root>
-				{#if player.clan}
-					<a
-						href={`/clan/${player.clan}`}
-						class={badgeVariants({ variant: 'secondary' })}
-						style={`background-color: ${player.clans.tagBgColor}; color: ${player.clans.tagTextColor};`}
-						>{player.clans.tag}</a
-					>
-				{/if}
-				<h4 class="font-semibold">
-					{#if isSupporterActive(player.supporterUntil)}
-						<span class="text-yellow-400">
-							{player.name}
-						</span>
-					{:else}
-						{player.name}
+			{#if isSupporterActive(player.supporterUntil)}
+				<img
+					class="bgGradient absolute top-[50px] z-0 ml-[-15px] h-[80px] w-full object-cover rounded"
+					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${player.uid}${
+						player.isBannerGif ? '.gif' : '.jpg'
+					}`}
+					alt=""
+				/>
+			{/if}
+			<div class='relative'>
+				<div class="hoverName">
+					<Avatar.Root>
+						<Avatar.Image
+							class="object-cover"
+							src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.uid}${
+								isSupporterActive(player.supporterUntil) && player.isAvatarGif ? '.gif' : '.jpg'
+							}`}
+							alt=""
+						/>
+						<Avatar.Fallback>{player.name[0]}</Avatar.Fallback>
+					</Avatar.Root>
+					{#if player.clan}
+						<a
+							href={`/clan/${player.clan}`}
+							class={badgeVariants({ variant: 'secondary' })}
+							style={`background-color: ${player.clans.tagBgColor}; color: ${player.clans.tagTextColor};`}
+							>{player.clans.tag}</a
+						>
 					{/if}
-				</h4>
-			</div>
-			<div class="content">
-				<div class="rating">
-					<div class="flex justify-center">
-						<div class="leftCol">
-							<b>Lv.{getExpLevel(exp).level}</b>
-						</div>
-					</div>
-					<div class="progressBar">
-						<div class="progress" style={`width: ${getExpLevel(exp).progress}%`}>
-							<b>{getExpLevel(exp).progress}%</b>
-						</div>
-					</div>
+					<h4 class="font-semibold">
+						{#if isSupporterActive(player.supporterUntil)}
+							<span class="text-yellow-400">
+								{player.name}
+							</span>
+						{:else}
+							{player.name}
+						{/if}
+					</h4>
 				</div>
-				<div class="rating">
-					<Tooltip.Root>
-						<Tooltip.Trigger>
+				<div class="content">
+					<div class="rating">
+						<div class="flex justify-center">
 							<div class="leftCol">
-								<div
-									class="title text-white"
-									style={`background-color: ${getTitle('dl', player)?.color}`}
-								>
-									{player.rating}
-								</div>
+								<b>Lv.{getExpLevel(exp).level}</b>
 							</div>
-						</Tooltip.Trigger>
-						<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
-					</Tooltip.Root>
-					<div class="rankWrapper">
-						Demon List rating
-						<div class="rank">
-							#{player.overallRank}
+						</div>
+						<div class="progressBar">
+							<div class="progress" style={`width: ${getExpLevel(exp).progress}%`}>
+								<b>{getExpLevel(exp).progress}%</b>
+							</div>
 						</div>
 					</div>
-				</div>
-				<div class="rating">
-					<div class="leftCol">
-						<div class="title">{player.totalFLpt}</div>
+					<div class="rating">
+						<Tooltip.Root>
+							<Tooltip.Trigger>
+								<div class="leftCol">
+									<div
+										class="title text-white"
+										style={`background-color: ${getTitle('dl', player)?.color}`}
+									>
+										{player.rating}
+									</div>
+								</div>
+							</Tooltip.Trigger>
+							<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
+						</Tooltip.Root>
+						<div class="rankWrapper">
+							Demon List rating
+							<div class="rank">
+								#{player.overallRank}
+							</div>
+						</div>
 					</div>
-					<div class="rankWrapper">
-						Total Featured List point
-						<div class="rank">
-							#{player.flrank}
+					<div class="rating">
+						<div class="leftCol">
+							<div class="title">{player.totalFLpt}</div>
+						</div>
+						<div class="rankWrapper">
+							Total Featured List point
+							<div class="rank">
+								#{player.flrank}
+							</div>
 						</div>
 					</div>
 				</div>
@@ -144,6 +154,10 @@
 </div>
 
 <style lang="scss">
+	.bgGradient {
+		margin-top: -50px;
+		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+	}
 	.progressBar {
 		background-color: gray;
 		width: 100%;
