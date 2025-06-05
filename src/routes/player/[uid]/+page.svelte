@@ -66,7 +66,15 @@
 	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
 {/if}
 <div class="relative">
-
+	{#if isSupporterActive(data.player.supporterUntil)}
+		<img
+			class="bgGradient absolute z-0 h-[350px] w-full object-cover"
+			src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.player.uid}${
+				data.player.isBannerGif ? '.gif' : '.jpg'
+			}`}
+			alt=""
+		/>
+	{/if}
 
 	<div class="wrapper z-1 relative">
 		<div class="playerInfo">
@@ -300,7 +308,7 @@
 							</div>
 						</Table.Cell>
 						<Table.Cell class="text-center"
-							>{new Date(record.timestamp).toLocaleString("vi-VN")}</Table.Cell
+							>{new Date(record.timestamp).toLocaleString('vi-VN')}</Table.Cell
 						>
 						<Table.Cell class="text-center">
 							{record.mobile ? 'Mobile' : 'PC'}
@@ -318,6 +326,10 @@
 </div>
 
 <style lang="scss">
+	.bgGradient {
+		margin-top: -50px;
+		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+	}
 	.levelBG {
 		padding-right: 10px;
 		mask-image: linear-gradient(
