@@ -21,7 +21,7 @@
 	<div class="mt-[-20px] flex flex-col items-center">
 		<PaymentButton title="22.000₫/month" />
 		<h1 class="mb-[40px] mt-[75px] text-3xl font-bold text-center">Why should you support Demon List VN</h1>
-		<div class="flex gap-[10px] flex-col lg:flex-row">
+		<div class="flex flex-wrap gap-[10px] justify-center">
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Support the Team</Card.Title>
@@ -50,7 +50,7 @@
 			</Card.Root>
 		</div>
 		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold text-center">What perks will you get</h1>
-		<div class="flex gap-[10px] flex-col md:flex-row">
+		<div class="flex flex-wrap gap-[10px] justify-center">
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Highlighted name</Card.Title>
