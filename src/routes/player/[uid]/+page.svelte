@@ -112,7 +112,7 @@
 							{data.player.name}
 						</h2>
 					{/if}
-					{#if data.player.name}
+					{#if data.player.isTrusted}
 						<div class="w-[18px] rounded-full bg-black dark:invert">
 							<img class="invert" src="/tick-svgrepo-com.svg" alt="tick" />
 						</div>
