@@ -6,19 +6,12 @@
 	import { getTitle } from '$lib/client';
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import { getExpLevel } from '$lib/client/getExpLevel';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	export let player: any;
 	export let showTitle = false;
 
 	let exp = player.exp + player.extraExp;
-
-	function supporterValid() {
-		if (!player.supporterUntil) {
-			return false;
-		}
-
-		return new Date(player.supporterUntil) > new Date();
-	}
 </script>
 
 <div class="wrapper">
@@ -46,7 +39,7 @@
 			rel="noreferrer noopener"
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
-			{#if supporterValid()}
+			{#if isSupporterActive(player.supporterUntil)}
 				<span class="text-yellow-400">
 					{player.name}
 				</span>
@@ -73,7 +66,7 @@
 					>
 				{/if}
 				<h4 class="font-semibold">
-					{#if supporterValid()}
+					{#if isSupporterActive(player.supporterUntil)}
 						<span class="text-yellow-400">
 							{player.name}
 						</span>

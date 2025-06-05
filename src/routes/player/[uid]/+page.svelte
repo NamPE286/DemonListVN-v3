@@ -20,6 +20,7 @@
 	import { page } from '$app/stores';
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { fade } from 'svelte/transition';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' = 'dl';
@@ -42,14 +43,6 @@
 
 		data.records = records;
 		data = data;
-	}
-
-	function supporterValid(supporterUntil: string | null) {
-		if (!supporterUntil) {
-			return false;
-		}
-
-		return new Date(supporterUntil) > new Date();
 	}
 </script>
 
@@ -106,7 +99,7 @@
 							</span>
 						</a>
 					{/if}
-					{#if supporterValid(data.player.supporterUntil)}
+					{#if isSupporterActive(data.player.supporterUntil)}
 						<h2 class="text-yellow-400">
 							{data.player.name}
 						</h2>

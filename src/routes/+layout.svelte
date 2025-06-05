@@ -23,7 +23,8 @@
 	import { mediaQuery } from 'svelte-legos';
 	import NotificationButton from '$lib/components/notificationButton.svelte';
 	import { goto } from '$app/navigation';
-	import { onMount, onDestroy } from 'svelte';
+	import { onMount } from 'svelte';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	let links = [
 		{ route: '/list/dl', name: 'Demon List' },
@@ -67,14 +68,6 @@
 		}
 	}
 
-	function supporterValid(supporterUntil: string | null) {
-		if (!supporterUntil) {
-			return false;
-		}
-
-		return new Date(supporterUntil) > new Date();
-	}
-
 	onMount(() => {
 		isVisible = true;
 
@@ -112,7 +105,7 @@
 			{#each links as link}
 				<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
 			{/each}
-			{#if $user.loggedIn && supporterValid($user.data.supporterUntil)}
+			{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
 				<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
 			{:else}
 				<Button class="ml-[10px] bg-yellow-400 hover:bg-yellow-500" href="/supporter"
@@ -134,7 +127,7 @@
 						</a>
 					{/each}
 					<DropdownMenu.Item>
-						{#if $user.loggedIn && supporterValid($user.data.supporterUntil)}
+						{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
 							<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
 						{:else}
 							<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter"
@@ -190,7 +183,7 @@
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end" class="z-[99999] w-56">
 						<DropdownMenu.Label>
-							{#if $user.loggedIn && supporterValid($user.data.supporterUntil)}
+							{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
 								<span class="text-yellow-400">{$user.data.name}</span>
 							{:else}
 								{$user.data.name}

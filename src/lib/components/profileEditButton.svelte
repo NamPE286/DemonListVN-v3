@@ -12,6 +12,7 @@
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	export let data: any;
 	export let open = false;
@@ -42,36 +43,76 @@
 		}
 
 		let image = e.target.files[0];
-		const options = {
-			maxSizeMB: 0.035,
-			maxWidthOrHeight: 480,
-			useWebWorker: true
-		};
 
-		const cImg = await imageCompression(image, options);
-		const upload = new Promise((resolve, reject) => {
-			supabase.storage
-				.from('avatars')
-				.upload(`/${$user.data.uid}.jpg`, cImg, {
-					cacheControl: '0',
-					upsert: true
-				})
-				.then((res) => {
-					const { data, error } = res;
+		if (image.name.endsWith('.gif')) {
+			const upload = new Promise((resolve, reject) => {
+				supabase.storage
+					.from('avatars')
+					.upload(`/${$user.data.uid}.gif`, image, {
+						cacheControl: '0',
+						upsert: true
+					})
+					.then(async (res) => {
+						player.isAvatarGif = true;
+						
+						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+							method: 'PUT',
+							headers: {
+								Authorization: 'Bearer ' + await $user.token(),
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(player)
+						});
 
-					if (error) {
-						reject();
-					} else {
-						resolve({});
-					}
-				});
-		});
+						const { data, error } = res;
 
-		toast.promise(upload, {
-			loading: 'Uploading...',
-			success: 'Uploaded! It may take a while to take effect.	',
-			error: 'Upload failed.'
-		});
+						if (error) {
+							reject();
+						} else {
+							resolve({});
+						}
+
+						location.reload();
+					});
+			});
+
+			toast.promise(upload, {
+				loading: 'Uploading...',
+				success: 'Uploaded! It may take a while to take effect.	',
+				error: 'Upload failed.'
+			});
+		} else {
+			const options = {
+				maxSizeMB: 0.035,
+				maxWidthOrHeight: 480,
+				useWebWorker: true
+			};
+
+			const cImg = await imageCompression(image, options);
+			const upload = new Promise((resolve, reject) => {
+				supabase.storage
+					.from('avatars')
+					.upload(`/${$user.data.uid}.jpg`, cImg, {
+						cacheControl: '0',
+						upsert: true
+					})
+					.then((res) => {
+						const { data, error } = res;
+
+						if (error) {
+							reject();
+						} else {
+							resolve({});
+						}
+					});
+			});
+
+			toast.promise(upload, {
+				loading: 'Uploading...',
+				success: 'Uploaded! It may take a while to take effect.	',
+				error: 'Upload failed.'
+			});
+		}
 	}
 
 	async function saveChanges() {
@@ -115,7 +156,7 @@
 <input
 	style="display:none"
 	type="file"
-	accept=".jpg, .jpeg"
+	accept={isSupporterActive($user.data.supporterUntil) ? '.jpg, .jpeg, .gif' : '.jpg, .jpeg'}
 	on:change={(e) => getImage(e)}
 	bind:this={fileinput}
 />
@@ -131,7 +172,12 @@
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="name" class="text-right">Name</Label>
-					<Input id="name" bind:value={player.name} class="col-span-3" disabled={player.isTrusted && !player.isAdmin}/>
+					<Input
+						id="name"
+						bind:value={player.name}
+						class="col-span-3"
+						disabled={player.isTrusted && !player.isAdmin}
+					/>
 				</div>
 				<Button
 					class="w-full"
