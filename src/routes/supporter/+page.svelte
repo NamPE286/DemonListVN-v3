@@ -16,9 +16,9 @@
 		alt="bg"
 	/>
 </div>
-<div class="relative pl-[10px] pr-[10px]">
+<div class="relative pl-[10px] pr-[10px] flex flex-col items-center">
 	<BigTitle value="Become a Supporter 💖" description="Get exclusive perks and help us grow!" />
-	<div class="mt-[-20px] flex flex-col items-center">
+	<div class="mt-[-20px] flex flex-col items-center max-w-[1000px]">
 		<PaymentButton title="22.000₫/month" />
 		<h1 class="mb-[40px] mt-[75px] text-center text-3xl font-bold">
 			Why should you support Demon List VN
@@ -76,6 +76,14 @@
 					<Card.Description class="w-[250px]"
 						>Quickly check where your submission stands in the queue and see how close it is to
 						being reviewed</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Be the first to try our newest feature</Card.Title>
+					<Card.Description class="w-[250px]"
+						>Gain early access to new releases with new features before they go public!</Card.Description
 					>
 				</Card.Header>
 			</Card.Root>
