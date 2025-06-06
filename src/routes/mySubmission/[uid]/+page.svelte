@@ -116,7 +116,7 @@
 								{#if record.needMod}
 									Forwarded
 								{:else if !record.queueNo}
-									Reviewing
+									-
 								{:else}
 									{record.queueNo}
 								{/if}
