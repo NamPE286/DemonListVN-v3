@@ -335,7 +335,7 @@
 
 <style lang="scss">
 	.bgGradient {
-		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 60%);
+		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
 	}
 	.levelBG {
 		padding-right: 10px;
