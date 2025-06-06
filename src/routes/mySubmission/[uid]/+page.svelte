@@ -9,6 +9,7 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 	let alertOpened = false;
@@ -37,7 +38,7 @@
 					return 'Submission cancelled!';
 				},
 				error: (err) => {
-					return 'Failed to cancel submission.'
+					return 'Failed to cancel submission.';
 				}
 			}
 		);
@@ -74,6 +75,9 @@
 					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 					<Table.Head class="w-[100px] text-center">Device</Table.Head>
 					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
+					{#if isSupporterActive($user.data.supporterUntil)}
+						<Table.Head class="w-[80px] text-center">Queue no.</Table.Head>
+					{/if}
 					<Table.Head class="w-[0px] text-center"></Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
 				</Table.Row>
@@ -98,7 +102,7 @@
 							</a>
 						</Table.Cell>
 						<Table.Cell class="text-center"
-							>{new Date(record.timestamp).toLocaleString("vi-VN")}</Table.Cell
+							>{new Date(record.timestamp).toLocaleString('vi-VN')}</Table.Cell
 						>
 						<Table.Cell class="text-center">
 							{record.mobile ? 'Mobile' : 'PC'}
@@ -107,6 +111,17 @@
 							{/if}
 						</Table.Cell>
 						<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+						{#if isSupporterActive($user.data.supporterUntil)}
+							<Table.Cell class="text-center">
+								{#if record.needMod}
+									Forwarded
+								{:else if !record.queueNo}
+									Reviewing
+								{:else}
+									{record.queueNo}
+								{/if}
+							</Table.Cell>
+						{/if}
 						<Table.Cell class="text-center">
 							<button>
 								<a href={record.videoLink} target="_blank">
