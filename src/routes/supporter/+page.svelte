@@ -45,7 +45,7 @@
 				<Card.Header>
 					<Card.Title>Keep Demon List VN self-sustaining</Card.Title>
 					<Card.Description class="w-[250px]"
-						>Your contributions help keep the game independent and completely free from ads and
+						>Your contributions help keep the site independent and completely free from ads and
 						outside sponsors.</Card.Description
 					>
 				</Card.Header>
