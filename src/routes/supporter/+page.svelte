@@ -104,9 +104,9 @@
 				</Card.Header>
 			</Card.Root>
 		</div>
-		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold">So... Have you made your decision?</h1>
+		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold text-center">So... Have you made your decision?</h1>
 		<PaymentButton title="Support us with just 22.000₫/month" />
-		<div class="mt-[100px] w-full pl-[50px] text-sm text-gray-400">
+		<div class="mt-[100px] w-full pl-[10px] lg:pl-[50px] text-sm text-gray-400">
 			<p>Note:</p>
 			<ul>
 				<li>- Demon List VN Supporter roles are non-recurring payments</li>
