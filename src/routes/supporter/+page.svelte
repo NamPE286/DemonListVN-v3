@@ -72,6 +72,15 @@
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
+					<Card.Title>Track your submission status</Card.Title>
+					<Card.Description class="w-[250px]"
+						>Quickly check where your submission stands in the queue and see how close it is to
+						being reviewed</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
 					<Card.Title>Umm... that pretty much it</Card.Title>
 					<Card.Description class="w-[250px]"
 						>Don't worry. More feature for supporters will be added in the future.</Card.Description
