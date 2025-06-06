@@ -72,7 +72,7 @@
 			on:error={() => {
 				isBannerFailedToLoad = true;
 			}}
-			class="bgGradient absolute z-0 h-[350px] w-full object-cover"
+			class="bgGradient absolute z-0 h-[600px] w-full object-cover mt-[-50px]"
 			src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.player.uid}${
 				data.player.isBannerGif ? '.gif' : '.jpg'
 			}`}
@@ -335,8 +335,7 @@
 
 <style lang="scss">
 	.bgGradient {
-		margin-top: -50px;
-		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
+		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 60%);
 	}
 	.levelBG {
 		padding-right: 10px;
