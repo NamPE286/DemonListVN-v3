@@ -72,7 +72,7 @@
 			on:error={() => {
 				isBannerFailedToLoad = true;
 			}}
-			class="bgGradient absolute z-0 h-[600px] w-full object-cover mt-[-50px]"
+			class="bgGradient absolute z-0 mt-[-50px] h-[600px] w-full object-cover"
 			src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.player.uid}${
 				data.player.isBannerGif ? '.gif' : '.jpg'
 			}`}
@@ -170,7 +170,7 @@
 			<div class="playerInfo2">
 				<Card.Root
 					style={isSupporterActive(data.player.supporterUntil)
-						? `background-color: ${data.player.bgColor}; border-color: ${data.player.borderColor}; color: white`
+						? `background-color: ${data.player.bgColor}; border-color: ${data.player.borderColor}; ${data.player.bgColor ? 'color: white' : ''}`
 						: ''}
 				>
 					<Card.Header>
