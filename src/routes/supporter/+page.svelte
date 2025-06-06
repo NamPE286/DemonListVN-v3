@@ -102,6 +102,7 @@
 			<p>Note:</p>
 			<ul>
 				<li>- Demon List VN Supporter roles are non-recurring payments</li>
+				<li>- Demon List VN Supporter roles are non-refundable</li>
 				<li>
 					- If you buy one while you still have an active roles, it will extend the duration in
 					addition to any remaining time.
