@@ -41,9 +41,13 @@
 	</ul>
 	<h2>Demon List rule</h2>
 	<ul>
-		<li>All levels must be insane or extreme demons at the time of submission. Some lower tier insane demon may not be accepted.</li>
+		<li>All levels must be insane or extreme demons at the time of submission..</li>
 		<li>All records must be 360p 25fps or better</li>
 		<li>Raw is required for all records.</li>
+		<li>
+			Note: Insane Demons will not receive a rating, but submissions are still accepted for archival
+			purposes.
+		</li>
 	</ul>
 	<h2>Featured List rule</h2>
 	<ul>
@@ -84,7 +88,7 @@
 <style lang="scss">
 	.wrapper {
 		padding-inline: 100px;
-        
+
 		h2 {
 			display: block;
 			font-size: 1.5em;
