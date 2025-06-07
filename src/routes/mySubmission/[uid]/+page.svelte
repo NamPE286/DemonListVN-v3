@@ -75,9 +75,7 @@
 					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 					<Table.Head class="w-[100px] text-center">Device</Table.Head>
 					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
-					{#if isSupporterActive($user.data.supporterUntil)}
-						<Table.Head class="w-[80px] text-center">Queue no.</Table.Head>
-					{/if}
+					<Table.Head class="w-[80px] text-center">Queue no.</Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
 				</Table.Row>
@@ -111,17 +109,15 @@
 							{/if}
 						</Table.Cell>
 						<Table.Cell class="text-center">{record.progress}%</Table.Cell>
-						{#if isSupporterActive($user.data.supporterUntil)}
-							<Table.Cell class="text-center">
-								{#if record.needMod}
-									Forwarded
-								{:else if !record.queueNo}
-									-
-								{:else}
-									{record.queueNo}
-								{/if}
-							</Table.Cell>
-						{/if}
+						<Table.Cell class="text-center">
+							{#if record.needMod}
+								Forwarded
+							{:else if !record.queueNo}
+								-
+							{:else}
+								{record.queueNo}
+							{/if}
+						</Table.Cell>
 						<Table.Cell class="text-center">
 							<button>
 								<a href={record.videoLink} target="_blank">

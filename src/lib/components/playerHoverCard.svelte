@@ -16,15 +16,6 @@
 
 <div class="wrapper">
 	<HoverCard.Root>
-		<Avatar.Root>
-			<Avatar.Image
-				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.uid}${
-					isSupporterActive(player.supporterUntil) && player.isAvatarGif ? '.gif' : '.jpg'
-				}`}
-				alt=""
-			/>
-			<Avatar.Fallback>{player.name[0]}</Avatar.Fallback>
-		</Avatar.Root>
 		{#if player.clan}
 			{#if showTitle && getTitle('dl', player)}
 				<Tooltip.Root>
