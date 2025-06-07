@@ -442,7 +442,7 @@
 		border-color: transparent;
 	}
 
-	@media screen and (max-width: 950px) {
+	@media screen and (max-width: 1000px) {
 		.navbarWrapper {
 			padding-inline: 15px;
 			.right {

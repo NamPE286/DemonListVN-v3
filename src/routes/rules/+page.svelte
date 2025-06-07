@@ -43,7 +43,7 @@
 	<ul>
 		<li>All levels must be insane or extreme demons at the time of submission..</li>
 		<li>All records must be 360p 25fps or better</li>
-		<li>Raw is required for all records.</li>
+		<li>Raw is required for all records. (except for Insane Demon)</li>
 		<li>
 			Note: Insane Demons will not receive a rating, but submissions are still accepted for archival
 			purposes.
