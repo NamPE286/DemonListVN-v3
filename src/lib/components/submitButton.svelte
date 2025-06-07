@@ -156,8 +156,6 @@
 		</Dialog.Header>
 		{#if step == 0}
 			<Alert.Root>
-				<ExclamationTriangle class="h-4 w-4" />
-				<Alert.Title>Attention!</Alert.Title>
 				<Alert.Description>
 					- Read the <button on:click={() => (open = false)}
 						><a href="/rules"><u>rules</u></a></button
@@ -170,6 +168,13 @@
 					<a href="https://github.com/NamPE286/DemonListVN-geode-mod/releases">
 						<u>Demon List VN's geode mod</u>
 					</a> while beating level to have higher chance of acceptance.
+				</Alert.Description>
+			</Alert.Root>
+			<Alert.Root class="border-yellow-400">
+				<Alert.Description>
+					<a class="underline" href="/supporter">Supporters'</a> submissions are prioritized in the
+					review queue. Their records are treated as if they were submitted 7 days earlier (skip
+					ahead by about 150 submissions).
 				</Alert.Description>
 			</Alert.Root>
 		{/if}

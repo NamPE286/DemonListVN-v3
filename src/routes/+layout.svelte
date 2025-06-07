@@ -38,7 +38,7 @@
 	let searchQuery = '';
 	let searchToggled = false;
 	let isVisible = false;
-	const isDesktop = mediaQuery('(min-width: 1200px)');
+	const isDesktop = mediaQuery('(min-width: 1300px)');
 
 	function signIn() {
 		supabase.auth.signInWithOAuth({
