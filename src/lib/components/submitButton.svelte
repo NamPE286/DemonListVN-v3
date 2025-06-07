@@ -11,6 +11,7 @@
 
 	import ExclamationTriangle from 'svelte-radix/ExclamationTriangle.svelte';
 	import { toast } from 'svelte-sonner';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	const defaultValue: any = {
 		levelid: NaN,
@@ -172,9 +173,9 @@
 			</Alert.Root>
 			<Alert.Root class="border-yellow-400">
 				<Alert.Description>
-					<a class="underline" href="/supporter">Supporters'</a> submissions are prioritized in the
-					review queue. Their records are treated as if they were submitted 7 days earlier (skip
-					ahead by about 150 submissions).
+					<a class="underline" href="/supporter">Supporters'</a> submissions are prioritized in the review
+					queue. Their records are treated as if they were submitted 7 days earlier (skip ahead by about
+					150 submissions).
 				</Alert.Description>
 			</Alert.Root>
 		{/if}
@@ -332,8 +333,13 @@
 						<AlertDialog.Header>
 							<AlertDialog.Title>Submitted!</AlertDialog.Title>
 							<AlertDialog.Description>
-								Your submission has been sent! It may take a few day for a moderator to approve your
-								submission.
+								{#if isSupporterActive($user.data.supporterUntil)}
+									Your submission has been sent and <span class="text-yellow-400">prioritized!</span
+									> It will be reviewed shortly.
+								{:else}
+									Your submission has been sent! It may take a few day for a moderator to approve
+									your submission.
+								{/if}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
