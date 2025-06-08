@@ -1,120 +1,168 @@
 <script lang="ts">
-    import supabase from '$lib/client/supabase';
     import LevelCard from '$lib/components/levelCard.svelte';
     import { onMount } from 'svelte';
     import { Input } from '$lib/components/ui/input';
     import { Button } from '$lib/components/ui/button';
 
-    let levels: any[] = [];
-    let filteredLevels: any[] = [];
-    let result: any = null;
+    const API_URL = 'https://api.demonlistvn.com';
+    const SPIN_INTERVAL = 70;
+    const SPIN_COUNT = 30;
+
+    interface Level {
+        id: number;
+        name: string;
+        creator: string;
+        dlTop: number;
+        thumbnail: string;
+    }
+
+    let result: Level | null = null;
     let spinning = false;
-    let displayLevel: any = null;
-    let timer: any;
+    let displayLevel: Level | null = null;
+    let timer: number;
     let error: string | null = null;
+
+    const emptyLevel: Level = {
+        id: 0,
+        name: 'Unknown',
+        creator: 'Unknown',
+        dlTop: 0,
+        thumbnail: ''
+    };
 
     let topFrom: number | null = null;
     let topTo: number | null = null;
-
-    let completionInput = 1;
-    let showCongrats = false;
-
-    let usedLevels: any[] = [];
-    let levelCardClickable = false;
-
     let minDlTop: number | null = null;
     let maxDlTop: number | null = null;
 
-    onMount(async () => {
-        const { data, error: err } = await supabase.from('levels').select('*');
-        if (err) {
-            error = 'Failed to load level list!';
-        } else {
-            levels = (data ?? []).filter(lv => lv.dlTop !== undefined && lv.dlTop !== null);
-            if (levels.length > 0) {
-                minDlTop = Math.min(...levels.map(lv => lv.dlTop));
-                maxDlTop = Math.max(...levels.map(lv => lv.dlTop));
-                const random = levels[Math.floor(Math.random() * levels.length)];
-                displayLevel = random;
-                result = random;
-            }
-            filterByRange();
-        }
-    });
+    let completionInput = 1;
+    let showCongrats = false;
+    let usedLevels: Level[] = [];
+    let levelCardClickable = false;
+    
 
-    function filterByRange() {
-        if (topFrom == null || topTo == null) {
-            filteredLevels = levels.filter(
-                lv => lv.dlTop && !usedLevels.some(u => u.id === lv.id)
-            );
+        $: filteredLevels = usedLevels.filter(level => {
+            if (topFrom !== null && topTo !== null) {
+                return level.dlTop >= topFrom && level.dlTop <= topTo;
+            }
+            return true;
+        });
+
+    async function getRandomLevel(): Promise<Level | null> {
+        try {
+            const params = new URLSearchParams({
+                count: '1'
+            });
+
+            if (topFrom !== null && topTo !== null) {
+                params.append('dlTopRange', `${topFrom}-${topTo}`);
+            }
+
+            const response = await fetch(`${API_URL}/level/random?${params}`);
+            if (!response.ok) {
+                throw new Error('Failed to get random level');
+            }
+
+            const level = await response.json();
+            return level;
+        } catch (e) {
+            error = e instanceof Error ? e.message : 'Failed to get random level';
+            return null;
+        }
+    }
+
+    async function spinRoulette(): Promise<void> {
+        if (spinning) {
             return;
         }
-        filteredLevels = levels.filter(
-            lv =>
-                lv.dlTop &&
-                topFrom !== null && topTo !== null &&
-                lv.dlTop >= topFrom && lv.dlTop <= topTo &&
-                !usedLevels.some(u => u.id === lv.id)
-        );
-    }
 
-    function spinRoulette() {
-        filterByRange();
-        if (!filteredLevels.length) return;
         spinning = true;
         result = null;
         let count = 0;
-        timer = setInterval(() => {
-            const random = filteredLevels[Math.floor(Math.random() * filteredLevels.length)];
-            displayLevel = random;
-            count++;
-            if (count > 20) {
-                clearInterval(timer);
-                result = random;
-                displayLevel = random;
+        levelCardClickable = true;
+
+        timer = window.setInterval(async () => {
+            try {
+                const random = await getRandomLevel();
+                if (random) {
+                    displayLevel = random;
+                }
+                count++;
+
+                if (count > SPIN_COUNT) {
+                    window.clearInterval(timer);
+                    if (random) {
+                        result = random;
+                        displayLevel = random;
+                        if (!usedLevels.some(u => u.id === random.id)) {
+                            usedLevels = [...usedLevels, random];
+                        }
+                    }
+                    spinning = false;
+
+                    if (completionInput < 102) {
+                        completionInput = Math.min(102, completionInput + 1);
+                    }
+
+                    if (completionInput >= 102) {
+                        showCongrats = true;
+                    }
+                }
+            } catch (e) {
+                error = e instanceof Error ? e.message : 'Error during spin';
+                window.clearInterval(timer);
                 spinning = false;
-                if (random && !usedLevels.some(u => u.id === random.id)) {
-                    usedLevels.push(random);
-                }
-                if (completionInput < 102) {
-                    completionInput = Math.min(102, Number(completionInput) + 1);
-                }
-                if (completionInput >= 102) {
-                    showCongrats = true;
-                }
-                filterByRange();
             }
-        }, 80);
+        }, SPIN_INTERVAL);
     }
 
-    function skipRoulette() {
-        if (!filteredLevels.length) return;
+    async function skipRoulette(): Promise<void> {
+        if (spinning) {
+            return;
+        }
+
         spinning = true;
         result = null;
         let count = 0;
-        timer = setInterval(() => {
-            const random = filteredLevels[Math.floor(Math.random() * filteredLevels.length)];
-            displayLevel = random;
-            count++;
-            if (count > 20) {
-                clearInterval(timer);
-                result = random;
-                displayLevel = random;
-                spinning = false;
-                if (random && !usedLevels.some(u => u.id === random.id)) {
-                    usedLevels.push(random);
+
+        timer = window.setInterval(async () => {
+            try {
+                const random = await getRandomLevel();
+                if (random) {
+                    displayLevel = random;
                 }
-                filterByRange();
+                count++;
+
+                if (count > SPIN_COUNT) {
+                    window.clearInterval(timer);
+                    if (random) {
+                        result = random;
+                        displayLevel = random;
+                        if (!usedLevels.some(u => u.id === random.id)) {
+                            usedLevels = [...usedLevels, random];
+                        }
+                    }
+                    spinning = false;
+                }
+            } catch (e) {
+                error = e instanceof Error ? e.message : 'Error during skip';
+                window.clearInterval(timer);
+                spinning = false;
             }
-        }, 80);
+        }, SPIN_INTERVAL);
     }
 
-    const emptyLevel = {
-        name: 'Unknown',
-        dlTop: 'N/A',
-        creator: 'Unknown',
-        thumbnail: '<thumbnail_url>',
-    };
+    onMount(async () => {
+        try {
+            const initialLevel = await getRandomLevel();
+            if (initialLevel) {
+                displayLevel = initialLevel;
+                result = initialLevel;
+            }
+        } catch (e) {
+            error = e instanceof Error ? e.message : 'Failed to load initial level';
+        }
+    });
 </script>
 
 <div class="pt-[9rem] pb-[3rem]">
@@ -175,7 +223,7 @@
                 bind:value={topFrom}
                 class="w-[6rem]"
                 placeholder="From"
-                on:change={() => { filterByRange(); result = null; }}
+                on:change={() => { result = null; }}
             />
             <span>-</span>
             <Input
@@ -185,7 +233,7 @@
                 bind:value={topTo}
                 class="w-[6rem]"
                 placeholder="To"
-                on:change={() => { filterByRange(); result = null; }}
+                on:change={() => { result = null; }}
             />
         </div>
         <Button on:click={spinRoulette} disabled={spinning} class="spin-btn">
