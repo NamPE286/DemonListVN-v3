@@ -65,8 +65,7 @@
 				<Card.Header>
 					<Card.Title>Animated Avatar and Banner</Card.Title>
 					<Card.Description class="w-[250px]"
-						>Catch everyone's eye with a dynamic avatar and banner that bring your profile to life
-						on the leaderboard</Card.Description
+						>Catch everyone's eye with a dynamic avatar and banner that bring your profile to life.</Card.Description
 					>
 				</Card.Header>
 			</Card.Root>
@@ -95,18 +94,20 @@
 				</Card.Header>
 			</Card.Root>
 		</div>
-		<h1 class="mb-[40px] mt-[40px] text-3xl font-bold text-center">So... Have you made your decision?</h1>
+		<h1 class="mb-[40px] mt-[40px] text-center text-3xl font-bold">
+			So... Have you made your decision?
+		</h1>
 		<PaymentButton title="Support us with just 22.000₫/month" />
-		<div class="mt-[100px] w-full pl-[10px] lg:pl-[50px] text-sm text-gray-400">
+		<div class="mt-[100px] w-full pl-[10px] text-sm text-gray-400 lg:pl-[50px]">
 			<p>Note:</p>
 			<ul>
-				<li>- Demon List VN Supporter roles are non-recurring payments</li>
-				<li>- Demon List VN Supporter roles are non-refundable</li>
+				<li>- Demon List VN Supporter roles are non-recurring payments,</li>
+				<li>- Demon List VN Supporter roles are non-refundable,</li>
 				<li>
 					- If you buy one while you still have an active roles, it will extend the duration in
 					addition to any remaining time.
 				</li>
-				<li>- 1 Month = 30 Days</li>
+				<li>- 1 Month = 30 Days.</li>
 			</ul>
 		</div>
 	</div>

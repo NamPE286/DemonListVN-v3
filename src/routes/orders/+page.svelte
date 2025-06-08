@@ -24,17 +24,6 @@
 		return x.toLocaleString('vi-VN');
 	}
 
-	function getAmount(order: any) {
-		let res = order.products.price * order.quantity - order.products.price * order.discount;
-
-		if (order.coupons) {
-			res -=
-				order.products.price * order.coupons.percent + order.products.price * order.coupons.deduct;
-		}
-
-		return Math.max(0, res);
-	}
-
 	async function pay(order: any) {
 		toast.loading('Checking order...');
 
@@ -84,7 +73,7 @@
 					<Table.Head class="w-[60px]">Quantity</Table.Head>
 					<Table.Head class="w-[60px]">Discount</Table.Head>
 					<Table.Head class="w-[100px]">Coupon</Table.Head>
-					<Table.Head class="w-[60px]">Amount</Table.Head>
+					<Table.Head class="w-[120px]">Amount</Table.Head>
 					<Table.Head class="w-[180px]">Recipent</Table.Head>
 					<Table.Head>Status</Table.Head>
 					<Table.Head class="text-right">Action</Table.Head>
@@ -98,7 +87,7 @@
 						<Table.Cell>{order.quantity}</Table.Cell>
 						<Table.Cell>{Math.round(order.discount * 100)}%</Table.Cell>
 						<Table.Cell>{order.coupon ? order.coupon : '-'}</Table.Cell>
-						<Table.Cell>{formatPrice(getAmount(order))}₫</Table.Cell>
+						<Table.Cell>{order.amount} {order.currency}</Table.Cell>
 						<Table.Cell>{order.giftTo ? order.giftTo : '-'}</Table.Cell>
 						<Table.Cell>{order.state}</Table.Cell>
 						<Table.Cell class="text-right">
