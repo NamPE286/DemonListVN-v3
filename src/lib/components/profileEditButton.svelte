@@ -331,10 +331,6 @@
 					<Input id="facebook" bind:value={player.facebook} class="col-span-3" />
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label for="discord" class="text-right">Discord</Label>
-					<Input id="discord" bind:value={player.discord} class="col-span-3" />
-				</div>
-				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="province" class="text-right">Province</Label>
 					<Select.Root bind:selected={provinceItem}>
 						<Select.Trigger class="col-span-3">

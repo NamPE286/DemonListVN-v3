@@ -83,6 +83,7 @@
 				<Tabs.Trigger value="general">General</Tabs.Trigger>
 				<Tabs.Trigger value="api">API</Tabs.Trigger>
 				<Tabs.Trigger value="sub">Subscriptions</Tabs.Trigger>
+				<Tabs.Trigger value="discord">Discord</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="general">
 				<div class="setting">
@@ -223,6 +224,17 @@
 						</Table.Row>
 					</Table.Body>
 				</Table.Root>
+			</Tabs.Content>
+			<Tabs.Content value="discord">
+				{#if $user.data.discord}
+					<Button class="w-full" variant="outline" disabled>Linked</Button>
+				{:else}
+					<a
+						href="https://discord.com/oauth2/authorize?client_id=1071500325338488843&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Fcallback%2Fdiscord&scope=identify"
+					>
+						<Button class="w-full" variant="outline">Link account</Button>
+					</a>
+				{/if}
 			</Tabs.Content>
 		</Tabs.Root>
 	</Dialog.Content>
