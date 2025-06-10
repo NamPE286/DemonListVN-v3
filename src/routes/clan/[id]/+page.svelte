@@ -265,7 +265,7 @@
 			supabase.storage
 				.from('clanPhotos')
 				.upload(`/${$page.params.id}.jpg`, cImg, {
-					cacheControl: '604800',
+					cacheControl: '86400',
 					upsert: true
 				})
 				.then((res) => {

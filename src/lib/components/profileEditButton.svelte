@@ -51,7 +51,7 @@
 				supabase.storage
 					.from('avatars')
 					.upload(`/${$user.data.uid}.gif`, image, {
-						cacheControl: '604800',
+						cacheControl: '86400',
 						upsert: true
 					})
 					.then(async (res) => {
@@ -94,7 +94,7 @@
 				supabase.storage
 					.from('avatars')
 					.upload(`/${$user.data.uid}.jpg`, cImg, {
-						cacheControl: '604800',
+						cacheControl: '86400',
 						upsert: true
 					})
 					.then(async (res) => {
@@ -140,7 +140,7 @@
 				supabase.storage
 					.from('banners')
 					.upload(`/${$user.data.uid}.gif`, image, {
-						cacheControl: '604800',
+						cacheControl: '86400',
 						upsert: true
 					})
 					.then(async (res) => {
@@ -184,7 +184,7 @@
 				supabase.storage
 					.from('banners')
 					.upload(`/${$user.data.uid}.jpg`, cImg, {
-						cacheControl: '604800',
+						cacheControl: '86400',
 						upsert: true
 					})
 					.then(async (res) => {
