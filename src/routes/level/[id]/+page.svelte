@@ -239,18 +239,6 @@
 						{/if}
 						<p><b>Difficulty: </b><span>{levelAPI.difficulty}</span></p>
 						<p><b>ID: </b><span>{levelAPI.id}</span></p>
-						{#if 'level' in data}
-							<p>
-								<b>Song: </b>
-								{#if data.level.songID == null}
-									<span>Available on Newground</span>
-								{:else}
-									<a href={`${import.meta.env.VITE_API_URL}/level/${data.level.id}/song`}
-										><u>Download</u></a
-									>
-								{/if}
-							</p>
-						{/if}
 					{:else}
 						<Loading inverted />
 					{/if}

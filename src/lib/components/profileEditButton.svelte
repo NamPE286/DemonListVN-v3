@@ -51,11 +51,12 @@
 				supabase.storage
 					.from('avatars')
 					.upload(`/${$user.data.uid}.gif`, image, {
-						cacheControl: '0',
+						cacheControl: '86400',
 						upsert: true
 					})
 					.then(async (res) => {
 						player.isAvatarGif = true;
+						player.avatarVersion++;
 
 						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
 							method: 'PUT',
@@ -93,11 +94,12 @@
 				supabase.storage
 					.from('avatars')
 					.upload(`/${$user.data.uid}.jpg`, cImg, {
-						cacheControl: '0',
+						cacheControl: '86400',
 						upsert: true
 					})
 					.then(async (res) => {
 						player.isAvatarGif = false;
+						player.avatarVersion++;
 
 						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
 							method: 'PUT',
@@ -138,11 +140,12 @@
 				supabase.storage
 					.from('banners')
 					.upload(`/${$user.data.uid}.gif`, image, {
-						cacheControl: '0',
+						cacheControl: '86400',
 						upsert: true
 					})
 					.then(async (res) => {
 						player.isBannerGif = true;
+						player.bannerVersion++;
 
 						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
 							method: 'PUT',
@@ -181,11 +184,12 @@
 				supabase.storage
 					.from('banners')
 					.upload(`/${$user.data.uid}.jpg`, cImg, {
-						cacheControl: '0',
+						cacheControl: '86400',
 						upsert: true
 					})
 					.then(async (res) => {
 						player.isBannerGif = false;
+						player.bannerVersion++;
 
 						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
 							method: 'PUT',
@@ -329,10 +333,6 @@
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="facebook" class="text-right">Facebook</Label>
 					<Input id="facebook" bind:value={player.facebook} class="col-span-3" />
-				</div>
-				<div class="grid grid-cols-4 items-center gap-4">
-					<Label for="discord" class="text-right">Discord</Label>
-					<Input id="discord" bind:value={player.discord} class="col-span-3" />
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
 					<Label for="province" class="text-right">Province</Label>

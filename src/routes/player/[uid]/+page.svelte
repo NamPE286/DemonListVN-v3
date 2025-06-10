@@ -75,7 +75,7 @@
 			class="bgGradient absolute z-0 mt-[-50px] h-[600px] w-full object-cover"
 			src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.player.uid}${
 				data.player.isBannerGif ? '.gif' : '.jpg'
-			}`}
+			}?version=${data.player.bannerVersion}`}
 			alt=""
 		/>
 	{/if}
@@ -89,7 +89,7 @@
 						isSupporterActive(data.player.supporterUntil) && data.player.isAvatarGif
 							? '.gif'
 							: '.jpg'
-					}`}
+					}?version=${data.player.avatarVersion}`}
 					alt=""
 				/>
 				<Avatar.Fallback class="text-5xl lg:text-6xl">{data.player.name[0]}</Avatar.Fallback>
