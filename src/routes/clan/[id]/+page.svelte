@@ -136,7 +136,7 @@
 	}
 
 	async function joinClan() {
-		toast.loading("Joining clan...")
+		toast.loading('Joining clan...');
 		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/join`, {
 			method: 'PUT',
 			headers: {
@@ -150,7 +150,7 @@
 			return;
 		}
 
-		toast.loading("Leaving clan...")
+		toast.loading('Leaving clan...');
 
 		fetch(`${import.meta.env.VITE_API_URL}/clan/leave`, {
 			method: 'PUT',
@@ -246,7 +246,22 @@
 		};
 
 		const cImg = await imageCompression(image, options);
-		const upload = new Promise((resolve, reject) => {
+		const upload = new Promise(async (resolve, reject) => {
+			delete editedData.id;
+			delete editedData.created_at;
+			delete editedData.players;
+
+			editedData.imageVersion++;
+
+			await fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
+				method: 'PATCH',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(editedData)
+			});
+
 			supabase.storage
 				.from('clanPhotos')
 				.upload(`/${$page.params.id}.jpg`, cImg, {
@@ -387,7 +402,7 @@
 			<img
 				in:fade={{ delay: 250, duration: 300 }}
 				class="bg"
-				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${$page.params.id}.jpg`}
+				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${$page.params.id}.jpg?version=${data.imageVersion}`}
 				alt="bg"
 			/>
 			<div class="bannerContentWrapper">
@@ -632,7 +647,7 @@
 									<a href={`/level/${item.levels.id}`}>{item.levels.name}</a>
 								</Table.Cell>
 								<Table.Cell class="text-center">
-									{new Date(item.timestamp).toLocaleString("vi-VN")}
+									{new Date(item.timestamp).toLocaleString('vi-VN')}
 								</Table.Cell>
 								<Table.Cell class="text-center">
 									{item.mobile ? 'Mobile' : 'PC'}
@@ -662,7 +677,7 @@
 									<PlayerHoverCard player={invitation.players} />
 								</Table.Cell>
 								<Table.Cell>
-									{new Date(invitation.created_at).toLocaleString("vi-VN")}
+									{new Date(invitation.created_at).toLocaleString('vi-VN')}
 								</Table.Cell>
 								<Table.Cell class="text-right">
 									<Button
@@ -695,7 +710,8 @@
 								id="limit"
 								class="col-span-3"
 								bind:value={editedData.memberLimit}
-								type="number" inputmode="numeric"
+								type="number"
+								inputmode="numeric"
 								placeholder="Enter 0 for unlimited"
 							/>
 						</div>
