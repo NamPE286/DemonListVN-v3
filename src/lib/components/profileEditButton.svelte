@@ -56,6 +56,7 @@
 					})
 					.then(async (res) => {
 						player.isAvatarGif = true;
+						player.avatarVersion++;
 
 						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
 							method: 'PUT',
@@ -98,6 +99,7 @@
 					})
 					.then(async (res) => {
 						player.isAvatarGif = false;
+						player.avatarVersion++;
 
 						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
 							method: 'PUT',
@@ -143,6 +145,7 @@
 					})
 					.then(async (res) => {
 						player.isBannerGif = true;
+						player.bannerVersion++;
 
 						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
 							method: 'PUT',
@@ -186,6 +189,7 @@
 					})
 					.then(async (res) => {
 						player.isBannerGif = false;
+						player.bannerVersion++;
 
 						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
 							method: 'PUT',

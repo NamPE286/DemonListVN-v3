@@ -178,7 +178,7 @@
 										isSupporterActive($user.data.supporterUntil) && $user.data.isAvatarGif
 											? '.gif'
 											: '.jpg'
-									}`}
+									}?version=${$user.data.avatarVersion}`}
 									alt=""
 								/>
 								<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
