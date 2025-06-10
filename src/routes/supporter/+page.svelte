@@ -79,6 +79,14 @@
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
+					<Card.Title>Discord DM Notifications</Card.Title>
+					<Card.Description class="w-[250px]"
+						>Receive notifications directly through Discord DMs.</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
 					<Card.Title>Be the first to try our newest feature</Card.Title>
 					<Card.Description class="w-[250px]"
 						>Gain early access to new releases with new features before they go public!</Card.Description
