@@ -13,7 +13,6 @@
 	import { onMount } from 'svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
-	import { Badge } from '$lib/components/ui/badge';
 
 	export let data: any;
 	export let open = false;
