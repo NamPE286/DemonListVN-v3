@@ -8,8 +8,6 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { user } from '$lib/client';
 	import Loading from '$lib/components/animation/loading.svelte';
-
-	import ExclamationTriangle from 'svelte-radix/ExclamationTriangle.svelte';
 	import { toast } from 'svelte-sonner';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
@@ -44,8 +42,37 @@
 	let step = 0;
 	let nextDisabled = false;
 	let errorMessage = '';
+	let time = {
+		m: null,
+		s: null,
+		ms: null
+	};
+
+	function getMs() {
+		return (time.m || 0) * 60000 + (time.s || 0) * 1000 + (time.ms || 0);
+	}
+
+	function validTime() {
+		if (time.m == null || time.s == null || time.ms == null) {
+			return false;
+		}
+
+		if (time.m < 0 || time.s < 0 || time.ms < 0) {
+			return false;
+		}
+
+		if (time.s >= 60 || time.ms >= 1000) {
+			return false;
+		}
+
+		return true;
+	}
 
 	async function submit() {
+		if (apiLevel.length == 'Plat') {
+			submission.progress = getMs();
+		}
+
 		if (submission.mobile != null) {
 			submission.mobile = submission.mobile.value;
 		}
@@ -95,14 +122,31 @@
 		}
 
 		if (step == 3) {
-			if (
-				!submission.progress ||
-				!submission.refreshRate ||
-				!submission.videoLink ||
-				!submission.mobile
-			) {
-				toast.error('Please fill in all required fields');
+			if (apiLevel.length == 'Plat' && !validTime()) {
+				toast.error('Invalid time');
 				return;
+			}
+
+			if (apiLevel.length != 'Plat') {
+				if (
+					!submission.progress ||
+					!submission.refreshRate ||
+					!submission.videoLink ||
+					!submission.mobile
+				) {
+					toast.error('Please fill in all required fields');
+					return;
+				}
+			} else {
+				if (
+					!validTime() ||
+					!submission.refreshRate ||
+					!submission.videoLink ||
+					!submission.mobile
+				) {
+					toast.error('Please fill in all required fields');
+					return;
+				}
 			}
 
 			if (level) {
@@ -217,17 +261,49 @@
 					{/if}
 				{/if}
 				{#if step == 3}
-					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="name" class="text-right">Progress</Label>
-						<Input
-							id="name"
-							type="number"
-							inputmode="numeric"
-							bind:value={submission.progress}
-							placeholder={level ? `Minimum ${level.minProgress}%` : 'Minimum 0%'}
-							class="col-span-3"
-						/>
-					</div>
+					{#if apiLevel.length != 'Plat'}
+						<div class="grid grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Progress</Label>
+							<Input
+								id="name"
+								type="number"
+								inputmode="numeric"
+								bind:value={submission.progress}
+								placeholder={level ? `Minimum ${level.minProgress}%` : 'Minimum 0%'}
+								class="col-span-3"
+							/>
+						</div>
+					{:else}
+						<div class="grid grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Time</Label>
+							<div class="flex gap-[10px]">
+								<Input
+									id="name"
+									type="number"
+									inputmode="numeric"
+									bind:value={time.m}
+									class="w-[75px]"
+									placeholder="m"
+								/>
+								<Input
+									id="name"
+									type="number"
+									inputmode="numeric"
+									bind:value={time.s}
+									class="w-[75px]"
+									placeholder="s"
+								/>
+								<Input
+									id="name"
+									type="number"
+									inputmode="numeric"
+									bind:value={time.ms}
+									class="w-[75px]"
+									placeholder="ms"
+								/>
+							</div>
+						</div>
+					{/if}
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">FPS</Label>
 						<Input
@@ -273,9 +349,9 @@
 							id="name"
 							type="number"
 							inputmode="numeric"
-							disabled={submission.progress != 100}
+							disabled={apiLevel.length != 'Plat' && submission.progress != 100}
 							bind:value={submission.suggestedRating}
-							placeholder={submission.progress == 100
+							placeholder={!(apiLevel.length != 'Plat' && submission.progress != 100)
 								? 'optional (không ghi cũng được)'
 								: 'progress must be 100%'}
 							class="col-span-3"
