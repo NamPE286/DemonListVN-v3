@@ -9,13 +9,20 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 	let alertOpened = false;
 	let lvID: number;
 	let userID: string, levelID: number;
 	let recordDetailOpened = false;
+
+	function getTimeString(ms: number) {
+		const minutes = Math.floor(ms / 60000);
+		const seconds = Math.floor((ms % 60000) / 1000);
+		const milliseconds = ms % 1000;
+
+		return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
+	}
 
 	async function deleteRecord() {
 		const { uid } = $user.data;
@@ -75,6 +82,7 @@
 					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 					<Table.Head class="w-[100px] text-center">Device</Table.Head>
 					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
+					<Table.Head class="w-[80px] text-center">Time</Table.Head>
 					<Table.Head class="w-[80px] text-center">Queue no.</Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
@@ -108,7 +116,12 @@
 								<br />({record.refreshRate}fps)
 							{/if}
 						</Table.Cell>
-						<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+						<Table.Cell class="text-center"
+							>{!record.levels.isPlatformer ? `${record.progress}%` : '-'}</Table.Cell
+						>
+						<Table.Cell class="text-center"
+							>{record.levels.isPlatformer ? getTimeString(record.progress) : '-'}</Table.Cell
+						>
 						<Table.Cell class="text-center">
 							{#if record.needMod}
 								Forwarded

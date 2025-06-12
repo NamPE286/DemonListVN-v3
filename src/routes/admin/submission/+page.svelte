@@ -20,6 +20,14 @@
 	let isOpen = false;
 	let userID: string, levelID: number;
 
+	function getTimeString(ms: number) {
+		const minutes = Math.floor(ms / 60000);
+		const seconds = Math.floor((ms % 60000) / 1000);
+		const milliseconds = ms % 1000;
+
+		return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
+	}
+
 	async function accept(userID: string, level: any) {
 		if (!confirm('Accept this record?')) {
 			return;
@@ -57,7 +65,7 @@
 	}
 
 	async function reject(userID: string, level: any) {
-		const reason = prompt('Reason for rejection')
+		const reason = prompt('Reason for rejection');
 
 		if (!confirm('Reject this record?')) {
 			return;
@@ -169,6 +177,7 @@
 				<Table.Head class="w-[100px] text-center">Submitted by</Table.Head>
 				<Table.Head class="w-[100px] text-center">Device</Table.Head>
 				<Table.Head class="w-[80px] text-center">Progress</Table.Head>
+				<Table.Head class="w-[80px] text-center">Time</Table.Head>
 				<Table.Head class="w-[0px] text-center"></Table.Head>
 				<Table.Head class="w-[0px] text-center"></Table.Head>
 			</Table.Row>
@@ -193,8 +202,7 @@
 						</a>
 					</Table.Cell>
 					<Table.Cell class="text-center"
-						><a href={`/player/${record.players.uid}`}>{record.players.name}</a
-						></Table.Cell
+						><a href={`/player/${record.players.uid}`}>{record.players.name}</a></Table.Cell
 					>
 					<Table.Cell class="text-center">
 						{record.mobile ? 'Mobile' : 'PC'}
@@ -202,7 +210,12 @@
 							<br />({record.refreshRate}fps)
 						{/if}
 					</Table.Cell>
-					<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+					<Table.Cell class="text-center"
+						>{!record.levels.isPlatformer ? `${record.progress}%` : '-'}</Table.Cell
+					>
+					<Table.Cell class="text-center"
+						>{record.levels.isPlatformer ? getTimeString(record.progress) : '-'}</Table.Cell
+					>
 					<Table.Cell class="text-center">
 						<button
 							on:click={() => {

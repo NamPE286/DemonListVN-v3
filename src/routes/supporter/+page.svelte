@@ -19,7 +19,7 @@
 <div class="relative flex flex-col items-center pl-[10px] pr-[10px]">
 	<BigTitle value="Become a Supporter 💖" description="Get exclusive perks and help us grow!" />
 	<div class="mt-[-20px] flex max-w-[1000px] flex-col items-center">
-		<PaymentButton title="22.000₫/month" />
+		<PaymentButton title="50.000₫/month" />
 		<h1 class="mb-[40px] mt-[75px] text-center text-3xl font-bold">
 			Why should you support Demon List VN
 		</h1>
@@ -105,7 +105,7 @@
 		<h1 class="mb-[40px] mt-[40px] text-center text-3xl font-bold">
 			So... Have you made your decision?
 		</h1>
-		<PaymentButton title="Support us with just 22.000₫/month" />
+		<PaymentButton title="Support us with just 50.000₫/month" />
 		<div class="mt-[100px] w-full pl-[10px] text-sm text-gray-400 lg:pl-[50px]">
 			<p>Note:</p>
 			<ul>

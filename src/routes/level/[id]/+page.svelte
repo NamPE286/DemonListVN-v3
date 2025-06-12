@@ -22,6 +22,14 @@
 	let recordDetailOpened = false;
 	let selectedRecord: any = null;
 
+	function getTimeString(ms: number) {
+		const minutes = Math.floor(ms / 60000);
+		const seconds = Math.floor((ms % 60000) / 1000);
+		const milliseconds = ms % 1000;
+
+		return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
+	}
+
 	function genPercent() {
 		const res = Array(100);
 
@@ -267,7 +275,7 @@
 					<Table.Head>Player</Table.Head>
 					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 					<Table.Head class="w-[100px] text-center">Device</Table.Head>
-					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
+					<Table.Head class="w-[80px] text-center">{data.level.isPlatformer ? "Time" : "Progress"}</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -300,7 +308,7 @@
 								{/if}
 							</Table.Cell>
 							<Table.Cell class="text-center">
-								{record.progress}%
+								{data.level.isPlatformer ? getTimeString(record.progress) : `${record.progress}%`}
 							</Table.Cell>
 						</Table.Row>
 					{/each}

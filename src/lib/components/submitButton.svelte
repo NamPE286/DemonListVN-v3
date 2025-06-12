@@ -49,7 +49,7 @@
 	};
 
 	function getMs() {
-		return (time.m || 0) * 60000 + (time.s || 0) * 1000 + (time.ms || 0);
+		return parseInt(time.m! || 0) * 60000 + parseInt(time.s! || 0) * 1000 + parseInt(time.ms! || 0);
 	}
 
 	function validTime() {
