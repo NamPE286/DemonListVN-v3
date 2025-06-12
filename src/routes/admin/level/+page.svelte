@@ -16,7 +16,6 @@
 		minProgress: NaN,
 		flTop: NaN,
 		rating: NaN,
-		songID: NaN,
 		isPlatformer: false
 	};
 
