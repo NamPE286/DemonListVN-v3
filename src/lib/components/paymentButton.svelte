@@ -128,7 +128,7 @@
 				<Dialog.Title>Select quantity</Dialog.Title>
 			</Dialog.Header>
 			<div>
-				<p>{formatPrice(50000 * quantity[0])}₫/{quantity[0]} month</p>
+				<p>{formatPrice(49000 * quantity[0])}₫/{quantity[0]} month</p>
 				<Slider bind:value={quantity} max={12} step={1} />
 			</div>
 			<Dialog.Footer>
@@ -145,7 +145,7 @@
 			</Dialog.Header>
 			<div class="flex text-sm">
 				<p>Demon List VN Supporter Role ({quantity[0]} month{quantity[0] > 1 ? 's' : ''})</p>
-				<p class="ml-auto"><b>{formatPrice(50000 * quantity[0])}₫</b></p>
+				<p class="ml-auto"><b>{formatPrice(49000 * quantity[0])}₫</b></p>
 			</div>
 			<div class="flex text-sm">
 				<p>Recipent</p>
