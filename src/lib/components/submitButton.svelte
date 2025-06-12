@@ -182,6 +182,11 @@
 				step = 0;
 				apiLevel = null;
 				level = null;
+				time = {
+					m: null,
+					s: null,
+					ms: null
+				};
 			}
 		}}>Submit</Dialog.Trigger
 	>
