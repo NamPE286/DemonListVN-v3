@@ -16,6 +16,7 @@
 		minProgress: NaN,
 		flTop: NaN,
 		rating: NaN,
+		insaneTier: NaN,
 		isPlatformer: false
 	};
 
@@ -39,8 +40,8 @@
 	}
 
 	async function updateLevel() {
-		if(!level.isPlatformer) {
-			console.log('ok')
+		if (!level.isPlatformer) {
+			console.log('ok');
 			level.isPlatformer = false;
 		}
 
@@ -172,6 +173,18 @@
 				class="w-[300px]"
 				bind:value={level.rating}
 			/>
+		</div>
+		<div class="input">
+			<Label for="rating" class="w-[100px]">Insane Tier</Label>
+			<Input
+				id="rating"
+				type="number"
+				inputmode="numeric"
+				class="w-[300px]"
+				bind:value={level.insaneTier}
+				placeholder="Enter a number for tier"
+			/>
+			0: D, 1: C, 2: B, 3: A, 4: S, 5: SS
 		</div>
 		<div class="input">
 			<Label for="rating" class="w-[100px]">Platformer</Label>
