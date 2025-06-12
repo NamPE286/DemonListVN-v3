@@ -42,14 +42,20 @@
 			return;
 		}
 
-		state = 1;
-
-		Promise.all([
+		const promises = [
 			fetch(`${import.meta.env.VITE_API_URL}/search/${value}`).then((res) => res.json()),
 			fetch(`https://gdbrowser.com/api/search/${value}?page=0&count=5&diff=-2`)
 				.then((res) => res.json())
 				.catch((err) => [])
-		])
+		];
+
+		if (value.startsWith('discord:')) {
+			promises[1] = Promise.resolve([]);
+		}
+
+		state = 1;
+
+		Promise.all(promises)
 			.then((res) => {
 				if (!res[0] || !res[1]) {
 					return;
@@ -70,6 +76,7 @@
 					});
 				}
 
+				value = '';
 				state = 2;
 			})
 			.catch((err) => {
@@ -126,9 +133,9 @@
 								<a href={`/level/${item.id}?list=other`} data-sveltekit-preload-data="tap">
 									<Command.Item>
 										{#if item.dlTop}
-											<span class="text-white font-bold mr-1">#{item.dlTop} DL</span>
+											<span class="mr-1 font-bold text-white">#{item.dlTop} DL</span>
 										{:else if item.flTop}
-											<span class="text-white font-bold mr-1">#{item.flTop} FL</span>
+											<span class="mr-1 font-bold text-white">#{item.flTop} FL</span>
 										{/if}
 										{item.name} by {item.creator} ({item.id}) (Not added)
 									</Command.Item>
@@ -137,9 +144,9 @@
 								<a href={`/level/${item.id}`} data-sveltekit-preload-data="tap">
 									<Command.Item>
 										{#if item.dlTop}
-											<span class="text-white font-bold mr-1">#{item.dlTop} DL</span>
+											<span class="mr-1 font-bold text-white">#{item.dlTop} DL</span>
 										{:else if item.flTop}
-											<span class="text-white font-bold mr-1">#{item.flTop} FL</span>
+											<span class="mr-1 font-bold text-white">#{item.flTop} FL</span>
 										{/if}
 										{item.name} by {item.creator} ({item.id})
 									</Command.Item>
