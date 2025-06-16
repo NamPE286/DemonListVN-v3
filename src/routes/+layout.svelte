@@ -32,7 +32,8 @@
 		{ route: '/players', name: 'Players' },
 		{ route: '/clans', name: 'Clans' },
 		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
-		{ route: '/rules', name: 'Rules' }
+		{ route: '/rules', name: 'Rules' },
+		{ route: '/roulette', name: 'Roulette' },
 	];
 
 	let searchQuery = '';
