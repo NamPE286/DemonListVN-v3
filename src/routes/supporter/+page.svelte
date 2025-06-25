@@ -37,7 +37,7 @@
 				<Card.Header>
 					<Card.Title>Server Infrastructure</Card.Title>
 					<Card.Description class="w-[250px]"
-						>Contributions go towards the servers for running the website</Card.Description
+						>Contributions go towards the servers for running the website.</Card.Description
 					>
 				</Card.Header>
 			</Card.Root>
@@ -79,9 +79,25 @@
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
+					<Card.Title>Unlock exclusive Discord role</Card.Title>
+					<Card.Description class="w-[250px]"
+						>Gain access to a special role on DLVN and partner Discord servers.</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
 					<Card.Title>Discord DM Notifications</Card.Title>
 					<Card.Description class="w-[250px]"
 						>Receive notifications directly through Discord DMs.</Card.Description
+					>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Supporter-Only Events</Card.Title>
+					<Card.Description class="w-[250px]"
+						>Join special events reserved just for our cherished supporters — giveaways, secret games, and more surprises await!</Card.Description
 					>
 				</Card.Header>
 			</Card.Root>
