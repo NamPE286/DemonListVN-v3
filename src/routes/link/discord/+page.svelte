@@ -16,6 +16,10 @@
 					Authorization: 'Bearer ' + (await $user.token())!,
 					'Content-Type': 'application/json'
 				}
+			}).then((res) => {
+				if (res.ok) {
+					$user.syncRole();
+				}
 			}),
 			{
 				loading: 'Linking your Discord account',
