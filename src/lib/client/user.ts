@@ -6,7 +6,8 @@ interface userType {
     token: () => Promise<string | undefined>,
     loggedIn: boolean
     checked: boolean
-    refresh: any
+    syncRole: () => Promise<void>
+    refresh: () => Promise<void>
 }
 
 async function addNewUser() {
@@ -35,6 +36,14 @@ let userData: userType = {
     },
     loggedIn: false,
     checked: false,
+    syncRole: async () => {
+        await fetch(`${import.meta.env.VITE_API_URL}/player/syncRole`, {
+            method: "PATCH",
+            headers: {
+                Authorization: "Bearer " + await userData.token()
+            }
+        })
+    },
     refresh: async () => {
         const { data, error } = await supabase.auth.getUser()
 
@@ -72,3 +81,4 @@ let userData: userType = {
 export const user = writable(userData)
 
 userData.refresh()
+userData.syncRole()
