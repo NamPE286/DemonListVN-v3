@@ -200,7 +200,7 @@
 		</div>
 	</div>
 </div>
-{#if isEventStarted() || $user.data.isAdmin}
+{#if isEventStarted() || ($user.loggedIn && $user.data.isAdmin)}
 	{#if data.exp && $user.loggedIn}
 		{#if !data.supporterOnly || isSupporterActive($user.data.supporterUntil)}
 			<div class="md-[15px] mb-[15px] mt-[15px] flex justify-center">
