@@ -4,6 +4,7 @@
 	import SvelteMarkdown from 'svelte-markdown';
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import * as Select from '$lib/components/ui/select/index.js';
+	import * as Tabs from '$lib/components/ui/tabs';
 	import { Button } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Skeleton } from '$lib/components/ui/skeleton';
@@ -14,7 +15,6 @@
 	import { Label } from '$lib/components/ui/label/index.js';
 	import Star from 'svelte-radix/Star.svelte';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
-	import DialogContent from '$lib/components/ui/dialog/dialog-content.svelte';
 
 	interface SubmitData {
 		levelID: number | null;
@@ -48,8 +48,8 @@
 			return 'Permanent';
 		}
 
-		if(!isEventStarted()) {
-			return `Start at ${new Date(data.start).toLocaleString('vi-vn')}`
+		if (!isEventStarted()) {
+			return `Start at ${new Date(data.start).toLocaleString('vi-vn')}`;
 		}
 
 		const second = (new Date(end).getTime() - new Date().getTime()) / 1000;
@@ -288,11 +288,20 @@
 			</div>
 		{/if}
 	{/if}
-	<div class="content markdown">
-		{#if data.content}
-			<SvelteMarkdown source={data.content} />
-		{/if}
-	</div>
+	<Tabs.Root value="detail" class='flex flex-col items-center'>
+		<Tabs.List>
+			<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
+			<Tabs.Trigger value="leaderboard">Leaderboard</Tabs.Trigger>
+		</Tabs.List>
+		<Tabs.Content value="detail">
+			<div class="content markdown">
+				{#if data.content}
+					<SvelteMarkdown source={data.content} />
+				{/if}
+			</div></Tabs.Content
+		>
+		<Tabs.Content value="leaderboard">Leaderboard</Tabs.Content>
+	</Tabs.Root>
 {/if}
 
 <style lang="scss">
