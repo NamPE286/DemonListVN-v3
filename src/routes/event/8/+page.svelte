@@ -3,22 +3,41 @@
 	import Clock from 'svelte-radix/Clock.svelte';
 	import SvelteMarkdown from 'svelte-markdown';
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
+	import * as Select from '$lib/components/ui/select/index.js';
 	import { Button } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
-	import { Textarea } from '$lib/components/ui/textarea';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores';
+	import { Input } from '$lib/components/ui/input/index.js';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
+	import { Label } from '$lib/components/ui/label/index.js';
 	import Star from 'svelte-radix/Star.svelte';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import DialogContent from '$lib/components/ui/dialog/dialog-content.svelte';
+
+	interface SubmitData {
+		levelID: number | null;
+		progress: number | null;
+		videoLink: string;
+	}
 
 	export let data: PageData;
+
 	let rewardState = 0;
 	let proof = '';
 	let claimOpened = false;
 	let cancelOpened = false;
+	let submitData: SubmitData = {
+		levelID: null,
+		progress: null,
+		videoLink: ''
+	};
+	let selectedLevel = {
+		disabled: false,
+		label: undefined,
+		value: undefined
+	};
 
 	function isEventStarted() {
 		return new Date(data.start) <= new Date();
@@ -29,8 +48,8 @@
 			return 'Permanent';
 		}
 
-		if (!isEventStarted()) {
-			return `Start at ${new Date(data.start).toLocaleString('vi-vn')}`;
+		if(!isEventStarted()) {
+			return `Start at ${new Date(data.start).toLocaleString('vi-vn')}`
 		}
 
 		const second = (new Date(end).getTime() - new Date().getTime()) / 1000;
@@ -55,7 +74,7 @@
 			return;
 		}
 
-		fetch(`${import.meta.env.VITE_API_URL}/event/${$page.params.id}/proof/${$user.data.uid}`)
+		fetch(`${import.meta.env.VITE_API_URL}/event/8/proof/${$user.data.uid}`)
 			.then((res) => {
 				if (!res.ok) {
 					rewardState = 4;
@@ -73,14 +92,29 @@
 	}
 
 	async function claimReward() {
+		if (selectedLevel.value === undefined) {
+			toast.error('Please fill in all required fields');
+		}
+
+		submitData.levelID = selectedLevel.value!;
+
+		if (submitData.progress === null || !(1 <= submitData.progress && submitData.progress <= 100)) {
+			toast.error('Invalid progress range');
+		}
+
+		if (submitData.videoLink === '') {
+			toast.error('Please fill in all required fields');
+		}
+
 		claimOpened = false;
 
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/event/proof`, {
 				method: 'POST',
 				body: JSON.stringify({
-					eventID: parseInt($page.params.id),
-					content: proof
+					eventID: 8,
+					content: proof,
+					data: submitData
 				}),
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())!,
@@ -104,7 +138,7 @@
 		cancelOpened = false;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/${$page.params.id}/proof/${$user.data.uid}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/event/8/proof/${$user.data.uid}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())!
@@ -201,11 +235,47 @@
 								<Dialog.Header>
 									<Dialog.Title>Participate</Dialog.Title>
 								</Dialog.Header>
-								{#if data.needProof}
-									<Textarea class="h-[125px]" placeholder="Provide proof" bind:value={proof} />
-								{:else}
-									<Textarea class="h-[125px]" placeholder="Message (optional)" bind:value={proof} />
-								{/if}
+								<div class="grid grid-cols-4 items-center gap-4">
+									<Label for="name" class="text-right">Level</Label>
+									<Select.Root bind:selected={selectedLevel}>
+										<Select.Trigger class="col-span-3">
+											<Select.Value placeholder="Select a level" />
+										</Select.Trigger>
+										<Select.Content>
+											<Select.Group>
+												<Select.Label>Level</Select.Label>
+												<Select.Item value={123}>Level A</Select.Item>
+												<Select.Item value={456}>Level B</Select.Item>
+											</Select.Group>
+										</Select.Content>
+										<Select.Input name="platform" value={true} />
+									</Select.Root>
+								</div>
+								<div class="grid grid-cols-4 items-center gap-4">
+									<Label for="name" class="text-right">Progress</Label>
+									<Input
+										id="name"
+										bind:value={submitData.progress}
+										placeholder="Required"
+										class="col-span-3"
+										type="number"
+										min="1"
+										max="100"
+									/>
+								</div>
+								<div class="grid grid-cols-4 items-center gap-4">
+									<Label for="name" class="text-right">Video's Link</Label>
+									<Input
+										id="name"
+										bind:value={submitData.videoLink}
+										placeholder="Required"
+										class="col-span-3"
+									/>
+								</div>
+								<div class="grid grid-cols-4 items-center gap-4">
+									<Label for="name" class="text-right">Comment</Label>
+									<Input id="name" bind:value={proof} placeholder="Optional" class="col-span-3" />
+								</div>
 								<Button on:click={claimReward}>Continue</Button>
 							</Dialog.Content>
 						</Dialog.Root>
