@@ -1,11 +1,12 @@
 <script lang="ts">
 	import type { Level } from './type';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import { Button } from '$lib/components/ui/button/index.js';
 
 	export let level: Level;
 </script>
 
-<Card.Root class="mb-[10px] ml-auto mr-auto flex w-[1000px] max-w-full">
+<Card.Root class="mb-[10px] ml-auto mr-auto flex w-[1000px] max-w-full items-center">
 	<a href={`https://www.youtube.com/watch?v=${level.videoID}`}>
 		<img
 			src={`https://img.youtube.com/vi/${level.videoID}/0.jpg`}
@@ -23,4 +24,5 @@
 		</div>
 		<p>by {level.creator} - ID: {level.id}</p>
 	</Card.Content>
+	<Button class='ml-auto mr-[22.5px]'>Submit</Button>
 </Card.Root>

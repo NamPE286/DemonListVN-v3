@@ -2,7 +2,6 @@
 	import type { PageData } from './$types';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { user } from '$lib/client';
-	import ParticipateButton from './participateButton.svelte';
 	import EventBanner from '../eventBanner.svelte';
 	import Markdown from '$lib/components/markdown.svelte';
 	import LevelCard from './levelCard.svelte';
@@ -65,8 +64,7 @@
 <EventBanner {data} />
 
 {#if isEventStarted() || ($user.loggedIn && $user.data.isAdmin)}
-	<ParticipateButton {data} {levels} />
-	<Tabs.Root value="detail" class="flex flex-col items-center">
+	<Tabs.Root value="detail" class="mt-[20px] flex flex-col items-center">
 		<Tabs.List>
 			<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
 			<Tabs.Trigger value="levels">Levels</Tabs.Trigger>
@@ -79,12 +77,14 @@
 				{/if}
 			</div>
 		</Tabs.Content>
-		<Tabs.Content value="levels" class='w-full pl-[10px] pr-[10px]'>
+		<Tabs.Content value="levels" class="mt-[20px] w-full pl-[10px] pr-[10px]">
 			{#each levels as level}
 				<LevelCard {level} />
 			{/each}
 		</Tabs.Content>
-		<Tabs.Content value="leaderboard">Leaderboard</Tabs.Content>
+		<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px] flex flex-col items-center">
+			Leaderboard
+		</Tabs.Content>
 	</Tabs.Root>
 {/if}
 
