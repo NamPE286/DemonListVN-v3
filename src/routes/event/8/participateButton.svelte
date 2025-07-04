@@ -9,14 +9,23 @@
 	import { toast } from 'svelte-sonner';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import type { Level } from './type';
 
 	interface SubmitData {
 		levelID: number | null;
 		progress: number | null;
 		videoLink: string;
+		raw: string
+	}
+
+	interface Selected {
+		disabled: boolean;
+		label: undefined | string;
+		value: undefined | Level;
 	}
 
 	export let data: any;
+	export let levels: Level[];
 
 	let rewardState = 0;
 	let proof = '';
@@ -25,9 +34,10 @@
 	let submitData: SubmitData = {
 		levelID: null,
 		progress: null,
-		videoLink: ''
+		videoLink: '',
+		raw: ''
 	};
-	let selectedLevel = {
+	let selectedLevel: Selected = {
 		disabled: false,
 		label: undefined,
 		value: undefined
@@ -69,7 +79,7 @@
 			toast.error('Please fill in all required fields');
 		}
 
-		submitData.levelID = selectedLevel.value!;
+		submitData.levelID = selectedLevel.value!.id;
 
 		if (submitData.progress === null || !(1 <= submitData.progress && submitData.progress <= 100)) {
 			toast.error('Invalid progress range');
@@ -181,8 +191,9 @@
 									<Select.Content>
 										<Select.Group>
 											<Select.Label>Level</Select.Label>
-											<Select.Item value={123}>Level A</Select.Item>
-											<Select.Item value={456}>Level B</Select.Item>
+											{#each levels as level}
+												<Select.Item value={level}>{level.name}</Select.Item>
+											{/each}
 										</Select.Group>
 									</Select.Content>
 									<Select.Input name="platform" value={true} />
@@ -207,6 +218,20 @@
 									bind:value={submitData.videoLink}
 									placeholder="Required"
 									class="col-span-3"
+								/>
+							</div>
+							<div class="grid grid-cols-4 items-center gap-4">
+									<Label for="name" class="text-right">Raw</Label>
+								<Input
+									id="name"
+									bind:value={submitData.raw}
+									placeholder={selectedLevel.value === undefined ||
+									selectedLevel.value.needRaw == false
+										? 'Not required'
+										: 'Required'}
+									class="col-span-3"
+									disabled={selectedLevel.value === undefined ||
+										selectedLevel.value.needRaw == false}
 								/>
 							</div>
 							<div class="grid grid-cols-4 items-center gap-4">
