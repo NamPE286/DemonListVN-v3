@@ -82,7 +82,7 @@
 				<LevelCard {level} />
 			{/each}
 		</Tabs.Content>
-		<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px] flex flex-col items-center">
+		<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px]">
 			Leaderboard
 		</Tabs.Content>
 	</Tabs.Root>
