@@ -8,28 +8,12 @@
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
 	import { Textarea } from '$lib/components/ui/textarea';
 
-	interface SubmitData {
-		levelID: number | null;
-		progress: number | null;
-		videoLink: string;
-	}
-
 	export let data: any;
 
 	let rewardState = 0;
 	let proof = '';
 	let claimOpened = false;
 	let cancelOpened = false;
-	let submitData: SubmitData = {
-		levelID: null,
-		progress: null,
-		videoLink: ''
-	};
-	let selectedLevel = {
-		disabled: false,
-		label: undefined,
-		value: undefined
-	};
 
 	function isEventEnded() {
 		return new Date(data.end) < new Date();
@@ -63,20 +47,6 @@
 	}
 
 	async function claimReward() {
-		if (selectedLevel.value === undefined) {
-			toast.error('Please fill in all required fields');
-		}
-
-		submitData.levelID = selectedLevel.value!;
-
-		if (submitData.progress === null || !(1 <= submitData.progress && submitData.progress <= 100)) {
-			toast.error('Invalid progress range');
-		}
-
-		if (submitData.videoLink === '') {
-			toast.error('Please fill in all required fields');
-		}
-
 		claimOpened = false;
 
 		toast.promise(
@@ -85,7 +55,6 @@
 				body: JSON.stringify({
 					eventID: 8,
 					content: proof,
-					data: submitData
 				}),
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())!,

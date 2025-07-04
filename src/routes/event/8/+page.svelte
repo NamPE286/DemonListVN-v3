@@ -5,6 +5,7 @@
 	import EventBanner from '../eventBanner.svelte';
 	import Markdown from '$lib/components/markdown.svelte';
 	import LevelCard from './levelCard.svelte';
+	import Leaderboard from './leaderboard.svelte';
 	import type { Level } from './type';
 
 	export let data: PageData;
@@ -78,12 +79,12 @@
 			</div>
 		</Tabs.Content>
 		<Tabs.Content value="levels" class="mt-[20px] w-full pl-[10px] pr-[10px]">
-			{#each levels as level}
-				<LevelCard {level} />
+			{#each levels as level, index}
+				<LevelCard {level} {index} />
 			{/each}
 		</Tabs.Content>
 		<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px]">
-			Leaderboard
+			<Leaderboard {levels} />
 		</Tabs.Content>
 	</Tabs.Root>
 {/if}
