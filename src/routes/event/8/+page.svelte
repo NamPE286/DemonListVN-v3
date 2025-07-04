@@ -13,14 +13,14 @@
 		{
 			id: 123,
 			name: 'Level A',
-			videoID: '',
+			videoID: '7Dj2_NQB7Jw',
 			point: 100,
 			needRaw: false
 		},
 		{
 			id: 456,
 			name: 'Level B',
-			videoID: '',
+			videoID: 'VPhLXeU25KA',
 			point: 200,
 			needRaw: true
 		}
