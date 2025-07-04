@@ -133,7 +133,6 @@
 			const links = elem.getElementsByTagName('a');
 			for (const link of links) {
 				link.style.color = '#98c2fe';
-				link.style.textDecoration = 'underline';
 			}
 		}
 	});
