@@ -5,6 +5,7 @@
 	import ParticipateButton from './participateButton.svelte';
 	import EventBanner from '../eventBanner.svelte';
 	import Markdown from '$lib/components/markdown.svelte';
+	import LevelCard from './levelCard.svelte';
 	import type { Level } from './type';
 
 	export let data: PageData;
@@ -13,15 +14,41 @@
 		{
 			id: 123,
 			name: 'Level A',
+			creator: 'Creator',
 			videoID: '7Dj2_NQB7Jw',
 			point: 100,
 			needRaw: false
 		},
 		{
-			id: 456,
+			id: 234,
 			name: 'Level B',
+			creator: 'Creator',
 			videoID: 'VPhLXeU25KA',
 			point: 200,
+			needRaw: false
+		},
+		{
+			id: 345,
+			name: 'Level C',
+			creator: 'Creator',
+			videoID: 'T4bkikW7fUE',
+			point: 300,
+			needRaw: false
+		},
+		{
+			id: 456,
+			name: 'Level D',
+			creator: 'Creator',
+			videoID: 'evtoG-4dLM4',
+			point: 400,
+			needRaw: true
+		},
+		{
+			id: 567,
+			name: 'Level E',
+			creator: 'Creator',
+			videoID: 'H_Nc-zjRmK4',
+			point: 500,
 			needRaw: true
 		}
 	];
@@ -52,7 +79,11 @@
 				{/if}
 			</div>
 		</Tabs.Content>
-		<Tabs.Content value="levels">Levels</Tabs.Content>
+		<Tabs.Content value="levels" class='w-full pl-[10px] pr-[10px]'>
+			{#each levels as level}
+				<LevelCard {level} />
+			{/each}
+		</Tabs.Content>
 		<Tabs.Content value="leaderboard">Leaderboard</Tabs.Content>
 	</Tabs.Root>
 {/if}
