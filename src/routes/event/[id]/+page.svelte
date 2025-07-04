@@ -126,6 +126,16 @@
 
 	onMount(() => {
 		getRewardState();
+
+		const elem = document.getElementsByClassName('markdown')[0];
+
+		if (elem) {
+			const links = elem.getElementsByTagName('a');
+			for (const link of links) {
+				link.style.color = '#98c2fe';
+				link.style.textDecoration = 'underline';
+			}
+		}
 	});
 </script>
 

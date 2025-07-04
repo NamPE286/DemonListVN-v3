@@ -160,6 +160,16 @@
 
 	onMount(() => {
 		getRewardState();
+
+		const elem = document.getElementsByClassName("markdown")[0]
+
+		if (elem) {
+			const links = elem.getElementsByTagName('a');
+			for (const link of links) {
+				link.style.color = '#98c2fe';
+				link.style.textDecoration = 'underline';
+			}
+		}
 	});
 </script>
 
@@ -288,7 +298,7 @@
 			</div>
 		{/if}
 	{/if}
-	<Tabs.Root value="detail" class='flex flex-col items-center'>
+	<Tabs.Root value="detail" class="flex flex-col items-center">
 		<Tabs.List>
 			<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
 			<Tabs.Trigger value="leaderboard">Leaderboard</Tabs.Trigger>
