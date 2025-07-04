@@ -24,9 +24,9 @@
 			<Table.Head class="w-[100px]">Rank</Table.Head>
 			<Table.Head>Player</Table.Head>
 			{#each levels as level, index}
-				<Table.Head class="w-[100px]">{indexToRoman(index + 1)}</Table.Head>
+				<Table.Head class="w-[75px] text-center">{indexToRoman(index + 1)}</Table.Head>
 			{/each}
-			<Table.Head class="w-[100px] text-right">Total</Table.Head>
+			<Table.Head class="w-[75px] text-right">Total</Table.Head>
 		</Table.Row>
 	</Table.Header>
 	<Table.Body>
@@ -34,9 +34,9 @@
 			<Table.Cell class="font-medium">#1</Table.Cell>
 			<Table.Cell>Player</Table.Cell>
 			{#each levels as level, index}
-				<Table.Cell class="w-[100px]">{level.point}</Table.Cell>
+				<Table.Cell class="w-[75px] text-center">{level.point}</Table.Cell>
 			{/each}
-			<Table.Cell class="w-[100px] text-right">1000</Table.Cell>
+			<Table.Cell class="w-[75px] text-right">1000</Table.Cell>
 		</Table.Row>
 	</Table.Body>
 </Table.Root>
