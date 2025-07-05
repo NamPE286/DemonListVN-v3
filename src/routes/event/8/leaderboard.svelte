@@ -47,7 +47,7 @@
 	});
 </script>
 
-<div class="flex justify-center">
+<div class="flex justify-center mb-[10px]">
 	<a href="#me">
 		<Button class="w-[200px]" variant="outline">Jump to me</Button>
 	</a>
