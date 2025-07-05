@@ -188,7 +188,7 @@
 					<DropdownMenu.Content align="end" class="z-[99999] w-56">
 						<DropdownMenu.Label>
 							{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
-								<span class="text-yellow-400">{$user.data.name}</span>
+								<span class="text-yellow-500">{$user.data.name}</span>
 							{:else}
 								{$user.data.name}
 							{/if}

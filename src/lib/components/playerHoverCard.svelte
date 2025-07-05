@@ -41,7 +41,7 @@
 		>
 			<div class="flex items-center gap-[5px]">
 				{#if isSupporterActive(player.supporterUntil)}
-					<span class="text-yellow-400">
+					<span class="text-yellow-500">
 						{player.name}
 					</span>
 				{:else}
@@ -94,7 +94,7 @@
 					{/if}
 					<h4 class="font-semibold">
 						{#if isSupporterActive(player.supporterUntil)}
-							<span class="text-yellow-400">
+							<span class="text-yellow-500">
 								{player.name}
 							</span>
 						{:else}

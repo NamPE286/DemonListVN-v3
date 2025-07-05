@@ -108,7 +108,7 @@
 						</a>
 					{/if}
 					{#if isSupporterActive(data.player.supporterUntil)}
-						<h2 class="text-yellow-400">
+						<h2 class="text-yellow-500">
 							{data.player.name}
 						</h2>
 					{:else}

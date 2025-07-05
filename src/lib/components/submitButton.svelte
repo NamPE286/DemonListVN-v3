@@ -415,7 +415,7 @@
 							<AlertDialog.Title>Submitted!</AlertDialog.Title>
 							<AlertDialog.Description>
 								{#if isSupporterActive($user.data.supporterUntil)}
-									Your submission has been sent and <span class="text-yellow-400">prioritized!</span
+									Your submission has been sent and <span class="text-yellow-500">prioritized!</span
 									> It will be reviewed shortly.
 								{:else}
 									Your submission has been sent! It may take a few day for a moderator to approve

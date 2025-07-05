@@ -209,7 +209,7 @@
 									<Avatar.Fallback>{item.name[0]}</Avatar.Fallback>
 								</Avatar.Root>
 								{#if isSupporterActive(item.supporterUntil)}
-									<span class="ml-[10px] text-yellow-400">{item.name}</span>
+									<span class="ml-[10px] text-yellow-500">{item.name}</span>
 								{:else}
 									<span class="ml-[10px]">{item.name}</span>
 								{/if}
