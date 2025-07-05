@@ -1,8 +1,12 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table/index.js';
+	import { onMount } from 'svelte';
+	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import type { Level } from './type';
 
 	export let levels: Level[];
+
+	let leaderboard: any[] = [];
 
 	function indexToRoman(num: number): string {
 		const romanNumerals = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
@@ -16,13 +20,35 @@
 		}
 		return result;
 	}
+
+	function getPoint(record: any, index: number) {
+		if (record === null) {
+			return 0;
+		}
+
+		return (record.progress / 100) * levels[index].point;
+	}
+
+	function getTotalPoint(records: any[]) {
+		let res = 0;
+
+		for (let i = 0; i < records.length; i++) {
+			res += getPoint(records[i], i);
+		}
+
+		return res;
+	}
+
+	onMount(async () => {
+		leaderboard = await (await fetch(`${import.meta.env.VITE_API_URL}/event/8/leaderboard`)).json();
+	});
 </script>
 
-<Table.Root class="ml-auto mr-auto w-[1500px]">
+<Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
 	<Table.Header>
 		<Table.Row>
 			<Table.Head class="w-[100px]">Rank</Table.Head>
-			<Table.Head>Player</Table.Head>
+			<Table.Head class="min-w-[200px]">Player</Table.Head>
 			{#each levels as level, index}
 				<Table.Head class="w-[75px] text-center">{indexToRoman(index + 1)}</Table.Head>
 			{/each}
@@ -30,13 +56,24 @@
 		</Table.Row>
 	</Table.Header>
 	<Table.Body>
-		<Table.Row>
-			<Table.Cell class="font-medium">#1</Table.Cell>
-			<Table.Cell>Player</Table.Cell>
-			{#each levels as level, index}
-				<Table.Cell class="w-[75px] text-center">{level.point}</Table.Cell>
-			{/each}
-			<Table.Cell class="w-[75px] text-right">1000</Table.Cell>
-		</Table.Row>
+		{#each leaderboard as player, rank}
+			<Table.Row>
+				<Table.Cell class="font-medium">#{rank + 1}</Table.Cell>
+				<Table.Cell class="min-w-[200px]">
+					<PlayerHoverCard {player} />
+				</Table.Cell>
+				{#each player.eventRecords as record, index}
+					<Table.Cell class="w-[75px] text-center">
+						{getPoint(record, index)}<br />
+						<span class="text-[11px] opacity-50">
+							{record ? `${record.progress}%` : ''}
+						</span>
+					</Table.Cell>
+				{/each}
+				<Table.Cell class="w-[75px] text-right">
+					{getTotalPoint(player.eventRecords)}
+				</Table.Cell>
+			</Table.Row>
+		{/each}
 	</Table.Body>
 </Table.Root>

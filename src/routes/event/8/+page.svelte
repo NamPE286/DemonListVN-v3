@@ -4,8 +4,9 @@
 	import { user } from '$lib/client';
 	import EventBanner from '../eventBanner.svelte';
 	import Markdown from '$lib/components/markdown.svelte';
-	import LevelCard from './levelCard.svelte';
+	import LevelTab from './levelTab.svelte';
 	import Leaderboard from './leaderboard.svelte';
+
 	import type { Level } from './type';
 
 	export let data: PageData;
@@ -53,6 +54,7 @@
 		}
 	];
 
+
 	function isEventStarted() {
 		return new Date(data.start) <= new Date();
 	}
@@ -79,9 +81,7 @@
 			</div>
 		</Tabs.Content>
 		<Tabs.Content value="levels" class="mt-[20px] w-full pl-[10px] pr-[10px]">
-			{#each levels as level, index}
-				<LevelCard {level} {index} />
-			{/each}
+			<LevelTab {levels} />
 		</Tabs.Content>
 		<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px]">
 			<Leaderboard {levels} />

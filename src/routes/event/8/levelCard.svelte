@@ -5,8 +5,11 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
+	import { toast } from 'svelte-sonner';
+	import { user } from '$lib/client';
 
 	interface SubmitData {
+		eventID: 8;
 		levelID: number | null;
 		progress: number | null;
 		videoLink: string;
@@ -15,8 +18,10 @@
 
 	export let level: Level;
 	export let index: number;
+	export let records: any[];
 
 	let submitData: SubmitData = {
+		eventID: 8,
 		levelID: level.id,
 		progress: null,
 		videoLink: '',
@@ -35,6 +40,65 @@
 		}
 		return result;
 	}
+
+	async function submit() {
+		if (!submitData.progress || !submitData.videoLink) {
+			toast.error('Please fill in all required fields');
+			return;
+		}
+
+		if (level.needRaw && !submitData.raw) {
+			toast.error('Please fill in all required fields');
+			return;
+		}
+
+		if (!(0 < submitData.progress && submitData.progress <= 100)) {
+			toast.error('Invalid progress');
+			return;
+		}
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event/8/submit`, {
+				method: 'POST',
+				body: JSON.stringify(submitData),
+				headers: {
+					Authorization: `Bearer ${await $user.token()}`,
+					'Content-Type': 'application/json'
+				}
+			}),
+			{
+				success: () => {
+					window.location.reload();
+					return 'Submitted!';
+				},
+				error: 'Failed to submit',
+				loading: 'Submitting...'
+			}
+		);
+	}
+
+	async function cancel() {
+		if (!confirm('Cancel submission? This cannot be undone')) {
+			return;
+		}
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event/8/submission/${level.id}`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: `Bearer ${await $user.token()}`
+				}
+			}),
+			{
+				success: () => {
+					window.location.reload();
+					return 'Cancelled!';
+				},
+				error: 'Failed to cancel',
+				loading: 'Cancelling...'
+			}
+		);
+	}
 </script>
 
 <Card.Root class="mb-[10px] ml-auto mr-auto flex w-[1000px] max-w-full items-center">
@@ -49,43 +113,51 @@
 		<div class="flex items-center gap-[10px]">
 			<h2 class="text-xl font-bold">{indexToRoman(index + 1)}. {level.name}</h2>
 			<span
-				class="rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-sm text-[var(--textColorInverted)]"
+				class="rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
 				>{level.point}pt</span
 			>
 		</div>
 		<p>by {level.creator} - ID: {level.id}</p>
 	</Card.Content>
-	<Dialog.Root>
-		<Dialog.Trigger class="ml-auto mr-[22.5px]">
-			<Button>Submit</Button>
-		</Dialog.Trigger>
-		<Dialog.Content>
-			<Dialog.Header>
-				<Dialog.Title>Submit {level.name}</Dialog.Title>
-			</Dialog.Header>
-			<div class="grid grid-cols-4 items-center gap-4">
-				<Label for="name" class="text-right">Progress</Label>
-				<Input
-					type="number"
-					inputmode="numeric"
-					min="1"
-					max="100"
-					bind:value={submitData.progress}
-					class="col-span-3"
-					placeholder="Required"
-				/>
-			</div>
-			<div class="grid grid-cols-4 items-center gap-4">
-				<Label for="name" class="text-right">Video's Link</Label>
-				<Input bind:value={submitData.videoLink} placeholder="Required" class="col-span-3" />
-			</div>
-			{#if level.needRaw}
-				<div class="grid grid-cols-4 items-center gap-4">
-					<Label for="name" class="text-right">Raw</Label>
-					<Input bind:value={submitData.raw} placeholder="Required" class="col-span-3" />
-				</div>
+	<div class="ml-auto mr-[22.5px]">
+		{#if $user.loggedIn}
+			{#if records[index] === null}
+				<Dialog.Root>
+					<Dialog.Trigger>
+						<Button>Submit</Button>
+					</Dialog.Trigger>
+					<Dialog.Content>
+						<Dialog.Header>
+							<Dialog.Title>Submit {level.name}</Dialog.Title>
+						</Dialog.Header>
+						<div class="grid grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Progress</Label>
+							<Input
+								type="number"
+								inputmode="numeric"
+								min="1"
+								max="100"
+								bind:value={submitData.progress}
+								class="col-span-3"
+								placeholder="Required"
+							/>
+						</div>
+						<div class="grid grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Video's Link</Label>
+							<Input bind:value={submitData.videoLink} placeholder="Required" class="col-span-3" />
+						</div>
+						{#if level.needRaw}
+							<div class="grid grid-cols-4 items-center gap-4">
+								<Label for="name" class="text-right">Raw</Label>
+								<Input bind:value={submitData.raw} placeholder="Required" class="col-span-3" />
+							</div>
+						{/if}
+						<Button on:click={submit}>Submit</Button>
+					</Dialog.Content>
+				</Dialog.Root>
+			{:else}
+				<Button variant="destructive" on:click={cancel}>Cancel</Button>
 			{/if}
-			<Button>Submit</Button>
-		</Dialog.Content>
-	</Dialog.Root>
+		{/if}
+	</div>
 </Card.Root>
