@@ -3,6 +3,9 @@
 	import { onMount } from 'svelte';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import type { Level } from './type';
+	import Button from '$lib/components/ui/button/button.svelte';
+	import { user } from '$lib/client';
+	import { dateStore } from 'svelte-legos';
 
 	export let levels: Level[];
 
@@ -44,6 +47,11 @@
 	});
 </script>
 
+<div class="flex justify-center">
+	<a href="#me">
+		<Button class="w-[200px]" variant="outline">Jump to me</Button>
+	</a>
+</div>
 <Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
 	<Table.Header>
 		<Table.Row>
@@ -60,7 +68,13 @@
 			<Table.Row>
 				<Table.Cell class="font-medium">#{rank + 1}</Table.Cell>
 				<Table.Cell class="min-w-[200px]">
-					<PlayerHoverCard {player} />
+					{#if player.uid == $user.data.uid}
+						<div id="me">
+							<PlayerHoverCard {player} />
+						</div>
+					{:else}
+						<PlayerHoverCard {player} />
+					{/if}
 				</Table.Cell>
 				{#each player.eventRecords as record, index}
 					<Table.Cell class="w-[75px] text-center">
