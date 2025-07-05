@@ -29,7 +29,9 @@
 			return 0;
 		}
 
-		return (record.progress / 100) * levels[index].point;
+		const res = (record.progress / 100) * levels[index].point;
+
+		return Math.round(res * 100) / 100;
 	}
 
 	function getTotalPoint(records: any[]) {
@@ -39,7 +41,7 @@
 			res += getPoint(records[i], i);
 		}
 
-		return res;
+		return Math.round(res * 100) / 100;
 	}
 
 	onMount(async () => {
@@ -47,7 +49,7 @@
 	});
 </script>
 
-<div class="flex justify-center mb-[10px]">
+<div class="mb-[10px] flex justify-center">
 	<a href="#me">
 		<Button class="w-[200px]" variant="outline">Jump to me</Button>
 	</a>

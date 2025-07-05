@@ -139,7 +139,7 @@
 								max="100"
 								bind:value={submitData.progress}
 								class="col-span-3"
-								placeholder="Required"
+								placeholder="Required (decimal allowed .e.g 99.99)"
 							/>
 						</div>
 						<div class="grid grid-cols-4 items-center gap-4">
