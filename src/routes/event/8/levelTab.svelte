@@ -5,6 +5,7 @@
 	import { user } from '$lib/client';
 
 	export let levels: Level[];
+	export let event: any;
 	let records: any[] = new Array(5).fill(null);
 
 	async function fetchRecord() {
@@ -33,6 +34,6 @@
 
 {#key records}
 	{#each levels as level, index}
-		<LevelCard {level} {index} {records} />
+		<LevelCard {level} {index} {records} {event} />
 	{/each}
 {/key}

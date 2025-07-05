@@ -19,6 +19,7 @@
 	export let level: Level;
 	export let index: number;
 	export let records: any[];
+	export let event: any
 
 	let submitData: SubmitData = {
 		eventID: 8,
@@ -27,6 +28,10 @@
 		videoLink: '',
 		raw: ''
 	};
+
+	function isEventEnded() {
+		return new Date(event.end) < new Date();
+	}
 
 	function indexToRoman(num: number): string {
 		const romanNumerals = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
@@ -120,7 +125,7 @@
 		<p>by {level.creator} - ID: {level.id}</p>
 	</Card.Content>
 	<div class="ml-auto mr-[22.5px]">
-		{#if $user.loggedIn}
+		{#if $user.loggedIn && !isEventEnded()}
 			{#if records[index] === null}
 				<Dialog.Root>
 					<Dialog.Trigger>

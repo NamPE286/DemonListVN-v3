@@ -81,7 +81,7 @@
 			</div>
 		</Tabs.Content>
 		<Tabs.Content value="levels" class="mt-[20px] w-full pl-[10px] pr-[10px]">
-			<LevelTab {levels} />
+			<LevelTab {levels} event={data} />
 		</Tabs.Content>
 		<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px]">
 			<Leaderboard {levels} />
