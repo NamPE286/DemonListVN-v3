@@ -5,7 +5,7 @@
 	import type { Level } from './type';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { user } from '$lib/client';
-	import { dateStore } from 'svelte-legos';
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 
 	export let levels: Level[];
 
@@ -58,7 +58,14 @@
 			<Table.Head class="w-[100px]">Rank</Table.Head>
 			<Table.Head class="min-w-[200px]">Player</Table.Head>
 			{#each levels as level, index}
-				<Table.Head class="w-[75px] text-center">{indexToRoman(index + 1)}</Table.Head>
+				<Table.Head class="w-[75px] text-center">
+					<Tooltip.Root>
+						<Tooltip.Trigger>
+							{indexToRoman(index + 1)}
+						</Tooltip.Trigger>
+						<Tooltip.Content>{level.name}</Tooltip.Content>
+					</Tooltip.Root>
+				</Table.Head>
 			{/each}
 			<Table.Head class="w-[75px] text-right">Total</Table.Head>
 		</Table.Row>
