@@ -7,6 +7,7 @@
 	import { user } from '$lib/client';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import { toast } from 'svelte-sonner';
 
 	export let levels: Level[];
 
@@ -45,15 +46,34 @@
 		return Math.round(res * 100) / 100;
 	}
 
+	async function update(noti = false) {
+		const upd = async () => {
+			leaderboard = await (
+				await fetch(`${import.meta.env.VITE_API_URL}/event/8/leaderboard`)
+			).json();
+		};
+
+		if (noti) {
+			toast.promise(upd, {
+				success: 'Refreshed!',
+				error: 'Failed to refresh',
+				loading: 'Refreshing...'
+			});
+		} else {
+			await upd();
+		}
+	}
+
 	onMount(async () => {
-		leaderboard = await (await fetch(`${import.meta.env.VITE_API_URL}/event/8/leaderboard`)).json();
+		await update();
 	});
 </script>
 
-<div class="mb-[10px] flex justify-center">
+<div class="mb-[10px] flex justify-center gap-[10px]">
 	<a href="#me">
 		<Button class="w-[200px]" variant="outline">Jump to me</Button>
 	</a>
+	<Button class="w-[100px]" variant="outline" on:click={() => update(true)}>Refresh</Button>
 </div>
 <Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
 	<Table.Header>
