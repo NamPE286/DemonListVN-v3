@@ -6,6 +6,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { user } from '$lib/client';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
+	import * as Dialog from '$lib/components/ui/dialog/index.js';
 
 	export let levels: Level[];
 
@@ -91,10 +92,40 @@
 				</Table.Cell>
 				{#each player.eventRecords as record, index}
 					<Table.Cell class="w-[75px] text-center">
-						{getPoint(record, index)}<br />
-						<span class="text-[11px] opacity-50">
-							{record ? `${record.progress}%` : ''}
-						</span>
+						<Dialog.Root>
+							<Dialog.Trigger>
+								{getPoint(record, index)}<br />
+								<span class="text-[11px] opacity-50">
+									{record ? `${record.progress}%` : ''}
+								</span>
+							</Dialog.Trigger>
+							<Dialog.Content>
+								<Dialog.Header>
+									<Dialog.Title>Record's Detail</Dialog.Title>
+								</Dialog.Header>
+								<div class="flex flex-col gap-0">
+									<section>
+										<span class="font-bold">Submitted at: </span>
+										{new Date(record.created_at).toLocaleString('vi-vn')}
+									</section>
+									<section>
+										<span class="font-bold">Video's Link: </span><a
+											href={record.videoLink}
+											class="text-[#95bdf7]">{record.videoLink}</a
+										>
+									</section>
+									<section>
+										<span class="font-bold">Raw: </span><a
+											href={record.videoLink}
+											class="text-[#95bdf7]">{record.raw ? record.raw : '(Not provided)'}</a
+										>
+									</section>
+									{#if !record.accepted}
+										<section class="mt-[10px] opacity-50 text-[13px]">* This record legitimacy is not verified</section>
+									{/if}
+								</div>
+							</Dialog.Content>
+						</Dialog.Root>
 					</Table.Cell>
 				{/each}
 				<Table.Cell class="w-[75px] text-right">
