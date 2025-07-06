@@ -75,13 +75,13 @@
 	<Table.Body>
 		{#each leaderboard as player, rank}
 			<Table.Row>
-				{#if player.uid == $user.data.uid}
+				{#if $user.loggedIn && player.uid == $user.data.uid}
 					<Table.Cell class="font-medium text-yellow-500">#{rank + 1}</Table.Cell>
 				{:else}
 					<Table.Cell class="font-medium">#{rank + 1}</Table.Cell>
 				{/if}
 				<Table.Cell class="min-w-[200px]">
-					{#if player.uid == $user.data.uid}
+					{#if $user.loggedIn && player.uid == $user.data.uid}
 						<div id="me">
 							<PlayerHoverCard {player} />
 						</div>
