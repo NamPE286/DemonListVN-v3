@@ -114,13 +114,15 @@
 										<section>
 											<span class="font-bold">Video's Link: </span><a
 												href={record.videoLink}
-												class="text-[#95bdf7]">{record.videoLink}</a
+												class="text-[#95bdf7]"
+												target="_blank">{record.videoLink}</a
 											>
 										</section>
 										<section>
 											<span class="font-bold">Raw: </span><a
-												href={record.videoLink}
-												class="text-[#95bdf7]">{record.raw ? record.raw : '(Not provided)'}</a
+												href={record.raw}
+												class="text-[#95bdf7]"
+												target="_blank">{record.raw ? record.raw : '(Not provided)'}</a
 											>
 										</section>
 										{#if !record.accepted}
