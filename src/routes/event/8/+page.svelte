@@ -13,44 +13,44 @@
 
 	const levels: Level[] = [
 		{
-			id: 123,
-			name: 'Level A',
-			creator: 'Creator',
-			videoID: '7Dj2_NQB7Jw',
+			id: 121184864,
+			name: 'NEW WORLD',
+			creator: 'Tinraz',
+			videoID: 'VqOx2DhUXNA',
 			point: 100,
 			needRaw: false
 		},
 		{
-			id: 234,
-			name: 'Level B',
-			creator: 'Creator',
-			videoID: 'VPhLXeU25KA',
+			id: 120313852,
+			name: 'Infernal Aether',
+			creator: 'GamerKnight750',
+			videoID: 'H0quPVhforY',
+			point: 100,
+			needRaw: false
+		},
+		{
+			id: 120866069,
+			name: 'big feet',
+			creator: 'AudieoVisual',
+			videoID: '2zFz8LASf_s',
+			point: 100,
+			needRaw: false
+		},
+		{
+			id: 120552432,
+			name: 'Free Geomrtyr Dash',
+			creator: 'ParzivalGames',
+			videoID: '6XbAoByMFwU',
 			point: 200,
 			needRaw: false
 		},
 		{
-			id: 345,
-			name: 'Level C',
+			id: 121537017,
+			name: 'Virtual Human',
 			creator: 'Creator',
-			videoID: 'T4bkikW7fUE',
-			point: 300,
+			videoID: 'gK7uFHZAOz4',
+			point: 200,
 			needRaw: false
-		},
-		{
-			id: 456,
-			name: 'Level D',
-			creator: 'Creator',
-			videoID: 'evtoG-4dLM4',
-			point: 400,
-			needRaw: true
-		},
-		{
-			id: 567,
-			name: 'Level E',
-			creator: 'Creator',
-			videoID: 'H_Nc-zjRmK4',
-			point: 500,
-			needRaw: true
 		}
 	];
 

@@ -107,7 +107,7 @@
 </script>
 
 <Card.Root class="mb-[10px] ml-auto mr-auto flex w-[1000px] max-w-full items-center">
-	<a href={`https://www.youtube.com/watch?v=${level.videoID}`}>
+	<a href={`https://www.youtube.com/watch?v=${level.videoID}`} target="_blank">
 		<img
 			src={`https://img.youtube.com/vi/${level.videoID}/0.jpg`}
 			alt="level"
