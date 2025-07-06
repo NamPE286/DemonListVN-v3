@@ -54,7 +54,6 @@
 		}
 	];
 
-
 	function isEventStarted() {
 		return new Date(data.start) <= new Date();
 	}
@@ -84,7 +83,7 @@
 			<LevelTab {levels} event={data} />
 		</Tabs.Content>
 		<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px]">
-			<Leaderboard {levels} />
+			<Leaderboard {levels} event={data} />
 		</Tabs.Content>
 	</Tabs.Root>
 {/if}

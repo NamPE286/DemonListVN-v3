@@ -10,6 +10,7 @@
 	import { toast } from 'svelte-sonner';
 
 	export let levels: Level[];
+	export let event: any;
 
 	let leaderboard: any[] = [];
 
@@ -24,6 +25,26 @@
 			}
 		}
 		return result;
+	}
+
+	function getPenalty(records: any[], divide: number) {
+		let mx: Date | null = null;
+
+		for (const i of records) {
+			if (i && i.created_at) {
+				const date = new Date(i.created_at);
+
+				if (mx === null || date > mx) {
+					mx = date;
+				}
+			}
+		}
+
+		if (!mx) {
+			return 0;
+		}
+
+		return Math.round((mx.getTime() - new Date(event.start).getTime()) / divide);
 	}
 
 	function getPoint(record: any, index: number) {
@@ -80,6 +101,7 @@
 		<Table.Row>
 			<Table.Head class="w-[100px]">Rank</Table.Head>
 			<Table.Head class="min-w-[200px]">Player</Table.Head>
+			<Table.Head class="w-[75px] text-center">Penalty</Table.Head>
 			{#each levels as level, index}
 				<Table.Head class="w-[75px] text-center">
 					<Tooltip.Root>
@@ -109,6 +131,14 @@
 					{:else}
 						<PlayerHoverCard {player} />
 					{/if}
+				</Table.Cell>
+				<Table.Cell class="w-[75px] text-center">
+					<Tooltip.Root>
+						<Tooltip.Trigger>
+							{getPenalty(player.eventRecords, 60000)}
+						</Tooltip.Trigger>
+						<Tooltip.Content>{getPenalty(player.eventRecords, 1)}ms since event start</Tooltip.Content>
+					</Tooltip.Root>
 				</Table.Cell>
 				{#each player.eventRecords as record, index}
 					<Table.Cell class="w-[75px] text-center">
