@@ -102,6 +102,7 @@
 			<Table.Head class="w-[100px]">Rank</Table.Head>
 			<Table.Head class="min-w-[200px]">Player</Table.Head>
 			<Table.Head class="w-[75px] text-center">Penalty</Table.Head>
+			<Table.Head class="w-[75px] text-center">Total</Table.Head>
 			{#each levels as level, index}
 				<Table.Head class="w-[75px] text-center">
 					<Tooltip.Root>
@@ -112,7 +113,6 @@
 					</Tooltip.Root>
 				</Table.Head>
 			{/each}
-			<Table.Head class="w-[75px] text-right">Total</Table.Head>
 		</Table.Row>
 	</Table.Header>
 	<Table.Body>
@@ -137,8 +137,13 @@
 						<Tooltip.Trigger>
 							{getPenalty(player.eventRecords, 60000)}
 						</Tooltip.Trigger>
-						<Tooltip.Content>{getPenalty(player.eventRecords, 1)}ms since event start</Tooltip.Content>
+						<Tooltip.Content
+							>{getPenalty(player.eventRecords, 1)}ms since event start</Tooltip.Content
+						>
 					</Tooltip.Root>
+				</Table.Cell>
+				<Table.Cell class="w-[75px] text-center">
+					{getTotalPoint(player.eventRecords)}
 				</Table.Cell>
 				{#each player.eventRecords as record, index}
 					<Table.Cell class="w-[75px] text-center">
@@ -186,9 +191,6 @@
 						{/if}
 					</Table.Cell>
 				{/each}
-				<Table.Cell class="w-[75px] text-right">
-					{getTotalPoint(player.eventRecords)}
-				</Table.Cell>
 			</Table.Row>
 		{/each}
 	</Table.Body>
