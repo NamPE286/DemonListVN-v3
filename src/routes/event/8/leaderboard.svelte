@@ -28,23 +28,17 @@
 	}
 
 	function getPenalty(records: any[], divide: number) {
-		let mx: Date | null = null;
+		let res: number = 0;
 
 		for (const i of records) {
-			if (i && i.created_at) {
-				const date = new Date(i.created_at);
-
-				if (mx === null || date > mx) {
-					mx = date;
-				}
+			if (i == null) {
+				continue;
 			}
+
+			res += new Date(i.created_at).getTime() - new Date(event.start).getTime();
 		}
 
-		if (!mx) {
-			return 0;
-		}
-
-		return Math.round((mx.getTime() - new Date(event.start).getTime()) / divide);
+		return Math.round(res / divide);
 	}
 
 	function getPoint(record: any, index: number) {
@@ -138,7 +132,7 @@
 							{getPenalty(player.eventRecords, 60000)}
 						</Tooltip.Trigger>
 						<Tooltip.Content
-							>{getPenalty(player.eventRecords, 1)}ms since event start</Tooltip.Content
+							>{getPenalty(player.eventRecords, 1)}</Tooltip.Content
 						>
 					</Tooltip.Root>
 				</Table.Cell>
