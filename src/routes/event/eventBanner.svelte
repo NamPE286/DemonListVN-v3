@@ -26,8 +26,9 @@
 
 		const day = Math.floor(second / 86400);
 		const hour = Math.floor((second - day * 86400) / 3600);
-
-		return `${day}d ${hour}h`;
+		const minute = Math.floor((second - day * 86400 - hour * 3600) / 60);
+		
+		return `${day}d ${hour}h ${minute}m`;
 	}
 </script>
 
