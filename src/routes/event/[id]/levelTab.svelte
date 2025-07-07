@@ -39,7 +39,7 @@
 		<Alert.Root class="text-yellow-400">
 			<Alert.Title class="flex items-center gap-[10px]">
 				<ExclamationTriangle size={15} />
-				You need to link your account to a Discord account in order to submit. Go to {'Setting > Discord'}
+				You need to link your account to a Discord account in order to submit. Go to {'Settings > Discord'}
 				to link.</Alert.Title
 			>
 		</Alert.Root>

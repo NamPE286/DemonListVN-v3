@@ -71,12 +71,12 @@
 	<Dialog.Trigger let:builder>
 		<Button builders={[builder]} variant="outline" size="icon">
 			<Gear class="h-[1.2rem] w-[1.2rem]" />
-			<span class="sr-only">Setting</span>
+			<span class="sr-only">Settings</span>
 		</Button>
 	</Dialog.Trigger>
 	<Dialog.Content>
 		<Dialog.Header>
-			<Dialog.Title>Setting</Dialog.Title>
+			<Dialog.Title>Settings</Dialog.Title>
 		</Dialog.Header>
 		<Tabs.Root value="general">
 			<Tabs.List>
