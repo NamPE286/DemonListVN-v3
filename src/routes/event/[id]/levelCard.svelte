@@ -7,6 +7,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/client';
+	import { Copy } from 'svelte-radix';
 
 	interface SubmitData {
 		levelID: number | null;
@@ -18,7 +19,7 @@
 	export let level: Level;
 	export let index: number;
 	export let records: any[];
-	export let event: any
+	export let event: any;
 
 	let submitData: SubmitData = {
 		levelID: level.id,
@@ -102,6 +103,13 @@
 			}
 		);
 	}
+
+	function copyID() {
+		navigator.clipboard
+			.writeText(level.levelID.toString())
+			.then(() => toast.success('Copied to clipboard!'))
+			.catch(() => toast.error('Failed to copy'));
+	}
 </script>
 
 <Card.Root class="mb-[10px] ml-auto mr-auto flex w-[1000px] max-w-full items-center">
@@ -119,8 +127,20 @@
 				class="rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
 				>{level.point}pt</span
 			>
+
+			{#if level.needRaw}
+				<span
+					class="rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
+					>Raw Required</span
+				>
+			{/if}
 		</div>
-		<p>by {level.creator} - ID: {level.levelID}</p>
+		<p class="flex items-center gap-[5px]">
+			by {level.creator} -
+			<button class="flex items-center gap-[5px]" on:click={copyID}
+				>ID: {level.levelID} <Copy size={15} /></button
+			>
+		</p>
 	</Card.Content>
 	<div class="ml-auto mr-[22.5px]">
 		{#if $user.loggedIn && !isEventEnded()}

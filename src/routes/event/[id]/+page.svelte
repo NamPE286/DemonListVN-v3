@@ -38,7 +38,7 @@
 				<Tabs.Trigger value="leaderboard">Leaderboard</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="detail">
-				<div class="content markdown">
+				<div class="markdown">
 					{#if data.content}
 						<Markdown content={data.content} />
 					{/if}
@@ -53,22 +53,25 @@
 		</Tabs.Root>
 	{:else}
 		<ParticipateButton {data} />
-		<div class="content markdown">
+		<div class="markdown">
 			{#if data.content}
 				<Markdown content={data.content} />
 			{/if}
 		</div>
 	{/if}
+{:else}
+	<div class="markdown">
+		{#if data.content}
+			<Markdown content={data.content} />
+		{/if}
+	</div>
 {/if}
 
 <style lang="scss">
-	.content {
-		padding-inline: 200px;
-	}
-
-	@media screen and (max-width: 900px) {
-		.content {
-			padding-inline: 10px;
-		}
+	.markdown {
+		width: fit-content;
+		margin-inline: auto;
+		max-width: 100%;
+		padding-inline: 10px;
 	}
 </style>
