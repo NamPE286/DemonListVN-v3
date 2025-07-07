@@ -16,13 +16,13 @@
 		raw: string;
 	}
 
-	export let level: Level;
+	export let level: Level | null;
 	export let index: number;
 	export let records: any[];
 	export let event: any;
 
 	let submitData: SubmitData = {
-		levelID: level.id,
+		levelID: level ? level.id : 0,
 		progress: null,
 		videoLink: '',
 		raw: ''
@@ -46,6 +46,10 @@
 	}
 
 	async function submit() {
+		if (level === null) {
+			return;
+		}
+
 		if (!submitData.progress || !submitData.videoLink) {
 			toast.error('Please fill in all required fields');
 			return;
@@ -82,6 +86,10 @@
 	}
 
 	async function cancel() {
+		if (level === null) {
+			return;
+		}
+
 		if (!confirm('Cancel submission? This cannot be undone')) {
 			return;
 		}
@@ -105,6 +113,10 @@
 	}
 
 	function copyID() {
+		if (!level) {
+			return;
+		}
+
 		navigator.clipboard
 			.writeText(level.levelID.toString())
 			.then(() => toast.success('Copied to clipboard!'))
@@ -113,22 +125,22 @@
 </script>
 
 <Card.Root class="mb-[10px] ml-auto mr-auto flex w-[1000px] max-w-full items-center">
-	<a href={`https://www.youtube.com/watch?v=${level.videoID}`} target="_blank">
+	<a href={`https://www.youtube.com/watch?v=${level ? level.videoID : ''}`} target="_blank">
 		<img
-			src={`https://img.youtube.com/vi/${level.videoID}/0.jpg`}
+			src={`https://img.youtube.com/vi/${level ? level.videoID : ''}/0.jpg`}
 			alt="level"
 			class="h-[100px] w-[177px] rounded-xl object-cover"
 		/>
 	</a>
 	<Card.Content class="mt-[22.5px] flex flex-col justify-center">
 		<div class="flex items-center gap-[10px]">
-			<h2 class="text-xl font-bold">{indexToRoman(index + 1)}. {level.name}</h2>
+			<h2 class="text-xl font-bold">{indexToRoman(index + 1)}. {level ? level.name : '???'}</h2>
 			<span
 				class="rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
-				>{level.point}pt</span
+				>{level ? level.point : '???'}pt</span
 			>
 
-			{#if level.needRaw}
+			{#if level && level.needRaw}
 				<span
 					class="rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
 					>Raw Required</span
@@ -136,14 +148,17 @@
 			{/if}
 		</div>
 		<p class="flex items-center gap-[5px]">
-			by {level.creator} -
-			<button class="flex items-center gap-[5px]" on:click={copyID}
-				>ID: {level.levelID} <Copy size={15} /></button
-			>
+			by {level ? level.creator : '???'} -
+			<button class="flex items-center gap-[5px]" on:click={copyID}>
+				ID: {level ? level.levelID : '???'}
+				{#if level}
+					<Copy size={15} />
+				{/if}
+			</button>
 		</p>
 	</Card.Content>
 	<div class="ml-auto mr-[22.5px]">
-		{#if $user.loggedIn && !isEventEnded()}
+		{#if $user.loggedIn && !isEventEnded() && level}
 			{#if records[index] === null}
 				<Dialog.Root>
 					<Dialog.Trigger>

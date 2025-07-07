@@ -12,11 +12,7 @@
 
 	export let data: PageData;
 
-	let levels: Level[] = [];
-
-	function isEventStarted() {
-		return new Date(data.start) <= new Date();
-	}
+	let levels: (Level | null)[] = [];
 
 	onMount(async () => {
 		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/event/${data.id}/levels`)).json();
@@ -28,8 +24,6 @@
 </svelte:head>
 
 <EventBanner {data} />
-
-{#if isEventStarted() || ($user.loggedIn && $user.data.isAdmin)}
 	{#if data.isContest}
 		<Tabs.Root value="detail" class="mt-[20px] flex flex-col items-center">
 			<Tabs.List>
@@ -59,13 +53,6 @@
 			{/if}
 		</div>
 	{/if}
-{:else}
-	<div class="markdown">
-		{#if data.content}
-			<Markdown content={data.content} />
-		{/if}
-	</div>
-{/if}
 
 <style lang="scss">
 	.markdown {

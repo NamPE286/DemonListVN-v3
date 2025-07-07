@@ -4,7 +4,7 @@
 	import type { Level } from './type';
 	import { user } from '$lib/client';
 
-	export let levels: Level[];
+	export let levels: (Level | null)[];
 	export let event: any;
 	let records: any[] = new Array(5).fill(null);
 

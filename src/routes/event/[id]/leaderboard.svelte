@@ -10,7 +10,7 @@
 	import { toast } from 'svelte-sonner';
 	import { Reload } from 'svelte-radix';
 
-	export let levels: Level[];
+	export let levels: (Level | null)[];
 	export let event: any;
 
 	let leaderboard: any[] = [];
@@ -58,7 +58,7 @@
 			return 0;
 		}
 
-		const res = (record.progress / 100) * levels[index].point;
+		const res = (record.progress / 100) * levels[index]!.point;
 
 		return Math.round(res * 100) / 100;
 	}
@@ -119,7 +119,7 @@
 						<Tooltip.Trigger>
 							{indexToRoman(index + 1)}
 						</Tooltip.Trigger>
-						<Tooltip.Content>{level.name}</Tooltip.Content>
+						<Tooltip.Content>{level ? level.name : "???"}</Tooltip.Content>
 					</Tooltip.Root>
 				</Table.Head>
 			{/each}
