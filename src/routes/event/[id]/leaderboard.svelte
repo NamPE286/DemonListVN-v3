@@ -13,6 +13,7 @@
 	export let event: any;
 
 	let leaderboard: any[] = [];
+	let refreshing = false;
 
 	function indexToRoman(num: number): string {
 		const romanNumerals = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
@@ -73,9 +74,11 @@
 
 	async function update(noti = false) {
 		const upd = async () => {
+			refreshing = true;
 			leaderboard = await (
 				await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/leaderboard`)
 			).json();
+			refreshing = false;
 		};
 
 		if (noti) {
@@ -98,7 +101,9 @@
 	<a href="#me">
 		<Button class="w-[200px]" variant="outline">Jump to me</Button>
 	</a>
-	<Button class="w-[100px]" variant="outline" on:click={() => update(true)}>Refresh</Button>
+	<Button class="w-[100px]" variant="outline" disabled={refreshing} on:click={() => update(true)}
+		>Refresh</Button
+	>
 </div>
 <Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
 	<Table.Header>
