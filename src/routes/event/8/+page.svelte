@@ -6,57 +6,20 @@
 	import Markdown from '$lib/components/markdown.svelte';
 	import LevelTab from './levelTab.svelte';
 	import Leaderboard from './leaderboard.svelte';
-
+	import { onMount } from 'svelte';
 	import type { Level } from './type';
 
 	export let data: PageData;
 
-	const levels: Level[] = [
-		{
-			id: 121184864,
-			name: 'NEW WORLD',
-			creator: 'Tinraz',
-			videoID: 'VqOx2DhUXNA',
-			point: 100,
-			needRaw: false
-		},
-		{
-			id: 120313852,
-			name: 'Infernal Aether',
-			creator: 'GamerKnight750',
-			videoID: 'H0quPVhforY',
-			point: 100,
-			needRaw: false
-		},
-		{
-			id: 120866069,
-			name: 'big feet',
-			creator: 'AudieoVisual',
-			videoID: '2zFz8LASf_s',
-			point: 100,
-			needRaw: false
-		},
-		{
-			id: 120552432,
-			name: 'Free Geomrtyr Dash',
-			creator: 'ParzivalGames',
-			videoID: '6XbAoByMFwU',
-			point: 200,
-			needRaw: false
-		},
-		{
-			id: 121537017,
-			name: 'Virtual Human',
-			creator: 'Creator',
-			videoID: 'gK7uFHZAOz4',
-			point: 200,
-			needRaw: false
-		}
-	];
+	let levels: Level[] = [];
 
 	function isEventStarted() {
 		return new Date(data.start) <= new Date();
 	}
+
+	onMount(async () => {
+		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/event/8/levels`)).json();
+	});
 </script>
 
 <svelte:head>

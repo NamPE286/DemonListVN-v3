@@ -9,7 +9,6 @@
 	import { user } from '$lib/client';
 
 	interface SubmitData {
-		eventID: 8;
 		levelID: number | null;
 		progress: number | null;
 		videoLink: string;
@@ -22,7 +21,6 @@
 	export let event: any
 
 	let submitData: SubmitData = {
-		eventID: 8,
 		levelID: level.id,
 		progress: null,
 		videoLink: '',
@@ -122,7 +120,7 @@
 				>{level.point}pt</span
 			>
 		</div>
-		<p>by {level.creator} - ID: {level.id}</p>
+		<p>by {level.creator} - ID: {level.levelID}</p>
 	</Card.Content>
 	<div class="ml-auto mr-[22.5px]">
 		{#if $user.loggedIn && !isEventEnded()}
