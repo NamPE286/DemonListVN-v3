@@ -19,7 +19,7 @@
 	}
 
 	onMount(async () => {
-		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/event/8/levels`)).json();
+		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/event/${data.id}/levels`)).json();
 	});
 </script>
 

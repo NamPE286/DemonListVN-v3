@@ -64,7 +64,7 @@
 	async function update(noti = false) {
 		const upd = async () => {
 			leaderboard = await (
-				await fetch(`${import.meta.env.VITE_API_URL}/event/8/leaderboard`)
+				await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/leaderboard`)
 			).json();
 		};
 

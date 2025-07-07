@@ -61,7 +61,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/8/submit`, {
+			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/submit`, {
 				method: 'POST',
 				body: JSON.stringify(submitData),
 				headers: {
@@ -86,7 +86,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/8/submission/${level.id}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/submission/${level.id}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: `Bearer ${await $user.token()}`
