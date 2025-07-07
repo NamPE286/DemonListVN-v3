@@ -8,6 +8,7 @@
 	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/client';
 	import { Copy } from 'svelte-radix';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	interface SubmitData {
 		levelID: number | null;
@@ -158,8 +159,10 @@
 		</p>
 	</Card.Content>
 	<div class="ml-auto mr-[22.5px]">
-		{#if $user.loggedIn && $user.data.discord && !isEventEnded() && level}
-			{#if records[index] === null}
+		{#if $user.loggedIn && $user.data.discord && !isEventEnded() && level && (!event.isSupporterOnly || isSupporterActive($user.data.supporterUntil))}
+			{#if records.length == 0}
+				<Button variant="secondary" disabled>...</Button>
+			{:else if records[index] === null}
 				<Dialog.Root>
 					<Dialog.Trigger>
 						<Button>Submit</Button>

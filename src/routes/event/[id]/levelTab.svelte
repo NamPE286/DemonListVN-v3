@@ -5,10 +5,11 @@
 	import { user } from '$lib/client';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { ExclamationTriangle } from 'svelte-radix';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	export let levels: (Level | null)[];
 	export let event: any;
-	let records: any[] = new Array(5).fill(null);
+	let records: any[] = [];
 
 	async function fetchRecord() {
 		if (!$user.loggedIn) {
@@ -41,6 +42,14 @@
 				<ExclamationTriangle size={15} />
 				You need to link your account to a Discord account in order to submit. Go to {'Settings > Discord'}
 				to link.</Alert.Title
+			>
+		</Alert.Root>
+	{/if}
+	{#if event.isSupporterOnly && !isSupporterActive($user.data.supporterUntil)}
+		<Alert.Root class="text-yellow-400">
+			<Alert.Title class="flex items-center gap-[10px]">
+				<ExclamationTriangle size={15} />
+				This event is Supporter only.</Alert.Title
 			>
 		</Alert.Root>
 	{/if}
