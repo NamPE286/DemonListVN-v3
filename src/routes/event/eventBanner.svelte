@@ -21,13 +21,13 @@
 		const second = (new Date(end).getTime() - new Date().getTime()) / 1000;
 
 		if (second < 0) {
-			return 'Expired';
+			return `Ended at ${new Date(data.end).toLocaleString('vi-vn')}`;
 		}
 
 		const day = Math.floor(second / 86400);
 		const hour = Math.floor((second - day * 86400) / 3600);
 		const minute = Math.floor((second - day * 86400 - hour * 3600) / 60);
-		
+
 		return `${day}d ${hour}h ${minute}m`;
 	}
 </script>
