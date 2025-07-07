@@ -136,7 +136,7 @@
 						>
 					</Tooltip.Root>
 				</Table.Cell>
-				<Table.Cell class="w-[75px] text-center">
+				<Table.Cell class="w-[75px] text-center font-bold">
 					{getTotalPoint(player.eventRecords)}
 				</Table.Cell>
 				{#each player.eventRecords as record, index}
