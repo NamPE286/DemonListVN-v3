@@ -24,6 +24,8 @@
 </svelte:head>
 
 <EventBanner {data} />
+
+{#if !data.hidden || ($user.loggedIn && $user.data.isAdmin)}
 	{#if data.isContest}
 		<Tabs.Root value="detail" class="mt-[20px] flex flex-col items-center">
 			<Tabs.List>
@@ -53,6 +55,7 @@
 			{/if}
 		</div>
 	{/if}
+{/if}
 
 <style lang="scss">
 	.markdown {
