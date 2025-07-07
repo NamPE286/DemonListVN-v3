@@ -59,7 +59,7 @@
 
 <style lang="scss">
 	.markdown {
-		width: fit-content;
+		width: 1000px;
 		margin-inline: auto;
 		max-width: 100%;
 		padding-inline: 10px;
