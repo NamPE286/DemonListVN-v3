@@ -1,12 +1,9 @@
 <script lang="ts">
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import LevelCard from '$lib/components/levelCard.svelte';
-	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
-	import Clock from 'svelte-radix/Clock.svelte';
-	import Star from 'svelte-radix/Star.svelte';
 	import { onMount } from 'svelte';
-	import { Skeleton } from '$lib/components/ui/skeleton';
 	import Autoplay from 'embla-carousel-autoplay';
+	import EventBanner from './event/eventBanner.svelte';
 
 	let time = new Date().toLocaleTimeString("vi-VN");
 	let visible = false;
@@ -44,19 +41,6 @@
 		return await (await fetch(`${import.meta.env.VITE_API_URL}/events/ongoing`)).json();
 	}
 
-	function getInterval(end: string | null) {
-		if (!end) {
-			return 'Permanent';
-		}
-
-		const second = (new Date(end).getTime() - new Date().getTime()) / 1000;
-		const day = Math.floor(second / 86400);
-		const hour = Math.floor((second - day * 86400) / 3600);
-		const minute = Math.floor((second - day * 86400 - hour * 3600) / 60);
-		
-		return `${day}d ${hour}h ${minute}m`;
-	}
-
 	onMount(() => {
 		visible = true;
 
@@ -82,7 +66,7 @@
 	/>
 </svelte:head>
 
-<div class="promotionWrapper w-full pl-[50px] pr-[50px]">
+<div class="promotionWrapper w-full pl-[50px] pr-[50px] mt-[20px]">
 	<Carousel.Root
 		class="h-fit w-full"
 		plugins={[
@@ -96,55 +80,13 @@
 				{#each events as item, index}
 					<Carousel.Item>
 						<a href={`/event/${item.id}`}>
-							<div class="p-1">
-								<div class="promotion" style={`background-image: url('${item.imgUrl}')`}>
-									<div class="promotionContent">
-										<div class="flex gap-[10px]">
-											<div class="period">
-												<Clock size={16} />
-												{getInterval(item.end)}
-											</div>
-											{#if item.isSupporterOnly}
-												<div class="period">
-													<Star size={16} />
-													Supporter Only
-												</div>
-											{/if}
-											{#if item.exp}
-												<div class="period">
-													{item.exp} EXP
-												</div>
-											{/if}
-										</div>
-										<h2>{item.title}</h2>
-										{#if item.redirect}
-											<a href={item.redirect} target="_blank">
-												<div class="flex gap-[10px]">
-													<ExternalLink />
-													{item.redirect}
-												</div>
-											</a>
-										{/if}
-										<p class="desc">{item.description}</p>
-									</div>
-								</div>
-							</div>
+							<EventBanner data={item} />
 						</a>
 					</Carousel.Item>
 				{/each}
 			{:else}
 				<Carousel.Item>
-					<div class="p-1">
-						<div class="promotion">
-							<div class="promotionContent">
-								<div class="flex flex-col gap-[10px]">
-									<Skeleton class="h-[20px] w-[75px]" />
-									<Skeleton class="h-[45px] w-[200px]" />
-									<Skeleton class="h-[25px] w-[150px]" />
-								</div>
-							</div>
-						</div>
-					</div>
+					<EventBanner data={null} />
 				</Carousel.Item>
 			{/if}
 		</Carousel.Content>
@@ -213,57 +155,6 @@
 </div>
 
 <style lang="scss">
-	.desc {
-		width: 650px;
-		max-width: 100%;
-	}
-
-	.promotion {
-		border: 1px solid hsl(var(--border));
-		border-radius: 10px;
-		background-position: center;
-		aspect-ratio: 40 / 10;
-		background-size: cover;
-		display: flex;
-		flex-direction: column;
-		overflow: hidden;
-		margin-top: 30px;
-		color: white;
-		min-height: 250px;
-		max-width: 100%;
-
-		.period {
-			background-color: white;
-			width: fit-content;
-			padding-inline: 8px;
-			color: black;
-			font-weight: 600;
-			text-shadow: none;
-			border-radius: 10px;
-			display: flex;
-			align-items: center;
-			gap: 5px;
-			line-height: 0;
-			padding-top: 3px;
-			padding-bottom: 3px;
-		}
-
-		.promotionContent {
-			margin-top: auto;
-			height: 175px;
-			padding: 21px;
-			text-shadow: black 1px 0 10px;
-		}
-
-		h2 {
-			font-weight: bold;
-			font-size: 28px;
-			line-height: 32px;
-			margin-top: 5px;
-			margin-bottom: 5px;
-		}
-	}
-
 	.wrapper {
 		position: relative;
 		z-index: 1;

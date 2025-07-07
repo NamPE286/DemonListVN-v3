@@ -2,6 +2,7 @@
 	import Clock from 'svelte-radix/Clock.svelte';
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import Star from 'svelte-radix/Star.svelte';
+	import { Skeleton } from '$lib/components/ui/skeleton';
 
 	export let data: any;
 
@@ -31,6 +32,20 @@
 		return `${day}d ${hour}h ${minute}m`;
 	}
 </script>
+
+{#if data === null}
+<div class="p-1">
+						<div class="promotion">
+							<div class="promotionContent">
+								<div class="flex flex-col gap-[10px]">
+									<Skeleton class="h-[20px] w-[75px]" />
+									<Skeleton class="h-[45px] w-[200px]" />
+									<Skeleton class="h-[25px] w-[150px]" />
+								</div>
+							</div>
+						</div>
+					</div>
+{:else}
 
 <div class="p-1">
 	<div class="promotion" style={`background-image: url('${data.imgUrl}')`}>
@@ -65,6 +80,7 @@
 		</div>
 	</div>
 </div>
+{/if}
 
 <style lang="scss">
 	.desc {
