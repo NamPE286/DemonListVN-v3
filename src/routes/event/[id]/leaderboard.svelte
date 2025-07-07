@@ -41,6 +41,16 @@
 		return Math.round(res / divide);
 	}
 
+	function getPenaltyTooltip(records: any[]) {
+		const ms = getPenalty(records, 1);
+
+		const minutes = Math.floor(ms / 60000);
+		const seconds = Math.floor((ms % 60000) / 1000);
+		const milliseconds = ms % 1000;
+
+		return `${minutes} minute${minutes !== 1 ? 's' : ''} ${seconds} second${seconds !== 1 ? 's' : ''} ${milliseconds} millisecond${milliseconds !== 1 ? 's' : ''}`;
+	}
+
 	function getPoint(record: any, index: number) {
 		if (record === null) {
 			return 0;
@@ -131,9 +141,7 @@
 						<Tooltip.Trigger>
 							{getPenalty(player.eventRecords, 60000)}
 						</Tooltip.Trigger>
-						<Tooltip.Content
-							>{getPenalty(player.eventRecords, 1)}</Tooltip.Content
-						>
+						<Tooltip.Content>{getPenaltyTooltip(player.eventRecords)}</Tooltip.Content>
 					</Tooltip.Root>
 				</Table.Cell>
 				<Table.Cell class="w-[75px] text-center font-bold">
