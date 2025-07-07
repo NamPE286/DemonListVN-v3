@@ -124,7 +124,7 @@
 	}
 </script>
 
-<Card.Root class="mb-[10px] ml-auto mr-auto flex w-[1000px] max-w-full items-center">
+<Card.Root class="flex items-center">
 	<a href={`https://www.youtube.com/watch?v=${level ? level.videoID : ''}`} target="_blank">
 		<img
 			src={`https://img.youtube.com/vi/${level ? level.videoID : ''}/0.jpg`}
@@ -158,7 +158,7 @@
 		</p>
 	</Card.Content>
 	<div class="ml-auto mr-[22.5px]">
-		{#if $user.loggedIn && !isEventEnded() && level}
+		{#if $user.loggedIn && $user.data.discord && !isEventEnded() && level}
 			{#if records[index] === null}
 				<Dialog.Root>
 					<Dialog.Trigger>
