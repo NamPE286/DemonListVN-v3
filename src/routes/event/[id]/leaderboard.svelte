@@ -8,6 +8,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { toast } from 'svelte-sonner';
+	import { Reload } from 'svelte-radix';
 
 	export let levels: Level[];
 	export let event: any;
@@ -101,9 +102,9 @@
 	<a href="#me">
 		<Button class="w-[200px]" variant="outline">Jump to me</Button>
 	</a>
-	<Button class="w-[100px]" variant="outline" disabled={refreshing} on:click={() => update(true)}
-		>Refresh</Button
-	>
+	<Button class="w-fit" variant="outline" disabled={refreshing} on:click={() => update(true)}>
+		<Reload size={16}/>
+	</Button>
 </div>
 <Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
 	<Table.Header>
