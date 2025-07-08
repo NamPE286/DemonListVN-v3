@@ -21,6 +21,7 @@
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
 	import { onMount } from 'svelte';
+	import MedalsTab from './medalsTab.svelte';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' | '' = 'dl';
@@ -269,12 +270,14 @@
 		</div>
 		<Tabs.Root value="dl">
 			<div class="tabs">
-				<Tabs.List class="grid grid-cols-3 w-[400px] max-w-[100% - 20px]">
+				<Tabs.List class="w-[400px] max-w-full grid grid-cols-3">
 					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Demon List</Tabs.Trigger>
 					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured List</Tabs.Trigger>
 					<Tabs.Trigger value="medals" on:click={() => (list = '')}>Medal</Tabs.Trigger>
 				</Tabs.List>
-				<Tabs.Content value="medals">Make changes to your account here.</Tabs.Content>
+				<Tabs.Content value="medals">
+					<MedalsTab userID={data.player.uid} />
+				</Tabs.Content>
 			</div>
 		</Tabs.Root>
 		{#if list}
@@ -501,6 +504,7 @@
 		align-items: center;
 		margin-top: 10px;
 		margin-bottom: 10px;
+		gap: 10px;
 	}
 
 	@media screen and (max-width: 1020px) {
