@@ -58,7 +58,11 @@
 			return 0;
 		}
 
-		const res = (record.progress / 100) * levels[index]!.point;
+		if(!levels[index]) {
+			return 0;
+		}
+
+		const res = (record.progress / 100) * levels[index].point;
 
 		return Math.round(res * 100) / 100;
 	}

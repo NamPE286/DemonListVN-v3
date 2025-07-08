@@ -44,7 +44,9 @@
 				<LevelTab {levels} event={data} />
 			</Tabs.Content>
 			<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px]">
-				<Leaderboard {levels} event={data} />
+				{#if levels.length}
+					<Leaderboard {levels} event={data} />
+				{/if}
 			</Tabs.Content>
 		</Tabs.Root>
 	{:else}
