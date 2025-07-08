@@ -1,6 +1,5 @@
 <script lang="ts">
 	export let medal: any;
-	console.log(medal.medalID);
 </script>
 
 <a href={medal.redirect ? medal.redirect : "#!"}>
