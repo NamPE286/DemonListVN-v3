@@ -23,7 +23,7 @@
 	import { onMount } from 'svelte';
 
 	export let data: PageData;
-	let list: 'dl' | 'fl' = 'dl';
+	let list: 'dl' | 'fl' | '' = 'dl';
 	let recordDetailOpened = false;
 	let selectedRecord: any = null;
 	let filter = {
@@ -269,67 +269,73 @@
 		</div>
 		<Tabs.Root value="dl">
 			<div class="tabs">
-				<Tabs.List class="grid w-full grid-cols-2 lg:w-[400px]">
+				<Tabs.List class="grid grid-cols-3 w-[400px] max-w-[100% - 20px]">
 					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Demon List</Tabs.Trigger>
 					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured List</Tabs.Trigger>
+					<Tabs.Trigger value="medals" on:click={() => (list = '')}>Medal</Tabs.Trigger>
 				</Tabs.List>
+				<Tabs.Content value="medals">Make changes to your account here.</Tabs.Content>
 			</div>
 		</Tabs.Root>
-		<Table.Root>
-			<Table.Caption>Total record: {data.records[list].length}</Table.Caption>
-			<Table.Header>
-				<Table.Row>
-					<Table.Head>Level</Table.Head>
-					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
-					<Table.Head class="w-[100px] text-center">Device</Table.Head>
-					<Table.Head class="w-[80px] text-center">Point</Table.Head>
-					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
-				</Table.Row>
-			</Table.Header>
-			<Table.Body>
-				{#each data.records[list] as record}
-					<Table.Row
-						on:click={(e) => {
-							// @ts-ignore
-							if (e.target.nodeName == 'A') {
-								return;
-							}
-
-							selectedRecord = record;
-							recordDetailOpened = true;
-						}}
-					>
-						<Table.Cell class="font-medium">
-							<div class="relative flex">
-								<img
-									class="levelBG absolute ml-[-18px] mt-[-16px] box-border h-[53.5px] w-[350px] max-w-full object-cover"
-									src={`https://img.youtube.com/vi/${record.levels.videoID}/0.jpg`}
-									alt="bg"
-								/>
-								<a
-									class="levelName z-10"
-									href={`/level/${record.levels.id}`}
-									data-sveltekit-preload-data="tap"
-								>
-									{record.levels.name}
-								</a>
-							</div>
-						</Table.Cell>
-						<Table.Cell class="text-center"
-							>{new Date(record.timestamp).toLocaleString('vi-VN')}</Table.Cell
-						>
-						<Table.Cell class="text-center">
-							{record.mobile ? 'Mobile' : 'PC'}
-							{#if record.refreshRate}
-								<br />({record.refreshRate}fps)
-							{/if}
-						</Table.Cell>
-						<Table.Cell class="text-center">{Math.round(record[list + 'Pt'] * 10) / 10}</Table.Cell>
-						<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+		{#if list}
+			<Table.Root>
+				<Table.Caption>Total record: {data.records[list].length}</Table.Caption>
+				<Table.Header>
+					<Table.Row>
+						<Table.Head>Level</Table.Head>
+						<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
+						<Table.Head class="w-[100px] text-center">Device</Table.Head>
+						<Table.Head class="w-[80px] text-center">Point</Table.Head>
+						<Table.Head class="w-[80px] text-center">Progress</Table.Head>
 					</Table.Row>
-				{/each}
-			</Table.Body>
-		</Table.Root>
+				</Table.Header>
+				<Table.Body>
+					{#each data.records[list] as record}
+						<Table.Row
+							on:click={(e) => {
+								// @ts-ignore
+								if (e.target.nodeName == 'A') {
+									return;
+								}
+
+								selectedRecord = record;
+								recordDetailOpened = true;
+							}}
+						>
+							<Table.Cell class="font-medium">
+								<div class="relative flex">
+									<img
+										class="levelBG absolute ml-[-18px] mt-[-16px] box-border h-[53.5px] w-[350px] max-w-full object-cover"
+										src={`https://img.youtube.com/vi/${record.levels.videoID}/0.jpg`}
+										alt="bg"
+									/>
+									<a
+										class="levelName z-10"
+										href={`/level/${record.levels.id}`}
+										data-sveltekit-preload-data="tap"
+									>
+										{record.levels.name}
+									</a>
+								</div>
+							</Table.Cell>
+							<Table.Cell class="text-center"
+								>{new Date(record.timestamp).toLocaleString('vi-VN')}</Table.Cell
+							>
+							<Table.Cell class="text-center">
+								{record.mobile ? 'Mobile' : 'PC'}
+								{#if record.refreshRate}
+									<br />({record.refreshRate}fps)
+								{/if}
+							</Table.Cell>
+							<Table.Cell class="text-center"
+								>{Math.round(record[list + 'Pt'] * 10) / 10}</Table.Cell
+							>
+							<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+						</Table.Row>
+					{/each}
+				</Table.Body>
+			</Table.Root>
+		{/if}
 	</div>
 </div>
 
@@ -491,7 +497,8 @@
 
 	.tabs {
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
+		align-items: center;
 		margin-top: 10px;
 		margin-bottom: 10px;
 	}
