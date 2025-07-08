@@ -238,39 +238,9 @@
 			{/key}
 		</div>
 		<Ads />
-		<div class="filter">
-			<div class="filterItem">
-				<Label>Sort by</Label>
-				<Select.Root
-					selected={{
-						label: 'Point',
-						value: 'pt'
-					}}
-					onSelectedChange={(e) => {
-						// @ts-ignore
-						filter.sortBy = e.value;
-					}}
-				>
-					<Select.Trigger class="w-[180px]">
-						<Select.Value placeholder="Select item to sort by" />
-					</Select.Trigger>
-					<Select.Content>
-						<Select.Item value="pt">Point</Select.Item>
-						<Select.Item value="timestamp">Date submitted</Select.Item>
-					</Select.Content>
-				</Select.Root>
-			</div>
-			<div class="filterItem">
-				<Label>Ascending</Label>
-				<Switch bind:checked={filter.ascending} />
-			</div>
-			<div class="filterItem">
-				<Button variant="outline" on:click={applyFilter}>Apply</Button>
-			</div>
-		</div>
 		<Tabs.Root value="dl">
 			<div class="tabs">
-				<Tabs.List class="w-[400px] max-w-full grid grid-cols-3">
+				<Tabs.List class="grid w-[400px] max-w-full grid-cols-3">
 					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Demon List</Tabs.Trigger>
 					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured List</Tabs.Trigger>
 					<Tabs.Trigger value="medals" on:click={() => (list = '')}>Medal</Tabs.Trigger>
@@ -280,7 +250,37 @@
 				</Tabs.Content>
 			</div>
 		</Tabs.Root>
-		{#if list}
+		{#if list.length}
+			<div class="filter">
+				<div class="filterItem">
+					<Label>Sort by</Label>
+					<Select.Root
+						selected={{
+							label: 'Point',
+							value: 'pt'
+						}}
+						onSelectedChange={(e) => {
+							// @ts-ignore
+							filter.sortBy = e.value;
+						}}
+					>
+						<Select.Trigger class="w-[180px]">
+							<Select.Value placeholder="Select item to sort by" />
+						</Select.Trigger>
+						<Select.Content>
+							<Select.Item value="pt">Point</Select.Item>
+							<Select.Item value="timestamp">Date submitted</Select.Item>
+						</Select.Content>
+					</Select.Root>
+				</div>
+				<div class="filterItem">
+					<Label>Ascending</Label>
+					<Switch bind:checked={filter.ascending} />
+				</div>
+				<div class="filterItem">
+					<Button variant="outline" on:click={applyFilter}>Apply</Button>
+				</div>
+			</div>
 			<Table.Root>
 				<Table.Caption>Total record: {data.records[list].length}</Table.Caption>
 				<Table.Header>
