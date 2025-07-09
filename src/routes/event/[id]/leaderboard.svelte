@@ -33,7 +33,7 @@
 		let res: number = 0;
 
 		for (const i of records) {
-			if (i == null) {
+			if (i == null || i.accepted === false) {
 				continue;
 			}
 
@@ -53,12 +53,12 @@
 		return `${minutes} minute${minutes !== 1 ? 's' : ''} ${seconds} second${seconds !== 1 ? 's' : ''} ${milliseconds} millisecond${milliseconds !== 1 ? 's' : ''}`;
 	}
 
-	function getPoint(record: any, index: number) {
-		if (record === null) {
+	function getPoint(record: any, index: number, checkAcp = false) {
+		if (record === null || (record.accepted === false && checkAcp)) {
 			return 0;
 		}
 
-		if(!levels[index]) {
+		if (!levels[index]) {
 			return 0;
 		}
 
@@ -71,7 +71,7 @@
 		let res = 0;
 
 		for (let i = 0; i < records.length; i++) {
-			res += getPoint(records[i], i);
+			res += getPoint(records[i], i, true);
 		}
 
 		return Math.round(res * 100) / 100;
@@ -107,7 +107,7 @@
 		<Button class="w-[200px]" variant="outline">Jump to me</Button>
 	</a>
 	<Button class="w-fit" variant="outline" disabled={refreshing} on:click={() => update(true)}>
-		<Reload size={16}/>
+		<Reload size={16} />
 	</Button>
 </div>
 <Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
@@ -123,7 +123,7 @@
 						<Tooltip.Trigger>
 							{indexToRoman(index + 1)}
 						</Tooltip.Trigger>
-						<Tooltip.Content>{level ? level.name : "???"}</Tooltip.Content>
+						<Tooltip.Content>{level ? level.name : '???'}</Tooltip.Content>
 					</Tooltip.Root>
 				</Table.Head>
 			{/each}
@@ -164,10 +164,19 @@
 						{:else}
 							<Dialog.Root>
 								<Dialog.Trigger>
-									{getPoint(record, index)}<br />
-									<span class="text-[11px] opacity-50">
-										{record ? `${record.progress}%` : ''}
-									</span>
+									{#if record && record.accepted === false}
+										<s>
+											{getPoint(record, index)}<br />
+											<span class="text-[11px] opacity-50">
+												{record ? `${record.progress}%` : ''}
+											</span>
+										</s>
+									{:else}
+										{getPoint(record, index)}<br />
+										<span class="text-[11px] opacity-50">
+											{record ? `${record.progress}%` : ''}
+										</span>
+									{/if}
 								</Dialog.Trigger>
 								<Dialog.Content>
 									<Dialog.Header>
@@ -192,9 +201,13 @@
 												target="_blank">{record.raw ? record.raw : '(Not provided)'}</a
 											>
 										</section>
-										{#if !record.accepted}
+										{#if record.accepted === null}
 											<section class="mt-[10px] text-[13px] opacity-50">
 												* This record legitimacy is not verified
+											</section>
+										{:else if record.accepted === false}
+											<section class="mt-[10px] text-[13px] opacity-50">
+												* This record is not counted
 											</section>
 										{/if}
 									</div>
