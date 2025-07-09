@@ -66,4 +66,10 @@
 		max-width: 100%;
 		padding-inline: 10px;
 	}
+
+	@media screen and (max-width: 1000px) {
+		.markdown {
+			width: 100%;
+		}
+	}
 </style>
