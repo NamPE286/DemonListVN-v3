@@ -171,6 +171,11 @@
 												{record ? `${record.progress}%` : ''}
 											</span>
 										</s>
+									{:else if record && record.accepted === null}
+										{getPoint(record, index)}*<br />
+										<span class="text-[11px] opacity-50">
+											{record ? `${record.progress}%` : ''}
+										</span>
 									{:else}
 										{getPoint(record, index)}<br />
 										<span class="text-[11px] opacity-50">
