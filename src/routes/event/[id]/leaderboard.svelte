@@ -9,12 +9,16 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { toast } from 'svelte-sonner';
 	import { Reload } from 'svelte-radix';
+	import { Input } from '$lib/components/ui/input/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
+	import * as Select from '$lib/components/ui/select/index.js';
 
 	export let levels: (Level | null)[];
 	export let event: any;
 
 	let leaderboard: any[] = [];
 	let refreshing = false;
+	let updateData: any = null;
 
 	function indexToRoman(num: number): string {
 		const romanNumerals = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
@@ -77,7 +81,7 @@
 		return Math.round(res * 100) / 100;
 	}
 
-	async function update(noti = false) {
+	async function refresh(noti = false) {
 		const upd = async () => {
 			refreshing = true;
 			leaderboard = await (
@@ -97,8 +101,30 @@
 		}
 	}
 
+	async function updateRecord(record: any) {
+		updateData.accepted = updateData.accepted.value;
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event/submission`, {
+				method: 'PATCH',
+				body: JSON.stringify(updateData),
+				headers: {
+					Authorization: `Bearer ${await $user.token()}`,
+					'Content-Type': 'application/json'
+				}
+			}),
+			{
+				success: 'Updated!',
+				error: 'Failed to update',
+				loading: 'Updating...'
+			}
+		);
+
+		record = updateData;
+	}
+
 	onMount(async () => {
-		await update();
+		await refresh();
 	});
 </script>
 
@@ -106,7 +132,7 @@
 	<a href="#me">
 		<Button class="w-[200px]" variant="outline">Jump to me</Button>
 	</a>
-	<Button class="w-fit" variant="outline" disabled={refreshing} on:click={() => update(true)}>
+	<Button class="w-fit" variant="outline" disabled={refreshing} on:click={() => refresh(true)}>
 		<Reload size={16} />
 	</Button>
 </div>
@@ -163,7 +189,24 @@
 							0
 						{:else}
 							<Dialog.Root>
-								<Dialog.Trigger>
+								<Dialog.Trigger
+									on:click={() => {
+										updateData = structuredClone(record);
+										delete updateData.eventLevels;
+
+										updateData.accepted = {
+											disabled: false,
+											label: (() => {
+												if (updateData.accepted === null) {
+													return 'Undecided';
+												}
+
+												return updateData.accepted ? 'Accepted' : 'Rejected';
+											})(),
+											value: updateData.accepted
+										};
+									}}
+								>
 									{#if record && record.accepted === false}
 										<s>
 											{getPoint(record, index)}<br />
@@ -214,6 +257,46 @@
 											<section class="mt-[10px] text-[13px] opacity-50">
 												* This record is not counted
 											</section>
+										{/if}
+
+										{#if $user.loggedIn && $user.data.isAdmin && updateData}
+											<div class="grid gap-4 py-4">
+												<div class="grid grid-cols-4 items-center gap-4">
+													<Label for="name" class="text-right">Progress</Label>
+													<Input
+														type="number"
+														bind:value={updateData.progress}
+														class="col-span-3"
+													/>
+												</div>
+												<div class="grid grid-cols-4 items-center gap-4">
+													<Label for="name" class="text-right">Video's Link</Label>
+													<Input bind:value={updateData.videoLink} class="col-span-3" />
+												</div>
+												{#if levels[index] && levels[index].needRaw}
+													<div class="grid grid-cols-4 items-center gap-4">
+														<Label for="name" class="text-right">Raw</Label>
+														<Input bind:value={updateData.raw} class="col-span-3" />
+													</div>
+												{/if}
+												<div class="grid grid-cols-4 items-center gap-4">
+													<Label for="name" class="text-right">Accept state</Label>
+													<Select.Root bind:selected={updateData.accepted}>
+														<Select.Trigger class="col-span-3">
+															<Select.Value placeholder="Select a platform" />
+														</Select.Trigger>
+														<Select.Content>
+															<Select.Group>
+																<Select.Item value={null}>Undecided</Select.Item>
+																<Select.Item value={true}>Accepted</Select.Item>
+																<Select.Item value={false}>Rejected</Select.Item>
+															</Select.Group>
+														</Select.Content>
+														<Select.Input name="platform" value={true} />
+													</Select.Root>
+												</div>
+												<Button on:click={() => updateRecord(record)}>Update</Button>
+											</div>
 										{/if}
 									</div>
 								</Dialog.Content>
