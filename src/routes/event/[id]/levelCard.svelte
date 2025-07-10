@@ -125,47 +125,50 @@
 	}
 </script>
 
-<Card.Root class="flex items-center">
-	<a href={`https://www.youtube.com/watch?v=${level ? level.videoID : ''}`} target="_blank">
-		<img
-			src={`https://img.youtube.com/vi/${level ? level.videoID : ''}/0.jpg`}
-			alt="level"
-			class="h-[100px] w-[177px] rounded-xl object-cover"
-		/>
-	</a>
-	<Card.Content class="mt-[22.5px] flex flex-col justify-center">
-		<div class="flex items-center gap-[10px]">
-			<h2 class="text-xl font-bold">{indexToRoman(index + 1)}. {level ? level.name : '???'}</h2>
-			<span
-				class="rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
-				>{level ? level.point : '???'}pt</span
-			>
-
-			{#if level && level.needRaw}
-				<span
-					class="rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
-					>Raw Required</span
-				>
-			{/if}
-		</div>
-		<p class="flex items-center gap-[5px]">
-			by {level ? level.creator : '???'} -
-			<button class="flex items-center gap-[5px]" on:click={copyID}>
-				ID: {level ? level.levelID : '???'}
-				{#if level}
-					<Copy size={15} />
-				{/if}
-			</button>
-		</p>
-	</Card.Content>
-	<div class="ml-auto mr-[22.5px]">
+<Card.Root class="flex flex-col items-center p-2 md:flex-row">
+	<div class="flex w-full">
+		<a href={`https://www.youtube.com/watch?v=${level ? level.videoID : ''}`} target="_blank">
+			<img
+				src={`https://img.youtube.com/vi/${level ? level.videoID : ''}/0.jpg`}
+				alt="level"
+				class="h-[100px] w-[177px] rounded-xl object-cover"
+			/>
+		</a>
+		<Card.Content class="mt-[22.5px] flex flex-col justify-center">
+			<div class="flex items-center gap-[10px]">
+				<div class="flex items-center gap-[5px]">
+					<h2 class="text-xl font-bold">{indexToRoman(index + 1)}. {level ? level.name : '???'}</h2>
+					<span
+						class="inline h-fit rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
+						>{level ? level.point : '???'}pt</span
+					>
+					{#if level && level.needRaw}
+						<span
+							class="inline rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
+							>Raw Required</span
+						>
+					{/if}
+				</div>
+			</div>
+			<div class="flex flex-col">
+				by {level ? level.creator : '???'}
+				<button class="flex items-center gap-[5px]" on:click={copyID}>
+					ID: {level ? level.levelID : '???'}
+					{#if level}
+						<Copy size={15} />
+					{/if}
+				</button>
+			</div>
+		</Card.Content>
+	</div>
+	<div class="ml-auto mr-[22.5px] w-full md:w-fit">
 		{#if $user.loggedIn && $user.data.discord && !isEventEnded() && level && (!event.isSupporterOnly || isSupporterActive($user.data.supporterUntil))}
 			{#if records.length == 0}
-				<Button variant="secondary" disabled>...</Button>
+				<Button class="w-full" variant="secondary" disabled>...</Button>
 			{:else if records[index] === null}
 				<Dialog.Root>
-					<Dialog.Trigger>
-						<Button>Submit</Button>
+					<Dialog.Trigger class="w-full">
+						<Button class="w-full">Submit</Button>
 					</Dialog.Trigger>
 					<Dialog.Content>
 						<Dialog.Header>
@@ -197,7 +200,7 @@
 					</Dialog.Content>
 				</Dialog.Root>
 			{:else}
-				<Button variant="destructive" on:click={cancel}>Cancel</Button>
+				<Button class="w-full" variant="destructive" on:click={cancel}>Cancel</Button>
 			{/if}
 		{/if}
 	</div>
