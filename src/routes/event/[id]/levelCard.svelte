@@ -126,7 +126,7 @@
 </script>
 
 <Card.Root class="flex flex-col items-center p-2 md:flex-row">
-	<div class="flex w-full">
+	<div class="flex w-full items-center">
 		<a href={`https://www.youtube.com/watch?v=${level ? level.videoID : ''}`} target="_blank">
 			<img
 				src={`https://img.youtube.com/vi/${level ? level.videoID : ''}/0.jpg`}
@@ -161,7 +161,7 @@
 			</div>
 		</Card.Content>
 	</div>
-	<div class="ml-auto mr-[22.5px] w-full md:w-fit">
+	<div class="ml-auto w-full md:w-fit">
 		{#if $user.loggedIn && $user.data.discord && !isEventEnded() && level && (!event.isSupporterOnly || isSupporterActive($user.data.supporterUntil))}
 			{#if records.length == 0}
 				<Button class="w-full" variant="secondary" disabled>...</Button>
