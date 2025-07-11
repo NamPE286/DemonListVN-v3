@@ -161,7 +161,7 @@
 			</div>
 		</Card.Content>
 	</div>
-	<div class="ml-auto w-full md:w-fit">
+	<div class="ml-auto w-full md:w-fit md:mr-[22.5px]">
 		{#if $user.loggedIn && $user.data.discord && !isEventEnded() && level && (!event.isSupporterOnly || isSupporterActive($user.data.supporterUntil))}
 			{#if records.length == 0}
 				<Button class="w-full" variant="secondary" disabled>...</Button>
