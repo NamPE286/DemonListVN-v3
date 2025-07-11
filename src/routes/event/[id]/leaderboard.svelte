@@ -205,6 +205,8 @@
 											})(),
 											value: updateData.accepted
 										};
+
+										updateData.created_at = new Date(updateData.created_at).toISOString().slice(0, 16);
 									}}
 								>
 									{#if record && record.accepted === false}
@@ -261,6 +263,14 @@
 
 										{#if $user.loggedIn && $user.data.isAdmin && updateData}
 											<div class="grid gap-4 py-4">
+												<div class="grid grid-cols-4 items-center gap-4">
+													<Label for="name" class="text-right">Submitted at</Label>
+													<Input
+														type="datetime-local"
+														bind:value={updateData.created_at}
+														class="col-span-3"
+													/>
+												</div>
 												<div class="grid grid-cols-4 items-center gap-4">
 													<Label for="name" class="text-right">Progress</Label>
 													<Input
