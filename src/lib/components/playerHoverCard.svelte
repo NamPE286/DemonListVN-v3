@@ -179,7 +179,7 @@
 	.wrapper {
 		display: flex;
 		align-items: center;
-		gap: 10px;
+		gap: 7px;
 	}
 
 	.leftCol {
