@@ -87,7 +87,12 @@
 		const upd = async () => {
 			refreshing = true;
 			leaderboard = await (
-				await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/leaderboard`)
+				await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/leaderboard`, {
+					method: "GET",
+					headers: {
+						"Authorization": ($user.loggedIn ? "Bearer " + await $user.token() : '')
+					}
+				})
 			).json();
 			refreshing = false;
 		};
