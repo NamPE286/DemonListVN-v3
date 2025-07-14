@@ -16,17 +16,17 @@
 
 <div class="wrapper">
 	<HoverCard.Root>
+		{#if showTitle && getTitle('dl', player)}
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<div class="rank" style={`background-color: ${getTitle('dl', player)?.color}`}>
+						<span>{getTitle('dl', player)?.title}</span>
+					</div>
+				</Tooltip.Trigger>
+				<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
+			</Tooltip.Root>
+		{/if}
 		{#if player.clan}
-			{#if showTitle && getTitle('dl', player)}
-				<Tooltip.Root>
-					<Tooltip.Trigger>
-						<div class="rank" style={`background-color: ${getTitle('dl', player)?.color}`}>
-							<span>{getTitle('dl', player)?.title}</span>
-						</div>
-					</Tooltip.Trigger>
-					<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
-				</Tooltip.Root>
-			{/if}
 			<a
 				href={`/clan/${player.clan}`}
 				class={badgeVariants({ variant: 'secondary' })}
