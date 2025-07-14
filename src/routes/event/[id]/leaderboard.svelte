@@ -142,7 +142,7 @@
 			{#if new Date(event.freeze) > new Date()}
 				The leaderboard will be freezed on {new Date(event.freeze).toLocaleString('vi-vn')}.
 			{:else}
-				The leaderboard is freezed.
+				The leaderboard is freezed since {new Date(event.freeze).toLocaleString('vi-vn')}.
 			{/if}
 		</Alert.Title>
 	</Alert.Root>
