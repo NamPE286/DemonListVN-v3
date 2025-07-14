@@ -15,6 +15,9 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { ExclamationTriangle } from 'svelte-radix';
+	import { flip } from 'svelte/animate';
+	import { cn } from '$lib/utils.js';
+	import { bounceInOut } from 'svelte/easing';
 
 	export let levels: (Level | null)[];
 	export let event: any;
@@ -229,8 +232,11 @@
 		</Table.Row>
 	</Table.Header>
 	<Table.Body>
-		{#each leaderboard as player, rank}
-			<Table.Row>
+		{#each leaderboard as player, rank (player.uid)}
+			<tr
+				animate:flip={{}}
+				class={cn('border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted')}
+			>
 				{#if $user.loggedIn && player.uid == $user.data.uid}
 					<Table.Cell class="font-medium text-yellow-500">#{rank + 1}</Table.Cell>
 				{:else}
@@ -390,7 +396,7 @@
 						{/if}
 					</Table.Cell>
 				{/each}
-			</Table.Row>
+			</tr>
 		{/each}
 	</Table.Body>
 </Table.Root>
