@@ -12,6 +12,8 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
+	import * as Alert from '$lib/components/ui/alert/index.js';
+	import { ExclamationTriangle } from 'svelte-radix';
 
 	export let levels: (Level | null)[];
 	export let event: any;
@@ -128,6 +130,18 @@
 	});
 </script>
 
+{#if event.freeze}
+	<Alert.Root class="mb-[10px] ml-auto mr-auto w-[1500px] max-w-full text-yellow-400">
+		<Alert.Title class="flex items-center gap-[10px]">
+			<ExclamationTriangle size={15} />
+			{#if new Date(event.freeze) > new Date()}
+				The leaderboard will be freezed on {new Date(event.freeze).toLocaleString('vi-vn')}.
+			{:else}
+				The leaderboard is freezed.
+			{/if}
+		</Alert.Title>
+	</Alert.Root>
+{/if}
 <div class="mb-[10px] flex justify-center gap-[10px]">
 	<a href="#me">
 		<Button class="w-[200px]" variant="outline">Jump to me</Button>
@@ -206,7 +220,9 @@
 											value: updateData.accepted
 										};
 
-										updateData.created_at = new Date(updateData.created_at).toISOString().slice(0, 16);
+										updateData.created_at = new Date(updateData.created_at)
+											.toISOString()
+											.slice(0, 16);
 									}}
 								>
 									{#if record && record.accepted === false}
