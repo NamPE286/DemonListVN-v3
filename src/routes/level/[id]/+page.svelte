@@ -275,7 +275,7 @@
 					<Table.Head>Player</Table.Head>
 					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 					<Table.Head class="w-[100px] text-center">Device</Table.Head>
-					<Table.Head class="w-[80px] text-center">{data.level.isPlatformer ? "Time" : "Progress"}</Table.Head>
+					<Table.Head class="w-[80px] text-center">{data.level && data.level.isPlatformer ? "Time" : "Progress"}</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -308,7 +308,7 @@
 								{/if}
 							</Table.Cell>
 							<Table.Cell class="text-center">
-								{data.level.isPlatformer ? getTimeString(record.progress) : `${record.progress}%`}
+								{data.level && data.level.isPlatformer ? getTimeString(record.progress) : `${record.progress}%`}
 							</Table.Cell>
 						</Table.Row>
 					{/each}
