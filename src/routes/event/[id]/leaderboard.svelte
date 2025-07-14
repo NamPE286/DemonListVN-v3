@@ -88,9 +88,9 @@
 			refreshing = true;
 			leaderboard = await (
 				await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/leaderboard`, {
-					method: "GET",
+					method: 'GET',
 					headers: {
-						"Authorization": ($user.loggedIn ? "Bearer " + await $user.token() : '')
+						Authorization: $user.loggedIn ? 'Bearer ' + (await $user.token()) : ''
 					}
 				})
 			).json();
@@ -262,15 +262,16 @@
 											<span class="font-bold">Video's Link: </span><a
 												href={record.videoLink}
 												class="text-[#95bdf7]"
-												target="_blank">{record.videoLink}</a
+												target="_blank">Link</a
 											>
 										</section>
 										<section>
-											<span class="font-bold">Raw: </span><a
-												href={record.raw}
-												class="text-[#95bdf7]"
-												target="_blank">{record.raw ? record.raw : '(Not provided)'}</a
-											>
+											<span class="font-bold">Raw: </span>
+											{#if record.raw}
+												<a href={record.raw} class="text-[#95bdf7]" target="_blank">Link</a>
+											{:else}
+												(Not provided)
+											{/if}
 										</section>
 										{#if record.accepted === null}
 											<section class="mt-[10px] text-[13px] opacity-50">
