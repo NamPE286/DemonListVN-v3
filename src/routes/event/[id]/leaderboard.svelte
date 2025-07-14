@@ -1,5 +1,6 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table/index.js';
+	import Download from 'svelte-radix/Download.svelte';
 	import { onMount } from 'svelte';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import type { Level } from './type';
@@ -130,6 +131,51 @@
 		record = updateData;
 	}
 
+	function exportToCSV() {
+		function escapeCSV(str: any) {
+			if (str === null || str === undefined) return '';
+			str = String(str);
+			if (str.includes('"') || str.includes(',') || str.includes('\n')) {
+				return '"' + str.replace(/"/g, '""') + '"';
+			}
+			return str;
+		}
+
+		let csvContent = 'Rank,Player,Total,Penalty';
+
+		for (let i = 0; i < levels.length; i++) {
+			const levelName = levels[i] ? escapeCSV(levels[i]!.name) : '???';
+			csvContent += `,${levelName}`;
+		}
+		csvContent += '\n';
+
+		leaderboard.forEach((player, rank) => {
+			const playerName = escapeCSV(
+				(player.clan ? `[${player.clans.tag}] ` : '') + player.name || 'Unknown'
+			);
+
+			csvContent += `${rank + 1},${playerName},${getTotalPoint(player.eventRecords)},${getPenalty(player.eventRecords, 60000)}`;
+
+			player.eventRecords.forEach((record: any, index: any) => {
+				const point = getPoint(record, index, true);
+				csvContent += `,${point}`;
+			});
+
+			csvContent += '\n';
+		});
+
+		const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+		const url = URL.createObjectURL(blob);
+		const link = document.createElement('a');
+		link.setAttribute('href', url);
+		link.setAttribute('download', `event_${event.id}_leaderboard.csv`);
+
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+		URL.revokeObjectURL(url);
+	}
+
 	onMount(async () => {
 		await refresh();
 	});
@@ -151,6 +197,14 @@
 	<a href="#me">
 		<Button class="w-[200px]" variant="outline">Jump to me</Button>
 	</a>
+	<Button
+		on:click={exportToCSV}
+		disabled={leaderboard.length === 0}
+		class="w-fit"
+		variant="outline"
+	>
+		<Download size={16} />
+	</Button>
 	<Button class="w-fit" variant="outline" disabled={refreshing} on:click={() => refresh(true)}>
 		<Reload size={16} />
 	</Button>
