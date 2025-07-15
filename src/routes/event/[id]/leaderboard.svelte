@@ -279,30 +279,30 @@
 		</Button>
 	{/if}
 </div>
-<div class="relative">
-	<div class="sticky top-[55px] z-10 bg-[hsl(var(--background))]">
-		<Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
-			<Table.Header>
-				<Table.Row>
-					<Table.Head class="w-[100px]">Rank</Table.Head>
-					<Table.Head class="min-w-[200px]">Player</Table.Head>
-					<Table.Head class="w-[75px] text-center">Total</Table.Head>
-					<Table.Head class="w-[75px] text-center">Penalty</Table.Head>
-					{#each levels as level, index}
-						<Table.Head class="w-[75px] text-center">
-							<Tooltip.Root>
-								<Tooltip.Trigger>
-									{indexToRoman(index + 1)}
-								</Tooltip.Trigger>
-								<Tooltip.Content>{level ? level.name : '???'}</Tooltip.Content>
-							</Tooltip.Root>
-						</Table.Head>
-					{/each}
-				</Table.Row>
-			</Table.Header>
-		</Table.Root>
-	</div>
+<div class="sticky top-[55px] z-10 bg-[hsl(var(--background))]">
+	<Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
+		<Table.Header>
+			<Table.Row>
+				<Table.Head class="w-[100px]">Rank</Table.Head>
+				<Table.Head class="min-w-[200px]">Player</Table.Head>
+				<Table.Head class="w-[75px] text-center">Total</Table.Head>
+				<Table.Head class="w-[75px] text-center">Penalty</Table.Head>
+				{#each levels as level, index}
+					<Table.Head class="w-[75px] text-center">
+						<Tooltip.Root>
+							<Tooltip.Trigger>
+								{indexToRoman(index + 1)}
+							</Tooltip.Trigger>
+							<Tooltip.Content>{level ? level.name : '???'}</Tooltip.Content>
+						</Tooltip.Root>
+					</Table.Head>
+				{/each}
+			</Table.Row>
+		</Table.Header>
+	</Table.Root>
+</div>
 
+<div class="select-none overflow-y-hidden">
 	<Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
 		<Table.Body>
 			{#each leaderboard as player, rank (player.uid)}
