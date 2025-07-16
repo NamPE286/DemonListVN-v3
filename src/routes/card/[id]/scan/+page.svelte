@@ -41,10 +41,10 @@
 	class="slide-up ml-auto mr-auto mt-[10px] flex w-[500px] max-w-full flex-col items-center gap-[10px] pl-[5px] pr-[5px]"
 	class:loaded
 >
-	<img class="rounded-xl border border-gray-500 shadow-md" src={data.img} alt="card" />
+	<img class="rounded-xl border border-opacity-50 shadow-md" src={data.img} alt="card" />
 	<p class="text-[12px] opacity-50">ID: {data.id}</p>
 	<h3 class="text-xl font-bold">{data.name} Card</h3>
-	<div>
+	<div class='slide-down'>
 		{#if data.activationDate == null}
 			<div class="text-center">
 				<p>This card is not activated.</p>
