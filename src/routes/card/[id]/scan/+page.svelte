@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { cn } from '$lib/utils.js';
 	import type { PageData } from '../$types';
 	import { onMount } from 'svelte';
 	import Button from '$lib/components/ui/button/button.svelte';
@@ -36,6 +35,10 @@
 		loaded = true;
 	});
 </script>
+
+<svelte:head>
+	<title>{data.name} Card - Demon List VN</title>
+</svelte:head>
 
 <div
 	class="slide-up ml-auto mr-auto mt-[10px] flex w-[500px] max-w-full flex-col items-center gap-[10px] pl-[5px] pr-[5px]"
