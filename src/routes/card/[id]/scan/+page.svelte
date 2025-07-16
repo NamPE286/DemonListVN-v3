@@ -40,7 +40,9 @@
 	}
 
 	onMount(() => {
-		loaded = true;
+		setTimeout(() => {
+			loaded = true;
+		}, 1000);
 	});
 </script>
 
