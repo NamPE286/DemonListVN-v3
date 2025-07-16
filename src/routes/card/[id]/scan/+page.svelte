@@ -219,13 +219,13 @@
 	</div>
 	{#if data.owner && $user.data?.uid === data.owner}
 		<div class="mt-4 w-full">
-			<Button class="w-full" on:click={() => (editMode = true)}>Edit bio</Button>
+			<Button class="w-full" on:click={() => (editMode = true)}>Edit Content</Button>
 			<Dialog.Root bind:open={editMode}>
 				<Dialog.Content class="sm:max-w-[800px]">
 					<Dialog.Header>
-						<Dialog.Title>Edit Your Bio</Dialog.Title>
+						<Dialog.Title>Edit Card's Content</Dialog.Title>
 						<Dialog.Description>
-							Write your bio using markdown. Click save when you're done.
+							Write card's content using markdown. Click save when you're done.
 						</Dialog.Description>
 					</Dialog.Header>
 
