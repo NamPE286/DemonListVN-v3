@@ -312,4 +312,10 @@
 		transform: translateY(-100px);
 		transition: transform 0.5s;
 	}
+
+	img {
+		background-color: var(--textColorInverted);
+		width: 100%;
+		aspect-ratio: 245/155.48;
+	}
 </style>
