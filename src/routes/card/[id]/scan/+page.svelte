@@ -15,7 +15,6 @@
 
 	export let data: PageData;
 
-	let loaded = false;
 	let isBannerFailedToLoad = false;
 	let exp = data.owner ? data.players.exp + data.players.extraExp : 0;
 
@@ -37,10 +36,6 @@
 			}
 		);
 	}
-
-	onMount(() => {
-		loaded = true;
-	});
 </script>
 
 <svelte:head>
@@ -48,13 +43,12 @@
 </svelte:head>
 
 <div
-	class="slide-up relative ml-auto mr-auto mt-[10px] flex w-[500px] max-w-full flex-col items-center gap-[10px] pl-[5px] pr-[5px]"
-	class:loaded
+	class="relative ml-auto mr-auto mt-[10px] flex w-[500px] max-w-full flex-col items-center gap-[10px] pl-[5px] pr-[5px]"
 >
 	<img class="rounded-xl border border-opacity-50 shadow-md" src={data.img} alt="card" />
 	<p class="text-[12px] opacity-50">ID: {data.id}</p>
 	<h3 class="text-xl font-bold">{data.name} Card</h3>
-	<div class="slide-down relative w-full">
+	<div class="relative w-full">
 		{#if data.activationDate == null}
 			<div class="text-center">
 				<p>This card is not activated.</p>
@@ -124,15 +118,17 @@
 								>{data.players.clans.tag}</a
 							>
 						{/if}
-						<h4 class="font-semibold">
-							{#if isSupporterActive(data.players.supporterUntil)}
-								<span class="text-yellow-500">
+						<a href={`/player/${data.players.uid}`}>
+							<h4 class="font-semibold">
+								{#if isSupporterActive(data.players.supporterUntil)}
+									<span class="text-yellow-500">
+										{data.players.name}
+									</span>
+								{:else}
 									{data.players.name}
-								</span>
-							{:else}
-								{data.players.name}
-							{/if}
-						</h4>
+								{/if}
+							</h4>
+						</a>
 					</div>
 					<div class="flex flex-col gap-[2px]">
 						<div class="rating">
@@ -287,31 +283,5 @@
 		padding-inline: 5px;
 		border-radius: 5px;
 		font-weight: 600;
-	}
-	.slide-up {
-		transform: translateY(50px);
-		opacity: 0;
-		transition:
-			transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-			opacity 0.6s ease-out;
-	}
-
-	.slide-up.loaded {
-		transform: translateY(0);
-		opacity: 1;
-	}
-
-	.slide-down {
-		transform: translateY(-30px);
-		opacity: 0;
-		transition:
-			transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-			opacity 0.6s ease-out;
-		transition-delay: 0.6s; /* Delay to run after slide-up animation */
-	}
-
-	.loaded .slide-down {
-		transform: translateY(0);
-		opacity: 1;
 	}
 </style>
