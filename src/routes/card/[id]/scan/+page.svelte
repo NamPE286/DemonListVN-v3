@@ -236,7 +236,7 @@
 					{:else}
 						<textarea
 							bind:value={editedContent}
-							class="h-[500px] w-full rounded-md border p-2"
+							class="h-[500px] w-full rounded-md border p-2 font-mono"
 							placeholder="Write the card content in markdown..."
 						></textarea>
 					{/if}
