@@ -12,11 +12,41 @@
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import Markdown from '$lib/components/markdown.svelte';
+	import * as Dialog from '$lib/components/ui/dialog';
 
 	export let data: PageData;
 
 	let isBannerFailedToLoad = false;
 	let exp = data.owner ? data.players.exp + data.players.extraExp : 0;
+	let editMode = false;
+	let previewMode = false;
+	let editedContent = data.content || '';
+
+	function togglePreview() {
+		previewMode = !previewMode;
+	}
+
+	async function saveContent() {
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/card/${data.id}/content`, {
+				method: 'PATCH',
+				headers: {
+					Authorization: `Bearer ${await $user.token()}`,
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({ content: editedContent })
+			}),
+			{
+				success: () => {
+					editMode = false;
+					window.location.reload();
+					return 'Content updated!';
+				},
+				error: 'Failed to update content',
+				loading: 'Saving...'
+			}
+		);
+	}
 
 	async function link() {
 		toast.promise(
@@ -187,9 +217,44 @@
 			</Card.Root>
 		{/if}
 	</div>
-	<div class="mt-[20px]">
-		<Markdown content={data.content} />
-	</div>
+	{#if data.owner && $user.data?.uid === data.owner}
+		<div class="mt-4 w-full">
+			<Button class="w-full" on:click={() => (editMode = true)}>Edit bio</Button>
+			<Dialog.Root bind:open={editMode}>
+				<Dialog.Content class="sm:max-w-[800px]">
+					<Dialog.Header>
+						<Dialog.Title>Edit Your Bio</Dialog.Title>
+						<Dialog.Description>
+							Write your bio using markdown. Click save when you're done.
+						</Dialog.Description>
+					</Dialog.Header>
+
+					{#if previewMode}
+						<div class="mt-2 h-[500px] overflow-y-scroll rounded-md border p-3">
+							<Markdown content={editedContent} />
+						</div>
+					{:else}
+						<textarea
+							bind:value={editedContent}
+							class="h-[500px] w-full rounded-md border p-2"
+							placeholder="Write the card content in markdown..."
+						></textarea>
+					{/if}
+
+					<Dialog.Footer>
+						<div class="flex justify-end gap-2">
+							<Button variant="outline" on:click={() => (editMode = false)}>Cancel</Button>
+							<Button variant="secondary" on:click={togglePreview}
+								>{previewMode ? 'Edit' : 'Preview'}</Button
+							>
+							<Button on:click={saveContent}>Save</Button>
+						</div>
+					</Dialog.Footer>
+				</Dialog.Content>
+			</Dialog.Root>
+		</div>
+	{/if}
+	<Markdown content={data.content} />
 </div>
 
 <style lang="scss">
