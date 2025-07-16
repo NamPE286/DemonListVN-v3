@@ -10,6 +10,8 @@
 	import Loading from '$lib/components/animation/loading.svelte';
 	import { toast } from 'svelte-sonner';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { navigating, page } from '$app/stores';
+	import { onMount } from 'svelte';
 
 	const defaultValue: any = {
 		levelid: NaN,
@@ -170,6 +172,22 @@
 
 		step++;
 	}
+
+	function onRouteChange(to: any) {
+		if (to?.route.id == '/level/[id]') {
+			defaultValue.levelid = parseInt(to.params!.id);
+		} else {
+			defaultValue.levelid = NaN;
+		}
+	}
+
+	$: if ($navigating) {
+		onRouteChange($navigating.to);
+	}
+
+	onMount(() => {
+		onRouteChange($page);
+	});
 </script>
 
 <Dialog.Root bind:open>
