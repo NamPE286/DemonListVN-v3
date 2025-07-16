@@ -18,7 +18,38 @@
 	onMount(() => {
 		updateMarkdownStyle();
 	});
-
 </script>
 
-<SvelteMarkdown source={content} />
+<div class="markdown">
+	<SvelteMarkdown source={content} />
+</div>
+
+<style>
+	.markdown :global(h1) {
+		font-size: 2em;
+		margin-bottom: 0.5em;
+	}
+	.markdown :global(h2) {
+		font-size: 1.5em;
+		margin-bottom: 0.5em;
+	}
+	.markdown :global(p) {
+		margin-bottom: 1em;
+		line-height: 1.6;
+	}
+	.markdown :global(ul),
+	.markdown :global(ol) {
+		margin-bottom: 1em;
+		padding-left: 2em;
+	}
+	.markdown :global(li) {
+		margin-bottom: 0.5em;
+	}
+	.markdown :global(a) {
+		text-decoration: underline;
+	}
+	.markdown :global(code) {
+		padding: 0.2em 0.4em;
+		border-radius: 3px;
+	}
+</style>

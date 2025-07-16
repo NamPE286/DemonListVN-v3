@@ -11,6 +11,7 @@
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import * as Tooltip from '$lib/components/ui/tooltip';
+	import Markdown from '$lib/components/markdown.svelte';
 
 	export let data: PageData;
 
@@ -186,6 +187,9 @@
 			</Card.Root>
 		{/if}
 	</div>
+	<div class="mt-[20px]">
+		<Markdown content={data.content} />
+	</div>
 </div>
 
 <style lang="scss">
@@ -235,7 +239,7 @@
 		margin-top: 50px;
 		display: flex;
 		flex-direction: column;
-		height: 100vh;
+		min-height: 100vh;
 	}
 
 	.leftCol {
