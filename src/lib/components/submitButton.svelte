@@ -174,10 +174,11 @@
 	}
 
 	function onRouteChange(to: any) {
-		if(!$user.loggedIn || !isSupporterActive($user.data.supporterUntil)) {
-			return
+		if (!$user.loggedIn || !isSupporterActive($user.data.supporterUntil)) {
+			defaultValue.levelid = NaN;
+			return;
 		}
-		
+
 		if (to?.route.id == '/level/[id]') {
 			defaultValue.levelid = parseInt(to.params!.id);
 		} else {
