@@ -52,7 +52,6 @@
 
 <div
 	class="wrapper relative ml-auto mr-auto flex w-[500px] max-w-full flex-col items-center gap-[10px] pl-[5px] pr-[5px]"
-	class:loaded
 >
 	<img
 		class="relative z-10 rounded-xl border border-opacity-50 shadow-md"
@@ -62,7 +61,7 @@
 	<p class="text-[12px] opacity-50">ID: {data.id}</p>
 	<h3 class="text-xl font-bold">{data.name} Card</h3>
 	{#if loaded}
-		<div class="relative z-0 w-full" transition:fly={{ y: -300, duration: 500, opacity: 100 }}>
+		<div class="relative z-0 w-full" transition:fly={{ y: -250, duration: 1000, opacity: 100 }}>
 			{#if data.activationDate == null}
 				<div class="text-center">
 					<p>This card is not activated.</p>
@@ -202,12 +201,6 @@
 </div>
 
 <style lang="scss">
-	.wrapper {
-		height: 100vh;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-	}
 	.rating {
 		.title {
 			padding: 2px;
@@ -251,6 +244,10 @@
 		display: flex;
 		align-items: center;
 		gap: 7px;
+		margin-top: 50px;
+		display: flex;
+		flex-direction: column;
+		height: 100vh;
 	}
 
 	.leftCol {
@@ -308,11 +305,6 @@
 		padding-inline: 5px;
 		border-radius: 5px;
 		font-weight: 600;
-	}
-
-	.loaded {
-		transform: translateY(-100px);
-		transition: transform 0.5s;
 	}
 
 	img {
