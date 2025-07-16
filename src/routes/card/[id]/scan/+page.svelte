@@ -13,6 +13,7 @@
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { onMount } from 'svelte';
+	import { load } from './+page';
 
 	export let data: PageData;
 
@@ -40,9 +41,7 @@
 	}
 
 	onMount(() => {
-		setTimeout(() => {
-			loaded = true;
-		}, 1000);
+		loaded = true;
 	});
 </script>
 
