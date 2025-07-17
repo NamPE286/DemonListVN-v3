@@ -21,10 +21,6 @@
 		).json();
 	}
 
-	function formatPrice(x: number) {
-		return x.toLocaleString('vi-VN');
-	}
-
 	async function restore(order: any) {
 		toast.loading('Restoring your order...');
 		window.location.href = `${import.meta.env.VITE_API_URL}/payment/success?orderCode=${order.id}`;
@@ -60,7 +56,12 @@
 						<Table.Cell class="font-medium">{order.id}</Table.Cell>
 						<Table.Cell>{order.products.name}</Table.Cell>
 						<Table.Cell>{order.quantity}</Table.Cell>
-						<Table.Cell>{formatPrice(order.amount)} {order.currency}</Table.Cell>
+						<Table.Cell>
+							{new Intl.NumberFormat('vi-VN', {
+								style: 'currency',
+								currency: order.currency
+							}).format(order.amount)}
+						</Table.Cell>
 						<Table.Cell>
 							{#if order.giftTo}
 								<PlayerHoverCard player={order.players} />
@@ -73,7 +74,7 @@
 							<Button
 								variant="secondary"
 								on:click={() => restore(order)}
-								disabled={order.status != "PENDING"}>Restore</Button
+								disabled={order.status != 'PENDING'}>Restore</Button
 							>
 							<a href={`/orders/${order.id}`}>
 								<Button variant="secondary">Detail</Button>
