@@ -5,6 +5,7 @@
 	import { user } from '$lib/client';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
+	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 
 	let orders: any[] = [];
 
@@ -87,8 +88,14 @@
 						<Table.Cell>{order.quantity}</Table.Cell>
 						<Table.Cell>{Math.round(order.discount * 100)}%</Table.Cell>
 						<Table.Cell>{order.coupon ? order.coupon : '-'}</Table.Cell>
-						<Table.Cell>{order.amount} {order.currency}</Table.Cell>
-						<Table.Cell>{order.giftTo ? order.giftTo : '-'}</Table.Cell>
+						<Table.Cell>{formatPrice(order.amount)} {order.currency}</Table.Cell>
+						<Table.Cell>
+							{#if order.giftTo}
+								<PlayerHoverCard player={order.players} />
+							{:else}
+								-
+							{/if}
+						</Table.Cell>
 						<Table.Cell>{order.state}</Table.Cell>
 						<Table.Cell class="text-right">
 							<Button
