@@ -38,7 +38,7 @@
 		<Carousel.Previous />
 		<Carousel.Next />
 	</Carousel.Root>
-	<h3 class="text-[25px] font-medium">Other products</h3>
+	<h3 class="text-[25px] font-medium">All products</h3>
 	<div class="flex w-[1200px] flex-wrap justify-center gap-[10px]">
 		{#each { length: 5 } as _}
 			<div class="border-box rounded-xl p-[10px] hover:bg-[hsl(var(--muted))]">
