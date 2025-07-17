@@ -5,6 +5,10 @@
 	import Autoplay from 'embla-carousel-autoplay';
 
 	export let data: PageData;
+
+	function getFirstLine(str: string) {
+		return str.split('\n')[0];
+	}
 </script>
 
 <svelte:head>
@@ -28,18 +32,20 @@
 		]}
 	>
 		<Carousel.Content>
-			{#each { length: 5 } as _}
+			{#each data.featured as item}
 				<Carousel.Item>
 					<a href="#!">
 						<div class="relative">
 							<img
 								class="ml-auto mr-auto aspect-[3/1] min-h-[250px] w-[1200px] max-w-full rounded-xl object-cover"
-								src="https://static.vecteezy.com/system/resources/previews/020/933/072/non_2x/abstract-blur-gradient-background-vector.jpg"
+								src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${item.id}/banner.webp`}
 								alt="product"
 							/>
-							<div class="absolute bottom-[20px] left-0 right-0 flex flex-col items-center text-white p-4">
-								<h2 class="text-shadow">Product name</h2>
-								<p class="text-shadow">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+							<div
+								class="absolute bottom-[20px] left-0 right-0 flex flex-col items-center p-4 text-white"
+							>
+								<h2 class="text-shadow">{item.name}</h2>
+								<p class="text-shadow">{getFirstLine(item.description)}</p>
 							</div>
 						</div>
 					</a>
@@ -51,17 +57,22 @@
 	</Carousel.Root>
 	<h3 class="text-[25px] font-medium">All products</h3>
 	<div class="flex w-[1200px] max-w-full flex-wrap justify-center gap-[10px]">
-		{#each { length: 10 } as _}
-			<a href="#!">
+		{#each data.data as item}
+			<a href={item.redirect ? item.redirect : `/store/product/${item.id}`}>
 				<div class="rounded-xl p-[10px] hover:bg-[hsl(var(--muted))]">
 					<img
 						class=" h-[180px] w-[180px] rounded-xl object-cover"
-						src="https://static.vecteezy.com/system/resources/previews/020/933/072/non_2x/abstract-blur-gradient-background-vector.jpg"
+						src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${item.id}/0.webp`}
 						alt="product"
 					/>
-					<div class="p-[7.5px] pb-0">
-						<h4 class="font-bold">Product's name</h4>
-						<h4>10.000₫</h4>
+					<div class="w-[180px] p-[7.5px] pb-0">
+						<h4 class="font-bold">{item.name}</h4>
+						<h4>
+							{new Intl.NumberFormat('vi-VN', {
+								style: 'currency',
+								currency: 'VND'
+							}).format(item.price)}
+						</h4>
 					</div>
 				</div>
 			</a>
