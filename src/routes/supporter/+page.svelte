@@ -87,7 +87,7 @@
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Discord DM Notifications</Card.Title>
+					<Card.Title>Discord DM notifications</Card.Title>
 					<Card.Description class="w-[250px]"
 						>Receive notifications directly through Discord DMs.</Card.Description
 					>
@@ -95,10 +95,19 @@
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Supporter-Only Events</Card.Title>
+					<Card.Title>Supporter-Only events</Card.Title>
 					<Card.Description class="w-[250px]"
-						>Join special events reserved just for our cherished supporters — giveaways, secret games, and more surprises await!</Card.Description
+						>Join special events reserved just for our cherished supporters — giveaways, secret
+						games, and more surprises await!</Card.Description
 					>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Autofill level ID when submit</Card.Title>
+					<Card.Description class="w-[250px]">
+						Automatically populate the level ID field when submitting a level, saving you time and effort.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
