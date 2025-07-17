@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Button } from '$lib/components/ui/button';
-	import * as Card from '$lib/components/ui/card';
+	import * as Carousel from '$lib/components/ui/carousel/index.js';
+	import Autoplay from 'embla-carousel-autoplay';
 </script>
 
 <svelte:head>
@@ -15,16 +16,31 @@
 </div>
 
 <div class="flex flex-col items-center gap-[10px]">
-	<div class="h-[350px] w-[1200px]">
-		<img
-			class="h-full w-full rounded-xl object-cover"
-			src="https://static.vecteezy.com/system/resources/previews/020/933/072/non_2x/abstract-blur-gradient-background-vector.jpg"
-			alt="product"
-		/>
-	</div>
+	<Carousel.Root
+		class="w-[1200px]"
+		plugins={[
+			Autoplay({
+				delay: 10000
+			})
+		]}
+	>
+		<Carousel.Content>
+			{#each { length: 5 } as _}
+				<Carousel.Item>
+					<img
+						class="ml-auto mr-auto h-[400px] w-[1200px] max-w-full rounded-xl object-cover"
+						src="https://static.vecteezy.com/system/resources/previews/020/933/072/non_2x/abstract-blur-gradient-background-vector.jpg"
+						alt="product"
+					/>
+				</Carousel.Item>
+			{/each}
+		</Carousel.Content>
+		<Carousel.Previous />
+		<Carousel.Next />
+	</Carousel.Root>
 	<h3 class="text-[25px] font-medium">Other products</h3>
 	<div class="flex w-[1200px] flex-wrap justify-center gap-[10px]">
-		{#each Array(10) as item, index}
+		{#each { length: 5 } as _}
 			<div class="border-box rounded-xl p-[10px] hover:bg-[hsl(var(--muted))]">
 				<img
 					class=" h-[200px] w-[200px] rounded-xl object-cover"
