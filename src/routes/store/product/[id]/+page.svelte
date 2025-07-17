@@ -24,7 +24,9 @@
 	<title>{data.name} - Demon List VN</title>
 </svelte:head>
 
-<div class="ml-auto mr-auto mt-[50px] flex w-[1300px] max-w-full gap-[50px] pl-[10px] pr-[10px]">
+<div
+	class="ml-auto mr-auto mt-[50px] flex w-[1300px] max-w-full flex-col items-center lg:items-start gap-[50px] pl-[15px] pr-[15px] lg:flex-row"
+>
 	<div class="flex w-fit flex-col gap-[10px]">
 		<img
 			class="aspect-square w-[500px] rounded-2xl object-cover"
@@ -49,10 +51,10 @@
 			{/each}
 		</div>
 	</div>
-	<div class="flex flex-col gap-[20px]">
+	<div class="flex flex-col items-center gap-[20px] lg:items-start">
 		<div>
-			<h2 class="text-[30px] font-semibold">{data.name}</h2>
-			<h3 class="text-[21px]">
+			<h2 class="text-center text-[30px] font-semibold lg:text-left">{data.name}</h2>
+			<h3 class="text-center text-[21px] lg:text-left">
 				{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.price)}
 			</h3>
 		</div>
@@ -70,14 +72,13 @@
 					>
 						-
 					</Button>
-                    <Input
-                        id="quantity"
-                        type="number"
-                        bind:value={quantity}
-                        min="1"
-                        readonly
-                        class="h-[40px] w-[80px] text-center cursor-default"
-                    />
+					<Input
+						id="quantity"
+						type="number"
+						bind:value={quantity}
+						min="1"
+						class="h-[40px] w-[80px] text-center"
+					/>
 					<Button
 						variant="outline"
 						size="sm"
