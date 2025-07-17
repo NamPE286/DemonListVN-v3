@@ -25,7 +25,7 @@
 </svelte:head>
 
 <div
-	class="ml-auto mr-auto mt-[50px] flex w-[1300px] max-w-full flex-col items-center lg:items-start gap-[50px] pl-[15px] pr-[15px] lg:flex-row"
+	class="ml-auto mr-auto mt-[20px] flex w-[1300px] max-w-full flex-col items-center gap-[20px] md:gap-[50px] pl-[15px] pr-[15px] md:mt-[50px] lg:flex-row lg:items-start"
 >
 	<div class="flex w-fit flex-col gap-[10px]">
 		<img
