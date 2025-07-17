@@ -1,7 +1,10 @@
 <script lang="ts">
+	import type { PageData } from './$types';
 	import { Button } from '$lib/components/ui/button';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import Autoplay from 'embla-carousel-autoplay';
+
+	export let data: PageData;
 </script>
 
 <svelte:head>
@@ -28,11 +31,17 @@
 			{#each { length: 5 } as _}
 				<Carousel.Item>
 					<a href="#!">
-						<img
-							class="ml-auto mr-auto aspect-[3/1] min-h-[250px] w-[1200px] max-w-full rounded-xl object-cover"
-							src="https://static.vecteezy.com/system/resources/previews/020/933/072/non_2x/abstract-blur-gradient-background-vector.jpg"
-							alt="product"
-						/>
+						<div class="relative">
+							<img
+								class="ml-auto mr-auto aspect-[3/1] min-h-[250px] w-[1200px] max-w-full rounded-xl object-cover"
+								src="https://static.vecteezy.com/system/resources/previews/020/933/072/non_2x/abstract-blur-gradient-background-vector.jpg"
+								alt="product"
+							/>
+							<div class="absolute bottom-[20px] left-0 right-0 flex flex-col items-center text-white p-4">
+								<h2 class="text-shadow">Product name</h2>
+								<p class="text-shadow">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+							</div>
+						</div>
 					</a>
 				</Carousel.Item>
 			{/each}
