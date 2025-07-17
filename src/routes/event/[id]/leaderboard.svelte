@@ -416,6 +416,10 @@
 														* This record legitimacy is not verified
 													</section>
 												{:else if record.accepted === false}
+													<section>
+														<span class="font-bold">Reject Reason: </span>
+														{record.rejectReason}
+													</section>
 													<section class="mt-[10px] text-[13px] opacity-50">
 														* This record is not counted
 													</section>
@@ -442,6 +446,14 @@
 														<div class="grid grid-cols-4 items-center gap-4">
 															<Label for="name" class="text-right">Video's Link</Label>
 															<Input bind:value={updateData.videoLink} class="col-span-3" />
+														</div>
+														<div class="grid grid-cols-4 items-center gap-4">
+															<Label
+																for="name"
+																placeholder="Leave blank if not rejected"
+																class="text-right">Reject Reason</Label
+															>
+															<Input bind:value={updateData.rejectReason} class="col-span-3" />
 														</div>
 														{#if levels[index] && levels[index].needRaw}
 															<div class="grid grid-cols-4 items-center gap-4">
