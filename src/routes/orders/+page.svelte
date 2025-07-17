@@ -47,11 +47,9 @@
 				<Table.Row>
 					<Table.Head class="w-[180px]">ID</Table.Head>
 					<Table.Head class="w-[180px]">Product</Table.Head>
-					<Table.Head class="w-[60px]">Quantity</Table.Head>
-					<Table.Head class="w-[60px]">Discount</Table.Head>
-					<Table.Head class="w-[100px]">Coupon</Table.Head>
+					<Table.Head class="w-[50px]">Qty</Table.Head>
 					<Table.Head class="w-[120px]">Amount</Table.Head>
-					<Table.Head class="w-[180px]">Recipent</Table.Head>
+					<Table.Head class="w-[150px]">Recipent</Table.Head>
 					<Table.Head>Status</Table.Head>
 					<Table.Head class="text-right">Action</Table.Head>
 				</Table.Row>
@@ -62,22 +60,20 @@
 						<Table.Cell class="font-medium">{order.id}</Table.Cell>
 						<Table.Cell>{order.products.name}</Table.Cell>
 						<Table.Cell>{order.quantity}</Table.Cell>
-						<Table.Cell>{Math.round(order.discount * 100)}%</Table.Cell>
-						<Table.Cell>{order.coupon ? order.coupon : '-'}</Table.Cell>
 						<Table.Cell>{formatPrice(order.amount)} {order.currency}</Table.Cell>
 						<Table.Cell>
 							{#if order.giftTo}
 								<PlayerHoverCard player={order.players} />
 							{:else}
-								-
+								<PlayerHoverCard player={$user.data} />
 							{/if}
 						</Table.Cell>
-						<Table.Cell>{order.state}</Table.Cell>
+						<Table.Cell>{order.state} {order.delivered ? 'and DELIVERED' : ''}</Table.Cell>
 						<Table.Cell class="text-right">
 							<Button
 								variant="secondary"
 								on:click={() => restore(order)}
-								disabled={order.state == 'CANCELLED' || order.state == 'EXPIRED'}>Restore</Button
+								disabled={order.status != "PENDING"}>Restore</Button
 							>
 							<a href={`/orders/${order.id}`}>
 								<Button variant="secondary">Detail</Button>
