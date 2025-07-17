@@ -88,42 +88,43 @@
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Discord DM notifications</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Receive notifications directly through Discord DMs.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Receive notifications directly through Discord DMs.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Supporter-Only events</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Join special events reserved just for our cherished supporters — giveaways, secret
-						games, and more surprises await!</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Join special events reserved just for our cherished supporters — giveaways, secret
+						games, and more surprises await!
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Autofill level ID when submit</Card.Title>
 					<Card.Description class="w-[250px]">
-						Automatically populate the level ID field when submitting a level, saving you time and effort.
+						Automatically populate the level ID field when submitting a level, saving you time and
+						effort.
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Be the first to try our newest feature</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Gain early access to new releases with new features before they go public!</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Gain early access to new releases with new features before they go public!
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Umm... that pretty much it</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Don't worry. More feature for supporters will be added in the future.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Don't worry. More feature for supporters will be added in the future.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 		</div>
