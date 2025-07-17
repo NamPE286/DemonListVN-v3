@@ -79,6 +79,9 @@
 								on:click={() => restore(order)}
 								disabled={order.state == 'CANCELLED' || order.state == 'EXPIRED'}>Restore</Button
 							>
+							<a href={`/orders/${order.id}`}>
+								<Button variant="secondary">Detail</Button>
+							</a>
 						</Table.Cell>
 					</Table.Row>
 				{/each}
