@@ -9,15 +9,15 @@
 </svelte:head>
 
 <div
-	class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full items-center pl-[10px] pr-[10px]"
+	class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full items-center pl-[15px] pr-[15px]"
 >
 	<h2>Store</h2>
 	<Button class="ml-auto">View my cart (1)</Button>
 </div>
 
-<div class="flex flex-col items-center gap-[10px]">
+<div class="flex flex-col items-center gap-[10px] pl-[10px] pr-[10px]">
 	<Carousel.Root
-		class="w-[1200px]"
+		class="w-[1200px] max-w-full"
 		plugins={[
 			Autoplay({
 				delay: 10000
@@ -28,7 +28,7 @@
 			{#each { length: 5 } as _}
 				<Carousel.Item>
 					<img
-						class="ml-auto mr-auto h-[400px] w-[1200px] max-w-full rounded-xl object-cover"
+                        class="ml-auto mr-auto aspect-[3/1] w-[1200px] max-w-full min-h-[250px] rounded-xl object-cover"
 						src="https://static.vecteezy.com/system/resources/previews/020/933/072/non_2x/abstract-blur-gradient-background-vector.jpg"
 						alt="product"
 					/>
@@ -39,15 +39,15 @@
 		<Carousel.Next />
 	</Carousel.Root>
 	<h3 class="text-[25px] font-medium">All products</h3>
-	<div class="flex w-[1200px] flex-wrap justify-center gap-[10px]">
-		{#each { length: 5 } as _}
-			<div class="border-box rounded-xl p-[10px] hover:bg-[hsl(var(--muted))]">
+	<div class="flex w-[1200px] max-w-full flex-wrap justify-center gap-[10px]">
+		{#each { length: 10 } as _}
+			<div class="rounded-xl p-[10px] hover:bg-[hsl(var(--muted))]">
 				<img
-					class=" h-[200px] w-[200px] rounded-xl object-cover"
+					class=" h-[180px] w-[180px] rounded-xl object-cover"
 					src="https://static.vecteezy.com/system/resources/previews/020/933/072/non_2x/abstract-blur-gradient-background-vector.jpg"
 					alt="product"
 				/>
-				<div class="border-box p-[10px] pb-0">
+				<div class="p-[7.5px] pb-0">
 					<h4 class="font-bold">Product's name</h4>
 					<h4>10.000₫</h4>
 				</div>
