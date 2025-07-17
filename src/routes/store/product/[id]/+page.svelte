@@ -4,6 +4,7 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import Markdown from '$lib/components/markdown.svelte';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
 
@@ -14,21 +15,8 @@
 		selectedImageIndex = index;
 	}
 
-	function increaseQuantity() {
-		quantity += 1;
-	}
-
-	function decreaseQuantity() {
-		if (quantity > 1) {
-			quantity -= 1;
-		}
-	}
-
 	function addToCart() {
-		// TODO: Implement cart functionality
-		console.log(`Adding ${quantity} of product ${data.id} to cart`);
-		// You can integrate with your cart state management here
-		alert(`Added ${quantity} item(s) to cart!`);
+		toast.success('Added to cart!');
 	}
 </script>
 
@@ -76,23 +64,25 @@
 					<Button
 						variant="outline"
 						size="sm"
-						on:click={decreaseQuantity}
+						on:click={() => quantity--}
 						disabled={quantity <= 1}
 						class="h-[40px] w-[40px] p-0"
 					>
 						-
 					</Button>
-					<Input
-						id="quantity"
-						type="number"
-						bind:value={quantity}
-						min="1"
-						class="h-[40px] w-[80px] text-center"
-					/>
+                    <Input
+                        id="quantity"
+                        type="number"
+                        bind:value={quantity}
+                        min="1"
+                        readonly
+                        class="h-[40px] w-[80px] text-center cursor-default"
+                    />
 					<Button
 						variant="outline"
 						size="sm"
-						on:click={increaseQuantity}
+						disabled={quantity == data.maxQuantity}
+						on:click={() => quantity++}
 						class="h-[40px] w-[40px] p-0"
 					>
 						+
