@@ -25,30 +25,6 @@
 		return x.toLocaleString('vi-VN');
 	}
 
-	async function pay(order: any) {
-		toast.loading('Checking order...');
-
-		const payment = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/orders/getPaymentLink/${order.id}`)
-		).json();
-
-		if (payment.status == 'PAID') {
-			toast.error("This order is paid. Please click on Restore if you haven't receive your order.");
-
-			return;
-		}
-
-		if (payment.status == 'CANCELLED') {
-			toast.error('This order is cancelled.');
-
-			return;
-		}
-
-		toast.loading('You will be redirected to our payment portal');
-
-		window.location.href = `https://pay.payos.vn/web/${payment.id}`;
-	}
-
 	async function restore(order: any) {
 		toast.loading('Restoring your order...');
 		window.location.href = `${import.meta.env.VITE_API_URL}/payment/success?orderCode=${order.id}`;
@@ -100,13 +76,8 @@
 						<Table.Cell class="text-right">
 							<Button
 								variant="secondary"
-								on:click={() => pay(order)}
-								disabled={order.state != 'PENDING'}>Pay</Button
-							>
-							<Button
-								variant="secondary"
 								on:click={() => restore(order)}
-								disabled={order.state == 'CANCELLED'}>Restore</Button
+								disabled={order.state == 'CANCELLED' || order.state == 'EXPIRED'}>Restore</Button
 							>
 						</Table.Cell>
 					</Table.Row>
