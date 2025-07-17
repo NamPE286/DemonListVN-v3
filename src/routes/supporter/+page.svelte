@@ -3,6 +3,7 @@
 	import BigTitle from '$lib/components/bigTitle.svelte';
 	import { fade } from 'svelte/transition';
 	import PaymentButton from '$lib/components/paymentButton.svelte';
+	import { Button } from '$lib/components/ui/button';
 </script>
 
 <svelte:head>
@@ -19,7 +20,13 @@
 <div class="relative flex flex-col items-center pl-[10px] pr-[10px]">
 	<BigTitle value="Become a Supporter 💖" description="Get exclusive perks and help us grow!" />
 	<div class="mt-[-20px] flex max-w-[1000px] flex-col items-center">
-		<PaymentButton title="49.000₫/month" />
+		<div class="flex items-center gap-[10px]">
+			<PaymentButton title="49.000₫/month" />
+			<span class="text-gray-400">or</span>
+			<a href="/store">
+				<Button>Check out our store</Button>
+			</a>
+		</div>
 		<h1 class="mb-[40px] mt-[75px] text-center text-3xl font-bold">
 			Why should you support Demon List VN
 		</h1>
