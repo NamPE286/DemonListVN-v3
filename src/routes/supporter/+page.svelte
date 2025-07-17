@@ -34,27 +34,27 @@
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Support the Team</Card.Title>
-					<Card.Description class="w-[250px]"
-						>A <s>small</s> single person team develops and runs Demon List VN. Your support gives
-						<s>them</s> him the motivation to develop and maintain the website.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						A <s>small</s> single person team develops and runs Demon List VN. Your support gives
+						<s>them</s> him the motivation to develop and maintain the website.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Server Infrastructure</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Contributions go towards the servers for running the website.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Contributions go towards the servers for running the website.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Keep Demon List VN self-sustaining</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Your contributions help keep the site independent and completely free from ads and
-						outside sponsors.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Your contributions help keep the site independent and completely free from ads and
+						outside sponsors.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 		</div>
@@ -63,33 +63,33 @@
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Highlighted name</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Stand out on the leaderboard with a flashy golden name.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Stand out on the leaderboard with a flashy golden name.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Animated Avatar and Banner</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Catch everyone's eye with a dynamic avatar and banner that bring your profile to life.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Catch everyone's eye with a dynamic avatar and banner that bring your profile to life.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Access priority queue</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Supporters enjoy reduced submission wait times, jumping ahead in the review line.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Supporters enjoy reduced submission wait times, jumping ahead in the review line.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Unlock exclusive Discord role</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Gain access to a special role on DLVN and partner Discord servers.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Gain access to a special role on DLVN and partner Discord servers.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
