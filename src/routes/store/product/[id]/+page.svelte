@@ -10,9 +10,18 @@
 
 	let selectedImageIndex = 0;
 	let quantity = 1;
+	let isImageEnlarged = false;
 
 	function selectImage(index: number) {
 		selectedImageIndex = index;
+	}
+
+	function enlargeImage() {
+		isImageEnlarged = true;
+	}
+
+	function closeEnlargedImage() {
+		isImageEnlarged = false;
 	}
 
 	function addToCart() {
@@ -28,11 +37,16 @@
 	class="ml-auto mr-auto mt-[20px] flex w-[1300px] max-w-full flex-col items-center gap-[20px] pl-[15px] pr-[15px] md:mt-[50px] md:gap-[50px] lg:flex-row lg:items-start"
 >
 	<div class="flex w-fit flex-col gap-[10px]">
-		<img
-			class="aspect-square w-[500px] rounded-2xl object-cover"
-			src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${data.id}/${selectedImageIndex}.webp`}
-			alt="product"
-		/>
+		<button
+			class="aspect-square w-[500px] cursor-zoom-in overflow-hidden rounded-2xl transition-transform duration-200 hover:scale-[1.02]"
+			on:click={enlargeImage}
+		>
+			<img
+				class="h-full w-full object-cover"
+				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${data.id}/${selectedImageIndex}.webp`}
+				alt="product"
+			/>
+		</button>
 		<div class="flex justify-center gap-[10px]">
 			{#each { length: data.imgCount } as _, index}
 				<button
@@ -97,3 +111,29 @@
 		</div>
 	</div>
 </div>
+
+{#if isImageEnlarged}
+	<!-- svelte-ignore a11y-click-events-have-key-events -->
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div
+		class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-80 p-4"
+		on:click={closeEnlargedImage}
+	>
+		<div class="relative max-h-[90vh] max-w-[90vw]">
+			<button
+				class="absolute -right-4 -top-4 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white text-black shadow-lg transition-colors hover:bg-gray-100"
+				on:click={closeEnlargedImage}
+				aria-label="Close enlarged image"
+			>
+				✕
+			</button>
+			<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
+			<img
+				class="max-h-[700px] max-w-full rounded-lg object-contain"
+				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${data.id}/${selectedImageIndex}.webp`}
+				alt=""
+				on:click|stopPropagation
+			/>
+		</div>
+	</div>
+{/if}
