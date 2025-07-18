@@ -5,6 +5,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import Markdown from '$lib/components/markdown.svelte';
 	import { toast } from 'svelte-sonner';
+	import { cart } from '$lib/client/cart';
 
 	export let data: PageData;
 
@@ -25,7 +26,8 @@
 	}
 
 	function addToCart() {
-		toast.success('Added to cart!');
+		$cart.addItem(data.id, quantity);
+		toast.success(`Added ${quantity} ${data.name} to cart!`);
 	}
 </script>
 
@@ -38,7 +40,7 @@
 >
 	<div class="flex w-fit flex-col gap-[10px]">
 		<button
-			class="aspect-square sm:w-[500px] cursor-zoom-in overflow-hidden rounded-2xl transition-transform duration-200 hover:scale-[1.02]"
+			class="aspect-square cursor-zoom-in overflow-hidden rounded-2xl transition-transform duration-200 hover:scale-[1.02] sm:w-[500px]"
 			on:click={enlargeImage}
 		>
 			<img
@@ -105,8 +107,18 @@
 					</Button>
 				</div>
 			</div>
-			<Button on:click={addToCart} class="h-[50px] w-[260px] text-[16px] font-semibold" size="lg">
+			<Button
+				disabled={$cart.getItem(data.id) &&
+					// @ts-ignore
+					$cart.getItem(data.id).quantity >= data.maxQuantity}
+				on:click={addToCart}
+				class="h-[50px] w-[260px] text-[16px] font-semibold"
+				size="lg"
+			>
 				Add to Cart
+				{#if $cart.getItem(data.id)}
+					({$cart.getItem(data.id)?.quantity} in cart)
+				{/if}
 			</Button>
 		</div>
 	</div>

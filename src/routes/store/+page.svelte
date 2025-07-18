@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PageData } from './$types';
+	import { cart } from '$lib/client/cart';
 	import { Button } from '$lib/components/ui/button';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import Autoplay from 'embla-carousel-autoplay';
@@ -19,7 +20,12 @@
 	class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full items-center pl-[15px] pr-[15px]"
 >
 	<h2>Store</h2>
-	<Button class="ml-auto">View my cart (1)</Button>
+	<Button class="ml-auto">
+		View my cart
+		{#if $cart.items.length}
+			({$cart.items.length})
+		{/if}
+	</Button>
 </div>
 
 <div class="flex flex-col items-center gap-[10px] pl-[10px] pr-[10px]">
@@ -27,7 +33,7 @@
 		class="w-[1200px] max-w-full"
 		plugins={[
 			Autoplay({
-				delay: 10000
+				delay: 5000
 			})
 		]}
 	>
