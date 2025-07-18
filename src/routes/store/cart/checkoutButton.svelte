@@ -4,11 +4,15 @@
 	import { user } from '$lib/client/user';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import { Textarea } from '$lib/components/ui/textarea/index.js';
+	import Label from '$lib/components/ui/label/label.svelte';
+	import { Input } from '$lib/components/ui/input/index.js';
 
 	export let items: any[];
 
 	let paymentMethod = '';
 	let address = '';
+	let phone = '';
 	let state = 0;
 
 	async function bankTransfer() {}
@@ -61,9 +65,27 @@
 			<Dialog.Header>
 				<Dialog.Title>Add shipping details</Dialog.Title>
 			</Dialog.Header>
+			<div class="grid grid-cols-4 items-center gap-4">
+				<Label class="text-right">Address</Label>
+				<Textarea
+					class="col-span-3"
+					placeholder="Enter your shipping address"
+					bind:value={address}
+				/>
+			</div>
+			<div class="grid grid-cols-4 items-center gap-4">
+				<Label class="text-right">Phone number</Label>
+				<Input
+					class="col-span-3"
+					bind:value={phone}
+					type="tel"
+					placeholder="0978123456"
+					pattern={`^\+?[0-9]{7,15}$`}
+				/>
+			</div>
 			<Dialog.Footer>
 				<Button
-					disabled={paymentMethod == ''}
+					disabled={address.length < 10 || phone.length != 10}
 					on:click={() => {
 						state = 2;
 					}}
@@ -75,31 +97,75 @@
 			<Dialog.Header>
 				<Dialog.Title>Review your order</Dialog.Title>
 			</Dialog.Header>
-			{#each items as item}
+			<div class="flex flex-col gap-[10px]">
+				<h3 class="font-bold">Order's Infomation</h3>
 				<div class="flex text-sm">
-					<p>{item.name}</p>
+					<p>Recipent</p>
+					<p class="ml-auto">
+						<b>
+							<PlayerHoverCard player={$user.data} />
+						</b>
+					</p>
+				</div>
+				<div class="flex text-sm">
+					<p>Shipping Address</p>
+					<p class="ml-auto">
+						{address}
+					</p>
+				</div>
+				<div class="flex text-sm">
+					<p>Phone number</p>
+					<p class="ml-auto">
+                        {phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}
+					</p>
+				</div>
+			</div>
+			<hr />
+			<div class="flex flex-col gap-[10px]">
+				<h3 class="font-bold">Items</h3>
+				{#each items as item}
+					<div class="flex text-sm">
+						<p>{item.name} x{$cart.getItem(item.id).quantity}</p>
+						<p class="ml-auto">
+							<b>
+								{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+									$cart.getItem(item.id).quantity * item.price
+								)}
+							</b>
+						</p>
+					</div>
+				{/each}
+			</div>
+			<hr />
+			<div class="flex flex-col gap-[10px]">
+				<div class="flex text-sm">
+					<p>Subtotal</p>
 					<p class="ml-auto">
 						<b>
 							{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-								$cart.getItem(item.id).quantity * item.price
+								items.reduce(
+									(total, item) => total + $cart.getItem(item.id).quantity * item.price,
+									0
+								)
 							)}
 						</b>
 					</p>
 				</div>
-			{/each}
-			<hr />
-			<div class="flex text-sm">
-				<p>Recipent</p>
+				<div class="flex text-sm">
+					<p>Shipping Fee</p>
+					<p class="ml-auto">
+						<b> Free </b>
+					</p>
+				</div>
+			</div>
+			<div class="text-md flex font-bold">
+				<p>Total</p>
 				<p class="ml-auto">
 					<b>
-						<PlayerHoverCard player={$user.data} />
+						{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+							items.reduce((total, item) => total + $cart.getItem(item.id).quantity * item.price, 0)
+						)}
 					</b>
-				</p>
-			</div>
-			<div class="flex text-sm">
-				<p>Shipping Address</p>
-				<p class="ml-auto">
-					<b> Vietnam </b>
 				</p>
 			</div>
 			<p class="text-sm italic text-gray-500">

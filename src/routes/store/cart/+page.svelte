@@ -64,11 +64,11 @@
 							<Button
 								variant="destructive"
 								size="icon"
-                                on:click={() => {
-                                    $cart.removeItem(product.id);
-                                    data = data.filter((item) => item.id !== product.id);
-                                    toast.success(`Removed ${product.name} from the cart.`);
-                                }}
+								on:click={() => {
+									$cart.removeItem(product.id);
+									data = data.filter((item) => item.id !== product.id);
+									toast.success(`Removed ${product.name} from the cart.`);
+								}}
 							>
 								<Cross2 size={16} />
 							</Button>
@@ -77,6 +77,18 @@
 				{/each}
 			</Table.Body>
 		</Table.Root>
+		<div class="flex justify-end">
+			<p class="text-right text-lg">
+				Total<br />
+				<span class='font-semibold text-2xl'>
+					{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+						data.reduce((total, product) => {
+							return total + product.price * $cart.getItem(product.id).quantity;
+						}, 0)
+					)}
+				</span>
+			</p>
+		</div>
 		<CheckoutButton bind:items={data} />
 	</div>
 {:else}
