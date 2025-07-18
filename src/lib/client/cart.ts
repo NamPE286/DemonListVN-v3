@@ -7,7 +7,8 @@ interface Item {
 
 interface Data {
     items: Item[];
-    getItem: (id: number) => Item | undefined;
+    queryArray: () => number[];
+    getItem: (id: number) => Item;
     addItem: (id: number, quantity: number) => void;
     removeItem: (id: number) => void;
     refresh: () => void;
@@ -42,8 +43,26 @@ const saveItems = (items: Item[]): void => {
 
 let data: Data = {
     items: getStoredItems(),
+    queryArray: () => {
+        let res = [];
+
+        for (const i of data.items) {
+            res.push(i.id);
+        }
+
+        return res;
+    },
     getItem: (id: number) => {
-        return data.items.find((item) => item.id === id);
+        const res = data.items.find((item) => item.id === id);
+
+        if (!res) {
+            return {
+                id: -1,
+                quantity: 0,
+            };
+        }
+
+        return res;
     },
     addItem: (id: number, quantity: number = 1) => {
         const existingItemIndex = data.items.findIndex((item) =>
@@ -65,12 +84,7 @@ let data: Data = {
         );
 
         if (existingItemIndex >= 0) {
-            if (data.items[existingItemIndex].quantity > 1) {
-                data.items[existingItemIndex].quantity -= 1;
-            } else {
-                data.items.splice(existingItemIndex, 1);
-            }
-
+            data.items.splice(existingItemIndex, 1);
             saveItems(data.items);
             cart.set(data);
         }

@@ -20,12 +20,14 @@
 	class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full items-center pl-[15px] pr-[15px]"
 >
 	<h2>Store</h2>
-	<Button class="ml-auto">
-		View my cart
-		{#if $cart.items.length}
-			({$cart.items.length})
-		{/if}
-	</Button>
+	<a href="/store/cart" class="ml-auto">
+		<Button>
+			View my cart
+			{#if $cart.items.length}
+				({$cart.items.length})
+			{/if}
+		</Button>
+	</a>
 </div>
 
 <div class="flex flex-col items-center gap-[10px] pl-[10px] pr-[10px]">
@@ -61,7 +63,7 @@
 		<Carousel.Previous />
 		<Carousel.Next />
 	</Carousel.Root>
-	<h3 class="text-[25px] font-medium">All products</h3>
+	<h3 class="text-[25px] font-medium mt-[5px]">All products</h3>
 	<div class="flex w-[1200px] max-w-full flex-wrap justify-center gap-[10px]">
 		{#each data.data as item}
 			<a href={item.redirect ? item.redirect : `/store/product/${item.id}`}>
