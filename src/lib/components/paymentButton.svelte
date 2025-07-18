@@ -147,6 +147,7 @@
 				<p>Demon List VN Supporter Role ({quantity[0]} month{quantity[0] > 1 ? 's' : ''})</p>
 				<p class="ml-auto"><b>{formatPrice(49000 * quantity[0])}₫</b></p>
 			</div>
+			<hr />
 			<div class="flex text-sm">
 				<p>Recipent</p>
 				<p class="ml-auto">

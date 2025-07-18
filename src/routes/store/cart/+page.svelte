@@ -5,6 +5,7 @@
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Cross2 } from 'svelte-radix';
 	import { toast } from 'svelte-sonner';
+	import CheckoutButton from './checkoutButton.svelte';
 
 	let data: any[] = [];
 
@@ -22,7 +23,6 @@
 
 	onMount(async () => {
 		await fetchData();
-		console.log(data);
 	});
 </script>
 
@@ -77,9 +77,7 @@
 				{/each}
 			</Table.Body>
 		</Table.Root>
-		<Button class="ml-auto mr-auto w-full max-w-[200px]" disabled={$cart.items.length == 0}>
-			Checkout
-		</Button>
+		<CheckoutButton bind:items={data} />
 	</div>
 {:else}
 	<p class="text-center opacity-50">No item in cart</p>
