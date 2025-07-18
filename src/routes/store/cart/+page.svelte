@@ -4,10 +4,15 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Cross2 } from 'svelte-radix';
+	import { toast } from 'svelte-sonner';
 
 	let data: any[] = [];
 
 	async function fetchData() {
+		if (!$cart.items.length) {
+			return;
+		}
+
 		data = await (
 			await fetch(
 				`${import.meta.env.VITE_API_URL}/store/products?ids=${JSON.stringify($cart.queryArray())}`
@@ -30,42 +35,55 @@
 >
 	<h2>Cart</h2>
 </div>
-
-<div
-	class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full flex-col justify-center gap-[15px] pl-[15px] pr-[15px]"
->
-	<Table.Root>
-		<Table.Header>
-			<Table.Row>
-				<Table.Head class="w-[300px]">Product</Table.Head>
-				<Table.Head class="w-[50px] text-center">Qty</Table.Head>
-				<Table.Head class="w-[200px]">Amount</Table.Head>
-				<Table.Head class="text-right">Action</Table.Head>
-			</Table.Row>
-		</Table.Header>
-		<Table.Body>
-			{#each data as product}
+{#if $cart.items.length}
+	<div
+		class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full flex-col justify-center gap-[15px] pl-[15px] pr-[15px]"
+	>
+		<Table.Root>
+			<Table.Header>
 				<Table.Row>
-					<Table.Cell class="w-[300px]">{product.name}</Table.Cell>
-					<Table.Cell class="w-[50px] text-center">
-						{$cart.getItem(product.id)?.quantity}
-					</Table.Cell>
-					<Table.Cell class="w-[200px]">
-						{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-							product.price * $cart.getItem(product.id).quantity
-						)}
-					</Table.Cell>
-					<Table.Cell class="text-right">
-						<Button variant="destructive" size="icon">
-							<Cross2 size={16} />
-						</Button>
-					</Table.Cell>
+					<Table.Head class="w-[300px]">Product</Table.Head>
+					<Table.Head class="w-[50px] text-center">Qty</Table.Head>
+					<Table.Head class="w-[200px]">Amount</Table.Head>
+					<Table.Head class="text-right">Action</Table.Head>
 				</Table.Row>
-			{/each}
-		</Table.Body>
-	</Table.Root>
-	<Button class="ml-auto mr-auto w-full max-w-[200px]">Checkout</Button>
-</div>
+			</Table.Header>
+			<Table.Body>
+				{#each data as product}
+					<Table.Row>
+						<Table.Cell class="w-[300px]">{product.name}</Table.Cell>
+						<Table.Cell class="w-[50px] text-center">
+							{$cart.getItem(product.id)?.quantity}
+						</Table.Cell>
+						<Table.Cell class="w-[200px]">
+							{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+								product.price * $cart.getItem(product.id).quantity
+							)}
+						</Table.Cell>
+						<Table.Cell class="text-right">
+							<Button
+								variant="destructive"
+								size="icon"
+                                on:click={() => {
+                                    $cart.removeItem(product.id);
+                                    data = data.filter((item) => item.id !== product.id);
+                                    toast.success(`Removed ${product.name} from the cart.`);
+                                }}
+							>
+								<Cross2 size={16} />
+							</Button>
+						</Table.Cell>
+					</Table.Row>
+				{/each}
+			</Table.Body>
+		</Table.Root>
+		<Button class="ml-auto mr-auto w-full max-w-[200px]" disabled={$cart.items.length == 0}>
+			Checkout
+		</Button>
+	</div>
+{:else}
+	<p class="text-center opacity-50">No item in cart</p>
+{/if}
 
 <style lang="scss">
 	h2 {

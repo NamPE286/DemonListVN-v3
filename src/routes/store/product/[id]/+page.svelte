@@ -36,7 +36,20 @@
 </svelte:head>
 
 <div
-	class="ml-auto mr-auto mt-[20px] flex w-[1300px] max-w-full flex-col items-center gap-[20px] pl-[15px] pr-[15px] md:mt-[50px] md:gap-[50px] lg:flex-row lg:items-start"
+	class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full items-center pl-[15px] pr-[15px]"
+>
+	<h2>Store</h2>
+	<a href="/store/cart" class="ml-auto">
+		<Button>
+			View my cart
+			{#if $cart.items.length}
+				({$cart.items.length})
+			{/if}
+		</Button>
+	</a>
+</div>
+<div
+	class="ml-auto mr-auto mt-[20px] flex w-[1200px] max-w-full flex-col items-center gap-[20px] pl-[15px] pr-[15px] md:mt-[50px] md:gap-[50px] lg:flex-row lg:items-start"
 >
 	<div class="flex w-fit flex-col gap-[10px]">
 		<button
@@ -110,14 +123,14 @@
 			<Button
 				disabled={$cart.getItem(data.id) &&
 					// @ts-ignore
-					$cart.getItem(data.id).quantity >= data.maxQuantity}
+					$cart.getItem(data.id).id != -1}
 				on:click={addToCart}
 				class="h-[50px] w-[260px] text-[16px] font-semibold"
 				size="lg"
 			>
 				Add to Cart
-				{#if $cart.getItem(data.id)}
-					({$cart.getItem(data.id)?.quantity} in cart)
+				{#if $cart.getItem(data.id).id != -1}
+					({$cart.getItem(data.id).quantity} in cart)
 				{/if}
 			</Button>
 		</div>
@@ -149,3 +162,10 @@
 		</div>
 	</div>
 {/if}
+
+<style lang="scss">
+	h2 {
+		font-weight: 600;
+		font-size: 35px;
+	}
+</style>
