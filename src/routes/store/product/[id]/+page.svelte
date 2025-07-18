@@ -25,7 +25,7 @@
 </svelte:head>
 
 <div
-	class="ml-auto mr-auto mt-[20px] flex w-[1300px] max-w-full flex-col items-center gap-[20px] md:gap-[50px] pl-[15px] pr-[15px] md:mt-[50px] lg:flex-row lg:items-start"
+	class="ml-auto mr-auto mt-[20px] flex w-[1300px] max-w-full flex-col items-center gap-[20px] pl-[15px] pr-[15px] md:mt-[50px] md:gap-[50px] lg:flex-row lg:items-start"
 >
 	<div class="flex w-fit flex-col gap-[10px]">
 		<img
@@ -77,7 +77,8 @@
 						type="number"
 						bind:value={quantity}
 						min="1"
-						class="h-[40px] w-[80px] text-center"
+						class="h-[40px] w-[80px] text-center disabled:opacity-100"
+						disabled
 					/>
 					<Button
 						variant="outline"
