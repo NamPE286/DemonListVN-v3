@@ -38,7 +38,7 @@
 >
 	<div class="flex w-fit flex-col gap-[10px]">
 		<button
-			class="aspect-square w-[500px] cursor-zoom-in overflow-hidden rounded-2xl transition-transform duration-200 hover:scale-[1.02]"
+			class="aspect-square sm:w-[500px] cursor-zoom-in overflow-hidden rounded-2xl transition-transform duration-200 hover:scale-[1.02]"
 			on:click={enlargeImage}
 		>
 			<img
