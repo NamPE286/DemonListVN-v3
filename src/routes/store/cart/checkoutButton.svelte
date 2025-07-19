@@ -79,11 +79,11 @@
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
 				<Label class="text-right">Phone number</Label>
-				<Input class="col-span-3" bind:value={phone} type="tel" placeholder="0978123456" />
+				<Input class="col-span-3" bind:value={phone} type="tel" placeholder="Example: 978123456" />
 			</div>
 			<Dialog.Footer>
 				<Button
-					disabled={address.length < 10 || phone.length != 10}
+					disabled={address.length < 10 || phone.length != 9}
 					on:click={() => {
 						state = 2;
 					}}
@@ -114,7 +114,7 @@
 				<div class="flex text-sm">
 					<p>Phone number</p>
 					<p class="ml-auto">
-						{phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}
+						+84 {phone.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')}
 					</p>
 				</div>
 			</div>
