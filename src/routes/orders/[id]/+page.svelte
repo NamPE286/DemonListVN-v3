@@ -34,14 +34,16 @@
 		<Card.Content>
 			<p>Order ID: {data.id}</p>
 			<p>Status: <b>{data.state} {data.delivered ? 'and DELIVERED' : ''}</b></p>
-			<div class="flex gap-[10px]">
-				<p>Shipping info:</p>
-				<div>
-					<p>{data.recipentName}</p>
-					<p>{data.address}</p>
-					<p>+84 {String(data.phone).replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')}</p>
+			{#if !data.productID}
+				<div class="flex gap-[10px]">
+					<p>Shipping info:</p>
+					<div>
+						<p>{data.recipentName}</p>
+						<p>{data.address}</p>
+						<p>+84 {String(data.phone).replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')}</p>
+					</div>
 				</div>
-			</div>
+			{/if}
 		</Card.Content>
 	</Card.Root>
 	<Card.Root class="w-full">
@@ -96,16 +98,18 @@
 						</b>
 					</p>
 				</div>
-				<div class="flex">
-					<p>Shipping fee</p>
-					<p class="ml-auto">
-						<b>
-							{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-								data.fee
-							)}
-						</b>
-					</p>
-				</div>
+				{#if !data.productID}
+					<div class="flex">
+						<p>Shipping fee</p>
+						<p class="ml-auto">
+							<b>
+								{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+									data.fee
+								)}
+							</b>
+						</p>
+					</div>
+				{/if}
 				<div class="mt-[10px] flex">
 					<p class="text-lg">
 						<b>Total</b>
@@ -125,41 +129,43 @@
 			</div>
 		</Card.Content>
 	</Card.Root>
-	<Card.Root class="w-full">
-		<Card.Header>
-			<Card.Title>Tracking</Card.Title>
-		</Card.Header>
-		<Card.Content>
-			<div>
-				{#if data.orderTracking && data.orderTracking.length > 0}
-					{#each data.orderTracking as item, i}
-						<div class="relative flex">
-							<div class="mr-4 flex flex-col items-center">
-								<div class="h-4 w-4 rounded-full bg-gray-400 dark:bg-gray-600"></div>
-								{#if i !== data.orderTracking.length - 1}
-									<div class=" absolute my-1 h-full w-[2px] bg-gray-400 dark:bg-gray-600"></div>
-								{/if}
-							</div>
-							<div class="flex-1 pb-4">
-								<p class="text-sm text-muted-foreground">
-									{new Date(item.created_at).toLocaleDateString('vi-VN')} -
-									{new Date(item.created_at).toLocaleTimeString('vi-VN')}
-								</p>
-								{#if item.link}
-									<a href={item.link}>
+	{#if !data.productID}
+		<Card.Root class="w-full">
+			<Card.Header>
+				<Card.Title>Tracking</Card.Title>
+			</Card.Header>
+			<Card.Content>
+				<div>
+					{#if data.orderTracking && data.orderTracking.length > 0}
+						{#each data.orderTracking as item, i}
+							<div class="relative flex">
+								<div class="mr-4 flex flex-col items-center">
+									<div class="h-4 w-4 rounded-full bg-gray-400 dark:bg-gray-600"></div>
+									{#if i !== data.orderTracking.length - 1}
+										<div class=" absolute my-1 h-full w-[2px] bg-gray-400 dark:bg-gray-600"></div>
+									{/if}
+								</div>
+								<div class="flex-1 pb-4">
+									<p class="text-sm text-muted-foreground">
+										{new Date(item.created_at).toLocaleDateString('vi-VN')} -
+										{new Date(item.created_at).toLocaleTimeString('vi-VN')}
+									</p>
+									{#if item.link}
+										<a href={item.link}>
+											<p>{item.content}</p>
+										</a>
+									{:else}
 										<p>{item.content}</p>
-									</a>
-								{:else}
-									<p>{item.content}</p>
-								{/if}
+									{/if}
+								</div>
 							</div>
-						</div>
-					{/each}
-				{:else}
-					<p class="italic text-muted-foreground">No tracking information available yet</p>
-				{/if}
-			</div>
-		</Card.Content>
-	</Card.Root>
+						{/each}
+					{:else}
+						<p class="italic text-muted-foreground">No tracking information available yet</p>
+					{/if}
+				</div>
+			</Card.Content>
+		</Card.Root>
+	{/if}
 	<Button class="ml-auto w-fit" variant="destructive" disabled={cancellable}>Cancel order</Button>
 </div>
