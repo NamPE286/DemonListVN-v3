@@ -32,7 +32,6 @@
 					items: $cart.items,
 					address: address,
 					phone: parseInt(phone),
-					paymentMethod: 'COD',
 					recipentName: recipentName
 				})
 			}),
