@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { cart } from '$lib/client/cart';
+	import { user } from '$lib/client/user';
 	import { onMount } from 'svelte';
 	import { Button } from '$lib/components/ui/button';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { Cross2 } from 'svelte-radix';
 	import { toast } from 'svelte-sonner';
 	import CheckoutButton from './checkoutButton.svelte';
+	import * as Alert from '$lib/components/ui/alert/index.js';
+	import { ExclamationTriangle } from 'svelte-radix';
 
 	let data: any[] = [];
 
@@ -39,6 +42,15 @@
 	<div
 		class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full flex-col justify-center gap-[15px] pl-[15px] pr-[15px]"
 	>
+		{#if $user.loggedIn && !$user.data.discord}
+			<Alert.Root class="text-yellow-400">
+				<Alert.Title class="flex items-center gap-[10px]">
+					<ExclamationTriangle size={15} />
+					You need to link your account to a Discord account in order to checkout. Go to {'Settings > Discord'}
+					to link.</Alert.Title
+				>
+			</Alert.Root>
+		{/if}
 		<Table.Root>
 			<Table.Header>
 				<Table.Row>

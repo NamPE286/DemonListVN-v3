@@ -23,7 +23,10 @@
 
 <Dialog.Root>
 	<Dialog.Trigger on:click={() => (state = 0)} class="ml-auto mr-auto w-fit">
-		<Button class="w-[200px]" disabled={$cart.items.length == 0}>Checkout</Button>
+		<Button
+			class="w-[200px]"
+			disabled={$cart.items.length == 0 || !($user.loggedIn && $user.data.discord)}>Checkout</Button
+		>
 	</Dialog.Trigger>
 	<Dialog.Content>
 		{#if state == 0}
