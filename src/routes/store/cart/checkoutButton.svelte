@@ -18,7 +18,27 @@
 	let state = 0;
 	let shippingFee = 0;
 
-	async function bankTransfer() {}
+	async function bankTransfer() {
+		toast.loading('You will be redirected to our payment portal');
+
+		const res: any = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/payment/getPaymentLink`, {
+				method: 'POST',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					items: $cart.items,
+					address: address,
+					phone: parseInt(phone),
+					recipentName: recipentName
+				})
+			})
+		).json();
+
+		window.location.href = res.checkoutUrl;
+	}
 
 	async function COD() {
 		toast.promise(
