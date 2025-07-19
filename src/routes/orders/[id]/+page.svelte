@@ -188,4 +188,15 @@
 	<Button class="ml-auto w-fit" variant="destructive" disabled={!cancellable()} on:click={cancel}>
 		Cancel order
 	</Button>
+	<div class="mt-[25px] text-sm text-gray-400">
+		<p>Note:</p>
+		<ul>
+			<li>- Orders in delivery cannot be cancelled.</li>
+			<li>- Prepaid orders require manual cancellation.</li>
+			<li>
+				- For refunds or cancellations, please contact @nampe286 on Discord or email
+				nambuihung654@gmail.com.
+			</li>
+		</ul>
+	</div>
 </div>
