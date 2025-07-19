@@ -11,7 +11,7 @@
 	export let data: PageData;
 
 	function cancellable() {
-		if (data.status == 'CANCELLED' || data.paymentMethod == 'Bank Transfer') {
+		if (data.state == 'CANCELLED' || data.paymentMethod == 'Bank Transfer') {
 			return false;
 		}
 
