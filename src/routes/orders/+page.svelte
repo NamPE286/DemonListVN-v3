@@ -60,7 +60,7 @@
 							{new Intl.NumberFormat('vi-VN', {
 								style: 'currency',
 								currency: order.currency
-							}).format(order.amount)}
+							}).format(order.amount + order.fee)}
 						</Table.Cell>
 						<Table.Cell>
 							{#if order.giftTo}

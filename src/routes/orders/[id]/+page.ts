@@ -1,6 +1,6 @@
 export async function load({ params, url, fetch }) {
     const { id } = params
-    const event = await (await fetch(`${import.meta.env.VITE_API_URL}/orders/${id}`)).json()
-
-    return event
+    const data = await (await fetch(`${import.meta.env.VITE_API_URL}/order/${id}`)).json()
+    
+    return data
 };

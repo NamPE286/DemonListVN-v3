@@ -12,6 +12,7 @@
 	export let items: any[];
 
 	let paymentMethod = '';
+	let recipentName = '';
 	let address = '';
 	let phone = '';
 	let state = 0;
@@ -31,7 +32,8 @@
 					items: $cart.items,
 					address: address,
 					phone: parseInt(phone),
-					paymentMethod: 'COD'
+					paymentMethod: 'COD',
+					recipentName: recipentName
 				})
 			}),
 			{
@@ -104,6 +106,10 @@
 				/>
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
+				<Label class="text-right">Recipent's name</Label>
+				<Input class="col-span-3" placeholder="Required" bind:value={recipentName} />
+			</div>
+			<div class="grid grid-cols-4 items-center gap-4">
 				<Label class="text-right">Phone number</Label>
 				<div class="col-span-3 flex gap-[10px]">
 					<Input class="w-[50px] disabled:opacity-100" value="+84" disabled />
@@ -112,7 +118,7 @@
 			</div>
 			<Dialog.Footer>
 				<Button
-					disabled={address.length == 0 || phone.length != 9}
+					disabled={!address || !recipentName || phone.length != 9}
 					on:click={() => {
 						state = 2;
 					}}
@@ -125,12 +131,12 @@
 				<Dialog.Title>Review your order</Dialog.Title>
 			</Dialog.Header>
 			<div class="flex flex-col gap-[10px]">
-				<h3 class="font-bold">Order's Infomation</h3>
+				<h3 class="font-bold">Shipping Infomation</h3>
 				<div class="flex text-sm">
 					<p>Recipent</p>
 					<p class="ml-auto">
 						<b>
-							<PlayerHoverCard player={$user.data} />
+							{recipentName}
 						</b>
 					</p>
 				</div>
