@@ -123,14 +123,15 @@
 			<Button
 				disabled={$cart.getItem(data.id) &&
 					// @ts-ignore
-					$cart.getItem(data.id).id != -1}
+					$cart.getItem(data.id).productID != -1}
 				on:click={addToCart}
 				class="h-[50px] w-[260px] text-[16px] font-semibold"
 				size="lg"
 			>
-				Add to Cart
-				{#if $cart.getItem(data.id).id != -1}
-					({$cart.getItem(data.id).quantity} in cart)
+				{#if $cart.getItem(data.id).productID != -1}
+					Added {$cart.getItem(data.id).quantity} in cart
+				{:else}
+					Add to Cart
 				{/if}
 			</Button>
 		</div>

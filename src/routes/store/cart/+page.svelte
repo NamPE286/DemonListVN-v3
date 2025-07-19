@@ -27,7 +27,7 @@
 </script>
 
 <svelte:head>
-	<title>Store - Demon List VN</title>
+	<title>Cart - Demon List VN</title>
 </svelte:head>
 
 <div
@@ -51,7 +51,9 @@
 			<Table.Body>
 				{#each data as product}
 					<Table.Row>
-						<Table.Cell class="w-[300px]">{product.name}</Table.Cell>
+						<Table.Cell class="w-[300px]">
+							<a href={`/store/product/${product.id}`}> {product.name}</a>
+						</Table.Cell>
 						<Table.Cell class="w-[50px] text-center">
 							{$cart.getItem(product.id)?.quantity}
 						</Table.Cell>
@@ -80,7 +82,7 @@
 		<div class="flex justify-end">
 			<p class="text-right text-lg">
 				Total<br />
-				<span class='font-semibold text-2xl'>
+				<span class="text-2xl font-semibold">
 					{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
 						data.reduce((total, product) => {
 							return total + product.price * $cart.getItem(product.id).quantity;

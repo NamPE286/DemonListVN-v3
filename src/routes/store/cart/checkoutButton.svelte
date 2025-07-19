@@ -14,6 +14,7 @@
 	let address = '';
 	let phone = '';
 	let state = 0;
+	let shippingFee = 0;
 
 	async function bankTransfer() {}
 
@@ -21,10 +22,8 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger on:click={() => (state = 0)}>
-		<Button class="ml-auto mr-auto w-full max-w-[200px]" disabled={$cart.items.length == 0}>
-			Checkout
-		</Button>
+	<Dialog.Trigger on:click={() => (state = 0)} class="ml-auto mr-auto w-fit">
+		<Button class="w-[200px]" disabled={$cart.items.length == 0}>Checkout</Button>
 	</Dialog.Trigger>
 	<Dialog.Content>
 		{#if state == 0}
@@ -37,6 +36,7 @@
 					class={`h-[70px] justify-start ${paymentMethod == 'Bank Transfer' ? 'border-white' : ''}`}
 					on:click={() => {
 						paymentMethod = 'Bank Transfer';
+						shippingFee = 0;
 					}}
 				>
 					Bank Transfer
@@ -46,6 +46,7 @@
 					class={`h-[70px] justify-start ${paymentMethod == 'COD' ? 'border-white' : ''}`}
 					on:click={() => {
 						paymentMethod = 'COD';
+						shippingFee = 25000;
 					}}
 				>
 					Cash on Delivery
@@ -75,13 +76,7 @@
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
 				<Label class="text-right">Phone number</Label>
-				<Input
-					class="col-span-3"
-					bind:value={phone}
-					type="tel"
-					placeholder="0978123456"
-					pattern={`^\+?[0-9]{7,15}$`}
-				/>
+				<Input class="col-span-3" bind:value={phone} type="tel" placeholder="0978123456" />
 			</div>
 			<Dialog.Footer>
 				<Button
@@ -116,7 +111,7 @@
 				<div class="flex text-sm">
 					<p>Phone number</p>
 					<p class="ml-auto">
-                        {phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}
+						{phone.replace(/(\d{4})(\d{3})(\d{3})/, '$1 $2 $3')}
 					</p>
 				</div>
 			</div>
@@ -154,7 +149,15 @@
 				<div class="flex text-sm">
 					<p>Shipping Fee</p>
 					<p class="ml-auto">
-						<b> Free </b>
+						<b>
+							{#if shippingFee == 0}
+								Free
+							{:else}
+								{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
+									shippingFee
+								)}
+							{/if}
+						</b>
 					</p>
 				</div>
 			</div>
@@ -163,7 +166,10 @@
 				<p class="ml-auto">
 					<b>
 						{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-							items.reduce((total, item) => total + $cart.getItem(item.id).quantity * item.price, 0)
+							items.reduce(
+								(total, item) => total + $cart.getItem(item.id).quantity * item.price,
+								0
+							) + shippingFee
 						)}
 					</b>
 				</p>

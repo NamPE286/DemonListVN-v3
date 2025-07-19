@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 
 interface Item {
-    id: number;
+    productID: number;
     quantity: number;
 }
 
@@ -47,17 +47,17 @@ let data: Data = {
         let res = [];
 
         for (const i of data.items) {
-            res.push(i.id);
+            res.push(i.productID);
         }
 
         return res;
     },
     getItem: (id: number) => {
-        const res = data.items.find((item) => item.id === id);
+        const res = data.items.find((item) => item.productID === id);
 
         if (!res) {
             return {
-                id: -1,
+                productID: -1,
                 quantity: 0,
             };
         }
@@ -66,13 +66,13 @@ let data: Data = {
     },
     addItem: (id: number, quantity: number = 1) => {
         const existingItemIndex = data.items.findIndex((item) =>
-            item.id === id
+            item.productID === id
         );
 
         if (existingItemIndex >= 0) {
             data.items[existingItemIndex].quantity += quantity;
         } else {
-            data.items.push({ id, quantity });
+            data.items.push({ productID: id, quantity });
         }
 
         saveItems(data.items);
@@ -80,7 +80,7 @@ let data: Data = {
     },
     removeItem: (id: number) => {
         const existingItemIndex = data.items.findIndex((item) =>
-            item.id === id
+            item.productID === id
         );
 
         if (existingItemIndex >= 0) {
