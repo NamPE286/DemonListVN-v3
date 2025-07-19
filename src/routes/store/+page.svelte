@@ -48,7 +48,7 @@
 						<div class="relative">
 							<img
 								class="ml-auto mr-auto aspect-[3/1] min-h-[250px] w-[1200px] max-w-full rounded-xl object-cover"
-								src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${item.id}/banner.webp`}
+								src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${item.id}/banner.webp?v=1`}
 								alt="product"
 							/>
 							<div
