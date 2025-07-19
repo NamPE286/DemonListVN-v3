@@ -11,12 +11,21 @@
 <div
 	class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[800px] max-w-full items-center pl-[15px] pr-[15px]"
 >
-	<Card.Root class='w-full'>
+	<Card.Root class="w-full">
 		<Card.Header>
-			<Card.Title>Shipping Details</Card.Title>
+			<Card.Title>Detail</Card.Title>
 		</Card.Header>
 		<Card.Content>
-			<p>Card Content</p>
+			<p>Order ID: {data.id}</p>
+			<p>Status: <b>{data.state} {data.delivered ? 'and DELIVERED' : ''}</b></p>
+			<div class='flex gap-[10px]'>
+				<p>Shipping info:</p>
+				<div>
+					<p>{data.recipentName}</p>
+					<p>{data.address}</p>
+					<p>+84 {String(data.phone).replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')}</p>
+				</div>
+			</div>
 		</Card.Content>
 	</Card.Root>
 </div>
