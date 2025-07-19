@@ -10,7 +10,7 @@
 	export let data: PageData;
 
 	let selectedImageIndex = 0;
-	let quantity = 1;
+	let quantity = data.stock > 0 ? 1 : 0;
 	let isImageEnlarged = false;
 
 	function selectImage(index: number) {
@@ -139,7 +139,9 @@
 					</div>
 				</div>
 				<Button
-					disabled={$cart.getItem(data.id) && $cart.getItem(data.id).productID != -1}
+					disabled={$cart.getItem(data.id) &&
+						$cart.getItem(data.id).productID != -1 &&
+						data.stock > 0}
 					on:click={addToCart}
 					class="h-[50px] w-[260px] text-[16px] font-semibold"
 					size="lg"
