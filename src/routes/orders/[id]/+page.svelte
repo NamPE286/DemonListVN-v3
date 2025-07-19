@@ -6,10 +6,15 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import { user } from '$lib/client';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
 
 	function cancellable() {
+		if (data.status == 'CANCELLED' || data.paymentMethod == 'Bank Transfer') {
+			return false;
+		}
+
 		for (const i of data.orderTracking) {
 			if (i.delivering) {
 				return false;
@@ -17,6 +22,15 @@
 		}
 
 		return true;
+	}
+
+	function cancel() {
+		if (!confirm('Cancel this order?')) {
+			return;
+		}
+
+		toast.loading('Cancelling...');
+		window.location.href = `${import.meta.env.VITE_API_URL}/payment/cancelled?orderCode=${data.id}`;
 	}
 </script>
 
@@ -47,7 +61,7 @@
 					</div>
 				</div>
 			{:else}
-				<div class='flex gap-[5px]'>
+				<div class="flex gap-[5px]">
 					Recipent:
 					{#if data.giftTo}
 						<PlayerHoverCard player={data.players} />
@@ -171,5 +185,7 @@
 			</Card.Content>
 		</Card.Root>
 	{/if}
-	<Button class="ml-auto w-fit" variant="destructive" disabled={cancellable}>Cancel order</Button>
+	<Button class="ml-auto w-fit" variant="destructive" disabled={!cancellable()} on:click={cancel}>
+		Cancel order
+	</Button>
 </div>
