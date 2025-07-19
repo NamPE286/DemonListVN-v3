@@ -89,11 +89,7 @@
 					<p class="ml-auto">
 						<b>
 							{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-								data.orderItems.reduce(
-									// @ts-ignore
-									(total, item) => total + item.quantity * item.products.price,
-									0
-								)
+								data.amount
 							)}
 						</b>
 					</p>
@@ -117,11 +113,7 @@
 					<p class="ml-auto text-lg">
 						<b>
 							{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
-								data.orderItems.reduce(
-									// @ts-ignore
-									(total, item) => total + item.quantity * item.products.price,
-									0
-								) + data.fee
+								data.amount + data.fee
 							)}
 						</b>
 					</p>
