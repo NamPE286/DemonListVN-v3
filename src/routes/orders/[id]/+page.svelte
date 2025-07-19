@@ -3,8 +3,19 @@
 	import Title from '$lib/components/Title.svelte';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
+	import Button from '$lib/components/ui/button/button.svelte';
 
 	export let data: PageData;
+
+	function cancellable() {
+		for (const i of data.orderTracking) {
+			if (i.delivering) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 </script>
 
 <svelte:head>
@@ -134,7 +145,13 @@
 									{new Date(item.created_at).toLocaleDateString('vi-VN')} -
 									{new Date(item.created_at).toLocaleTimeString('vi-VN')}
 								</p>
-								<p>{item.content}</p>
+								{#if item.link}
+									<a href={item.link}>
+										<p>{item.content}</p>
+									</a>
+								{:else}
+									<p>{item.content}</p>
+								{/if}
 							</div>
 						</div>
 					{/each}
@@ -144,4 +161,5 @@
 			</div>
 		</Card.Content>
 	</Card.Root>
+	<Button class="ml-auto w-fit" variant="destructive" disabled={cancellable}>Cancel order</Button>
 </div>
