@@ -129,7 +129,7 @@
 				size="lg"
 			>
 				{#if $cart.getItem(data.id).productID != -1}
-					Added {$cart.getItem(data.id).quantity} in cart
+					Added {$cart.getItem(data.id).quantity} to cart
 				{:else}
 					Add to Cart
 				{/if}
