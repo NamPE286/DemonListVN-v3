@@ -34,6 +34,7 @@
 		<Card.Content>
 			<p>Order ID: {data.id}</p>
 			<p>Status: <b>{data.state} {data.delivered ? 'and DELIVERED' : ''}</b></p>
+			<p>Payment method: {data.paymentMethod}</p>
 			{#if !data.productID}
 				<div class="flex gap-[10px]">
 					<p>Shipping info:</p>
