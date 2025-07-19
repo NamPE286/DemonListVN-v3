@@ -38,7 +38,9 @@
 <div
 	class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full items-center pl-[15px] pr-[15px]"
 >
-	<h2>Store</h2>
+	<a href="/store">
+		<h2>Store</h2>
+	</a>
 	<a href="/store/cart" class="ml-auto">
 		<Button>
 			View my cart
@@ -86,6 +88,13 @@
 			<h3 class="text-center text-[21px] lg:text-left">
 				{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.price)}
 			</h3>
+			<p>
+				{#if data.stock == 0}
+					Out of stock
+				{:else}
+					{data.stock} in stock
+				{/if}
+			</p>
 		</div>
 		<Markdown content={data.description} />
 		<div class="mt-auto flex flex-col gap-[15px]">
@@ -112,7 +121,7 @@
 					<Button
 						variant="outline"
 						size="sm"
-						disabled={quantity == data.maxQuantity}
+						disabled={quantity == Math.min(data.stock, data.maxQuantity)}
 						on:click={() => quantity++}
 						class="h-[40px] w-[40px] p-0"
 					>

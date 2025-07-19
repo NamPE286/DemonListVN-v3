@@ -7,6 +7,7 @@
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
+	import { toast } from 'svelte-sonner';
 
 	export let items: any[];
 
@@ -18,7 +19,32 @@
 
 	async function bankTransfer() {}
 
-	async function COD() {}
+	async function COD() {
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/order`, {
+				method: 'POST',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					items: $cart.items,
+					address: address,
+					phone: parseInt(phone),
+					paymentMethod: 'COD'
+				})
+			}),
+			{
+				success: () => {
+					$cart.clear();
+					window.location.href = '/orders';
+					return 'Order placed!';
+				},
+				loading: 'Placing order...',
+				error: 'Failed to place order'
+			}
+		);
+	}
 </script>
 
 <Dialog.Root>
@@ -86,7 +112,7 @@
 			</div>
 			<Dialog.Footer>
 				<Button
-					disabled={address.length < 10 || phone.length != 9}
+					disabled={address.length == 0 || phone.length != 9}
 					on:click={() => {
 						state = 2;
 					}}

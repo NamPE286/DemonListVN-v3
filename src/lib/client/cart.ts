@@ -12,6 +12,7 @@ interface Data {
     addItem: (id: number, quantity: number) => void;
     removeItem: (id: number) => void;
     refresh: () => void;
+    clear: () => void;
 }
 
 const STORAGE_KEY = "cartItems";
@@ -93,6 +94,11 @@ let data: Data = {
         data.items = getStoredItems();
         cart.set(data);
     },
+    clear: () => {
+        data.items = [];
+        saveItems(data.items);
+        cart.set(data);
+    }
 };
 
 export const cart = writable(data);

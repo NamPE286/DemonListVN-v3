@@ -54,8 +54,8 @@
 				{#each orders as order}
 					<Table.Row>
 						<Table.Cell class="font-medium">{order.id}</Table.Cell>
-						<Table.Cell>{order.products.name}</Table.Cell>
-						<Table.Cell>{order.quantity}</Table.Cell>
+						<Table.Cell>{order.productID ? order.products.name : "Store Item(s)"}</Table.Cell>
+						<Table.Cell>{order.quantity ? order.quantity : "?"}</Table.Cell>
 						<Table.Cell>
 							{new Intl.NumberFormat('vi-VN', {
 								style: 'currency',
@@ -74,7 +74,7 @@
 							<Button
 								variant="secondary"
 								on:click={() => restore(order)}
-								disabled={order.status != 'PENDING'}>Restore</Button
+								disabled={!(order.state == 'PENDING' && order.paymentMethod == 'Bank Transfer')}>Restore</Button
 							>
 							<a href={`/orders/${order.id}`}>
 								<Button variant="secondary">Detail</Button>
