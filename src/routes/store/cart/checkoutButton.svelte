@@ -3,7 +3,6 @@
 	import { cart } from '$lib/client/cart';
 	import { user } from '$lib/client/user';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import { Textarea } from '$lib/components/ui/textarea/index.js';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
@@ -37,6 +36,7 @@
 			})
 		).json();
 
+		$cart.clear();
 		window.location.href = res.checkoutUrl;
 	}
 
