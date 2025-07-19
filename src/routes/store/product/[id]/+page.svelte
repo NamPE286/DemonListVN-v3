@@ -88,62 +88,70 @@
 			<h3 class="text-center text-[21px] lg:text-left">
 				{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.price)}
 			</h3>
-			<p>
-				{#if data.stock == 0}
-					Out of stock
-				{:else}
-					{data.stock} in stock
-				{/if}
-			</p>
+			{#if data.stock !== null}
+				<p>
+					{#if data.stock === 0}
+						Out of stock
+					{:else}
+						{data.stock} in stock
+					{/if}
+				</p>
+			{/if}
 		</div>
 		<Markdown content={data.description} />
-		<div class="mt-auto flex flex-col gap-[15px]">
-			<div class="flex items-center gap-[8px]">
-				<Label for="quantity" class="text-[16px] font-medium">Quantity</Label>
-				<div class="flex items-center gap-[10px]">
-					<Button
-						variant="outline"
-						size="sm"
-						on:click={() => quantity--}
-						disabled={quantity <= 1}
-						class="h-[40px] w-[40px] p-0"
-					>
-						-
-					</Button>
-					<Input
-						id="quantity"
-						type="number"
-						bind:value={quantity}
-						min="1"
-						class="h-[40px] w-[80px] text-center disabled:opacity-100"
-						disabled
-					/>
-					<Button
-						variant="outline"
-						size="sm"
-						disabled={quantity == Math.min(data.stock, data.maxQuantity)}
-						on:click={() => quantity++}
-						class="h-[40px] w-[40px] p-0"
-					>
-						+
-					</Button>
+		{#if data.id == 1}
+			<a href="/supporter">
+				<Button class="h-[50px] w-[260px] text-[16px] font-semibold" size="lg">
+					Go to Supporter Page
+				</Button>
+			</a>
+		{:else}
+			<div class="mt-auto flex flex-col gap-[15px]">
+				<div class="flex items-center gap-[8px]">
+					<Label for="quantity" class="text-[16px] font-medium">Quantity</Label>
+					<div class="flex items-center gap-[10px]">
+						<Button
+							variant="outline"
+							size="sm"
+							on:click={() => quantity--}
+							disabled={quantity <= 1}
+							class="h-[40px] w-[40px] p-0"
+						>
+							-
+						</Button>
+						<Input
+							id="quantity"
+							type="number"
+							bind:value={quantity}
+							min="1"
+							class="h-[40px] w-[80px] text-center disabled:opacity-100"
+							disabled
+						/>
+						<Button
+							variant="outline"
+							size="sm"
+							disabled={quantity == Math.min(data.stock, data.maxQuantity)}
+							on:click={() => quantity++}
+							class="h-[40px] w-[40px] p-0"
+						>
+							+
+						</Button>
+					</div>
 				</div>
+				<Button
+					disabled={$cart.getItem(data.id) && $cart.getItem(data.id).productID != -1}
+					on:click={addToCart}
+					class="h-[50px] w-[260px] text-[16px] font-semibold"
+					size="lg"
+				>
+					{#if $cart.getItem(data.id).productID != -1}
+						Added {$cart.getItem(data.id).quantity} to cart
+					{:else}
+						Add to Cart
+					{/if}
+				</Button>
 			</div>
-			<Button
-				disabled={$cart.getItem(data.id) &&
-					// @ts-ignore
-					$cart.getItem(data.id).productID != -1}
-				on:click={addToCart}
-				class="h-[50px] w-[260px] text-[16px] font-semibold"
-				size="lg"
-			>
-				{#if $cart.getItem(data.id).productID != -1}
-					Added {$cart.getItem(data.id).quantity} to cart
-				{:else}
-					Add to Cart
-				{/if}
-			</Button>
-		</div>
+		{/if}
 	</div>
 </div>
 
