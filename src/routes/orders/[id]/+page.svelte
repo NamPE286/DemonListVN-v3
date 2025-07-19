@@ -4,6 +4,8 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import Button from '$lib/components/ui/button/button.svelte';
+	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import { user } from '$lib/client';
 
 	export let data: PageData;
 
@@ -43,6 +45,15 @@
 						<p>{data.address}</p>
 						<p>+84 {String(data.phone).replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')}</p>
 					</div>
+				</div>
+			{:else}
+				<div class='flex gap-[5px]'>
+					Recipent:
+					{#if data.giftTo}
+						<PlayerHoverCard player={data.players} />
+					{:else}
+						<PlayerHoverCard player={$user.data} />
+					{/if}
 				</div>
 			{/if}
 		</Card.Content>
