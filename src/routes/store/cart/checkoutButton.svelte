@@ -79,7 +79,10 @@
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
 				<Label class="text-right">Phone number</Label>
-				<Input class="col-span-3" bind:value={phone} type="tel" placeholder="Example: 978123456" />
+				<div class="col-span-3 flex gap-[10px]">
+					<Input class="w-[50px] disabled:opacity-100" value="+84" disabled />
+					<Input bind:value={phone} type="tel" placeholder="Example: 978123456" />
+				</div>
 			</div>
 			<Dialog.Footer>
 				<Button
