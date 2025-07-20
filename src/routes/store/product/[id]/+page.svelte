@@ -139,15 +139,16 @@
 					</div>
 				</div>
 				<Button
-					disabled={$cart.getItem(data.id) &&
-						$cart.getItem(data.id).productID != -1 &&
-						data.stock > 0}
+					disabled={($cart.getItem(data.id) && $cart.getItem(data.id).productID != -1) ||
+						data.stock == 0}
 					on:click={addToCart}
 					class="h-[50px] w-[260px] text-[16px] font-semibold"
 					size="lg"
 				>
 					{#if $cart.getItem(data.id).productID != -1}
 						Added {$cart.getItem(data.id).quantity} to cart
+					{:else if data.stock == 0}
+						Out of stock
 					{:else}
 						Add to Cart
 					{/if}
