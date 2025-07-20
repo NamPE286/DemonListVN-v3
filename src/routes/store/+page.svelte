@@ -52,7 +52,8 @@
 								alt="product"
 							/>
 							<div
-								class={`absolute bottom-[20px] left-0 right-0 flex flex-col items-center p-4 text-[${item.bannerTextColor}]`}
+								class={`absolute bottom-[20px] left-0 right-0 flex flex-col items-center p-4`}
+								style={`color: ${item.bannerTextColor ? item.bannerTextColor : 'white'}`}
 							>
 								<h2 class="text-shadow">{item.name}</h2>
 								<p class="text-shadow">{getFirstLine(item.description)}</p>
