@@ -69,7 +69,11 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger on:click={() => (state = 0)} class="ml-auto mr-auto w-fit">
+	<Dialog.Trigger
+		on:click={() => (state = 0)}
+		class="ml-auto mr-auto w-fit"
+		disabled={$cart.items.length == 0 || !($user.loggedIn && $user.data.discord)}
+	>
 		<Button
 			class="w-[200px]"
 			disabled={$cart.items.length == 0 || !($user.loggedIn && $user.data.discord)}>Checkout</Button

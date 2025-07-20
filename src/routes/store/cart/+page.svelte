@@ -50,6 +50,13 @@
 					to link.</Alert.Title
 				>
 			</Alert.Root>
+		{:else if !$user.loggedIn}
+			<Alert.Root class="text-yellow-400">
+				<Alert.Title class="flex items-center gap-[10px]">
+					<ExclamationTriangle size={15} />
+					You need to sign in to checkout.</Alert.Title
+				>
+			</Alert.Root>
 		{/if}
 		<Table.Root>
 			<Table.Header>
