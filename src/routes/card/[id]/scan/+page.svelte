@@ -73,7 +73,7 @@
 </svelte:head>
 
 <div
-	class="wrapper relative ml-auto mr-auto flex w-[500px] max-w-full flex-col items-center gap-[10px] pl-[5px] pr-[5px]"
+	class="wrapper relative ml-auto mr-auto flex w-[500px] max-w-full flex-col items-center gap-[10px] pl-[10px] pr-[10px]"
 >
 	<img
 		class="relative z-10 rounded-xl border border-opacity-50 shadow-md"

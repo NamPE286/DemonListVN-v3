@@ -3,6 +3,7 @@
 	import BigTitle from '$lib/components/bigTitle.svelte';
 	import { fade } from 'svelte/transition';
 	import PaymentButton from '$lib/components/paymentButton.svelte';
+	import { Button } from '$lib/components/ui/button';
 </script>
 
 <svelte:head>
@@ -19,7 +20,13 @@
 <div class="relative flex flex-col items-center pl-[10px] pr-[10px]">
 	<BigTitle value="Become a Supporter 💖" description="Get exclusive perks and help us grow!" />
 	<div class="mt-[-20px] flex max-w-[1000px] flex-col items-center">
-		<PaymentButton title="49.000₫/month" />
+		<div class="flex items-center gap-[10px]">
+			<PaymentButton title="49.000₫/month" />
+			<span class="text-gray-400">or</span>
+			<a href="/store">
+				<Button>Check out our store</Button>
+			</a>
+		</div>
 		<h1 class="mb-[40px] mt-[75px] text-center text-3xl font-bold">
 			Why should you support Demon List VN
 		</h1>
@@ -27,27 +34,27 @@
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Support the Team</Card.Title>
-					<Card.Description class="w-[250px]"
-						>A <s>small</s> single person team develops and runs Demon List VN. Your support gives
-						<s>them</s> him the motivation to develop and maintain the website.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						A <s>small</s> single person team develops and runs Demon List VN. Your support gives
+						<s>them</s> him the motivation to develop and maintain the website.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Server Infrastructure</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Contributions go towards the servers for running the website.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Contributions go towards the servers for running the website.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Keep Demon List VN self-sustaining</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Your contributions help keep the site independent and completely free from ads and
-						outside sponsors.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Your contributions help keep the site independent and completely free from ads and
+						outside sponsors.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 		</div>
@@ -56,65 +63,75 @@
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Highlighted name</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Stand out on the leaderboard with a flashy golden name.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Stand out on the leaderboard with a flashy golden name.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Animated Avatar and Banner</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Catch everyone's eye with a dynamic avatar and banner that bring your profile to life.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Catch everyone's eye with a dynamic avatar and banner that bring your profile to life.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Access priority queue</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Supporters enjoy reduced submission wait times, jumping ahead in the review line.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Supporters enjoy reduced submission wait times, jumping ahead in the review line.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Unlock exclusive Discord role</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Gain access to a special role on DLVN and partner Discord servers.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Gain access to a special role on DLVN and partner Discord servers.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Discord DM Notifications</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Receive notifications directly through Discord DMs.</Card.Description
-					>
+					<Card.Title>Discord DM notifications</Card.Title>
+					<Card.Description class="w-[250px]">
+						Receive notifications directly through Discord DMs.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Supporter-Only Events</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Join special events reserved just for our cherished supporters — giveaways, secret games, and more surprises await!</Card.Description
-					>
+					<Card.Title>Supporter-Only events</Card.Title>
+					<Card.Description class="w-[250px]">
+						Join special events reserved just for our cherished supporters — giveaways, secret
+						games, and more surprises await!
+					</Card.Description>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Autofill level ID when submit</Card.Title>
+					<Card.Description class="w-[250px]">
+						Automatically populate the level ID field when submitting a level, saving you time and
+						effort.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Be the first to try our newest feature</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Gain early access to new releases with new features before they go public!</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Gain early access to new releases with new features before they go public!
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
 					<Card.Title>Umm... that pretty much it</Card.Title>
-					<Card.Description class="w-[250px]"
-						>Don't worry. More feature for supporters will be added in the future.</Card.Description
-					>
+					<Card.Description class="w-[250px]">
+						Don't worry. More feature for supporters will be added in the future.
+					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 		</div>

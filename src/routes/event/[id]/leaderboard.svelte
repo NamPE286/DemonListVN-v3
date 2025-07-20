@@ -153,7 +153,7 @@
 			return str;
 		}
 
-		let csvContent = 'Rank,Player,Total,Penalty';
+		let csvContent = 'Rank,Player,UserID,Total,Penalty';
 
 		for (let i = 0; i < levels.length; i++) {
 			const levelName = levels[i] ? escapeCSV(levels[i]!.name) : '???';
@@ -165,8 +165,9 @@
 			const playerName = escapeCSV(
 				(player.clan ? `[${player.clans.tag}] ` : '') + player.name || 'Unknown'
 			);
+			const userID = escapeCSV(player.uid || 'Unknown');
 
-			csvContent += `${rank + 1},${playerName},${getTotalPoint(player.eventRecords)},${getPenalty(player.eventRecords, 60000)}`;
+			csvContent += `${rank + 1},${playerName},${userID},${getTotalPoint(player.eventRecords)},${getPenalty(player.eventRecords, 60000)}`;
 
 			player.eventRecords.forEach((record: any, index: any) => {
 				const point = getPoint(record, index, true);
