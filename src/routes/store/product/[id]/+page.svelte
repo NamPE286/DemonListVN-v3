@@ -89,7 +89,7 @@
 				{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.price)}
 			</h3>
 			{#if data.stock !== null}
-				<p>
+				<p class='text-center lg:text-left'>
 					{#if data.stock === 0}
 						Out of stock
 					{:else}
