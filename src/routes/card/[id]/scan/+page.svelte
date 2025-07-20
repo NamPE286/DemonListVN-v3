@@ -81,7 +81,9 @@
 		alt="card"
 	/>
 	<p class="text-[12px] opacity-50">ID: {data.id}</p>
-	<h3 class="text-xl font-bold">{data.name} Card</h3>
+	{#if data.name}
+		<h3 class="text-xl font-bold">{data.name}</h3>
+	{/if}
 	<div class="relative z-0 w-full">
 		{#if data.activationDate == null}
 			<div class="text-center">
