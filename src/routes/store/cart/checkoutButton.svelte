@@ -41,6 +41,8 @@
 	}
 
 	async function COD() {
+		let orderID = 0;
+
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/order`, {
 				method: 'POST',
@@ -54,11 +56,13 @@
 					phone: parseInt(phone),
 					recipientName: recipientName
 				})
-			}),
+			})
+				.then((res) => res.json())
+				.then((res) => (orderID = res.orderID)),
 			{
 				success: () => {
 					$cart.clear();
-					window.location.href = '/orders';
+					window.location.href = `/orders/${orderID}`;
 					return 'Order placed!';
 				},
 				loading: 'Placing order...',
