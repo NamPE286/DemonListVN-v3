@@ -129,7 +129,7 @@
 				/>
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
-				<Label class="text-right">recipient's name</Label>
+				<Label class="text-right">Recipient's name</Label>
 				<Input class="col-span-3" placeholder="Required" bind:value={recipientName} />
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
@@ -156,7 +156,7 @@
 			<div class="flex flex-col gap-[10px]">
 				<h3 class="font-bold">Shipping Infomation</h3>
 				<div class="flex text-sm">
-					<p>recipient</p>
+					<p>Recipient</p>
 					<p class="ml-auto">
 						<b>
 							{recipientName}

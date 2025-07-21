@@ -45,7 +45,7 @@
 					<Table.Head class="w-[180px]">Product</Table.Head>
 					<Table.Head class="w-[50px]">Qty</Table.Head>
 					<Table.Head class="w-[120px]">Amount</Table.Head>
-					<Table.Head class="w-[150px]">recipient</Table.Head>
+					<Table.Head class="w-[150px]">Recipient</Table.Head>
 					<Table.Head>Status</Table.Head>
 					<Table.Head class="text-right">Action</Table.Head>
 				</Table.Row>

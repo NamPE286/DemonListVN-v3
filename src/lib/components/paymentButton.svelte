@@ -149,7 +149,7 @@
 			</div>
 			<hr />
 			<div class="flex text-sm">
-				<p>recipient</p>
+				<p>Recipient</p>
 				<p class="ml-auto">
 					<b>
 						{#if giftTo}

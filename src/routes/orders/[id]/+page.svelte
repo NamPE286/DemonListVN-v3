@@ -90,7 +90,7 @@
 					</div>
 				{:else}
 					<div class="flex gap-[5px]">
-						recipient:
+						Recipient:
 						{#if data.giftTo}
 							<PlayerHoverCard player={data.players} />
 						{:else}
