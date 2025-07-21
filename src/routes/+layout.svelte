@@ -165,20 +165,18 @@
 							class={`overflow-hidden rounded-full ${isSupporterActive($user.data.supporterUntil) ? 'border-[2px] border-yellow-400' : ''}`}
 							builders={[builder]}
 						>
-							<div>
-								<Avatar.Root>
-									<Avatar.Image
-										class="object-cover"
-										src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}${
-											isSupporterActive($user.data.supporterUntil) && $user.data.isAvatarGif
-												? '.gif'
-												: '.jpg'
-										}?version=${$user.data.avatarVersion}`}
-										alt=""
-									/>
-									<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
-								</Avatar.Root>
-							</div>
+							<Avatar.Root>
+								<Avatar.Image
+									class="object-cover"
+									src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}${
+										isSupporterActive($user.data.supporterUntil) && $user.data.isAvatarGif
+											? '.gif'
+											: '.jpg'
+									}?version=${$user.data.avatarVersion}`}
+									alt=""
+								/>
+								<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
+							</Avatar.Root>
 						</Button>
 					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end" class="z-[99999] w-56">
