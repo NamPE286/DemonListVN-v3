@@ -11,7 +11,7 @@
 	export let items: any[];
 
 	let paymentMethod = '';
-	let recipentName = '';
+	let recipientName = '';
 	let address = '';
 	let phone = '';
 	let state = 0;
@@ -31,7 +31,7 @@
 					items: $cart.items,
 					address: address,
 					phone: parseInt(phone),
-					recipentName: recipentName
+					recipientName: recipientName
 				})
 			})
 		).json();
@@ -52,7 +52,7 @@
 					items: $cart.items,
 					address: address,
 					phone: parseInt(phone),
-					recipentName: recipentName
+					recipientName: recipientName
 				})
 			}),
 			{
@@ -129,8 +129,8 @@
 				/>
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
-				<Label class="text-right">Recipent's name</Label>
-				<Input class="col-span-3" placeholder="Required" bind:value={recipentName} />
+				<Label class="text-right">recipient's name</Label>
+				<Input class="col-span-3" placeholder="Required" bind:value={recipientName} />
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
 				<Label class="text-right">Phone number</Label>
@@ -141,7 +141,7 @@
 			</div>
 			<Dialog.Footer>
 				<Button
-					disabled={!address || !recipentName || phone.length != 9}
+					disabled={!address || !recipientName || phone.length != 9}
 					on:click={() => {
 						state = 2;
 					}}
@@ -156,10 +156,10 @@
 			<div class="flex flex-col gap-[10px]">
 				<h3 class="font-bold">Shipping Infomation</h3>
 				<div class="flex text-sm">
-					<p>Recipent</p>
+					<p>recipient</p>
 					<p class="ml-auto">
 						<b>
-							{recipentName}
+							{recipientName}
 						</b>
 					</p>
 				</div>

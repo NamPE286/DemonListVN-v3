@@ -83,14 +83,14 @@
 					<div class="flex gap-[10px]">
 						<p>Shipping info:</p>
 						<div>
-							<p>{data.recipentName}</p>
+							<p>{data.recipientName}</p>
 							<p>{data.address}</p>
 							<p>+84 {String(data.phone).replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')}</p>
 						</div>
 					</div>
 				{:else}
 					<div class="flex gap-[5px]">
-						Recipent:
+						recipient:
 						{#if data.giftTo}
 							<PlayerHoverCard player={data.players} />
 						{:else}
