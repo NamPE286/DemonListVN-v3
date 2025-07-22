@@ -8,6 +8,7 @@
 	import { toast } from 'svelte-sonner';
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
+	import AddTrackingButton from './addTrackingButton.svelte';
 
 	let data: any = null;
 
@@ -181,35 +182,38 @@
 					<Card.Title>Tracking</Card.Title>
 				</Card.Header>
 				<Card.Content>
-					<div>
-						{#if data.orderTracking && data.orderTracking.length > 0}
-							{#each data.orderTracking as item, i}
-								<div class="relative flex">
-									<div class="mr-4 flex flex-col items-center">
-										<div class="h-4 w-4 rounded-full bg-gray-400 dark:bg-gray-600"></div>
-										{#if i !== data.orderTracking.length - 1}
-											<div class=" absolute my-1 h-full w-[2px] bg-gray-400 dark:bg-gray-600"></div>
-										{/if}
-									</div>
-									<div class="flex-1 pb-4">
-										<p class="text-sm text-muted-foreground">
-											{new Date(item.created_at).toLocaleDateString('vi-VN')} -
-											{new Date(item.created_at).toLocaleTimeString('vi-VN')}
-										</p>
-										{#if item.link}
-											<a href={item.link}>
-												<p>{item.content}</p>
-											</a>
-										{:else}
-											<p>{item.content}</p>
-										{/if}
-									</div>
+					{#if $user.loggedIn && $user.data.isAdmin}
+						<div class="mb-[10px]">
+							<AddTrackingButton order={data} />
+						</div>
+					{/if}
+					{#if data.orderTracking && data.orderTracking.length > 0}
+						{#each data.orderTracking as item, i}
+							<div class="relative flex">
+								<div class="mr-4 flex flex-col items-center">
+									<div class="h-4 w-4 rounded-full bg-gray-400 dark:bg-gray-600"></div>
+									{#if i !== data.orderTracking.length - 1}
+										<div class=" absolute my-1 h-full w-[2px] bg-gray-400 dark:bg-gray-600"></div>
+									{/if}
 								</div>
-							{/each}
-						{:else}
-							<p class="italic text-muted-foreground">No tracking information available yet</p>
-						{/if}
-					</div>
+								<div class="flex-1 pb-4">
+									<p class="text-sm text-muted-foreground">
+										{new Date(item.created_at).toLocaleDateString('vi-VN')} -
+										{new Date(item.created_at).toLocaleTimeString('vi-VN')}
+									</p>
+									{#if item.link}
+										<a href={item.link}>
+											<p>{item.content}</p>
+										</a>
+									{:else}
+										<p>{item.content}</p>
+									{/if}
+								</div>
+							</div>
+						{/each}
+					{:else}
+						<p class="italic text-muted-foreground">No tracking information available yet</p>
+					{/if}
 				</Card.Content>
 			</Card.Root>
 		{/if}
