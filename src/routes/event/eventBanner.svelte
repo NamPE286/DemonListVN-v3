@@ -34,52 +34,51 @@
 </script>
 
 {#if data === null}
-<div class="p-1">
-						<div class="promotion">
-							<div class="promotionContent">
-								<div class="flex flex-col gap-[10px]">
-									<Skeleton class="h-[20px] w-[75px]" />
-									<Skeleton class="h-[45px] w-[200px]" />
-									<Skeleton class="h-[25px] w-[150px]" />
-								</div>
-							</div>
-						</div>
-					</div>
-{:else}
-
-<div class="p-1">
-	<div class="promotion" style={`background-image: url('${data.imgUrl}')`}>
-		<div class="promotionContent">
-			<div class="flex gap-[10px]">
-				<div class="period">
-					<Clock size={16} />
-					{getInterval(data.end)}
+	<div class="p-1">
+		<div class="promotion">
+			<div class="promotionContent">
+				<div class="flex flex-col gap-[10px]">
+					<Skeleton class="h-[20px] w-[75px]" />
+					<Skeleton class="h-[45px] w-[200px]" />
+					<Skeleton class="h-[25px] w-[150px]" />
 				</div>
-				{#if data.isSupporterOnly}
-					<div class="period">
-						<Star size={16} />
-						Supporter Only
-					</div>
-				{/if}
-				{#if data.exp}
-					<div class="period">
-						{data.exp} EXP
-					</div>
-				{/if}
 			</div>
-			<h2>{data.title}</h2>
-			{#if data.redirect}
-				<a href={data.redirect} target="_blank">
-					<div class="flex gap-[10px]">
-						<ExternalLink />
-						{data.redirect}
-					</div>
-				</a>
-			{/if}
-			<p class="desc">{data.description}</p>
 		</div>
 	</div>
-</div>
+{:else}
+	<div class="p-1">
+		<div class="promotion" style={`background-image: url('${data.imgUrl}')`}>
+			<div class="promotionContent">
+				<div class="flex gap-[10px]">
+					<div class="period">
+						<Clock size={16} />
+						{getInterval(data.end)}
+					</div>
+					{#if data.isSupporterOnly}
+						<div class="period">
+							<Star size={16} />
+							Supporter Only
+						</div>
+					{/if}
+					{#if data.exp}
+						<div class="period">
+							{data.exp} EXP
+						</div>
+					{/if}
+				</div>
+				<h2>{data.title}</h2>
+				{#if data.redirect && data.isExternal}
+					<a href={data.redirect} target="_blank">
+						<div class="flex gap-[10px]">
+							<ExternalLink />
+							{data.redirect}
+						</div>
+					</a>
+				{/if}
+				<p class="desc">{data.description}</p>
+			</div>
+		</div>
+	</div>
 {/if}
 
 <style lang="scss">
