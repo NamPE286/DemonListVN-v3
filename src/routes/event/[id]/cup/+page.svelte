@@ -30,7 +30,7 @@
 	<Tabs.Root bind:value={tab} class="mt-[20px] flex flex-col items-center">
 		<Tabs.List>
 			<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
-			<Tabs.Trigger value="pickem">Pick'Em Challenge</Tabs.Trigger>
+			<Tabs.Trigger value="standing">Standing</Tabs.Trigger>
 			<Tabs.Trigger value="schedule">Schedule</Tabs.Trigger>
 		</Tabs.List>
 		<Tabs.Content value="detail">
@@ -40,7 +40,7 @@
 				{/if}
 			</div>
 		</Tabs.Content>
-		<Tabs.Content value="pickem" class="h-[100vh] w-full mt-[20px]">
+		<Tabs.Content value="standing" class="h-[100vh] w-full mt-[20px]">
             <SingleElimBracket {data} />
         </Tabs.Content>
 		<Tabs.Content value="schedule" class="h-[100vh] w-full">
