@@ -77,6 +77,9 @@
 				<Card.Title>Detail</Card.Title>
 			</Card.Header>
 			<Card.Content>
+				{#if $user.loggedIn && $user.data.isAdmin}
+					<a href={`/player/${data.userID}`}>Player</a>
+				{/if}
 				<p>Order ID: {data.id}</p>
 				<p>Payment status: <b>{data.state}</b></p>
 				<p>Payment method: {data.paymentMethod}</p>
