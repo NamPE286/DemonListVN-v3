@@ -16,7 +16,7 @@
 
 	function truncateText(str: string) {
 		if (!truncate) {
-			return;
+			return str;
 		}
 
 		let x = truncate;
