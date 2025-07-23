@@ -86,7 +86,7 @@
 						<div>
 							<p>{data.recipientName}</p>
 							<p>{data.address}</p>
-							<p>+84 {String(data.phone).replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')}</p>
+							<p>+84 {data.phone}</p>
 						</div>
 					</div>
 				{:else}
