@@ -9,9 +9,32 @@
 
 	export let player: any;
 	export let showTitle = false;
+	export let truncate: number | null = null;
 
 	let exp = player.exp + player.extraExp;
 	let isBannerFailedToLoad = false;
+
+	function truncateText(str: string) {
+		if (!truncate) {
+			return;
+		}
+
+		let x = truncate;
+
+		if (showTitle) {
+			x -= 3;
+		}
+
+		if(player.clan) {
+			x -= 5;
+		}
+
+		if (str.length <= x) {
+			return str;
+		}
+
+		return str.substring(0, x) + '...';
+	}
 </script>
 
 <div class="wrapper">
@@ -42,10 +65,10 @@
 			<div class="flex items-center gap-[5px]">
 				{#if isSupporterActive(player.supporterUntil)}
 					<span class="text-yellow-500">
-						{player.name}
+						{truncateText(player.name)}
 					</span>
 				{:else}
-					{player.name}
+					{truncateText(player.name)}
 				{/if}
 				{#if player.isTrusted}
 					<div class="mb-[2.5px] h-[12px] w-[12px] rounded-full bg-black dark:invert">

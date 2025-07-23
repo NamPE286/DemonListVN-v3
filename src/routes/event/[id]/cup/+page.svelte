@@ -6,6 +6,7 @@
 	import Markdown from '$lib/components/markdown.svelte';
 	import { onMount } from 'svelte';
 	import type { Level } from '../type';
+	import SingleElimBracket from './singleElimBracket.svelte';
 
 	export let data: PageData;
 
@@ -39,7 +40,10 @@
 				{/if}
 			</div>
 		</Tabs.Content>
-		<Tabs.Content value="schedule" class='w-full h-[100vh]'>
+		<Tabs.Content value="pickem" class="h-[100vh] w-full mt-[20px]">
+            <SingleElimBracket {data} />
+        </Tabs.Content>
+		<Tabs.Content value="schedule" class="h-[100vh] w-full">
 			<iframe
 				src={data.data.calendar}
 				style="border: 0"
