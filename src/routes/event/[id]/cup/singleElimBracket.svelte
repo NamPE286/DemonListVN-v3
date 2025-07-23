@@ -18,7 +18,7 @@
 					<div class="flex flex-col gap-[10px]">
 						{#each data.data.bracket.slice(2 * index, 2 * index + 2) as player, j}
 							<div
-								class="flex h-[35px] w-[250px] text-sm items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px]"
+								class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px] text-sm"
 							>
 								{#if player}
 									<PlayerHoverCard {player} showTitle={true} truncate={20} />
@@ -58,7 +58,7 @@
 					<div class="flex flex-col gap-[60px]">
 						{#each data.data.bracket.slice(16 + 2 * index, 16 + 2 * index + 2) as player, j}
 							<div
-								class="flex h-[35px] w-[250px] text-sm items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px]"
+								class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px] text-sm"
 							>
 								{#if player}
 									<PlayerHoverCard {player} showTitle={true} truncate={20} />
@@ -100,7 +100,7 @@
 					<div class="flex flex-col gap-[160px]">
 						{#each data.data.bracket.slice(16 + 8 + 2 * index, 16 + 8 + 2 * index + 2) as player, j}
 							<div
-								class="flex h-[35px] w-[250px] text-sm items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px]"
+								class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px] text-sm"
 							>
 								{#if player}
 									<PlayerHoverCard {player} showTitle={true} truncate={20} />
@@ -142,7 +142,7 @@
 					<div class="flex flex-col gap-[360px]">
 						{#each data.data.bracket.slice(16 + 8 + 4 + 2 * index, 16 + 8 + 4 + 2 * index + 2) as player, j}
 							<div
-								class="flex h-[35px] w-[250px] text-sm items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px]"
+								class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px] text-sm"
 							>
 								{#if player}
 									<PlayerHoverCard {player} showTitle={true} truncate={20} />
@@ -178,19 +178,22 @@
 				</div>
 			{/each}
 		</div>
-		<div class="mt-[360px] flex flex-col gap-[250px]">
+		<div class="mt-[330px] flex flex-col gap-[250px]">
 			<div class="flex flex-col">
 				{#each { length: 1 } as _, index}
 					<div class="flex flex-col gap-[360px]">
 						{#each data.data.bracket.slice(16 + 8 + 4 + 2 + 2 * index, 16 + 8 + 4 + 2 + 2 * index + 1) as player, j}
-							<div
-								class="flex h-[35px] w-[250px] text-sm items-center rounded-md border-[1px] border-yellow-400 pl-[10px] pr-[10px]"
-							>
-								{#if player}
-									<PlayerHoverCard {player} showTitle={true} truncate={20} />
-								{:else}
-									<span class="opacity-50"> Unknown </span>
-								{/if}
+							<div>
+								<p class='text-center mb-[10px] text-yellow-400'>Champion</p>
+								<div
+									class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-yellow-400 pl-[10px] pr-[10px] text-sm"
+								>
+									{#if player}
+										<PlayerHoverCard {player} showTitle={true} truncate={20} />
+									{:else}
+										<span class="opacity-50"> Unknown </span>
+									{/if}
+								</div>
 							</div>
 						{/each}
 					</div>
@@ -202,7 +205,7 @@
 					<div class="flex flex-col gap-[10px]">
 						{#each data.data.bracket.slice(16 + 8 + 4 + 2 + 1 + 2 * index, 16 + 8 + 4 + 2 + 1 + 2 * index + 2) as player, j}
 							<div
-								class="flex h-[35px] w-[250px] text-sm items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px]"
+								class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px] text-sm"
 							>
 								{#if player}
 									<PlayerHoverCard {player} showTitle={true} truncate={20} />
