@@ -5,13 +5,13 @@
 </script>
 
 <div class="w-[1800px]">
-	<div class="mb-[10px] flex w-full gap-[50px] pl-[10px] 2xl:pl-[200px]">
+	<div class="mb-[10px] flex w-full gap-[50px] pl-[10px] xl:pl-[200px]">
 		<div class="w-[250px] text-center">Round of 16</div>
 		<div class="w-[250px] text-center">Quarterfinals</div>
 		<div class="w-[250px] text-center">Semifinals</div>
 		<div class="w-[250px] text-center">Finals</div>
 	</div>
-	<div class="flex items-center pl-[10px] 2xl:pl-[200px]">
+	<div class="flex items-center pl-[10px] xl:pl-[200px]">
 		<div class="flex flex-col gap-[20px]">
 			{#each { length: 8 } as _, index}
 				<div class="flex">
@@ -125,7 +125,7 @@
 									class="absolute left-0 top-[212px] h-[1px] w-[25px] bg-[hsl(var(--border))]"
 								></div>
 								<div
-									class="absolute left-[25px] top-[17.5px] h-[196px] w-[1px] bg-[hsl(var(--border))]"
+									class="absolute left-[25px] top-[17.5px] h-[195px] w-[1px] bg-[hsl(var(--border))]"
 								></div>
 								<div
 									class="absolute left-[25px] top-[117px] h-[1px] w-[25px] bg-[hsl(var(--border))]"
@@ -167,7 +167,7 @@
 									class="absolute left-0 top-[412px] h-[1px] w-[25px] bg-[hsl(var(--border))]"
 								></div>
 								<div
-									class="absolute left-[25px] top-[17.5px] h-[396px] w-[1px] bg-[hsl(var(--border))]"
+									class="absolute left-[25px] top-[17.5px] h-[395px] w-[1px] bg-[hsl(var(--border))]"
 								></div>
 								<div
 									class="absolute left-[25px] top-[214px] h-[1px] w-[25px] bg-[hsl(var(--border))]"
