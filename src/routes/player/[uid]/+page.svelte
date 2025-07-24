@@ -20,7 +20,6 @@
 	import { page } from '$app/stores';
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
-	import { onMount } from 'svelte';
 	import MedalsTab from './medalsTab.svelte';
 
 	export let data: PageData;

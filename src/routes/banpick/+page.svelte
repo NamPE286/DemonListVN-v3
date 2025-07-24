@@ -6,6 +6,8 @@
 	import { quintOut } from 'svelte/easing';
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
+	import * as Avatar from '$lib/components/ui/avatar';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 
@@ -18,6 +20,7 @@
 	let turn = 0;
 	let coinFlipped = false;
 	let isCoinFlipping = false;
+	let isBannerFailedToLoad = [false, false];
 
 	function ban(index: number) {
 		banned[index] = true;
@@ -67,20 +70,32 @@
 	});
 </script>
 
-<img
-	class="bgGradient absolute z-0 mt-[-50px] h-[100vh] w-[800px] object-cover"
-	src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.players[0].uid}${
-		data.players[0].isBannerGif ? '.gif' : '.jpg'
-	}?version=${data.players[0].bannerVersion}`}
-	alt="banner"
-/>
-<img
-	class="bgGradient1 absolute right-0 z-0 mt-[-50px] h-[100vh] w-[800px] object-cover"
-	src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.players[1].uid}${
-		data.players[1].isBannerGif ? '.gif' : '.jpg'
-	}?version=${data.players[1].bannerVersion}`}
-	alt="banner"
-/>
+{#if isSupporterActive(data.players[0].supporterUntil) && !isBannerFailedToLoad[0]}
+	<img
+		on:error={() => {
+			isBannerFailedToLoad[0] = true;
+			isBannerFailedToLoad = isBannerFailedToLoad;
+		}}
+		class="bgGradient absolute z-0 mt-[-50px] h-[100vh] w-[800px] object-cover"
+		src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.players[0].uid}${
+			data.players[0].isBannerGif ? '.gif' : '.jpg'
+		}?version=${data.players[0].bannerVersion}`}
+		alt="banner"
+	/>
+{/if}
+{#if isSupporterActive(data.players[1].supporterUntil) && !isBannerFailedToLoad[1]}
+	<img
+		on:error={() => {
+			isBannerFailedToLoad[1] = true;
+			isBannerFailedToLoad = isBannerFailedToLoad;
+		}}
+		class="bgGradient1 absolute right-0 z-0 mt-[-50px] h-[100vh] w-[800px] object-cover"
+		src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.players[1].uid}${
+			data.players[1].isBannerGif ? '.gif' : '.jpg'
+		}?version=${data.players[1].bannerVersion}`}
+		alt="banner"
+	/>
+{/if}
 
 <div
 	class="relative z-[1px] flex flex-col items-center gap-[30px] pl-[20px] pr-[20px]"
@@ -90,9 +105,37 @@
 		class="mt-[50px] flex justify-center gap-[50px]"
 		in:fly={{ y: -30, duration: 800, delay: 200, easing: quintOut }}
 	>
-		<PlayerHoverCard player={data.players[0]} showTitle={true} />
+		<div class="flex items-center gap-[10px]">
+			<Avatar.Root class="h-8 w-8">
+				<Avatar.Image
+					class="object-cover"
+					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.players[0].uid}${
+						isSupporterActive(data.players[0].supporterUntil) && data.players[0].isAvatarGif
+							? '.gif'
+							: '.jpg'
+					}?version=${data.players[0].avatarVersion}`}
+					alt=""
+				/>
+				<Avatar.Fallback class="text-5xl lg:text-6xl">{data.players[0].name[0]}</Avatar.Fallback>
+			</Avatar.Root>
+			<PlayerHoverCard player={data.players[0]} showTitle={true} />
+		</div>
 		<span class="animate-pulse font-bold">VS</span>
-		<PlayerHoverCard player={data.players[1]} showTitle={true} />
+		<div class="flex items-center gap-[10px]">
+			<PlayerHoverCard player={data.players[1]} showTitle={true} />
+			<Avatar.Root class="h-8 w-8">
+				<Avatar.Image
+					class="object-cover"
+					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.players[1].uid}${
+						isSupporterActive(data.players[1].supporterUntil) && data.players[1].isAvatarGif
+							? '.gif'
+							: '.jpg'
+					}?version=${data.players[1].avatarVersion}`}
+					alt=""
+				/>
+				<Avatar.Fallback class="text-5xl lg:text-6xl">{data.players[1].name[1]}</Avatar.Fallback>
+			</Avatar.Root>
+		</div>
 	</div>
 	<div class="flex gap-[10px]" in:fly={{ y: -20, duration: 600, delay: 400, easing: quintOut }}>
 		{#each levels as level, index}
