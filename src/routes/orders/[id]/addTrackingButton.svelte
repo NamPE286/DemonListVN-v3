@@ -53,7 +53,7 @@
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
 				<Label class="text-right">Tracking ID</Label>
-				<Input bind:value={trackingID} placeholder="Optional" type="number" class="col-span-3" />
+				<Input bind:value={trackingID} placeholder="Optional" class="col-span-3" />
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
 				<Label class="text-right">Content</Label>
@@ -63,13 +63,14 @@
 					</Select.Trigger>
 					<Select.Content>
 						<Select.Item value={0}>Your order is being prepared</Select.Item>
-						<Select.Item value={1} disabled={!shippingUnit}>
+						<Select.Item value={1}>Failed to pick up the package</Select.Item>
+						<Select.Item value={2} disabled={!shippingUnit}>
 							Your order is packed and will be handed over to {shippingUnit} soon
 						</Select.Item>
-						<Select.Item value={2} disabled={!shippingUnit || !trackingID}>
+						<Select.Item value={3} disabled={!shippingUnit || !trackingID}>
 							Your package is picked up by {shippingUnit} (Tracking ID: {trackingID})
 						</Select.Item>
-						<Select.Item value={3}>Your package has been delivered!</Select.Item>
+						<Select.Item value={4}>Your package has been delivered!</Select.Item>
 					</Select.Content>
 				</Select.Root>
 			</div>
