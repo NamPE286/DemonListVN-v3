@@ -12,20 +12,34 @@
 	let order = Array(data.levels.length).fill(0);
 	let phase = 0;
 	let levels: any[] = [null, null, null];
+	let logs: any[] = Array(data.levels.length).fill(null);
+	let pickedBy: any[] = [null, null, null];
 	let turn = 0;
 	let coinFlipped = false;
 	let isCoinFlipping = false;
-	let decided = false;
 
 	function ban(index: number) {
 		banned[index] = true;
+		logs[index] = data.players[turn];
 		phase++;
+
+		toast.info(`${data.players[turn].name} banned ${data.levels[index].name}`);
+
+		turn = 1 - turn;
 	}
 
 	function pick(index: number) {
 		order[index] = phase - 2;
 		levels[phase - 3] = data.levels[index];
+		logs[index] = data.players[turn];
+		pickedBy[phase - 3] = data.players[turn];
 		phase++;
+
+		toast.info(
+			`${data.players[turn].name} picked ${data.levels[index].name} as the ${formatOrder(phase - 2)} level!`
+		);
+
+		turn = 1 - turn;
 	}
 
 	function formatOrder(x: number) {
@@ -73,7 +87,7 @@
 	<div class="flex gap-[10px]" in:fly={{ y: -20, duration: 600, delay: 400, easing: quintOut }}>
 		{#each levels as level, index}
 			<div
-				class="flex w-[200px] flex-col items-center gap-[10px] rounded-md border-[1px] p-[10px] text-center transition-all duration-300 hover:scale-105 hover:shadow-lg"
+				class="flex w-[200px] flex-col items-center gap-[10px] rounded-md border-[1px] p-[10px] text-center transition-all duration-300"
 				style="
                     backdrop-filter: blur(10px);
                 "
@@ -81,12 +95,13 @@
 				<div class="font-bold">{formatOrder(index + 1)} level</div>
 				<div class="">
 					{#if !level}
-						<div class="text-bold h-[70px] animate-pulse opacity-50">?</div>
+						<div class="text-bold h-[90px] animate-pulse opacity-50">?</div>
 					{:else}
 						<div class="text-bold" in:scale={{ duration: 400, easing: quintOut }}>
 							<b>{level.name}</b><br />
 							<span class="text-sm opacity-50">by {level.author}</span><br />
-							<span class="text-sm">{level.difficulty}</span>
+							<span class="text-sm">{level.difficulty}</span><br />
+							<span class="text-sm">Picked by {pickedBy[index].name}</span>
 						</div>
 					{/if}
 				</div>
@@ -113,11 +128,11 @@
 					</div>
 					{#if banned[index]}
 						<Button variant="destructive" class="ml-auto transition-all duration-200" disabled
-							>Banned</Button
+							>Banned by {logs[index].name}</Button
 						>
 					{:else if order[index]}
 						<Button class="ml-auto transition-all duration-200" disabled
-							>{formatOrder(order[index])} level picked</Button
+							>Picked by {logs[index].name}</Button
 						>
 					{:else if phase < 3}
 						<Button
@@ -198,7 +213,7 @@
 	{/if}
 </div>
 
-<div class='pb-[100px]' />
+<div class="pb-[100px]" />
 
 <style lang="scss">
 	.bgGradient {
