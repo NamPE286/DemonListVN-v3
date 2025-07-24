@@ -179,7 +179,7 @@
 						transform: rotateY(0);
 					}
 					100% {
-						transform: rotateY(calc(720deg));
+						transform: rotateY(calc(900deg + 180deg));
 					}
 				}
 			</style>
@@ -190,7 +190,7 @@
 						transform: rotateY(0);
 					}
 					100% {
-						transform: rotateY(calc(720deg + 180deg));
+						transform: rotateY(calc(900deg));
 					}
 				}
 			</style>
