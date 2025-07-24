@@ -67,7 +67,7 @@
 	<div class="flex flex-col items-center gap-[10px]" in:fly={{ y: 20, duration: 600, delay: 600, easing: quintOut }}>
 		{#each data.levels as level, index}
 			<div
-				class="flex w-[500px] items-center rounded-md border-[1px] p-[10px] transition-all duration-300 hover:shadow-md hover:scale-[1.02] {banned[index] ? 'animate-pulse' : ''}"
+				class="flex w-[500px] items-center rounded-md border-[1px] p-[10px] transition-all duration-300"
 				style={`
                 ${banned[index] ? 'opacity: 50%;' : ''}
             `}
@@ -75,16 +75,16 @@
 			>
 				<div class="text-bold">
 					<b>{level.name}</b> <span class="text-sm opacity-50">by {level.author}</span><br />
-					<span class="text-sm">{level.difficulty}</span>
+					<span class="text-sm">{level.difficulty}</span>     
 				</div>
 				{#if banned[index]}
 					<Button variant="destructive" class="ml-auto transition-all duration-200" disabled>Banned</Button>
 				{:else if order[index]}
 					<Button class="ml-auto transition-all duration-200 animate-bounce" disabled>{formatOrder(order[index])} level picked</Button>
 				{:else if phase < 3}
-					<Button variant="destructive" class="ml-auto transition-all duration-200 hover:scale-110" on:click={() => ban(index)}>Ban</Button>
+					<Button variant="destructive" class="ml-auto transition-all duration-200" on:click={() => ban(index)}>Ban</Button>
 				{:else}
-					<Button class="ml-auto transition-all duration-200 hover:scale-110 hover:bg-green-600" on:click={() => pick(index)}>Pick</Button>
+					<Button class="ml-auto transition-all duration-200" on:click={() => pick(index)}>Pick</Button>
 				{/if}
 			</div>
 		{/each}
