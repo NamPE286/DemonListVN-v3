@@ -76,7 +76,7 @@
 			isBannerFailedToLoad[0] = true;
 			isBannerFailedToLoad = isBannerFailedToLoad;
 		}}
-		class="bgGradient absolute z-0 mt-[-50px] h-[100vh] w-[800px] object-cover"
+		class="bgGradient absolute z-0 mt-[-50px] h-[100vh] w-[850px] object-cover"
 		src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.players[0].uid}${
 			data.players[0].isBannerGif ? '.gif' : '.jpg'
 		}?version=${data.players[0].bannerVersion}`}
@@ -89,7 +89,7 @@
 			isBannerFailedToLoad[1] = true;
 			isBannerFailedToLoad = isBannerFailedToLoad;
 		}}
-		class="bgGradient1 absolute right-0 z-0 mt-[-50px] h-[100vh] w-[800px] object-cover"
+		class="bgGradient1 absolute right-0 z-0 mt-[-50px] h-[100vh] w-[850px] object-cover"
 		src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.players[1].uid}${
 			data.players[1].isBannerGif ? '.gif' : '.jpg'
 		}?version=${data.players[1].bannerVersion}`}
@@ -266,7 +266,7 @@
 	{/if}
 </div>
 
-<div class="pb-[100px]" />
+<div class="pb-[1000px]" />
 
 <style lang="scss">
 	.bgGradient {
