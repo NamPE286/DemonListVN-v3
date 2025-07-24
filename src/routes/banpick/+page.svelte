@@ -5,6 +5,7 @@
 	import { fade, scale, fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
 	import { toast } from 'svelte-sonner';
+	import { onMount } from 'svelte';
 
 	export let data: PageData;
 
@@ -33,13 +34,13 @@
 		levels[phase - 3] = data.levels[index];
 		logs[index] = data.players[turn];
 		pickedBy[phase - 3] = data.players[turn];
-		phase++;
 
 		toast.info(
 			`${data.players[turn].name} picked ${data.levels[index].name} as the ${formatOrder(phase - 2)} level!`
 		);
 
 		turn = 1 - turn;
+		phase++;
 	}
 
 	function formatOrder(x: number) {
@@ -55,6 +56,15 @@
 			return 'Tiebreaker';
 		}
 	}
+
+	onMount(() => {
+		const originalOverflow = document.body.style.overflow;
+		document.body.style.overflow = 'hidden';
+
+		return () => {
+			document.body.style.overflow = originalOverflow;
+		};
+	});
 </script>
 
 <img
