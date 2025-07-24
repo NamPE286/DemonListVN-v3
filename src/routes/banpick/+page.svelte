@@ -75,7 +75,7 @@
                 "
 			>
 				<div class="font-bold">{formatOrder(index + 1)} level</div>
-				<div class="ml-[100px]">
+				<div class="">
 					{#if !level}
 						<div class="text-bold h-[70px] animate-pulse opacity-50">?</div>
 					{:else}
@@ -111,7 +111,7 @@
 						>Banned</Button
 					>
 				{:else if order[index]}
-					<Button class="ml-auto animate-bounce transition-all duration-200" disabled
+					<Button class="ml-auto transition-all duration-200" disabled
 						>{formatOrder(order[index])} level picked</Button
 					>
 				{:else if phase < 3}
