@@ -4,6 +4,7 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { fade, scale, fly } from 'svelte/transition';
 	import { quintOut } from 'svelte/easing';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
 
@@ -11,7 +12,10 @@
 	let order = Array(data.levels.length).fill(0);
 	let phase = 0;
 	let levels: any[] = [null, null, null];
-    let turn = 0;
+	let turn = 0;
+	let coinFlipped = false;
+	let isCoinFlipping = false;
+	let decided = false;
 
 	function ban(index: number) {
 		banned[index] = true;
@@ -89,45 +93,109 @@
 			</div>
 		{/each}
 	</div>
-	<div
-		class="flex flex-col items-center gap-[10px]"
-		in:fly={{ y: 20, duration: 600, delay: 600, easing: quintOut }}
-	>
-		{#each data.levels as level, index}
-			<div
-				class="flex w-[500px] items-center rounded-md border-[1px] p-[10px] transition-all duration-300"
-				style={`
+	{#if coinFlipped}
+		<div
+			class="flex flex-col items-center gap-[10px]"
+			in:fly={{ y: 20, duration: 600, delay: 600, easing: quintOut }}
+		>
+			{#each data.levels as level, index}
+				<div
+					class="flex w-[500px] items-center rounded-md border-[1px] p-[10px] transition-all duration-300"
+					style={`
                 ${banned[index] ? 'opacity: 50%;' : ''}
                 backdrop-filter: blur(10px);
             `}
-				in:fly={{ x: -50, duration: 400, delay: 100 * index, easing: quintOut }}
-			>
-				<div class="text-bold">
-					<b>{level.name}</b> <span class="text-sm opacity-50">by {level.author}</span><br />
-					<span class="text-sm">{level.difficulty}</span>
+					in:fly={{ x: -50, duration: 400, delay: 100 * index, easing: quintOut }}
+				>
+					<div class="text-bold">
+						<b>{level.name}</b> <span class="text-sm opacity-50">by {level.author}</span><br />
+						<span class="text-sm">{level.difficulty}</span>
+					</div>
+					{#if banned[index]}
+						<Button variant="destructive" class="ml-auto transition-all duration-200" disabled
+							>Banned</Button
+						>
+					{:else if order[index]}
+						<Button class="ml-auto transition-all duration-200" disabled
+							>{formatOrder(order[index])} level picked</Button
+						>
+					{:else if phase < 3}
+						<Button
+							variant="destructive"
+							class="ml-auto transition-all duration-200"
+							on:click={() => ban(index)}>Ban</Button
+						>
+					{:else}
+						<Button class="ml-auto transition-all duration-200" on:click={() => pick(index)}
+							>Pick</Button
+						>
+					{/if}
 				</div>
-				{#if banned[index]}
-					<Button variant="destructive" class="ml-auto transition-all duration-200" disabled
-						>Banned</Button
-					>
-				{:else if order[index]}
-					<Button class="ml-auto transition-all duration-200" disabled
-						>{formatOrder(order[index])} level picked</Button
-					>
-				{:else if phase < 3}
-					<Button
-						variant="destructive"
-						class="ml-auto transition-all duration-200"
-						on:click={() => ban(index)}>Ban</Button
-					>
-				{:else}
-					<Button class="ml-auto transition-all duration-200" on:click={() => pick(index)}
-						>Pick</Button
-					>
-				{/if}
+			{/each}
+		</div>
+	{:else}
+		<div class="flex flex-col items-center gap-4" in:fade={{ duration: 600, easing: quintOut }}>
+			<div class="mb-4 text-center">
+				<h2 class="mb-2 text-xl font-bold">Flip a coin to decide who goes first</h2>
+				<p class="text-sm opacity-70">Winner bans first</p>
 			</div>
-		{/each}
-	</div>
+			<div
+				class="coin-container"
+				style={`
+                @keyframes flip {
+                    0% {
+                        transform: rotateY(0);
+                    }
+                    100% {
+                        transform: rotateY(calc(720deg + 180deg));
+                    }
+                }`}
+			>
+				<div
+					class="coin"
+					class:flipping={isCoinFlipping}
+					on:animationend={() => {
+						coinFlipped = true;
+						toast.info(`${data.players[turn].name} goes first!`);
+					}}
+				>
+					<div class="side front text-black">{data.players[0].name}</div>
+					<div class="side back text-black">{data.players[1].name}</div>
+				</div>
+			</div>
+			<Button
+				on:click={() => {
+					turn = Math.round(Math.random());
+					isCoinFlipping = true;
+				}}
+			>
+				Flip coin
+			</Button>
+		</div>
+		{#if turn == 0}
+			<style>
+				@keyframes flip {
+					0% {
+						transform: rotateY(0);
+					}
+					100% {
+						transform: rotateY(calc(720deg));
+					}
+				}
+			</style>
+		{:else}
+			<style>
+				@keyframes flip {
+					0% {
+						transform: rotateY(0);
+					}
+					100% {
+						transform: rotateY(calc(720deg + 180deg));
+					}
+				}
+			</style>
+		{/if}
+	{/if}
 </div>
 
 <style lang="scss">
@@ -137,5 +205,46 @@
 
 	.bgGradient1 {
 		mask-image: linear-gradient(-90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
+	}
+
+	.coin-container {
+		perspective: 1000px;
+		height: 120px;
+		width: 120px;
+	}
+
+	.coin {
+		width: 100%;
+		height: 100%;
+		position: relative;
+		transform-style: preserve-3d;
+		transition: transform 0.1s;
+
+		&.flipping {
+			animation: flip 2s forwards;
+		}
+	}
+
+	.side {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-weight: bold;
+		backface-visibility: hidden;
+	}
+
+	.front {
+		background: linear-gradient(45deg, #f3f3f3, #ddd);
+		border: 3px solid #ccc;
+	}
+
+	.back {
+		background: linear-gradient(45deg, #e6e6e6, #ccc);
+		border: 3px solid #bbb;
+		transform: rotateY(180deg);
 	}
 </style>
