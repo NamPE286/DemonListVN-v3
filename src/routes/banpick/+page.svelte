@@ -11,6 +11,7 @@
 	let order = Array(data.levels.length).fill(0);
 	let phase = 0;
 	let levels: any[] = [null, null, null];
+    let turn = 0;
 
 	function ban(index: number) {
 		banned[index] = true;
