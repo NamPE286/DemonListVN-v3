@@ -63,7 +63,7 @@
 	in:fade={{ duration: 600, easing: quintOut }}
 >
 	<div
-		class="mt-[50px] flex justify-center gap-[50px] text-xl"
+		class="mt-[50px] flex justify-center gap-[50px]"
 		in:fly={{ y: -30, duration: 800, delay: 200, easing: quintOut }}
 	>
 		<PlayerHoverCard player={data.players[0]} showTitle={true} />
@@ -197,6 +197,8 @@
 		{/if}
 	{/if}
 </div>
+
+<div class='pb-[100px]' />
 
 <style lang="scss">
 	.bgGradient {
