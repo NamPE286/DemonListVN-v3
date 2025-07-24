@@ -44,6 +44,9 @@
 	{#each data.levels as level, index}
 		<div
 			class="flex w-[500px] items-center rounded-md border-[1px] p-[10px]"
+			style={`
+                ${banned[index] ? 'opacity: 50%;' : ''}
+            `}
 		>
 			<div class="text-bold">
 				<b>{level.name}</b> <span class="text-sm opacity-50">by {level.author}</span><br />
