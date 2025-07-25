@@ -22,11 +22,11 @@
 		let x = truncate;
 
 		if (showTitle) {
-			x -= 3;
+			x -= 2;
 		}
 
 		if(player.clan) {
-			x -= 5;
+			x -= 4;
 		}
 
 		if (str.length <= x) {
