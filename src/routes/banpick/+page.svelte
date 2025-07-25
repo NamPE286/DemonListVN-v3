@@ -35,7 +35,14 @@
 	function pick(index: number) {
 		order[index] = phase - 2;
 		levels[phase - 3] = data.levels[index];
-		logs[index] = data.players[turn];
+
+		if (phase == 5) {
+			logs[index] = {
+				name: 'Tiebreaker'
+			};
+		} else {
+			logs[index] = data.players[turn];
+		}
 		pickedBy[phase - 3] = data.players[turn];
 
 		toast.info(
@@ -116,7 +123,7 @@
 					}?version=${data.players[0].avatarVersion}`}
 					alt=""
 				/>
-				<Avatar.Fallback class="text-5xl lg:text-6xl">{data.players[0].name[0]}</Avatar.Fallback>
+				<Avatar.Fallback class="text-sm">{data.players[0].name[0]}</Avatar.Fallback>
 			</Avatar.Root>
 			<PlayerHoverCard player={data.players[0]} showTitle={true} />
 		</div>
@@ -133,7 +140,7 @@
 					}?version=${data.players[1].avatarVersion}`}
 					alt=""
 				/>
-				<Avatar.Fallback class="text-5xl lg:text-6xl">{data.players[1].name[1]}</Avatar.Fallback>
+				<Avatar.Fallback class="text-sm">{data.players[1].name[1]}</Avatar.Fallback>
 			</Avatar.Root>
 		</div>
 	</div>
@@ -154,7 +161,9 @@
 							<b>{level.name}</b><br />
 							<span class="text-sm opacity-50">by {level.author}</span><br />
 							<span class="text-sm">{level.difficulty}</span><br />
-							<span class="text-sm">Picked by {pickedBy[index].name}</span>
+							{#if index != 2}
+								<span class="text-sm">Picked by {pickedBy[index].name}</span>
+							{/if}
 						</div>
 					{/if}
 				</div>
@@ -185,7 +194,9 @@
 						>
 					{:else if order[index]}
 						<Button class="ml-auto transition-all duration-200" disabled
-							>Picked by {logs[index].name}</Button
+							>{logs[index].name == 'Tiebreaker'
+								? 'Tiebreaker'
+								: `Picked by ${logs[index].name}`}</Button
 						>
 					{:else if phase < 3}
 						<Button
