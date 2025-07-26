@@ -22,8 +22,29 @@
 							>
 								{#if player}
 									<PlayerHoverCard {player} showTitle={true} truncate={20} />
+								{:else}
+									<span class="opacity-50"> Unknown </span>
 								{/if}
-								<div class="ml-auto">
+								<div
+									class="ml-auto"
+									class:text-green-500={data.data.bracketResult[2 * index] !== null &&
+										data.data.bracketResult[2 * index + 1] !== null &&
+										((j === 0 &&
+											data.data.bracketResult[2 * index] >
+												data.data.bracketResult[2 * index + 1]) ||
+											(j === 1 &&
+												data.data.bracketResult[2 * index + 1] >
+													data.data.bracketResult[2 * index]))}
+									class:text-red-500={data.data.bracketResult[2 * index] !== null &&
+										data.data.bracketResult[2 * index + 1] !== null &&
+										((j === 0 &&
+											data.data.bracketResult[2 * index] <
+												data.data.bracketResult[2 * index + 1]) ||
+											(j === 1 &&
+												data.data.bracketResult[2 * index + 1] <
+													data.data.bracketResult[2 * index]))}
+									class:text-gray-400={data.data.bracketResult[2 * index + j] === null}
+								>
 									{data.data.bracketResult[2 * index + j] !== null
 										? data.data.bracketResult[2 * index + j]
 										: '-'}
@@ -65,8 +86,27 @@
 								{:else}
 									<span class="opacity-50"> Unknown </span>
 								{/if}
-								<div class="ml-auto">
-									{data.data.bracketResult[16 + 2 * index + j]
+								<div
+									class="ml-auto"
+									class:text-green-500={data.data.bracketResult[16 + 2 * index] !== null &&
+										data.data.bracketResult[16 + 2 * index + 1] !== null &&
+										((j === 0 &&
+											data.data.bracketResult[16 + 2 * index] >
+												data.data.bracketResult[16 + 2 * index + 1]) ||
+											(j === 1 &&
+												data.data.bracketResult[16 + 2 * index + 1] >
+													data.data.bracketResult[16 + 2 * index]))}
+									class:text-red-500={data.data.bracketResult[16 + 2 * index] !== null &&
+										data.data.bracketResult[16 + 2 * index + 1] !== null &&
+										((j === 0 &&
+											data.data.bracketResult[16 + 2 * index] <
+												data.data.bracketResult[16 + 2 * index + 1]) ||
+											(j === 1 &&
+												data.data.bracketResult[16 + 2 * index + 1] <
+													data.data.bracketResult[16 + 2 * index]))}
+									class:text-gray-400={data.data.bracketResult[16 + 2 * index + j] === null}
+								>
+									{data.data.bracketResult[16 + 2 * index + j] !== null
 										? data.data.bracketResult[16 + 2 * index + j]
 										: '-'}
 								</div>
@@ -107,8 +147,27 @@
 								{:else}
 									<span class="opacity-50"> Unknown </span>
 								{/if}
-								<div class="ml-auto">
-									{data.data.bracketResult[16 + 8 + 2 * index + j]
+								<div
+									class="ml-auto"
+									class:text-green-500={data.data.bracketResult[16 + 8 + 2 * index] !== null &&
+										data.data.bracketResult[16 + 8 + 2 * index + 1] !== null &&
+										((j === 0 &&
+											data.data.bracketResult[16 + 8 + 2 * index] >
+												data.data.bracketResult[16 + 8 + 2 * index + 1]) ||
+											(j === 1 &&
+												data.data.bracketResult[16 + 8 + 2 * index + 1] >
+													data.data.bracketResult[16 + 8 + 2 * index]))}
+									class:text-red-500={data.data.bracketResult[16 + 8 + 2 * index] !== null &&
+										data.data.bracketResult[16 + 8 + 2 * index + 1] !== null &&
+										((j === 0 &&
+											data.data.bracketResult[16 + 8 + 2 * index] <
+												data.data.bracketResult[16 + 8 + 2 * index + 1]) ||
+											(j === 1 &&
+												data.data.bracketResult[16 + 8 + 2 * index + 1] <
+													data.data.bracketResult[16 + 8 + 2 * index]))}
+									class:text-gray-400={data.data.bracketResult[16 + 8 + 2 * index + j] === null}
+								>
+									{data.data.bracketResult[16 + 8 + 2 * index + j] !== null
 										? data.data.bracketResult[16 + 8 + 2 * index + j]
 										: '-'}
 								</div>
@@ -149,8 +208,27 @@
 								{:else}
 									<span class="opacity-50"> Unknown </span>
 								{/if}
-								<div class="ml-auto">
-									{data.data.bracketResult[16 + 8 + 4 + 2 * index + j]
+								<div
+									class="ml-auto"
+									class:text-green-500={data.data.bracketResult[16 + 8 + 4 + 2 * index] !== null &&
+										data.data.bracketResult[16 + 8 + 4 + 2 * index + 1] !== null &&
+										((j === 0 &&
+											data.data.bracketResult[16 + 8 + 4 + 2 * index] >
+												data.data.bracketResult[16 + 8 + 4 + 2 * index + 1]) ||
+											(j === 1 &&
+												data.data.bracketResult[16 + 8 + 4 + 2 * index + 1] >
+													data.data.bracketResult[16 + 8 + 4 + 2 * index]))}
+									class:text-red-500={data.data.bracketResult[16 + 8 + 4 + 2 * index] !== null &&
+										data.data.bracketResult[16 + 8 + 4 + 2 * index + 1] !== null &&
+										((j === 0 &&
+											data.data.bracketResult[16 + 8 + 4 + 2 * index] <
+												data.data.bracketResult[16 + 8 + 4 + 2 * index + 1]) ||
+											(j === 1 &&
+												data.data.bracketResult[16 + 8 + 4 + 2 * index + 1] <
+													data.data.bracketResult[16 + 8 + 4 + 2 * index]))}
+									class:text-gray-400={data.data.bracketResult[16 + 8 + 4 + 2 * index + j] === null}
+								>
+									{data.data.bracketResult[16 + 8 + 4 + 2 * index + j] !== null
 										? data.data.bracketResult[16 + 8 + 4 + 2 * index + j]
 										: '-'}
 								</div>
@@ -184,7 +262,7 @@
 					<div class="flex flex-col gap-[360px]">
 						{#each data.data.bracket.slice(16 + 8 + 4 + 2 + 2 * index, 16 + 8 + 4 + 2 + 2 * index + 1) as player, j}
 							<div>
-								<p class='text-center mb-[10px] text-yellow-400'>Champion</p>
+								<p class="mb-[10px] text-center text-yellow-400">Champion</p>
 								<div
 									class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-yellow-400 pl-[10px] pr-[10px] text-sm"
 								>
@@ -212,8 +290,31 @@
 								{:else}
 									<span class="opacity-50"> Unknown </span>
 								{/if}
-								<div class="ml-auto">
-									{data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index + j]
+								<div
+									class="ml-auto"
+									class:text-green-500={data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index] !==
+										null &&
+										data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index + 1] !== null &&
+										((j === 0 &&
+											data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index] >
+												data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index + 1]) ||
+											(j === 1 &&
+												data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index + 1] >
+													data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index]))}
+									class:text-red-500={data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index] !==
+										null &&
+										data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index + 1] !== null &&
+										((j === 0 &&
+											data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index] <
+												data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index + 1]) ||
+											(j === 1 &&
+												data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index + 1] <
+													data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index]))}
+									class:text-gray-400={data.data.bracketResult[
+										16 + 8 + 4 + 2 + 1 + 2 * index + j
+									] === null}
+								>
+									{data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index + j] !== null
 										? data.data.bracketResult[16 + 8 + 4 + 2 + 1 + 2 * index + j]
 										: '-'}
 								</div>
