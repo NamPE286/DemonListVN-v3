@@ -24,7 +24,7 @@
 									<PlayerHoverCard {player} showTitle={true} truncate={20} />
 								{/if}
 								<div class="ml-auto">
-									{data.data.bracketResult[2 * index + j]
+									{data.data.bracketResult[2 * index + j] !== null
 										? data.data.bracketResult[2 * index + j]
 										: '-'}
 								</div>
