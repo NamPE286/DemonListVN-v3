@@ -1,6 +1,6 @@
 export function getTitle(list: string, player: any) {
     if (list == 'dl') {
-        if (player.rating >= 6000)
+        if (player.rating >= 5800)
             return {
                 title: 'LGM',
                 fullTitle: 'Legendary Grandmaster',
