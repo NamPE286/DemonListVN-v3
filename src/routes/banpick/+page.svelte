@@ -125,11 +125,11 @@
 				/>
 				<Avatar.Fallback class="text-sm">{data.players[0].name[0]}</Avatar.Fallback>
 			</Avatar.Root>
-			<PlayerHoverCard player={data.players[0]} showTitle={false} />
+			<PlayerHoverCard player={data.players[0]} showTitle={true} />
 		</div>
 		<span class="animate-pulse font-bold">VS</span>
 		<div class="flex items-center gap-[10px]">
-			<PlayerHoverCard player={data.players[1]} showTitle={false} />
+			<PlayerHoverCard player={data.players[1]} showTitle={true} />
 			<Avatar.Root class="h-8 w-8">
 				<Avatar.Image
 					class="object-cover"

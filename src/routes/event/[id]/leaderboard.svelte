@@ -319,10 +319,10 @@
 					<Table.Cell class="min-w-[200px]">
 						{#if $user.loggedIn && player.uid == $user.data.uid}
 							<div id="me">
-								<PlayerHoverCard {player} showTitle={false} />
+								<PlayerHoverCard {player} showTitle={true} />
 							</div>
 						{:else}
-							<PlayerHoverCard {player} showTitle={false} />
+							<PlayerHoverCard {player} showTitle={true} />
 						{/if}
 					</Table.Cell>
 					<Table.Cell class="w-[75px] text-center font-bold">

@@ -20,7 +20,7 @@
 		curPage = parseInt($page.url.searchParams.get('page') || '1');
 	}
 
-	$: $page.url, update();
+	$: ($page.url, update());
 
 	onMount(() => {
 		document.getElementById(`page${curPage}`)?.click();
@@ -48,32 +48,22 @@
 			{#each data.leaderboard as player}
 				<Table.Row>
 					<Table.Cell class="font-medium">
-						#{$page.params.list == 'dl'
-							? player.overallRank
-							: player[$page.params.list + 'rank']}
+						#{$page.params.list == 'dl' ? player.overallRank : player[$page.params.list + 'rank']}
 					</Table.Cell>
 					<Table.Cell>
 						<div class="playerNameWrapper">
-							{#if $page.params.list == 'dl'}
-								<Tooltip.Root>
-									<Tooltip.Trigger>
-										<div
-											class="rank"
-											style={`background-color: ${getTitle('dl', player)?.color}`}
-										>
-											<span>{getTitle('dl', player)?.title}</span>
-										</div>
-									</Tooltip.Trigger>
-									<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
-								</Tooltip.Root>
-							{/if}
-							<PlayerHoverCard {player} />
+							<PlayerHoverCard {player} showTitle={true}/>
 						</div>
 					</Table.Cell>
 					<Table.Cell class="text-right">
 						{$page.params.list == 'dl'
 							? player.rating
-							: player['total' + $page.params.list.toUpperCase() + 'pt']}
+							: player[
+									'total' +
+										// @ts-ignore
+										$page.params.list.toUpperCase() +
+										'pt'
+								]}
 					</Table.Cell>
 				</Table.Row>
 			{/each}
