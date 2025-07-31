@@ -81,7 +81,7 @@
 			<li>Master: >= 2000</li>
 			<li>Grandmaster: >= 3500</li>
 			<li>Legendary Grandmaster: >= 6000</li>
-			<li>Ascended Grandmaster: >= 10000</li>
+			<li>Ascended Grandmaster: >= 8000</li>
 		</ul>
 	</ul>
 </div>
