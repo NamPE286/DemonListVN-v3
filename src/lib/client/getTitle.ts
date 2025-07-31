@@ -1,6 +1,6 @@
 export function getTitle(list: string, player: any) {
     if (list == "dl") {
-        if (player.rating >= 8000) {
+        if (player.rating >= 10000) {
             return {
                 title: "AGM",
                 fullTitle: "Ascended Grandmaster",
@@ -8,28 +8,28 @@ export function getTitle(list: string, player: any) {
                     "white;background: linear-gradient(to right, #ff00cc, #333399);",
             };
         }
-        if (player.rating >= 5000) {
+        if (player.rating >= 5400) {
             return {
                 title: "LGM",
                 fullTitle: "Legendary Grandmaster",
                 color: "darkred",
             };
         }
-        if (player.rating >= 3500) {
+        if (player.rating >= 3000) {
             return {
                 title: "GM",
                 fullTitle: "Grandmaster",
                 color: "red",
             };
         }
-        if (player.rating >= 2000) {
+        if (player.rating >= 1500) {
             return {
                 title: "M",
                 fullTitle: "Master",
                 color: "hsla(321, 100%, 50%, 1)",
             };
         }
-        if (player.rating >= 1500) {
+        if (player.rating >= 1000) {
             return {
                 title: "CM",
                 fullTitle: "Candidate Master",
