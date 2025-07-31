@@ -21,7 +21,7 @@
 								class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px] text-sm"
 							>
 								{#if player}
-									<PlayerHoverCard {player} showTitle={true} truncate={20} />
+									<PlayerHoverCard {player} showTitle={false} truncate={20} />
 								{:else}
 									<span class="opacity-50"> Unknown </span>
 								{/if}
@@ -82,7 +82,7 @@
 								class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px] text-sm"
 							>
 								{#if player}
-									<PlayerHoverCard {player} showTitle={true} truncate={20} />
+									<PlayerHoverCard {player} showTitle={false} truncate={20} />
 								{:else}
 									<span class="opacity-50"> Unknown </span>
 								{/if}
@@ -143,7 +143,7 @@
 								class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px] text-sm"
 							>
 								{#if player}
-									<PlayerHoverCard {player} showTitle={true} truncate={20} />
+									<PlayerHoverCard {player} showTitle={false} truncate={20} />
 								{:else}
 									<span class="opacity-50"> Unknown </span>
 								{/if}
@@ -204,7 +204,7 @@
 								class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px] text-sm"
 							>
 								{#if player}
-									<PlayerHoverCard {player} showTitle={true} truncate={20} />
+									<PlayerHoverCard {player} showTitle={false} truncate={20} />
 								{:else}
 									<span class="opacity-50"> Unknown </span>
 								{/if}
@@ -267,7 +267,7 @@
 									class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-yellow-400 pl-[10px] pr-[10px] text-sm"
 								>
 									{#if player}
-										<PlayerHoverCard {player} showTitle={true} truncate={20} />
+										<PlayerHoverCard {player} showTitle={false} truncate={20} />
 									{:else}
 										<span class="opacity-50"> Unknown </span>
 									{/if}
@@ -286,7 +286,7 @@
 								class="flex h-[35px] w-[250px] items-center rounded-md border-[1px] border-[hsl(var(--border))] pl-[10px] pr-[10px] text-sm"
 							>
 								{#if player}
-									<PlayerHoverCard {player} showTitle={true} truncate={20} />
+									<PlayerHoverCard {player} showTitle={false} truncate={20} />
 								{:else}
 									<span class="opacity-50"> Unknown </span>
 								{/if}
