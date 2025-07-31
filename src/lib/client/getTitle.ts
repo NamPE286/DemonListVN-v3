@@ -1,6 +1,5 @@
 export function getTitle(list: string, player: any) {
     if (list == "dl") {
-        return null
         if (player.rating >= 10000) {
             return {
                 title: "AGM",
