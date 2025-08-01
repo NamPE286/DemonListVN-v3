@@ -36,6 +36,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sentry/sveltekit": "^10.0.0",
 		"@supabase/supabase-js": "^2.41.1",
 		"browser-image-compression": "^2.0.2",
 		"chart.js": "^4.4.2",
