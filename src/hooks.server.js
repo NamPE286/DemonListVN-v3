@@ -1,12 +1,13 @@
-import { handleErrorWithSentry, sentryHandle, initCloudflareSentryHandle } from '@sentry/sveltekit';
 import { sequence } from '@sveltejs/kit/hooks';
+import { initCloudflareSentryHandle, sentryHandle, handleErrorWithSentry } from '@sentry/sveltekit';
 
 export const handle = sequence(
 	initCloudflareSentryHandle({
-		dsn: 'https://a051a3204dbf41eb600f322b67dd4cdc@o4509770173054976.ingest.us.sentry.io/4509770259365888',
+		dsn: process.env.SENTRY_DSN,
 		tracesSampleRate: 1.0,
-		enableLogs: true
+    enableLogs: true
 	}),
 	sentryHandle()
 );
+
 export const handleError = handleErrorWithSentry();
