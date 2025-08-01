@@ -64,7 +64,7 @@
 		fetchAPIKeys();
 	}
 
-	$: $user, fetchAPIKeys();
+	$: ($user, fetchAPIKeys());
 </script>
 
 <Dialog.Root>
@@ -212,28 +212,32 @@
 					</Table.Header>
 					<Table.Body>
 						<Table.Row>
-							<Table.Cell class="font-medium">Supporter Role</Table.Cell>
-							{#if $user.data.supporterUntil == null}
-								<Table.Cell>Not activated</Table.Cell>
-							{:else}
-								<Table.Cell
-									>{new Date($user.data.supporterUntil).toLocaleString('vi-VN')}
-									{isSupporterActive($user.data.supporterUntil) ? '' : '(Expired)'}</Table.Cell
-								>
+							{#if $user.loggedIn}
+								<Table.Cell class="font-medium">Supporter Role</Table.Cell>
+								{#if $user.data.supporterUntil == null}
+									<Table.Cell>Not activated</Table.Cell>
+								{:else}
+									<Table.Cell
+										>{new Date($user.data.supporterUntil).toLocaleString('vi-VN')}
+										{isSupporterActive($user.data.supporterUntil) ? '' : '(Expired)'}</Table.Cell
+									>
+								{/if}
 							{/if}
 						</Table.Row>
 					</Table.Body>
 				</Table.Root>
 			</Tabs.Content>
 			<Tabs.Content value="discord">
-				{#if $user.data.discord}
-					<Button class="w-full" variant="outline" disabled>Linked</Button>
-				{:else}
-					<a
-						href="https://discord.com/oauth2/authorize?client_id=1071500325338488843&response_type=code&redirect_uri=https%3A%2F%2Fapi.demonlistvn.com%2Fauth%2Fcallback%2Fdiscord&scope=identify"
-					>
-						<Button class="w-full" variant="outline">Link account</Button>
-					</a>
+				{#if $user.loggedIn}
+					{#if $user.data.discord}
+						<Button class="w-full" variant="outline" disabled>Linked</Button>
+					{:else}
+						<a
+							href="https://discord.com/oauth2/authorize?client_id=1071500325338488843&response_type=code&redirect_uri=https%3A%2F%2Fapi.demonlistvn.com%2Fauth%2Fcallback%2Fdiscord&scope=identify"
+						>
+							<Button class="w-full" variant="outline">Link account</Button>
+						</a>
+					{/if}
 				{/if}
 			</Tabs.Content>
 		</Tabs.Root>
