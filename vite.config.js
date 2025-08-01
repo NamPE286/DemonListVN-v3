@@ -8,7 +8,8 @@ export default defineConfig({
 			sourceMapsUploadOptions: {
 				org: 'demon-list-vn',
 				project: 'javascript-sveltekit'
-			}
+			},
+			adapter: 'cloudflare'
 		}),
 		sveltekit()
 	],

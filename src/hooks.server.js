@@ -1,13 +1,16 @@
-import { sequence } from '@sveltejs/kit/hooks';
-import { initCloudflareSentryHandle, sentryHandle, handleErrorWithSentry } from '@sentry/sveltekit';
+import * as Sentry from '@sentry/cloudflare';
 
-export const handle = sequence(
-	initCloudflareSentryHandle({
-		dsn: process.env.SENTRY_DSN,
-		tracesSampleRate: 1.0,
-    enableLogs: true
-	}),
-	sentryHandle()
-);
-
-export const handleError = handleErrorWithSentry();
+export const handle = ({ event, resolve }) => {
+	const requestHandlerOptions = {
+		options: {
+			// @ts-ignore
+			dsn: event.platform.env.SENTRY_DSN,
+			tracesSampleRate: 1.0
+		},
+		request: event.request,
+		// @ts-ignore
+		context: event.platform.ctx
+	};
+	// @ts-ignore
+	return Sentry.wrapRequestHandler(requestHandlerOptions, () => resolve(event));
+};
