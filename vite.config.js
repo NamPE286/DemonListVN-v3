@@ -12,12 +12,6 @@ export default defineConfig({
 		}),
 		sveltekit()
 	],
-	ssr: {
-		noExternal: ['node:async_hooks']
-	},
-	optimizeDeps: {
-		exclude: ['node:async_hooks']
-	},
 	css: {
 		preprocessorOptions: {
 			scss: {
