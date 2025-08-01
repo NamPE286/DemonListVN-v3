@@ -9,7 +9,11 @@ export default defineConfig({
             project: "javascript-sveltekit"
         }
     }), sveltekit()],
-
+	build: {
+		rollupOptions: {
+			external: ['node:async_hooks']
+		}
+	},
 	css: {
 		preprocessorOptions: {
 			scss: {
