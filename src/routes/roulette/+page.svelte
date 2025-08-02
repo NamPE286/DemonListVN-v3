@@ -1,17 +1,24 @@
 <script lang="ts">
 import { onMount } from 'svelte';
-import LevelCard from '$lib/components/levelCard.svelte';
-import supabase from '$lib/client/supabase';
+
 import { Input } from '$lib/components/ui/input';
 import { Button } from '$lib/components/ui/button';
 import { Card, CardContent } from '$lib/components/ui/card';
 import { Label } from '$lib/components/ui/label';
+import LevelCard from '$lib/components/levelCard.svelte';
+import supabase from '$lib/client/supabase';
+
+interface Level {
+  dlTop?: number | null;
+  flTop?: number | null;
+  [key: string]: unknown;
+}
 
 let rangeStart: number | '' = '';
 let rangeEnd: number | '' = '';
-let allLevels: any[] = [];
-let availableLevels: any[] = [];
-let currentLevel: any = null;
+let allLevels: Level[] = [];
+let availableLevels: Level[] = [];
+let currentLevel: Level | null = null;
 let currentType: 'dl' | 'fl' = 'dl';
 let finished = false;
 let message = '';
@@ -24,22 +31,30 @@ let pendingRangeEnd: number | '' = '';
 
 onMount(fetchLevels);
 
-async function fetchLevels() {
-  let query = supabase.from('levels').select('*').eq('accepted', true).eq('isNonList', false).eq('isPlatformer', false);
+async function fetchLevels(): Promise<void> {
+  const query = supabase.from('levels').select('*').eq('accepted', true).eq('isNonList', false).eq('isPlatformer', false);
   const { data, error } = await query;
   if (!error && data) {
-    allLevels = data;
+    allLevels = data as Level[];
     resetRoulette();
   }
 }
 
-function resetRoulette() {
-  availableLevels = allLevels.filter(l => {
-    if (listType === 'dl' && (l.dlTop === null || l.dlTop === undefined)) return false;
-    if (listType === 'fl' && (l.flTop === null || l.flTop === undefined)) return false;
-    let top = getLevelTop(l);
-    if (rangeStart !== '' && top < +rangeStart) return false;
-    if (rangeEnd !== '' && top > +rangeEnd) return false;
+function resetRoulette(): void {
+  availableLevels = allLevels.filter((l: Level) => {
+    if (listType === 'dl' && (l.dlTop === null || l.dlTop === undefined)) {
+      return false;
+    }
+    if (listType === 'fl' && (l.flTop === null || l.flTop === undefined)) {
+      return false;
+    }
+    const top = getLevelTop(l);
+    if (rangeStart !== '' && top < Number(rangeStart)) {
+      return false;
+    }
+    if (rangeEnd !== '' && top > Number(rangeEnd)) {
+      return false;
+    }
     return true;
   });
   currentLevel = null;
@@ -59,20 +74,30 @@ function resetRoulette() {
   }
 }
 
-function getLevelTop(level: any) {
-  if (listType === 'dl') return level.dlTop ?? 0;
-  if (listType === 'fl') return level.flTop ?? 0;
+function getLevelTop(level: Level): number {
+  if (listType === 'dl') {
+    return level.dlTop ?? 0;
+  }
+  if (listType === 'fl') {
+    return level.flTop ?? 0;
+  }
   return level.dlTop ?? level.flTop ?? 0;
 }
 
-function getLevelType(level: any): 'dl' | 'fl' {
-  if (listType === 'dl') return 'dl';
-  if (listType === 'fl') return 'fl';
+function getLevelType(level: Level): 'dl' | 'fl' {
+  if (listType === 'dl') {
+    return 'dl';
+  }
+  if (listType === 'fl') {
+    return 'fl';
+  }
   return (level.dlTop !== null && level.dlTop !== undefined) ? 'dl' : 'fl';
 }
 
-function validateInput(val: string) {
-  if (targetPercent > 100) return false;
+function validateInput(val: string): boolean {
+  if (targetPercent > 100) {
+    return false;
+  }
   if (val.trim() === '') {
     inputError = '';
     return false;
@@ -98,13 +123,15 @@ function validateInput(val: string) {
   return true;
 }
 
-function onInput(e: Event) {
+function onInput(e: Event): void {
   inputValue = (e.target as HTMLInputElement).value;
   validateInput(inputValue);
 }
 
-function doneRoulette() {
-  if (!validateInput(inputValue)) return;
+function doneRoulette(): void {
+  if (!validateInput(inputValue)) {
+    return;
+  }
   const num = Number(inputValue);
   if (num >= 100) {
     finished = true;
@@ -127,12 +154,12 @@ function doneRoulette() {
   inputError = '';
 }
 
-function handleListTypeChange(type: 'all' | 'dl' | 'fl') {
+function handleListTypeChange(type: 'all' | 'dl' | 'fl'): void {
   listType = type;
   resetRoulette();
 }
 
-function applyRange() {
+function applyRange(): void {
   rangeStart = pendingRangeStart;
   rangeEnd = pendingRangeEnd;
   resetRoulette();
@@ -156,7 +183,7 @@ function applyRange() {
           <div class="h-[120px] sm:h-[220px] flex items-center justify-center dark:text-zinc-400 text-zinc-500 text-base sm:text-xl mb-4">Loading...</div>
         {/if}
         {#if finished}
-          <div class="text-yellow-400 text-lg sm:text-2xl font-bold my-4 sm:my-8 text-center">{message}</div>
+          <div class="text-green-500 text-lg sm:text-xl font-bold my-4 sm:my-8 text-center">{message}</div>
         {/if}
         {#if !finished && currentLevel && targetPercent <= 100}
           <div class="flex flex-col items-center gap-2 mt-6 w-full">
