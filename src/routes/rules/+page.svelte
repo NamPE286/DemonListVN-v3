@@ -73,15 +73,14 @@
 		<li>Rating distribution:</li>
 		<ul>
 			<li>C: > 0</li>
-			<li>B: >= 50</li>
-			<li>A: >= 200</li>
-			<li>Specialist: >= 400</li>
-			<li>Expert: >= 800</li>
-			<li>Candidate Master: >= 1000</li>
-			<li>Master: >= 1500</li>
-			<li>Grandmaster: >= 3000</li>
-			<li>Legendary Grandmaster: >= 5800</li>
-			<li>Ascended Grandmaster: >= 10000</li>
+			<li>B: >= 500</li>
+			<li>A: >= 1000</li>
+			<li>Specialist: >= 1800</li>
+			<li>Expert: >= 2500</li>
+			<li>Candidate Master: >= 3500</li>
+			<li>Master: >= 3900</li>
+			<li>Grandmaster: >= 4500</li>
+			<li>Legendary Grandmaster: >= 5200</li>
 		</ul>
 	</ul>
 </div>

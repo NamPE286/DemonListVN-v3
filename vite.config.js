@@ -1,14 +1,23 @@
+import { sentrySvelteKit } from '@sentry/sveltekit';
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [sveltekit()],
-
+	plugins: [
+		sentrySvelteKit({
+			sourceMapsUploadOptions: {
+				org: 'demon-list-vn',
+				project: 'javascript-sveltekit'
+			},
+			adapter: 'cloudflare'
+		}),
+		sveltekit()
+	],
 	css: {
 		preprocessorOptions: {
 			scss: {
 				additionalData: '@use "src/variables.scss" as *;',
-				silenceDeprecations: ["legacy-js-api"]
+				silenceDeprecations: ['legacy-js-api']
 			}
 		}
 	}

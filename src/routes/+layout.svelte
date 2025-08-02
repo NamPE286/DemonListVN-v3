@@ -83,7 +83,10 @@
 		});
 
 		updateNavbarOnTop();
-		window.addEventListener('scroll', updateNavbarOnTop);
+
+		if ('addEventListener' in window) {
+			window.addEventListener('scroll', updateNavbarOnTop);
+		}
 	});
 </script>
 
