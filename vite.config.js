@@ -20,8 +20,5 @@ export default defineConfig({
 				silenceDeprecations: ['legacy-js-api']
 			}
 		}
-	},
-	build: {
-		minify: "terser"
 	}
 });
