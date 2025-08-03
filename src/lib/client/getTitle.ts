@@ -1,5 +1,13 @@
 export function getTitle(list: string, player: any) {
     if (list == "dl") {
+        if (player.rating >= 6000) {
+            return {
+                title: "AGM",
+                fullTitle: "Ascended Grandmaster",
+                color:
+                    "white;background: linear-gradient(to right, #ff00cc, #333399);",
+            };
+        }
         if (player.rating >= 4800) {
             return {
                 title: "LGM",
