@@ -8,7 +8,7 @@ export function getTitle(list: string, player: any) {
                     "white;background: linear-gradient(to right, #ff00cc, #333399);",
             };
         }
-        if (player.rating >= 4800) {
+        if (player.rating >= 5000) {
             return {
                 title: "LGM",
                 fullTitle: "Legendary Grandmaster",

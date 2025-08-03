@@ -80,7 +80,7 @@
 			<li>Candidate Master: >= 2500</li>
 			<li>Master: >= 3000</li>
 			<li>Grandmaster: >= 4000</li>
-			<li>Legendary Grandmaster: >= 4800</li>
+			<li>Legendary Grandmaster: >= 5000</li>
 			<li>Ascended Grandmaster: >= 6000</li>
 		</ul>
 	</ul>
