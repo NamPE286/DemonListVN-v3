@@ -151,6 +151,7 @@
 					font-size: 18px;
 					font-weight: 500;
 					display: flex;
+					flex-wrap: wrap;
 					align-items: center;
 					gap: 5px;
 
