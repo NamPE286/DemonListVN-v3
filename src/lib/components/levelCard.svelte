@@ -5,6 +5,8 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import Check from 'svelte-radix/Check.svelte';
 	import Clock from 'svelte-radix/Clock.svelte';
+	import { onMount } from 'svelte';
+	import { user } from '$lib/client';
 
 	export let level: any;
 	export let type: string;
