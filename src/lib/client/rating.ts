@@ -4,12 +4,14 @@ interface Rating {
 }
 
 export function calcRating(ratings: Rating[], newRating: number | null = null) {
+	const data = structuredClone(ratings);
+
 	if (newRating !== null) {
-		ratings.push({
+		data.push({
 			progress: 100,
 			rating: newRating
 		});
-		ratings.sort((a, b) => {
+		data.sort((a, b) => {
 			let x = a.rating,
 				y = b.rating;
 
@@ -27,8 +29,8 @@ export function calcRating(ratings: Rating[], newRating: number | null = null) {
 
 	let res = 0;
 
-	for (let i = 0; i < ratings.length; i++) {
-		let tmp = ratings[i].rating;
+	for (let i = 0; i < data.length; i++) {
+		let tmp = data[i].rating;
 		let top = i + 1;
 
 		if (top == 1) {
@@ -45,7 +47,7 @@ export function calcRating(ratings: Rating[], newRating: number | null = null) {
 			tmp = 1;
 		}
 
-		if (ratings[i].progress != 100) {
+		if (data[i].progress != 100) {
 			tmp *= 100 / 150;
 		}
 

@@ -5,8 +5,10 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import Check from 'svelte-radix/Check.svelte';
 	import Clock from 'svelte-radix/Clock.svelte';
-	import { onMount } from 'svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { user } from '$lib/client';
+	import { calcRating } from '$lib/client/rating';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	export let level: any;
 	export let type: string;
@@ -41,6 +43,24 @@
 												{level.flPt}pt
 											{/if}
 										</div>
+										{#key $user}
+											{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
+												{#if !level.record}
+													<Tooltip.Root>
+														<Tooltip.Trigger>
+															<div class="pt">
+																+{calcRating($user.ratings, level.rating) - $user.data.rating}
+															</div>
+														</Tooltip.Trigger>
+														<Tooltip.Content>
+															<p>
+																{$user.data.rating} -> {calcRating($user.ratings, level.rating)}
+															</p>
+														</Tooltip.Content>
+													</Tooltip.Root>
+												{/if}
+											{/if}
+										{/key}
 										{#if level.minProgress != 100 && type == 'dl'}
 											<div class="pt">
 												{level.minProgress}% Min
