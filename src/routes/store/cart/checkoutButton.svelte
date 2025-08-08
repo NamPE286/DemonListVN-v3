@@ -58,7 +58,7 @@
 				})
 			})
 				.then((res) => res.json())
-				.then((res) => (orderID = res.orderID)),
+				.then((res: any) => (orderID = res.orderID)),
 			{
 				success: () => {
 					$cart.clear();
@@ -94,7 +94,7 @@
 					class={`h-[70px] justify-start ${paymentMethod == 'Bank Transfer' ? 'border-white' : ''}`}
 					on:click={() => {
 						paymentMethod = 'Bank Transfer';
-						shippingFee = 0;
+						shippingFee = 25000;
 					}}
 				>
 					Bank Transfer
