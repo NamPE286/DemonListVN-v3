@@ -102,8 +102,7 @@
 								<AlertDialog.Title>Link card to this account ({$user.data.name})?</AlertDialog.Title
 								>
 								<AlertDialog.Description>
-									This will permanently link the card to this account ({$user.data.name}) and cannot
-									be unlinked or transfered.
+									This will permanently link the card and give <b>{data.supporterIncluded} month{data.supporterIncluded == 1 ? '' : 's'} of Supporter Role</b> to this account ({$user.data.name}).
 								</AlertDialog.Description>
 							</AlertDialog.Header>
 							<AlertDialog.Footer>
