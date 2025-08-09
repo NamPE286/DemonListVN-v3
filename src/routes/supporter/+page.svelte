@@ -120,6 +120,14 @@
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
+					<Card.Title>View rating prediction</Card.Title>
+					<Card.Description class="w-[250px]">
+						Get insights into the potential rating of your level before submission, helping you plan better.
+					</Card.Description>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
 					<Card.Title>Be the first to try our newest feature</Card.Title>
 					<Card.Description class="w-[250px]">
 						Gain early access to new releases with new features before they go public!
