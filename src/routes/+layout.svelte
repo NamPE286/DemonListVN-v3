@@ -40,6 +40,7 @@
 	let searchToggled = false;
 	let isVisible = false;
 	let hideNav = false;
+	let removePad = false;
 	const isDesktop = mediaQuery('(min-width: 1300px)');
 
 	function signIn() {
@@ -90,6 +91,7 @@
 
 		const urlParams = new URLSearchParams(window.location.search);
 		hideNav = urlParams.has('hideNav');
+		removePad = urlParams.has('removePad');
 	});
 </script>
 
@@ -224,6 +226,8 @@
 			{/if}
 		</div>
 	</div>
+{/if}
+{#if !removePad}
 	<div class="filler"></div>
 {/if}
 
