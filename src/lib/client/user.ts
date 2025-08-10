@@ -73,7 +73,6 @@ let userData: userType = {
 				userData.loggedIn = true;
 				userData.checked = true;
 				user.set(userData);
-				console.log(userData);
 			})
 			.catch((err) => {
 				addNewUser().then(() => {
