@@ -62,6 +62,10 @@
 	}
 
 	function updateNavbarOnTop() {
+		if(!document.getElementsByClassName('navbarWrapper')) {
+			return;
+		}
+		
 		const navbar = document.getElementsByClassName('navbarWrapper')[0];
 
 		if (window.scrollY === 0) {
