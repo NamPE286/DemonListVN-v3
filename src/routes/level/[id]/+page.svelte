@@ -134,7 +134,7 @@
 		/>
 		<meta
 			property="og:description"
-			content={`Rating: ${data.level.rating} #${data.level.dlTop} | Featured List point: ${data.level.flPt} #${data.level.flTop}`}
+			content={`Rating: ${data.level.rating} #${data.level.dlTop}\nFeatured List point: ${data.level.flPt} #${data.level.flTop}`}
 		/>
 	{/if}
 	<meta

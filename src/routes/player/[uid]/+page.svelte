@@ -52,7 +52,7 @@
 	<meta property="og:title" content={`${data.player.name}'s profile - Demon List VN`} />
 	<meta
 		property="og:description"
-		content={`Rating: ${data.player.rating} #${data.player.overallRank} | Total Featured List point: ${data.player.totalFLpt} #${data.player.flrank}`}
+		content={`Rating: ${data.player.rating} #${data.player.overallRank}\nTotal Featured List point: ${data.player.totalFLpt} #${data.player.flrank}`}
 	/>
 	<meta
 		property="og:image"
