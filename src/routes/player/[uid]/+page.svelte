@@ -49,14 +49,6 @@
 
 <svelte:head>
 	<title>{data.player.name}'s profile - Demon List VN</title>
-</svelte:head>
-
-{#if selectedRecord}
-	<RecordDetail
-		bind:open={recordDetailOpened}
-		bind:uid={selectedRecord.userid}
-		bind:levelID={selectedRecord.levelid}
-	/>
 	<meta property="og:title" content={`${data.player.name}'s profile - Demon List VN`} />
 	<meta
 		property="og:description"
@@ -64,7 +56,17 @@
 	/>
 	<meta
 		property="og:image"
-		content={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}.jpg`}
+		content={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}${
+			isSupporterActive(data.player.supporterUntil) && data.player.isAvatarGif ? '.gif' : '.jpg'
+		}?version=${data.player.avatarVersion}`}
+	/>
+</svelte:head>
+
+{#if selectedRecord}
+	<RecordDetail
+		bind:open={recordDetailOpened}
+		bind:uid={selectedRecord.userid}
+		bind:levelID={selectedRecord.levelid}
 	/>
 {/if}
 
