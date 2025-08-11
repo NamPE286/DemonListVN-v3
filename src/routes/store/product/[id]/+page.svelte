@@ -33,6 +33,12 @@
 
 <svelte:head>
 	<title>{data.name} - Demon List VN</title>
+	<meta property="og:title" content={`${data.name} - Demon List VN`} />
+	<meta property="og:description" content={data.description} />
+	<meta
+		property="og:image"
+		content={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${data.id}/0.webp`}
+	/>
 </svelte:head>
 
 <div
@@ -89,7 +95,7 @@
 				{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(data.price)}
 			</h3>
 			{#if data.stock !== null}
-				<p class='text-center lg:text-left'>
+				<p class="text-center lg:text-left">
 					{#if data.stock === 0}
 						Out of stock
 					{:else}
