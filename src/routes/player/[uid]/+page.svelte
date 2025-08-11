@@ -36,7 +36,7 @@
 	let isBannerFailedToLoad = false;
 
 	async function applyFilter() {
-		const records = await (
+		const records: any[] = await (
 			await fetch(
 				`${import.meta.env.VITE_API_URL}/player/${$page.params.uid}/records?sortBy=${filter.sortBy}&ascending=${filter.ascending}&end=500`
 			)
@@ -56,6 +56,13 @@
 		bind:open={recordDetailOpened}
 		bind:uid={selectedRecord.userid}
 		bind:levelID={selectedRecord.levelid}
+	/>
+	<meta property="og:title" content={`${data.player.name}'s profile - Demon List VN`} />
+	<meta
+		property="og:image"
+		content={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}${
+			isSupporterActive(data.player.supporterUntil) && data.player.isAvatarGif ? '.gif' : '.jpg'
+		}?version=${data.player.avatarVersion}`}
 	/>
 {/if}
 
