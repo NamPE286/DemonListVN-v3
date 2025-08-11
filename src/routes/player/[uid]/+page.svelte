@@ -58,7 +58,14 @@
 		bind:levelID={selectedRecord.levelid}
 	/>
 	<meta property="og:title" content={`${data.player.name}'s profile - Demon List VN`} />
-	<meta property="og:description" content={`Rating: ${data.player.rating} #${data.player.overallRank} | Total Featured List point: ${data.player.totalFLpt} #${data.player.flrank}`} />
+	<meta
+		property="og:description"
+		content={`Rating: ${data.player.rating} #${data.player.overallRank} | Total Featured List point: ${data.player.totalFLpt} #${data.player.flrank}`}
+	/>
+	<meta
+		property="og:image"
+		content={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}.jpg`}
+	/>
 {/if}
 
 {#if data.player.isBanned}
