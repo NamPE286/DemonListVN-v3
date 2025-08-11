@@ -59,12 +59,6 @@
 	/>
 	<meta property="og:title" content={`${data.player.name}'s profile - Demon List VN`} />
 	<meta property="og:description" content={`Rating: ${data.player.rating} #${data.player.overallRank}`} />
-	<meta
-		property="og:image"
-		content={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}${
-			isSupporterActive(data.player.supporterUntil) && data.player.isAvatarGif ? '.gif' : '.jpg'
-		}?version=${data.player.avatarVersion}`}
-	/>
 {/if}
 
 {#if data.player.isBanned}
