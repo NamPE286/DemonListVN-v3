@@ -21,6 +21,9 @@
 
 <svelte:head>
 	<title>{data.title} - Demon List VN</title>
+	<meta property="og:title" content={`${data.title} - Demon List VN`} />
+	<meta property="og:description" content={data.description} />
+	<meta property="og:image" content={data.imgUrl} />
 </svelte:head>
 
 <EventBanner {data} />
