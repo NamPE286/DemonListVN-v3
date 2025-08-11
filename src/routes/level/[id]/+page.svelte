@@ -102,18 +102,18 @@
 			});
 	}
 
-	$: $page.params.id, fetchData();
+	$: ($page.params.id, fetchData());
 
 	onMount(() => {
 		loaded = true;
 		fetchData();
 
-		if($page.url.searchParams.get("record")) {
+		if ($page.url.searchParams.get('record')) {
 			recordDetailOpened = true;
 			selectedRecord = {
-				userid: $page.url.searchParams.get("record"),
+				userid: $page.url.searchParams.get('record'),
 				levelid: $page.params.id
-			}
+			};
 		}
 	});
 </script>
@@ -121,9 +121,31 @@
 <svelte:head>
 	{#if 'gdbrowser' in data}
 		<title>{data.gdbrowser.name} by {data.gdbrowser.author} - Demon List VN</title>
+		<meta
+			property="og:title"
+			content={`${data.gdbrowser.name} by {data.gdbrowser.author} - Demon List VN`}
+		/>
+		<meta property="og:description" content={data.gdbrowser.description} />
 	{:else}
 		<title>{data.level.name} by {data.level.creator} - Demon List VN</title>
+		<meta
+			property="og:title"
+			content={`${data.level.name} by {data.level.creator} - Demon List VN`}
+		/>
+		<meta
+			property="og:description"
+			content={`Rating: ${data.level.rating} #${data.level.dlTop} - Featured List point: ${data.level.flPt} #${data.level.flTop}`}
+		/>
 	{/if}
+	<meta
+		property="og:image"
+		content={'pointercrate' in data
+			? `https://img.youtube.com/vi/${new URL(
+					// @ts-ignore
+					data.pointercrate.video
+				).searchParams.get('v')}/0.jpg`
+			: `https://img.youtube.com/vi/${data.level.videoID}/0.jpg`}
+	/>
 </svelte:head>
 
 {#if selectedRecord}
@@ -275,7 +297,9 @@
 					<Table.Head>Player</Table.Head>
 					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 					<Table.Head class="w-[100px] text-center">Device</Table.Head>
-					<Table.Head class="w-[80px] text-center">{data.level && data.level.isPlatformer ? "Time" : "Progress"}</Table.Head>
+					<Table.Head class="w-[80px] text-center"
+						>{data.level && data.level.isPlatformer ? 'Time' : 'Progress'}</Table.Head
+					>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -299,7 +323,7 @@
 								<PlayerHoverCard player={record.players} />
 							</Table.Cell>
 							<Table.Cell class="text-center">
-								{new Date(record.timestamp).toLocaleString("vi-VN")}
+								{new Date(record.timestamp).toLocaleString('vi-VN')}
 							</Table.Cell>
 							<Table.Cell class="text-center">
 								{record.mobile ? 'Mobile' : 'PC'}
@@ -308,7 +332,9 @@
 								{/if}
 							</Table.Cell>
 							<Table.Cell class="text-center">
-								{data.level && data.level.isPlatformer ? getTimeString(record.progress) : `${record.progress}%`}
+								{data.level && data.level.isPlatformer
+									? getTimeString(record.progress)
+									: `${record.progress}%`}
 							</Table.Cell>
 						</Table.Row>
 					{/each}
