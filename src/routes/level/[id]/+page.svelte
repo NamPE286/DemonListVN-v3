@@ -130,11 +130,11 @@
 		<title>{data.level.name} by {data.level.creator} - Demon List VN</title>
 		<meta
 			property="og:title"
-			content={`${data.level.name} by {data.level.creator} - Demon List VN`}
+			content={`${data.level.name} by ${data.level.creator} - Demon List VN`}
 		/>
 		<meta
 			property="og:description"
-			content={`Rating: ${data.level.rating} #${data.level.dlTop} - Featured List point: ${data.level.flPt} #${data.level.flTop}`}
+			content={`Rating: ${data.level.rating} #${data.level.dlTop} | Featured List point: ${data.level.flPt} #${data.level.flTop}`}
 		/>
 	{/if}
 	<meta

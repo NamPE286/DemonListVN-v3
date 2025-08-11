@@ -58,7 +58,7 @@
 		bind:levelID={selectedRecord.levelid}
 	/>
 	<meta property="og:title" content={`${data.player.name}'s profile - Demon List VN`} />
-	<meta property="og:description" content={`Rating: ${data.player.rating} #${data.player.overallRank}`} />
+	<meta property="og:description" content={`Rating: ${data.player.rating} #${data.player.overallRank} | Total Featured List point: ${data.player.totalFLpt} #${data.player.flrank}`} />
 {/if}
 
 {#if data.player.isBanned}
