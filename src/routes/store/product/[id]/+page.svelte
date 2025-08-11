@@ -29,12 +29,16 @@
 		$cart.addItem(data.id, quantity);
 		toast.success(`Added ${quantity} ${data.name} to cart!`);
 	}
+
+	function getFirstLine(str: string) {
+		return str.split('\n')[0];
+	}
 </script>
 
 <svelte:head>
 	<title>{data.name} - Demon List VN</title>
 	<meta property="og:title" content={`${data.name} - Demon List VN`} />
-	<meta property="og:description" content={data.description} />
+	<meta property="og:description" content={getFirstLine(data.description)} />
 	<meta
 		property="og:image"
 		content={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${data.id}/0.webp`}
