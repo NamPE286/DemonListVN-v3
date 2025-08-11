@@ -144,7 +144,7 @@
 					// @ts-ignore
 					data.pointercrate.video
 				).searchParams.get('v')}/0.jpg`
-			: `https://img.youtube.com/vi/${data.level.videoID}/0.jpg`}
+			: `https://img.youtube.com/vi/${data.level.videoID}/mqdefault.jpg`}
 	/>
 </svelte:head>
 
