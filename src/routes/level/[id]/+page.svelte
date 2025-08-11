@@ -93,11 +93,11 @@
 
 		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/records?end=500`)
 			.then((res) => res.json())
-			.then((res) => (records = res));
+			.then((res: any) => (records = res));
 
 		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/deathCount`)
 			.then((res) => res.json())
-			.then((res) => {
+			.then((res: any) => {
 				deathCount = res.count;
 			});
 	}
