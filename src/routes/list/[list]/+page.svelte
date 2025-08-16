@@ -23,7 +23,7 @@
 		const query = new URLSearchParams({
 			start: String((curPage - 1) * 50),
 			end: String(curPage * 50 - 1),
-			sortBy: `${$page.params.list}Top`,
+			sortBy: `${$page.params.list == 'fl' ? 'fl' : 'dl'}Top`,
 			ascending: 'true',
 			uid: $user.loggedIn ? $user.data.uid : ''
 		});
