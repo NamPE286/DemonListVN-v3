@@ -23,7 +23,7 @@
 	import MedalsTab from './medalsTab.svelte';
 
 	export let data: PageData;
-	let list: 'dl' | 'fl' | '' = 'dl';
+	let list: 'dl' | 'fl' | 'pl' | '' = 'dl';
 	let recordDetailOpened = false;
 	let selectedRecord: any = null;
 	let filter = {
@@ -222,7 +222,7 @@
 									<Tooltip.Content>{getTitle('dl', data.player)?.fullTitle}</Tooltip.Content>
 								</Tooltip.Root>
 								<div class="rankWrapper">
-									Demon List rating
+									Classic Rating
 									<div class="rank">
 										#{data.player.overallRank}
 									</div>
@@ -233,7 +233,7 @@
 									<div class="title">{data.player.totalFLpt}</div>
 								</div>
 								<div class="rankWrapper">
-									Total Featured List point
+									Total Featured List Point
 									<div class="rank">
 										#{data.player.flrank}
 									</div>
@@ -250,9 +250,10 @@
 		<Ads />
 		<Tabs.Root value="dl">
 			<div class="tabs">
-				<Tabs.List class="grid w-[400px] max-w-full grid-cols-3">
-					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Demon List</Tabs.Trigger>
-					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured List</Tabs.Trigger>
+				<Tabs.List class="grid w-[400px] max-w-full grid-cols-4">
+					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Classic</Tabs.Trigger>
+					<Tabs.Trigger value="pl" on:click={() => (list = 'pl')}>Platformer</Tabs.Trigger>
+					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured</Tabs.Trigger>
 					<Tabs.Trigger value="medals" on:click={() => (list = '')}>Medal</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content value="medals">
