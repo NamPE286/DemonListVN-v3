@@ -35,6 +35,14 @@
 	let expLevel = getExpLevel(exp);
 	let isBannerFailedToLoad = false;
 
+	function getTimeString(ms: number) {
+		const minutes = Math.floor(ms / 60000);
+		const seconds = Math.floor((ms % 60000) / 1000);
+		const milliseconds = ms % 1000;
+
+		return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
+	}
+
 	async function applyFilter() {
 		const records: any[] = await (
 			await fetch(
@@ -300,7 +308,11 @@
 						<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 						<Table.Head class="w-[100px] text-center">Device</Table.Head>
 						<Table.Head class="w-[80px] text-center">Point</Table.Head>
-						<Table.Head class="w-[80px] text-center">Progress</Table.Head>
+						{#if list == 'pl'}
+							<Table.Head class="w-[80px] text-center">Time</Table.Head>
+						{:else}
+							<Table.Head class="w-[80px] text-center">Progress</Table.Head>
+						{/if}
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -344,7 +356,11 @@
 							<Table.Cell class="text-center"
 								>{Math.round(record[list + 'Pt'] * 10) / 10}</Table.Cell
 							>
-							<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+							{#if list == 'pl'}
+								<Table.Cell class="text-center">{getTimeString(record.progress)}</Table.Cell>
+							{:else}
+								<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+							{/if}
 						</Table.Row>
 					{/each}
 				</Table.Body>
