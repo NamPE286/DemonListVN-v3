@@ -12,7 +12,7 @@
 		curTab = $page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels';
 	}
 
-	$: $page.url, update();
+	$: ($page.url, update());
 </script>
 
 <svelte:head>
@@ -22,7 +22,9 @@
 </svelte:head>
 
 {#if $page.params.list == 'dl'}
-	<BigTitle value="Demon List" description="Hardest level beaten by Vietnamese" />
+	<BigTitle value="Classic List" description="Hardest classic level beaten by Vietnamese" />
+{:else if $page.params.list == 'pl'}
+	<BigTitle value="Platformer List" description="Hardest platformer level beaten by Vietnamese" />
 {:else if $page.params.list == 'fl'}
 	<BigTitle value="Featured List" description="Hardest level created by Vietnamese" />
 {/if}

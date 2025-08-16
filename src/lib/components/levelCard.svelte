@@ -30,21 +30,21 @@
 						</a>
 						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
 							<div class="levelInfo">
-								<div class="top">#{level[`${type}Top`]}</div>
+								<div class="top">#{level[`${type == 'fl' ? 'fl' : 'dl'}Top`]}</div>
 								<div class="info">
 									<div class="levelName">
 										<div class="name">
 											{level.name}
 										</div>
 										<div class="pt">
-											{#if type == 'dl'}
-												{level.rating}pt
-											{:else if type == 'fl'}
+											{#if type == 'fl'}
 												{level.flPt}pt
+											{:else}
+												{level.rating}pt
 											{/if}
 										</div>
 										{#key $user}
-											{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
+											{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil) && type == 'dl'}
 												{#if !level.record}
 													<Tooltip.Root>
 														<Tooltip.Trigger>

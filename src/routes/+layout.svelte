@@ -27,8 +27,9 @@
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	let links = [
-		{ route: '/list/dl', name: 'Demon List' },
-		{ route: '/list/fl', name: 'Featured List' },
+		{ route: '/list/dl', name: 'Classic' },
+		{ route: '/list/pl', name: 'Platformer' },
+		{ route: '/list/fl', name: 'Featured' },
 		{ route: '/players', name: 'Players' },
 		{ route: '/clans', name: 'Clans' },
 		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
@@ -62,10 +63,10 @@
 	}
 
 	function updateNavbarOnTop() {
-		if(!document.getElementsByClassName('navbarWrapper')) {
+		if (!document.getElementsByClassName('navbarWrapper')) {
 			return;
 		}
-		
+
 		const navbar = document.getElementsByClassName('navbarWrapper')[0];
 
 		if (window.scrollY === 0) {
@@ -84,7 +85,7 @@
 			}
 
 			links[0].route = `/list/dl?uid=${data.data.uid}`;
-			links[1].route = `/list/fl?uid=${data.data.uid}`;
+			links[2].route = `/list/fl?uid=${data.data.uid}`;
 		});
 
 		updateNavbarOnTop();
@@ -120,6 +121,11 @@
 				{#each links as link}
 					<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
 				{/each}
+				{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
+					<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
+				{:else}
+					<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter">Support Us</Button>
+				{/if}
 			</div>
 			<div class="menu">
 				<DropdownMenu.Root>

@@ -55,7 +55,19 @@
 		redirect();
 	}
 
-	$: data, update();
+	function getTitle() {
+		if ($page.params.list == 'dl') {
+			return 'Classic List';
+		} else if ($page.params.list == 'pl') {
+			return 'Platformer List';
+		} else if ($page.params.list == 'fl') {
+			return 'Featured List';
+		}
+
+		return 'None';
+	}
+
+	$: (data, update());
 
 	onMount(() => {
 		user.subscribe((value) => {
@@ -73,19 +85,19 @@
 </script>
 
 <svelte:head>
-	<title>{$page.params.list == 'dl' ? 'Demon' : 'Featured'} List - Demon List VN</title>
+	<title>{getTitle()} - Demon List VN</title>
 </svelte:head>
 
 <div class="levelsWrapper">
 	<div class="levels">
 		{#each prefix as level}
-			<LevelCard {level} type={$page.params.list} />
+			<LevelCard {level} type={$page.params.list || 'dl'} />
 		{/each}
 	</div>
 	<Ads dataAdFormat="rectangle" />
 	<div class="levels">
 		{#each data.levels.slice(4) as level}
-			<LevelCard {level} type={$page.params.list} />
+			<LevelCard {level} type={$page.params.list || 'dl'} />
 		{/each}
 	</div>
 </div>
