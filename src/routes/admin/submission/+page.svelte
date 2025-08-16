@@ -115,6 +115,12 @@
 					filtered.data.push(i);
 				}
 			}
+		} else if (value == 'pl') {
+			for (const i of originalData.data) {
+				if (i.levels.isPlatformer) {
+					filtered.data.push(i);
+				}
+			}
 		} else if (value == 'fl') {
 			for (const i of originalData.data) {
 				if (i.levels.flPt) {
@@ -164,8 +170,9 @@
 				<Select.Item value="all">All</Select.Item>
 				<Select.Item value="needMod">Need further inspection</Select.Item>
 				<Select.Item value="newLevel">New level</Select.Item>
-				<Select.Item value="dl">Demon List</Select.Item>
-				<Select.Item value="fl">Featured List</Select.Item>
+				<Select.Item value="dl">Classic</Select.Item>
+				<Select.Item value="pl">Platformer</Select.Item>
+				<Select.Item value="fl">Featured</Select.Item>
 			</Select.Content>
 		</Select.Root>
 	</div>
