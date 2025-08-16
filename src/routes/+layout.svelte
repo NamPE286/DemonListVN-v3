@@ -42,7 +42,7 @@
 	let isVisible = false;
 	let hideNav = false;
 	let removePad = false;
-	const isDesktop = mediaQuery('(min-width: 1300px)');
+	const isDesktop = mediaQuery('(min-width: 1350px)');
 
 	function signIn() {
 		supabase.auth.signInWithOAuth({
@@ -456,7 +456,7 @@
 		border-color: transparent;
 	}
 
-	@media screen and (max-width: 1000px) {
+	@media screen and (max-width: 1100px) {
 		.navbarWrapper {
 			padding-inline: 15px;
 			.right {

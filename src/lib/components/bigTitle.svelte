@@ -5,7 +5,7 @@
 
 <div class="title">
 	<h1>{value}</h1>
-	<p>{description}</p>
+	<p class="text-center">{description}</p>
 </div>
 
 <style lang="scss">
