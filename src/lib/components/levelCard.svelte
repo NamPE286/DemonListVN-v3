@@ -9,7 +9,7 @@
 	import { user } from '$lib/client';
 	import { calcRating } from '$lib/client/rating';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
-	
+
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
 		const seconds = Math.floor((ms % 60000) / 1000);
@@ -69,10 +69,16 @@
 												{/if}
 											{/if}
 										{/key}
-										{#if level.minProgress != 100 && type == 'dl'}
-											<div class="pt">
-												{level.minProgress}% Min
-											</div>
+										{#if level.minProgress}
+											{#if type == 'dl' && level.minProgress != 100}
+												<div class="pt">
+													{level.minProgress}% Min
+												</div>
+											{:else if type == 'pl'}
+												<div class="pt">
+													{getTimeString(level.minProgress)} Max
+												</div>
+											{/if}
 										{/if}
 									</div>
 									<div class="creator">by {level.creator}</div>
