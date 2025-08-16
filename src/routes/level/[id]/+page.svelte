@@ -134,7 +134,7 @@
 		/>
 		<meta
 			property="og:description"
-			content={`Rating: ${data.level.rating} #${data.level.dlTop}\nFeatured List point: ${data.level.flPt} #${data.level.flTop}`}
+			content={`${data.level.isPlatformer ? 'Platformer Rating' : 'Classic Rating'}: ${data.level.rating} #${data.level.dlTop}\nFeatured List Point: ${data.level.flPt} #${data.level.flTop}`}
 		/>
 	{/if}
 	<meta
@@ -205,11 +205,12 @@
 				<div class="content">
 					{#if 'level' in data}
 						<div class="pointLabel">
-							Rating: {data.level.rating}
+							{data.level.isPlatformer ? 'Platformer Rating' : 'Classic Rating'}: {data.level
+								.rating}
 							<div class="top">#{data.level.dlTop}</div>
 						</div>
 						<div class="pointLabel">
-							Featured List point: {data.level.flPt}
+							Featured List Point: {data.level.flPt}
 							<div class="top">#{data.level.flTop}</div>
 						</div>
 					{:else if 'pointercrate' in data && data.pointercrate.requirement != -1}
@@ -277,7 +278,7 @@
 		</Card.Root>
 	</div>
 	<Ads />
-	{#if 'level' in data}
+	{#if 'level' in data && !data.level.isPlatformer}
 		<div class="chartWrapper cardWrapper1">
 			{#if !deathCount.length}
 				<Loading inverted />
