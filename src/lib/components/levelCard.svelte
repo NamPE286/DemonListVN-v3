@@ -9,6 +9,14 @@
 	import { user } from '$lib/client';
 	import { calcRating } from '$lib/client/rating';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	
+	function getTimeString(ms: number) {
+		const minutes = Math.floor(ms / 60000);
+		const seconds = Math.floor((ms % 60000) / 1000);
+		const milliseconds = ms % 1000;
+
+		return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
+	}
 
 	export let level: any;
 	export let type: string;
@@ -72,10 +80,14 @@
 								{#if level.record}
 									<div class="progress">
 										{#if level.record.isChecked}
-											{#if level.record.progress == 100}
-												<Check />
+											{#if !level.isPlatformer}
+												{#if level.record.progress == 100}
+													<Check />
+												{:else}
+													{level.record.progress}%
+												{/if}
 											{:else}
-												{level.record.progress}%
+												{getTimeString(level.record.progress)}
 											{/if}
 										{:else}
 											<Clock />
