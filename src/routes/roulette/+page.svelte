@@ -141,18 +141,14 @@ async function fetchRandomLevel(): Promise<void> {
       currentType = 'pl';
     } else {
       const random = Math.random();
-      if (random < 0.33) {
+      if (random < 0.5) {
         levels = dlLevels;
         type = 'dl';
         currentType = 'dl';
-      } else if (random < 0.66) {
+      } else {
         levels = flLevels;
         type = 'fl';
         currentType = 'fl';
-      } else {
-        levels = plLevels;
-        type = 'pl';
-        currentType = 'pl';
       }
     }
     const filtered = filterLevelsByRange(levels, type);
@@ -292,7 +288,7 @@ function handleListTypeChange(type: 'all' | 'dl' | 'fl' | 'pl'): void {
         <div class="flex gap-2 mb-2 w-full justify-center flex-wrap">
           <Button variant={listType === 'all' ? 'default' : 'secondary'} class={listType === 'all' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('all')}>All</Button>
           <Button variant={listType === 'dl' ? 'default' : 'secondary'} class={listType === 'dl' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('dl')}>Classic</Button>
-          <Button variant={listType === 'pl' ? 'default' : 'secondary'} class={listType === 'pl' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('pl')}>Platformer</Button>
+        <!-- <Button variant={listType === 'pl' ? 'default' : 'secondary'} class={listType === 'pl' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('pl')}>Platformer</Button> -->
           <Button variant={listType === 'fl' ? 'default' : 'secondary'} class={listType === 'fl' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('fl')}>Featured</Button>
         </div>
         <Button variant="secondary" class="w-full py-2 text-sm sm:text-base font-medium dark:bg-black bg-white dark:text-white text-black" on:click={applyRange} disabled={pendingRangeStart === rangeStart && pendingRangeEnd === rangeEnd}>Apply</Button>
