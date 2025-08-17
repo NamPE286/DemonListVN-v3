@@ -5,6 +5,18 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import Check from 'svelte-radix/Check.svelte';
 	import Clock from 'svelte-radix/Clock.svelte';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import { user } from '$lib/client';
+	import { calcRating } from '$lib/client/rating';
+	import { isSupporterActive } from '$lib/client/isSupporterActive';
+
+	function getTimeString(ms: number) {
+		const minutes = Math.floor(ms / 60000);
+		const seconds = Math.floor((ms % 60000) / 1000);
+		const milliseconds = ms % 1000;
+
+		return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
+	}
 
 	export let level: any;
 	export let type: string;
@@ -26,23 +38,47 @@
 						</a>
 						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
 							<div class="levelInfo">
-								<div class="top">#{level[`${type}Top`]}</div>
+								<div class="top">#{level[`${type == 'fl' ? 'fl' : 'dl'}Top`]}</div>
 								<div class="info">
 									<div class="levelName">
 										<div class="name">
 											{level.name}
 										</div>
 										<div class="pt">
-											{#if type == 'dl'}
-												{level.rating}pt
-											{:else if type == 'fl'}
+											{#if type == 'fl'}
 												{level.flPt}pt
+											{:else}
+												{level.rating}pt
 											{/if}
 										</div>
-										{#if level.minProgress != 100 && type == 'dl'}
-											<div class="pt">
-												{level.minProgress}% Min
-											</div>
+										{#key $user}
+											{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil) && type == 'dl'}
+												{#if !level.record}
+													<Tooltip.Root>
+														<Tooltip.Trigger>
+															<div class="pt">
+																+{calcRating($user.ratings, level.rating) - $user.data.rating}
+															</div>
+														</Tooltip.Trigger>
+														<Tooltip.Content>
+															<p>
+																{$user.data.rating} -> {calcRating($user.ratings, level.rating)}
+															</p>
+														</Tooltip.Content>
+													</Tooltip.Root>
+												{/if}
+											{/if}
+										{/key}
+										{#if level.minProgress}
+											{#if type == 'dl' && level.minProgress != 100}
+												<div class="pt">
+													{level.minProgress}% Min
+												</div>
+											{:else if type == 'pl'}
+												<div class="pt">
+													{getTimeString(level.minProgress)} Max
+												</div>
+											{/if}
 										{/if}
 									</div>
 									<div class="creator">by {level.creator}</div>
@@ -50,10 +86,14 @@
 								{#if level.record}
 									<div class="progress">
 										{#if level.record.isChecked}
-											{#if level.record.progress == 100}
-												<Check />
+											{#if !level.isPlatformer}
+												{#if level.record.progress == 100}
+													<Check />
+												{:else}
+													{level.record.progress}%
+												{/if}
 											{:else}
-												{level.record.progress}%
+												{getTimeString(level.record.progress)}
 											{/if}
 										{:else}
 											<Clock />
@@ -151,6 +191,7 @@
 					font-size: 18px;
 					font-weight: 500;
 					display: flex;
+					flex-wrap: wrap;
 					align-items: center;
 					gap: 5px;
 

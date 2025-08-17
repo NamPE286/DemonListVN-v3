@@ -23,7 +23,7 @@
 	import MedalsTab from './medalsTab.svelte';
 
 	export let data: PageData;
-	let list: 'dl' | 'fl' | '' = 'dl';
+	let list: 'dl' | 'fl' | 'pl' | '' = 'dl';
 	let recordDetailOpened = false;
 	let selectedRecord: any = null;
 	let filter = {
@@ -35,8 +35,16 @@
 	let expLevel = getExpLevel(exp);
 	let isBannerFailedToLoad = false;
 
+	function getTimeString(ms: number) {
+		const minutes = Math.floor(ms / 60000);
+		const seconds = Math.floor((ms % 60000) / 1000);
+		const milliseconds = ms % 1000;
+
+		return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
+	}
+
 	async function applyFilter() {
-		const records = await (
+		const records: any[] = await (
 			await fetch(
 				`${import.meta.env.VITE_API_URL}/player/${$page.params.uid}/records?sortBy=${filter.sortBy}&ascending=${filter.ascending}&end=500`
 			)
@@ -49,6 +57,17 @@
 
 <svelte:head>
 	<title>{data.player.name}'s profile - Demon List VN</title>
+	<meta property="og:title" content={`${data.player.name}'s profile - Demon List VN`} />
+	<meta
+		property="og:description"
+		content={`Rating: ${data.player.rating} #${data.player.overallRank}\nTotal Featured List point: ${data.player.totalFLpt} #${data.player.flrank}`}
+	/>
+	<meta
+		property="og:image"
+		content={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}${
+			isSupporterActive(data.player.supporterUntil) && data.player.isAvatarGif ? '.gif' : '.jpg'
+		}?version=${data.player.avatarVersion}`}
+	/>
 </svelte:head>
 
 {#if selectedRecord}
@@ -211,7 +230,7 @@
 									<Tooltip.Content>{getTitle('dl', data.player)?.fullTitle}</Tooltip.Content>
 								</Tooltip.Root>
 								<div class="rankWrapper">
-									Demon List rating
+									Classic Rating
 									<div class="rank">
 										#{data.player.overallRank}
 									</div>
@@ -222,7 +241,7 @@
 									<div class="title">{data.player.totalFLpt}</div>
 								</div>
 								<div class="rankWrapper">
-									Total Featured List point
+									Total Featured List Point
 									<div class="rank">
 										#{data.player.flrank}
 									</div>
@@ -239,9 +258,10 @@
 		<Ads />
 		<Tabs.Root value="dl">
 			<div class="tabs">
-				<Tabs.List class="grid w-[400px] max-w-full grid-cols-3">
-					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Demon List</Tabs.Trigger>
-					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured List</Tabs.Trigger>
+				<Tabs.List class="grid w-[400px] max-w-full grid-cols-4">
+					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Classic</Tabs.Trigger>
+					<Tabs.Trigger value="pl" on:click={() => (list = 'pl')}>Platformer</Tabs.Trigger>
+					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured</Tabs.Trigger>
 					<Tabs.Trigger value="medals" on:click={() => (list = '')}>Medal</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content value="medals">
@@ -288,7 +308,11 @@
 						<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
 						<Table.Head class="w-[100px] text-center">Device</Table.Head>
 						<Table.Head class="w-[80px] text-center">Point</Table.Head>
-						<Table.Head class="w-[80px] text-center">Progress</Table.Head>
+						{#if list == 'pl'}
+							<Table.Head class="w-[80px] text-center">Time</Table.Head>
+						{:else}
+							<Table.Head class="w-[80px] text-center">Progress</Table.Head>
+						{/if}
 					</Table.Row>
 				</Table.Header>
 				<Table.Body>
@@ -332,7 +356,11 @@
 							<Table.Cell class="text-center"
 								>{Math.round(record[list + 'Pt'] * 10) / 10}</Table.Cell
 							>
-							<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+							{#if list == 'pl'}
+								<Table.Cell class="text-center">{getTimeString(record.progress)}</Table.Cell>
+							{:else}
+								<Table.Cell class="text-center">{record.progress}%</Table.Cell>
+							{/if}
 						</Table.Row>
 					{/each}
 				</Table.Body>

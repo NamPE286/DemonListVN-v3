@@ -46,6 +46,7 @@
 		"cmdk-sv": "^0.0.17",
 		"embla-carousel-autoplay": "^8.3.0",
 		"embla-carousel-svelte": "^8.0.1",
+		"esbuild": "^0.25.4",
 		"mode-watcher": "^0.3.0",
 		"non.geist": "^1.0.2",
 		"svelte-legos": "^0.2.2",

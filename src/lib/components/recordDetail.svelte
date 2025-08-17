@@ -27,6 +27,14 @@
 	let verdict = '';
 	let cmt = '';
 
+	function getTimeString(ms: number) {
+		const minutes = Math.floor(ms / 60000);
+		const seconds = Math.floor((ms % 60000) / 1000);
+		const milliseconds = ms % 1000;
+
+		return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
+	}
+
 	function genPercent() {
 		const res = Array(100);
 
@@ -213,7 +221,7 @@
 		return `${$page.url.origin}/level/${record.data.levelid}?record=${record.data.userid}`;
 	}
 
-	$: open, fetchData();
+	$: (open, fetchData());
 </script>
 
 <Dialog.Root
@@ -254,14 +262,19 @@
 								/>
 							{/if}
 							<b>Submitted on:</b>
-							{new Date(record.data.timestamp).toLocaleString("vi-VN")}<br />
+							{new Date(record.data.timestamp).toLocaleString('vi-VN')}<br />
 							<b>Device:</b>
 							{record.data.mobile ? 'Mobile' : 'PC'}
 							{#if record.data.refreshRate}
 								({record.data.refreshRate}fps)
 							{/if} <br />
-							<b>Progress:</b>
-							{record.data.progress}% <br />
+							{#if !record.data.levels.isPlatformer}
+								<b>Progress:</b>
+								{record.data.progress}% <br />
+							{:else}
+								<b>Time:</b>
+								{getTimeString(record.data.progress)} <br />
+							{/if}
 							<b>Suggested rating:</b>
 							{record.data.suggestedRating ? record.data.suggestedRating : '(No rating provided)'}
 							{#if record.data.progress == 100 && $user.loggedIn && $user.data.uid == record.data.players.uid}

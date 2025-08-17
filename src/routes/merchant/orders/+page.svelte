@@ -27,7 +27,8 @@
 				<Table.Head class="w-[200px]">ID</Table.Head>
 				<Table.Head class="w-[100px]">Status</Table.Head>
 				<Table.Head class="w-[150px]">Method</Table.Head>
-				<Table.Head>Recipient's name</Table.Head>
+				<Table.Head class="w-[200px]">Recipient's name</Table.Head>
+				<Table.Head>Latest Status</Table.Head>
 				<Table.Head class="text-right">Amount</Table.Head>
 			</Table.Row>
 		</Table.Header>
@@ -42,6 +43,7 @@
 					<Table.Cell>{item.state}</Table.Cell>
 					<Table.Cell>{item.paymentMethod}</Table.Cell>
 					<Table.Cell>{item.recipientName}</Table.Cell>
+					<Table.Cell>{item.orderTracking[0] ? item.orderTracking[0].content : 'N/a'}</Table.Cell>
 					<Table.Cell class="text-right">
 						{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
 							item.amount + item.fee

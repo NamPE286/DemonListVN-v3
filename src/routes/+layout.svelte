@@ -27,8 +27,9 @@
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
 	let links = [
-		{ route: '/list/dl', name: 'Demon List' },
-		{ route: '/list/fl', name: 'Featured List' },
+		{ route: '/list/dl', name: 'Classic' },
+		{ route: '/list/pl', name: 'Platformer' },
+		{ route: '/list/fl', name: 'Featured' },
 		{ route: '/players', name: 'Players' },
 		{ route: '/clans', name: 'Clans' },
 		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
@@ -40,7 +41,9 @@
 	let searchQuery = '';
 	let searchToggled = false;
 	let isVisible = false;
-	const isDesktop = mediaQuery('(min-width: 1300px)');
+	let hideNav = false;
+	let removePad = false;
+	const isDesktop = mediaQuery('(min-width: 1350px)');
 
 	function signIn() {
 		supabase.auth.signInWithOAuth({
@@ -61,6 +64,10 @@
 	}
 
 	function updateNavbarOnTop() {
+		if (!document.getElementsByClassName('navbarWrapper')) {
+			return;
+		}
+
 		const navbar = document.getElementsByClassName('navbarWrapper')[0];
 
 		if (window.scrollY === 0) {
@@ -79,7 +86,7 @@
 			}
 
 			links[0].route = `/list/dl?uid=${data.data.uid}`;
-			links[1].route = `/list/fl?uid=${data.data.uid}`;
+			links[2].route = `/list/fl?uid=${data.data.uid}`;
 		});
 
 		updateNavbarOnTop();
@@ -87,6 +94,10 @@
 		if ('addEventListener' in window) {
 			window.addEventListener('scroll', updateNavbarOnTop);
 		}
+
+		const urlParams = new URLSearchParams(window.location.search);
+		hideNav = urlParams.has('hideNav');
+		removePad = urlParams.has('removePad');
 	});
 </script>
 
@@ -98,130 +109,138 @@
 	--loading-bar-train-background-color="rgb(0 100 220 / 90%)"
 />
 
-<div class="navbarWrapper navbarWrapperOnTop">
-	<div class="right">
-		<a href="/" class="logo" data-sveltekit-preload-data="tap">
-			<div class="logo-img-wrapper">
-				<img src="/favicon.png" alt="logo" />
-			</div>
-			<span id="logo-name"><b>Demon List VN</b></span>
-		</a>
-		<div class="links">
-			{#each links as link}
-				<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
-			{/each}
-		</div>
-		<div class="menu">
-			<DropdownMenu.Root>
-				<DropdownMenu.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="outline" size="icon">
-						<HamburgerMenu size={18} />
-					</Button>
-				</DropdownMenu.Trigger>
-				<DropdownMenu.Content align="end">
-					{#each links as link}
-						<a href={link.route} data-sveltekit-preload-data="tap">
-							<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
-						</a>
-					{/each}
-					<DropdownMenu.Item>
-						{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
-							<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
-						{:else}
-							<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter"
-								>Support Us</Button
-							>
-						{/if}
-					</DropdownMenu.Item>
-				</DropdownMenu.Content>
-			</DropdownMenu.Root>
-		</div>
-	</div>
-	<div class="left">
-		{#if $isDesktop}
-			<Button variant="outline" on:click={() => (searchToggled = true)}>
-				<div class="searchBtn">
-					<MagnifyingGlass size={20} />
-					<p>Search</p>
-					<kbd
-						class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
-					>
-						<span class="text-xs">Ctrl K</span>
-					</kbd>
+{#if !hideNav}
+	<div class="navbarWrapper navbarWrapperOnTop">
+		<div class="right">
+			<a href="/" class="logo" data-sveltekit-preload-data="tap">
+				<div class="logo-img-wrapper">
+					<img src="/favicon.png" alt="logo" />
 				</div>
-			</Button>
-		{:else}
-			<button class="clickable" on:click={() => (searchToggled = true)}>
-				<MagnifyingGlass size={20} />
-			</button>
-		{/if}
-		{#if $user.checked && isVisible}
-			{#if !$user.loggedIn}
-				<Button variant="outline" on:click={signIn}>Sign In</Button>
-			{:else}
-				<SubmitButton />
-				<NotificationButton />
+				<span id="logo-name"><b>Demon List VN</b></span>
+			</a>
+			<div class="links">
+				{#each links as link}
+					<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
+				{/each}
+				{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
+					<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
+				{:else}
+					<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter">Support Us</Button>
+				{/if}
+			</div>
+			<div class="menu">
 				<DropdownMenu.Root>
 					<DropdownMenu.Trigger asChild let:builder>
-						<Button
-							variant="outline"
-							size="icon"
-							class={`overflow-hidden rounded-full ${isSupporterActive($user.data.supporterUntil) ? 'border-[2px] border-yellow-400' : ''}`}
-							builders={[builder]}
-						>
-							<Avatar.Root>
-								<Avatar.Image
-									class="object-cover"
-									src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}${
-										isSupporterActive($user.data.supporterUntil) && $user.data.isAvatarGif
-											? '.gif'
-											: '.jpg'
-									}?version=${$user.data.avatarVersion}`}
-									alt=""
-								/>
-								<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
-							</Avatar.Root>
+						<Button builders={[builder]} variant="outline" size="icon">
+							<HamburgerMenu size={18} />
 						</Button>
 					</DropdownMenu.Trigger>
-					<DropdownMenu.Content align="end" class="z-[99999] w-56">
-						<DropdownMenu.Label>
+					<DropdownMenu.Content align="end">
+						{#each links as link}
+							<a href={link.route} data-sveltekit-preload-data="tap">
+								<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
+							</a>
+						{/each}
+						<DropdownMenu.Item>
 							{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
-								<span class="text-yellow-500">{$user.data.name}</span>
+								<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
 							{:else}
-								{$user.data.name}
+								<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter"
+									>Support Us</Button
+								>
 							{/if}
-						</DropdownMenu.Label>
-						<DropdownMenu.Separator />
-						<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
-							>Profile</DropdownMenu.Item
-						>
-						<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
-							>Submissions</DropdownMenu.Item
-						>
-						<DropdownMenu.Item on:click={() => goto(`/orders`)}>Orders</DropdownMenu.Item>
-						{#if $user.data.clan}
-							<DropdownMenu.Item on:click={() => goto(`/clan/${$user.data.clan}`)}
-								>Clan</DropdownMenu.Item
-							>
-						{/if}
-						{#if $user.data.isTrusted || $user.data.isAdmin}
-							<DropdownMenu.Item on:click={() => goto(`/overwatch`)}>Overwatch</DropdownMenu.Item>
-						{/if}
-						<DropdownMenu.Separator />
-						<DropdownMenu.Item on:click={signOut}>
-							<span style="color: red">Sign out</span>
 						</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
+			</div>
+		</div>
+		<div class="left">
+			{#if $isDesktop}
+				<Button variant="outline" on:click={() => (searchToggled = true)}>
+					<div class="searchBtn">
+						<MagnifyingGlass size={20} />
+						<p>Search</p>
+						<kbd
+							class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
+						>
+							<span class="text-xs">Ctrl K</span>
+						</kbd>
+					</div>
+				</Button>
+			{:else}
+				<button class="clickable" on:click={() => (searchToggled = true)}>
+					<MagnifyingGlass size={20} />
+				</button>
 			{/if}
-			<SettingButton />
-		{:else}
-			<Skeleton class="h-[30px] w-[200px]" />
-		{/if}
+			{#if $user.checked && isVisible}
+				{#if !$user.loggedIn}
+					<Button variant="outline" on:click={signIn}>Sign In</Button>
+				{:else}
+					<SubmitButton />
+					<NotificationButton />
+					<DropdownMenu.Root>
+						<DropdownMenu.Trigger asChild let:builder>
+							<Button
+								variant="outline"
+								size="icon"
+								class={`overflow-hidden rounded-full ${isSupporterActive($user.data.supporterUntil) ? 'border-[2px] border-yellow-400' : ''}`}
+								builders={[builder]}
+							>
+								<Avatar.Root>
+									<Avatar.Image
+										class="object-cover"
+										src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}${
+											isSupporterActive($user.data.supporterUntil) && $user.data.isAvatarGif
+												? '.gif'
+												: '.jpg'
+										}?version=${$user.data.avatarVersion}`}
+										alt=""
+									/>
+									<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
+								</Avatar.Root>
+							</Button>
+						</DropdownMenu.Trigger>
+						<DropdownMenu.Content align="end" class="z-[99999] w-56">
+							<DropdownMenu.Label>
+								{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
+									<span class="text-yellow-500">{$user.data.name}</span>
+								{:else}
+									{$user.data.name}
+								{/if}
+							</DropdownMenu.Label>
+							<DropdownMenu.Separator />
+							<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
+								>Profile</DropdownMenu.Item
+							>
+							<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
+								>Submissions</DropdownMenu.Item
+							>
+							<DropdownMenu.Item on:click={() => goto(`/orders`)}>Orders</DropdownMenu.Item>
+							{#if $user.data.clan}
+								<DropdownMenu.Item on:click={() => goto(`/clan/${$user.data.clan}`)}
+									>Clan</DropdownMenu.Item
+								>
+							{/if}
+							{#if $user.data.isTrusted || $user.data.isAdmin}
+								<DropdownMenu.Item on:click={() => goto(`/overwatch`)}>Overwatch</DropdownMenu.Item>
+							{/if}
+							<DropdownMenu.Separator />
+							<DropdownMenu.Item on:click={signOut}>
+								<span style="color: red">Sign out</span>
+							</DropdownMenu.Item>
+						</DropdownMenu.Content>
+					</DropdownMenu.Root>
+				{/if}
+				<SettingButton />
+			{:else}
+				<Skeleton class="h-[30px] w-[200px]" />
+			{/if}
+		</div>
 	</div>
-</div>
-
-<div class="filler"></div>
+{/if}
+{#if !removePad}
+	<div class="filler"></div>
+{/if}
 
 <slot />
 
@@ -438,7 +457,7 @@
 		border-color: transparent;
 	}
 
-	@media screen and (max-width: 1000px) {
+	@media screen and (max-width: 1100px) {
 		.navbarWrapper {
 			padding-inline: 15px;
 			.right {

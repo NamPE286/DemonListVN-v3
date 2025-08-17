@@ -37,7 +37,7 @@
 
 				return res.json();
 			})
-			.then((res) => {
+			.then((res: any) => {
 				if (res.accepted) {
 					rewardState = 1;
 				} else {
@@ -53,7 +53,7 @@
 			fetch(`${import.meta.env.VITE_API_URL}/event/proof`, {
 				method: 'POST',
 				body: JSON.stringify({
-					eventID: 8,
+					eventID: data.id,
 					content: proof,
 				}),
 				headers: {
@@ -68,7 +68,7 @@
 
 					return 'Sent!';
 				},
-				loading: 'Sending proof...',
+				loading: 'Sending...',
 				error: 'An error occured'
 			}
 		);
