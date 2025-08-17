@@ -6,26 +6,29 @@ import { Card, CardContent } from '$lib/components/ui/card';
 import { Label } from '$lib/components/ui/label';
 import LevelCard from '$lib/components/levelCard.svelte';
 
-/** Level type for Demon/Featured List. */
+/** Level type for Demon/Featured/Platformer List. */
 interface Level {
   dlTop?: number | null;
   flTop?: number | null;
+  plTop?: number | null;
   [key: string]: unknown;
 }
 
 // State variables
 let dlLevels: Level[] = [];
 let flLevels: Level[] = [];
+let plLevels: Level[] = [];
 let currentLevel: Level | null = null;
-let currentType: 'dl' | 'fl' = 'dl';
+let currentType: 'dl' | 'fl' | 'pl' = 'dl';
 let finished = false;
 let message = '';
-let listType: 'all' | 'dl' | 'fl' = 'all';
+let listType: 'all' | 'dl' | 'fl' | 'pl' = 'all';
 let inputValue = '';
 let targetPercent = 2;
 let inputError = '';
 let maxDlTop = 0;
 let maxFlTop = 0;
+let maxPlTop = 0;
 
 // Range filter state
 let rangeStart: number | '' = '';
@@ -60,14 +63,16 @@ async function fetchAllLevels(endpoint: string, sortBy: string): Promise<Level[]
 }
 
 /**
- * Fetch Demon List and Featured List levels, set max tops, and reset roulette.
+ * Fetch Classic, Featured List, and Platformer levels, set max tops, and reset roulette.
  */
 async function fetchLevelsFromApi(): Promise<void> {
   try {
     dlLevels = await fetchAllLevels('https://api.demonlistvn.com/list/dl', 'dlTop');
     flLevels = await fetchAllLevels('https://api.demonlistvn.com/list/fl', 'flTop');
+    plLevels = await fetchAllLevels('https://api.demonlistvn.com/list/pl', 'dlTop');
     maxDlTop = dlLevels.reduce((max, lvl) => typeof lvl.dlTop === 'number' && lvl.dlTop > max ? lvl.dlTop : max, 0);
     maxFlTop = flLevels.reduce((max, lvl) => typeof lvl.flTop === 'number' && lvl.flTop > max ? lvl.flTop : max, 0);
+    maxPlTop = plLevels.reduce((max, lvl) => typeof lvl.dlTop === 'number' && lvl.dlTop > max ? lvl.dlTop : max, 0);
     resetRoulette();
   } catch (error) {
     console.error('Error fetching levels from API:', error);
@@ -102,12 +107,12 @@ function applyRange(): void {
 /**
  * Filter levels by range and list type.
  * @param levels Array of Level
- * @param type 'dl' or 'fl'
+ * @param type 'dl', 'fl', or 'pl'
  * @returns Filtered levels
  */
-function filterLevelsByRange(levels: Level[], type: 'dl' | 'fl'): Level[] {
+function filterLevelsByRange(levels: Level[], type: 'dl' | 'fl' | 'pl'): Level[] {
   return levels.filter((l: Level) => {
-    const top = type === 'dl' ? l.dlTop : l.flTop;
+    const top = type === 'dl' ? l.dlTop : type === 'fl' ? l.flTop : l.dlTop;
     if (rangeStart !== '' && (typeof top !== 'number' || top < Number(rangeStart))) return false;
     if (rangeEnd !== '' && (typeof top !== 'number' || top > Number(rangeEnd))) return false;
     return true;
@@ -121,7 +126,7 @@ async function fetchRandomLevel(): Promise<void> {
   if (finished) return;
   try {
     let levels: Level[] = [];
-    let type: 'dl' | 'fl';
+    let type: 'dl' | 'fl' | 'pl';
     if (listType === 'dl') {
       levels = dlLevels;
       type = 'dl';
@@ -130,16 +135,24 @@ async function fetchRandomLevel(): Promise<void> {
       levels = flLevels;
       type = 'fl';
       currentType = 'fl';
+    } else if (listType === 'pl') {
+      levels = plLevels;
+      type = 'pl';
+      currentType = 'pl';
     } else {
-      const useDl = Math.random() < 0.5;
-      if (useDl) {
+      const random = Math.random();
+      if (random < 0.33) {
         levels = dlLevels;
         type = 'dl';
         currentType = 'dl';
-      } else {
+      } else if (random < 0.66) {
         levels = flLevels;
         type = 'fl';
         currentType = 'fl';
+      } else {
+        levels = plLevels;
+        type = 'pl';
+        currentType = 'pl';
       }
     }
     const filtered = filterLevelsByRange(levels, type);
@@ -220,7 +233,7 @@ async function doneRoulette(): Promise<void> {
  * Handle list type change and reset roulette.
  * @param type List type
  */
-function handleListTypeChange(type: 'all' | 'dl' | 'fl'): void {
+function handleListTypeChange(type: 'all' | 'dl' | 'fl' | 'pl'): void {
   listType = type;
   resetRoulette();
 }
@@ -269,7 +282,7 @@ function handleListTypeChange(type: 'all' | 'dl' | 'fl'): void {
     <Card class="rounded-2xl shadow-xl min-w-[0] w-full max-w-[auto] md:max-w-[350px] flex flex-col items-center dark:bg-black bg-white">
       <CardContent class="w-full flex flex-col items-center p-4 sm:p-8 gap-3 sm:gap-5">
         <div class="dark:text-zinc-300 text-zinc-700 text-sm sm:text-base mb-1 text-center">
-          Range: <b>#{(listType === 'all' || listType === 'dl') ? (dlLevels.length ? Math.min(...dlLevels.map(l => l.dlTop ?? Infinity)) : 1) : (flLevels.length ? Math.min(...flLevels.map(l => l.flTop ?? Infinity)) : 1)} to {(listType === 'all' || listType === 'dl') ? (dlLevels.length ? Math.max(...dlLevels.map(l => l.dlTop ?? 0)) : 0) : (flLevels.length ? Math.max(...flLevels.map(l => l.flTop ?? 0)) : 0)}</b>
+          Range: <b>#{(listType === 'all' || listType === 'dl') ? (dlLevels.length ? Math.min(...dlLevels.map(l => l.dlTop ?? Infinity)) : 1) : (listType === 'fl') ? (flLevels.length ? Math.min(...flLevels.map(l => l.flTop ?? Infinity)) : 1) : (plLevels.length ? Math.min(...plLevels.map(l => l.dlTop ?? Infinity)) : 1)} to {(listType === 'all' || listType === 'dl') ? (dlLevels.length ? Math.max(...dlLevels.map(l => l.dlTop ?? 0)) : 0) : (listType === 'fl') ? (flLevels.length ? Math.max(...flLevels.map(l => l.flTop ?? 0)) : 0) : (plLevels.length ? Math.max(...plLevels.map(l => l.dlTop ?? 0)) : 0)}</b>
         </div>
         <div class="flex items-center gap-2 mb-2 w-full justify-center">
           <Input class="w-24 sm:w-24 text-left text-sm sm:text-base dark:bg-black bg-white dark:text-white text-black" placeholder="From" type="number" min="1" bind:value={pendingRangeStart} />
@@ -278,8 +291,9 @@ function handleListTypeChange(type: 'all' | 'dl' | 'fl'): void {
         </div>
         <div class="flex gap-2 mb-2 w-full justify-center flex-wrap">
           <Button variant={listType === 'all' ? 'default' : 'secondary'} class={listType === 'all' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('all')}>All</Button>
-          <Button variant={listType === 'dl' ? 'default' : 'secondary'} class={listType === 'dl' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('dl')}>Demon List</Button>
-          <Button variant={listType === 'fl' ? 'default' : 'secondary'} class={listType === 'fl' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('fl')}>Featured List</Button>
+          <Button variant={listType === 'dl' ? 'default' : 'secondary'} class={listType === 'dl' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('dl')}>Classic</Button>
+          <Button variant={listType === 'pl' ? 'default' : 'secondary'} class={listType === 'pl' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('pl')}>Platformer</Button>
+          <Button variant={listType === 'fl' ? 'default' : 'secondary'} class={listType === 'fl' ? 'dark:bg-white bg-black dark:text-black text-white ' : 'dark:bg-black bg-white dark:text-white text-black '} on:click={() => handleListTypeChange('fl')}>Featured</Button>
         </div>
         <Button variant="secondary" class="w-full py-2 text-sm sm:text-base font-medium dark:bg-black bg-white dark:text-white text-black" on:click={applyRange} disabled={pendingRangeStart === rangeStart && pendingRangeEnd === rangeEnd}>Apply</Button>
         <Button class="w-full py-2 sm:py-3 text-base sm:text-lg font-medium mb-2 dark:bg-white bg-black dark:text-black text-white" on:click={doneRoulette} disabled={finished || targetPercent > 100 || !validateInput(inputValue)}>Start</Button>
