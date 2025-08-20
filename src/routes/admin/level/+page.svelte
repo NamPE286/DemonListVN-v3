@@ -23,14 +23,14 @@
 	async function fetchLevel() {
 		fetch(`${import.meta.env.VITE_API_URL}/level/${level.id}`)
 			.then((res) => res.json())
-			.then((res) => {
+			.then((res: any) => {
 				level = res;
 				state = 1;
 			})
 			.catch((err) => {
-				fetch(`https://gdbrowser.com/api/level/${level.id}`)
+				fetch(`${import.meta.env.VITE_API_URL}/level/${level.id}?fromGD=1`)
 					.then((res) => res.json())
-					.then((res) => {
+					.then((res: any) => {
 						level.name = res.name;
 						level.creator = res.author;
 						state = 2;

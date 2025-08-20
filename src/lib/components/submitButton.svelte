@@ -93,7 +93,7 @@
 				sendStatus = 2;
 			}
 
-			errorMessage = (await res.json()).message;
+			errorMessage = (await res.json() as any).message;
 		});
 	}
 
@@ -104,7 +104,7 @@
 			).json();
 		} catch {}
 
-		apiLevel = await (await fetch(`https://gdbrowser.com/api/level/${submission.levelid}`)).json();
+		apiLevel = await (await fetch(`${import.meta.env.VITE_API_URL}/level/${submission.levelid}?fromGD=1`)).json();
 	}
 
 	function next() {

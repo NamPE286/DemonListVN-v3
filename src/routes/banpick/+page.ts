@@ -18,7 +18,7 @@ export async function load({ params, url, fetch }) {
 
     for (const i of levelIDs) {
         levels.push(
-            await (await fetch(`https://gdbrowser.com/api/level/${i}`)).json(),
+            await (await fetch(`${import.meta.env.VITE_API_URL}/level/${i}?fromGD=1`)).json(),
         );
     }
 

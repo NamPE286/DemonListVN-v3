@@ -87,7 +87,7 @@
 		records = [];
 		deathCount = [];
 
-		fetch(`https://gdbrowser.com/api/level/${$page.params.id}`)
+		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}?fromGD=1`)
 			.then((res) => res.json())
 			.then((res) => (levelAPI = res));
 
