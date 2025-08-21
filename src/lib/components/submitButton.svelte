@@ -71,7 +71,7 @@
 	}
 
 	async function submit() {
-		if (apiLevel.length == 'Plat') {
+		if (apiLevel.length == 5) {
 			submission.progress = getMs();
 		}
 
@@ -124,12 +124,12 @@
 		}
 
 		if (step == 3) {
-			if (apiLevel.length == 'Plat' && !validTime()) {
+			if (apiLevel.length == 5 && !validTime()) {
 				toast.error('Invalid time');
 				return;
 			}
 
-			if (apiLevel.length != 'Plat') {
+			if (apiLevel.length != 5) {
 				if (
 					!submission.progress ||
 					!submission.refreshRate ||
@@ -289,7 +289,7 @@
 					{/if}
 				{/if}
 				{#if step == 3}
-					{#if apiLevel.length != 'Plat'}
+					{#if apiLevel.length != 5}
 						<div class="grid grid-cols-4 items-center gap-4">
 							<Label for="name" class="text-right">Progress</Label>
 							<Input
@@ -377,9 +377,9 @@
 							id="name"
 							type="number"
 							inputmode="numeric"
-							disabled={apiLevel.length != 'Plat' && submission.progress != 100}
+							disabled={apiLevel.length != 5 && submission.progress != 100}
 							bind:value={submission.suggestedRating}
-							placeholder={!(apiLevel.length != 'Plat' && submission.progress != 100)
+							placeholder={!(apiLevel.length != 5 && submission.progress != 100)
 								? 'optional (không ghi cũng được)'
 								: 'progress must be 100%'}
 							class="col-span-3"
