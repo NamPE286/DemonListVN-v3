@@ -13,6 +13,7 @@
 	import { onMount } from 'svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { upload } from '$lib/client/storage';
 
 	export let data: any;
 	export let open = false;
@@ -32,7 +33,7 @@
 		value: player.city
 	};
 
-	$: open, reset();
+	$: (open, reset());
 
 	function reset() {
 		player = structuredClone(data);
@@ -46,80 +47,52 @@
 		let image = e.target.files[0];
 
 		if (image.name.endsWith('.gif')) {
-			const upload = new Promise((resolve, reject) => {
-				supabase.storage
-					.from('avatars')
-					.upload(`/${$user.data.uid}.gif`, image, {
-						cacheControl: '86400',
-						upsert: true
-					})
-					.then(async (res) => {
-						player.isAvatarGif = true;
-						player.avatarVersion++;
+			const handleUpload = async () => {
+				await upload(`avatars/${$user.data.uid}.gif`, image, (await $user.token())!);
 
-						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
-							method: 'PUT',
-							headers: {
-								Authorization: 'Bearer ' + (await $user.token()),
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify(player)
-						});
+				player.isAvatarGif = true;
+				player.avatarVersion++;
 
-						const { data, error } = res;
+				await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+					method: 'PUT',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token()),
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(player)
+				});
+			};
 
-						if (error) {
-							reject();
-						} else {
-							resolve({});
-						}
-					});
-			});
-
-			toast.promise(upload, {
+			toast.promise(handleUpload, {
 				loading: 'Uploading...',
 				success: 'Uploaded! It may take a while to take effect.	',
 				error: 'Upload failed.'
 			});
 		} else {
-			const options = {
+			toast.loading('Compressing image...');
+			
+			const cImg = await imageCompression(image, {
 				maxSizeMB: 0.035,
 				maxWidthOrHeight: 480,
 				useWebWorker: true
+			});
+			const handleUpload = async () => {
+				await upload(`avatars/${$user.data.uid}.jpg`, cImg, (await $user.token())!);
+
+				player.isAvatarGif = false;
+				player.avatarVersion++;
+
+				await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+					method: 'PUT',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token()),
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(player)
+				});
 			};
 
-			const cImg = await imageCompression(image, options);
-			const upload = new Promise((resolve, reject) => {
-				supabase.storage
-					.from('avatars')
-					.upload(`/${$user.data.uid}.jpg`, cImg, {
-						cacheControl: '86400',
-						upsert: true
-					})
-					.then(async (res) => {
-						player.isAvatarGif = false;
-						player.avatarVersion++;
-
-						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
-							method: 'PUT',
-							headers: {
-								Authorization: 'Bearer ' + (await $user.token()),
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify(player)
-						});
-
-						const { data, error } = res;
-
-						if (error) {
-							reject();
-						} else {
-							resolve({});
-						}
-					});
-			});
-
-			toast.promise(upload, {
+			toast.promise(handleUpload, {
 				loading: 'Uploading...',
 				success: 'Uploaded! It may take a while to take effect.	',
 				error: 'Upload failed.'
