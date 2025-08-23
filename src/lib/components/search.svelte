@@ -201,7 +201,7 @@
 								<Avatar.Root>
 									<Avatar.Image
 										class="object-cover"
-										src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${item.uid}${
+										src={`https://cdn.demonlistvn.com/avatars/${item.uid}${
 											isSupporterActive(item.supporterUntil) && item.isAvatarGif ? '.gif' : '.jpg'
 										}`}
 										alt="@shadcn"

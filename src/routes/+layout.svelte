@@ -188,7 +188,7 @@
 								<Avatar.Root>
 									<Avatar.Image
 										class="object-cover"
-										src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${$user.data.uid}${
+										src={`https://cdn.demonlistvn.com/avatars/${$user.data.uid}${
 											isSupporterActive($user.data.supporterUntil) && $user.data.isAvatarGif
 												? '.gif'
 												: '.jpg'

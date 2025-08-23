@@ -48,7 +48,7 @@
 						<div class="relative">
 							<img
 								class="ml-auto mr-auto aspect-[3/1] min-h-[250px] w-[1200px] max-w-full rounded-xl object-cover"
-								src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${item.id}/banner.webp?v=1`}
+								src={`https://cdn.demonlistvn.com/products/${item.id}/banner.webp?v=1`}
 								alt="product"
 							/>
 							<div
@@ -73,7 +73,7 @@
 				<div class="h-full rounded-xl p-[10px] hover:bg-[hsl(var(--muted))]">
 					<img
 						class=" h-[180px] w-[180px] rounded-xl object-cover"
-						src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${item.id}/0.webp`}
+						src={`https://cdn.demonlistvn.com/products/${item.id}/0.webp`}
 						alt="product"
 					/>
 					<div class="w-[180px] p-[7.5px] pb-0">

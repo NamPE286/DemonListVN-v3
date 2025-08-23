@@ -64,7 +64,7 @@
 	/>
 	<meta
 		property="og:image"
-		content={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}${
+		content={`https://cdn.demonlistvn.com/avatars/${data.player.uid}${
 			isSupporterActive(data.player.supporterUntil) && data.player.isAvatarGif ? '.gif' : '.jpg'
 		}?version=${data.player.avatarVersion}`}
 	/>
@@ -92,7 +92,7 @@
 				isBannerFailedToLoad = true;
 			}}
 			class="bgGradient absolute z-0 mt-[-50px] h-[600px] w-full object-cover"
-			src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.player.uid}${
+			src={`https://cdn.demonlistvn.com/banners/${data.player.uid}${
 				data.player.isBannerGif ? '.gif' : '.jpg'
 			}?version=${data.player.bannerVersion}`}
 			alt=""
@@ -104,7 +104,7 @@
 			<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
 				<Avatar.Image
 					class="object-cover"
-					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.player.uid}${
+					src={`https://cdn.demonlistvn.com/avatars/${data.player.uid}${
 						isSupporterActive(data.player.supporterUntil) && data.player.isAvatarGif
 							? '.gif'
 							: '.jpg'

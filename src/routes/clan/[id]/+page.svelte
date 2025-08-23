@@ -263,7 +263,7 @@
 			});
 
 			supabase.storage
-				.from('clanPhotos')
+				.from('clan-photos')
 				.upload(`/${$page.params.id}.jpg`, cImg, {
 					cacheControl: '86400',
 					upsert: true
@@ -402,7 +402,7 @@
 			<img
 				in:fade={{ delay: 250, duration: 300 }}
 				class="bg"
-				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${$page.params.id}.jpg?version=${data.imageVersion}`}
+				src={`https://cdn.demonlistvn.com/clan-photos/${$page.params.id}.jpg?version=${data.imageVersion}`}
 				alt="bg"
 			/>
 			<div class="bannerContentWrapper">
