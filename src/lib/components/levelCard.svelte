@@ -10,6 +10,8 @@
 	import { calcRating } from '$lib/client/rating';
 	import { isSupporterActive } from '$lib/client/isSupporterActive';
 
+	let failedToLoad = false;
+
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
 		const seconds = Math.floor((ms % 60000) / 1000);
@@ -36,12 +38,17 @@
 									loading="lazy"
 									class="thumbnail absolute"
 								/>
-								<img
-									src={`https://levelthumbs.prevter.me/thumbnail/${level.id}/small`}
-									alt=""
-									loading="lazy"
-									class="thumbnail absolute opacity-0 hover:opacity-100 z-1 translate-x-4 hover:translate-x-0 transition-all duration-300 ease-in-out"
-								/>
+								{#if !failedToLoad}
+									<img
+										src={`https://levelthumbs.prevter.me/thumbnail/${level.id}/small`}
+										alt=""
+										loading="lazy"
+										class="thumbnail z-1 absolute translate-x-4 opacity-0 transition-all duration-300 ease-in-out hover:translate-x-0 hover:opacity-100"
+										on:error={() => {
+											failedToLoad = true;
+										}}
+									/>
+								{/if}
 							</div>
 						</a>
 						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
