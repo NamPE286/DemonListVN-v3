@@ -90,13 +90,7 @@
 
 <div class="levelsWrapper">
 	<div class="levels">
-		{#each prefix as level}
-			<LevelCard {level} type={$page.params.list || 'dl'} />
-		{/each}
-	</div>
-	<Ads dataAdFormat="rectangle" />
-	<div class="levels">
-		{#each data.levels.slice(4) as level}
+		{#each data.levels as level}
 			<LevelCard {level} type={$page.params.list || 'dl'} />
 		{/each}
 	</div>
