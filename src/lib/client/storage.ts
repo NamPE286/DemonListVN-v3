@@ -8,10 +8,11 @@ export async function upload(path: string, data: any, token: string) {
 		})
 	).text();
 
-    console.log(data)
-
 	await fetch(url, {
 		method: 'PUT',
+		headers: {
+			'Content-Type': 'text/plain'
+		},
 		body: data
 	});
 }

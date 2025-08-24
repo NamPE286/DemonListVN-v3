@@ -91,7 +91,7 @@
 			on:error={() => {
 				isBannerFailedToLoad = true;
 			}}
-			class="bgGradient absolute z-0 mt-[-50px] h-[600px] w-full object-cover"
+			class="bgGradient absolute z-0 mt-[-55px] h-[600px] w-full object-cover"
 			src={`https://cdn.demonlistvn.com/banners/${data.player.uid}${
 				data.player.isBannerGif ? '.gif' : '.jpg'
 			}?version=${data.player.bannerVersion}`}

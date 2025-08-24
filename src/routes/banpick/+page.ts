@@ -4,7 +4,7 @@ export async function load({ params, url, fetch }) {
     const levelIDs: number[] = JSON.parse(url.searchParams.get("levels")!);
     const levels = [];
 
-    const players =
+    const players: any[] =
         await (await fetch(`${import.meta.env.VITE_API_URL}/players`, {
             method: "POST",
             body: JSON.stringify({
@@ -18,7 +18,7 @@ export async function load({ params, url, fetch }) {
 
     for (const i of levelIDs) {
         levels.push(
-            await (await fetch(`${import.meta.env.VITE_API_URL}/level/${i}?fromGD=1`)).json(),
+            await (await fetch(`${import.meta.env.VITE_API_URL}/level/${i}?fromGD=1`)).json() as any,
         );
     }
 
