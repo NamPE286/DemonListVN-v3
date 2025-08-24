@@ -31,7 +31,7 @@
 				<ContextMenu.Root>
 					<ContextMenu.Trigger>
 						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
-							<div class="relative h-[235px]">
+							<div class="relative h-[235px] flex justify-center">
 								<img
 									src={`https://img.youtube.com/vi/${level.videoID}/0.jpg`}
 									alt=""
