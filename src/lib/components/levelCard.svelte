@@ -29,12 +29,20 @@
 				<ContextMenu.Root>
 					<ContextMenu.Trigger>
 						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
-							<img
-								src={`https://img.youtube.com/vi/${level.videoID}/0.jpg`}
-								alt=""
-								loading="lazy"
-								class="thumbnail"
-							/>
+							<div class="relative h-[235px]">
+								<img
+									src={`https://img.youtube.com/vi/${level.videoID}/0.jpg`}
+									alt=""
+									loading="lazy"
+									class="thumbnail absolute"
+								/>
+								<img
+									src={`https://levelthumbs.prevter.me/thumbnail/${level.id}/small`}
+									alt=""
+									loading="lazy"
+									class="thumbnail absolute opacity-0 hover:opacity-100 z-1 translate-x-4 hover:translate-x-0 transition-all duration-300 ease-in-out"
+								/>
+							</div>
 						</a>
 						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
 							<div class="levelInfo">
