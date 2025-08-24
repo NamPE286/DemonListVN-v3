@@ -26,6 +26,7 @@
 	import { fade } from 'svelte/transition';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import Ads from '$lib/components/ads.svelte';
+	import { upload } from '$lib/client/storage';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
@@ -78,7 +79,7 @@
 			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/members?${new URLSearchParams(membersFilter).toString()}`
 		)
 			.then((res) => res.json())
-			.then((res) => {
+			.then((res: any) => {
 				if (append) {
 					members = members.concat(res);
 				} else {
@@ -114,7 +115,7 @@
 			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/records?${new URLSearchParams(recordsFilter).toString()}`
 		)
 			.then((res) => res.json())
-			.then((res) => {
+			.then((res: any) => {
 				if (append) {
 					records = records.concat(res);
 				} else {
@@ -132,7 +133,7 @@
 	function fetchInvitations() {
 		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/invitations`)
 			.then((res) => res.json())
-			.then((res) => (invitations = res));
+			.then((res: any) => (invitations = res));
 	}
 
 	async function joinClan() {
@@ -246,13 +247,14 @@
 		};
 
 		const cImg = await imageCompression(image, options);
-		const upload = new Promise(async (resolve, reject) => {
+		const handleUpload = async () => {
 			delete editedData.id;
 			delete editedData.created_at;
 			delete editedData.players;
 
 			editedData.imageVersion++;
 
+			await upload(`clan-photos/${$page.params.id}.jpg`, cImg, (await $user.token())!);
 			await fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
 				method: 'PATCH',
 				headers: {
@@ -261,25 +263,9 @@
 				},
 				body: JSON.stringify(editedData)
 			});
+		};
 
-			supabase.storage
-				.from('clan-photos')
-				.upload(`/${$page.params.id}.jpg`, cImg, {
-					cacheControl: '86400',
-					upsert: true
-				})
-				.then((res) => {
-					const { data, error } = res;
-
-					if (error) {
-						reject();
-					} else {
-						resolve({});
-					}
-				});
-		});
-
-		toast.promise(upload, {
+		toast.promise(handleUpload, {
 			loading: 'Uploading...',
 			success: 'Uploaded! It may take a while to take effect.	',
 			error: 'Upload failed.'
@@ -353,7 +339,7 @@
 		}).then((res) => window.location.reload());
 	}
 
-	$: $user,
+	$: ($user,
 		(() => {
 			if ($user.loggedIn) {
 				fetch(
@@ -362,7 +348,7 @@
 					.then((res) => res.json())
 					.then((res) => (invitation = res));
 			}
-		})();
+		})());
 
 	onMount(async () => {
 		fetchMembers(null);
@@ -437,14 +423,14 @@
 								<Button
 									class="w-full"
 									on:click={() => {
-										acceptInvitation(parseInt($page.params.id));
+										acceptInvitation(parseInt(String($page.params.id)));
 									}}>Accept</Button
 								>
 								<Button
 									variant="outline"
 									class="w-full"
 									on:click={() => {
-										rejectInvitation(parseInt($page.params.id));
+										rejectInvitation(parseInt(String($page.params.id)));
 									}}>Reject</Button
 								>
 							{:else if $user.data.clan == $page.params.id}
