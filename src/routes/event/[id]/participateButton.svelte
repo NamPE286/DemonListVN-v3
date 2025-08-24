@@ -54,7 +54,7 @@
 				method: 'POST',
 				body: JSON.stringify({
 					eventID: data.id,
-					content: proof,
+					content: proof
 				}),
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())!,
@@ -128,6 +128,8 @@
 			{:else if rewardState == 4}
 				{#if $user.data.exp < data.minExp}
 					<Button class="w-[300px]" disabled>Not enough EXP ({data.minExp} EXP minimum)</Button>
+				{:else if !$user.data.discord}
+					<Button class="w-[300px]" disabled>Discord linking required</Button>
 				{:else if isEventEnded()}
 					<Button class="w-[200px]" disabled>Event ended</Button>
 				{:else}
