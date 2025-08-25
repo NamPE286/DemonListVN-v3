@@ -86,7 +86,7 @@
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Short Profile URL</Card.Title>
+					<Card.Title>Short profile URL</Card.Title>
 					<Card.Description class="w-[250px]">
 						Share your profile easily with a clean, professional link.<br />
 						Example: <a href="/@NamPE">demonlistvn.com/@NamPE</a>
