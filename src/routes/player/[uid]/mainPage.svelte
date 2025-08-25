@@ -19,7 +19,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
 	import { getExpLevel } from '$lib/client/getExpLevel';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 	import MedalsTab from './medalsTab.svelte';
 
 	export let data: PageData;
@@ -65,7 +65,7 @@
 	<meta
 		property="og:image"
 		content={`https://cdn.demonlistvn.com/avatars/${data.player.uid}${
-			isSupporterActive(data.player.supporterUntil) && data.player.isAvatarGif ? '.gif' : '.jpg'
+			isActive(data.player.supporterUntil) && data.player.isAvatarGif ? '.gif' : '.jpg'
 		}?version=${data.player.avatarVersion}`}
 	/>
 </svelte:head>
@@ -86,7 +86,7 @@
 	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
 {/if}
 <div class="relative">
-	{#if isSupporterActive(data.player.supporterUntil) && !isBannerFailedToLoad}
+	{#if isActive(data.player.supporterUntil) && !isBannerFailedToLoad}
 		<img
 			on:error={() => {
 				isBannerFailedToLoad = true;
@@ -105,7 +105,7 @@
 				<Avatar.Image
 					class="object-cover"
 					src={`https://cdn.demonlistvn.com/avatars/${data.player.uid}${
-						isSupporterActive(data.player.supporterUntil) && data.player.isAvatarGif
+						isActive(data.player.supporterUntil) && data.player.isAvatarGif
 							? '.gif'
 							: '.jpg'
 					}?version=${data.player.avatarVersion}`}
@@ -126,7 +126,7 @@
 							</span>
 						</a>
 					{/if}
-					{#if isSupporterActive(data.player.supporterUntil)}
+					{#if isActive(data.player.supporterUntil)}
 						<h2 class="text-yellow-500">
 							{data.player.name}
 						</h2>
@@ -188,7 +188,7 @@
 		<div class="playerInfo2Wrapper">
 			<div class="playerInfo2">
 				<Card.Root
-					style={isSupporterActive(data.player.supporterUntil)
+					style={isActive(data.player.supporterUntil)
 						? `background-color: ${data.player.bgColor}; border-color: ${data.player.borderColor}; ${data.player.bgColor ? 'color: white' : ''}`
 						: ''}
 				>

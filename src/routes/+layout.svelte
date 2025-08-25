@@ -24,7 +24,7 @@
 	import NotificationButton from '$lib/components/notificationButton.svelte';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	let links = [
 		{ route: '/list/dl', name: 'Classic' },
@@ -121,7 +121,7 @@
 				{#each links as link}
 					<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
 				{/each}
-				{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
+				{#if $user.loggedIn && isActive($user.data.supporterUntil)}
 					<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
 				{:else}
 					<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter">Support Us</Button>
@@ -141,7 +141,7 @@
 							</a>
 						{/each}
 						<DropdownMenu.Item>
-							{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
+							{#if $user.loggedIn && isActive($user.data.supporterUntil)}
 								<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
 							{:else}
 								<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter"
@@ -182,14 +182,14 @@
 							<Button
 								variant="outline"
 								size="icon"
-								class={`overflow-hidden rounded-full ${isSupporterActive($user.data.supporterUntil) ? 'border-[2px] border-yellow-400' : ''}`}
+								class={`overflow-hidden rounded-full ${isActive($user.data.supporterUntil) ? 'border-[2px] border-yellow-400' : ''}`}
 								builders={[builder]}
 							>
 								<Avatar.Root>
 									<Avatar.Image
 										class="object-cover"
 										src={`https://cdn.demonlistvn.com/avatars/${$user.data.uid}${
-											isSupporterActive($user.data.supporterUntil) && $user.data.isAvatarGif
+											isActive($user.data.supporterUntil) && $user.data.isAvatarGif
 												? '.gif'
 												: '.jpg'
 										}?version=${$user.data.avatarVersion}`}
@@ -201,7 +201,7 @@
 						</DropdownMenu.Trigger>
 						<DropdownMenu.Content align="end" class="z-[99999] w-56">
 							<DropdownMenu.Label>
-								{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil)}
+								{#if $user.loggedIn && isActive($user.data.supporterUntil)}
 									<span class="text-yellow-500">{$user.data.name}</span>
 								{:else}
 									{$user.data.name}

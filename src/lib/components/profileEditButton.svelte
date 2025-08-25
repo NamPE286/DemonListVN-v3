@@ -12,7 +12,7 @@
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 	import { upload } from '$lib/client/storage';
 
 	export let data: any;
@@ -202,7 +202,7 @@
 <input
 	style="display:none"
 	type="file"
-	accept={isSupporterActive($user.data.supporterUntil) ? '.jpg, .jpeg, .gif' : '.jpg, .jpeg'}
+	accept={isActive($user.data.supporterUntil) ? '.jpg, .jpeg, .gif' : '.jpg, .jpeg'}
 	on:change={(e) => getAvatar(e)}
 	bind:this={fileinput}
 />
@@ -248,13 +248,13 @@
 						variant="outline"
 						id="avatar"
 						placeholder="Avatar"
-						disabled={!isSupporterActive(player.supporterUntil)}
+						disabled={!isActive(player.supporterUntil)}
 						on:click={() => {
 							fileinput1.click();
 						}}>Upload banner</Button
 					>
 				</div>
-				{#if isSupporterActive(player.supporterUntil)}
+				{#if isActive(player.supporterUntil)}
 					<div class="mb-[10px] flex items-center gap-[10px] text-sm">
 						Border
 						<Input type="color" bind:value={player.borderColor} />

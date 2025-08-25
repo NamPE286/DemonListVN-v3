@@ -5,7 +5,7 @@
 	import { getTitle } from '$lib/client';
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import { getExpLevel } from '$lib/client/getExpLevel';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let player: any;
 	export let showTitle = false;
@@ -63,7 +63,7 @@
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
 			<div class="flex items-center gap-[5px]">
-				{#if isSupporterActive(player.supporterUntil)}
+				{#if isActive(player.supporterUntil)}
 					<span class="text-yellow-500">
 						{truncateText(player.name)}
 					</span>
@@ -79,11 +79,11 @@
 		</HoverCard.Trigger>
 		<HoverCard.Content
 			class="w-80"
-			style={isSupporterActive(player.supporterUntil)
+			style={isActive(player.supporterUntil)
 				? `background-color: ${player.bgColor}; border-color: ${player.borderColor}; ${player.bgColor ? 'color: white' : ''}`
 				: ''}
 		>
-			{#if isSupporterActive(player.supporterUntil) && !isBannerFailedToLoad}
+			{#if isActive(player.supporterUntil) && !isBannerFailedToLoad}
 				<img
 					on:error={() => {
 						isBannerFailedToLoad = true;
@@ -101,7 +101,7 @@
 						<Avatar.Image
 							class="object-cover"
 							src={`https://cdn.demonlistvn.com/avatars/${player.uid}${
-								isSupporterActive(player.supporterUntil) && player.isAvatarGif ? '.gif' : '.jpg'
+								isActive(player.supporterUntil) && player.isAvatarGif ? '.gif' : '.jpg'
 							}`}
 							alt=""
 						/>
@@ -116,7 +116,7 @@
 						>
 					{/if}
 					<h4 class="font-semibold">
-						{#if isSupporterActive(player.supporterUntil)}
+						{#if isActive(player.supporterUntil)}
 							<span class="text-yellow-500">
 								{player.name}
 							</span>

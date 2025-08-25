@@ -9,7 +9,7 @@
 	import { user } from '$lib/client';
 	import Loading from '$lib/components/animation/loading.svelte';
 	import { toast } from 'svelte-sonner';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 	import { navigating, page } from '$app/stores';
 	import { onMount } from 'svelte';
 
@@ -174,7 +174,7 @@
 	}
 
 	function onRouteChange(to: any) {
-		if (!$user.loggedIn || !isSupporterActive($user.data.supporterUntil)) {
+		if (!$user.loggedIn || !isActive($user.data.supporterUntil)) {
 			defaultValue.levelid = NaN;
 			return;
 		}
@@ -437,7 +437,7 @@
 						<AlertDialog.Header>
 							<AlertDialog.Title>Submitted!</AlertDialog.Title>
 							<AlertDialog.Description>
-								{#if isSupporterActive($user.data.supporterUntil)}
+								{#if isActive($user.data.supporterUntil)}
 									Your submission has been sent and <span class="text-yellow-500">prioritized!</span
 									> It will be reviewed shortly.
 								{:else}

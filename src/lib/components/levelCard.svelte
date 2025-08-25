@@ -8,7 +8,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { user } from '$lib/client';
 	import { calcRating } from '$lib/client/rating';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	let failedToLoad = false;
 
@@ -67,7 +67,7 @@
 											{/if}
 										</div>
 										{#key $user}
-											{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil) && type == 'dl'}
+											{#if $user.loggedIn && isActive($user.data.supporterUntil) && type == 'dl'}
 												{#if !level.record}
 													<Tooltip.Root>
 														<Tooltip.Trigger>

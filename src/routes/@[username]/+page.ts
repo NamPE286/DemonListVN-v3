@@ -1,4 +1,4 @@
-import { isSupporterActive } from '$lib/client/isSupporterActive.js';
+import { isActive } from '$lib/client/isSupporterActive.js';
 import { redirect } from '@sveltejs/kit';
 import { getPlayerData } from '../player/[uid]/getPlayerData.js';
 
@@ -8,7 +8,7 @@ export async function load({ params, url, fetch }) {
 		await fetch(`${import.meta.env.VITE_API_URL}/player/@${username}`)
 	).json();
 
-	if (!isSupporterActive(player.supporterUntil)) {
+	if (!isActive(player.supporterUntil)) {
 		throw redirect(307, `/supporter`);
 	}
 

@@ -7,7 +7,7 @@
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 
@@ -77,7 +77,7 @@
 	});
 </script>
 
-{#if isSupporterActive(data.players[0].supporterUntil) && !isBannerFailedToLoad[0]}
+{#if isActive(data.players[0].supporterUntil) && !isBannerFailedToLoad[0]}
 	<img
 		on:error={() => {
 			isBannerFailedToLoad[0] = true;
@@ -90,7 +90,7 @@
 		alt="banner"
 	/>
 {/if}
-{#if isSupporterActive(data.players[1].supporterUntil) && !isBannerFailedToLoad[1]}
+{#if isActive(data.players[1].supporterUntil) && !isBannerFailedToLoad[1]}
 	<img
 		on:error={() => {
 			isBannerFailedToLoad[1] = true;
@@ -117,7 +117,7 @@
 				<Avatar.Image
 					class="object-cover"
 					src={`https://cdn.demonlistvn.com/avatars/${data.players[0].uid}${
-						isSupporterActive(data.players[0].supporterUntil) && data.players[0].isAvatarGif
+						isActive(data.players[0].supporterUntil) && data.players[0].isAvatarGif
 							? '.gif'
 							: '.jpg'
 					}?version=${data.players[0].avatarVersion}`}
@@ -134,7 +134,7 @@
 				<Avatar.Image
 					class="object-cover"
 					src={`https://cdn.demonlistvn.com/avatars/${data.players[1].uid}${
-						isSupporterActive(data.players[1].supporterUntil) && data.players[1].isAvatarGif
+						isActive(data.players[1].supporterUntil) && data.players[1].isAvatarGif
 							? '.gif'
 							: '.jpg'
 					}?version=${data.players[1].avatarVersion}`}

@@ -1,4 +1,4 @@
-import { isSupporterActive } from '$lib/client/isSupporterActive';
+import { isActive } from '$lib/client/isSupporterActive';
 
 export async function getPlayerData(player: any, fetch: any) {
 	const uid: string = player.uid;

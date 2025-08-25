@@ -6,7 +6,7 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import { toast } from 'svelte-sonner';
 	import * as Card from '$lib/components/ui/card';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import { getExpLevel } from '$lib/client/getExpLevel';
@@ -118,11 +118,11 @@
 		{:else if data.owner}
 			<Card.Root
 				class="mt-[20px] w-full"
-				style={isSupporterActive(data.players.supporterUntil)
+				style={isActive(data.players.supporterUntil)
 					? `background-color: ${data.players.bgColor}; border-color: ${data.players.borderColor}; ${data.players.bgColor ? 'color: white' : ''}`
 					: ''}
 			>
-				{#if isSupporterActive(data.players.supporterUntil) && !isBannerFailedToLoad}
+				{#if isActive(data.players.supporterUntil) && !isBannerFailedToLoad}
 					<img
 						on:error={() => {
 							isBannerFailedToLoad = true;
@@ -140,7 +140,7 @@
 							<Avatar.Image
 								class="object-cover"
 								src={`https://cdn.demonlistvn.com/avatars/${data.players.uid}${
-									isSupporterActive(data.players.supporterUntil) && data.players.isAvatarGif
+									isActive(data.players.supporterUntil) && data.players.isAvatarGif
 										? '.gif'
 										: '.jpg'
 								}`}
@@ -158,7 +158,7 @@
 						{/if}
 						<a href={`/player/${data.players.uid}`}>
 							<h4 class="font-semibold">
-								{#if isSupporterActive(data.players.supporterUntil)}
+								{#if isActive(data.players.supporterUntil)}
 									<span class="text-yellow-500">
 										{data.players.name}
 									</span>

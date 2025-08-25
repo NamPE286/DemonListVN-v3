@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 	import { Textarea } from '$lib/components/ui/textarea';
 
 	export let data: any;
@@ -104,7 +104,7 @@
 </script>
 
 {#if data.exp && $user.loggedIn}
-	{#if !data.supporterOnly || isSupporterActive($user.data.supporterUntil)}
+	{#if !data.supporterOnly || isActive($user.data.supporterUntil)}
 		<div class="md-[15px] mb-[15px] mt-[15px] flex justify-center">
 			{#if rewardState == 0}
 				<Skeleton class="h-[35px] w-[200px]" />

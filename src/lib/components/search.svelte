@@ -6,7 +6,7 @@
 	import Loading from '$lib/components/animation/loading.svelte';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { toast } from 'svelte-sonner';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let open: boolean;
 	export let value: string = '';
@@ -202,13 +202,13 @@
 									<Avatar.Image
 										class="object-cover"
 										src={`https://cdn.demonlistvn.com/avatars/${item.uid}${
-											isSupporterActive(item.supporterUntil) && item.isAvatarGif ? '.gif' : '.jpg'
+											isActive(item.supporterUntil) && item.isAvatarGif ? '.gif' : '.jpg'
 										}`}
 										alt="@shadcn"
 									/>
 									<Avatar.Fallback>{item.name[0]}</Avatar.Fallback>
 								</Avatar.Root>
-								{#if isSupporterActive(item.supporterUntil)}
+								{#if isActive(item.supporterUntil)}
 									<span class="ml-[10px] text-yellow-500">{item.name}</span>
 								{:else}
 									<span class="ml-[10px]">{item.name}</span>
