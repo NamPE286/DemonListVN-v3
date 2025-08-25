@@ -11,6 +11,7 @@ export const handle = ({ event, resolve }) => {
 		// @ts-ignore
 		context: event.platform.ctx
 	};
+
 	// @ts-ignore
 	return Sentry.wrapRequestHandler(requestHandlerOptions, () => resolve(event));
 };
