@@ -9,7 +9,7 @@ export async function load({ params, url, fetch }) {
 	).json();
 
 	if (!isSupporterActive(player.supporterUntil)) {
-		throw new Error('Not accessible')
+		throw redirect(307, `/supporter`);
 	}
 
 	return await getPlayerData(player, fetch);

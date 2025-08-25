@@ -86,6 +86,15 @@
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
+					<Card.Title>Short Profile URL</Card.Title>
+					<Card.Description class="w-[250px]">
+						Share your profile easily with a clean, professional link.<br />
+						Example: <a href="/@NamPE">demonlistvn.com/@NamPE</a>
+					</Card.Description>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
 					<Card.Title>Unlock exclusive Discord role</Card.Title>
 					<Card.Description class="w-[250px]">
 						Gain access to a special role on DLVN and partner Discord servers.
@@ -122,7 +131,8 @@
 				<Card.Header>
 					<Card.Title>View rating prediction</Card.Title>
 					<Card.Description class="w-[250px]">
-						Get insights into the potential rating of your level before submission, helping you plan better.
+						Get insights into the potential rating of your level before submission, helping you plan
+						better.
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
