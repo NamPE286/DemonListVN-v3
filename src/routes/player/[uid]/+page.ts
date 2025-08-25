@@ -10,5 +10,9 @@ export async function load({ params, url, fetch }) {
 		throw redirect(307, `/@${player.name}`);
 	}
 
+	if (uid.startsWith('@') && !isSupporterActive(player.supporterUntil)) {
+		throw new Error('Not accessible');
+	}
+
 	return await getPlayerData(player, fetch);
 }
