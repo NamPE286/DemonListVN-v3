@@ -105,9 +105,7 @@
 				<Avatar.Image
 					class="object-cover"
 					src={`https://cdn.demonlistvn.com/avatars/${data.player.uid}${
-						isActive(data.player.supporterUntil) && data.player.isAvatarGif
-							? '.gif'
-							: '.jpg'
+						isActive(data.player.supporterUntil) && data.player.isAvatarGif ? '.gif' : '.jpg'
 					}?version=${data.player.avatarVersion}`}
 					alt=""
 				/>
@@ -126,15 +124,20 @@
 							</span>
 						</a>
 					{/if}
-					{#if isActive(data.player.supporterUntil)}
-						<h2 class="text-yellow-500">
-							{data.player.name}
-						</h2>
-					{:else}
-						<h2>
-							{data.player.name}
-						</h2>
-					{/if}
+					<button on:click={() => {
+						navigator.clipboard.writeText(data.player.uid);
+						toast.success('Copied UID to clipboard!')
+					}}>
+						{#if isActive(data.player.supporterUntil)}
+							<h2 class="text-yellow-500">
+								{data.player.name}
+							</h2>
+						{:else}
+							<h2>
+								{data.player.name}
+							</h2>
+						{/if}
+					</button>
 					{#if data.player.isTrusted}
 						<div class="w-[18px] rounded-full bg-black dark:invert">
 							<img class="invert" src="/tick-svgrepo-com.svg" alt="tick" />
