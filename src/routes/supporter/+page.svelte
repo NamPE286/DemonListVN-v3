@@ -175,7 +175,7 @@
 <style lang="scss">
 	.bgGradient {
 		filter: blur(175px);
-		margin-top: -50px;
+		margin-top: -55px;
 		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
 	}
 </style>
