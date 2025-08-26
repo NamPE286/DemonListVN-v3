@@ -3,6 +3,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Select from '$lib/components/ui/select';
 	import * as Dialog from '$lib/components/ui/dialog';
+	import { Textarea } from '$lib/components/ui/textarea';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Switch } from '$lib/components/ui/switch';
@@ -166,6 +167,7 @@
 		delete editedData.id;
 		delete editedData.created_at;
 		delete editedData.players;
+		delete editedData.boostedUntil;
 
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
@@ -231,6 +233,7 @@
 			delete editedData.id;
 			delete editedData.created_at;
 			delete editedData.players;
+			delete editedData.boostedUntil;
 
 			editedData.imageVersion++;
 
@@ -665,6 +668,15 @@
 					<section>
 						<h3>Basic info</h3>
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Home Content</Label>
+							<Textarea
+								disabled={!isActive(data.boostedUntil)}
+								id="name"
+								class="col-span-3"
+								bind:value={editedData.homeContent}
+							/>
+						</div>
+						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
 							<Label for="name" class="text-right">Clan's name</Label>
 							<Input id="name" class="col-span-3" bind:value={editedData.name} />
 						</div>
@@ -696,8 +708,8 @@
 								style={`background-color: ${editedData.tagBgColor}; color: ${editedData.tagTextColor};`}
 								>{data.tag}</Badge
 							>
-							<Input type="color" bind:value={editedData.tagBgColor} />
-							<Input type="color" bind:value={editedData.tagTextColor} />
+							<Input disabled={!isActive(data.boostedUntil)} type="color" bind:value={editedData.tagBgColor} />
+							<Input disabled={!isActive(data.boostedUntil)} type="color" bind:value={editedData.tagTextColor} />
 							<Button
 								variant="outline"
 								on:click={() => {
@@ -706,7 +718,7 @@
 							>
 						</div>
 						<div class="applyBtnWrapper">
-							<Button on:click={updateClan}>Apply</Button>
+							<Button on:click={updateClan}>Save</Button>
 						</div>
 					</section>
 				{/if}
