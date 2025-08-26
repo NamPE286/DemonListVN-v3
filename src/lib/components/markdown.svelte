@@ -20,9 +20,11 @@
 	});
 </script>
 
-<div class="markdown">
-	<SvelteMarkdown source={content} />
-</div>
+{#if content}
+	<div class="markdown">
+		<SvelteMarkdown source={content} />
+	</div>
+{/if}
 
 <style>
 	.markdown :global(h1) {
