@@ -113,7 +113,7 @@
 			</Avatar.Root>
 			<div class="info">
 				<div class="flex items-center gap-[10px]">
-					{#if data.player.clan}
+					{#if data.player.clan && isActive(data.player.clans.boostedUntil)}
 						<a
 							href={`/clan/${data.player.clan}`}
 							class={badgeVariants({ variant: 'secondary' })}
@@ -124,19 +124,18 @@
 							</span>
 						</a>
 					{/if}
-					<button on:click={() => {
-						navigator.clipboard.writeText(data.player.uid);
-						toast.success('Copied UID to clipboard!')
-					}}>
-						{#if isActive(data.player.supporterUntil)}
-							<h2 class="text-yellow-500">
-								{data.player.name}
-							</h2>
-						{:else}
-							<h2>
-								{data.player.name}
-							</h2>
-						{/if}
+					<button
+						on:click={() => {
+							navigator.clipboard.writeText(data.player.uid);
+							toast.success('Copied UID to clipboard!');
+						}}
+					>
+						<h2 class={isActive(data.player.supporterUntil) ? 'text-yellow-500' : ''}>
+							{#if data.player.clan && !isActive(data.player.clans.boostedUntil)}
+								[{data.player.clans.tag}]
+							{/if}
+							{data.player.name}
+						</h2>
 					</button>
 					{#if data.player.isTrusted}
 						<div class="w-[18px] rounded-full bg-black dark:invert">

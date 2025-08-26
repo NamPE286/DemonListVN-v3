@@ -418,11 +418,15 @@
 							{:else if data.isPublic && (data.memberCount < data.memberLimit || data.memberLimit == 0)}
 								<Button variant="outline" class="w-full" on:click={joinClan}>Join</Button>
 							{/if}
+
+							<BoostButton {data} />
 						{/if}
 					</div>
-					<div class="bannerBtn">
-						<BoostButton {data} />
-					</div>
+					{#if new Date(data.boostedUntil) > new Date()}
+						<p class="text-center text-sm text-gray-500">
+							Boosted until: {new Date(data.boostedUntil).toLocaleDateString('vi-vn')}
+						</p>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -767,7 +771,7 @@
 				z-index: 1;
 				height: 100%;
 				width: 100%;
-				padding-bottom: 18px;
+				padding-bottom: 8px;
 				padding-inline: 18px;
 				display: flex;
 				flex-direction: column-reverse;

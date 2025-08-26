@@ -7,6 +7,7 @@
 	import { Slider } from '$lib/components/ui/slider';
 
 	export let data: any;
+	export let disabled = false;
 
 	let state = 0;
 	let nextState = 0;
@@ -48,7 +49,8 @@
 	<Dialog.Trigger disabled={!$user.loggedIn} on:click={reset} class="w-full">
 		<Button
 			variant="outline"
-			class="w-full border-[#f400ea] bg-[#510057] text-white hover:bg-[#870091]"
+			class="w-full border-yellow-300  bg-yellow-600  text-white hover:bg-yellow-500 hover:text-white"
+			{disabled}
 		>
 			Boost this clan
 		</Button>
