@@ -28,11 +28,13 @@
 	import { upload } from '$lib/client/storage';
 	import InviteButton from './inviteButton.svelte';
 	import BoostButton from './boostButton.svelte';
+	import Markdown from '$lib/components/markdown.svelte';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
 	let transferUID = '';
-	let currentTab: string = 'members';
+	let currentTab: string = isActive(data.boostedUntil) ? 'home' : 'members';
 	let members: any[] = [];
 	let records: any[] = [];
 	let invitations: any[] = [];
@@ -436,6 +438,9 @@
 	<div class="content">
 		<Tabs.Root bind:value={currentTab} class="flex w-[100%] flex-col items-center">
 			<Tabs.List class="mb-[5px] w-fit">
+				{#if isActive(data.boostedUntil)}
+					<Tabs.Trigger value="home">Home</Tabs.Trigger>
+				{/if}
 				<Tabs.Trigger value="members">Members</Tabs.Trigger>
 				<Tabs.Trigger value="records">Records</Tabs.Trigger>
 				{#if $user.loggedIn && $user.data.clan == $page.params.id}
@@ -443,6 +448,11 @@
 					<Tabs.Trigger value="settings">Settings</Tabs.Trigger>
 				{/if}
 			</Tabs.List>
+			{#if isActive(data.boostedUntil)}
+				<Tabs.Content value="home" class="w-full">
+					<Markdown content={data.homeContent} />
+				</Tabs.Content>
+			{/if}
 			<Tabs.Content value="members" class="w-full">
 				<div class="filter">
 					<div class="filterItem">
