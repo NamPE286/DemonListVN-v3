@@ -354,6 +354,11 @@
 
 <svelte:head>
 	<title>{data.name}'s clan info - Demon List VN</title>
+	<meta property="og:title" content={`${data.name}'s clan info - Demon List VN`} />
+	<meta
+		property="og:image"
+		content={`https://cdn.demonlistvn.com/clan-photos/${$page.params.id}.jpg?version=${data.imageVersion}`}
+	/>
 </svelte:head>
 
 <input
@@ -708,8 +713,16 @@
 								style={`background-color: ${editedData.tagBgColor}; color: ${editedData.tagTextColor};`}
 								>{data.tag}</Badge
 							>
-							<Input disabled={!isActive(data.boostedUntil)} type="color" bind:value={editedData.tagBgColor} />
-							<Input disabled={!isActive(data.boostedUntil)} type="color" bind:value={editedData.tagTextColor} />
+							<Input
+								disabled={!isActive(data.boostedUntil)}
+								type="color"
+								bind:value={editedData.tagBgColor}
+							/>
+							<Input
+								disabled={!isActive(data.boostedUntil)}
+								type="color"
+								bind:value={editedData.tagTextColor}
+							/>
 							<Button
 								variant="outline"
 								on:click={() => {
