@@ -25,7 +25,7 @@
 			x -= 2;
 		}
 
-		if(player.clan) {
+		if (player.clan) {
 			x -= 4;
 		}
 
@@ -49,7 +49,7 @@
 				<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
 			</Tooltip.Root>
 		{/if}
-		{#if player.clan}
+		{#if player.clan && isActive(player.clan.boostedUntil)}
 			<a
 				href={`/clan/${player.clan}`}
 				class={badgeVariants({ variant: 'secondary' })}
@@ -65,7 +65,11 @@
 			<div class="flex items-center gap-[5px]">
 				{#if isActive(player.supporterUntil)}
 					<span class="text-yellow-500">
-						{truncateText(player.name)}
+						{truncateText(
+							isActive(player.clan.boostedUntil)
+								? player.name
+								: `[${player.clans.tag}] ${player.name}`
+						)}
 					</span>
 				{:else}
 					{truncateText(player.name)}
@@ -107,7 +111,7 @@
 						/>
 						<Avatar.Fallback>{player.name[0]}</Avatar.Fallback>
 					</Avatar.Root>
-					{#if player.clan}
+					{#if player.clan && isActive(player.clan.boostedUntil)}
 						<a
 							href={`/clan/${player.clan}`}
 							class={badgeVariants({ variant: 'secondary' })}
@@ -116,13 +120,11 @@
 						>
 					{/if}
 					<h4 class="font-semibold">
-						{#if isActive(player.supporterUntil)}
-							<span class="text-yellow-500">
-								{player.name}
-							</span>
-						{:else}
-							{player.name}
-						{/if}
+						<span class={isActive(player.supporterUntil) ? 'text-yellow-500' : ''}>
+							{#if !isActive(player.clan.boostedUntil)}
+								<a href={`/clan/${player.clan}`}>[{player.clans.tag}]</a>
+							{/if}{player.name}
+						</span>
 					</h4>
 				</div>
 				<div class="content">
