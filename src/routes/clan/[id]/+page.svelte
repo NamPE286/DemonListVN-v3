@@ -27,6 +27,7 @@
 	import Ads from '$lib/components/ads.svelte';
 	import { upload } from '$lib/client/storage';
 	import InviteButton from './inviteButton.svelte';
+	import BoostButton from './boostButton.svelte';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
@@ -419,6 +420,9 @@
 							{/if}
 						{/if}
 					</div>
+					<div class="bannerBtn">
+						<BoostButton {data} />
+					</div>
 				</div>
 			</div>
 		</div>
@@ -789,7 +793,7 @@
 					display: flex;
 					justify-content: space-between;
 					gap: 10px;
-					margin-top: 10px;
+					margin-top: 5px;
 				}
 			}
 		}

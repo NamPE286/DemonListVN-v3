@@ -6,10 +6,10 @@
 	import { user } from '$lib/client';
 
 	let invitePlayerUID = '';
-	let inviteOpened = false;
+	let opened = false;
 
 	async function invitePlayer() {
-		inviteOpened = false;
+		opened = false;
 
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/clan/invite/${invitePlayerUID}`, {
@@ -30,7 +30,7 @@
 	}
 </script>
 
-<Dialog.Root bind:open={inviteOpened}>
+<Dialog.Root bind:open={opened}>
 	<Dialog.Trigger class="w-full">
 		<Button variant="outline" class="w-full">Invite</Button>
 	</Dialog.Trigger>
