@@ -31,6 +31,7 @@
 	import BoostButton from './boostButton.svelte';
 	import Markdown from '$lib/components/markdown.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
@@ -458,7 +459,11 @@
 			</Tabs.List>
 			{#if isActive(data.boostedUntil)}
 				<Tabs.Content value="home" class="w-full">
-					<Markdown content={data.homeContent} />
+					{#if data.mode == 'markdown'}
+						<Markdown content={data.homeContent} />
+					{:else if data.mode == 'iframe'}
+						<iframe class="w-full h-[calc(100vh-180px)] rounded-lg" src={data.homeContent} title='home' />
+					{/if}
 				</Tabs.Content>
 			{/if}
 			<Tabs.Content value="members" class="w-full">
@@ -682,9 +687,23 @@
 							/>
 						</div>
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Content Mode</Label>
+							<RadioGroup.Root bind:value={data.mode}>
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="markdown" />
+									<Label for="markdown">Markdown</Label>
+								</div>
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="iframe" />
+									<Label for="iframe">iframe</Label>
+								</div>
+							</RadioGroup.Root>
+						</div>
+						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
 							<Label for="name" class="text-right">Clan's name</Label>
 							<Input id="name" class="col-span-3" bind:value={editedData.name} />
 						</div>
+
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
 							<Label for="tag" class="text-right">Clan's tag</Label>
 							<Input id="tag" class="col-span-3" bind:value={editedData.tag} />
