@@ -35,7 +35,7 @@
 	export let data: PageData;
 	let editedData = structuredClone(data);
 	let transferUID = '';
-	let currentTab: string = isActive(data.boostedUntil) ? 'home' : 'members';
+	let currentTab: string = isActive(data.boostedUntil) && data.homeContent ? 'home' : 'members';
 	let members: any[] = [];
 	let records: any[] = [];
 	let invitations: any[] = [];
