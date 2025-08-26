@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData } from '../$types';
+	import type { PageData } from './$types';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { getTitle, user } from '$lib/client';
@@ -102,7 +102,11 @@
 								<AlertDialog.Title>Link card to this account ({$user.data.name})?</AlertDialog.Title
 								>
 								<AlertDialog.Description>
-									This will permanently link the card and give <b>{data.supporterIncluded} month{data.supporterIncluded == 1 ? '' : 's'} of Supporter Role</b> to this account ({$user.data.name}).
+									This will permanently link the card and give <b
+										>{data.supporterIncluded} month{data.supporterIncluded == 1 ? '' : 's'} of Supporter
+										Role</b
+									>
+									to this account ({$user.data.name}).
 								</AlertDialog.Description>
 							</AlertDialog.Header>
 							<AlertDialog.Footer>
@@ -148,7 +152,7 @@
 							/>
 							<Avatar.Fallback>{data.players.name[0]}</Avatar.Fallback>
 						</Avatar.Root>
-						{#if data.players.clan}
+						{#if data.players.clan && isActive(data.players.clans.boostedUntil)}
 							<a
 								href={`/clan/${data.players.clan}`}
 								class={badgeVariants({ variant: 'secondary' })}
@@ -158,13 +162,11 @@
 						{/if}
 						<a href={`/player/${data.players.uid}`}>
 							<h4 class="font-semibold">
-								{#if isActive(data.players.supporterUntil)}
-									<span class="text-yellow-500">
-										{data.players.name}
-									</span>
-								{:else}
-									{data.players.name}
-								{/if}
+								<span class={isActive(data.players.supporterUntil) ? 'text-yellow-500' : ''}>
+									{#if !isActive(data.players.clans.boostedUntil)}
+										<a href={`/clan/${data.players.clan}`}>[{data.players.clans.tag}]</a>
+									{/if}{data.players.name}
+								</span>
 							</h4>
 						</a>
 					</div>

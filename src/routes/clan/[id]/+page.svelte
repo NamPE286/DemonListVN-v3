@@ -3,6 +3,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Select from '$lib/components/ui/select';
 	import * as Dialog from '$lib/components/ui/dialog';
+	import { Textarea } from '$lib/components/ui/textarea';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Switch } from '$lib/components/ui/switch';
@@ -21,19 +22,20 @@
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
-	import supabase from '$lib/client/supabase';
 	import imageCompression from 'browser-image-compression';
 	import { fade } from 'svelte/transition';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import Ads from '$lib/components/ads.svelte';
 	import { upload } from '$lib/client/storage';
+	import InviteButton from './inviteButton.svelte';
+	import BoostButton from './boostButton.svelte';
+	import Markdown from '$lib/components/markdown.svelte';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
 	let transferUID = '';
-	let invitePlayerUID = '';
-	let inviteOpened = false;
-	let currentTab: string = 'members';
+	let currentTab: string = isActive(data.boostedUntil) ? 'home' : 'members';
 	let members: any[] = [];
 	let records: any[] = [];
 	let invitations: any[] = [];
@@ -161,31 +163,11 @@
 		}).then((res) => window.location.reload());
 	}
 
-	async function invitePlayer() {
-		inviteOpened = false;
-
-		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/clan/invite/${invitePlayerUID}`, {
-				method: 'POST',
-				headers: {
-					Authorization: 'Bearer ' + (await $user.token())
-				}
-			}),
-			{
-				success: () => {
-					invitePlayerUID = '';
-					return 'Player invited!';
-				},
-				loading: 'Sending invitation...',
-				error: 'Failed to invite player.'
-			}
-		);
-	}
-
 	async function updateClan() {
 		delete editedData.id;
 		delete editedData.created_at;
 		delete editedData.players;
+		delete editedData.boostedUntil;
 
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
@@ -251,6 +233,7 @@
 			delete editedData.id;
 			delete editedData.created_at;
 			delete editedData.players;
+			delete editedData.boostedUntil;
 
 			editedData.imageVersion++;
 
@@ -435,26 +418,20 @@
 								>
 							{:else if $user.data.clan == $page.params.id}
 								{#if data.isPublic || data.owner == $user.data.uid}
-									<Dialog.Root bind:open={inviteOpened}>
-										<Dialog.Trigger class="w-full">
-											<Button variant="outline" class="w-full">Invite</Button>
-										</Dialog.Trigger>
-										<Dialog.Content>
-											<Dialog.Header>
-												<Dialog.Title>Invite new player</Dialog.Title>
-											</Dialog.Header>
-											<Input placeholder="Player's UID" bind:value={invitePlayerUID} />
-											<Button on:click={invitePlayer} disabled={invitePlayerUID.length == 0}
-												>Invite</Button
-											>
-										</Dialog.Content>
-									</Dialog.Root>
+									<InviteButton />
 								{/if}
 							{:else if data.isPublic && (data.memberCount < data.memberLimit || data.memberLimit == 0)}
 								<Button variant="outline" class="w-full" on:click={joinClan}>Join</Button>
 							{/if}
+
+							<BoostButton {data} />
 						{/if}
 					</div>
+					{#if new Date(data.boostedUntil) > new Date()}
+						<p class="text-center text-sm text-gray-500">
+							Boosted until: {new Date(data.boostedUntil).toLocaleDateString('vi-vn')}
+						</p>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -464,6 +441,9 @@
 	<div class="content">
 		<Tabs.Root bind:value={currentTab} class="flex w-[100%] flex-col items-center">
 			<Tabs.List class="mb-[5px] w-fit">
+				{#if isActive(data.boostedUntil)}
+					<Tabs.Trigger value="home">Home</Tabs.Trigger>
+				{/if}
 				<Tabs.Trigger value="members">Members</Tabs.Trigger>
 				<Tabs.Trigger value="records">Records</Tabs.Trigger>
 				{#if $user.loggedIn && $user.data.clan == $page.params.id}
@@ -471,6 +451,11 @@
 					<Tabs.Trigger value="settings">Settings</Tabs.Trigger>
 				{/if}
 			</Tabs.List>
+			{#if isActive(data.boostedUntil)}
+				<Tabs.Content value="home" class="w-full">
+					<Markdown content={data.homeContent} />
+				</Tabs.Content>
+			{/if}
 			<Tabs.Content value="members" class="w-full">
 				<div class="filter">
 					<div class="filterItem">
@@ -683,6 +668,15 @@
 					<section>
 						<h3>Basic info</h3>
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Home Content</Label>
+							<Textarea
+								disabled={!isActive(data.boostedUntil)}
+								id="name"
+								class="col-span-3"
+								bind:value={editedData.homeContent}
+							/>
+						</div>
+						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
 							<Label for="name" class="text-right">Clan's name</Label>
 							<Input id="name" class="col-span-3" bind:value={editedData.name} />
 						</div>
@@ -714,8 +708,8 @@
 								style={`background-color: ${editedData.tagBgColor}; color: ${editedData.tagTextColor};`}
 								>{data.tag}</Badge
 							>
-							<Input type="color" bind:value={editedData.tagBgColor} />
-							<Input type="color" bind:value={editedData.tagTextColor} />
+							<Input disabled={!isActive(data.boostedUntil)} type="color" bind:value={editedData.tagBgColor} />
+							<Input disabled={!isActive(data.boostedUntil)} type="color" bind:value={editedData.tagTextColor} />
 							<Button
 								variant="outline"
 								on:click={() => {
@@ -724,7 +718,7 @@
 							>
 						</div>
 						<div class="applyBtnWrapper">
-							<Button on:click={updateClan}>Apply</Button>
+							<Button on:click={updateClan}>Save</Button>
 						</div>
 					</section>
 				{/if}
@@ -799,7 +793,7 @@
 				z-index: 1;
 				height: 100%;
 				width: 100%;
-				padding-bottom: 18px;
+				padding-bottom: 8px;
 				padding-inline: 18px;
 				display: flex;
 				flex-direction: column-reverse;
@@ -825,7 +819,7 @@
 					display: flex;
 					justify-content: space-between;
 					gap: 10px;
-					margin-top: 10px;
+					margin-top: 5px;
 				}
 			}
 		}
