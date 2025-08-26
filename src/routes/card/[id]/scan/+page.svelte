@@ -152,7 +152,7 @@
 							/>
 							<Avatar.Fallback>{data.players.name[0]}</Avatar.Fallback>
 						</Avatar.Root>
-						{#if data.players.clan && isActive(data.players.clan.boostedUntil)}
+						{#if data.players.clan && isActive(data.players.clans.boostedUntil)}
 							<a
 								href={`/clan/${data.players.clan}`}
 								class={badgeVariants({ variant: 'secondary' })}
@@ -163,7 +163,7 @@
 						<a href={`/player/${data.players.uid}`}>
 							<h4 class="font-semibold">
 								<span class={isActive(data.players.supporterUntil) ? 'text-yellow-500' : ''}>
-									{#if !isActive(data.players.clan.boostedUntil)}
+									{#if !isActive(data.players.clans.boostedUntil)}
 										<a href={`/clan/${data.players.clan}`}>[{data.players.clans.tag}]</a>
 									{/if}{data.players.name}
 								</span>
