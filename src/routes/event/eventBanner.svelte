@@ -54,6 +54,11 @@
 						<Clock size={16} />
 						{getInterval(data.end)}
 					</div>
+					{#if data.isRanked}
+						<div class="period">
+							Ranked
+						</div>
+					{/if}
 					{#if data.isSupporterOnly}
 						<div class="period">
 							<Star size={16} />
