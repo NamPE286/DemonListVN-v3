@@ -17,7 +17,8 @@
 		flTop: NaN,
 		rating: NaN,
 		insaneTier: NaN,
-		isPlatformer: false
+		isPlatformer: false,
+		isNonList: false
 	};
 
 	async function fetchLevel() {
@@ -189,6 +190,10 @@
 		<div class="input">
 			<Label for="rating" class="w-[100px]">Platformer</Label>
 			<Switch bind:checked={level.isPlatformer}></Switch>
+		</div>
+		<div class="input">
+			<Label for="rating" class="w-[100px]">Non List</Label>
+			<Switch bind:checked={level.isNonList}></Switch>
 		</div>
 		<div class="flex w-[150px] flex-col gap-[15px]">
 			<Button on:click={updateLevel}>{state == 1 ? 'Update' : 'Add new level'}</Button>
