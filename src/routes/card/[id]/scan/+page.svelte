@@ -215,6 +215,26 @@
 								</div>
 							</div>
 						</div>
+						<div class="rating">
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									<div class="leftCol">
+										<div
+											class="title text-white"
+											style={`background-color: ${getTitle('elo', data.players)?.color}`}
+										>
+											{#if data.players.matchCount < 10}
+												<span class="opacity-50">{`${data.players.elo}?`}</span>
+											{:else}
+												{data.players.elo}
+											{/if}
+										</div>
+									</div>
+								</Tooltip.Trigger>
+								<Tooltip.Content>{getTitle('elo', data.players)?.fullTitle}</Tooltip.Content>
+							</Tooltip.Root>
+							<div class="rankWrapper">Contest Rating</div>
+						</div>
 					</div>
 				</Card.Content>
 			</Card.Root>

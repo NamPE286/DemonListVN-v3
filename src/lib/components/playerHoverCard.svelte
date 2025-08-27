@@ -169,6 +169,26 @@
 							</div>
 						</div>
 					</div>
+					<div class="rating">
+						<Tooltip.Root>
+							<Tooltip.Trigger>
+								<div class="leftCol">
+									<div
+										class="title text-white"
+										style={`background-color: ${getTitle('elo', player)?.color}`}
+									>
+										{#if player.matchCount < 10}
+											<span class="opacity-50">{`${player.elo}?`}</span>
+										{:else}
+											{player.elo}
+										{/if}
+									</div>
+								</div>
+							</Tooltip.Trigger>
+							<Tooltip.Content>{getTitle('elo', player)?.fullTitle}</Tooltip.Content>
+						</Tooltip.Root>
+						<div class="rankWrapper">Contest Rating</div>
+					</div>
 				</div>
 			</div>
 		</HoverCard.Content>
