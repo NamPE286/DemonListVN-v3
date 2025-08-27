@@ -32,6 +32,7 @@
 	import Markdown from '$lib/components/markdown.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
+	import { Content } from '$lib/components/ui/alert-dialog';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
@@ -678,7 +679,13 @@
 					<section>
 						<h3>Basic info</h3>
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
-							<Label for="name" class="text-right">Home Content</Label>
+							<Label for="name" class="text-right">
+								{#if data.mode == 'markdown'}
+									Home Content
+								{:else if data.mode == 'iframe'}
+									iframe URL
+								{/if}
+							</Label>
 							<Textarea
 								disabled={!isActive(data.boostedUntil)}
 								id="name"
