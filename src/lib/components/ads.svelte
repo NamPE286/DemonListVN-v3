@@ -26,11 +26,11 @@
 			console.error(err);
 		}
 
-		// user.subscribe((p) => {
-		// 	if (p.data && isActive(p.data.supporterUntil)) {
-		// 		enabled = false;
-		// 	}
-		// });
+		user.subscribe((p) => {
+			if (p.data && isActive(p.data.supporterUntil)) {
+				enabled = false;
+			}
+		});
 	});
 </script>
 
@@ -44,7 +44,6 @@
 				data-ad-slot="7284584064"
 				data-ad-format={dataAdFormat}
 				data-full-width-responsive="true"
-				data-adtest="on"
 			></ins>
 		</div>
 	{:else if unit == 'leaderboard'}
