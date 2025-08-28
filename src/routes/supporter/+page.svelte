@@ -52,8 +52,8 @@
 				<Card.Header>
 					<Card.Title>Keep Demon List VN self-sustaining</Card.Title>
 					<Card.Description class="w-[250px]">
-						Your contributions help keep the site independent and completely free from ads and
-						outside sponsors.
+						Your contributions help keep the site independent and completely free from outside
+						sponsors.
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
@@ -73,6 +73,14 @@
 					<Card.Title>Animated Avatar and Banner</Card.Title>
 					<Card.Description class="w-[250px]">
 						Catch everyone's eye with a dynamic avatar and banner that bring your profile to life.
+					</Card.Description>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Ads-free experience</Card.Title>
+					<Card.Description class="w-[250px]">
+						Enjoy an uninterrupted browsing experience with no ads across the website.
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
