@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { onMount } from 'svelte';
 	import { user } from '$lib/client';
 	import { isActive } from '$lib/client/isSupporterActive';
@@ -6,6 +6,7 @@
 	export let dataAdFormat = 'auto';
 	export let unit = 'auto';
 	let mounted = false;
+	let adContainer: any;
 
 	onMount(() => {
 		if (mounted) {
@@ -14,18 +15,23 @@
 
 		mounted = true;
 
-		try {
-			// @ts-ignore
-			(window.adsbygoogle = window.adsbygoogle || []).push({});
-		} catch (err) {
-			console.error(err);
+		if (adContainer) {
+			const insElement = adContainer.querySelector('.adsbygoogle');
+			if (insElement && !insElement.dataset.adsbygoogleStatus) {
+				try {
+					// @ts-ignore
+					(window.adsbygoogle = window.adsbygoogle || []).push({});
+				} catch (err) {
+					console.error('AdSense error:', err);
+				}
+			}
 		}
 	});
 </script>
 
 {#if $user.checked && (!$user.loggedIn || !isActive($user.data.supporterUntil))}
 	{#if unit == 'auto'}
-		<div class="text-center">
+		<div class="text-center" bind:this={adContainer}>
 			<ins
 				class="adsbygoogle ad"
 				style="display:block"
@@ -36,7 +42,7 @@
 			></ins>
 		</div>
 	{:else if unit == 'leaderboard'}
-		<div class="text-center">
+		<div class="text-center" bind:this={adContainer}>
 			<ins
 				class="adsbygoogle ad"
 				style="display:inline-block;width:728px;height:90px"
