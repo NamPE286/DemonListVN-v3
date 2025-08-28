@@ -7,6 +7,7 @@
 	export let unit = 'auto';
 	let mounted = false;
 	let adContainer: any;
+	$: shouldShowAds = $user.checked && (!$user.loggedIn || !isActive($user.data.supporterUntil));
 
 	onMount(() => {
 		if (mounted) {
@@ -15,21 +16,23 @@
 
 		mounted = true;
 
-		if (adContainer) {
-			const insElement = adContainer.querySelector('.adsbygoogle');
-			if (insElement && !insElement.dataset.adsbygoogleStatus) {
-				try {
-					// @ts-ignore
-					(window.adsbygoogle = window.adsbygoogle || []).push({});
-				} catch (err) {
-					console.error('AdSense error:', err);
+		if (shouldShowAds) {
+			if (adContainer) {
+				const insElement = adContainer.querySelector('.adsbygoogle');
+				if (insElement && !insElement.dataset.adsbygoogleStatus) {
+					try {
+						// @ts-ignore
+						(window.adsbygoogle = window.adsbygoogle || []).push({});
+					} catch (err) {
+						console.error('AdSense error:', err);
+					}
 				}
 			}
 		}
 	});
 </script>
 
-{#if $user.checked && (!$user.loggedIn || !isActive($user.data.supporterUntil))}
+{#if shouldShowAds}
 	{#if unit == 'auto'}
 		<div class="text-center" bind:this={adContainer}>
 			<ins
