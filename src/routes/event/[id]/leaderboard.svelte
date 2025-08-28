@@ -298,6 +298,9 @@
 						</Tooltip.Root>
 					</Table.Head>
 				{/each}
+				{#if event.isCalculated}
+					<Table.Head class="w-[75px] text-center">Δ</Table.Head>
+				{/if}
 			</Table.Row>
 		</Table.Header>
 	</Table.Root>
@@ -518,6 +521,11 @@
 							</Table.Cell>
 						{/if}
 					{/each}
+					<Table.Cell
+						class={`w-[75px] text-center ${Math.sign(player.diff) > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}
+					>
+						{Math.sign(player.diff) > 0 ? '+' : ''}{player.diff}
+					</Table.Cell>
 				</tr>
 			{/each}
 		</Table.Body>
