@@ -5,14 +5,9 @@
 
 	export let dataAdFormat = 'auto';
 	export let unit = 'auto';
-	let enabled = true;
 	let mounted = false;
 
 	onMount(() => {
-		if (!enabled) {
-			return;
-		}
-
 		if (mounted) {
 			return;
 		}
@@ -25,16 +20,10 @@
 		} catch (err) {
 			console.error(err);
 		}
-
-		user.subscribe((p) => {
-			if (p.data && isActive(p.data.supporterUntil)) {
-				enabled = false;
-			}
-		});
 	});
 </script>
 
-{#if enabled}
+{#if $user.checked && (!$user.loggedIn || !isActive($user.data.supporterUntil))}
 	{#if unit == 'auto'}
 		<div class="text-center">
 			<ins
