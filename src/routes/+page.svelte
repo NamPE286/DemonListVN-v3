@@ -5,6 +5,8 @@
 	import Autoplay from 'embla-carousel-autoplay';
 	import EventBanner from './event/eventBanner.svelte';
 	import Ads from '$lib/components/ads.svelte';
+	import { user } from '$lib/client';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
@@ -13,6 +15,7 @@
 		fl: null
 	};
 	let events: any = null;
+	$: shouldShowAds = $user.checked && (!$user.loggedIn || !isActive($user.data.supporterUntil));
 
 	async function getRecentDemonListLevel() {
 		const query = new URLSearchParams({
@@ -65,6 +68,13 @@
 		name="description"
 		content="Welcome to Demon List VN, this is where we keep track of the hardest demons created, verified and hardest demon beaten by Vietnamese!"
 	/>
+	{#if shouldShowAds}
+		<script
+			async
+			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4605218533506777"
+			crossorigin="anonymous"
+		></script>
+	{/if}
 </svelte:head>
 
 <div class="promotionWrapper mt-[20px] w-full pl-[50px] pr-[50px]">
@@ -95,7 +105,7 @@
 		<Carousel.Next />
 	</Carousel.Root>
 </div>
-<Ads dataAdFormat="auto" unit='leaderboard' />
+<Ads dataAdFormat="auto" unit="leaderboard" />
 <div class="wrapper">
 	<h4>Newest levels from Demon List</h4>
 	<div class="carouselWrapper">
