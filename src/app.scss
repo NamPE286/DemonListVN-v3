@@ -90,6 +90,10 @@ ins.adsbygoogle.adsbygoogle-noablate {
   z-index: 799 !important;
 }
 
+ins.adsbygoogle[data-ad-status='unfilled'] {
+  display: none !important;
+}
+
 @layer base {
   * {
     @apply border-border;
