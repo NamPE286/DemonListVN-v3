@@ -9,6 +9,7 @@
 	import { onMount } from 'svelte';
 	import ParticipateButton from './participateButton.svelte';
 	import type { Level } from './type';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 
@@ -27,6 +28,7 @@
 </svelte:head>
 
 <EventBanner {data} />
+<Ads dataAdFormat="auto" unit='leaderboard' />
 
 {#if !data.hidden || ($user.loggedIn && $user.data.isAdmin)}
 	{#if data.isContest}

@@ -7,6 +7,7 @@
 	import { onMount } from 'svelte';
 	import type { Level } from '../type';
 	import SingleElimBracket from './singleElimBracket.svelte';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 
@@ -26,6 +27,8 @@
 	<EventBanner {data} />
 {/if}
 
+<Ads dataAdFormat="auto" unit="leaderboard" />
+
 {#if !data.hidden || ($user.loggedIn && $user.data.isAdmin)}
 	<Tabs.Root bind:value={tab} class="mt-[20px] flex flex-col items-center">
 		<Tabs.List>
@@ -40,9 +43,9 @@
 				{/if}
 			</div>
 		</Tabs.Content>
-		<Tabs.Content value="standing" class="h-[100vh] w-full mt-[20px]">
-            <SingleElimBracket {data} />
-        </Tabs.Content>
+		<Tabs.Content value="standing" class="mt-[20px] h-[100vh] w-full">
+			<SingleElimBracket {data} />
+		</Tabs.Content>
 		<Tabs.Content value="schedule" class="h-[100vh] w-full">
 			<iframe
 				src={data.data.calendar}
