@@ -28,9 +28,10 @@
 </svelte:head>
 
 <EventBanner {data} />
-<Ads dataAdFormat="auto" unit='leaderboard' />
+<Ads dataAdFormat="auto" unit="leaderboard" />
 
 {#if !data.hidden || ($user.loggedIn && $user.data.isAdmin)}
+	<ParticipateButton {data} />
 	{#if data.isContest}
 		<Tabs.Root value="detail" class="mt-[20px] flex flex-col items-center">
 			<Tabs.List>
@@ -55,7 +56,6 @@
 			</Tabs.Content>
 		</Tabs.Root>
 	{:else}
-		<ParticipateButton {data} />
 		<div class="markdown">
 			{#if data.content}
 				<Markdown content={data.content} />

@@ -25,7 +25,7 @@
 			return;
 		}
 
-		if (!$user.loggedIn || !data.exp) {
+		if (!$user.loggedIn) {
 			return;
 		}
 
@@ -103,7 +103,7 @@
 	});
 </script>
 
-{#if data.exp && $user.loggedIn}
+{#if $user.loggedIn}
 	{#if !data.supporterOnly || isActive($user.data.supporterUntil)}
 		<div class="md-[15px] mb-[15px] mt-[15px] flex justify-center">
 			{#if rewardState == 0}
@@ -111,18 +111,22 @@
 			{:else if rewardState == 1}
 				<Button class="w-[200px]" disabled>Reward claimed</Button>
 			{:else if rewardState == 2}
-				<Dialog.Root bind:open={cancelOpened}>
-					<Dialog.Trigger>
-						<Button class="w-[200px]" variant="destructive">Cancel participation</Button>
-					</Dialog.Trigger>
-					<Dialog.Content>
-						<Dialog.Header>
-							<Dialog.Title>Cancel?</Dialog.Title>
-							<Dialog.Description>This action cannot be undone.</Dialog.Description>
-						</Dialog.Header>
-						<Button variant="destructive" on:click={cancelProof}>Proceed</Button>
-					</Dialog.Content>
-				</Dialog.Root>
+				{#if !data.isRanked}
+					<Dialog.Root bind:open={cancelOpened}>
+						<Dialog.Trigger>
+							<Button class="w-[200px]" variant="destructive">Cancel participation</Button>
+						</Dialog.Trigger>
+						<Dialog.Content>
+							<Dialog.Header>
+								<Dialog.Title>Cancel?</Dialog.Title>
+								<Dialog.Description>This action cannot be undone.</Dialog.Description>
+							</Dialog.Header>
+							<Button variant="destructive" on:click={cancelProof}>Proceed</Button>
+						</Dialog.Content>
+					</Dialog.Root>
+				{:else}
+					<Button class="w-[200px]" disabled>Participated</Button>
+				{/if}
 			{:else if rewardState == 3}
 				<Button class="w-[200px]" disabled>Event ended</Button>
 			{:else if rewardState == 4}
