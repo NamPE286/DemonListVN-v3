@@ -442,7 +442,9 @@
 				</div>
 			</div>
 		</div>
-		<Ads dataAdFormat="vertical" />
+		{#if !isActive(data.boostedUntil)}
+			<Ads dataAdFormat="vertical" />
+		{/if}
 	</div>
 
 	<div class="content">
@@ -463,7 +465,11 @@
 					{#if data.mode == 'markdown'}
 						<Markdown content={data.homeContent} />
 					{:else if data.mode == 'iframe'}
-						<iframe class="w-full h-[calc(100vh-180px)] rounded-lg" src={data.homeContent} title='home' />
+						<iframe
+							class="h-[calc(100vh-180px)] w-full rounded-lg"
+							src={data.homeContent}
+							title="home"
+						/>
 					{/if}
 				</Tabs.Content>
 			{/if}

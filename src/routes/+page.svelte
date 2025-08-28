@@ -4,8 +4,9 @@
 	import { onMount } from 'svelte';
 	import Autoplay from 'embla-carousel-autoplay';
 	import EventBanner from './event/eventBanner.svelte';
+	import Ads from '$lib/components/ads.svelte';
 
-	let time = new Date().toLocaleTimeString("vi-VN");
+	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
 	let recent: any = {
 		dl: null,
@@ -49,7 +50,7 @@
 		getEvents().then((data) => (events = data));
 
 		const interval = setInterval(() => {
-			time = new Date().toLocaleTimeString("vi-VN");
+			time = new Date().toLocaleTimeString('vi-VN');
 		}, 1000);
 
 		return () => {
@@ -66,7 +67,7 @@
 	/>
 </svelte:head>
 
-<div class="promotionWrapper w-full pl-[50px] pr-[50px] mt-[20px]">
+<div class="promotionWrapper mt-[20px] w-full pl-[50px] pr-[50px]">
 	<Carousel.Root
 		class="h-fit w-full"
 		plugins={[
@@ -94,7 +95,7 @@
 		<Carousel.Next />
 	</Carousel.Root>
 </div>
-
+<Ads dataAdFormat="auto" unit='leaderboard' />
 <div class="wrapper">
 	<h4>Newest levels from Demon List</h4>
 	<div class="carouselWrapper">

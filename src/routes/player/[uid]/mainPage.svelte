@@ -259,7 +259,7 @@
 													style={`background-color: ${getTitle('elo', data.player)?.color}`}
 												>
 													{#if data.player.matchCount < 10}
-														<span class='opacity-50'>{`${data.player.elo}?`}</span>
+														<span class="opacity-50">{`${data.player.elo}?`}</span>
 													{:else}
 														{data.player.elo}
 													{/if}
@@ -279,7 +279,9 @@
 				<Heatmap uid={data.player.uid} />
 			{/key}
 		</div>
-		<Ads />
+		{#if !isActive(data.player.supporterUntil)}
+			<Ads dataAdFormat="rectangle" />
+		{/if}
 		<Tabs.Root value="dl">
 			<div class="tabs">
 				<Tabs.List class="grid w-[400px] max-w-full grid-cols-4">

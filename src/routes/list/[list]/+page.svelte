@@ -90,7 +90,11 @@
 
 <div class="levelsWrapper">
 	<div class="levels">
-		{#each data.levels as level}
+		{#each data.levels as level, index}
+			{#if (index) % 20 == 0 && index != 0}
+				<Ads />
+				<Ads />
+			{/if}
 			<LevelCard {level} type={$page.params.list || 'dl'} />
 		{/each}
 	</div>
