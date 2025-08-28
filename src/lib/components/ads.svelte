@@ -6,8 +6,7 @@
 	export let dataAdFormat = 'auto';
 	export let unit = 'auto';
 	let mounted = false;
-	let adContainer: any;
-	$: shouldShowAds = $user.checked && (!$user.loggedIn || !isActive($user.data.supporterUntil));
+	$: hidden = $user.checked && $user.loggedIn && isActive($user.data.supporterUntil);
 
 	onMount(() => {
 		if (mounted) {
@@ -16,25 +15,18 @@
 
 		mounted = true;
 
-		if (shouldShowAds) {
-			if (adContainer) {
-				const insElement = adContainer.querySelector('.adsbygoogle');
-				if (insElement && !insElement.dataset.adsbygoogleStatus) {
-					try {
-						// @ts-ignore
-						(window.adsbygoogle = window.adsbygoogle || []).push({});
-					} catch (err) {
-						console.error('AdSense error:', err);
-					}
-				}
-			}
+		try {
+			// @ts-ignore
+			(window.adsbygoogle = window.adsbygoogle || []).push({});
+		} catch (err) {
+			console.error('AdSense error:', err);
 		}
 	});
 </script>
 
-{#if shouldShowAds}
+{#if !hidden}
 	{#if unit == 'auto'}
-		<div class="text-center" bind:this={adContainer}>
+		<div class="text-center">
 			<ins
 				class="adsbygoogle ad"
 				style="display:block"
@@ -45,7 +37,7 @@
 			></ins>
 		</div>
 	{:else if unit == 'leaderboard'}
-		<div class="text-center" bind:this={adContainer}>
+		<div class="text-center">
 			<ins
 				class="adsbygoogle ad"
 				style="display:inline-block;width:728px;height:90px"

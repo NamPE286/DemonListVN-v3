@@ -15,7 +15,6 @@
 		fl: null
 	};
 	let events: any = null;
-	$: shouldShowAds = $user.checked && (!$user.loggedIn || !isActive($user.data.supporterUntil));
 
 	async function getRecentDemonListLevel() {
 		const query = new URLSearchParams({
@@ -68,13 +67,6 @@
 		name="description"
 		content="Welcome to Demon List VN, this is where we keep track of the hardest demons created, verified and hardest demon beaten by Vietnamese!"
 	/>
-	{#if shouldShowAds}
-		<script
-			async
-			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4605218533506777"
-			crossorigin="anonymous"
-		></script>
-	{/if}
 </svelte:head>
 
 <div class="promotionWrapper mt-[20px] w-full pl-[50px] pr-[50px]">
