@@ -43,7 +43,6 @@
 	let hideNav = false;
 	let removePad = false;
 	const isDesktop = mediaQuery('(min-width: 1350px)');
-	$: shouldShowAds = $user.checked && (!$user.loggedIn || !isActive($user.data.supporterUntil));
 
 	function signIn() {
 		supabase.auth.signInWithOAuth({
@@ -98,18 +97,19 @@
 		const urlParams = new URLSearchParams(window.location.search);
 		hideNav = urlParams.has('hideNav');
 		removePad = urlParams.has('removePad');
+
+		user.subscribe((u) => {
+			if (u.checked && (!u.loggedIn || !isActive(u.data.supporterUntil))) {
+				const s = document.createElement('script');
+				s.async = true;
+				s.src =
+					'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4605218533506777';
+				s.crossOrigin = 'anonymous';
+				document.head.appendChild(s);
+			}
+		});
 	});
 </script>
-
-<svelte:head>
-	{#if shouldShowAds}
-		<script
-			async
-			src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4605218533506777"
-			crossorigin="anonymous"
-		></script>
-	{/if}
-</svelte:head>
 
 <ModeWatcher defaultMode="system" />
 <Toaster position="top-center" />
