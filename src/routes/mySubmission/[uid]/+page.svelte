@@ -9,6 +9,7 @@
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
+	import Ads from '$lib/components/ads.svelte';
 
 	export let data: PageData;
 	let alertOpened = false;
@@ -56,6 +57,7 @@
 	<title>My submissions - Demon List VN</title>
 </svelte:head>
 
+<Ads unit="leaderboard" />
 <RecordDetail bind:open={recordDetailOpened} uid={userID} {levelID} />
 
 <AlertDialog.Root bind:open={alertOpened}>

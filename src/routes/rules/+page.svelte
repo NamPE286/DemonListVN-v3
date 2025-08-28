@@ -1,12 +1,13 @@
 <script lang="ts">
+	import Ads from '$lib/components/ads.svelte';
 	import BigTitle from '$lib/components/bigTitle.svelte';
 </script>
 
 <svelte:head>
 	<title>Rules - Demon List VN</title>
 </svelte:head>
-
 <BigTitle value="Rules" description="Read the rules" />
+<Ads unit="leaderboard" />
 <div class="wrapper">
 	<h2>General rules</h2>
 	<ul>
