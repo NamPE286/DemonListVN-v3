@@ -376,18 +376,18 @@
 												<s>
 													{getPoint(record, index)}<br />
 													<span class="text-[11px] opacity-50">
-														{record ? `${record.progress}%` : ''}
+														{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 													</span>
 												</s>
 											{:else if record && record.accepted === null}
 												{getPoint(record, index)}*<br />
 												<span class="text-[11px] opacity-50">
-													{record ? `${record.progress}%` : ''}
+													{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 												</span>
 											{:else}
 												{getPoint(record, index)}<br />
 												<span class="text-[11px] opacity-50">
-													{record ? `${record.progress}%` : ''}
+													{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 												</span>
 											{/if}
 										</Dialog.Trigger>
@@ -499,18 +499,18 @@
 										<s>
 											{getPoint(record, index)}<br />
 											<span class="text-[11px] opacity-50">
-												{record ? `${record.progress}%` : ''}
+												{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 											</span>
 										</s>
 									{:else if record && record.accepted === null}
 										{getPoint(record, index)}*<br />
 										<span class="text-[11px] opacity-50">
-											{record ? `${record.progress}%` : ''}
+											{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 										</span>
 									{:else}
 										{getPoint(record, index)}<br />
 										<span class="text-[11px] opacity-50">
-											{record ? `${record.progress}%` : ''}
+											{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 										</span>
 									{/if}
 								{:else if record == 'revealed'}
@@ -521,11 +521,13 @@
 							</Table.Cell>
 						{/if}
 					{/each}
-					<Table.Cell
-						class={`w-[75px] text-center ${Math.sign(player.diff) > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}
-					>
-						{Math.sign(player.diff) > 0 ? '+' : ''}{player.diff}
-					</Table.Cell>
+					{#if event.isCalculated}
+						<Table.Cell
+							class={`w-[75px] text-center ${Math.sign(player.diff) > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}
+						>
+							{Math.sign(player.diff) > 0 ? '+' : ''}{player.diff}
+						</Table.Cell>
+					{/if}
 				</tr>
 			{/each}
 		</Table.Body>
