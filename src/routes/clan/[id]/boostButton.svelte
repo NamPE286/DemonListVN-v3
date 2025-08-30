@@ -49,7 +49,7 @@
 	<Dialog.Trigger disabled={!$user.loggedIn} on:click={reset} class="w-full">
 		<Button
 			variant="outline"
-			class="w-full border-yellow-300  bg-yellow-600  text-white hover:bg-yellow-500 hover:text-white"
+			class="w-full border-yellow-300  bg-yellow-500 text-white  hover:bg-yellow-600 hover:text-white dark:bg-yellow-700 hover:dark:bg-yellow-600"
 			{disabled}
 		>
 			Boost this clan
