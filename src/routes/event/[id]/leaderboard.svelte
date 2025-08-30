@@ -242,11 +242,11 @@
 		<Alert.Title class="flex items-center gap-[10px]">
 			<ExclamationTriangle size={15} />
 			{#if new Date(event.freeze) > new Date()}
-				The leaderboard will be freezed on {new Date(event.freeze).toLocaleString('vi-vn')}.
+				The leaderboard will be frozen on {new Date(event.freeze).toLocaleString('vi-vn')}.
 			{:else if event.freeze == event.start}
 				The leaderboard is hidden.
 			{:else}
-				The leaderboard is freezed since {new Date(event.freeze).toLocaleString('vi-vn')}.
+				The leaderboard has been frozen since {new Date(event.freeze).toLocaleString('vi-vn')}.
 			{/if}
 		</Alert.Title>
 	</Alert.Root>
