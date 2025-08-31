@@ -174,7 +174,7 @@
 							<Tooltip.Trigger>
 								<div class="leftCol">
 									<div
-										class="title text-white"
+										class="title"
 										style={`background-color: ${getTitle('elo', player)?.color}`}
 									>
 										{#if player.matchCount < 10}
