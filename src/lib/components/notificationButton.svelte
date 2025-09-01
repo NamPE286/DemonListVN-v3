@@ -75,8 +75,8 @@
 		if ($user.data.exp === 0) {
 			notifications = [
 				{
-					content:
-						'You must submit a record before you can do with anything else. This notification will disappear when your record is accepted.',
+					content: 'Beat Platinum Adventure to fully unlock your account',
+					redirect: '/level/5904109',
 					timestamp: new Date().toISOString()
 				}
 			];
@@ -89,8 +89,8 @@
 		if ($user.data.exp === 0) {
 			notifications = [
 				{
-					content:
-						'You must submit a record before you can do with anything else. This notification will disappear when your record is accepted.',
+					content: 'Beat Platinum Adventure to fully unlock your account',
+					redirect: '/level/5904109',
 					timestamp: new Date().toISOString()
 				}
 			];
@@ -104,7 +104,7 @@
 		});
 	}
 
-	$: $user, fetchNotifications();
+	$: ($user, fetchNotifications());
 </script>
 
 <Popover.Root>
