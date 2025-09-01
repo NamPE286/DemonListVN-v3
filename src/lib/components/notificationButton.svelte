@@ -72,7 +72,7 @@
 			)
 			.subscribe();
 
-		if ($user.data.exp === 0) {
+		if ($user.data.recordCount === 0) {
 			notifications = [
 				{
 					content: 'Beat Platinum Adventure to fully unlock your account',
@@ -86,7 +86,7 @@
 	async function clear() {
 		notifications = [];
 
-		if ($user.data.exp === 0) {
+		if ($user.data.recordCount === 0) {
 			notifications = [
 				{
 					content: 'Beat Platinum Adventure to fully unlock your account',
