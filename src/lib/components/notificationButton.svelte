@@ -55,23 +55,6 @@
 			).json();
 		} catch {}
 
-		supabase
-			.channel('table-db-changes')
-			.on(
-				'postgres_changes',
-				{
-					event: 'INSERT',
-					schema: 'public',
-					table: 'notifications',
-					filter: `to=eq.${$user.data.uid}`
-				},
-				(payload) => {
-					notifications.unshift(payload.new);
-					notifications = notifications;
-				}
-			)
-			.subscribe();
-
 		if ($user.data.recordCount === 0) {
 			notifications = [
 				{
