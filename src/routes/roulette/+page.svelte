@@ -244,7 +244,7 @@ function handleListTypeChange(type: 'all' | 'dl' | 'fl' | 'pl'): void {
 
   <div class="flex flex-col md:flex-row gap-6 md:gap-10 mt-6 items-start w-full max-w-5xl">
     <Card class="rounded-2xl shadow-xl min-w-[0] w-full max-w-[auto] md:max-w-[520px] flex flex-col items-center dark:bg-black bg-white mb-6 md:mb-0">
-      <CardContent class="w-full flex flex-col items-center p-4 sm:p-8">
+      <CardContent class="w-full flex-col items-center p-4 sm:p-8">
         {#if currentLevel}
           <LevelCard level={currentLevel} type={currentType} />
         {/if}
