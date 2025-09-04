@@ -52,8 +52,8 @@
 				<Card.Header>
 					<Card.Title>Keep Demon List VN self-sustaining</Card.Title>
 					<Card.Description class="w-[250px]">
-						Your contributions help keep the site independent and completely free from ads and
-						outside sponsors.
+						Your contributions help keep the site independent and completely free from outside
+						sponsors.
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
@@ -78,9 +78,26 @@
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
+					<Card.Title>Ads-free experience</Card.Title>
+					<Card.Description class="w-[250px]">
+						Enjoy an uninterrupted browsing experience with no ads across the website.
+					</Card.Description>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
 					<Card.Title>Access priority queue</Card.Title>
 					<Card.Description class="w-[250px]">
 						Supporters enjoy reduced submission wait times, jumping ahead in the review line.
+					</Card.Description>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root>
+				<Card.Header>
+					<Card.Title>Short profile URL</Card.Title>
+					<Card.Description class="w-[250px]">
+						Share your profile easily with a clean, professional link.<br />
+						Example: <a href="/@NamPE">demonlistvn.com/@NamPE</a>
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
@@ -122,7 +139,8 @@
 				<Card.Header>
 					<Card.Title>View rating prediction</Card.Title>
 					<Card.Description class="w-[250px]">
-						Get insights into the potential rating of your level before submission, helping you plan better.
+						Get insights into the potential rating of your level before submission, helping you plan
+						better.
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
@@ -150,8 +168,8 @@
 		<div class="mt-[100px] w-full pl-[10px] text-sm text-gray-400 lg:pl-[50px]">
 			<p>Note:</p>
 			<ul>
-				<li>- Demon List VN Supporter roles are non-recurring payments,</li>
-				<li>- Demon List VN Supporter roles are non-refundable,</li>
+				<li>- Demon List VN Supporter roles are non-recurring payments.</li>
+				<li>- Demon List VN Supporter roles are non-refundable.</li>
 				<li>
 					- If you buy one while you still have an active roles, it will extend the duration in
 					addition to any remaining time.
@@ -165,7 +183,7 @@
 <style lang="scss">
 	.bgGradient {
 		filter: blur(175px);
-		margin-top: -50px;
+		margin-top: -55px;
 		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 100%);
 	}
 </style>

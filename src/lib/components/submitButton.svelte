@@ -9,7 +9,7 @@
 	import { user } from '$lib/client';
 	import Loading from '$lib/components/animation/loading.svelte';
 	import { toast } from 'svelte-sonner';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 	import { navigating, page } from '$app/stores';
 	import { onMount } from 'svelte';
 
@@ -71,7 +71,7 @@
 	}
 
 	async function submit() {
-		if (apiLevel.length == 'Plat') {
+		if (apiLevel.length == 5) {
 			submission.progress = getMs();
 		}
 
@@ -93,7 +93,7 @@
 				sendStatus = 2;
 			}
 
-			errorMessage = (await res.json()).message;
+			errorMessage = (await res.json() as any).message;
 		});
 	}
 
@@ -104,7 +104,7 @@
 			).json();
 		} catch {}
 
-		apiLevel = await (await fetch(`https://gdbrowser.com/api/level/${submission.levelid}`)).json();
+		apiLevel = await (await fetch(`${import.meta.env.VITE_API_URL}/level/${submission.levelid}?fromGD=1`)).json();
 	}
 
 	function next() {
@@ -124,12 +124,12 @@
 		}
 
 		if (step == 3) {
-			if (apiLevel.length == 'Plat' && !validTime()) {
+			if (apiLevel.length == 5 && !validTime()) {
 				toast.error('Invalid time');
 				return;
 			}
 
-			if (apiLevel.length != 'Plat') {
+			if (apiLevel.length != 5) {
 				if (
 					!submission.progress ||
 					!submission.refreshRate ||
@@ -174,7 +174,7 @@
 	}
 
 	function onRouteChange(to: any) {
-		if (!$user.loggedIn || !isSupporterActive($user.data.supporterUntil)) {
+		if (!$user.loggedIn || !isActive($user.data.supporterUntil)) {
 			defaultValue.levelid = NaN;
 			return;
 		}
@@ -289,7 +289,7 @@
 					{/if}
 				{/if}
 				{#if step == 3}
-					{#if apiLevel.length != 'Plat'}
+					{#if apiLevel.length != 5}
 						<div class="grid grid-cols-4 items-center gap-4">
 							<Label for="name" class="text-right">Progress</Label>
 							<Input
@@ -377,9 +377,9 @@
 							id="name"
 							type="number"
 							inputmode="numeric"
-							disabled={apiLevel.length != 'Plat' && submission.progress != 100}
+							disabled={apiLevel.length != 5 && submission.progress != 100}
 							bind:value={submission.suggestedRating}
-							placeholder={!(apiLevel.length != 'Plat' && submission.progress != 100)
+							placeholder={!(apiLevel.length != 5 && submission.progress != 100)
 								? 'optional (không ghi cũng được)'
 								: 'progress must be 100%'}
 							class="col-span-3"
@@ -437,7 +437,7 @@
 						<AlertDialog.Header>
 							<AlertDialog.Title>Submitted!</AlertDialog.Title>
 							<AlertDialog.Description>
-								{#if isSupporterActive($user.data.supporterUntil)}
+								{#if isActive($user.data.supporterUntil)}
 									Your submission has been sent and <span class="text-yellow-500">prioritized!</span
 									> It will be reviewed shortly.
 								{:else}

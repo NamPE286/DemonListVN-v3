@@ -1,12 +1,12 @@
 <script lang="ts">
-	import type { PageData } from '../$types';
+	import type { PageData } from './$types';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { getTitle, user } from '$lib/client';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import { toast } from 'svelte-sonner';
 	import * as Card from '$lib/components/ui/card';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import { getExpLevel } from '$lib/client/getExpLevel';
@@ -102,7 +102,11 @@
 								<AlertDialog.Title>Link card to this account ({$user.data.name})?</AlertDialog.Title
 								>
 								<AlertDialog.Description>
-									This will permanently link the card and give <b>{data.supporterIncluded} month{data.supporterIncluded == 1 ? '' : 's'} of Supporter Role</b> to this account ({$user.data.name}).
+									This will permanently link the card and give <b
+										>{data.supporterIncluded} month{data.supporterIncluded == 1 ? '' : 's'} of Supporter
+										Role</b
+									>
+									to this account ({$user.data.name}).
 								</AlertDialog.Description>
 							</AlertDialog.Header>
 							<AlertDialog.Footer>
@@ -118,17 +122,17 @@
 		{:else if data.owner}
 			<Card.Root
 				class="mt-[20px] w-full"
-				style={isSupporterActive(data.players.supporterUntil)
+				style={isActive(data.players.supporterUntil)
 					? `background-color: ${data.players.bgColor}; border-color: ${data.players.borderColor}; ${data.players.bgColor ? 'color: white' : ''}`
 					: ''}
 			>
-				{#if isSupporterActive(data.players.supporterUntil) && !isBannerFailedToLoad}
+				{#if isActive(data.players.supporterUntil) && !isBannerFailedToLoad}
 					<img
 						on:error={() => {
 							isBannerFailedToLoad = true;
 						}}
 						class="bgGradient absolute z-0 rounded-xl object-cover"
-						src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.players.uid}${
+						src={`https://cdn.demonlistvn.com/banners/${data.players.uid}${
 							data.players.isBannerGif ? '.gif' : '.jpg'
 						}`}
 						alt=""
@@ -139,8 +143,8 @@
 						<Avatar.Root>
 							<Avatar.Image
 								class="object-cover"
-								src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.players.uid}${
-									isSupporterActive(data.players.supporterUntil) && data.players.isAvatarGif
+								src={`https://cdn.demonlistvn.com/avatars/${data.players.uid}${
+									isActive(data.players.supporterUntil) && data.players.isAvatarGif
 										? '.gif'
 										: '.jpg'
 								}`}
@@ -148,7 +152,7 @@
 							/>
 							<Avatar.Fallback>{data.players.name[0]}</Avatar.Fallback>
 						</Avatar.Root>
-						{#if data.players.clan}
+						{#if data.players.clan && isActive(data.players.clans.boostedUntil)}
 							<a
 								href={`/clan/${data.players.clan}`}
 								class={badgeVariants({ variant: 'secondary' })}
@@ -158,13 +162,11 @@
 						{/if}
 						<a href={`/player/${data.players.uid}`}>
 							<h4 class="font-semibold">
-								{#if isSupporterActive(data.players.supporterUntil)}
-									<span class="text-yellow-500">
-										{data.players.name}
-									</span>
-								{:else}
-									{data.players.name}
-								{/if}
+								<span class={isActive(data.players.supporterUntil) ? 'text-yellow-500' : ''}>
+									{#if !isActive(data.players.clans.boostedUntil)}
+										<a href={`/clan/${data.players.clan}`}>[{data.players.clans.tag}]</a>
+									{/if}{data.players.name}
+								</span>
 							</h4>
 						</a>
 					</div>
@@ -212,6 +214,26 @@
 									#{data.players.flrank}
 								</div>
 							</div>
+						</div>
+						<div class="rating">
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									<div class="leftCol">
+										<div
+											class="title"
+											style={`background-color: ${getTitle('elo', data.players)?.color}`}
+										>
+											{#if data.players.matchCount < 10}
+												<span class="opacity-50">{`${data.players.elo}?`}</span>
+											{:else}
+												{data.players.elo}
+											{/if}
+										</div>
+									</div>
+								</Tooltip.Trigger>
+								<Tooltip.Content>{getTitle('elo', data.players)?.fullTitle}</Tooltip.Content>
+							</Tooltip.Root>
+							<div class="rankWrapper">Contest Rating</div>
 						</div>
 					</div>
 				</Card.Content>

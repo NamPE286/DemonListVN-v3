@@ -8,7 +8,7 @@
 	>
 		<img
 			class="h-[150px] w-[150px] object-cover"
-			src={`https://qdwpenfblwdmhywwszzj.supabase.co/storage/v1/object/public/medals/${medal.medalID}.webp`}
+			src={`https://cdn.demonlistvn.com/medals/${medal.medalID}.webp`}
 			alt=""
 		/>
 		<h3 class="mb-[10px] mt-[10px] text-center text-xl font-bold">{medal.name}</h3>

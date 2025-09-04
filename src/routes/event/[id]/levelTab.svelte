@@ -5,7 +5,7 @@
 	import { user } from '$lib/client';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { ExclamationTriangle } from 'svelte-radix';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let levels: (Level | null)[];
 	export let event: any;
@@ -45,7 +45,7 @@
 			>
 		</Alert.Root>
 	{/if}
-	{#if event.isSupporterOnly && !isSupporterActive($user.data.supporterUntil)}
+	{#if event.isSupporterOnly && !isActive($user.data.supporterUntil)}
 		<Alert.Root class="text-yellow-400">
 			<Alert.Title class="flex items-center gap-[10px]">
 				<ExclamationTriangle size={15} />

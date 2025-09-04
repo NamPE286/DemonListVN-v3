@@ -1,12 +1,13 @@
 <script lang="ts">
+	import Ads from '$lib/components/ads.svelte';
 	import BigTitle from '$lib/components/bigTitle.svelte';
 </script>
 
 <svelte:head>
 	<title>Rules - Demon List VN</title>
 </svelte:head>
-
 <BigTitle value="Rules" description="Read the rules" />
+<Ads unit="leaderboard" />
 <div class="wrapper">
 	<h2>General rules</h2>
 	<ul>
@@ -67,10 +68,10 @@
 		</ul>
 		<li>Rules:</li>
 		<ul>
-			<li>Rating is only applied to Demon List.</li>
+			<li>Rating is only applied to Demon List and Contest Event.</li>
 			<li>Banned and hidden accounts will be unrated.</li>
 		</ul>
-		<li>Rating distribution:</li>
+		<li>Demon List Rating distribution:</li>
 		<ul>
 			<li>C: > 0</li>
 			<li>B: >= 500</li>
@@ -82,6 +83,18 @@
 			<li>Grandmaster: >= 4000</li>
 			<li>Legendary Grandmaster: >= 5000</li>
 			<li>Ascended Grandmaster: >= 6000</li>
+		</ul>
+		<li>Contest Rating distribution:</li>
+		<ul>
+			<li>Plastic: > 0</li>
+			<li>Iron: >= 200</li>
+			<li>Silver: >= 500</li>
+			<li>Gold: >= 1000</li>
+			<li>Diamond: >= 1500</li>
+			<li>Challenger: >= 2000</li>
+			<li>Challenger First Class: >= 2500</li>
+			<li>Elite: >= 3000</li>
+			<li>Global Elite: >= 3500</li>
 		</ul>
 	</ul>
 </div>

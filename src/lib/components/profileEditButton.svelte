@@ -12,7 +12,8 @@
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
+	import { upload } from '$lib/client/storage';
 
 	export let data: any;
 	export let open = false;
@@ -32,7 +33,7 @@
 		value: player.city
 	};
 
-	$: open, reset();
+	$: (open, reset());
 
 	function reset() {
 		player = structuredClone(data);
@@ -46,80 +47,52 @@
 		let image = e.target.files[0];
 
 		if (image.name.endsWith('.gif')) {
-			const upload = new Promise((resolve, reject) => {
-				supabase.storage
-					.from('avatars')
-					.upload(`/${$user.data.uid}.gif`, image, {
-						cacheControl: '86400',
-						upsert: true
-					})
-					.then(async (res) => {
-						player.isAvatarGif = true;
-						player.avatarVersion++;
+			const handleUpload = async () => {
+				await upload(`avatars/${$user.data.uid}.gif`, image, (await $user.token())!);
 
-						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
-							method: 'PUT',
-							headers: {
-								Authorization: 'Bearer ' + (await $user.token()),
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify(player)
-						});
+				player.isAvatarGif = true;
+				player.avatarVersion++;
 
-						const { data, error } = res;
+				await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+					method: 'PUT',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token()),
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(player)
+				});
+			};
 
-						if (error) {
-							reject();
-						} else {
-							resolve({});
-						}
-					});
-			});
-
-			toast.promise(upload, {
+			toast.promise(handleUpload, {
 				loading: 'Uploading...',
 				success: 'Uploaded! It may take a while to take effect.	',
 				error: 'Upload failed.'
 			});
 		} else {
-			const options = {
+			toast.loading('Compressing image...');
+
+			const cImg = await imageCompression(image, {
 				maxSizeMB: 0.035,
 				maxWidthOrHeight: 480,
 				useWebWorker: true
+			});
+			const handleUpload = async () => {
+				await upload(`avatars/${$user.data.uid}.jpg`, cImg, (await $user.token())!);
+
+				player.isAvatarGif = false;
+				player.avatarVersion++;
+
+				await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+					method: 'PUT',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token()),
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(player)
+				});
 			};
 
-			const cImg = await imageCompression(image, options);
-			const upload = new Promise((resolve, reject) => {
-				supabase.storage
-					.from('avatars')
-					.upload(`/${$user.data.uid}.jpg`, cImg, {
-						cacheControl: '86400',
-						upsert: true
-					})
-					.then(async (res) => {
-						player.isAvatarGif = false;
-						player.avatarVersion++;
-
-						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
-							method: 'PUT',
-							headers: {
-								Authorization: 'Bearer ' + (await $user.token()),
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify(player)
-						});
-
-						const { data, error } = res;
-
-						if (error) {
-							reject();
-						} else {
-							resolve({});
-						}
-					});
-			});
-
-			toast.promise(upload, {
+			toast.promise(handleUpload, {
 				loading: 'Uploading...',
 				success: 'Uploaded! It may take a while to take effect.	',
 				error: 'Upload failed.'
@@ -135,38 +108,23 @@
 		let image = e.target.files[0];
 
 		if (image.name.endsWith('.gif')) {
-			const upload = new Promise((resolve, reject) => {
-				supabase.storage
-					.from('banners')
-					.upload(`/${$user.data.uid}.gif`, image, {
-						cacheControl: '86400',
-						upsert: true
-					})
-					.then(async (res) => {
-						player.isBannerGif = true;
-						player.bannerVersion++;
+			const handleUpload = async () => {
+				await upload(`banners/${$user.data.uid}.gif`, image, (await $user.token())!);
 
-						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
-							method: 'PUT',
-							headers: {
-								Authorization: 'Bearer ' + (await $user.token()),
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify(player)
-						});
+				player.isBannerGif = true;
+				player.bannerVersion++;
 
-						const { data, error } = res;
+				await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+					method: 'PUT',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token()),
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(player)
+				});
+			};
 
-						if (error) {
-							console.error(error);
-							reject();
-						} else {
-							resolve({});
-						}
-					});
-			});
-
-			toast.promise(upload, {
+			toast.promise(handleUpload, {
 				loading: 'Uploading...',
 				success: 'Uploaded! It may take a while to take effect.	',
 				error: 'Upload failed.'
@@ -179,38 +137,23 @@
 			};
 
 			const cImg = await imageCompression(image, options);
-			const upload = new Promise((resolve, reject) => {
-				supabase.storage
-					.from('banners')
-					.upload(`/${$user.data.uid}.jpg`, cImg, {
-						cacheControl: '86400',
-						upsert: true
-					})
-					.then(async (res) => {
-						player.isBannerGif = false;
-						player.bannerVersion++;
+			const handleUpload = async () => {
+				await upload(`banners/${$user.data.uid}.jpg`, cImg, (await $user.token())!);
 
-						await fetch(`${import.meta.env.VITE_API_URL}/player`, {
-							method: 'PUT',
-							headers: {
-								Authorization: 'Bearer ' + (await $user.token()),
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify(player)
-						});
+				player.isBannerGif = false;
+				player.bannerVersion++;
 
-						const { data, error } = res;
+				await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+					method: 'PUT',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token()),
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(player)
+				});
+			};
 
-						if (error) {
-							console.error(error);
-							reject();
-						} else {
-							resolve({});
-						}
-					});
-			});
-
-			toast.promise(upload, {
+			toast.promise(handleUpload, {
 				loading: 'Uploading...',
 				success: 'Uploaded! It may take a while to take effect.	',
 				error: 'Upload failed.'
@@ -259,7 +202,7 @@
 <input
 	style="display:none"
 	type="file"
-	accept={isSupporterActive($user.data.supporterUntil) ? '.jpg, .jpeg, .gif' : '.jpg, .jpeg'}
+	accept={isActive($user.data.supporterUntil) ? '.jpg, .jpeg, .gif' : '.jpg, .jpeg'}
 	on:change={(e) => getAvatar(e)}
 	bind:this={fileinput}
 />
@@ -305,13 +248,13 @@
 						variant="outline"
 						id="avatar"
 						placeholder="Avatar"
-						disabled={!isSupporterActive(player.supporterUntil)}
+						disabled={!isActive(player.supporterUntil)}
 						on:click={() => {
 							fileinput1.click();
 						}}>Upload banner</Button
 					>
 				</div>
-				{#if isSupporterActive(player.supporterUntil)}
+				{#if isActive(player.supporterUntil)}
 					<div class="mb-[10px] flex items-center gap-[10px] text-sm">
 						Border
 						<Input type="color" bind:value={player.borderColor} />

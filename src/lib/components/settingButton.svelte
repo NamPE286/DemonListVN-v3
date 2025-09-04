@@ -15,7 +15,7 @@
 	import Moon from 'svelte-radix/Moon.svelte';
 	import Desktop from 'svelte-radix/Desktop.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	const settingsValue = settings.value;
 	let bgURLOpened = false;
@@ -219,7 +219,7 @@
 								{:else}
 									<Table.Cell
 										>{new Date($user.data.supporterUntil).toLocaleString('vi-VN')}
-										{isSupporterActive($user.data.supporterUntil) ? '' : '(Expired)'}</Table.Cell
+										{isActive($user.data.supporterUntil) ? '' : '(Expired)'}</Table.Cell
 									>
 								{/if}
 							{/if}

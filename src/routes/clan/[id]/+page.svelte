@@ -3,6 +3,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Select from '$lib/components/ui/select';
 	import * as Dialog from '$lib/components/ui/dialog';
+	import { Textarea } from '$lib/components/ui/textarea';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Switch } from '$lib/components/ui/switch';
@@ -21,18 +22,22 @@
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 	import { goto } from '$app/navigation';
-	import supabase from '$lib/client/supabase';
 	import imageCompression from 'browser-image-compression';
 	import { fade } from 'svelte/transition';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import Ads from '$lib/components/ads.svelte';
+	import { upload } from '$lib/client/storage';
+	import InviteButton from './inviteButton.svelte';
+	import BoostButton from './boostButton.svelte';
+	import Markdown from '$lib/components/markdown.svelte';
+	import { isActive } from '$lib/client/isSupporterActive';
+	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
+	import { Content } from '$lib/components/ui/alert-dialog';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
 	let transferUID = '';
-	let invitePlayerUID = '';
-	let inviteOpened = false;
-	let currentTab: string = 'members';
+	let currentTab: string = isActive(data.boostedUntil) && data.homeContent ? 'home' : 'members';
 	let members: any[] = [];
 	let records: any[] = [];
 	let invitations: any[] = [];
@@ -78,7 +83,7 @@
 			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/members?${new URLSearchParams(membersFilter).toString()}`
 		)
 			.then((res) => res.json())
-			.then((res) => {
+			.then((res: any) => {
 				if (append) {
 					members = members.concat(res);
 				} else {
@@ -114,7 +119,7 @@
 			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/records?${new URLSearchParams(recordsFilter).toString()}`
 		)
 			.then((res) => res.json())
-			.then((res) => {
+			.then((res: any) => {
 				if (append) {
 					records = records.concat(res);
 				} else {
@@ -132,7 +137,7 @@
 	function fetchInvitations() {
 		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/invitations`)
 			.then((res) => res.json())
-			.then((res) => (invitations = res));
+			.then((res: any) => (invitations = res));
 	}
 
 	async function joinClan() {
@@ -160,31 +165,11 @@
 		}).then((res) => window.location.reload());
 	}
 
-	async function invitePlayer() {
-		inviteOpened = false;
-
-		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/clan/invite/${invitePlayerUID}`, {
-				method: 'POST',
-				headers: {
-					Authorization: 'Bearer ' + (await $user.token())
-				}
-			}),
-			{
-				success: () => {
-					invitePlayerUID = '';
-					return 'Player invited!';
-				},
-				loading: 'Sending invitation...',
-				error: 'Failed to invite player.'
-			}
-		);
-	}
-
 	async function updateClan() {
 		delete editedData.id;
 		delete editedData.created_at;
 		delete editedData.players;
+		delete editedData.boostedUntil;
 
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
@@ -246,13 +231,15 @@
 		};
 
 		const cImg = await imageCompression(image, options);
-		const upload = new Promise(async (resolve, reject) => {
+		const handleUpload = async () => {
 			delete editedData.id;
 			delete editedData.created_at;
 			delete editedData.players;
+			delete editedData.boostedUntil;
 
 			editedData.imageVersion++;
 
+			await upload(`clan-photos/${$page.params.id}.jpg`, cImg, (await $user.token())!);
 			await fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
 				method: 'PATCH',
 				headers: {
@@ -261,25 +248,9 @@
 				},
 				body: JSON.stringify(editedData)
 			});
+		};
 
-			supabase.storage
-				.from('clanPhotos')
-				.upload(`/${$page.params.id}.jpg`, cImg, {
-					cacheControl: '86400',
-					upsert: true
-				})
-				.then((res) => {
-					const { data, error } = res;
-
-					if (error) {
-						reject();
-					} else {
-						resolve({});
-					}
-				});
-		});
-
-		toast.promise(upload, {
+		toast.promise(handleUpload, {
 			loading: 'Uploading...',
 			success: 'Uploaded! It may take a while to take effect.	',
 			error: 'Upload failed.'
@@ -353,7 +324,7 @@
 		}).then((res) => window.location.reload());
 	}
 
-	$: $user,
+	$: ($user,
 		(() => {
 			if ($user.loggedIn) {
 				fetch(
@@ -362,7 +333,7 @@
 					.then((res) => res.json())
 					.then((res) => (invitation = res));
 			}
-		})();
+		})());
 
 	onMount(async () => {
 		fetchMembers(null);
@@ -385,6 +356,11 @@
 
 <svelte:head>
 	<title>{data.name}'s clan info - Demon List VN</title>
+	<meta property="og:title" content={`${data.name}'s clan info - Demon List VN`} />
+	<meta
+		property="og:image"
+		content={`https://cdn.demonlistvn.com/clan-photos/${$page.params.id}.jpg?version=${data.imageVersion}`}
+	/>
 </svelte:head>
 
 <input
@@ -402,7 +378,7 @@
 			<img
 				in:fade={{ delay: 250, duration: 300 }}
 				class="bg"
-				src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/clanPhotos/${$page.params.id}.jpg?version=${data.imageVersion}`}
+				src={`https://cdn.demonlistvn.com/clan-photos/${$page.params.id}.jpg?version=${data.imageVersion}`}
 				alt="bg"
 			/>
 			<div class="bannerContentWrapper">
@@ -437,47 +413,46 @@
 								<Button
 									class="w-full"
 									on:click={() => {
-										acceptInvitation(parseInt($page.params.id));
+										acceptInvitation(parseInt(String($page.params.id)));
 									}}>Accept</Button
 								>
 								<Button
 									variant="outline"
 									class="w-full"
 									on:click={() => {
-										rejectInvitation(parseInt($page.params.id));
+										rejectInvitation(parseInt(String($page.params.id)));
 									}}>Reject</Button
 								>
 							{:else if $user.data.clan == $page.params.id}
 								{#if data.isPublic || data.owner == $user.data.uid}
-									<Dialog.Root bind:open={inviteOpened}>
-										<Dialog.Trigger class="w-full">
-											<Button variant="outline" class="w-full">Invite</Button>
-										</Dialog.Trigger>
-										<Dialog.Content>
-											<Dialog.Header>
-												<Dialog.Title>Invite new player</Dialog.Title>
-											</Dialog.Header>
-											<Input placeholder="Player's UID" bind:value={invitePlayerUID} />
-											<Button on:click={invitePlayer} disabled={invitePlayerUID.length == 0}
-												>Invite</Button
-											>
-										</Dialog.Content>
-									</Dialog.Root>
+									<InviteButton />
 								{/if}
 							{:else if data.isPublic && (data.memberCount < data.memberLimit || data.memberLimit == 0)}
 								<Button variant="outline" class="w-full" on:click={joinClan}>Join</Button>
 							{/if}
+
+							<BoostButton {data} />
 						{/if}
 					</div>
+					{#if new Date(data.boostedUntil) > new Date()}
+						<p class="text-center text-sm text-gray-500">
+							Boosted until: {new Date(data.boostedUntil).toLocaleDateString('vi-vn')}
+						</p>
+					{/if}
 				</div>
 			</div>
 		</div>
-		<Ads dataAdFormat="vertical" />
+		{#if !isActive(data.boostedUntil)}
+			<Ads dataAdFormat="vertical" />
+		{/if}
 	</div>
 
 	<div class="content">
 		<Tabs.Root bind:value={currentTab} class="flex w-[100%] flex-col items-center">
 			<Tabs.List class="mb-[5px] w-fit">
+				{#if isActive(data.boostedUntil)}
+					<Tabs.Trigger value="home">Home</Tabs.Trigger>
+				{/if}
 				<Tabs.Trigger value="members">Members</Tabs.Trigger>
 				<Tabs.Trigger value="records">Records</Tabs.Trigger>
 				{#if $user.loggedIn && $user.data.clan == $page.params.id}
@@ -485,6 +460,19 @@
 					<Tabs.Trigger value="settings">Settings</Tabs.Trigger>
 				{/if}
 			</Tabs.List>
+			{#if isActive(data.boostedUntil)}
+				<Tabs.Content value="home" class="w-full">
+					{#if data.mode == 'markdown'}
+						<Markdown content={data.homeContent} />
+					{:else if data.mode == 'iframe'}
+						<iframe
+							class="h-[calc(100vh-180px)] w-full rounded-lg"
+							src={data.homeContent}
+							title="home"
+						/>
+					{/if}
+				</Tabs.Content>
+			{/if}
 			<Tabs.Content value="members" class="w-full">
 				<div class="filter">
 					<div class="filterItem">
@@ -697,9 +685,38 @@
 					<section>
 						<h3>Basic info</h3>
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">
+								{#if data.mode == 'markdown'}
+									Home Content
+								{:else if data.mode == 'iframe'}
+									iframe URL
+								{/if}
+							</Label>
+							<Textarea
+								disabled={!isActive(data.boostedUntil)}
+								id="name"
+								class="col-span-3"
+								bind:value={editedData.homeContent}
+							/>
+						</div>
+						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Content Mode</Label>
+							<RadioGroup.Root bind:value={data.mode} disabled={!isActive(data.boostedUntil)}>
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="markdown" />
+									<Label for="markdown">Markdown</Label>
+								</div>
+								<div class="flex items-center space-x-2">
+									<RadioGroup.Item value="iframe" />
+									<Label for="iframe">iframe</Label>
+								</div>
+							</RadioGroup.Root>
+						</div>
+						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
 							<Label for="name" class="text-right">Clan's name</Label>
 							<Input id="name" class="col-span-3" bind:value={editedData.name} />
 						</div>
+
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
 							<Label for="tag" class="text-right">Clan's tag</Label>
 							<Input id="tag" class="col-span-3" bind:value={editedData.tag} />
@@ -728,8 +745,16 @@
 								style={`background-color: ${editedData.tagBgColor}; color: ${editedData.tagTextColor};`}
 								>{data.tag}</Badge
 							>
-							<Input type="color" bind:value={editedData.tagBgColor} />
-							<Input type="color" bind:value={editedData.tagTextColor} />
+							<Input
+								disabled={!isActive(data.boostedUntil)}
+								type="color"
+								bind:value={editedData.tagBgColor}
+							/>
+							<Input
+								disabled={!isActive(data.boostedUntil)}
+								type="color"
+								bind:value={editedData.tagTextColor}
+							/>
 							<Button
 								variant="outline"
 								on:click={() => {
@@ -738,7 +763,7 @@
 							>
 						</div>
 						<div class="applyBtnWrapper">
-							<Button on:click={updateClan}>Apply</Button>
+							<Button on:click={updateClan}>Save</Button>
 						</div>
 					</section>
 				{/if}
@@ -813,7 +838,7 @@
 				z-index: 1;
 				height: 100%;
 				width: 100%;
-				padding-bottom: 18px;
+				padding-bottom: 8px;
 				padding-inline: 18px;
 				display: flex;
 				flex-direction: column-reverse;
@@ -839,7 +864,7 @@
 					display: flex;
 					justify-content: space-between;
 					gap: 10px;
-					margin-top: 10px;
+					margin-top: 5px;
 				}
 			}
 		}

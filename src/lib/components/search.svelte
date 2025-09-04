@@ -6,7 +6,7 @@
 	import Loading from '$lib/components/animation/loading.svelte';
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { toast } from 'svelte-sonner';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let open: boolean;
 	export let value: string = '';
@@ -44,7 +44,7 @@
 
 		const promises = [
 			fetch(`${import.meta.env.VITE_API_URL}/search/${value}`).then((res) => res.json()),
-			fetch(`https://gdbrowser.com/api/search/${value}?page=0&count=5&diff=-2`)
+			fetch(`https://gdbrowser.com/api/search/${value}?page=0&count=5&diff=-2`) // TODO: Migrate to own GD API
 				.then((res) => res.json())
 				.catch((err) => [])
 		];
@@ -56,7 +56,7 @@
 		state = 1;
 
 		Promise.all(promises)
-			.then((res) => {
+			.then((res: any[]) => {
 				if (!res[0] || !res[1]) {
 					return;
 				}
@@ -201,14 +201,14 @@
 								<Avatar.Root>
 									<Avatar.Image
 										class="object-cover"
-										src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${item.uid}${
-											isSupporterActive(item.supporterUntil) && item.isAvatarGif ? '.gif' : '.jpg'
+										src={`https://cdn.demonlistvn.com/avatars/${item.uid}${
+											isActive(item.supporterUntil) && item.isAvatarGif ? '.gif' : '.jpg'
 										}`}
 										alt="@shadcn"
 									/>
 									<Avatar.Fallback>{item.name[0]}</Avatar.Fallback>
 								</Avatar.Root>
-								{#if isSupporterActive(item.supporterUntil)}
+								{#if isActive(item.supporterUntil)}
 									<span class="ml-[10px] text-yellow-500">{item.name}</span>
 								{:else}
 									<span class="ml-[10px]">{item.name}</span>

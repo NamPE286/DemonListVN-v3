@@ -7,7 +7,7 @@
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 
@@ -77,27 +77,27 @@
 	});
 </script>
 
-{#if isSupporterActive(data.players[0].supporterUntil) && !isBannerFailedToLoad[0]}
+{#if isActive(data.players[0].supporterUntil) && !isBannerFailedToLoad[0]}
 	<img
 		on:error={() => {
 			isBannerFailedToLoad[0] = true;
 			isBannerFailedToLoad = isBannerFailedToLoad;
 		}}
-		class="bgGradient absolute z-0 mt-[-50px] h-[100vh] w-[850px] object-cover"
-		src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.players[0].uid}${
+		class="bgGradient absolute z-0 mt-[-505x] h-[100vh] w-[850px] object-cover"
+		src={`https://cdn.demonlistvn.com/banners/${data.players[0].uid}${
 			data.players[0].isBannerGif ? '.gif' : '.jpg'
 		}?version=${data.players[0].bannerVersion}`}
 		alt="banner"
 	/>
 {/if}
-{#if isSupporterActive(data.players[1].supporterUntil) && !isBannerFailedToLoad[1]}
+{#if isActive(data.players[1].supporterUntil) && !isBannerFailedToLoad[1]}
 	<img
 		on:error={() => {
 			isBannerFailedToLoad[1] = true;
 			isBannerFailedToLoad = isBannerFailedToLoad;
 		}}
-		class="bgGradient1 absolute right-0 z-0 mt-[-50px] h-[100vh] w-[850px] object-cover"
-		src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${data.players[1].uid}${
+		class="bgGradient1 absolute right-0 z-0 mt-[-55px] h-[100vh] w-[850px] object-cover"
+		src={`https://cdn.demonlistvn.com/banners/${data.players[1].uid}${
 			data.players[1].isBannerGif ? '.gif' : '.jpg'
 		}?version=${data.players[1].bannerVersion}`}
 		alt="banner"
@@ -116,8 +116,8 @@
 			<Avatar.Root class="h-8 w-8">
 				<Avatar.Image
 					class="object-cover"
-					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.players[0].uid}${
-						isSupporterActive(data.players[0].supporterUntil) && data.players[0].isAvatarGif
+					src={`https://cdn.demonlistvn.com/avatars/${data.players[0].uid}${
+						isActive(data.players[0].supporterUntil) && data.players[0].isAvatarGif
 							? '.gif'
 							: '.jpg'
 					}?version=${data.players[0].avatarVersion}`}
@@ -133,8 +133,8 @@
 			<Avatar.Root class="h-8 w-8">
 				<Avatar.Image
 					class="object-cover"
-					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${data.players[1].uid}${
-						isSupporterActive(data.players[1].supporterUntil) && data.players[1].isAvatarGif
+					src={`https://cdn.demonlistvn.com/avatars/${data.players[1].uid}${
+						isActive(data.players[1].supporterUntil) && data.players[1].isAvatarGif
 							? '.gif'
 							: '.jpg'
 					}?version=${data.players[1].avatarVersion}`}

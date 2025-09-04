@@ -5,7 +5,7 @@
 	import { getTitle } from '$lib/client';
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import { getExpLevel } from '$lib/client/getExpLevel';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let player: any;
 	export let showTitle = false;
@@ -25,7 +25,7 @@
 			x -= 2;
 		}
 
-		if(player.clan) {
+		if (player.clan) {
 			x -= 4;
 		}
 
@@ -49,7 +49,7 @@
 				<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
 			</Tooltip.Root>
 		{/if}
-		{#if player.clan}
+		{#if player.clan && isActive(player.clans.boostedUntil)}
 			<a
 				href={`/clan/${player.clan}`}
 				class={badgeVariants({ variant: 'secondary' })}
@@ -63,13 +63,13 @@
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
 			<div class="flex items-center gap-[5px]">
-				{#if isSupporterActive(player.supporterUntil)}
-					<span class="text-yellow-500">
-						{truncateText(player.name)}
-					</span>
-				{:else}
-					{truncateText(player.name)}
-				{/if}
+				<span class={isActive(player.supporterUntil) ? 'text-yellow-500' : ''}>
+					{truncateText(
+						player.clan && !isActive(player.clans.boostedUntil)
+							? `[${player.clans.tag}] ${player.name}`
+							: player.name
+					)}
+				</span>
 				{#if player.isTrusted}
 					<div class="mb-[2.5px] h-[12px] w-[12px] rounded-full bg-black dark:invert">
 						<img class="invert" src="/tick-svgrepo-com.svg" alt="tick" />
@@ -79,17 +79,17 @@
 		</HoverCard.Trigger>
 		<HoverCard.Content
 			class="w-80"
-			style={isSupporterActive(player.supporterUntil)
+			style={isActive(player.supporterUntil)
 				? `background-color: ${player.bgColor}; border-color: ${player.borderColor}; ${player.bgColor ? 'color: white' : ''}`
 				: ''}
 		>
-			{#if isSupporterActive(player.supporterUntil) && !isBannerFailedToLoad}
+			{#if isActive(player.supporterUntil) && !isBannerFailedToLoad}
 				<img
 					on:error={() => {
 						isBannerFailedToLoad = true;
 					}}
 					class="bgGradient absolute top-[50px] z-0 ml-[-15px] h-[80px] w-full rounded object-cover"
-					src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/banners/${player.uid}${
+					src={`https://cdn.demonlistvn.com/banners/${player.uid}${
 						player.isBannerGif ? '.gif' : '.jpg'
 					}`}
 					alt=""
@@ -100,14 +100,14 @@
 					<Avatar.Root>
 						<Avatar.Image
 							class="object-cover"
-							src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/avatars/${player.uid}${
-								isSupporterActive(player.supporterUntil) && player.isAvatarGif ? '.gif' : '.jpg'
+							src={`https://cdn.demonlistvn.com/avatars/${player.uid}${
+								isActive(player.supporterUntil) && player.isAvatarGif ? '.gif' : '.jpg'
 							}`}
 							alt=""
 						/>
 						<Avatar.Fallback>{player.name[0]}</Avatar.Fallback>
 					</Avatar.Root>
-					{#if player.clan}
+					{#if player.clan && isActive(player.clans.boostedUntil)}
 						<a
 							href={`/clan/${player.clan}`}
 							class={badgeVariants({ variant: 'secondary' })}
@@ -116,13 +116,12 @@
 						>
 					{/if}
 					<h4 class="font-semibold">
-						{#if isSupporterActive(player.supporterUntil)}
-							<span class="text-yellow-500">
-								{player.name}
-							</span>
-						{:else}
+						<span class={isActive(player.supporterUntil) ? 'text-yellow-500' : ''}>
+							{#if player.clan && !isActive(player.clans.boostedUntil)}
+								<a href={`/clan/${player.clan}`}>[{player.clans.tag}]</a>
+							{/if}
 							{player.name}
-						{/if}
+						</span>
 					</h4>
 				</div>
 				<div class="content">
@@ -169,6 +168,26 @@
 								#{player.flrank}
 							</div>
 						</div>
+					</div>
+					<div class="rating">
+						<Tooltip.Root>
+							<Tooltip.Trigger>
+								<div class="leftCol">
+									<div
+										class="title"
+										style={`background-color: ${getTitle('elo', player)?.color}`}
+									>
+										{#if player.matchCount < 10}
+											<span class="opacity-50">{`${player.elo}?`}</span>
+										{:else}
+											{player.elo}
+										{/if}
+									</div>
+								</div>
+							</Tooltip.Trigger>
+							<Tooltip.Content>{getTitle('elo', player)?.fullTitle}</Tooltip.Content>
+						</Tooltip.Root>
+						<div class="rankWrapper">Contest Rating</div>
 					</div>
 				</div>
 			</div>

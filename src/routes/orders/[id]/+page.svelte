@@ -117,7 +117,7 @@
 									<a href={`/store/product/${item.productID}`}>
 										<img
 											class="h-[65px] w-[65px] rounded-lg object-cover"
-											src={`${import.meta.env.VITE_SUPABASE_API_URL}/storage/v1/object/public/products/${item.productID}/0.webp`}
+											src={`https://cdn.demonlistvn.com/products/${item.productID}/0.webp`}
 											alt="product"
 										/>
 									</a>

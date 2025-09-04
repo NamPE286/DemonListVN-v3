@@ -8,7 +8,9 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { user } from '$lib/client';
 	import { calcRating } from '$lib/client/rating';
-	import { isSupporterActive } from '$lib/client/isSupporterActive';
+	import { isActive } from '$lib/client/isSupporterActive';
+
+	let failedToLoad = false;
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -29,12 +31,25 @@
 				<ContextMenu.Root>
 					<ContextMenu.Trigger>
 						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
-							<img
-								src={`https://img.youtube.com/vi/${level.videoID}/0.jpg`}
-								alt=""
-								loading="lazy"
-								class="thumbnail"
-							/>
+							<div class="relative h-[235px] flex justify-center">
+								<img
+									src={`https://img.youtube.com/vi/${level.videoID}/0.jpg`}
+									alt=""
+									loading="lazy"
+									class="thumbnail absolute"
+								/>
+								{#if !failedToLoad}
+									<img
+										src={`https://levelthumbs.prevter.me/thumbnail/${level.id}/small`}
+										alt=""
+										loading="lazy"
+										class="thumbnail z-1 absolute translate-x-4 opacity-0 transition-all duration-300 ease-in-out hover:translate-x-0 hover:opacity-100"
+										on:error={() => {
+											failedToLoad = true;
+										}}
+									/>
+								{/if}
+							</div>
 						</a>
 						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
 							<div class="levelInfo">
@@ -52,7 +67,7 @@
 											{/if}
 										</div>
 										{#key $user}
-											{#if $user.loggedIn && isSupporterActive($user.data.supporterUntil) && type == 'dl'}
+											{#if $user.loggedIn && isActive($user.data.supporterUntil) && type == 'dl'}
 												{#if !level.record}
 													<Tooltip.Root>
 														<Tooltip.Trigger>

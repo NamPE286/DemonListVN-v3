@@ -1,7 +1,7 @@
-export function isSupporterActive(supporterUntil: string | null) {
-    if (!supporterUntil) {
+export function isActive(expiryDate: string | null) {
+    if (!expiryDate) {
         return false;
     }
 
-    return new Date(supporterUntil) > new Date();
+    return new Date(expiryDate) > new Date();
 }

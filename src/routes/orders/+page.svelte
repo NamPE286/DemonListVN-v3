@@ -26,6 +26,14 @@
 		window.location.href = `${import.meta.env.VITE_API_URL}/payment/success?orderCode=${order.id}`;
 	}
 
+	function restorable(order: any) {
+		if (!order.quantity) {
+			return !(order.state == 'PENDING' && order.paymentMethod == 'Bank Transfer');
+		}
+
+		return order.state == 'CANCELLED' || order.state == 'EXPIRED' || order.delivered;
+	}
+
 	onMount(() => {
 		getOrders();
 	});
@@ -54,8 +62,8 @@
 				{#each orders as order}
 					<Table.Row>
 						<Table.Cell class="font-medium">{order.id}</Table.Cell>
-						<Table.Cell>{order.productID ? order.products.name : "Store Item(s)"}</Table.Cell>
-						<Table.Cell>{order.quantity ? order.quantity : "?"}</Table.Cell>
+						<Table.Cell>{order.productID ? order.products.name : 'Store Item(s)'}</Table.Cell>
+						<Table.Cell>{order.quantity ? order.quantity : '?'}</Table.Cell>
 						<Table.Cell>
 							{new Intl.NumberFormat('vi-VN', {
 								style: 'currency',
@@ -74,7 +82,7 @@
 							<Button
 								variant="secondary"
 								on:click={() => restore(order)}
-								disabled={!(order.state == 'PENDING' && order.paymentMethod == 'Bank Transfer')}>Restore</Button
+								disabled={restorable(order)}>Restore</Button
 							>
 							<a href={`/orders/${order.id}`}>
 								<Button variant="secondary">Detail</Button>

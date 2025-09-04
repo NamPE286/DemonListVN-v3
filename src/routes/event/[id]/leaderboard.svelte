@@ -242,11 +242,11 @@
 		<Alert.Title class="flex items-center gap-[10px]">
 			<ExclamationTriangle size={15} />
 			{#if new Date(event.freeze) > new Date()}
-				The leaderboard will be freezed on {new Date(event.freeze).toLocaleString('vi-vn')}.
+				The leaderboard will be frozen on {new Date(event.freeze).toLocaleString('vi-vn')}.
 			{:else if event.freeze == event.start}
 				The leaderboard is hidden.
 			{:else}
-				The leaderboard is freezed since {new Date(event.freeze).toLocaleString('vi-vn')}.
+				The leaderboard has been frozen since {new Date(event.freeze).toLocaleString('vi-vn')}.
 			{/if}
 		</Alert.Title>
 	</Alert.Root>
@@ -298,6 +298,9 @@
 						</Tooltip.Root>
 					</Table.Head>
 				{/each}
+				{#if event.isCalculated}
+					<Table.Head class="w-[75px] text-center">Δ</Table.Head>
+				{/if}
 			</Table.Row>
 		</Table.Header>
 	</Table.Root>
@@ -312,9 +315,9 @@
 					class={cn('border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted')}
 				>
 					{#if $user.loggedIn && player.uid == $user.data.uid}
-						<Table.Cell class="font-medium text-yellow-500">#{rank + 1}</Table.Cell>
+						<Table.Cell class="w-[100px] font-medium text-yellow-500">#{rank + 1}</Table.Cell>
 					{:else}
-						<Table.Cell class="font-medium">#{rank + 1}</Table.Cell>
+						<Table.Cell class="w-[100px] font-medium">#{rank + 1}</Table.Cell>
 					{/if}
 					<Table.Cell class="min-w-[200px]">
 						{#if $user.loggedIn && player.uid == $user.data.uid}
@@ -373,18 +376,18 @@
 												<s>
 													{getPoint(record, index)}<br />
 													<span class="text-[11px] opacity-50">
-														{record ? `${record.progress}%` : ''}
+														{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 													</span>
 												</s>
 											{:else if record && record.accepted === null}
 												{getPoint(record, index)}*<br />
 												<span class="text-[11px] opacity-50">
-													{record ? `${record.progress}%` : ''}
+													{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 												</span>
 											{:else}
 												{getPoint(record, index)}<br />
 												<span class="text-[11px] opacity-50">
-													{record ? `${record.progress}%` : ''}
+													{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 												</span>
 											{/if}
 										</Dialog.Trigger>
@@ -496,18 +499,18 @@
 										<s>
 											{getPoint(record, index)}<br />
 											<span class="text-[11px] opacity-50">
-												{record ? `${record.progress}%` : ''}
+												{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 											</span>
 										</s>
 									{:else if record && record.accepted === null}
 										{getPoint(record, index)}*<br />
 										<span class="text-[11px] opacity-50">
-											{record ? `${record.progress}%` : ''}
+											{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 										</span>
 									{:else}
 										{getPoint(record, index)}<br />
 										<span class="text-[11px] opacity-50">
-											{record ? `${record.progress}%` : ''}
+											{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
 										</span>
 									{/if}
 								{:else if record == 'revealed'}
@@ -518,6 +521,13 @@
 							</Table.Cell>
 						{/if}
 					{/each}
+					{#if event.isCalculated}
+						<Table.Cell
+							class={`w-[75px] text-center ${Math.sign(player.diff) > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}
+						>
+							{Math.sign(player.diff) > 0 ? '+' : ''}{player.diff}
+						</Table.Cell>
+					{/if}
 				</tr>
 			{/each}
 		</Table.Body>

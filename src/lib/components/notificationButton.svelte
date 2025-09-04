@@ -55,28 +55,11 @@
 			).json();
 		} catch {}
 
-		supabase
-			.channel('table-db-changes')
-			.on(
-				'postgres_changes',
-				{
-					event: 'INSERT',
-					schema: 'public',
-					table: 'notifications',
-					filter: `to=eq.${$user.data.uid}`
-				},
-				(payload) => {
-					notifications.unshift(payload.new);
-					notifications = notifications;
-				}
-			)
-			.subscribe();
-
-		if ($user.data.exp === 0) {
+		if ($user.data.recordCount === 0) {
 			notifications = [
 				{
-					content:
-						'You must submit a record before you can do with anything else. This notification will disappear when your record is accepted.',
+					content: 'Beat Platinum Adventure to fully unlock your account',
+					redirect: '/level/5904109',
 					timestamp: new Date().toISOString()
 				}
 			];
@@ -86,11 +69,11 @@
 	async function clear() {
 		notifications = [];
 
-		if ($user.data.exp === 0) {
+		if ($user.data.recordCount === 0) {
 			notifications = [
 				{
-					content:
-						'You must submit a record before you can do with anything else. This notification will disappear when your record is accepted.',
+					content: 'Beat Platinum Adventure to fully unlock your account',
+					redirect: '/level/5904109',
 					timestamp: new Date().toISOString()
 				}
 			];
@@ -104,7 +87,7 @@
 		});
 	}
 
-	$: $user, fetchNotifications();
+	$: ($user, fetchNotifications());
 </script>
 
 <Popover.Root>

@@ -17,20 +17,21 @@
 		flTop: NaN,
 		rating: NaN,
 		insaneTier: NaN,
-		isPlatformer: false
+		isPlatformer: false,
+		isNonList: false
 	};
 
 	async function fetchLevel() {
 		fetch(`${import.meta.env.VITE_API_URL}/level/${level.id}`)
 			.then((res) => res.json())
-			.then((res) => {
+			.then((res: any) => {
 				level = res;
 				state = 1;
 			})
 			.catch((err) => {
-				fetch(`https://gdbrowser.com/api/level/${level.id}`)
+				fetch(`${import.meta.env.VITE_API_URL}/level/${level.id}?fromGD=1`)
 					.then((res) => res.json())
-					.then((res) => {
+					.then((res: any) => {
 						level.name = res.name;
 						level.creator = res.author;
 						state = 2;
@@ -189,6 +190,10 @@
 		<div class="input">
 			<Label for="rating" class="w-[100px]">Platformer</Label>
 			<Switch bind:checked={level.isPlatformer}></Switch>
+		</div>
+		<div class="input">
+			<Label for="rating" class="w-[100px]">Non List</Label>
+			<Switch bind:checked={level.isNonList}></Switch>
 		</div>
 		<div class="flex w-[150px] flex-col gap-[15px]">
 			<Button on:click={updateLevel}>{state == 1 ? 'Update' : 'Add new level'}</Button>

@@ -5,6 +5,7 @@
 
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import Ads from '$lib/components/ads.svelte';
 
 	let curTab = $page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels';
 
@@ -50,6 +51,8 @@
 		</div>
 	</Tabs.Root>
 {/if}
+
+<Ads dataAdFormat="auto" unit="leaderboard" />
 
 <slot />
 

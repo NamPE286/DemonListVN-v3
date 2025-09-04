@@ -4,7 +4,7 @@ export async function load({ params, url, fetch }) {
 	const { id } = params;
 
 	if (url.searchParams.get('list') == 'other') {
-		let gdbrowserLevel: any = await (await fetch(`https://gdbrowser.com/api/level/${id}`)).json();
+		let gdbrowserLevel: any = await (await fetch(`${import.meta.env.VITE_API_URL}/level/${id}?fromGD=1`)).json();
 
 		if (!('demonList' in gdbrowserLevel)) {
 			return {
