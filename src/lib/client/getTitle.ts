@@ -123,15 +123,15 @@ export function getTitle(list: string, player: any) {
 		if (player.elo >= 1000) {
 			return {
 				fullTitle: 'Gold',
-				title: 'AU',
-				color: '#c9b22c'
+				title: 'G',
+				color: '#bda700'
 			};
 		}
 
 		if (player.elo >= 500) {
 			return {
 				fullTitle: 'Silver',
-				title: 'AG',
+				title: 'S',
 				color: 'gray'
 			};
 		}
@@ -139,7 +139,7 @@ export function getTitle(list: string, player: any) {
 		if (player.elo >= 200) {
 			return {
 				fullTitle: 'Iron',
-				title: 'FE',
+				title: 'I',
 				color: 'gray'
 			};
 		}
