@@ -124,7 +124,7 @@ export function getTitle(list: string, player: any) {
 			return {
 				fullTitle: 'Gold',
 				title: 'AU',
-				color: 'darkyellow'
+				color: '#c9b22c'
 			};
 		}
 
