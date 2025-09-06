@@ -258,7 +258,7 @@
 													class="title"
 													style={`background-color: ${getTitle('elo', data.player)?.color}`}
 												>
-													{#if data.player.matchCount < 10}
+													{#if data.player.matchCount < 5}
 														<span class="opacity-50">{`${data.player.elo}?`}</span>
 													{:else}
 														{data.player.elo}

@@ -74,79 +74,79 @@ export function getTitle(list: string, player: any) {
 	}
 
 	if (list == 'elo') {
-		if (player.matchCount < 10) {
+		if (player.matchCount < 5) {
 			return {
-				fullTitle: `Need ${10 - player.matchCount} more contest to be ranked`
+				fullTitle: `Need ${5 - player.matchCount} more contest to be ranked`
 			};
 		}
 
 		if (player.elo >= 3500) {
 			return {
-				title: 'Global Elite',
-				fullTitle: 'GE',
+				fullTitle: 'Global Elite',
+				title: 'GE',
 				color: 'darkred'
 			};
 		}
 
 		if (player.elo >= 3000) {
 			return {
-				title: 'Elite',
-				fullTitle: 'E',
+				fullTitle: 'Elite',
+				title: 'E',
 				color: 'red'
 			};
 		}
 
 		if (player.elo >= 2500) {
 			return {
-				title: 'Challenger First Class',
-				fullTitle: 'CFE',
+				fullTitle: 'Challenger First Class',
+				title: 'CFE',
 				color: 'hsla(321, 100%, 50%, 1)'
 			};
 		}
 
 		if (player.elo >= 2000) {
 			return {
-				title: 'Challenger',
-				fullTitle: 'CH',
+				fullTitle: 'Challenger',
+				title: 'CH',
 				color: 'purple'
 			};
 		}
 
 		if (player.elo >= 1500) {
 			return {
-				title: 'Diamond',
-				fullTitle: 'DM',
+				fullTitle: 'Diamond',
+				title: 'DM',
 				color: 'darkcyan'
 			};
 		}
 
 		if (player.elo >= 1000) {
 			return {
-				title: 'Gold',
-				fullTitle: 'AU',
+				fullTitle: 'Gold',
+				title: 'AU',
 				color: 'darkyellow'
 			};
 		}
 
 		if (player.elo >= 500) {
 			return {
-				title: 'Silver',
-				fullTitle: 'AG',
+				fullTitle: 'Silver',
+				title: 'AG',
 				color: 'gray'
 			};
 		}
 
 		if (player.elo >= 200) {
 			return {
-				title: 'Iron',
-				fullTitle: 'FE',
+				fullTitle: 'Iron',
+				title: 'FE',
 				color: 'gray'
 			};
 		}
 
 		return {
-			title: 'P',
-			fullTitle: 'Plastic',
+			fullTitle: 'P',
+			title: 'Plastic',
 			color: 'P'
 		};
 	}
