@@ -47,7 +47,7 @@
 						<span>{getTitle(titleType, player)?.title}</span>
 					</div>
 				</Tooltip.Trigger>
-				<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
+				<Tooltip.Content>{getTitle(titleType, player)?.fullTitle}</Tooltip.Content>
 			</Tooltip.Root>
 		{/if}
 		{#if player.clan && isActive(player.clans.boostedUntil)}
