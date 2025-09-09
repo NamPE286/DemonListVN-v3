@@ -9,6 +9,7 @@
 
 	export let player: any;
 	export let showTitle = false;
+	export let titleType: 'dl' | 'pl' | 'elo' = 'dl'
 	export let truncate: number | null = null;
 
 	let exp = player.exp + player.extraExp;
@@ -39,14 +40,14 @@
 
 <div class="wrapper">
 	<HoverCard.Root>
-		{#if showTitle && getTitle('dl', player)}
+		{#if showTitle && getTitle(titleType, player)?.title}
 			<Tooltip.Root>
 				<Tooltip.Trigger>
-					<div class="rank" style={`background-color: ${getTitle('dl', player)?.color}`}>
-						<span>{getTitle('dl', player)?.title}</span>
+					<div class="rank" style={`background-color: ${getTitle(titleType, player)?.color}`}>
+						<span>{getTitle(titleType, player)?.title}</span>
 					</div>
 				</Tooltip.Trigger>
-				<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
+				<Tooltip.Content>{getTitle(titleType, player)?.fullTitle}</Tooltip.Content>
 			</Tooltip.Root>
 		{/if}
 		{#if player.clan && isActive(player.clans.boostedUntil)}
@@ -177,7 +178,7 @@
 										class="title"
 										style={`background-color: ${getTitle('elo', player)?.color}`}
 									>
-										{#if player.matchCount < 10}
+										{#if player.matchCount < 5}
 											<span class="opacity-50">{`${player.elo}?`}</span>
 										{:else}
 											{player.elo}

@@ -163,7 +163,7 @@
 						<a href={`/player/${data.players.uid}`}>
 							<h4 class="font-semibold">
 								<span class={isActive(data.players.supporterUntil) ? 'text-yellow-500' : ''}>
-									{#if !isActive(data.players.clans.boostedUntil)}
+									{#if data.players.clan && !isActive(data.players.clans.boostedUntil)}
 										<a href={`/clan/${data.players.clan}`}>[{data.players.clans.tag}]</a>
 									{/if}{data.players.name}
 								</span>
@@ -223,7 +223,7 @@
 											class="title"
 											style={`background-color: ${getTitle('elo', data.players)?.color}`}
 										>
-											{#if data.players.matchCount < 10}
+											{#if data.players.matchCount < 5}
 												<span class="opacity-50">{`${data.players.elo}?`}</span>
 											{:else}
 												{data.players.elo}

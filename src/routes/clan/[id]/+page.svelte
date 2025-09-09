@@ -701,7 +701,7 @@
 						</div>
 						<div class="mb-[10px] grid w-[500px] grid-cols-4 items-center gap-4">
 							<Label for="name" class="text-right">Content Mode</Label>
-							<RadioGroup.Root bind:value={data.mode} disabled={!isActive(data.boostedUntil)}>
+							<RadioGroup.Root bind:value={editedData.mode} disabled={!isActive(data.boostedUntil)}>
 								<div class="flex items-center space-x-2">
 									<RadioGroup.Item value="markdown" />
 									<Label for="markdown">Markdown</Label>

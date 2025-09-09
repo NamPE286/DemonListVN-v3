@@ -142,7 +142,7 @@
 							<img class="invert" src="/tick-svgrepo-com.svg" alt="tick" />
 						</div>
 					{/if}
-					{#if $user.loggedIn && data.player.uid == $user.data.uid && $user.data.recordCount != 0 && !$user.data.isBanned}
+					{#if $user.loggedIn && data.player.uid == $user.data.uid && !$user.data.isBanned}
 						<ProfileEditButton bind:data={data.player} />
 					{/if}
 				</div>
@@ -258,7 +258,7 @@
 													class="title"
 													style={`background-color: ${getTitle('elo', data.player)?.color}`}
 												>
-													{#if data.player.matchCount < 10}
+													{#if data.player.matchCount < 5}
 														<span class="opacity-50">{`${data.player.elo}?`}</span>
 													{:else}
 														{data.player.elo}
