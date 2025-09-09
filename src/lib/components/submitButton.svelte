@@ -44,11 +44,24 @@
 	let step = 0;
 	let nextDisabled = false;
 	let errorMessage = '';
+	let valueInput = "";
 	let time = {
 		m: null,
 		s: null,
 		ms: null
 	};
+
+	function BlockingInput(event: any) {
+    event.target.value = event.target.value.replace(/[^0-9]/g, '');
+    valueInput = event.target.value;
+	}
+
+	function LimitInput(event: any) {
+		if (event.target.value.length > 3) {
+        event.target.value = event.target.value.substring(0, 3);
+    }
+        valueInput = event.target.value;
+    }
 
 	function getMs() {
 		return parseInt(time.m! || 0) * 60000 + parseInt(time.s! || 0) * 1000 + parseInt(time.ms! || 0);
@@ -299,6 +312,8 @@
 								bind:value={submission.progress}
 								placeholder={level ? `Minimum ${level.minProgress}%` : 'Minimum 0%'}
 								class="col-span-3"
+								on:input={BlockingInput}
+								on:input={LimitInput}
 							/>
 						</div>
 					{:else}
@@ -341,6 +356,7 @@
 							bind:value={submission.refreshRate}
 							placeholder="0 for CBF or unlimited FPS"
 							class="col-span-3"
+							on:input={BlockingInput}
 						/>
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
@@ -349,8 +365,13 @@
 					</div>
 					{#if !level || !level.flTop || level.rating}
 						<div class="grid grid-cols-4 items-center gap-4">
-							<Label for="name" class="text-right">Raw</Label>
-							<Input id="name" bind:value={submission.raw} class="col-span-3" />
+						<Label for="name" class="text-right">Video's footage link</Label>
+						<Input 
+							id="name" 
+							bind:value={submission.raw} 
+							class="col-span-3"
+							placeholder="a.k.a raw footage"
+						/>
 						</div>
 					{/if}
 					<div class="grid grid-cols-4 items-center gap-4">
