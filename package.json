@@ -36,8 +36,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sentry/cloudflare": "^10.0.0",
-		"@sentry/sveltekit": "^10.0.0",
 		"@supabase/supabase-js": "^2.41.1",
 		"@sveltejs/adapter-cloudflare": "^7.1.2",
 		"browser-image-compression": "^2.0.2",
