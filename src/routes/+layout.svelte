@@ -258,7 +258,7 @@
 {/if}
 
 {#if !$user.loggedIn || (!isActive($user.data.supporterUntil) && pathname !== '/supporter')}
-	<Card.Root class="relative z-[10] mx-[55px] border-pink-500 bg-pink-300 dark:bg-pink-950">
+	<Card.Root class="relative z-[10] mx-[55px] border-pink-500 bg-pink-300 dark:bg-pink-950 mt-[10px]">
 		<Card.Content class="mb-[-12px] mt-[10px] text-center">
 			<p class="text-pink-700 dark:text-pink-300">
 				💖 Consider becoming a <a href="/supporter" class="underline">Supporter</a> to help DLVN grow!
