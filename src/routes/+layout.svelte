@@ -25,6 +25,7 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import * as Card from '$lib/components/ui/card/index.js';
 
 	let links = [
 		{ route: '/list/dl', name: 'Classic' },
@@ -252,6 +253,15 @@
 	<div class="filler"></div>
 {/if}
 
+{#if !$user.loggedIn || !isActive($user.data.supporterUntil)}
+	<Card.Root class="relative z-[10] mx-[55px] border-pink-500 dark:bg-pink-950 bg-pink-300">
+		<Card.Content class="mb-[-12px] mt-[10px] text-center">
+			<p class="dark:text-pink-300 text-pink-700">
+				💖 Consider becoming a <a href="/supporter" class="underline">Supporter</a> to help DLVN grow! 💖
+			</p>
+		</Card.Content>
+	</Card.Root>
+{/if}
 <slot />
 
 <footer>

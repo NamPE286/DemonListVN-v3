@@ -5,8 +5,6 @@
 	import Autoplay from 'embla-carousel-autoplay';
 	import EventBanner from './event/eventBanner.svelte';
 	import Ads from '$lib/components/ads.svelte';
-	import { user } from '$lib/client';
-	import { isActive } from '$lib/client/isSupporterActive';
 
 	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
