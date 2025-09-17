@@ -16,6 +16,7 @@
 	import Desktop from 'svelte-radix/Desktop.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import { onMount } from 'svelte';
 
 	const settingsValue = settings.value;
 	let bgURLOpened = false;
@@ -65,6 +66,11 @@
 	}
 
 	$: ($user, fetchAPIKeys());
+
+	function setTheme(theme: string) {
+		document.documentElement.setAttribute('data-theme', theme);
+		localStorage.setItem('theme', theme);
+	}
 </script>
 
 <Dialog.Root>
@@ -95,22 +101,10 @@
 									builders={[builder]}
 									variant="outline"
 									size="icon"
-									on:click={() => setMode('system')}
-								>
-									<Desktop class="h-[1.2rem] w-[1.2rem]" />
-								</Button>
-							</Tooltip.Trigger>
-							<Tooltip.Content>
-								<p>System</p>
-							</Tooltip.Content>
-						</Tooltip.Root>
-						<Tooltip.Root>
-							<Tooltip.Trigger let:builder>
-								<Button
-									builders={[builder]}
-									variant="outline"
-									size="icon"
-									on:click={() => setMode('light')}
+									on:click={() => {
+										setMode('light');
+										setTheme('light');
+									}}
 								>
 									<Sun class="h-[1.2rem] w-[1.2rem]" />
 								</Button>
@@ -125,7 +119,10 @@
 									builders={[builder]}
 									variant="outline"
 									size="icon"
-									on:click={() => setMode('dark')}
+									on:click={() => {
+										setMode('dark');
+										setTheme('dark');
+									}}
 								>
 									<Moon class="h-[1.2rem] w-[1.2rem]" />
 								</Button>
@@ -134,6 +131,98 @@
 								<p>Dark</p>
 							</Tooltip.Content>
 						</Tooltip.Root>
+						{#if $user.loggedIn && isActive($user.data.supporterUntil)}
+							<Tooltip.Root>
+								<Tooltip.Trigger let:builder>
+									<Button
+										builders={[builder]}
+										variant="outline"
+										size="icon"
+										on:click={() => {
+											setMode('dark');
+											setTheme('red');
+										}}
+									>
+										<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-red-500"></div>
+									</Button>
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p>Red</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
+							<Tooltip.Root>
+								<Tooltip.Trigger let:builder>
+									<Button
+										builders={[builder]}
+										variant="outline"
+										size="icon"
+										on:click={() => {
+											setMode('dark');
+											setTheme('green');
+										}}
+									>
+										<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-green-500"></div>
+									</Button>
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p>Green</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
+							<Tooltip.Root>
+								<Tooltip.Trigger let:builder>
+									<Button
+										builders={[builder]}
+										variant="outline"
+										size="icon"
+										on:click={() => {
+											setMode('dark');
+											setTheme('blue');
+										}}
+									>
+										<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-blue-500"></div>
+									</Button>
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p>Blue</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
+							<Tooltip.Root>
+								<Tooltip.Trigger let:builder>
+									<Button
+										builders={[builder]}
+										variant="outline"
+										size="icon"
+										on:click={() => {
+											setMode('dark');
+											setTheme('pink');
+										}}
+									>
+										<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-pink-500"></div>
+									</Button>
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p>Pink</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
+							<Tooltip.Root>
+								<Tooltip.Trigger let:builder>
+									<Button
+										builders={[builder]}
+										variant="outline"
+										size="icon"
+										on:click={() => {
+											setMode('dark');
+											setTheme('gold');
+										}}
+									>
+										<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-yellow-500"></div>
+									</Button>
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p>Gold</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
+						{/if}
 					</div>
 				</div>
 			</Tabs.Content>

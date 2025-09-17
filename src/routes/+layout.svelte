@@ -2,7 +2,7 @@
 	import '../app.pcss';
 	import '../app.scss';
 	import 'non.geist';
-	import { ModeWatcher } from 'mode-watcher';
+	import { ModeWatcher, setMode } from 'mode-watcher';
 
 	import HamburgerMenu from 'svelte-radix/HamburgerMenu.svelte';
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
@@ -81,7 +81,31 @@
 		}
 	}
 
+	function setTheme(theme: string) {
+		document.documentElement.setAttribute('data-theme', theme);
+		localStorage.setItem('theme', theme);
+	}
+
 	onMount(() => {
+		const currentTheme =
+			localStorage.getItem('theme') || document.documentElement.getAttribute('data-theme');
+
+		if (!currentTheme) {
+			setMode('dark');
+			setTheme('dark');
+		}
+
+		if (currentTheme !== 'light' && currentTheme !== 'dark') {
+			user.subscribe((u) => {
+				if (u.checked && (!u.loggedIn || !isActive(u.data.supporterUntil))) {
+					setMode('dark');
+					setTheme('dark');
+				}
+			});
+		} else {
+			setTheme(currentTheme);
+		}
+
 		isVisible = true;
 
 		user.subscribe((data) => {
@@ -258,7 +282,9 @@
 {/if}
 
 {#if !$user.loggedIn || (!isActive($user.data.supporterUntil) && pathname !== '/supporter')}
-	<Card.Root class="relative z-[10] mx-[55px] border-pink-500 bg-pink-300 dark:bg-pink-950 mt-[10px]">
+	<Card.Root
+		class="relative z-[10] mx-[55px] mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950"
+	>
 		<Card.Content class="mb-[-12px] mt-[10px] text-center">
 			<p class="text-pink-700 dark:text-pink-300">
 				💖 Consider becoming a <a href="/supporter" class="underline">Supporter</a> to help DLVN grow!
