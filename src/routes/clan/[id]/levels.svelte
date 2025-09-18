@@ -50,6 +50,10 @@
 	}
 
 	onMount(async () => {
+		if (!isActive(clan.boostedUntil)) {
+			return;
+		}
+        
 		await fetchLevels();
 	});
 </script>
