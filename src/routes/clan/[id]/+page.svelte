@@ -32,7 +32,7 @@
 	import Markdown from '$lib/components/markdown.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
-	import { Content } from '$lib/components/ui/alert-dialog';
+	import Levels from './levels.svelte';
 
 	export let data: PageData;
 	let editedData = structuredClone(data);
@@ -452,9 +452,10 @@
 			<Tabs.List class="mb-[5px] w-fit">
 				{#if isActive(data.boostedUntil)}
 					<Tabs.Trigger value="home">Home</Tabs.Trigger>
+					<Tabs.Trigger value="levels">Levels</Tabs.Trigger>
 				{/if}
-				<Tabs.Trigger value="members">Members</Tabs.Trigger>
 				<Tabs.Trigger value="records">Records</Tabs.Trigger>
+				<Tabs.Trigger value="members">Members</Tabs.Trigger>
 				{#if $user.loggedIn && $user.data.clan == $page.params.id}
 					<Tabs.Trigger value="invitations">Invitations</Tabs.Trigger>
 					<Tabs.Trigger value="settings">Settings</Tabs.Trigger>
@@ -473,6 +474,9 @@
 					{/if}
 				</Tabs.Content>
 			{/if}
+			<Tabs.Content value="levels" class="w-full">
+				<Levels clan={data} />
+			</Tabs.Content>
 			<Tabs.Content value="members" class="w-full">
 				<div class="filter">
 					<div class="filterItem">
