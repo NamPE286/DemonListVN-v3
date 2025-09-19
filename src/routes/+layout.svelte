@@ -108,13 +108,14 @@
 		if (!currentTheme) {
 			setMode('dark');
 			setTheme('dark');
-		}
-
-		if (currentTheme !== 'light' && currentTheme !== 'dark') {
+		} else if (currentTheme !== 'light' && currentTheme !== 'dark') {
 			user.subscribe((u) => {
 				if (u.checked && (!u.loggedIn || !isActive(u.data.supporterUntil))) {
 					setMode('dark');
 					setTheme('dark');
+				} else {
+					console.log('ok');
+					setTheme(currentTheme);
 				}
 			});
 		} else {
