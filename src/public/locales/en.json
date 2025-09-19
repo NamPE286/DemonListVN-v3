@@ -132,5 +132,8 @@
             "caution": "Please do not close the payment window until you are redirected back to Demon List VN",
             "proceed": "Process to payment"
         }
+    },
+    "player_card": {
+        
     }
 }
