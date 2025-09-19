@@ -1,0 +1,13 @@
+{
+    "nav": {
+        "classic": "Classic",
+        "platformer": "Platformer",
+        "featured": "Featured",
+        "players": "Người chơi",
+        "clans": "Hội",
+        "mod": "Mod",
+        "rules": "Luật",
+        "store": "Cửa hàng",
+        "supporter": "Ủng hộ"
+    }
+}

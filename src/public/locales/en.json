@@ -1,0 +1,13 @@
+{
+    "nav": {
+        "classic": "Classic",
+        "platformer": "Platformer",
+        "featured": "featured",
+        "players": "Players",
+        "clans": "Clans",
+        "mod": "Mod",
+        "rules": "Rules",
+        "store": "Store",
+        "supporter": "Support Us"
+    }
+}

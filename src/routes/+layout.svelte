@@ -2,6 +2,8 @@
 	import '../app.pcss';
 	import '../app.scss';
 	import 'non.geist';
+	import '../i18n'
+	
 	import { ModeWatcher, setMode } from 'mode-watcher';
 
 	import HamburgerMenu from 'svelte-radix/HamburgerMenu.svelte';
@@ -27,16 +29,23 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { page } from '$app/stores';
+	import { waitLocale } from 'svelte-i18n';
+	import { _ } from 'svelte-i18n';
+	import { get } from 'svelte/store';
+
+	export async function preload() {
+		return waitLocale();
+	}
 
 	let links = [
-		{ route: '/list/dl', name: 'Classic' },
-		{ route: '/list/pl', name: 'Platformer' },
-		{ route: '/list/fl', name: 'Featured' },
-		{ route: '/players', name: 'Players' },
-		{ route: '/clans', name: 'Clans' },
-		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
-		{ route: '/rules', name: 'Rules' },
-		{ route: '/store', name: 'Store' }
+		{ route: '/list/dl', name: get(_)('nav.classic') },
+		{ route: '/list/pl', name: get(_)('nav.platformer') },
+		{ route: '/list/fl', name: get(_)('nav.featured') },
+		{ route: '/players', name: get(_)('nav.players') },
+		{ route: '/clans', name: get(_)('nav.clans') },
+		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: get(_)('nav.mod') },
+		{ route: '/rules', name: get(_)('nav.rules') },
+		{ route: '/store', name: get(_)('nav.store') }
 	];
 
 	let searchQuery = '';
@@ -155,16 +164,18 @@
 				<div class="logo-img-wrapper">
 					<img src="/favicon.png" alt="logo" />
 				</div>
-				<span id="logo-name" style="font-family: 'Geist Variable', sans-serif;"><b>Demon List VN</b></span>
+				<span id="logo-name" style="font-family: 'Geist Variable', sans-serif;"
+					><b>Demon List VN</b></span
+				>
 			</a>
 			<div class="links">
 				{#each links as link}
 					<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
 				{/each}
 				{#if $user.loggedIn && isActive($user.data.supporterUntil)}
-					<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
+					<a href="/supporter" class="link" data-sveltekit-preload-data="tap">{$_('nav.supporter')}</a>
 				{:else}
-					<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter">Support Us</Button>
+					<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter">{$_('nav.supporter')}</Button>
 				{/if}
 			</div>
 			<div class="menu">

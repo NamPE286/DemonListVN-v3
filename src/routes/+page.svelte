@@ -5,7 +5,7 @@
 	import Autoplay from 'embla-carousel-autoplay';
 	import EventBanner from './event/eventBanner.svelte';
 	import Ads from '$lib/components/ads.svelte';
-
+	
 	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
 	let recent: any = {
