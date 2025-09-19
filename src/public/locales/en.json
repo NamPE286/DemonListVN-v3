@@ -1,4 +1,18 @@
 {
+    "general": {
+        "next": "Next",
+        "back": "Back",
+        "close": "Close",
+        "select": "Select",
+        "month": "Month"
+    },
+    "toast": {
+        "clipboard": "Copied to clipboard!",
+        "payment": {
+            "no_player": "Player not found",
+            "redirect": "You will be redirected to our payment portal"
+        }
+    },
     "nav": {
         "classic": "Classic",
         "platformer": "Platformer",
@@ -98,5 +112,25 @@
         "no_noti": "Empty",
         "navigate": "Click to navigate",
         "ago": "ago"
+    },
+    "payment": {
+        "recipent": {
+            "title": "Who are you buying this for",
+            "friend": "For a friend",
+            "self": "For myself"
+        },
+        "gift": {
+            "title": "Select a friend to gift",
+            "confirm": "You are going to gift"
+        },
+        "quantity": {
+            "title": "Select quantity"
+        },
+        "review": {
+            "title": "Review your order",
+            "recipent": "Recipent",
+            "caution": "Please do not close the payment window until you are redirected back to Demon List VN",
+            "proceed": "Process to payment"
+        }
     }
 }

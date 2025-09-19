@@ -9,6 +9,8 @@
 	import { user } from '$lib/client';
 	import { calcRating } from '$lib/client/rating';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import { _ } from 'svelte-i18n';
+	import { get } from 'svelte/store';
 
 	let failedToLoad = false;
 
@@ -131,7 +133,7 @@
 							inset
 							on:click={async () => {
 								await navigator.clipboard.writeText(String(level.id));
-								toast.success('Copied to clipboard!');
+								toast.success(get(_)("toast.clipboard"));
 							}}>Copy level ID</ContextMenu.Item
 						>
 						<ContextMenu.Item
@@ -140,7 +142,7 @@
 								await navigator.clipboard.writeText(
 									`https://img.youtube.com/vi/${level.videoID}/0.jpg`
 								);
-								toast.success('Copied to clipboard!');
+								toast.success(get(_)("toast.clipboard"));
 							}}>Copy thumbnail image URL</ContextMenu.Item
 						>
 					</ContextMenu.Content>

@@ -1,4 +1,18 @@
 {
+    "general": {
+        "next": "Tiếp",
+        "back": "Trước",
+        "close": "Đóng",
+        "select": "Chọn",
+        "month": "Tháng"
+    },
+    "toast": {
+        "clipboard": "Đã sao chép vào bảng nhớ tạm!",
+        "payment": {
+            "no_player": "Không tìm thấy người chơi",
+            "redirect": "Bạn sẽ được chuyển hướng đến cổng thanh toán của DLVN"
+        }
+    },
     "nav": {
         "classic": "Classic",
         "platformer": "Platformer",
@@ -98,5 +112,25 @@
         "no_noti": "Trống",
         "navigate": "Bấm để chuyển hướng",
         "ago": "trước"
+    },
+    "payment": {
+        "recipent": {
+            "title": "Bạn mua cho ai",
+            "friend": "Cho một người bạn",
+            "self": "Cho bản thân"
+        },
+        "gift": {
+            "title": "Chọn một người bạn để tặng",
+            "confirm": "Bạn sẽ tặng"
+        },
+        "quantity": {
+            "title": "Lựa chọn số lượng"
+        },
+        "review": {
+            "title": "Xem lại đơn hàng",
+            "recipent": "Người nhận",
+            "caution": "Vui lòng không đóng cửa sổ thanh toán cho đến khi bạn được chuyển hướng trở lại Demon List VN",
+            "proceed": "Tiến hành thanh toán"
+        }
     }
 }
