@@ -95,7 +95,11 @@
 				sendStatus = 2;
 			}
 
-			errorMessage = ((await res.json()) as any).message;
+			if ($locale == 'vi') {
+				errorMessage = ((await res.json()) as any).vi;
+			} else {
+				errorMessage = ((await res.json()) as any).en;
+			}
 		});
 	}
 
@@ -462,14 +466,16 @@
 				{#if sendStatus == 0}
 					<AlertDialog.Content>
 						<AlertDialog.Header>
-							<AlertDialog.Title>Sending your submission...</AlertDialog.Title>
-							<AlertDialog.Description>This may take a while.</AlertDialog.Description>
+							<AlertDialog.Title>{$_('submit.send.loading.title')}</AlertDialog.Title>
+							<AlertDialog.Description
+								>{$_('submit.send.loading.description')}</AlertDialog.Description
+							>
 						</AlertDialog.Header>
 					</AlertDialog.Content>
 				{:else if sendStatus == 1}
 					<AlertDialog.Content>
 						<AlertDialog.Header>
-							<AlertDialog.Title>{$_("submit.send.success.title")}</AlertDialog.Title>
+							<AlertDialog.Title>{$_('submit.send.success.title')}</AlertDialog.Title>
 							<AlertDialog.Description>
 								{#if isActive($user.data.supporterUntil)}
 									{#if $locale == 'vi'}
@@ -481,7 +487,7 @@
 										> It will be reviewed shortly.
 									{/if}
 								{:else}
-									{$_("submit.send.success.description")}
+									{$_('submit.send.success.description')}
 								{/if}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
@@ -492,14 +498,16 @@
 				{:else if sendStatus == 2}
 					<AlertDialog.Content>
 						<AlertDialog.Header>
-							<AlertDialog.Title>{$_("submit.send.failed.title")}</AlertDialog.Title>
+							<AlertDialog.Title>{$_('submit.send.failed.title')}</AlertDialog.Title>
 							<AlertDialog.Description>
-								{$_("submit.send.failed.description")}<br />
+								{$_('submit.send.failed.description')}<br />
 								ⓘ {errorMessage}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
-							<AlertDialog.Cancel on:click={() => (open = false)}>{$_("submit.close")}</AlertDialog.Cancel>
+							<AlertDialog.Cancel on:click={() => (open = false)}
+								>{$_('submit.close')}</AlertDialog.Cancel
+							>
 						</AlertDialog.Footer>
 					</AlertDialog.Content>
 				{/if}
