@@ -29,7 +29,6 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { page } from '$app/stores';
-	import { waitLocale } from 'svelte-i18n';
 	import { _, locale } from 'svelte-i18n';
 
 	$: links = [
@@ -94,6 +93,15 @@
 	}
 
 	onMount(() => {
+		const savedLocale = localStorage.getItem('locale');
+
+		locale.set(savedLocale || 'vi');
+		locale.subscribe((value) => {
+			if (value) {
+				localStorage.setItem('locale', value);
+			}
+		});
+
 		const currentTheme =
 			localStorage.getItem('theme') || document.documentElement.getAttribute('data-theme');
 
@@ -301,7 +309,8 @@
 		<Card.Content class="mb-[-12px] mt-[10px] text-center">
 			<p class="text-pink-700 dark:text-pink-300">
 				{#if $locale == 'vi'}
-					💖 Trở thành <a href="/supporter" class="underline">Supporter</a> để ủng hộ và giúp DLVN phát triển hơn 💖
+					💖 Trở thành <a href="/supporter" class="underline">Supporter</a> để ủng hộ và giúp DLVN phát
+					triển hơn 💖
 				{:else}
 					💖 Consider becoming a <a href="/supporter" class="underline">Supporter</a> to help DLVN grow!
 					💖

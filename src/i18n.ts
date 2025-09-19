@@ -4,8 +4,8 @@ register('en', () => import('./public/locales/en.json'));
 register('vi', () => import('./public/locales/vi.json'));
 
 init({
-  fallbackLocale: 'vi',
-  initialLocale: 'vi',
+	fallbackLocale: 'vi',
+	initialLocale: 'vi'
 });
 
-locale.set("vi")
+locale.set('vi');
