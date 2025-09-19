@@ -155,7 +155,7 @@
 				<div class="logo-img-wrapper">
 					<img src="/favicon.png" alt="logo" />
 				</div>
-				<span id="logo-name"><b>Demon List VN</b></span>
+				<span id="logo-name" style="font-family: 'Geist Variable', sans-serif;"><b>Demon List VN</b></span>
 			</a>
 			<div class="links">
 				{#each links as link}
