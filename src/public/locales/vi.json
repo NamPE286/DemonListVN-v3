@@ -91,5 +91,12 @@
     },
     "heatmap": {
         "split_by_month": "Tách theo tháng"
+    },
+    "notifications": {
+        "title": "Thông báo",
+        "clear_all": "Xoá toàn bộ",
+        "no_noti": "Trống",
+        "navigate": "Bấm để chuyển hướng",
+        "ago": "trước"
     }
 }

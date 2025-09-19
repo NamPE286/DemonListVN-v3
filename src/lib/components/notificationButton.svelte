@@ -6,7 +6,7 @@
 	import { user } from '$lib/client';
 	import supabase from '$lib/client/supabase';
 	import { dateStore } from 'svelte-legos';
-
+	import { _ } from 'svelte-i18n';
 	let notifications: any[] = [];
 
 	function timeSince(date: any) {
@@ -105,13 +105,13 @@
 	</Popover.Trigger>
 	<Popover.Content class="z-[99999] w-[350px]">
 		<div class="header">
-			<h4 class="font-medium leading-none">Notifications</h4>
+			<h4 class="font-medium leading-none">{$_("notifications.title")}</h4>
 			<div class="buttonWrapper">
-				<Button variant="link" on:click={clear}>Clear all</Button>
+				<Button variant="link" on:click={clear}>{$_("notifications.clear_all")}</Button>
 			</div>
 		</div>
 		{#if notifications.length == 0}
-			<p class="noNoti">No notification</p>
+			<p class="noNoti">{$_("notifications.no_noti")}</p>
 		{:else}
 			<div class="notiWrapper">
 				{#each notifications as notification}
@@ -121,11 +121,11 @@
 								<a class="notiContent" href={notification.redirect ? notification.redirect : '#!'}
 									>{notification.content}
 									{#if notification.redirect}
-										<span class="navigate"> - Click to navigate</span>
+										<span class="navigate"> - {$_("notifications.navigate")}</span>
 									{/if}
 								</a></Card.Title
 							>
-							<Card.Description>{timeSince(notification.timestamp)} ago</Card.Description>
+							<Card.Description>{timeSince(notification.timestamp)} {$_("notifications.ago")}</Card.Description>
 						</Card.Header>
 					</Card.Root>
 				{/each}
