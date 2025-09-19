@@ -88,5 +88,8 @@
                 "continue": "Continue"
             }
         }
+    },
+    "heatmap": {
+        "split_by_month": "Split by month"
     }
 }

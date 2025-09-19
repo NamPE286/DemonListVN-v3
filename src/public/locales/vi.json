@@ -88,5 +88,8 @@
                 "continue": "Tiếp tục"
             }
         }
+    },
+    "heatmap": {
+        "split_by_month": "Tách theo tháng"
     }
 }

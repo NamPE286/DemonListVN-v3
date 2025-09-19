@@ -4,6 +4,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import * as Select from '$lib/components/ui/select';
 	import { onMount } from 'svelte';
+	import { _ } from 'svelte-i18n';
 
 	export let uid: string;
 	let year: number = new Date().getFullYear();
@@ -52,7 +53,7 @@
 <div class="wrapper">
 	<div class="flex">
 		<div class="flex items-center space-x-2">
-			<Label for="split">Split by month</Label>
+			<Label for="split">{$_("heatmap.split_by_month")}</Label>
 			<Switch bind:checked={splitByMonth} id="split" />
 		</div>
 		<div class="ml-auto">
