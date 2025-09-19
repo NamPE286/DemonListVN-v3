@@ -16,7 +16,7 @@
 	import Desktop from 'svelte-radix/Desktop.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
-	import { onMount } from 'svelte';
+	import { locale, _ } from 'svelte-i18n';
 
 	const settingsValue = settings.value;
 	let bgURLOpened = false;
@@ -223,6 +223,22 @@
 								</Tooltip.Content>
 							</Tooltip.Root>
 						{/if}
+					</div>
+				</div>
+				<div class="setting">
+					<Label>Language</Label>
+					<div class="right">
+						<Button
+							variant="outline"
+							size="sm"
+							on:click={() => {
+								const currentLang = $locale;
+								const newLang = currentLang === 'en' ? 'vi' : 'en';
+								locale.set(newLang);
+							}}
+						>
+							{$locale === 'vi' ? 'Tiếng Việt' : 'English'}
+						</Button>
 					</div>
 				</div>
 			</Tabs.Content>

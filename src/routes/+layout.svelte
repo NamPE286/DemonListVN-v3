@@ -2,8 +2,8 @@
 	import '../app.pcss';
 	import '../app.scss';
 	import 'non.geist';
-	import '../i18n'
-	
+	import '../i18n';
+
 	import { ModeWatcher, setMode } from 'mode-watcher';
 
 	import HamburgerMenu from 'svelte-radix/HamburgerMenu.svelte';
@@ -30,22 +30,24 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { page } from '$app/stores';
 	import { waitLocale } from 'svelte-i18n';
-	import { _ } from 'svelte-i18n';
-	import { get } from 'svelte/store';
+	import { _, locale } from 'svelte-i18n';
 
 	export async function preload() {
 		return waitLocale();
 	}
 
-	let links = [
-		{ route: '/list/dl', name: get(_)('nav.classic') },
-		{ route: '/list/pl', name: get(_)('nav.platformer') },
-		{ route: '/list/fl', name: get(_)('nav.featured') },
-		{ route: '/players', name: get(_)('nav.players') },
-		{ route: '/clans', name: get(_)('nav.clans') },
-		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: get(_)('nav.mod') },
-		{ route: '/rules', name: get(_)('nav.rules') },
-		{ route: '/store', name: get(_)('nav.store') }
+	$: links = [
+		{ route: '/list/dl', name: $locale === 'en' ? 'Classic' : 'Classic' },
+		{ route: '/list/pl', name: $locale === 'en' ? 'Platformer' : 'Platformer' },
+		{ route: '/list/fl', name: $locale === 'en' ? 'Featured' : 'Featured' },
+		{ route: '/players', name: $locale === 'en' ? 'Players' : 'Người chơi' },
+		{ route: '/clans', name: $locale === 'en' ? 'Clans' : 'Hội' },
+		{
+			route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases',
+			name: $locale === 'en' ? 'Mod' : 'Mod'
+		},
+		{ route: '/rules', name: $locale === 'en' ? 'Rules' : 'Luật' },
+		{ route: '/store', name: $locale === 'en' ? 'Store' : 'Cửa hàng' }
 	];
 
 	let searchQuery = '';
@@ -173,9 +175,13 @@
 					<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
 				{/each}
 				{#if $user.loggedIn && isActive($user.data.supporterUntil)}
-					<a href="/supporter" class="link" data-sveltekit-preload-data="tap">{$_('nav.supporter')}</a>
+					<a href="/supporter" class="link" data-sveltekit-preload-data="tap"
+						>{$_('nav.supporter')}</a
+					>
 				{:else}
-					<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter">{$_('nav.supporter')}</Button>
+					<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter"
+						>{$_('nav.supporter')}</Button
+					>
 				{/if}
 			</div>
 			<div class="menu">
