@@ -32,10 +32,6 @@
 	import { waitLocale } from 'svelte-i18n';
 	import { _, locale } from 'svelte-i18n';
 
-	export async function preload() {
-		return waitLocale();
-	}
-
 	$: links = [
 		{ route: '/list/dl', name: $locale === 'en' ? 'Classic' : 'Classic' },
 		{ route: '/list/pl', name: $locale === 'en' ? 'Platformer' : 'Platformer' },
@@ -304,8 +300,12 @@
 	>
 		<Card.Content class="mb-[-12px] mt-[10px] text-center">
 			<p class="text-pink-700 dark:text-pink-300">
-				💖 Consider becoming a <a href="/supporter" class="underline">Supporter</a> to help DLVN grow!
-				💖
+				{#if $locale == 'vi'}
+					💖 Trở thành <a href="/supporter" class="underline">Supporter</a> để ủng hộ và giúp DLVN phát triển hơn 💖
+				{:else}
+					💖 Consider becoming a <a href="/supporter" class="underline">Supporter</a> to help DLVN grow!
+					💖
+				{/if}
 			</p>
 		</Card.Content>
 	</Card.Root>

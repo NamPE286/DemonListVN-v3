@@ -9,5 +9,84 @@
         "rules": "Luật",
         "store": "Cửa hàng",
         "supporter": "Ủng hộ"
+    },
+    "submit": {
+        "button": "Nộp",
+        "next": "Tiếp",
+        "back": "Trước",
+        "close": "Đóng",
+        "attention": {
+            "title": "Lưu ý"
+        },
+        "level": {
+            "title": "Level"
+        },
+        "required": {
+            "title": "Mục bắt buộc",
+            "progress": "Tiến độ",
+            "video": "Liên kết Video",
+            "platform": "Nền tảng",
+            "minimum": "Tối thiểu"
+        },
+        "optional": {
+            "title": "Mục không bắt buộc",
+            "suggestion": "Rating đề xuất",
+            "comment": "Bình luận"
+        },
+        "send": {
+            "loading": {
+                "title": "Đang gửi bản nộp của bạn...",
+                "description": "Quá trình này sẽ mất một lúc."
+            },
+            "success": {
+                "title": "Đã nộp!",
+                "description": "Bản nộp của bạn đã được ghi nhận! Sẽ mất vài hôm để kiểm duyệt viên duyệt bản nộp của bạn."
+            },
+            "failed": {
+                "title": "Đã có sự cố xảy ra",
+                "description": "Bản ghi của bạn chưa được ghi nhận. Nếu việc này tiếp diễn, vui lòng liên hệ với quản trị viên để giải quyết."
+            }
+        }
+    },
+    "settings": {
+        "title": "Cài đặt",
+        "tabs": {
+            "general": "Chung",
+            "api": "API",
+            "sub": "Gói",
+            "discord": "Discord"
+        },
+        "general": {
+            "theme": {
+                "title": "Chủ đề",
+                "light": "Sáng",
+                "dark": "Tối",
+                "red": "Đỏ",
+                "blue": "Xanh dương",
+                "green": "Xanh lá",
+                "pink": "Hồng",
+                "gold": "Vàng"
+            },
+            "language": {
+                "title": "Ngôn ngữ"
+            }
+        },
+        "api": {
+            "key": "Khoá",
+            "created_at": "Tạo lúc",
+            "delete": {
+                "title": "Bạn chắc không?",
+                "description": "Thao tác này không thể hoàn lại.",
+                "cancel": "Huỷ",
+                "continue": "Tiếp tục"
+            },
+            "create": {
+                "button": "Tạo khoá mới",
+                "title": "Tạo khoá API mới?",
+                "description": "Bất cứ ai với khoá này có thể nộp và thay đổi tài khoản của bạn.",
+                "cancel": "Huỷ",
+                "continue": "Tiếp tục"
+            }
+        }
     }
 }

@@ -9,5 +9,84 @@
         "rules": "Rules",
         "store": "Store",
         "supporter": "Support Us"
+    },
+    "submit": {
+        "button": "Submit",
+        "next": "Next",
+        "back": "Back",
+        "close": "Close",
+        "attention": {
+            "title": "Attention"
+        },
+        "level": {
+            "title": "Level"
+        },
+        "required": {
+            "title": "Required fields",
+            "progress": "Progress",
+            "video": "Video's Link",
+            "platform": "Platform",
+            "minimum": "Minimum"
+        },
+        "optional": {
+            "title": "Optional fields",
+            "suggestion": "Rating suggestion",
+            "comment": "Comment"
+        },
+        "send": {
+            "loading": {
+                "title": "Sending your submission...",
+                "description": "This may take a while."
+            },
+            "success": {
+                "title": "Submitted!",
+                "description": "Your submission has been sent! It may take a few day for a moderator to approve your submission."
+            },
+            "failed": {
+                "title": "Something happened",
+                "description": "We are unable to send your submission. If this problem persist, please contact a moderator to resolve this issue."
+            }
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "tabs": {
+            "general": "General",
+            "api": "API",
+            "sub": "Subscriptions",
+            "discord": "Discord"
+        },
+        "general": {
+            "theme": {
+                "title": "Theme",
+                "light": "Light",
+                "dark": "Dark",
+                "red": "Red",
+                "blue": "Blue",
+                "green": "Green",
+                "pink": "Pink",
+                "gold": "Gold"
+            },
+            "language": {
+                "title": "Language"
+            }
+        },
+        "api": {
+            "key": "Key",
+            "created_at": "Created at",
+            "delete": {
+                "title": "Are you sure?",
+                "description": "This action cannot be undone.",
+                "cancel": "Cancel",
+                "continue": "Continue"
+            },
+            "create": {
+                "button": "Create a new key",
+                "title": "Create a new API key?",
+                "description": "Anyone with this key can submit and make change to your account.",
+                "cancel": "Cancel",
+                "continue": "Continue"
+            }
+        }
     }
 }

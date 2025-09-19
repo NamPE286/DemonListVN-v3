@@ -12,6 +12,8 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { navigating, page } from '$app/stores';
 	import { onMount } from 'svelte';
+	import { locale } from 'svelte-i18n';
+	import { _ } from 'svelte-i18n';
 
 	const defaultValue: any = {
 		levelid: NaN,
@@ -93,7 +95,7 @@
 				sendStatus = 2;
 			}
 
-			errorMessage = (await res.json() as any).message;
+			errorMessage = ((await res.json()) as any).message;
 		});
 	}
 
@@ -104,7 +106,9 @@
 			).json();
 		} catch {}
 
-		apiLevel = await (await fetch(`${import.meta.env.VITE_API_URL}/level/${submission.levelid}?fromGD=1`)).json();
+		apiLevel = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/level/${submission.levelid}?fromGD=1`)
+		).json();
 	}
 
 	function next() {
@@ -211,43 +215,62 @@
 					ms: null
 				};
 			}
-		}}>Submit</Dialog.Trigger
+		}}>{$_('submit.button')}</Dialog.Trigger
 	>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
 			<Dialog.Title>
 				{#if step == 0}
-					Attention
+					{$_('submit.attention.title')}
 				{:else if step == 1 || step == 2}
-					Level
+					{$_('submit.level.title')}
 				{:else if step == 3}
-					Required fields
+					{$_('submit.required.title')}
 				{:else if step == 4}
-					Optional fields
+					{$_('submit.optional.title')}
 				{/if}
 			</Dialog.Title>
 		</Dialog.Header>
 		{#if step == 0}
 			<Alert.Root>
 				<Alert.Description>
-					- Read the <button on:click={() => (open = false)}
-						><a href="/rules"><u>rules</u></a></button
-					>
-					before submitting.<br />
-					- Suggested rating is Demon List VN level's rating, not level's stars or placement. <br />
-					- Raw is recording from the beginning to the end of the recording session without editing.
-					<br />
-					- Use
-					<a href="https://github.com/NamPE286/DemonListVN-geode-mod/releases">
-						<u>Demon List VN's geode mod</u>
-					</a> while beating level to have higher chance of acceptance.
+					{#if $locale == 'vi'}
+						- Đọc <button on:click={() => (open = false)}><a href="/rules"><u>luật</u></a></button>
+						trước khi nộp.<br />
+						- Điểm đề xuất là điểm của DLVN, không phải sao hay thứ hạng của level.
+						<br />
+						- Raw là video quay từ lúc bắt đầu đến kết thúc quá trình quay chưa bị chỉnh sửa.
+						<br />
+						- Sử dụng
+						<a href="https://github.com/NamPE286/DemonListVN-geode-mod/releases">
+							<u>Demon List VN's geode mod</u>
+						</a> trong khi chơi level để có cơ hội chấp nhận cao hơn.
+					{:else}
+						- Read the <button on:click={() => (open = false)}
+							><a href="/rules"><u>rules</u></a></button
+						>
+						before submitting.<br />
+						- Suggested rating is Demon List VN level's rating, not level's stars or placement.
+						<br />
+						- Raw is recording from the beginning to the end of the recording session without editing.
+						<br />
+						- Use
+						<a href="https://github.com/NamPE286/DemonListVN-geode-mod/releases">
+							<u>Demon List VN's geode mod</u>
+						</a> while beating level to have higher chance of acceptance.
+					{/if}
 				</Alert.Description>
 			</Alert.Root>
 			<Alert.Root class="border-yellow-400">
 				<Alert.Description>
-					<a class="underline" href="/supporter">Supporters'</a> submissions are prioritized in the review
-					queue. Their records are treated as if they were submitted 7 days earlier (skip ahead by about
-					150 submissions).
+					{#if $locale == 'vi'}
+						Bản nộp của <a class="underline" href="/supporter">Supporter</a> được ưu tiên duyệt. Những
+						bản nộp này đuọc coi như nộp sớm hơn 7 ngày (bỏ qua khoảng 150 bản nộp khác).
+					{:else}
+						<a class="underline" href="/supporter">Supporters'</a> submissions are prioritized in the
+						review queue. Their records are treated as if they were submitted 7 days earlier (skip ahead
+						by about 150 submissions).
+					{/if}
 				</Alert.Description>
 			</Alert.Root>
 		{/if}
@@ -281,23 +304,32 @@
 						<Loading inverted={true} />
 					{:else}
 						<div class="text-center">
-							You are going to submit <a href={`/level/${apiLevel.id}`}
-								><b><u>{apiLevel.name}</u></b></a
-							>
-							by {apiLevel.author}
+							{#if $locale == 'vi'}
+								Bạn chuẩn bị nộp cho level <a href={`/level/${apiLevel.id}`}
+									><b><u>{apiLevel.name}</u></b></a
+								>
+								by {apiLevel.author}
+							{:else}
+								You are going to submit <a href={`/level/${apiLevel.id}`}
+									><b><u>{apiLevel.name}</u></b></a
+								>
+								by {apiLevel.author}
+							{/if}
 						</div>
 					{/if}
 				{/if}
 				{#if step == 3}
 					{#if apiLevel.length != 5}
 						<div class="grid grid-cols-4 items-center gap-4">
-							<Label for="name" class="text-right">Progress</Label>
+							<Label for="name" class="text-right">{$_('submit.required.progress')}</Label>
 							<Input
 								id="name"
 								type="number"
 								inputmode="numeric"
 								bind:value={submission.progress}
-								placeholder={level ? `Minimum ${level.minProgress}%` : 'Minimum 0%'}
+								placeholder={level
+									? `${$_('submit.required.minimum')} ${level.minProgress}%`
+									: `{$_('submit.required.minimum')} 0%`}
 								class="col-span-3"
 							/>
 						</div>
@@ -339,12 +371,12 @@
 							type="number"
 							inputmode="numeric"
 							bind:value={submission.refreshRate}
-							placeholder="0 for CBF or unlimited FPS"
+							placeholder="CBF/∞ FPS = 0 FPS"
 							class="col-span-3"
 						/>
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="name" class="text-right">Video's link</Label>
+						<Label for="name" class="text-right">{$_('submit.required.video')}</Label>
 						<Input id="name" bind:value={submission.videoLink} class="col-span-3" />
 					</div>
 					{#if !level || !level.flTop || level.rating}
@@ -354,7 +386,7 @@
 						</div>
 					{/if}
 					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="name" class="text-right">Platform</Label>
+						<Label for="name" class="text-right">{$_('submit.required.platform')}</Label>
 						<Select.Root bind:selected={submission.mobile}>
 							<Select.Trigger class="col-span-3">
 								<Select.Value placeholder="Select a platform" />
@@ -372,7 +404,7 @@
 				{/if}
 				{#if step == 4}
 					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="name" class="text-right">Rating suggestion</Label>
+						<Label for="name" class="text-right">{$_('submit.optional.suggestion')}</Label>
 						<Input
 							id="name"
 							type="number"
@@ -386,7 +418,7 @@
 						/>
 					</div>
 					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="name" class="text-right">Comment</Label>
+						<Label for="name" class="text-right">{$_('submit.optional.comment')}</Label>
 						<Input
 							id="name"
 							bind:value={submission.comment}
@@ -407,7 +439,7 @@
 								on:click={() => {
 									step--;
 								}}
-								variant="outline">Back</Button
+								variant="outline">{$_('submit.back')}</Button
 							>
 						{/if}
 						{#if step == 4}
@@ -418,10 +450,12 @@
 								on:click={() => {
 									sendStatus = 0;
 									submit();
-								}}>Submit</Button
+								}}>{$_('submit.button')}</Button
 							>
 						{:else}
-							<Button class="w-full" on:click={next} bind:disabled={nextDisabled}>Next</Button>
+							<Button class="w-full" on:click={next} bind:disabled={nextDisabled}
+								>{$_('submit.next')}</Button
+							>
 						{/if}
 					</div>
 				</AlertDialog.Trigger>
@@ -435,14 +469,19 @@
 				{:else if sendStatus == 1}
 					<AlertDialog.Content>
 						<AlertDialog.Header>
-							<AlertDialog.Title>Submitted!</AlertDialog.Title>
+							<AlertDialog.Title>{$_("submit.send.success.title")}</AlertDialog.Title>
 							<AlertDialog.Description>
 								{#if isActive($user.data.supporterUntil)}
-									Your submission has been sent and <span class="text-yellow-500">prioritized!</span
-									> It will be reviewed shortly.
+									{#if $locale == 'vi'}
+										Bản nộp của bạn đã được gửi đi và <span class="text-yellow-500">ưu tiên!</span> Nó
+										sẽ được duyệt trong thời gian ngắn nhất.
+									{:else}
+										Your submission has been sent and <span class="text-yellow-500"
+											>prioritized!</span
+										> It will be reviewed shortly.
+									{/if}
 								{:else}
-									Your submission has been sent! It may take a few day for a moderator to approve
-									your submission.
+									{$_("submit.send.success.description")}
 								{/if}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
@@ -453,15 +492,14 @@
 				{:else if sendStatus == 2}
 					<AlertDialog.Content>
 						<AlertDialog.Header>
-							<AlertDialog.Title>Something happened</AlertDialog.Title>
+							<AlertDialog.Title>{$_("submit.send.failed.title")}</AlertDialog.Title>
 							<AlertDialog.Description>
-								We are unable to send your submission. If this problem persist, please contact a
-								moderator to resolve this issue.<br />
-								Error: {errorMessage}
+								{$_("submit.send.failed.description")}<br />
+								ⓘ {errorMessage}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
-							<AlertDialog.Cancel on:click={() => (open = false)}>Close</AlertDialog.Cancel>
+							<AlertDialog.Cancel on:click={() => (open = false)}>{$_("submit.close")}</AlertDialog.Cancel>
 						</AlertDialog.Footer>
 					</AlertDialog.Content>
 				{/if}

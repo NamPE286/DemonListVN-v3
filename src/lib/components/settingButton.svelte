@@ -13,13 +13,10 @@
 	import Sun from 'svelte-radix/Sun.svelte';
 	import Trash from 'svelte-radix/Trash.svelte';
 	import Moon from 'svelte-radix/Moon.svelte';
-	import Desktop from 'svelte-radix/Desktop.svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { locale, _ } from 'svelte-i18n';
 
-	const settingsValue = settings.value;
-	let bgURLOpened = false;
 	let APIKeys: any[] = [];
 
 	async function fetchAPIKeys() {
@@ -77,23 +74,23 @@
 	<Dialog.Trigger let:builder>
 		<Button builders={[builder]} variant="outline" size="icon">
 			<Gear class="h-[1.2rem] w-[1.2rem]" />
-			<span class="sr-only">Settings</span>
+			<span class="sr-only">{$_("settings.title")}</span>
 		</Button>
 	</Dialog.Trigger>
 	<Dialog.Content>
 		<Dialog.Header>
-			<Dialog.Title>Settings</Dialog.Title>
+			<Dialog.Title>{$_("settings.title")}</Dialog.Title>
 		</Dialog.Header>
 		<Tabs.Root value="general">
 			<Tabs.List>
-				<Tabs.Trigger value="general">General</Tabs.Trigger>
-				<Tabs.Trigger value="api">API</Tabs.Trigger>
-				<Tabs.Trigger value="sub">Subscriptions</Tabs.Trigger>
-				<Tabs.Trigger value="discord">Discord</Tabs.Trigger>
+				<Tabs.Trigger value="general">{$_("settings.tabs.general")}</Tabs.Trigger>
+				<Tabs.Trigger value="api">{$_("settings.tabs.api")}</Tabs.Trigger>
+				<Tabs.Trigger value="sub">{$_("settings.tabs.sub")}</Tabs.Trigger>
+				<Tabs.Trigger value="discord">{$_("settings.tabs.discord")}</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="general">
 				<div class="setting">
-					<Label>Theme</Label>
+					<Label>{$_("settings.general.theme.title")}</Label>
 					<div class="right">
 						<Tooltip.Root>
 							<Tooltip.Trigger let:builder>
@@ -110,7 +107,7 @@
 								</Button>
 							</Tooltip.Trigger>
 							<Tooltip.Content>
-								<p>Light</p>
+								<p>{$_("settings.general.theme.light")}</p>
 							</Tooltip.Content>
 						</Tooltip.Root>
 						<Tooltip.Root>
@@ -128,7 +125,7 @@
 								</Button>
 							</Tooltip.Trigger>
 							<Tooltip.Content>
-								<p>Dark</p>
+								<p>{$_("settings.general.theme.dark")}</p>
 							</Tooltip.Content>
 						</Tooltip.Root>
 						{#if $user.loggedIn && isActive($user.data.supporterUntil)}
@@ -147,7 +144,7 @@
 									</Button>
 								</Tooltip.Trigger>
 								<Tooltip.Content>
-									<p>Red</p>
+								<p>{$_("settings.general.theme.red")}</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 							<Tooltip.Root>
@@ -165,7 +162,7 @@
 									</Button>
 								</Tooltip.Trigger>
 								<Tooltip.Content>
-									<p>Green</p>
+								<p>{$_("settings.general.theme.green")}</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 							<Tooltip.Root>
@@ -183,7 +180,7 @@
 									</Button>
 								</Tooltip.Trigger>
 								<Tooltip.Content>
-									<p>Blue</p>
+								<p>{$_("settings.general.theme.blue")}</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 							<Tooltip.Root>
@@ -201,7 +198,7 @@
 									</Button>
 								</Tooltip.Trigger>
 								<Tooltip.Content>
-									<p>Pink</p>
+								<p>{$_("settings.general.theme.pink")}</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 							<Tooltip.Root>
@@ -219,14 +216,14 @@
 									</Button>
 								</Tooltip.Trigger>
 								<Tooltip.Content>
-									<p>Gold</p>
+								<p>{$_("settings.general.theme.gold")}</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 						{/if}
 					</div>
 				</div>
 				<div class="setting">
-					<Label>Language</Label>
+					<Label>{$_("settings.general.language.title")}</Label>
 					<div class="right">
 						<Button
 							variant="outline"
@@ -246,8 +243,8 @@
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head class="w-[70px]">Key</Table.Head>
-							<Table.Head>Created at</Table.Head>
+							<Table.Head class="w-[70px]">{$_("settings.api.key")}</Table.Head>
+							<Table.Head>{$_("settings.api.created_at")}</Table.Head>
 							<Table.Head class="text-right"></Table.Head>
 						</Table.Row>
 					</Table.Header>
@@ -269,15 +266,15 @@
 										</AlertDialog.Trigger>
 										<AlertDialog.Content>
 											<AlertDialog.Header>
-												<AlertDialog.Title>Are you sure?</AlertDialog.Title>
+												<AlertDialog.Title>{$_("settings.api.delete.title")}</AlertDialog.Title>
 												<AlertDialog.Description>
-													This action cannot be undone.
+													{$_("settings.api.delete.description")}
 												</AlertDialog.Description>
 											</AlertDialog.Header>
 											<AlertDialog.Footer>
-												<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+												<AlertDialog.Cancel>{$_("settings.api.delete.cancel")}</AlertDialog.Cancel>
 												<AlertDialog.Action on:click={() => deleteKey(key.key)}
-													>Continue</AlertDialog.Action
+													>{$_("settings.api.delete.continue")}</AlertDialog.Action
 												>
 											</AlertDialog.Footer>
 										</AlertDialog.Content>
@@ -290,19 +287,19 @@
 				<AlertDialog.Root>
 					<AlertDialog.Trigger asChild let:builder>
 						<Button builders={[builder]} class="mt-[10px] w-full" variant="outline"
-							>Create a new key</Button
+							>{$_("settings.api.create.button")}</Button
 						>
 					</AlertDialog.Trigger>
 					<AlertDialog.Content>
 						<AlertDialog.Header>
-							<AlertDialog.Title>Create a new API key?</AlertDialog.Title>
+							<AlertDialog.Title>{$_("settings.api.create.title")}</AlertDialog.Title>
 							<AlertDialog.Description>
-								Anyone with this key can submit and make change to your account.
+								{$_("settings.api.create.description")}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
-							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-							<AlertDialog.Action on:click={createNewKey}>Continue</AlertDialog.Action>
+							<AlertDialog.Cancel>{$_("settings.api.create.cancel")}</AlertDialog.Cancel>
+							<AlertDialog.Action on:click={createNewKey}>{$_("settings.api.create.continue")}</AlertDialog.Action>
 						</AlertDialog.Footer>
 					</AlertDialog.Content>
 				</AlertDialog.Root>
