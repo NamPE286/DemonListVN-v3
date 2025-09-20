@@ -138,5 +138,19 @@
         "rating": "Classic rating",
         "featured": "Total Featured List point",
         "contest": "Contest rating"
+    },
+    "profile_edit": {
+        "title": "Edit profile",
+        "description": "Make changes to your profile here",
+        "name": "Name",
+        "upload_avatar": "Upload avatar",
+        "upload_banner": "Upload banner",
+        "border": "Border",
+        "background": "Background",
+        "reset": "Reset",
+        "province": "Province",
+        "city": "City",
+        "hide_profile": "Hide profile",
+        "save": "Save changes"
     }
 }

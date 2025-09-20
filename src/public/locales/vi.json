@@ -140,6 +140,17 @@
         "contest": "Điểm cuộc thi"
     },
     "profile_edit": {
-
+        "title": "Chỉnh sửa hồ sơ",
+        "description": "Thay đổi hồ sơ của bạn tại đây",
+        "name": "Tên",
+        "upload_avatar": "Đăng ảnh đại diện",
+        "upload_banner": "Đăng ảnh bìa",
+        "border": "Viền",
+        "background": "Nền",
+        "reset": "Đặt lại",
+        "province": "Tỉnh",
+        "city": "Thành phố",
+        "hide_profile": "Ẩn hồ sơ",
+        "save": "Lưu thay đổi"
     }
 }
