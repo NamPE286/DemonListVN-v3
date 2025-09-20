@@ -524,5 +524,89 @@
             "rating": "Điểm xếp hạng",
             "total_point": "Tổng điểm"
         }
+    },
+    "supporter": {
+        "title": "Trở thành Supporter 💖",
+        "description": "Nhận những đặc quyền và giúp chúng tôi phát triển!",
+        "price": "49.000₫/tháng",
+        "or": "hoặc",
+        "store_button": "Xem cửa hàng của chúng tôi",
+        "why_support": {
+            "title": "Tại sao bạn nên ủng hộ Demon List VN",
+            "support_team": {
+                "title": "Ủng hộ đội ngũ",
+                "description": "Một đội ngũ nhỏ chỉ có một người phát triển và vận hành Demon List VN. Sự ủng hộ của bạn mang lại động lực để anh ấy phát triển và duy trì trang web."
+            },
+            "server_infrastructure": {
+                "title": "Hạ tầng máy chủ",
+                "description": "Sự đóng góp của bạn sẽ được dùng cho các máy chủ để vận hành trang web."
+            },
+            "self_sustaining": {
+                "title": "Giữ Demon List VN tự duy trì",
+                "description": "Sự đóng góp của bạn giúp trang web độc lập và hoàn toàn không phụ thuộc vào các nhà tài trợ bên ngoài."
+            }
+        },
+        "perks": {
+            "title": "Bạn sẽ nhận được những đặc quyền gì",
+            "highlighted_name": {
+                "title": "Tên được làm nổi bật",
+                "description": "Nổi bật trên bảng xếp hạng với tên màu vàng bắt mắt."
+            },
+            "animated_media": {
+                "title": "Avatar và Banner động",
+                "description": "Thu hút mọi ánh nhìn với avatar và banner động làm hồ sơ của bạn sống động hơn."
+            },
+            "ads_free": {
+                "title": "Trải nghiệm không quảng cáo",
+                "description": "Tận hưởng trải nghiệm duyệt web không bị gián đoạn với không có quảng cáo trên toàn trang web."
+            },
+            "priority_queue": {
+                "title": "Truy cập hàng đợi ưu tiên",
+                "description": "Supporter được giảm thời gian chờ duyệt, nhảy lên trước trong hàng đợi."
+            },
+            "short_url": {
+                "title": "URL hồ sơ ngắn gọn",
+                "description": "Chia sẻ hồ sơ của bạn dễ dàng với liên kết ngắn gọn, chuyên nghiệp."
+            },
+            "discord_role": {
+                "title": "Mở khóa role Discord độc quyền",
+                "description": "Có quyền truy cập vào role đặc biệt trên DLVN và các máy chủ Discord đối tác."
+            },
+            "discord_notifications": {
+                "title": "Thông báo Discord DM",
+                "description": "Nhận thông báo trực tiếp qua Discord DM."
+            },
+            "exclusive_events": {
+                "title": "Sự kiện chỉ dành cho Supporter",
+                "description": "Tham gia các sự kiện đặc biệt dành riêng cho những supporter được trân trọng của chúng tôi — giveaway, trò chơi bí mật và nhiều bất ngờ khác đang chờ bạn!"
+            },
+            "autofill_level": {
+                "title": "Tự động điền ID level khi nộp",
+                "description": "Tự động điền trường ID level khi nộp level, giúp bạn tiết kiệm thời gian và công sức."
+            },
+            "rating_prediction": {
+                "title": "Xem dự đoán điểm số",
+                "description": "Có cái nhìn về điểm số tiềm năng của level trước khi nộp, giúp bạn lên kế hoạch tốt hơn."
+            },
+            "early_access": {
+                "title": "Là người đầu tiên trải nghiệm tính năng mới nhất",
+                "description": "Có quyền truy cập sớm vào các bản phát hành mới với tính năng mới trước khi công bố!"
+            },
+            "more_coming": {
+                "title": "Ừm... đó là tất cả",
+                "description": "Đừng lo lắng. Sẽ có thêm nhiều tính năng cho supporter trong tương lai."
+            }
+        },
+        "decision": {
+            "title": "Vậy... Bạn đã quyết định chưa?",
+            "button": "Ủng hộ chúng tôi chỉ với 49.000₫/tháng"
+        },
+        "notes": {
+            "title": "Lưu ý:",
+            "non_recurring": "Demon List VN Supporter không tự động gia hạn.",
+            "non_refundable": "Demon List VN Supporter không thể hoàn tiền.",
+            "extension": "Nếu bạn mua Supporter khi vẫn còn Supporter đang hoạt động, thời gian sẽ được cộng thêm thêm.",
+            "duration": "1 Tháng = 30 Ngày."
+        }
     }
 }

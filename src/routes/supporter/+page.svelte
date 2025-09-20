@@ -4,10 +4,11 @@
 	import { fade } from 'svelte/transition';
 	import PaymentButton from '$lib/components/paymentButton.svelte';
 	import { Button } from '$lib/components/ui/button';
+	import { _ } from 'svelte-i18n';
 </script>
 
 <svelte:head>
-	<title>Get Supporter - Demon List VN</title>
+	<title>Nhận Supporter - Demon List VN</title>
 </svelte:head>
 
 <div in:fade={{ delay: 300, duration: 1000 }}>
@@ -18,163 +19,155 @@
 	/>
 </div>
 <div class="relative flex flex-col items-center pl-[10px] pr-[10px]">
-	<BigTitle value="Become a Supporter 💖" description="Get exclusive perks and help us grow!" />
+	<BigTitle value={$_('supporter.title')} description={$_('supporter.description')} />
 	<div class="mt-[-20px] flex max-w-[1000px] flex-col items-center">
 		<div class="flex items-center gap-[10px]">
-			<PaymentButton title="49.000₫/month" />
-			<span class="text-gray-400">or</span>
+			<PaymentButton title={$_('supporter.price')} />
+			<span class="text-gray-400">{$_('supporter.or')}</span>
 			<a href="/store">
-				<Button>Check out our store</Button>
+				<Button>{$_('supporter.store_button')}</Button>
 			</a>
 		</div>
 		<h1 class="mb-[40px] mt-[75px] text-center text-3xl font-bold">
-			Why should you support Demon List VN
+			{$_('supporter.why_support.title')}
 		</h1>
 		<div class="flex flex-wrap justify-center gap-[10px]">
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Support the Team</Card.Title>
+					<Card.Title>{$_('supporter.why_support.support_team.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						A <s>small</s> single person team develops and runs Demon List VN. Your support gives
-						<s>them</s> him the motivation to develop and maintain the website.
+						{$_('supporter.why_support.support_team.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Server Infrastructure</Card.Title>
+					<Card.Title>{$_('supporter.why_support.server_infrastructure.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Contributions go towards the servers for running the website.
+						{$_('supporter.why_support.server_infrastructure.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Keep Demon List VN self-sustaining</Card.Title>
+					<Card.Title>{$_('supporter.why_support.self_sustaining.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Your contributions help keep the site independent and completely free from outside
-						sponsors.
+						{$_('supporter.why_support.self_sustaining.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 		</div>
-		<h1 class="mb-[40px] mt-[40px] text-center text-3xl font-bold">What perks will you get</h1>
+		<h1 class="mb-[40px] mt-[40px] text-center text-3xl font-bold">{$_('supporter.perks.title')}</h1>
 		<div class="flex flex-wrap justify-center gap-[10px]">
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Highlighted name</Card.Title>
+					<Card.Title>{$_('supporter.perks.highlighted_name.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Stand out on the leaderboard with a flashy golden name.
+						{$_('supporter.perks.highlighted_name.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Animated Avatar and Banner</Card.Title>
+					<Card.Title>{$_('supporter.perks.animated_media.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Catch everyone's eye with a dynamic avatar and banner that bring your profile to life.
+						{$_('supporter.perks.animated_media.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Ads-free experience</Card.Title>
+					<Card.Title>{$_('supporter.perks.ads_free.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Enjoy an uninterrupted browsing experience with no ads across the website.
+						{$_('supporter.perks.ads_free.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Access priority queue</Card.Title>
+					<Card.Title>{$_('supporter.perks.priority_queue.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Supporters enjoy reduced submission wait times, jumping ahead in the review line.
+						{$_('supporter.perks.priority_queue.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Short profile URL</Card.Title>
+					<Card.Title>{$_('supporter.perks.short_url.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Share your profile easily with a clean, professional link.<br />
+						{$_('supporter.perks.short_url.description')}<br />
 						Example: <a href="/@NamPE">demonlistvn.com/@NamPE</a>
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Unlock exclusive Discord role</Card.Title>
+					<Card.Title>{$_('supporter.perks.discord_role.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Gain access to a special role on DLVN and partner Discord servers.
+						{$_('supporter.perks.discord_role.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Discord DM notifications</Card.Title>
+					<Card.Title>{$_('supporter.perks.discord_notifications.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Receive notifications directly through Discord DMs.
+						{$_('supporter.perks.discord_notifications.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Supporter-Only events</Card.Title>
+					<Card.Title>{$_('supporter.perks.exclusive_events.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Join special events reserved just for our cherished supporters — giveaways, secret
-						games, and more surprises await!
+						{$_('supporter.perks.exclusive_events.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Autofill level ID when submit</Card.Title>
+					<Card.Title>{$_('supporter.perks.autofill_level.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Automatically populate the level ID field when submitting a level, saving you time and
-						effort.
+						{$_('supporter.perks.autofill_level.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>View rating prediction</Card.Title>
+					<Card.Title>{$_('supporter.perks.rating_prediction.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Get insights into the potential rating of your level before submission, helping you plan
-						better.
+						{$_('supporter.perks.rating_prediction.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Be the first to try our newest feature</Card.Title>
+					<Card.Title>{$_('supporter.perks.early_access.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Gain early access to new releases with new features before they go public!
+						{$_('supporter.perks.early_access.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 			<Card.Root>
 				<Card.Header>
-					<Card.Title>Umm... that pretty much it</Card.Title>
+					<Card.Title>{$_('supporter.perks.more_coming.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
-						Don't worry. More feature for supporters will be added in the future.
+						{$_('supporter.perks.more_coming.description')}
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
 		</div>
 		<h1 class="mb-[40px] mt-[40px] text-center text-3xl font-bold">
-			So... Have you made your decision?
+			{$_('supporter.decision.title')}
 		</h1>
-		<PaymentButton title="Support us with just 49.000₫/month" />
+		<PaymentButton title={$_('supporter.decision.button')} />
 		<div class="mt-[100px] w-full pl-[10px] text-sm text-gray-400 lg:pl-[50px]">
-			<p>Note:</p>
+			<p>{$_('supporter.notes.title')}</p>
 			<ul>
-				<li>- Demon List VN Supporter roles are non-recurring payments.</li>
-				<li>- Demon List VN Supporter roles are non-refundable.</li>
-				<li>
-					- If you buy one while you still have an active roles, it will extend the duration in
-					addition to any remaining time.
-				</li>
-				<li>- 1 Month = 30 Days.</li>
+				<li>- {$_('supporter.notes.non_recurring')}</li>
+				<li>- {$_('supporter.notes.non_refundable')}</li>
+				<li>- {$_('supporter.notes.extension')}</li>
+				<li>- {$_('supporter.notes.duration')}</li>
 			</ul>
 		</div>
 	</div>
