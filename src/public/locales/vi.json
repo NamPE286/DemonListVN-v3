@@ -392,5 +392,27 @@
         "loading": "Đang liên kết tài khoản Discord của bạn",
         "success": "Đã liên kết!",
         "error": "Liên kết thất bại"
+    },
+    "list": {
+        "classic": {
+            "title": "Classic List",
+            "description": "Level classic khó nhất được Việt hoàn thành"
+        },
+        "platformer": {
+            "title": "Platformer List",
+            "description": "Level platformer khó nhất được người Việt hoàn thành"
+        },
+        "featured": {
+            "title": "Featured List",
+            "description": "Level khó nhất được tạo bởi người Việt"
+        },
+        "tabs": {
+            "levels": "Levels",
+            "leaderboard": "Bảng xếp hạng",
+            "rank": "Hạng",
+            "player": "Người chơi",
+            "rating": "Điểm",
+            "total_point": "Tổng điểm"
+        }
     }
 }

@@ -392,5 +392,27 @@
         "loading": "Linking your Discord account",
         "success": "Linked!",
         "error": "Failed to link"
+    },
+    "list": {
+        "classic": {
+            "title": "Classic List",
+            "description": "Hardest classic level beaten by Vietnamese"
+        },
+        "platformer": {
+            "title": "Platformer List", 
+            "description": "Hardest platformer level beaten by Vietnamese"
+        },
+        "featured": {
+            "title": "Featured List",
+            "description": "Hardest level created by Vietnamese"
+        },
+        "tabs": {
+            "levels": "Levels",
+            "leaderboard": "Leaderboard",
+            "rank": "Rank",
+            "player": "Player",
+            "rating": "Rating",
+            "total_point": "Total point"
+        }
     }
 }
