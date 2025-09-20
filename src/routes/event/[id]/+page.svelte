@@ -10,7 +10,8 @@
 	import ParticipateButton from './participateButton.svelte';
 	import type { Level } from './type';
 	import Ads from '$lib/components/ads.svelte';
-
+	import { _ } from 'svelte-i18n';
+	
 	export let data: PageData;
 
 	let levels: (Level | null)[] = [];
@@ -35,9 +36,9 @@
 	{#if data.isContest}
 		<Tabs.Root value="detail" class="mt-[20px] flex flex-col items-center">
 			<Tabs.List>
-				<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
-				<Tabs.Trigger value="levels">Levels</Tabs.Trigger>
-				<Tabs.Trigger value="leaderboard">Leaderboard</Tabs.Trigger>
+				<Tabs.Trigger value="detail">{$_('contest.tabs.detail')}</Tabs.Trigger>
+				<Tabs.Trigger value="levels">{$_('contest.tabs.levels')}</Tabs.Trigger>
+				<Tabs.Trigger value="leaderboard">{$_('contest.tabs.leaderboard')}</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="detail">
 				<div class="markdown">

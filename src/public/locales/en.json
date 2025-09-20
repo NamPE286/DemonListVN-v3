@@ -363,6 +363,11 @@
                 "message_placeholder": "Message (optional)",
                 "continue": "Continue"
             }
+        },
+        "tabs": {
+            "detail": "Detail",
+            "levels": "Levels",
+            "leaderboard": "Leaderboard"
         }
     }
 }

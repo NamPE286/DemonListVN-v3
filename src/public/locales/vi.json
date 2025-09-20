@@ -363,6 +363,11 @@
             "message_placeholder": "Tin nhắn (tuỳ chọn)",
             "continue": "Tiếp tục"
             }
+        },
+        "tabs": {
+            "detail": "Chi tiết",
+            "levels": "Levels",
+            "leaderboard": "Bảng xếp hạng"
         }
     }
 }
