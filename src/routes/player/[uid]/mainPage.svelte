@@ -57,8 +57,8 @@
 </script>
 
 <svelte:head>
-	<title>{data.player.name}'s profile - Demon List VN</title>
-	<meta property="og:title" content={`${data.player.name}'s profile - Demon List VN`} />
+	<title>{data.player.name} - Demon List VN</title>
+	<meta property="og:title" content={`${data.player.name} - Demon List VN`} />
 	<meta
 		property="og:description"
 		content={`Điểm Classic: ${data.player.rating} #${data.player.overallRank}\nTổng điểm Featured List: ${data.player.totalFLpt} #${data.player.flrank}\nĐiểm cuộc thi: ${data.player.elo}`}
@@ -78,13 +78,14 @@
 		bind:levelID={selectedRecord.levelid}
 	/>
 {/if}
-
 {#if data.player.isBanned}
 	<div class="flex h-[50px] items-center justify-center bg-red-600">
-		This player is banned. If this is your profile, contact a moderator to appeal this decision.
+		{$_('player.banned_notice')}
 	</div>
 {:else if data.player.isHidden}
-	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
+	<div class="flex h-[50px] items-center justify-center bg-yellow-600">
+		{$_('player.hidden_notice')}
+	</div>
 {/if}
 <div class="relative">
 	{#if isActive(data.player.supporterUntil) && !isBannerFailedToLoad}
@@ -128,7 +129,7 @@
 					<button
 						on:click={() => {
 							navigator.clipboard.writeText(data.player.uid);
-							toast.success('Copied UID to clipboard!');
+							toast.success($_('player.copy_uid'));
 						}}
 					>
 						<h2 class={isActive(data.player.supporterUntil) ? 'text-yellow-500' : ''}>
@@ -203,7 +204,7 @@
 							<div class="rating">
 								<div class="flex justify-center">
 									<div class="leftCol">
-										<b>Lv.{expLevel.level}</b>
+										<b>{$_('player.level')}.{expLevel.level}</b>
 									</div>
 								</div>
 								<div class="progressBar">
@@ -214,7 +215,7 @@
 								<Tooltip.Root>
 									<Tooltip.Trigger>{exp}/{expLevel.upperBound}</Tooltip.Trigger>
 									<Tooltip.Content>
-										<p>{expLevel.upperBound - exp} EXP to next level</p>
+										<p>{expLevel.upperBound - exp} {$_('player.exp_to_next')}</p>
 									</Tooltip.Content>
 								</Tooltip.Root>
 							</div>
@@ -288,10 +289,18 @@
 		<Tabs.Root value="dl">
 			<div class="tabs">
 				<Tabs.List class="grid w-[400px] max-w-full grid-cols-4">
-					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Classic</Tabs.Trigger>
-					<Tabs.Trigger value="pl" on:click={() => (list = 'pl')}>Platformer</Tabs.Trigger>
-					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured</Tabs.Trigger>
-					<Tabs.Trigger value="medals" on:click={() => (list = '')}>Medal</Tabs.Trigger>
+					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}
+						>{$_('player.tabs.dl')}</Tabs.Trigger
+					>
+					<Tabs.Trigger value="pl" on:click={() => (list = 'pl')}
+						>{$_('player.tabs.pl')}</Tabs.Trigger
+					>
+					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}
+						>{$_('player.tabs.fl')}</Tabs.Trigger
+					>
+					<Tabs.Trigger value="medals" on:click={() => (list = '')}
+						>{$_('player.tabs.medals')}</Tabs.Trigger
+					>
 				</Tabs.List>
 				<Tabs.Content value="medals">
 					<MedalsTab userID={data.player.uid} />
@@ -301,10 +310,10 @@
 		{#if list.length}
 			<div class="filter">
 				<div class="filterItem">
-					<Label>Sort by</Label>
+					<Label>{$_('general.sort_by')}</Label>
 					<Select.Root
 						selected={{
-							label: 'Point',
+							label: $_('player.filter.point'),
 							value: 'pt'
 						}}
 						onSelectedChange={(e) => {
@@ -313,34 +322,34 @@
 						}}
 					>
 						<Select.Trigger class="w-[180px]">
-							<Select.Value placeholder="Select item to sort by" />
+							<Select.Value placeholder={$_('player.filter.sort_by')} />
 						</Select.Trigger>
 						<Select.Content>
-							<Select.Item value="pt">Point</Select.Item>
-							<Select.Item value="timestamp">Date submitted</Select.Item>
+							<Select.Item value="pt">{$_('player.filter.point')}</Select.Item>
+							<Select.Item value="timestamp">{$_('player.filter.date_submitted')}</Select.Item>
 						</Select.Content>
 					</Select.Root>
 				</div>
 				<div class="filterItem">
-					<Label>Ascending</Label>
+					<Label>{$_('general.ascending')}</Label>
 					<Switch bind:checked={filter.ascending} />
 				</div>
 				<div class="filterItem">
-					<Button variant="outline" on:click={applyFilter}>Apply</Button>
+					<Button variant="outline" on:click={applyFilter}>{$_('general.apply')}</Button>
 				</div>
 			</div>
 			<Table.Root>
-				<Table.Caption>Total record: {data.records[list].length}</Table.Caption>
+				<Table.Caption>{$_('player.table.total_record')}: {data.records[list].length}</Table.Caption>
 				<Table.Header>
 					<Table.Row>
-						<Table.Head>Level</Table.Head>
-						<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
-						<Table.Head class="w-[100px] text-center">Device</Table.Head>
-						<Table.Head class="w-[80px] text-center">Point</Table.Head>
+						<Table.Head>{$_('player.table.level')}</Table.Head>
+						<Table.Head class="w-[100px] text-center">{$_('player.table.submitted_on')}</Table.Head>
+						<Table.Head class="w-[100px] text-center">{$_('player.table.device')}</Table.Head>
+						<Table.Head class="w-[80px] text-center">{$_('player.table.point')}</Table.Head>
 						{#if list == 'pl'}
-							<Table.Head class="w-[80px] text-center">Time</Table.Head>
+							<Table.Head class="w-[80px] text-center">{$_('player.table.time')}</Table.Head>
 						{:else}
-							<Table.Head class="w-[80px] text-center">Progress</Table.Head>
+							<Table.Head class="w-[80px] text-center">{$_('player.table.progress')}</Table.Head>
 						{/if}
 					</Table.Row>
 				</Table.Header>

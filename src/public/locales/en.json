@@ -473,5 +473,56 @@
             "prepaid": "- Prepaid orders require manual cancellation.",
             "contact": "- For refunds or cancellations, please contact @nampe286 on Discord or email nambuihung654@gmail.com."
         }
+    },
+    "player": {
+        "banned_notice": "This player is banned. If this is your profile, contact a moderator to appeal this decision.",
+        "hidden_notice": "This profile is hidden.",
+        "copy_uid": "Copied UID to clipboard!",
+        "level": "Level",
+        "exp_to_next": "EXP to next level",
+        "tabs": {
+            "dl": "Classic",
+            "pl": "Platformer",
+            "fl": "Featured",
+            "medals": "Medal"
+        },
+        "filter": {
+            "sort_by": "Sort by",
+            "point": "Point",
+            "date_submitted": "Date submitted"
+        },
+        "table": {
+            "total_record": "Total record",
+            "level": "Level",
+            "submitted_on": "Submitted on",
+            "device": "Device",
+            "point": "Point",
+            "time": "Time",
+            "progress": "Progress"
+        },
+        "medals": {
+            "achieved_on": "Achieved on"
+        }
+    },
+    "players": {
+        "title": "Players",
+        "filter": {
+            "location": "Location",
+            "province": "Province",
+            "city": "City",
+            "options": "Option",
+            "sort_by": "Sort by",
+            "rating": "Rating",
+            "featured_list_point": "Featured list point",
+            "sort_ascending": "Sort ascending",
+            "reset": "Reset"
+        },
+        "table": {
+            "total_player": "Total player",
+            "no": "No.",
+            "player": "Player",
+            "rating": "Rating",
+            "total_point": "Total point"
+        }
     }
 }

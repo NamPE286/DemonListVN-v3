@@ -473,5 +473,56 @@
             "prepaid": "- Đơn hàng trả trước cần huỷ thủ công.",
             "contact": "- Để hoàn tiền hoặc huỷ đơn, vui lòng liên hệ @nampe286 trên Discord hoặc email nambuihung654@gmail.com."
         }
+    },
+    "player": {
+        "banned_notice": "Người chơi này đã bị cấm. Nếu đây là hồ sơ của bạn, hãy liên hệ với người kiểm duyệt để kháng cáo quyết định này.",
+        "hidden_notice": "Hồ sơ này đã bị ẩn.",
+        "copy_uid": "Đã sao chép UID vào bảng nhớ tạm!",
+        "level": "Lv",
+        "exp_to_next": "EXP để lên cấp tiếp theo",
+        "tabs": {
+            "dl": "Classic",
+            "pl": "Platformer",
+            "fl": "Featured",
+            "medals": "Huy chương"
+        },
+        "filter": {
+            "sort_by": "Sắp xếp theo",
+            "point": "Điểm",
+            "date_submitted": "Thời gian nộp"
+        },
+        "table": {
+            "total_record": "Số bản ghi",
+            "level": "Level",
+            "submitted_on": "Nộp lúc",
+            "device": "Thiết bị",
+            "point": "Điểm",
+            "time": "Thời gian",
+            "progress": "Tiến độ"
+        },
+        "medals": {
+            "achieved_on": "Đạt được vào"
+        }
+    },
+    "players": {
+        "title": "Người chơi",
+        "filter": {
+            "location": "Vị trí",
+            "province": "Tỉnh",
+            "city": "Thành phố",
+            "options": "Tuỳ chọn",
+            "sort_by": "Sắp xếp theo",
+            "rating": "Điểm xếp hạng",
+            "featured_list_point": "Điểm Featured List",
+            "sort_ascending": "Sắp xếp tăng dần",
+            "reset": "Đặt lại"
+        },
+        "table": {
+            "total_player": "Tổng người chơi",
+            "no": "Số",
+            "player": "Người chơi",
+            "rating": "Điểm xếp hạng",
+            "total_point": "Tổng điểm"
+        }
     }
 }

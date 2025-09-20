@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { _ } from "svelte-i18n";
+
 	export let medal: any;
 </script>
 
@@ -16,7 +18,7 @@
 			<p class="text-center">{medal.content}</p>
 		{/if}
 		<p class="mt-[10px] text-[var(--textColor2)]">
-			Achieved on {new Date(medal.created_at).toLocaleDateString('vi-vn')}
+			{$_("player.medals.achieved_on")} {new Date(medal.created_at).toLocaleDateString('vi-vn')}
 		</p>
 	</div>
 </a>
