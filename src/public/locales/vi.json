@@ -305,7 +305,8 @@
         "ranked": "Có xếp hạng",
         "supporter_only": "Chỉ dành cho Supporter",
         "starts_at": "Bắt đầu lúc",
-        "ended_at": "Kết thúc lúc"
+        "ended_at": "Kết thúc lúc",
+        "permanent": "Vô thời hạn"
     },
     "cup": {
         "tabs": {
@@ -430,5 +431,9 @@
         "time": "Thời gian",
         "queue_no": "Số thứ tự",
         "forwarded": "Đã chuyển tiếp"
+    },
+    "home": {
+        "newest_dl": "Levels mới nhất từ Demon List",
+        "newest_fl": "Levels mới nhất từ Featured List"
     }
 }

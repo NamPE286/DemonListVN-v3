@@ -5,7 +5,8 @@
 	import Autoplay from 'embla-carousel-autoplay';
 	import EventBanner from './event/eventBanner.svelte';
 	import Ads from '$lib/components/ads.svelte';
-	
+	import { _ } from 'svelte-i18n';
+
 	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
 	let recent: any = {
@@ -63,7 +64,7 @@
 	<title>Demon List VN</title>
 	<meta
 		name="description"
-		content="Welcome to Demon List VN, this is where we keep track of the hardest demons created, verified and hardest demon beaten by Vietnamese!"
+		content="Chào mừng đến với Demon List VN, nơi chúng tôi theo dõi những demon khó nhất được tạo ra, xác minh và những demon khó nhất được đánh bại bởi người Việt Nam!"
 	/>
 </svelte:head>
 
@@ -97,7 +98,7 @@
 </div>
 <Ads dataAdFormat="auto" unit="leaderboard" />
 <div class="wrapper">
-	<h4>Newest levels from Demon List</h4>
+	<h4>{$_('home.newest_dl')}</h4>
 	<div class="carouselWrapper">
 		{#if recent.dl}
 			<Carousel.Root>
@@ -125,7 +126,7 @@
 			</Carousel.Root>
 		{/if}
 	</div>
-	<h4>Newest levels from Featured List</h4>
+	<h4>{$_('home.newest_fl')}</h4>
 	<div class="carouselWrapper">
 		{#if recent.fl}
 			<Carousel.Root>

@@ -13,7 +13,7 @@
 
 	function getInterval(end: string | null) {
 		if (!end) {
-			return 'Permanent';
+			return $_("events.permanent");
 		}
 
 		if (!isEventStarted()) {

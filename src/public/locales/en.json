@@ -305,7 +305,8 @@
         "ranked": "Ranked",
         "supporter_only": "Supporter Only",
         "starts_at": "Starts at",
-        "ended_at": "Ended at"
+        "ended_at": "Ended at",
+        "permanent": "Permanent"
     },
     "cup": {
         "tabs": {
@@ -430,5 +431,9 @@
         "time": "Time",
         "queue_no": "Queue no.",
         "forwarded": "Forwarded"
+    },
+    "home": {
+        "newest_dl": "Newest levels from Demon List",
+        "newest_fl": "Newest levels from Featured List"
     }
 }
