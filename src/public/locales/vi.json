@@ -132,5 +132,10 @@
             "caution": "Vui lòng không đóng cửa sổ thanh toán cho đến khi bạn được chuyển hướng trở lại Demon List VN",
             "proceed": "Tiến hành thanh toán"
         }
+    },
+    "player_card": {
+        "rating": "Điểm Demon List",
+        "featured": "Tổng điểm Featured List",
+        "contest": "Điểm cuộc thi"
     }
 }

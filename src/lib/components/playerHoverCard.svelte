@@ -6,10 +6,11 @@
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import { _ } from 'svelte-i18n';
 
 	export let player: any;
 	export let showTitle = false;
-	export let titleType: 'dl' | 'pl' | 'elo' = 'dl'
+	export let titleType: 'dl' | 'pl' | 'elo' = 'dl';
 	export let truncate: number | null = null;
 
 	let exp = player.exp + player.extraExp;
@@ -153,7 +154,7 @@
 							<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
 						</Tooltip.Root>
 						<div class="rankWrapper">
-							Demon List rating
+							{$_('player_card.rating')}
 							<div class="rank">
 								#{player.overallRank}
 							</div>
@@ -164,7 +165,7 @@
 							<div class="title">{player.totalFLpt}</div>
 						</div>
 						<div class="rankWrapper">
-							Total Featured List point
+							{$_('player_card.featured')}
 							<div class="rank">
 								#{player.flrank}
 							</div>
@@ -174,10 +175,7 @@
 						<Tooltip.Root>
 							<Tooltip.Trigger>
 								<div class="leftCol">
-									<div
-										class="title"
-										style={`background-color: ${getTitle('elo', player)?.color}`}
-									>
+									<div class="title" style={`background-color: ${getTitle('elo', player)?.color}`}>
 										{#if player.matchCount < 5}
 											<span class="opacity-50">{`${player.elo}?`}</span>
 										{:else}
@@ -188,7 +186,7 @@
 							</Tooltip.Trigger>
 							<Tooltip.Content>{getTitle('elo', player)?.fullTitle}</Tooltip.Content>
 						</Tooltip.Root>
-						<div class="rankWrapper">Contest Rating</div>
+						<div class="rankWrapper">{$_('player_card.contest')}</div>
 					</div>
 				</div>
 			</div>

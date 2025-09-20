@@ -134,6 +134,8 @@
         }
     },
     "player_card": {
-        
+        "rating": "Demon List rating",
+        "featured": "Total Featured List point",
+        "contest": "Contest rating"
     }
 }
