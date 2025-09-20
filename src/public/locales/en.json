@@ -54,7 +54,8 @@
             "loading": "Cancelling submission...",
             "success": "Submission cancelled!",
             "error": "Failed to cancel submission."
-        }
+        },
+        "order_restore": "Restoring your order..."
     },
     "context": {
         "copy_level_id": "Copy level's ID",
@@ -405,7 +406,7 @@
             "description": "Hardest classic level beaten by Vietnamese"
         },
         "platformer": {
-            "title": "Platformer List", 
+            "title": "Platformer List",
             "description": "Hardest platformer level beaten by Vietnamese"
         },
         "featured": {
@@ -435,5 +436,42 @@
     "home": {
         "newest_dl": "Newest levels from Demon List",
         "newest_fl": "Newest levels from Featured List"
+    },
+    "orders": {
+        "title": "Orders",
+        "id": "ID",
+        "product": "Product",
+        "quantity": "Qty",
+        "amount": "Amount",
+        "recipient": "Recipient",
+        "status": "Status",
+        "action": "Action",
+        "store_items": "Store Item(s)",
+        "restore": "Restore",
+        "detail": "Detail"
+    },
+    "order_detail": {
+        "title": "Order Details",
+        "detail": "Detail",
+        "items": "Items",
+        "tracking": "Tracking",
+        "player": "Player",
+        "order_id": "Order ID",
+        "payment_status": "Payment status",
+        "payment_method": "Payment method",
+        "shipping_info": "Shipping info",
+        "recipient": "Recipient",
+        "qty": "Qty",
+        "subtotal": "Subtotal",
+        "shipping_fee": "Shipping fee",
+        "total": "Total",
+        "cancel_order": "Cancel order",
+        "no_tracking": "No tracking information available yet",
+        "note": {
+            "title": "Note:",
+            "delivery": "- Orders in delivery cannot be cancelled.",
+            "prepaid": "- Prepaid orders require manual cancellation.",
+            "contact": "- For refunds or cancellations, please contact @nampe286 on Discord or email nambuihung654@gmail.com."
+        }
     }
 }

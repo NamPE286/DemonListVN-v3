@@ -6,6 +6,7 @@
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import { _ } from 'svelte-i18n';
 
 	let orders: any[] = [];
 
@@ -22,7 +23,7 @@
 	}
 
 	async function restore(order: any) {
-		toast.loading('Restoring your order...');
+		toast.loading($_('toast.order_restore'));
 		window.location.href = `${import.meta.env.VITE_API_URL}/payment/success?orderCode=${order.id}`;
 	}
 
@@ -40,29 +41,31 @@
 </script>
 
 <svelte:head>
-	<title>Orders - Demon List VN</title>
+	<title>Đơn hàng - Demon List VN</title>
 </svelte:head>
 
 {#if $user.loggedIn}
-	<Title value="Orders" />
+	<Title value={$_('orders.title')} />
 	<div class="min-w-[1300px] pl-[10px] pr-[10px] lg:pl-[70px] lg:pr-[70px]">
 		<Table.Root>
 			<Table.Header>
 				<Table.Row>
-					<Table.Head class="w-[180px]">ID</Table.Head>
-					<Table.Head class="w-[180px]">Product</Table.Head>
-					<Table.Head class="w-[50px]">Qty</Table.Head>
-					<Table.Head class="w-[120px]">Amount</Table.Head>
-					<Table.Head class="w-[150px]">Recipient</Table.Head>
-					<Table.Head>Status</Table.Head>
-					<Table.Head class="text-right">Action</Table.Head>
+					<Table.Head class="w-[180px]">{$_('orders.id')}</Table.Head>
+					<Table.Head class="w-[180px]">{$_('orders.product')}</Table.Head>
+					<Table.Head class="w-[50px]">{$_('orders.quantity')}</Table.Head>
+					<Table.Head class="w-[120px]">{$_('orders.amount')}</Table.Head>
+					<Table.Head class="w-[150px]">{$_('orders.recipient')}</Table.Head>
+					<Table.Head>{$_('orders.status')}</Table.Head>
+					<Table.Head class="text-right">{$_('orders.action')}</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
 				{#each orders as order}
 					<Table.Row>
 						<Table.Cell class="font-medium">{order.id}</Table.Cell>
-						<Table.Cell>{order.productID ? order.products.name : 'Store Item(s)'}</Table.Cell>
+						<Table.Cell
+							>{order.productID ? order.products.name : $_('orders.store_items')}</Table.Cell
+						>
 						<Table.Cell>{order.quantity ? order.quantity : '?'}</Table.Cell>
 						<Table.Cell>
 							{new Intl.NumberFormat('vi-VN', {
@@ -82,10 +85,10 @@
 							<Button
 								variant="secondary"
 								on:click={() => restore(order)}
-								disabled={restorable(order)}>Restore</Button
+								disabled={restorable(order)}>{$_('orders.restore')}</Button
 							>
 							<a href={`/orders/${order.id}`}>
-								<Button variant="secondary">Detail</Button>
+								<Button variant="secondary">{$_('orders.detail')}</Button>
 							</a>
 						</Table.Cell>
 					</Table.Row>

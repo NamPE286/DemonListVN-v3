@@ -9,6 +9,7 @@
 	import { page } from '$app/state';
 	import { onMount } from 'svelte';
 	import AddTrackingButton from './addTrackingButton.svelte';
+	import { _ } from 'svelte-i18n';
 
 	let data: any = null;
 
@@ -63,10 +64,10 @@
 </script>
 
 <svelte:head>
-	<title>Order Details - Demon List VN</title>
+	<title>Chi tiết đơn hàng - Demon List VN</title>
 </svelte:head>
 
-<Title value="Order Details" />
+<Title value={$_('order_detail.title')} />
 
 {#if data}
 	<div
@@ -74,18 +75,18 @@
 	>
 		<Card.Root class="w-full">
 			<Card.Header>
-				<Card.Title>Detail</Card.Title>
+				<Card.Title>{$_('order_detail.detail')}</Card.Title>
 			</Card.Header>
 			<Card.Content>
 				{#if $user.loggedIn && $user.data.isAdmin}
-					<a href={`/player/${data.userID}`}>Player</a>
+					<a href={`/player/${data.userID}`}>{$_('order_detail.player')}</a>
 				{/if}
-				<p>Order ID: {data.id}</p>
-				<p>Payment status: <b>{data.state}</b></p>
-				<p>Payment method: {data.paymentMethod}</p>
+				<p>{$_('order_detail.order_id')}: {data.id}</p>
+				<p>{$_('order_detail.payment_status')}: <b>{data.state}</b></p>
+				<p>{$_('order_detail.payment_method')}: {data.paymentMethod}</p>
 				{#if !data.productID}
 					<div class="flex gap-[10px]">
-						<p>Shipping info:</p>
+						<p>{$_('order_detail.shipping_info')}:</p>
 						<div>
 							<p>{data.recipientName}</p>
 							<p>{data.address}</p>
@@ -94,7 +95,7 @@
 					</div>
 				{:else}
 					<div class="flex gap-[5px]">
-						Recipient:
+						{$_('order_detail.recipient')}:
 						{#if data.giftTo}
 							<PlayerHoverCard player={data.players} />
 						{:else}
@@ -106,7 +107,7 @@
 		</Card.Root>
 		<Card.Root class="w-full">
 			<Card.Header>
-				<Card.Title>Items</Card.Title>
+				<Card.Title>{$_('order_detail.items')}</Card.Title>
 			</Card.Header>
 			<Card.Content>
 				<Table.Root>
@@ -128,7 +129,7 @@
 											</h3>
 										</a>
 										<p>
-											Qty: {item.quantity}
+											{$_('order_detail.qty')}: {item.quantity}
 										</p>
 									</div>
 									<div class="ml-auto flex items-center">
@@ -143,7 +144,7 @@
 				</Table.Root>
 				<div class="mt-[15px]">
 					<div class="flex">
-						<p>Subtotal</p>
+						<p>{$_('order_detail.subtotal')}</p>
 						<p class="ml-auto">
 							<b>
 								{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
@@ -154,7 +155,7 @@
 					</div>
 					{#if !data.productID}
 						<div class="flex">
-							<p>Shipping fee</p>
+							<p>{$_('order_detail.shipping_fee')}</p>
 							<p class="ml-auto">
 								<b>
 									{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
@@ -166,7 +167,7 @@
 					{/if}
 					<div class="mt-[10px] flex">
 						<p class="text-lg">
-							<b>Total</b>
+							<b>{$_('order_detail.total')}</b>
 						</p>
 						<p class="ml-auto text-lg">
 							<b>
@@ -182,7 +183,7 @@
 		{#if !data.productID}
 			<Card.Root class="w-full">
 				<Card.Header>
-					<Card.Title>Tracking</Card.Title>
+					<Card.Title>{$_('order_detail.tracking')}</Card.Title>
 				</Card.Header>
 				<Card.Content>
 					{#if $user.loggedIn && $user.data.isAdmin}
@@ -215,23 +216,20 @@
 							</div>
 						{/each}
 					{:else}
-						<p class="italic text-muted-foreground">No tracking information available yet</p>
+						<p class="italic text-muted-foreground">{$_('order_detail.no_tracking')}</p>
 					{/if}
 				</Card.Content>
 			</Card.Root>
 		{/if}
 		<Button class="ml-auto w-fit" variant="destructive" disabled={!cancellable()} on:click={cancel}>
-			Cancel order
+			{$_('order_detail.cancel_order')}
 		</Button>
 		<div class="mt-[25px] text-sm text-gray-400">
-			<p>Note:</p>
+			<p>{$_('order_detail.note.title')}</p>
 			<ul>
-				<li>- Orders in delivery cannot be cancelled.</li>
-				<li>- Prepaid orders require manual cancellation.</li>
-				<li>
-					- For refunds or cancellations, please contact @nampe286 on Discord or email
-					nambuihung654@gmail.com.
-				</li>
+				<li>{$_('order_detail.note.delivery')}</li>
+				<li>{$_('order_detail.note.prepaid')}</li>
+				<li>{$_('order_detail.note.contact')}</li>
 			</ul>
 		</div>
 	</div>

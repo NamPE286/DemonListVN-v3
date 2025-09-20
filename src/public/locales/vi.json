@@ -54,7 +54,8 @@
             "loading": "Đang huỷ bản nộp...",
             "success": "Đã huỷ bản nộp!",
             "error": "Huỷ bản nộp thất bại."
-        }
+        },
+        "order_restore": "Đang khôi phục đơn hàng của bạn..."
     },
     "context": {
         "copy_level_id": "Sao chép ID level",
@@ -435,5 +436,42 @@
     "home": {
         "newest_dl": "Levels mới nhất từ Demon List",
         "newest_fl": "Levels mới nhất từ Featured List"
+    },
+    "orders": {
+        "title": "Đơn hàng",
+        "id": "ID",
+        "product": "Sản phẩm",
+        "quantity": "Số lượng",
+        "amount": "Tổng tiền",
+        "recipient": "Người nhận",
+        "status": "Trạng thái",
+        "action": "Hành động",
+        "store_items": "Sản phẩm cửa hàng",
+        "restore": "Khôi phục",
+        "detail": "Chi tiết"
+    },
+    "order_detail": {
+        "title": "Chi tiết đơn hàng",
+        "detail": "Chi tiết",
+        "items": "Sản phẩm",
+        "tracking": "Theo dõi",
+        "player": "Người chơi",
+        "order_id": "ID đơn hàng",
+        "payment_status": "Trạng thái thanh toán",
+        "payment_method": "Phương thức thanh toán",
+        "shipping_info": "Thông tin giao hàng",
+        "recipient": "Người nhận",
+        "qty": "Số lượng",
+        "subtotal": "Tạm tính",
+        "shipping_fee": "Phí vận chuyển",
+        "total": "Tổng cộng",
+        "cancel_order": "Huỷ đơn hàng",
+        "no_tracking": "Chưa có thông tin theo dõi",
+        "note": {
+            "title": "Lưu ý:",
+            "delivery": "- Đơn hàng đang giao không thể huỷ.",
+            "prepaid": "- Đơn hàng trả trước cần huỷ thủ công.",
+            "contact": "- Để hoàn tiền hoặc huỷ đơn, vui lòng liên hệ @nampe286 trên Discord hoặc email nambuihung654@gmail.com."
+        }
     }
 }
