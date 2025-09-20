@@ -274,5 +274,26 @@
         "invite_only": "Invite only",
         "invited": "You've been invited to this clan",
         "boosted_until": "Boosted until"
+    },
+    "clans": {
+        "title": "Clans",
+        "tabs": {
+            "listing": "Clan listing",
+            "invitations": "Invitations"
+        },
+        "search_placeholder": "Search",
+        "owned_by": "Owned by",
+        "create": {
+            "title": "Create new clan",
+            "description": "Additional configurations can be found in clan's settings after creation",
+            "button": "Create clan",
+            "name": "Name",
+            "tag": "Tag",
+            "tag_placeholder": "2-6 characters, alphanumeric, no space",
+            "member_limit": "Member limit",
+            "member_limit_placeholder": "Enter 0 for unlimited",
+            "public": "Public",
+            "create_button": "Create"
+        }
     }
 }

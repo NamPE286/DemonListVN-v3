@@ -274,5 +274,26 @@
         "invite_only": "Phải được mời",
         "invited": "Bạn được mời vào hội này",
         "boosted_until": "Được nâng cấp cho đến"
+    },
+    "clans": {
+        "title": "Hội",
+        "tabs": {
+            "listing": "Danh sách hội",
+            "invitations": "Lời mời"
+        },
+        "search_placeholder": "Tìm kiếm",
+        "owned_by": "Sở hữu bởi",
+        "create": {
+            "title": "Tạo hội mới",
+            "description": "Các cài đặt bổ sung có thể được tìm thấy trong phần cài đặt của hội sau khi tạo",
+            "button": "Tạo hội",
+            "name": "Tên",
+            "tag": "Tag",
+            "tag_placeholder": "2-6 ký tự, chữ và số, không có dấu cách",
+            "member_limit": "Giới hạn thành viên",
+            "member_limit_placeholder": "Nhập 0 để không giới hạn",
+            "public": "Công khai",
+            "create_button": "Tạo"
+        }
     }
 }
