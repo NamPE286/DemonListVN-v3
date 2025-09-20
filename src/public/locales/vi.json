@@ -134,8 +134,12 @@
         }
     },
     "player_card": {
-        "rating": "Điểm Demon List",
+        "title": "Thông số người chơi",
+        "rating": "Điểm Classic",
         "featured": "Tổng điểm Featured List",
         "contest": "Điểm cuộc thi"
+    },
+    "profile_edit": {
+
     }
 }

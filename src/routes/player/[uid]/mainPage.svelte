@@ -21,6 +21,7 @@
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import MedalsTab from './medalsTab.svelte';
+	import { _ } from 'svelte-i18n';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' | 'pl' | '' = 'dl';
@@ -60,7 +61,7 @@
 	<meta property="og:title" content={`${data.player.name}'s profile - Demon List VN`} />
 	<meta
 		property="og:description"
-		content={`Rating: ${data.player.rating} #${data.player.overallRank}\nTotal Featured List point: ${data.player.totalFLpt} #${data.player.flrank}`}
+		content={`Điểm Classic: ${data.player.rating} #${data.player.overallRank}\nTổng điểm Featured List: ${data.player.totalFLpt} #${data.player.flrank}\nĐiểm cuộc thi: ${data.player.elo}`}
 	/>
 	<meta
 		property="og:image"
@@ -195,7 +196,7 @@
 						: ''}
 				>
 					<Card.Header>
-						<Card.Title tag="h1">Player's statistic</Card.Title>
+						<Card.Title tag="h1">{$_('player_card.title')}</Card.Title>
 					</Card.Header>
 					<Card.Content>
 						<div class="flex flex-col gap-[3px]">
@@ -232,7 +233,7 @@
 									<Tooltip.Content>{getTitle('dl', data.player)?.fullTitle}</Tooltip.Content>
 								</Tooltip.Root>
 								<div class="rankWrapper">
-									Classic Rating
+									{$_('player_card.rating')}
 									<div class="rank">
 										#{data.player.overallRank}
 									</div>
@@ -243,7 +244,7 @@
 									<div class="title">{data.player.totalFLpt}</div>
 								</div>
 								<div class="rankWrapper">
-									Total Featured List Point
+									{$_('player_card.featured')}
 									<div class="rank">
 										#{data.player.flrank}
 									</div>
@@ -269,7 +270,9 @@
 										<Tooltip.Content>{getTitle('elo', data.player)?.fullTitle}</Tooltip.Content>
 									</Tooltip.Root>
 								</div>
-								<div class="rankWrapper">Contest Rating</div>
+								<div class="rankWrapper">
+									{$_('player_card.contest')}
+								</div>
 							</div>
 						</div>
 					</Card.Content>

@@ -13,6 +13,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import Markdown from '$lib/components/markdown.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
+	import { _ } from 'svelte-i18n';
 
 	export let data: PageData;
 
@@ -198,7 +199,7 @@
 								<Tooltip.Content>{getTitle('dl', data.players)?.fullTitle}</Tooltip.Content>
 							</Tooltip.Root>
 							<div class="rankWrapper">
-								Demon List rating
+								{$_('player_card.rating')}
 								<div class="rank">
 									#{data.players.overallRank}
 								</div>
@@ -209,7 +210,7 @@
 								<div class="title">{data.players.totalFLpt}</div>
 							</div>
 							<div class="rankWrapper">
-								Total Featured List point
+								{$_('player_card.featured')}
 								<div class="rank">
 									#{data.players.flrank}
 								</div>
@@ -233,7 +234,9 @@
 								</Tooltip.Trigger>
 								<Tooltip.Content>{getTitle('elo', data.players)?.fullTitle}</Tooltip.Content>
 							</Tooltip.Root>
-							<div class="rankWrapper">Contest Rating</div>
+							<div class="rankWrapper">
+								{$_('player_card.contest')}
+							</div>
 						</div>
 					</div>
 				</Card.Content>
