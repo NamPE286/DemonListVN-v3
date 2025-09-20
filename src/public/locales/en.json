@@ -4,7 +4,9 @@
         "back": "Back",
         "close": "Close",
         "select": "Select",
-        "month": "Month"
+        "month": "Month",
+        "cancel": "Cancel",
+        "continue": "Continue"
     },
     "toast": {
         "clipboard": "Copied to clipboard!",
@@ -196,5 +198,13 @@
         "dlvn": "Levels from Demon List VN",
         "gd": "Levels from Geometry Dash",
         "players": "Players"
+    },
+    "card": {
+        "inactive": "This card is not activated.\nPlease contact a moderator to activate this card.",
+        "link": {
+            "button": "Link card to",
+            "title": "Link card to this account"
+        },
+        "edit": "Edit content"
     }
 }

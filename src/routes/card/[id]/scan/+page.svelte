@@ -13,7 +13,7 @@
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import Markdown from '$lib/components/markdown.svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
-	import { _ } from 'svelte-i18n';
+	import { _, locale } from 'svelte-i18n';
 
 	export let data: PageData;
 
@@ -87,32 +87,39 @@
 	{/if}
 	<div class="relative z-0 w-full">
 		{#if data.activationDate == null}
-			<div class="text-center">
-				<p>This card is not activated.</p>
-				<p>Please contact with a moderator to activate this card.</p>
+			<div class="whitespace-pre-wrap text-center">
+				{$_('card.inactive')}
 			</div>
 		{:else if data.owner == null}
 			<div class="flex justify-center">
 				{#if $user.loggedIn}
 					<AlertDialog.Root>
 						<AlertDialog.Trigger>
-							<Button class="w-full">Link card to {$user.data.name}</Button>
+							<Button class="w-full">{$_("card.link.button")} {$user.data.name}</Button>
 						</AlertDialog.Trigger>
 						<AlertDialog.Content>
 							<AlertDialog.Header>
-								<AlertDialog.Title>Link card to this account ({$user.data.name})?</AlertDialog.Title
+								<AlertDialog.Title>{$_("card.link.title")} ({$user.data.name})?</AlertDialog.Title
 								>
 								<AlertDialog.Description>
-									This will permanently link the card and give <b
-										>{data.supporterIncluded} month{data.supporterIncluded == 1 ? '' : 's'} of Supporter
-										Role</b
-									>
-									to this account ({$user.data.name}).
+									{#if $locale == 'vi'}
+										Việc này sẽ liên kết vĩnh viễn và cấp <b
+											>{data.supporterIncluded} month{data.supporterIncluded == 1 ? '' : 's'} of Supporter
+											Role</b
+										>
+										cho tài khoản này ({$user.data.name}).
+									{:else}
+										This will permanently link the card and give <b
+											>{data.supporterIncluded} month{data.supporterIncluded == 1 ? '' : 's'} of Supporter
+											Role</b
+										>
+										to this account ({$user.data.name}).
+									{/if}
 								</AlertDialog.Description>
 							</AlertDialog.Header>
 							<AlertDialog.Footer>
-								<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-								<AlertDialog.Action on:click={link}>Continue</AlertDialog.Action>
+								<AlertDialog.Cancel>{$_("general.cancel")}</AlertDialog.Cancel>
+								<AlertDialog.Action on:click={link}>{$_("general.continue")}</AlertDialog.Action>
 							</AlertDialog.Footer>
 						</AlertDialog.Content>
 					</AlertDialog.Root>
@@ -245,7 +252,7 @@
 	</div>
 	{#if data.owner && $user.data?.uid === data.owner}
 		<div class="mt-4 w-full">
-			<Button class="w-full" on:click={() => (editMode = true)}>Edit Content</Button>
+			<Button class="w-full" on:click={() => (editMode = true)}>{$_("card.edit")}</Button>
 			<Dialog.Root bind:open={editMode}>
 				<Dialog.Content class="sm:max-w-[800px]">
 					<Dialog.Header>

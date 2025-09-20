@@ -4,7 +4,9 @@
         "back": "Trước",
         "close": "Đóng",
         "select": "Chọn",
-        "month": "Tháng"
+        "month": "Tháng",
+        "cancel": "Huỷ bỏ",
+        "continue": "Tiếp tục"
     },
     "toast": {
         "clipboard": "Đã sao chép vào bảng nhớ tạm!",
@@ -196,5 +198,13 @@
         "dlvn": "Levels từ Demon List VN",
         "gd": "Levels từ Geometry Dash",
         "players": "Người chơi"
+    },
+    "card": {
+        "inactive": "Thẻ này chưa được kích hoạt.\nVui lòng liên hệ với quản trị viên để kích hoath thẻ này.",
+        "link": {
+            "button": "Liên kết thẻ tới",
+            "title": "Liên kết thẻ tới tài khoản này"
+        },
+        "edit": "Chỉnh sửa nội dung"
     }
 }
