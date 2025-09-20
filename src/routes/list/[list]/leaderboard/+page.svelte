@@ -8,6 +8,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
+	import { _ } from 'svelte-i18n';
 
 	import type { PageData } from './$types';
 	import Ads from '$lib/components/ads.svelte';
@@ -20,6 +21,18 @@
 		curPage = parseInt($page.url.searchParams.get('page') || '1');
 	}
 
+	function getListTitle() {
+		if ($page.params.list == 'dl') {
+			return 'Classic List';
+		} else if ($page.params.list == 'pl') {
+			return 'Platformer List';
+		} else if ($page.params.list == 'fl') {
+			return 'Featured List';
+		}
+
+		return 'None';
+	}
+
 	$: ($page.url, update());
 
 	onMount(() => {
@@ -28,7 +41,7 @@
 </script>
 
 <svelte:head>
-	<title>Leaderboard - Demon List - Demon List VN</title>
+	<title>Bảng xếp hạng - {getListTitle()} - Demon List VN</title>
 </svelte:head>
 
 <Ads dataAdFormat="rectangle" />
@@ -37,10 +50,10 @@
 	<Table.Root>
 		<Table.Header>
 			<Table.Row>
-				<Table.Head class="w-[55px]">Rank</Table.Head>
-				<Table.Head>Player</Table.Head>
+				<Table.Head class="w-[55px]">{$_('list.tabs.rank')}</Table.Head>
+				<Table.Head>{$_('list.tabs.player')}</Table.Head>
 				<Table.Head class="w-[70px] text-right">
-					{$page.params.list == 'dl' ? 'Rating' : 'Total point'}
+					{$page.params.list == 'dl' ? $_('list.tabs.rating') : $_('list.tabs.total_point')}
 				</Table.Head>
 			</Table.Row>
 		</Table.Header>
@@ -52,7 +65,7 @@
 					</Table.Cell>
 					<Table.Cell>
 						<div class="playerNameWrapper">
-							<PlayerHoverCard {player} showTitle={true}/>
+							<PlayerHoverCard {player} showTitle={true} />
 						</div>
 					</Table.Cell>
 					<Table.Cell class="text-right">

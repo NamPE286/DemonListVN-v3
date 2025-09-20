@@ -4,6 +4,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/client';
+	import { _ } from 'svelte-i18n';
 
 	let invitePlayerUID = '';
 	let opened = false;
@@ -21,10 +22,10 @@
 			{
 				success: () => {
 					invitePlayerUID = '';
-					return 'Player invited!';
+					return $_('toast.clan_invite.success');
 				},
-				loading: 'Sending invitation...',
-				error: 'Failed to invite player.'
+				loading: $_('toast.clan_invite.loading'),
+				error: $_('toast.clan_invite.error')
 			}
 		);
 	}
@@ -36,9 +37,9 @@
 	</Dialog.Trigger>
 	<Dialog.Content>
 		<Dialog.Header>
-			<Dialog.Title>Invite new player</Dialog.Title>
+			<Dialog.Title>{$_('invite.title')}</Dialog.Title>
 		</Dialog.Header>
-		<Input placeholder="Player's UID" bind:value={invitePlayerUID} />
-		<Button on:click={invitePlayer} disabled={invitePlayerUID.length == 0}>Invite</Button>
+		<Input placeholder={$_('invite.placeholder')} bind:value={invitePlayerUID} />
+		<Button on:click={invitePlayer} disabled={invitePlayerUID.length == 0}>{$_('invite.button')}</Button>
 	</Dialog.Content>
 </Dialog.Root>

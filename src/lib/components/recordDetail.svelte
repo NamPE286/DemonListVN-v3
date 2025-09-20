@@ -15,6 +15,7 @@
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
+	import { _, locale } from 'svelte-i18n';
 
 	export let uid: string;
 	export let levelID: number;
@@ -232,27 +233,31 @@
 >
 	<Dialog.Content>
 		<Dialog.Header>
-			<Dialog.Title>Record's detail</Dialog.Title>
+			<Dialog.Title>{$_('record_detail.title')}</Dialog.Title>
 			{#if record}
-				<DialogDescription
-					>{record.data.players.name}'s {record.data.levels.name} record</DialogDescription
-				>
+				<DialogDescription>
+					{#if $locale == 'vi'}
+						Bản ghi {record.data.levels.name} của {record.data.players.name}
+					{:else}
+						{record.data.players.name}'s {record.data.levels.name} record
+					{/if}
+				</DialogDescription>
 
 				<Tabs.Root value="detail" class="w-100">
 					<Tabs.List>
-						<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
-						<Tabs.Trigger value="deathCount">Death count</Tabs.Trigger>
-						<Tabs.Trigger value="share">Share</Tabs.Trigger>
+						<Tabs.Trigger value="detail">{$_('record_detail.tabs.detail')}</Tabs.Trigger>
+						<Tabs.Trigger value="deathCount">{$_('record_detail.tabs.death_count')}</Tabs.Trigger>
+						<Tabs.Trigger value="share">{$_('record_detail.tabs.share')}</Tabs.Trigger>
 						{#if record.data.reviewer != null && $user.loggedIn && record.data.reviewer.uid == $user.data.uid && record.data.needMod == false}
-							<Tabs.Trigger value="review">Review</Tabs.Trigger>
+							<Tabs.Trigger value="review">{$_('record_detail.tabs.review')}</Tabs.Trigger>
 						{/if}
 						{#if $user.loggedIn && $user.data.isAdmin}
-							<Tabs.Trigger value="edit">Edit</Tabs.Trigger>
+							<Tabs.Trigger value="edit">{$_('record_detail.tabs.edit')}</Tabs.Trigger>
 						{/if}
 					</Tabs.List>
 					<Tabs.Content value="detail">
 						<div class="detailWrapper">
-							<b>Video link:</b>
+							<b>{$_('record_detail.title')}:</b>
 							<a href={record.data.videoLink} target="_blank"
 								>{record.data.videoLink.slice(0, 25)}...</a
 							><br />
@@ -261,22 +266,22 @@
 								<a href={record.data.raw} target="_blank">{record.data.raw.slice(0, 25)}...</a><br
 								/>
 							{/if}
-							<b>Submitted on:</b>
+							<b>{$_('record_detail.submit')}:</b>
 							{new Date(record.data.timestamp).toLocaleString('vi-VN')}<br />
-							<b>Device:</b>
+							<b>{$_('record_detail.device')}:</b>
 							{record.data.mobile ? 'Mobile' : 'PC'}
 							{#if record.data.refreshRate}
 								({record.data.refreshRate}fps)
 							{/if} <br />
 							{#if !record.data.levels.isPlatformer}
-								<b>Progress:</b>
+								<b>{$_('record_detail.progress')}:</b>
 								{record.data.progress}% <br />
 							{:else}
-								<b>Time:</b>
+								<b>{$_('record_detail.time')}:</b>
 								{getTimeString(record.data.progress)} <br />
 							{/if}
-							<b>Suggested rating:</b>
-							{record.data.suggestedRating ? record.data.suggestedRating : '(No rating provided)'}
+							<b>{$_('record_detail.rating')}:</b>
+							{record.data.suggestedRating ? record.data.suggestedRating : 'N/a'}
 							{#if record.data.progress == 100 && $user.loggedIn && $user.data.uid == record.data.players.uid}
 								<Dialog.Root bind:open={open1}>
 									<Dialog.Trigger>
@@ -286,7 +291,7 @@
 									</Dialog.Trigger>
 									<Dialog.Content>
 										<Dialog.Header>
-											<Dialog.Title>Change suggested rating</Dialog.Title>
+											<Dialog.Title>{$_('record_detail.rating_change')}</Dialog.Title>
 											<Input
 												type="number"
 												inputmode="numeric"
@@ -298,10 +303,10 @@
 								</Dialog.Root>
 							{/if}
 							<br />
-							<b>Comment:</b>
+							<b>{$_('record_detail.comment')}:</b>
 							{record.data.comment ? record.data.comment : '(No comment provided)'}<br />
 							<div class="flex gap-[5px]">
-								<b>Reviewed by:</b>
+								<b>{$_('record_detail.reviewed_by')}:</b>
 								{#if record.data.reviewer != null}
 									<PlayerHoverCard player={record.data.reviewer} />
 								{:else}
@@ -309,10 +314,10 @@
 								{/if}
 							</div>
 							{#if $user.loggedIn && $user.data.isAdmin}
-								<b>Reviewer's comment:</b>
+								<b>{$_('record_detail.reviewer_cmt')}:</b>
 								{record.data.reviewerComment
 									? record.data.reviewerComment
-									: '(No comment provided)'}<br />
+									: 'N/a'}<br />
 							{/if}
 						</div>
 					</Tabs.Content>

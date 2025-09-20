@@ -10,6 +10,7 @@
 	import type { PageData } from './$types';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import Ads from '$lib/components/ads.svelte';
+	import { _ } from 'svelte-i18n';
 
 	export let data: PageData;
 	let alertOpened = false;
@@ -37,16 +38,16 @@
 				}
 			}),
 			{
-				loading: 'Cancelling submission...',
+				loading: $_('toast.submission_cancel.loading'),
 				success: () => {
 					data.data = data.data.filter((x) => {
 						return x.levelid != lvID;
 					});
 
-					return 'Submission cancelled!';
+					return $_('toast.submission_cancel.success');
 				},
 				error: (err) => {
-					return 'Failed to cancel submission.';
+					return $_('toast.submission_cancel.error');
 				}
 			}
 		);
@@ -54,7 +55,7 @@
 </script>
 
 <svelte:head>
-	<title>My submissions - Demon List VN</title>
+	<title>Bản nộp của tôi - Demon List VN</title>
 </svelte:head>
 
 <Ads unit="leaderboard" />
@@ -74,18 +75,18 @@
 </AlertDialog.Root>
 
 {#if $user.loggedIn && $user.data.uid == $page.params.uid}
-	<Title value="My submissions" />
+	<Title value={$_('submissions.title')} />
 	<div class="wrapper">
 		<Table.Root>
-			<Table.Caption>Total record: {data.data.length}</Table.Caption>
+			<Table.Caption>{$_('submissions.total_record')}: {data.data.length}</Table.Caption>
 			<Table.Header>
 				<Table.Row>
-					<Table.Head>Level</Table.Head>
-					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
-					<Table.Head class="w-[100px] text-center">Device</Table.Head>
-					<Table.Head class="w-[80px] text-center">Progress</Table.Head>
-					<Table.Head class="w-[80px] text-center">Time</Table.Head>
-					<Table.Head class="w-[80px] text-center">Queue no.</Table.Head>
+					<Table.Head>{$_('submissions.level')}</Table.Head>
+					<Table.Head class="w-[100px] text-center">{$_('submissions.submitted_on')}</Table.Head>
+					<Table.Head class="w-[100px] text-center">{$_('submissions.device')}</Table.Head>
+					<Table.Head class="w-[80px] text-center">{$_('submissions.progress')}</Table.Head>
+					<Table.Head class="w-[80px] text-center">{$_('submissions.time')}</Table.Head>
+					<Table.Head class="w-[80px] text-center">{$_('submissions.queue_no')}</Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
 				</Table.Row>
@@ -126,7 +127,7 @@
 						>
 						<Table.Cell class="text-center">
 							{#if record.needMod}
-								Forwarded
+								{$_('submissions.forwarded')}
 							{:else if !record.queueNo}
 								-
 							{:else}

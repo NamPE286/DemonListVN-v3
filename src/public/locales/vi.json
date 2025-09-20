@@ -1,4 +1,65 @@
 {
+    "general": {
+        "next": "Tiếp",
+        "back": "Trước",
+        "close": "Đóng",
+        "select": "Chọn",
+        "month": "Tháng",
+        "cancel": "Huỷ bỏ",
+        "continue": "Tiếp tục",
+        "accept": "Chấp nhận",
+        "reject": "Từ chối",
+        "sort_by": "Sắp xếp theo",
+        "ascending": "Tăng dần",
+        "apply": "Áp dụng"
+    },
+    "toast": {
+        "clipboard": "Đã sao chép vào bảng nhớ tạm!",
+        "payment": {
+            "no_player": "Không tìm thấy người chơi",
+            "redirect": "Bạn sẽ được chuyển hướng đến cổng thanh toán của DLVN"
+        },
+        "player_edit": {
+            "uploading": "Đang tải lên...",
+            "success": "Đã tải lên! Sẽ mất một lúc để thấy sự thay đổi.",
+            "error": "Tải lên thất bại",
+            "save": {
+                "loading": "Đang lưu...",
+                "success": "Đã lưu!",
+                "error": "Lưu thất bại"
+            },
+            "name": "Tên chỉ được chứa chữ và số"
+        },
+        "clan_invite": {
+            "success": "Đã mời người chơi!",
+            "loading": "Đang gửi lời mời...",
+            "error": "Mời người chơi thất bại."
+        },
+        "clan_leave": {
+            "confirm": "Bạn có chắc chắn muốn rời khỏi hội này?",
+            "loading": "Đang rời hội..."
+        },
+        "clan_update": {
+            "success": "Đã cập nhật! Trang này sẽ được làm mới.",
+            "loading": "Đang cập nhật...",
+            "error": "Cập nhật thất bại."
+        },
+        "clan_delete": {
+            "confirm": "Bạn có muốn xoá hội này?",
+            "success": "Đã xoá!",
+            "loading": "Đang xoá...",
+            "error": "Xoá thất bại."
+        },
+        "submission_cancel": {
+            "loading": "Đang huỷ bản nộp...",
+            "success": "Đã huỷ bản nộp!",
+            "error": "Huỷ bản nộp thất bại."
+        }
+    },
+    "context": {
+        "copy_level_id": "Sao chép ID level",
+        "copy_thumbnail": "Sao chép liên kết ảnh"
+    },
     "nav": {
         "classic": "Classic",
         "platformer": "Platformer",
@@ -25,12 +86,13 @@
             "title": "Mục bắt buộc",
             "progress": "Tiến độ",
             "video": "Liên kết Video",
+            "raw": "Liên kết Video thô",
             "platform": "Nền tảng",
             "minimum": "Tối thiểu"
         },
         "optional": {
             "title": "Mục không bắt buộc",
-            "suggestion": "Rating đề xuất",
+            "suggestion": "Điểm đề xuất",
             "comment": "Bình luận"
         },
         "send": {
@@ -87,6 +149,286 @@
                 "cancel": "Huỷ",
                 "continue": "Tiếp tục"
             }
+        },
+        "subscriptions": {
+            "name": "Tên",
+            "active_until": "Có hiệu lực đến",
+            "expired": "Hết hạn"
+        },
+        "discord": {
+            "linked": "Đã liên kết",
+            "link": "Liên kết tài khoản"
         }
+    },
+    "heatmap": {
+        "split_by_month": "Tách theo tháng"
+    },
+    "notifications": {
+        "title": "Thông báo",
+        "clear_all": "Xoá toàn bộ",
+        "no_noti": "Trống",
+        "navigate": "Bấm để chuyển hướng",
+        "ago": "trước"
+    },
+    "payment": {
+        "recipent": {
+            "title": "Bạn mua cho ai",
+            "friend": "Cho một người bạn",
+            "self": "Cho bản thân"
+        },
+        "gift": {
+            "title": "Chọn một người bạn để tặng",
+            "confirm": "Bạn sẽ tặng"
+        },
+        "quantity": {
+            "title": "Lựa chọn số lượng"
+        },
+        "review": {
+            "title": "Xem lại đơn hàng",
+            "recipent": "Người nhận",
+            "caution": "Vui lòng không đóng cửa sổ thanh toán cho đến khi bạn được chuyển hướng trở lại Demon List VN",
+            "proceed": "Tiến hành thanh toán"
+        }
+    },
+    "player_card": {
+        "title": "Thông số người chơi",
+        "rating": "Điểm Classic",
+        "featured": "Tổng điểm Featured",
+        "contest": "Điểm cuộc thi"
+    },
+    "profile_edit": {
+        "title": "Chỉnh sửa hồ sơ",
+        "description": "Thay đổi hồ sơ của bạn tại đây",
+        "name": "Tên",
+        "upload_avatar": "Đổi ảnh đại diện",
+        "upload_banner": "Đổi ảnh bìa",
+        "border": "Viền",
+        "background": "Nền",
+        "reset": "Đặt lại",
+        "province": "Tỉnh",
+        "city": "Thành phố",
+        "hide_profile": "Ẩn hồ sơ",
+        "save": "Lưu thay đổi"
+    },
+    "record_detail": {
+        "tabs": {
+            "detail": "Chi tiết",
+            "death_count": "Số lần chết",
+            "share": "Chia sẻ",
+            "edit": "Chỉnh sửa",
+            "review": "Đánh giá"
+        },
+        "title": "Chi tiết bản ghi",
+        "raw": "Raw",
+        "submit": "Nộp lúc",
+        "device": "Thiết bị",
+        "progress": "Tiến độ",
+        "time": "Thời gian",
+        "rating": "Điểm đề xuất",
+        "rating_change": "Thay đổi điểm đề xuất",
+        "comment": "Bình luận",
+        "reviewed_by": "Đánh giá bởi",
+        "reviewer_cmt": "Bình luận của người đánh giá"
+    },
+    "search": {
+        "button": "Tìm kiếm",
+        "placeholder": "Nhập và bấm Enter để tìm kiếm...",
+        "no_result": "Không có kết quả",
+        "dlvn": "Levels từ Demon List VN",
+        "gd": "Levels từ Geometry Dash",
+        "players": "Người chơi"
+    },
+    "card": {
+        "inactive": "Thẻ này chưa được kích hoạt.\nVui lòng liên hệ với quản trị viên để kích hoath thẻ này.",
+        "link": {
+            "button": "Liên kết thẻ tới",
+            "title": "Liên kết thẻ tới tài khoản này"
+        },
+        "edit": "Chỉnh sửa nội dung"
+    },
+    "clan": {
+        "tabs": {
+            "home": "Trang chủ",
+            "levels": "Levels",
+            "records": "Bản ghi",
+            "members": "Thành viên",
+            "invitations": "Lời mời",
+            "settings": "Cài đặt"
+        },
+        "sort": {
+            "timestamp": "Thời gian nộp",
+            "dlPt": "Điểm Classic",
+            "flPt": "Điểm Featured"
+        },
+        "invite": {
+            "title": "Mời người chơi mới",
+            "placeholder": "UID của người chơi",
+            "button": "Mời"
+        },
+        "boost": {
+            "title": "Nâng cấp hội này",
+            "quantity": "Chọn số lượng",
+            "review": "Xem lại đơn hàng",
+            "days": "ngày",
+            "days_plural": "ngày",
+            "recipent_clan": "Hội nhận",
+            "caution": "Vui lòng không đóng cửa sổ thanh toán cho đến khi bạn được chuyển hướng trở lại Demon List VN",
+            "proceed": "Tiến hành thanh toán"
+        },
+        "public": "Công khai",
+        "invite_only": "Phải được mời",
+        "invited": "Bạn được mời vào hội này",
+        "boosted_until": "Được nâng cấp cho đến"
+    },
+    "clans": {
+        "title": "Hội",
+        "tabs": {
+            "listing": "Danh sách hội",
+            "invitations": "Lời mời"
+        },
+        "search_placeholder": "Tìm kiếm",
+        "owned_by": "Sở hữu bởi",
+        "create": {
+            "title": "Tạo hội mới",
+            "description": "Các cài đặt bổ sung có thể được tìm thấy trong phần cài đặt của hội sau khi tạo",
+            "button": "Tạo hội",
+            "name": "Tên",
+            "tag": "Tag",
+            "tag_placeholder": "2-6 ký tự, chữ và số, không có dấu cách",
+            "member_limit": "Giới hạn thành viên",
+            "member_limit_placeholder": "Nhập 0 để không giới hạn",
+            "public": "Công khai",
+            "create_button": "Tạo"
+        }
+    },
+    "events": {
+        "ranked": "Có xếp hạng",
+        "supporter_only": "Chỉ dành cho Supporter",
+        "starts_at": "Bắt đầu lúc",
+        "ended_at": "Kết thúc lúc"
+    },
+    "cup": {
+        "tabs": {
+            "detail": "Chi tiết",
+            "standing": "Bảng xếp hạng",
+            "schedule": "Lịch trình"
+        },
+        "rounds": {
+            "round_of_16": "Vòng 16",
+            "quarterfinals": "Tứ kết",
+            "semifinals": "Bán kết",
+            "finals": "Chung kết"
+        }
+    },
+    "contest": {
+        "leaderboard": {
+            "rank": "Hạng",
+            "player": "Người chơi",
+            "total": "Tổng",
+            "penalty": "Phạt",
+            "jump_to_me": "Nhảy đến tôi",
+            "frozen_notice": "Bảng xếp hạng sẽ bị đóng băng vào",
+            "frozen_since": "Bảng xếp hạng đã bị đóng băng từ",
+            "hidden_notice": "Bảng xếp hạng bị ẩn.",
+            "record_detail": "Chi tiết bản ghi",
+            "submitted_at": "Nộp lúc",
+            "video_link": "Liên kết video",
+            "raw": "Raw",
+            "not_provided": "(Không cung cấp)",
+            "reject_reason": "Lý do từ chối",
+            "unverified_notice": "* Tính hợp lệ của bản ghi này chưa được xác minh",
+            "rejected_notice": "* Bản ghi này không được tính",
+            "refresh": {
+                "success": "Đã làm mới!",
+                "error": "Làm mới thất bại",
+                "loading": "Đang làm mới..."
+            }
+        },
+        "alerts": {
+            "discord_required": "Bạn cần liên kết tài khoản với Discord để có thể nộp bài. Vào Cài đặt > Discord để liên kết.",
+            "supporter_only": "Sự kiện này chỉ dành cho Supporter."
+        },
+        "participate": {
+            "reward_claimed": "Đã nhận phần thưởng",
+            "cancel_participation": "Huỷ tham gia",
+            "participated": "Đã tham gia",
+            "event_ended": "Sự kiện đã kết thúc",
+            "not_enough_exp": "Không đủ EXP (tối thiểu {minExp} EXP)",
+            "discord_required": "Cần liên kết Discord",
+            "participate": "Tham gia",
+            "not_eligible": "Không đủ điều kiện",
+            "cancel_confirm": {
+                "title": "Huỷ?",
+                "description": "Hành động này không thể hoàn tác.",
+                "proceed": "Tiếp tục"
+            },
+            "participate_dialog": {
+                "title": "Tham gia",
+                "proof_placeholder": "Cung cấp bằng chứng",
+                "message_placeholder": "Tin nhắn (tuỳ chọn)",
+                "continue": "Tiếp tục"
+            }
+        },
+        "tabs": {
+            "detail": "Chi tiết",
+            "levels": "Levels",
+            "leaderboard": "Bảng xếp hạng"
+        }
+    },
+    "level": {
+        "description": "Mô tả",
+        "minimum_progress": "Tiến độ tối thiểu",
+        "difficulty": "Độ khó",
+        "id": "ID",
+        "total_records": "Tổng số bản ghi",
+        "no": "Số",
+        "submitted_on": "Nộp lúc",
+        "device": "Thiết bị",
+        "progress": "Tiến độ",
+        "time": "Thời gian",
+        "mobile": "Di động",
+        "pc": "PC",
+        "fps": "fps",
+        "platformer_rating": "Điểm Platformer",
+        "classic_rating": "Điểm Classic",
+        "featured_list_point": "Điểm Featured List"
+    },
+    "discord_link": {
+        "loading": "Đang liên kết tài khoản Discord của bạn",
+        "success": "Đã liên kết!",
+        "error": "Liên kết thất bại"
+    },
+    "list": {
+        "classic": {
+            "title": "Classic List",
+            "description": "Level classic khó nhất được Việt hoàn thành"
+        },
+        "platformer": {
+            "title": "Platformer List",
+            "description": "Level platformer khó nhất được người Việt hoàn thành"
+        },
+        "featured": {
+            "title": "Featured List",
+            "description": "Level khó nhất được tạo bởi người Việt"
+        },
+        "tabs": {
+            "levels": "Levels",
+            "leaderboard": "Bảng xếp hạng",
+            "rank": "Hạng",
+            "player": "Người chơi",
+            "rating": "Điểm",
+            "total_point": "Tổng điểm"
+        }
+    },
+    "submissions": {
+        "title": "Bản nộp của tôi",
+        "total_record": "Tổng bản ghi",
+        "level": "Level",
+        "submitted_on": "Nộp lúc",
+        "device": "Thiết bị",
+        "progress": "Tiến độ",
+        "time": "Thời gian",
+        "queue_no": "Số thứ tự",
+        "forwarded": "Đã chuyển tiếp"
     }
 }

@@ -8,6 +8,7 @@
 	import type { Level } from '../type';
 	import SingleElimBracket from './singleElimBracket.svelte';
 	import Ads from '$lib/components/ads.svelte';
+	import { _ } from 'svelte-i18n';
 
 	export let data: PageData;
 
@@ -32,9 +33,9 @@
 {#if !data.hidden || ($user.loggedIn && $user.data.isAdmin)}
 	<Tabs.Root bind:value={tab} class="mt-[20px] flex flex-col items-center">
 		<Tabs.List>
-			<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
-			<Tabs.Trigger value="standing">Standing</Tabs.Trigger>
-			<Tabs.Trigger value="schedule">Schedule</Tabs.Trigger>
+			<Tabs.Trigger value="detail">{$_('cup.tabs.detail')}</Tabs.Trigger>
+			<Tabs.Trigger value="standing">{$_('cup.tabs.standing')}</Tabs.Trigger>
+			<Tabs.Trigger value="schedule">{$_('cup.tabs.schedule')}</Tabs.Trigger>
 		</Tabs.List>
 		<Tabs.Content value="detail">
 			<div class="markdown">

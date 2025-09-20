@@ -220,7 +220,7 @@
 				<Button variant="outline" on:click={() => (searchToggled = true)}>
 					<div class="searchBtn">
 						<MagnifyingGlass size={20} />
-						<p>Search</p>
+						<p>{$_("search.button")}</p>
 						<kbd
 							class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
 						>

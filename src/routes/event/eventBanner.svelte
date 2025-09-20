@@ -3,6 +3,7 @@
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import Star from 'svelte-radix/Star.svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
+	import { _ } from 'svelte-i18n';
 
 	export let data: any;
 
@@ -16,13 +17,13 @@
 		}
 
 		if (!isEventStarted()) {
-			return `Start at ${new Date(data.start).toLocaleString('vi-vn')}`;
+			return `${$_('events.starts_at')} ${new Date(data.start).toLocaleString('vi-vn')}`;
 		}
 
 		const second = (new Date(end).getTime() - new Date().getTime()) / 1000;
 
 		if (second < 0) {
-			return `Ended at ${new Date(data.end).toLocaleString('vi-vn')}`;
+			return `${$_('events.ended_at')} ${new Date(end).toLocaleString('vi-vn')}`;
 		}
 
 		const day = Math.floor(second / 86400);
@@ -32,7 +33,6 @@
 		return `${day}d ${hour}h ${minute}m`;
 	}
 </script>
-
 {#if data === null}
 	<div class="p-1">
 		<div class="promotion">
@@ -56,13 +56,13 @@
 					</div>
 					{#if data.isRanked}
 						<div class="period">
-							Ranked
+							{$_('events.ranked')}
 						</div>
 					{/if}
 					{#if data.isSupporterOnly}
 						<div class="period">
 							<Star size={16} />
-							Supporter Only
+							{$_('events.supporter_only')}
 						</div>
 					{/if}
 					{#if data.exp}

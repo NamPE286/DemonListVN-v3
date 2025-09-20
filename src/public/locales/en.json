@@ -1,4 +1,65 @@
 {
+    "general": {
+        "next": "Next",
+        "back": "Back",
+        "close": "Close",
+        "select": "Select",
+        "month": "Month",
+        "cancel": "Cancel",
+        "continue": "Continue",
+        "accept": "Accept",
+        "reject": "Reject",
+        "sort_by": "Sort by",
+        "ascending": "Ascending",
+        "apply": "Apply"
+    },
+    "toast": {
+        "clipboard": "Copied to clipboard!",
+        "payment": {
+            "no_player": "Player not found",
+            "redirect": "You will be redirected to our payment portal"
+        },
+        "player_edit": {
+            "uploading": "Uploading...",
+            "success": "Uploaded! It may take a while to take effect.",
+            "error": "Upload failed",
+            "save": {
+                "loading": "Saving...",
+                "success": "Saved!",
+                "error": "Failed to save"
+            },
+            "name": "Name must contain only letters and numbers."
+        },
+        "clan_invite": {
+            "success": "Player invited!",
+            "loading": "Sending invitation...",
+            "error": "Failed to invite player."
+        },
+        "clan_leave": {
+            "confirm": "Are you sure you want to leave this clan?",
+            "loading": "Leaving clan..."
+        },
+        "clan_update": {
+            "success": "Updated! This page will be refreshed.",
+            "loading": "Updating...",
+            "error": "Failed to update."
+        },
+        "clan_delete": {
+            "confirm": "Do you wish to delete this clan?",
+            "success": "Deleted!",
+            "loading": "Deleting...",
+            "error": "Failed to delete."
+        },
+        "submission_cancel": {
+            "loading": "Cancelling submission...",
+            "success": "Submission cancelled!",
+            "error": "Failed to cancel submission."
+        }
+    },
+    "context": {
+        "copy_level_id": "Copy level's ID",
+        "copy_thumbnail": "Copy thumbnail image URL"
+    },
     "nav": {
         "classic": "Classic",
         "platformer": "Platformer",
@@ -25,6 +86,7 @@
             "title": "Required fields",
             "progress": "Progress",
             "video": "Video's Link",
+            "raw": "Raw's Link",
             "platform": "Platform",
             "minimum": "Minimum"
         },
@@ -87,6 +149,286 @@
                 "cancel": "Cancel",
                 "continue": "Continue"
             }
+        },
+        "subscriptions": {
+            "name": "Name",
+            "active_until": "Active until",
+            "expired": "Expired"
+        },
+        "discord": {
+            "linked": "Linked",
+            "link": "Link account"
         }
+    },
+    "heatmap": {
+        "split_by_month": "Split by month"
+    },
+    "notifications": {
+        "title": "Notifications",
+        "clear_all": "Clear all",
+        "no_noti": "Empty",
+        "navigate": "Click to navigate",
+        "ago": "ago"
+    },
+    "payment": {
+        "recipent": {
+            "title": "Who are you buying this for",
+            "friend": "For a friend",
+            "self": "For myself"
+        },
+        "gift": {
+            "title": "Select a friend to gift",
+            "confirm": "You are going to gift"
+        },
+        "quantity": {
+            "title": "Select quantity"
+        },
+        "review": {
+            "title": "Review your order",
+            "recipent": "Recipent",
+            "caution": "Please do not close the payment window until you are redirected back to Demon List VN",
+            "proceed": "Process to payment"
+        }
+    },
+    "player_card": {
+        "title": "Player's statistic",
+        "rating": "Classic rating",
+        "featured": "Total Featured List point",
+        "contest": "Contest rating"
+    },
+    "profile_edit": {
+        "title": "Edit profile",
+        "description": "Make changes to your profile here",
+        "name": "Name",
+        "upload_avatar": "Upload avatar",
+        "upload_banner": "Upload banner",
+        "border": "Border",
+        "background": "Background",
+        "reset": "Reset",
+        "province": "Province",
+        "city": "City",
+        "hide_profile": "Hide profile",
+        "save": "Save changes"
+    },
+    "record_detail": {
+        "tabs": {
+            "detail": "Detail",
+            "death_count": "Death count",
+            "share": "Share",
+            "edit": "Edit",
+            "review": "Review"
+        },
+        "title": "Record's detail",
+        "raw": "Raw",
+        "submit": "Submitted on",
+        "device": "Device",
+        "progress": "Progress",
+        "time": "Time",
+        "rating": "Suggested rating",
+        "rating_change": "Change suggested rating",
+        "comment": "Comment",
+        "reviewed_by": "Reviewed by",
+        "reviewer_cmt": "Reviewer's comment"
+    },
+    "search": {
+        "button": "Search",
+        "placeholder": "Type and press Enter to search...",
+        "no_result": "No results found",
+        "dlvn": "Levels from Demon List VN",
+        "gd": "Levels from Geometry Dash",
+        "players": "Players"
+    },
+    "card": {
+        "inactive": "This card is not activated.\nPlease contact a moderator to activate this card.",
+        "link": {
+            "button": "Link card to",
+            "title": "Link card to this account"
+        },
+        "edit": "Edit content"
+    },
+    "clan": {
+        "tabs": {
+            "home": "Home",
+            "levels": "Levels",
+            "records": "Records",
+            "members": "Members",
+            "invitations": "Invitations",
+            "settings": "Settings"
+        },
+        "sort": {
+            "timestamp": "Date submitted",
+            "dlPt": "Classic point",
+            "flPt": "Featured point"
+        },
+        "invite": {
+            "title": "Invite new player",
+            "placeholder": "Player's UID",
+            "button": "Invite"
+        },
+        "boost": {
+            "title": "Boost this clan",
+            "quantity": "Select quantity",
+            "review": "Review your order",
+            "days": "day",
+            "days_plural": "days",
+            "recipent_clan": "Recipent Clan",
+            "caution": "Please do not close the payment window until you are redirected back to Demon List VN",
+            "proceed": "Proceed to Payment"
+        },
+        "public": "Public",
+        "invite_only": "Invite only",
+        "invited": "You've been invited to this clan",
+        "boosted_until": "Boosted until"
+    },
+    "clans": {
+        "title": "Clans",
+        "tabs": {
+            "listing": "Clan listing",
+            "invitations": "Invitations"
+        },
+        "search_placeholder": "Search",
+        "owned_by": "Owned by",
+        "create": {
+            "title": "Create new clan",
+            "description": "Additional configurations can be found in clan's settings after creation",
+            "button": "Create clan",
+            "name": "Name",
+            "tag": "Tag",
+            "tag_placeholder": "2-6 characters, alphanumeric, no space",
+            "member_limit": "Member limit",
+            "member_limit_placeholder": "Enter 0 for unlimited",
+            "public": "Public",
+            "create_button": "Create"
+        }
+    },
+    "events": {
+        "ranked": "Ranked",
+        "supporter_only": "Supporter Only",
+        "starts_at": "Starts at",
+        "ended_at": "Ended at"
+    },
+    "cup": {
+        "tabs": {
+            "detail": "Detail",
+            "standing": "Standing",
+            "schedule": "Schedule"
+        },
+        "rounds": {
+            "round_of_16": "Round of 16",
+            "quarterfinals": "Quarterfinals",
+            "semifinals": "Semifinals",
+            "finals": "Finals"
+        }
+    },
+    "contest": {
+        "leaderboard": {
+            "rank": "Rank",
+            "player": "Player",
+            "total": "Total",
+            "penalty": "Penalty",
+            "jump_to_me": "Jump to me",
+            "frozen_notice": "The leaderboard will be frozen on",
+            "frozen_since": "The leaderboard has been frozen since",
+            "hidden_notice": "The leaderboard is hidden.",
+            "record_detail": "Record's Detail",
+            "submitted_at": "Submitted at",
+            "video_link": "Video's Link",
+            "raw": "Raw",
+            "not_provided": "(Not provided)",
+            "reject_reason": "Reject Reason",
+            "unverified_notice": "* This record legitimacy is not verified",
+            "rejected_notice": "* This record is not counted",
+            "refresh": {
+                "success": "Refreshed!",
+                "error": "Refresh failed",
+                "loading": "Refreshing..."
+            }
+        },
+        "alerts": {
+            "discord_required": "You need to link your account to a Discord account in order to submit. Go to Settings > Discord to link.",
+            "supporter_only": "This event is Supporter only."
+        },
+        "participate": {
+            "reward_claimed": "Reward claimed",
+            "cancel_participation": "Cancel participation",
+            "participated": "Participated",
+            "event_ended": "Event ended",
+            "not_enough_exp": "Not enough EXP ({minExp} EXP minimum)",
+            "discord_required": "Discord linking required",
+            "participate": "Participate",
+            "not_eligible": "Not eligible",
+            "cancel_confirm": {
+                "title": "Cancel?",
+                "description": "This action cannot be undone.",
+                "proceed": "Proceed"
+            },
+            "participate_dialog": {
+                "title": "Participate",
+                "proof_placeholder": "Provide proof",
+                "message_placeholder": "Message (optional)",
+                "continue": "Continue"
+            }
+        },
+        "tabs": {
+            "detail": "Detail",
+            "levels": "Levels",
+            "leaderboard": "Leaderboard"
+        }
+    },
+    "level": {
+        "description": "Description",
+        "minimum_progress": "Minimum progress",
+        "difficulty": "Difficulty",
+        "id": "ID",
+        "total_records": "Total record",
+        "no": "No.",
+        "submitted_on": "Submitted on",
+        "device": "Device",
+        "progress": "Progress",
+        "time": "Time",
+        "mobile": "Mobile",
+        "pc": "PC",
+        "fps": "fps",
+        "platformer_rating": "Platformer rating",
+        "classic_rating": "Classic rating",
+        "featured_list_point": "Featured List point"
+    },
+    "discord_link": {
+        "loading": "Linking your Discord account",
+        "success": "Linked!",
+        "error": "Failed to link"
+    },
+    "list": {
+        "classic": {
+            "title": "Classic List",
+            "description": "Hardest classic level beaten by Vietnamese"
+        },
+        "platformer": {
+            "title": "Platformer List", 
+            "description": "Hardest platformer level beaten by Vietnamese"
+        },
+        "featured": {
+            "title": "Featured List",
+            "description": "Hardest level created by Vietnamese"
+        },
+        "tabs": {
+            "levels": "Levels",
+            "leaderboard": "Leaderboard",
+            "rank": "Rank",
+            "player": "Player",
+            "rating": "Rating",
+            "total_point": "Total point"
+        }
+    },
+    "submissions": {
+        "title": "My submissions",
+        "total_record": "Total record",
+        "level": "Level",
+        "submitted_on": "Submitted on",
+        "device": "Device",
+        "progress": "Progress",
+        "time": "Time",
+        "queue_no": "Queue no.",
+        "forwarded": "Forwarded"
     }
 }
