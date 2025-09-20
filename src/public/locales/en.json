@@ -334,9 +334,9 @@
             "unverified_notice": "* This record legitimacy is not verified",
             "rejected_notice": "* This record is not counted",
             "refresh": {
-            "success": "Refreshed!",
-            "error": "Refresh failed",
-            "loading": "Refreshing..."
+                "success": "Refreshed!",
+                "error": "Refresh failed",
+                "loading": "Refreshing..."
             }
         },
         "alerts": {
@@ -369,5 +369,23 @@
             "levels": "Levels",
             "leaderboard": "Leaderboard"
         }
+    },
+    "level": {
+        "description": "Description",
+        "minimum_progress": "Minimum progress",
+        "difficulty": "Difficulty",
+        "id": "ID",
+        "total_records": "Total record",
+        "no": "No.",
+        "submitted_on": "Submitted on",
+        "device": "Device",
+        "progress": "Progress",
+        "time": "Time",
+        "mobile": "Mobile",
+        "pc": "PC",
+        "fps": "fps",
+        "platformer_rating": "Platformer rating",
+        "classic_rating": "Classic rating",
+        "featured_list_point": "Featured List point"
     }
 }

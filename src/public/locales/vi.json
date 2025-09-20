@@ -353,15 +353,15 @@
             "participate": "Tham gia",
             "not_eligible": "Không đủ điều kiện",
             "cancel_confirm": {
-            "title": "Huỷ?",
-            "description": "Hành động này không thể hoàn tác.",
-            "proceed": "Tiếp tục"
+                "title": "Huỷ?",
+                "description": "Hành động này không thể hoàn tác.",
+                "proceed": "Tiếp tục"
             },
             "participate_dialog": {
-            "title": "Tham gia",
-            "proof_placeholder": "Cung cấp bằng chứng",
-            "message_placeholder": "Tin nhắn (tuỳ chọn)",
-            "continue": "Tiếp tục"
+                "title": "Tham gia",
+                "proof_placeholder": "Cung cấp bằng chứng",
+                "message_placeholder": "Tin nhắn (tuỳ chọn)",
+                "continue": "Tiếp tục"
             }
         },
         "tabs": {
@@ -369,5 +369,23 @@
             "levels": "Levels",
             "leaderboard": "Bảng xếp hạng"
         }
+    },
+    "level": {
+        "description": "Mô tả",
+        "minimum_progress": "Tiến độ tối thiểu",
+        "difficulty": "Độ khó",
+        "id": "ID",
+        "total_records": "Tổng số bản ghi",
+        "no": "Số",
+        "submitted_on": "Nộp lúc",
+        "device": "Thiết bị",
+        "progress": "Tiến độ",
+        "time": "Thời gian",
+        "mobile": "Di động",
+        "pc": "PC",
+        "fps": "fps",
+        "platformer_rating": "Điểm Platformer",
+        "classic_rating": "Điểm Classic",
+        "featured_list_point": "Điểm Featured List"
     }
 }

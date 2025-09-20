@@ -12,6 +12,7 @@
 	import Ads from '$lib/components/ads.svelte';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { goto } from '$app/navigation';
+	import { _ } from 'svelte-i18n';
 
 	export let data: PageData;
 	let levelAPI: any = null;
@@ -134,7 +135,7 @@
 		/>
 		<meta
 			property="og:description"
-			content={`${data.level.isPlatformer ? 'Platformer Rating' : 'Classic Rating'}: ${data.level.rating} #${data.level.dlTop}\nFeatured List Point: ${data.level.flPt} #${data.level.flTop}`}
+			content={`${data.level.isPlatformer ? 'Điểm Platformer' : 'Điểm Classic'}: ${data.level.rating} #${data.level.dlTop}\n Điểm Featured List: ${data.level.flPt} #${data.level.flTop}`}
 		/>
 	{/if}
 	<meta
@@ -205,12 +206,12 @@
 				<div class="content">
 					{#if 'level' in data}
 						<div class="pointLabel">
-							{data.level.isPlatformer ? 'Platformer Rating' : 'Classic Rating'}: {data.level
+							{data.level.isPlatformer ? $_('level.platformer_rating') : $_('level.classic_rating')}: {data.level
 								.rating}
 							<div class="top">#{data.level.dlTop}</div>
 						</div>
 						<div class="pointLabel">
-							Featured List Point: {data.level.flPt}
+							{$_('level.featured_list_point')}: {data.level.flPt}
 							<div class="top">#{data.level.flTop}</div>
 						</div>
 					{:else if 'pointercrate' in data && data.pointercrate.requirement != -1}
@@ -259,17 +260,17 @@
 			<Card.Content>
 				<div class="content">
 					{#if levelAPI}
-						<p><b>Description:</b> <span>{levelAPI.description}</span></p>
+						<p><b>{$_('level.description')}:</b> <span>{levelAPI.description}</span></p>
 						{#if 'pointercrate' in data && data.pointercrate.requirement != -1}
 							<p>
-								<b>Minimum progress:</b>
+								<b>{$_('level.minimum_progress')}:</b>
 								<span>{data.pointercrate.requirement}% (Pointercrate)</span>
 							</p>
 						{:else if 'level' in data && data.level.rating}
-							<p><b>Minimum progress:</b> <span>{data.level.minProgress}%</span></p>
+							<p><b>{$_('level.minimum_progress')}:</b> <span>{data.level.minProgress}%</span></p>
 						{/if}
-						<p><b>Difficulty: </b><span>{levelAPI.difficulty}</span></p>
-						<p><b>ID: </b><span>{levelAPI.id}</span></p>
+						<p><b>{$_('level.difficulty')}: </b><span>{levelAPI.difficulty}</span></p>
+						<p><b>{$_('level.id')}: </b><span>{levelAPI.id}</span></p>
 					{:else}
 						<Loading inverted />
 					{/if}
@@ -290,16 +291,16 @@
 	<div class="cardWrapper1 table">
 		<Table.Root>
 			{#if records}
-				<Table.Caption>Total record: {records.length}</Table.Caption>
+				<Table.Caption>{$_('level.total_records')}: {records.length}</Table.Caption>
 			{/if}
 			<Table.Header>
 				<Table.Row>
-					<Table.Head class="w-[35px]">No.</Table.Head>
+					<Table.Head class="w-[35px]">{$_('level.no')}</Table.Head>
 					<Table.Head>Player</Table.Head>
-					<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
-					<Table.Head class="w-[100px] text-center">Device</Table.Head>
+					<Table.Head class="w-[100px] text-center">{$_('level.submitted_on')}</Table.Head>
+					<Table.Head class="w-[100px] text-center">{$_('level.device')}</Table.Head>
 					<Table.Head class="w-[80px] text-center"
-						>{data.level && data.level.isPlatformer ? 'Time' : 'Progress'}</Table.Head
+						>{data.level && data.level.isPlatformer ? $_('level.time') : $_('level.progress')}</Table.Head
 					>
 				</Table.Row>
 			</Table.Header>
@@ -327,9 +328,9 @@
 								{new Date(record.timestamp).toLocaleString('vi-VN')}
 							</Table.Cell>
 							<Table.Cell class="text-center">
-								{record.mobile ? 'Mobile' : 'PC'}
+								{record.mobile ? $_('level.mobile') : $_('level.pc')}
 								{#if record.refreshRate}
-									<br />({record.refreshRate}fps)
+									<br />({record.refreshRate}{$_('level.fps')})
 								{/if}
 							</Table.Cell>
 							<Table.Cell class="text-center">
