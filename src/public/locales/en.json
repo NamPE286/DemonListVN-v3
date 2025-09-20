@@ -49,6 +49,11 @@
             "success": "Deleted!",
             "loading": "Deleting...",
             "error": "Failed to delete."
+        },
+        "submission_cancel": {
+            "loading": "Cancelling submission...",
+            "success": "Submission cancelled!",
+            "error": "Failed to cancel submission."
         }
     },
     "context": {
@@ -414,5 +419,16 @@
             "rating": "Rating",
             "total_point": "Total point"
         }
+    },
+    "submissions": {
+        "title": "My submissions",
+        "total_record": "Total record",
+        "level": "Level",
+        "submitted_on": "Submitted on",
+        "device": "Device",
+        "progress": "Progress",
+        "time": "Time",
+        "queue_no": "Queue no.",
+        "forwarded": "Forwarded"
     }
 }

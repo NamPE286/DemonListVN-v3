@@ -49,6 +49,11 @@
             "success": "Đã xoá!",
             "loading": "Đang xoá...",
             "error": "Xoá thất bại."
+        },
+        "submission_cancel": {
+            "loading": "Đang huỷ bản nộp...",
+            "success": "Đã huỷ bản nộp!",
+            "error": "Huỷ bản nộp thất bại."
         }
     },
     "context": {
@@ -414,5 +419,16 @@
             "rating": "Điểm",
             "total_point": "Tổng điểm"
         }
+    },
+    "submissions": {
+        "title": "Bản nộp của tôi",
+        "total_record": "Tổng bản ghi",
+        "level": "Level",
+        "submitted_on": "Nộp lúc",
+        "device": "Thiết bị",
+        "progress": "Tiến độ",
+        "time": "Thời gian",
+        "queue_no": "Số thứ tự",
+        "forwarded": "Đã chuyển tiếp"
     }
 }
