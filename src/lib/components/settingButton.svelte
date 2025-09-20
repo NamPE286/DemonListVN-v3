@@ -308,8 +308,8 @@
 				<Table.Root>
 					<Table.Header>
 						<Table.Row>
-							<Table.Head class="w-[120px]">Name</Table.Head>
-							<Table.Head>Active Untils</Table.Head>
+							<Table.Head class="w-[120px]">{$_("settings.subscriptions.name")}</Table.Head>
+							<Table.Head>{$_("settings.subscriptions.active_until")}</Table.Head>
 						</Table.Row>
 					</Table.Header>
 					<Table.Body>
@@ -321,7 +321,7 @@
 								{:else}
 									<Table.Cell
 										>{new Date($user.data.supporterUntil).toLocaleString('vi-VN')}
-										{isActive($user.data.supporterUntil) ? '' : '(Expired)'}</Table.Cell
+										{isActive($user.data.supporterUntil) ? '' : `(${$_("settings.subscriptions.expired")})`}</Table.Cell
 									>
 								{/if}
 							{/if}
@@ -332,12 +332,12 @@
 			<Tabs.Content value="discord">
 				{#if $user.loggedIn}
 					{#if $user.data.discord}
-						<Button class="w-full" variant="outline" disabled>Linked</Button>
+						<Button class="w-full" variant="outline" disabled>{$_("settings.discord.linked")}</Button>
 					{:else}
 						<a
 							href="https://discord.com/oauth2/authorize?client_id=1071500325338488843&response_type=code&redirect_uri=https%3A%2F%2Fapi.demonlistvn.com%2Fauth%2Fcallback%2Fdiscord&scope=identify"
 						>
-							<Button class="w-full" variant="outline">Link account</Button>
+							<Button class="w-full" variant="outline">{$_("settings.discord.link")}</Button>
 						</a>
 					{/if}
 				{/if}

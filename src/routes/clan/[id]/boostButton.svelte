@@ -5,6 +5,7 @@
 	import { toast } from 'svelte-sonner';
 	import { Button } from '$lib/components/ui/button';
 	import { Slider } from '$lib/components/ui/slider';
+	import { _ } from 'svelte-i18n';
 
 	export let data: any;
 	export let disabled = false;
@@ -22,7 +23,7 @@
 	}
 
 	async function purchase() {
-		toast.loading('You will be redirected to our payment portal');
+		toast.loading($_("toast.payment.redirect"));
 
 		const res: any = await (
 			await fetch(
@@ -52,16 +53,16 @@
 			class="w-full border-yellow-300  bg-yellow-500 text-white  hover:bg-yellow-600 hover:text-white dark:bg-yellow-700 hover:dark:bg-yellow-600"
 			{disabled}
 		>
-			Boost this clan
+			{$_('clan.boost.title')}
 		</Button>
 	</Dialog.Trigger>
 	<Dialog.Content>
 		{#if state == 0}
 			<Dialog.Header>
-				<Dialog.Title>Select quantity</Dialog.Title>
+				<Dialog.Title>{$_('clan.boost.quantity')}</Dialog.Title>
 			</Dialog.Header>
 			<div>
-				<p>{formatPrice(5000 * quantity[0])}₫/{quantity[0]} day{quantity[0] <= 1 ? '' : 's'}</p>
+				<p>{formatPrice(5000 * quantity[0])}₫/{quantity[0]} {$_(quantity[0] <= 1 ? 'clan.boost.days' : 'clan.boost.days_plural')}</p>
 				<Slider bind:value={quantity} max={30} step={1} />
 			</div>
 			<Dialog.Footer>
@@ -74,15 +75,15 @@
 			</Dialog.Footer>
 		{:else if state == 1}
 			<Dialog.Header>
-				<Dialog.Title>Review your order</Dialog.Title>
+				<Dialog.Title>{$_('clan.boost.review')}</Dialog.Title>
 			</Dialog.Header>
 			<div class="flex text-sm">
-				<p>Clan Boost ({quantity[0]} day{quantity[0] > 1 ? 's' : ''})</p>
+				<p>Clan Boost ({quantity[0]} {$_(quantity[0] > 1 ? 'clan.boost.days_plural' : 'clan.boost.days')})</p>
 				<p class="ml-auto"><b>{formatPrice(5000 * quantity[0])}₫</b></p>
 			</div>
 			<hr />
 			<div class="flex text-sm">
-				<p>Recipent Clan</p>
+				<p>{$_('clan.boost.recipent_clan')}</p>
 				<p class="ml-auto">
 					<b>
 						[{data.tag}] {data.name}
@@ -90,10 +91,10 @@
 				</p>
 			</div>
 			<p class="text-sm italic text-gray-500">
-				Please do not close the payment window until you are redirected back to Demon List VN
+				{$_('clan.boost.caution')}
 			</p>
 			<Dialog.Footer>
-				<Button on:click={purchase}>Proceed to Payment</Button>
+				<Button on:click={purchase}>{$_('clan.boost.proceed')}</Button>
 			</Dialog.Footer>
 		{/if}
 	</Dialog.Content>

@@ -5,7 +5,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import LevelCard from '$lib/components/levelCard.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
-
+	import { _ } from 'svelte-i18n';
+	
 	export let clan: any;
 
 	let filter = {
@@ -91,7 +92,7 @@
 					}
 
 					await fetchLevels();
-				}}>Apply</Button
+				}}>{$_("general.apply")}</Button
 			>
 		</div>
 	</div>

@@ -6,7 +6,12 @@
         "select": "Select",
         "month": "Month",
         "cancel": "Cancel",
-        "continue": "Continue"
+        "continue": "Continue",
+        "accept": "Accept",
+        "reject": "Reject",
+        "sort_by": "Sort by",
+        "ascending": "Ascending",
+        "apply": "Apply"
     },
     "toast": {
         "clipboard": "Copied to clipboard!",
@@ -24,6 +29,26 @@
                 "error": "Failed to save"
             },
             "name": "Name must contain only letters and numbers."
+        },
+        "clan_invite": {
+            "success": "Player invited!",
+            "loading": "Sending invitation...",
+            "error": "Failed to invite player."
+        },
+        "clan_leave": {
+            "confirm": "Are you sure you want to leave this clan?",
+            "loading": "Leaving clan..."
+        },
+        "clan_update": {
+            "success": "Updated! This page will be refreshed.",
+            "loading": "Updating...",
+            "error": "Failed to update."
+        },
+        "clan_delete": {
+            "confirm": "Do you wish to delete this clan?",
+            "success": "Deleted!",
+            "loading": "Deleting...",
+            "error": "Failed to delete."
         }
     },
     "context": {
@@ -119,6 +144,15 @@
                 "cancel": "Cancel",
                 "continue": "Continue"
             }
+        },
+        "subscriptions": {
+            "name": "Name",
+            "active_until": "Active until",
+            "expired": "Expired"
+        },
+        "discord": {
+            "linked": "Linked",
+            "link": "Link account"
         }
     },
     "heatmap": {
@@ -206,5 +240,39 @@
             "title": "Link card to this account"
         },
         "edit": "Edit content"
+    },
+    "clan": {
+        "tabs": {
+            "home": "Home",
+            "levels": "Levels",
+            "records": "Records",
+            "members": "Members",
+            "invitations": "Invitations",
+            "settings": "Settings"
+        },
+        "sort": {
+            "timestamp": "Date submitted",
+            "dlPt": "Classic point",
+            "flPt": "Featured point"
+        },
+        "invite": {
+            "title": "Invite new player",
+            "placeholder": "Player's UID",
+            "button": "Invite"
+        },
+        "boost": {
+            "title": "Boost this clan",
+            "quantity": "Select quantity",
+            "review": "Review your order",
+            "days": "day",
+            "days_plural": "days",
+            "recipent_clan": "Recipent Clan",
+            "caution": "Please do not close the payment window until you are redirected back to Demon List VN",
+            "proceed": "Proceed to Payment"
+        },
+        "public": "Public",
+        "invite_only": "Invite only",
+        "invited": "You've been invited to this clan",
+        "boosted_until": "Boosted until"
     }
 }

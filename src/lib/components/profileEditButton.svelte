@@ -70,8 +70,6 @@
 				error: $_('toast.player_edit.error')
 			});
 		} else {
-			toast.loading('Compressing image...');
-
 			const cImg = await imageCompression(image, {
 				maxSizeMB: 0.035,
 				maxWidthOrHeight: 480,

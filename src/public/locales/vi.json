@@ -6,7 +6,12 @@
         "select": "Chọn",
         "month": "Tháng",
         "cancel": "Huỷ bỏ",
-        "continue": "Tiếp tục"
+        "continue": "Tiếp tục",
+        "accept": "Chấp nhận",
+        "reject": "Từ chối",
+        "sort_by": "Sắp xếp theo",
+        "ascending": "Tăng dần",
+        "apply": "Áp dụng"
     },
     "toast": {
         "clipboard": "Đã sao chép vào bảng nhớ tạm!",
@@ -24,6 +29,26 @@
                 "error": "Lưu thất bại"
             },
             "name": "Tên chỉ được chứa chữ và số"
+        },
+        "clan_invite": {
+            "success": "Đã mời người chơi!",
+            "loading": "Đang gửi lời mời...",
+            "error": "Mời người chơi thất bại."
+        },
+        "clan_leave": {
+            "confirm": "Bạn có chắc chắn muốn rời khỏi hội này?",
+            "loading": "Đang rời hội..."
+        },
+        "clan_update": {
+            "success": "Đã cập nhật! Trang này sẽ được làm mới.",
+            "loading": "Đang cập nhật...",
+            "error": "Cập nhật thất bại."
+        },
+        "clan_delete": {
+            "confirm": "Bạn có muốn xoá hội này?",
+            "success": "Đã xoá!",
+            "loading": "Đang xoá...",
+            "error": "Xoá thất bại."
         }
     },
     "context": {
@@ -119,6 +144,15 @@
                 "cancel": "Huỷ",
                 "continue": "Tiếp tục"
             }
+        },
+        "subscriptions": {
+            "name": "Tên",
+            "active_until": "Có hiệu lực đến",
+            "expired": "Hết hạn"
+        },
+        "discord": {
+            "linked": "Đã liên kết",
+            "link": "Liên kết tài khoản"
         }
     },
     "heatmap": {
@@ -154,7 +188,7 @@
     "player_card": {
         "title": "Thông số người chơi",
         "rating": "Điểm Classic",
-        "featured": "Tổng điểm Featured List",
+        "featured": "Tổng điểm Featured",
         "contest": "Điểm cuộc thi"
     },
     "profile_edit": {
@@ -206,5 +240,39 @@
             "title": "Liên kết thẻ tới tài khoản này"
         },
         "edit": "Chỉnh sửa nội dung"
+    },
+    "clan": {
+        "tabs": {
+            "home": "Trang chủ",
+            "levels": "Levels",
+            "records": "Bản ghi",
+            "members": "Thành viên",
+            "invitations": "Lời mời",
+            "settings": "Cài đặt"
+        },
+        "sort": {
+            "timestamp": "Thời gian nộp",
+            "dlPt": "Điểm Classic",
+            "flPt": "Điểm Featured"
+        },
+        "invite": {
+            "title": "Mời người chơi mới",
+            "placeholder": "UID của người chơi",
+            "button": "Mời"
+        },
+        "boost": {
+            "title": "Nâng cấp hội này",
+            "quantity": "Chọn số lượng",
+            "review": "Xem lại đơn hàng",
+            "days": "ngày",
+            "days_plural": "ngày",
+            "recipent_clan": "Hội nhận",
+            "caution": "Vui lòng không đóng cửa sổ thanh toán cho đến khi bạn được chuyển hướng trở lại Demon List VN",
+            "proceed": "Tiến hành thanh toán"
+        },
+        "public": "Công khai",
+        "invite_only": "Phải được mời",
+        "invited": "Bạn được mời vào hội này",
+        "boosted_until": "Được nâng cấp cho đến"
     }
 }
