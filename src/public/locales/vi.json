@@ -55,7 +55,12 @@
             "success": "Đã huỷ bản nộp!",
             "error": "Huỷ bản nộp thất bại."
         },
-        "order_restore": "Đang khôi phục đơn hàng của bạn..."
+        "order_restore": "Đang khôi phục đơn hàng của bạn...",
+        "order_place": {
+            "success": "Đã đặt hàng!",
+            "loading": "Đang đặt hàng...",
+            "error": "Đặt hàng thất bại"
+        }
     },
     "context": {
         "copy_level_id": "Sao chép ID level",
@@ -607,6 +612,56 @@
             "non_refundable": "Demon List VN Supporter không thể hoàn tiền.",
             "extension": "Nếu bạn mua Supporter khi vẫn còn Supporter đang hoạt động, thời gian sẽ được cộng thêm thêm.",
             "duration": "1 Tháng = 30 Ngày."
+        }
+    },
+    "store": {
+        "title": "Cửa hàng",
+        "view_cart": "Giỏ hàng của tôi",
+        "all_products": "Tất cả sản phẩm",
+        "cart": {
+            "title": "Giỏ hàng",
+            "discord_required": "Bạn cần liên kết tài khoản với Discord để có thể thanh toán. Vào Cài đặt > Discord để liên kết.",
+            "login_required": "Bạn cần đăng nhập để thanh toán.",
+            "product": "Sản phẩm",
+            "qty": "Số lượng",
+            "amount": "Số tiền",
+            "action": "Hành động",
+            "total": "Tổng cộng",
+            "remove_success": "Đã xoá {product} khỏi giỏ hàng.",
+            "empty": "Không có sản phẩm trong giỏ hàng"
+        },
+        "checkout": {
+            "button": "Thanh toán",
+            "payment_method": {
+                "title": "Chọn phương thức thanh toán",
+                "bank_transfer": "Chuyển khoản ngân hàng",
+                "cod": "Thanh toán khi nhận hàng"
+            },
+            "shipping": {
+                "title": "Thêm thông tin giao hàng",
+                "address": "Địa chỉ",
+                "address_placeholder": "Nhập địa chỉ giao hàng của bạn",
+                "recipient_name": "Tên người nhận",
+                "recipient_required": "Bắt buộc",
+                "phone_number": "Số điện thoại",
+                "phone_placeholder": "Ví dụ: 978123456"
+            },
+            "review": {
+                "title": "Xem lại đơn hàng",
+                "shipping_info": "Thông tin giao hàng",
+                "recipient": "Người nhận",
+                "shipping_address": "Địa chỉ giao hàng",
+                "phone_number": "Số điện thoại",
+                "items": "Sản phẩm",
+                "subtotal": "Tạm tính",
+                "shipping_fee": "Phí vận chuyển",
+                "total": "Tổng cộng",
+                "free": "Miễn phí",
+                "bank_transfer_note": "Vui lòng không đóng cửa sổ thanh toán cho đến khi bạn được chuyển hướng trở lại Demon List VN",
+                "cod_note": "Phí thanh toán sẽ được thu khi giao hàng bởi đối tác vận chuyển của chúng tôi",
+                "proceed_payment": "Tiến hành thanh toán",
+                "place_order": "Đặt hàng"
+            }
         }
     }
 }

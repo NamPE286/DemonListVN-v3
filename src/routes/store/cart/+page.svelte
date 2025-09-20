@@ -9,6 +9,7 @@
 	import CheckoutButton from './checkoutButton.svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { ExclamationTriangle } from 'svelte-radix';
+	import { _ } from 'svelte-i18n';
 
 	let data: any[] = [];
 
@@ -30,13 +31,13 @@
 </script>
 
 <svelte:head>
-	<title>Cart - Demon List VN</title>
+	<title>Giỏ hàng - Demon List VN</title>
 </svelte:head>
 
 <div
 	class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full items-center pl-[15px] pr-[15px]"
 >
-	<h2>Cart</h2>
+	<h2>{$_('store.cart.title')}</h2>
 </div>
 {#if $cart.items.length}
 	<div
@@ -46,25 +47,24 @@
 			<Alert.Root class="text-yellow-400">
 				<Alert.Title class="flex items-center gap-[10px]">
 					<ExclamationTriangle size={15} />
-					You need to link your account to a Discord account in order to checkout. Go to {'Settings > Discord'}
-					to link.</Alert.Title
-				>
+					{$_('store.cart.discord_required')}
+				</Alert.Title>
 			</Alert.Root>
 		{:else if !$user.loggedIn}
 			<Alert.Root class="text-yellow-400">
 				<Alert.Title class="flex items-center gap-[10px]">
 					<ExclamationTriangle size={15} />
-					You need to sign in to checkout.</Alert.Title
-				>
+					{$_('store.cart.login_required')}
+				</Alert.Title>
 			</Alert.Root>
 		{/if}
 		<Table.Root>
 			<Table.Header>
 				<Table.Row>
-					<Table.Head class="w-[300px]">Product</Table.Head>
-					<Table.Head class="w-[50px] text-center">Qty</Table.Head>
-					<Table.Head class="w-[200px]">Amount</Table.Head>
-					<Table.Head class="text-right">Action</Table.Head>
+					<Table.Head class="w-[300px]">{$_('store.cart.product')}</Table.Head>
+					<Table.Head class="w-[50px] text-center">{$_('store.cart.qty')}</Table.Head>
+					<Table.Head class="w-[200px]">{$_('store.cart.amount')}</Table.Head>
+					<Table.Head class="text-right">{$_('store.cart.action')}</Table.Head>
 				</Table.Row>
 			</Table.Header>
 			<Table.Body>
@@ -88,7 +88,7 @@
 								on:click={() => {
 									$cart.removeItem(product.id);
 									data = data.filter((item) => item.id !== product.id);
-									toast.success(`Removed ${product.name} from the cart.`);
+									toast.success($_('store.cart.remove_success', { values: { product: product.name } }));
 								}}
 							>
 								<Cross2 size={16} />
@@ -100,7 +100,7 @@
 		</Table.Root>
 		<div class="flex justify-end">
 			<p class="text-right text-lg">
-				Total<br />
+				{$_('store.cart.total')}<br />
 				<span class="text-2xl font-semibold">
 					{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
 						data.reduce((total, product) => {
@@ -113,7 +113,7 @@
 		<CheckoutButton bind:items={data} />
 	</div>
 {:else}
-	<p class="text-center opacity-50">No item in cart</p>
+	<p class="text-center opacity-50">{$_('store.cart.empty')}</p>
 {/if}
 
 <style lang="scss">

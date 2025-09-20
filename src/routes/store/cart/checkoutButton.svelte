@@ -7,6 +7,7 @@
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { toast } from 'svelte-sonner';
+	import { _ } from 'svelte-i18n';
 
 	export let items: any[];
 
@@ -63,10 +64,10 @@
 				success: () => {
 					$cart.clear();
 					window.location.href = `/orders/${orderID}`;
-					return 'Order placed!';
+					return $_('toast.order_place.success');
 				},
-				loading: 'Placing order...',
-				error: 'Failed to place order'
+				loading: $_('toast.order_place.loading'),
+				error: $_('toast.order_place.error')
 			}
 		);
 	}
@@ -80,13 +81,13 @@
 	>
 		<Button
 			class="w-[200px]"
-			disabled={$cart.items.length == 0 || !($user.loggedIn && $user.data.discord)}>Checkout</Button
+			disabled={$cart.items.length == 0 || !($user.loggedIn && $user.data.discord)}>{$_('store.checkout.button')}</Button
 		>
 	</Dialog.Trigger>
 	<Dialog.Content>
 		{#if state == 0}
 			<Dialog.Header>
-				<Dialog.Title>Select payment method</Dialog.Title>
+				<Dialog.Title>{$_('store.checkout.payment_method.title')}</Dialog.Title>
 			</Dialog.Header>
 			<div class="flex flex-col gap-[5px]">
 				<Button
@@ -97,7 +98,7 @@
 						shippingFee = 25000;
 					}}
 				>
-					Bank Transfer
+					{$_('store.checkout.payment_method.bank_transfer')}
 				</Button>
 				<Button
 					variant="outline"
@@ -107,7 +108,7 @@
 						shippingFee = 25000;
 					}}
 				>
-					Cash on Delivery
+					{$_('store.checkout.payment_method.cod')}
 				</Button>
 				<Dialog.Footer>
 					<Button
@@ -122,25 +123,25 @@
 			</div>
 		{:else if state == 1}
 			<Dialog.Header>
-				<Dialog.Title>Add shipping details</Dialog.Title>
+				<Dialog.Title>{$_('store.checkout.shipping.title')}</Dialog.Title>
 			</Dialog.Header>
 			<div class="grid grid-cols-4 items-center gap-4">
-				<Label class="text-right">Address</Label>
+				<Label class="text-right">{$_('store.checkout.shipping.address')}</Label>
 				<Textarea
 					class="col-span-3"
-					placeholder="Enter your shipping address"
+					placeholder={$_('store.checkout.shipping.address_placeholder')}
 					bind:value={address}
 				/>
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
-				<Label class="text-right">Recipient's name</Label>
-				<Input class="col-span-3" placeholder="Required" bind:value={recipientName} />
+				<Label class="text-right">{$_('store.checkout.shipping.recipient_name')}</Label>
+				<Input class="col-span-3" placeholder={$_('store.checkout.shipping.recipient_required')} bind:value={recipientName} />
 			</div>
 			<div class="grid grid-cols-4 items-center gap-4">
-				<Label class="text-right">Phone number</Label>
+				<Label class="text-right">{$_('store.checkout.shipping.phone_number')}</Label>
 				<div class="col-span-3 flex gap-[10px]">
 					<Input class="w-[50px] disabled:opacity-100" value="+84" disabled />
-					<Input bind:value={phone} type="tel" placeholder="Example: 978123456" />
+					<Input bind:value={phone} type="tel" placeholder={$_('store.checkout.shipping.phone_placeholder')} />
 				</div>
 			</div>
 			<Dialog.Footer>
@@ -155,12 +156,12 @@
 			</Dialog.Footer>
 		{:else if state == 2}
 			<Dialog.Header>
-				<Dialog.Title>Review your order</Dialog.Title>
+				<Dialog.Title>{$_('store.checkout.review.title')}</Dialog.Title>
 			</Dialog.Header>
 			<div class="flex flex-col gap-[10px]">
-				<h3 class="font-bold">Shipping Infomation</h3>
+				<h3 class="font-bold">{$_('store.checkout.review.shipping_info')}</h3>
 				<div class="flex text-sm">
-					<p>Recipient</p>
+					<p>{$_('store.checkout.review.recipient')}</p>
 					<p class="ml-auto">
 						<b>
 							{recipientName}
@@ -168,13 +169,13 @@
 					</p>
 				</div>
 				<div class="flex text-sm">
-					<p>Shipping Address</p>
+					<p>{$_('store.checkout.review.shipping_address')}</p>
 					<p class="ml-auto">
 						{address}
 					</p>
 				</div>
 				<div class="flex text-sm">
-					<p>Phone number</p>
+					<p>{$_('store.checkout.review.phone_number')}</p>
 					<p class="ml-auto">
 						+84 {phone.replace(/(\d{3})(\d{3})(\d{3})/, '$1 $2 $3')}
 					</p>
@@ -182,7 +183,7 @@
 			</div>
 			<hr />
 			<div class="flex flex-col gap-[10px]">
-				<h3 class="font-bold">Items</h3>
+				<h3 class="font-bold">{$_('store.checkout.review.items')}</h3>
 				{#each items as item}
 					<div class="flex text-sm">
 						<p>{item.name} x{$cart.getItem(item.id).quantity}</p>
@@ -199,7 +200,7 @@
 			<hr />
 			<div class="flex flex-col gap-[10px]">
 				<div class="flex text-sm">
-					<p>Subtotal</p>
+					<p>{$_('store.checkout.review.subtotal')}</p>
 					<p class="ml-auto">
 						<b>
 							{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
@@ -212,11 +213,11 @@
 					</p>
 				</div>
 				<div class="flex text-sm">
-					<p>Shipping Fee</p>
+					<p>{$_('store.checkout.review.shipping_fee')}</p>
 					<p class="ml-auto">
 						<b>
 							{#if shippingFee == 0}
-								Free
+								{$_('store.checkout.review.free')}
 							{:else}
 								{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
 									shippingFee
@@ -227,7 +228,7 @@
 				</div>
 			</div>
 			<div class="text-md flex font-bold">
-				<p>Total</p>
+				<p>{$_('store.checkout.review.total')}</p>
 				<p class="ml-auto">
 					<b>
 						{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(
@@ -241,16 +242,16 @@
 			</div>
 			<p class="text-sm italic text-gray-500">
 				{#if paymentMethod == 'Bank Transfer'}
-					Please do not close the payment window until you are redirected back to Demon List VN
+					{$_('store.checkout.review.bank_transfer_note')}
 				{:else if paymentMethod == 'COD'}
-					Payment will be collected upon delivery by our shipping partner
+					{$_('store.checkout.review.cod_note')}
 				{/if}
 			</p>
 			<Dialog.Footer>
 				{#if paymentMethod == 'Bank Transfer'}
-					<Button on:click={bankTransfer}>Proceed to Payment</Button>
+					<Button on:click={bankTransfer}>{$_('store.checkout.review.proceed_payment')}</Button>
 				{:else if paymentMethod == 'COD'}
-					<Button on:click={COD}>Place Order</Button>
+					<Button on:click={COD}>{$_('store.checkout.review.place_order')}</Button>
 				{/if}
 			</Dialog.Footer>
 		{/if}

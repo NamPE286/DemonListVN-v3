@@ -55,7 +55,12 @@
             "success": "Submission cancelled!",
             "error": "Failed to cancel submission."
         },
-        "order_restore": "Restoring your order..."
+        "order_restore": "Restoring your order...",
+        "order_place": {
+            "success": "Order placed!",
+            "loading": "Placing order...",
+            "error": "Failed to place order"
+        }
     },
     "context": {
         "copy_level_id": "Copy level's ID",
@@ -586,6 +591,56 @@
             "non_refundable": "Demon List VN Supporter roles are non-refundable.",
             "extension": "If you buy one while you still have an active roles, it will extend the duration in addition to any remaining time.",
             "duration": "1 Month = 30 Days."
+        }
+    },
+    "store": {
+        "title": "Store",
+        "view_cart": "View my cart",
+        "all_products": "All products",
+        "cart": {
+            "title": "Cart",
+            "discord_required": "You need to link your account to a Discord account in order to checkout. Go to Settings > Discord to link.",
+            "login_required": "You need to sign in to checkout.",
+            "product": "Product",
+            "qty": "Qty",
+            "amount": "Amount",
+            "action": "Action",
+            "total": "Total",
+            "remove_success": "Removed {product} from the cart.",
+            "empty": "No item in cart"
+        },
+        "checkout": {
+            "button": "Checkout",
+            "payment_method": {
+                "title": "Select payment method",
+                "bank_transfer": "Bank Transfer",
+                "cod": "Cash on Delivery"
+            },
+            "shipping": {
+                "title": "Add shipping details",
+                "address": "Address",
+                "address_placeholder": "Enter your shipping address",
+                "recipient_name": "Recipient's name",
+                "recipient_required": "Required",
+                "phone_number": "Phone number",
+                "phone_placeholder": "Example: 978123456"
+            },
+            "review": {
+                "title": "Review your order",
+                "shipping_info": "Shipping Information",
+                "recipient": "Recipient",
+                "shipping_address": "Shipping Address",
+                "phone_number": "Phone number",
+                "items": "Items",
+                "subtotal": "Subtotal",
+                "shipping_fee": "Shipping Fee",
+                "total": "Total",
+                "free": "Free",
+                "bank_transfer_note": "Please do not close the payment window until you are redirected back to Demon List VN",
+                "cod_note": "Payment will be collected upon delivery by our shipping partner",
+                "proceed_payment": "Proceed to Payment",
+                "place_order": "Place Order"
+            }
         }
     }
 }
