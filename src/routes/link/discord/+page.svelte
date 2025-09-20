@@ -2,6 +2,7 @@
 	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/client';
 	import { page } from '$app/stores';
+	import { _ } from 'svelte-i18n';
 
 	const token = $page.url.searchParams.get('token');
 
@@ -22,12 +23,12 @@
 				}
 			}),
 			{
-				loading: 'Linking your Discord account',
+				loading: $_('discord_link.loading'),
 				success: () => {
 					window.location.href = '/';
-					return 'Linked!';
+					return $_('discord_link.success');
 				},
-				error: 'Failed to link'
+				error: $_('discord_link.error')
 			}
 		);
 	}
