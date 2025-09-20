@@ -11,6 +11,17 @@
         "payment": {
             "no_player": "Không tìm thấy người chơi",
             "redirect": "Bạn sẽ được chuyển hướng đến cổng thanh toán của DLVN"
+        },
+        "player_edit": {
+            "uploading": "Đang tải lên...",
+            "success": "Đã tải lên! Sẽ mất một lúc để thấy sự thay đổi.",
+            "error": "Tải lên thất bại",
+            "save": {
+                "loading": "Đang lưu...",
+                "success": "Đã lưu!",
+                "error": "Lưu thất bại"
+            },
+            "name": "Tên chỉ được chứa chữ và số"
         }
     },
     "context": {
@@ -148,8 +159,8 @@
         "title": "Chỉnh sửa hồ sơ",
         "description": "Thay đổi hồ sơ của bạn tại đây",
         "name": "Tên",
-        "upload_avatar": "Đăng ảnh đại diện",
-        "upload_banner": "Đăng ảnh bìa",
+        "upload_avatar": "Đổi ảnh đại diện",
+        "upload_banner": "Đổi ảnh bìa",
         "border": "Viền",
         "background": "Nền",
         "reset": "Đặt lại",

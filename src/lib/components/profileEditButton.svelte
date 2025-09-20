@@ -65,9 +65,9 @@
 			};
 
 			toast.promise(handleUpload, {
-				loading: 'Uploading...',
-				success: 'Uploaded! It may take a while to take effect.	',
-				error: 'Upload failed.'
+				loading: $_('toast.player_edit.uploading'),
+				success: $_('toast.player_edit.success'),
+				error: $_('toast.player_edit.error')
 			});
 		} else {
 			toast.loading('Compressing image...');
@@ -94,9 +94,9 @@
 			};
 
 			toast.promise(handleUpload, {
-				loading: 'Uploading...',
-				success: 'Uploaded! It may take a while to take effect.	',
-				error: 'Upload failed.'
+				loading: $_('toast.player_edit.uploading'),
+				success: $_('toast.player_edit.success'),
+				error: $_('toast.player_edit.error')
 			});
 		}
 	}
@@ -126,9 +126,9 @@
 			};
 
 			toast.promise(handleUpload, {
-				loading: 'Uploading...',
-				success: 'Uploaded! It may take a while to take effect.	',
-				error: 'Upload failed.'
+				loading: $_('toast.player_edit.uploading'),
+				success: $_('toast.player_edit.success'),
+				error: $_('toast.player_edit.error')
 			});
 		} else {
 			const options = {
@@ -155,9 +155,9 @@
 			};
 
 			toast.promise(handleUpload, {
-				loading: 'Uploading...',
-				success: 'Uploaded! It may take a while to take effect.	',
-				error: 'Upload failed.'
+				loading: $_('toast.player_edit.uploading'),
+				success: $_('toast.player_edit.success'),
+				error: $_('toast.player_edit.error')
 			});
 		}
 	}
@@ -167,7 +167,7 @@
 		player.city = cityItem.value;
 
 		if (!/^[A-Za-z0-9]+$/.test(player.name)) {
-			toast.error('Name must contain only letters and numbers.');
+			toast.error($_('toast.player_edit.name'));
 			return;
 		}
 
@@ -180,11 +180,10 @@
 			},
 			body: JSON.stringify(player)
 		});
-
 		toast.promise(promise, {
-			loading: 'Saving...',
-			success: 'Saved!',
-			error: 'Failed to save.'
+			loading: $_('toast.player_edit.save.loading'),
+			success: $_('toast.player_edit.save.success'),
+			error: $_('toast.player_edit.save.error')
 		});
 
 		data = player;

@@ -11,6 +11,17 @@
         "payment": {
             "no_player": "Player not found",
             "redirect": "You will be redirected to our payment portal"
+        },
+        "player_edit": {
+            "uploading": "Uploading...",
+            "success": "Uploaded! It may take a while to take effect.",
+            "error": "Upload failed",
+            "save": {
+                "loading": "Saving...",
+                "success": "Saved!",
+                "error": "Failed to save"
+            },
+            "name": "Name must contain only letters and numbers."
         }
     },
     "context": {
