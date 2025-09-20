@@ -39,12 +39,13 @@
             "title": "Mục bắt buộc",
             "progress": "Tiến độ",
             "video": "Liên kết Video",
+            "raw": "Liên kết Video thô",
             "platform": "Nền tảng",
             "minimum": "Tối thiểu"
         },
         "optional": {
             "title": "Mục không bắt buộc",
-            "suggestion": "Rating đề xuất",
+            "suggestion": "Điểm đề xuất",
             "comment": "Bình luận"
         },
         "send": {
@@ -152,5 +153,25 @@
         "city": "Thành phố",
         "hide_profile": "Ẩn hồ sơ",
         "save": "Lưu thay đổi"
+    },
+    "record_detail": {
+        "tabs": {
+            "detail": "Chi tiết",
+            "death_count": "Số lần chết",
+            "share": "Chia sẻ",
+            "edit": "Chỉnh sửa",
+            "review": "Đánh giá"
+        },
+        "title": "Chi tiết bản ghi",
+        "raw": "Raw",
+        "submit": "Nộp lúc",
+        "device": "Thiết bị",
+        "progress": "Tiến độ",
+        "time": "Thời gian",
+        "rating": "Điểm đề xuất",
+        "rating_change": "Thay đổi điểm đề xuất",
+        "comment": "Bình luận",
+        "reviewed_by": "Đánh giá bởi",
+        "reviewer_cmt": "Bình luận của người đánh giá"
     }
 }

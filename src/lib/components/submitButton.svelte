@@ -243,7 +243,7 @@
 						trước khi nộp.<br />
 						- Điểm đề xuất là điểm của DLVN, không phải sao hay thứ hạng của level.
 						<br />
-						- Raw là video quay từ lúc bắt đầu đến kết thúc quá trình quay chưa bị chỉnh sửa.
+						- Video thô là video quay từ lúc bắt đầu đến kết thúc quá trình quay chưa bị chỉnh sửa.
 						<br />
 						- Sử dụng
 						<a href="https://github.com/NamPE286/DemonListVN-geode-mod/releases">
@@ -390,7 +390,7 @@
 						</div>
 					{/if}
 					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="name" class="text-right">{$_('submit.required.platform')}</Label>
+						<Label for="name" class="text-right">{$_('submit.required.raw')}</Label>
 						<Select.Root bind:selected={submission.mobile}>
 							<Select.Trigger class="col-span-3">
 								<Select.Value placeholder="Select a platform" />

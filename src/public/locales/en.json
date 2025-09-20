@@ -39,6 +39,7 @@
             "title": "Required fields",
             "progress": "Progress",
             "video": "Video's Link",
+            "raw": "Raw's Link",
             "platform": "Platform",
             "minimum": "Minimum"
         },
@@ -152,5 +153,25 @@
         "city": "City",
         "hide_profile": "Hide profile",
         "save": "Save changes"
+    },
+    "record_detail": {
+        "tabs": {
+            "detail": "Detail",
+            "death_count": "Death count",
+            "share": "Share",
+            "edit": "Edit",
+            "review": "Review"
+        },
+        "title": "Record's detail",
+        "raw": "Raw",
+        "submit": "Submitted on",
+        "device": "Device",
+        "progress": "Progress",
+        "time": "Time",
+        "rating": "Suggested rating",
+        "rating_change": "Change suggested rating",
+        "comment": "Comment",
+        "reviewed_by": "Reviewed by",
+        "reviewer_cmt": "Reviewer's comment"
     }
 }
