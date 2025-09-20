@@ -295,5 +295,74 @@
             "public": "Public",
             "create_button": "Create"
         }
+    },
+    "events": {
+        "ranked": "Ranked",
+        "supporter_only": "Supporter Only",
+        "starts_at": "Starts at",
+        "ended_at": "Ended at"
+    },
+    "cup": {
+        "tabs": {
+            "detail": "Detail",
+            "standing": "Standing",
+            "schedule": "Schedule"
+        },
+        "rounds": {
+            "round_of_16": "Round of 16",
+            "quarterfinals": "Quarterfinals",
+            "semifinals": "Semifinals",
+            "finals": "Finals"
+        }
+    },
+    "contest": {
+        "leaderboard": {
+            "rank": "Rank",
+            "player": "Player",
+            "total": "Total",
+            "penalty": "Penalty",
+            "jump_to_me": "Jump to me",
+            "frozen_notice": "The leaderboard will be frozen on",
+            "frozen_since": "The leaderboard has been frozen since",
+            "hidden_notice": "The leaderboard is hidden.",
+            "record_detail": "Record's Detail",
+            "submitted_at": "Submitted at",
+            "video_link": "Video's Link",
+            "raw": "Raw",
+            "not_provided": "(Not provided)",
+            "reject_reason": "Reject Reason",
+            "unverified_notice": "* This record legitimacy is not verified",
+            "rejected_notice": "* This record is not counted",
+            "refresh": {
+            "success": "Refreshed!",
+            "error": "Refresh failed",
+            "loading": "Refreshing..."
+            }
+        },
+        "alerts": {
+            "discord_required": "You need to link your account to a Discord account in order to submit. Go to Settings > Discord to link.",
+            "supporter_only": "This event is Supporter only."
+        },
+        "participate": {
+            "reward_claimed": "Reward claimed",
+            "cancel_participation": "Cancel participation",
+            "participated": "Participated",
+            "event_ended": "Event ended",
+            "not_enough_exp": "Not enough EXP ({minExp} EXP minimum)",
+            "discord_required": "Discord linking required",
+            "participate": "Participate",
+            "not_eligible": "Not eligible",
+            "cancel_confirm": {
+                "title": "Cancel?",
+                "description": "This action cannot be undone.",
+                "proceed": "Proceed"
+            },
+            "participate_dialog": {
+                "title": "Participate",
+                "proof_placeholder": "Provide proof",
+                "message_placeholder": "Message (optional)",
+                "continue": "Continue"
+            }
+        }
     }
 }

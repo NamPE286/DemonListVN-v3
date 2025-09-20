@@ -295,5 +295,74 @@
             "public": "Công khai",
             "create_button": "Tạo"
         }
+    },
+    "events": {
+        "ranked": "Có xếp hạng",
+        "supporter_only": "Chỉ dành cho Supporter",
+        "starts_at": "Bắt đầu lúc",
+        "ended_at": "Kết thúc lúc"
+    },
+    "cup": {
+        "tabs": {
+            "detail": "Chi tiết",
+            "standing": "Bảng xếp hạng",
+            "schedule": "Lịch trình"
+        },
+        "rounds": {
+            "round_of_16": "Vòng 16",
+            "quarterfinals": "Tứ kết",
+            "semifinals": "Bán kết",
+            "finals": "Chung kết"
+        }
+    },
+    "contest": {
+        "leaderboard": {
+            "rank": "Hạng",
+            "player": "Người chơi",
+            "total": "Tổng",
+            "penalty": "Phạt",
+            "jump_to_me": "Nhảy đến tôi",
+            "frozen_notice": "Bảng xếp hạng sẽ bị đóng băng vào",
+            "frozen_since": "Bảng xếp hạng đã bị đóng băng từ",
+            "hidden_notice": "Bảng xếp hạng bị ẩn.",
+            "record_detail": "Chi tiết bản ghi",
+            "submitted_at": "Nộp lúc",
+            "video_link": "Liên kết video",
+            "raw": "Raw",
+            "not_provided": "(Không cung cấp)",
+            "reject_reason": "Lý do từ chối",
+            "unverified_notice": "* Tính hợp lệ của bản ghi này chưa được xác minh",
+            "rejected_notice": "* Bản ghi này không được tính",
+            "refresh": {
+                "success": "Đã làm mới!",
+                "error": "Làm mới thất bại",
+                "loading": "Đang làm mới..."
+            }
+        },
+        "alerts": {
+            "discord_required": "Bạn cần liên kết tài khoản với Discord để có thể nộp bài. Vào Cài đặt > Discord để liên kết.",
+            "supporter_only": "Sự kiện này chỉ dành cho Supporter."
+        },
+        "participate": {
+            "reward_claimed": "Đã nhận phần thưởng",
+            "cancel_participation": "Huỷ tham gia",
+            "participated": "Đã tham gia",
+            "event_ended": "Sự kiện đã kết thúc",
+            "not_enough_exp": "Không đủ EXP (tối thiểu {minExp} EXP)",
+            "discord_required": "Cần liên kết Discord",
+            "participate": "Tham gia",
+            "not_eligible": "Không đủ điều kiện",
+            "cancel_confirm": {
+            "title": "Huỷ?",
+            "description": "Hành động này không thể hoàn tác.",
+            "proceed": "Tiếp tục"
+            },
+            "participate_dialog": {
+            "title": "Tham gia",
+            "proof_placeholder": "Cung cấp bằng chứng",
+            "message_placeholder": "Tin nhắn (tuỳ chọn)",
+            "continue": "Tiếp tục"
+            }
+        }
     }
 }

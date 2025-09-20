@@ -7,6 +7,7 @@
 	import { toast } from 'svelte-sonner';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { Textarea } from '$lib/components/ui/textarea';
+	import { _ } from 'svelte-i18n';
 
 	export let data: any;
 
@@ -109,48 +110,48 @@
 			{#if rewardState == 0}
 				<Skeleton class="h-[35px] w-[200px]" />
 			{:else if rewardState == 1}
-				<Button class="w-[200px]" disabled>Reward claimed</Button>
+				<Button class="w-[200px]" disabled>{$_('contest.participate.reward_claimed')}</Button>
 			{:else if rewardState == 2}
 				{#if !data.isRanked}
 					<Dialog.Root bind:open={cancelOpened}>
 						<Dialog.Trigger>
-							<Button class="w-[200px]" variant="destructive">Cancel participation</Button>
+							<Button class="w-[200px]" variant="destructive">{$_('contest.participate.cancel_participation')}</Button>
 						</Dialog.Trigger>
 						<Dialog.Content>
 							<Dialog.Header>
-								<Dialog.Title>Cancel?</Dialog.Title>
-								<Dialog.Description>This action cannot be undone.</Dialog.Description>
+								<Dialog.Title>{$_('contest.participate.cancel_confirm.title')}</Dialog.Title>
+								<Dialog.Description>{$_('contest.participate.cancel_confirm.description')}</Dialog.Description>
 							</Dialog.Header>
-							<Button variant="destructive" on:click={cancelProof}>Proceed</Button>
+							<Button variant="destructive" on:click={cancelProof}>{$_('contest.participate.cancel_confirm.proceed')}</Button>
 						</Dialog.Content>
 					</Dialog.Root>
 				{:else}
-					<Button class="w-[200px]" disabled>Participated</Button>
+					<Button class="w-[200px]" disabled>{$_('contest.participate.participated')}</Button>
 				{/if}
 			{:else if rewardState == 3}
-				<Button class="w-[200px]" disabled>Event ended</Button>
+				<Button class="w-[200px]" disabled>{$_('contest.participate.event_ended')}</Button>
 			{:else if rewardState == 4}
 				{#if $user.data.exp < data.minExp}
-					<Button class="w-[300px]" disabled>Not enough EXP ({data.minExp} EXP minimum)</Button>
+					<Button class="w-[300px]" disabled>{$_('contest.participate.not_enough_exp', { values: { minExp: data.minExp } })}</Button>
 				{:else if !$user.data.discord}
-					<Button class="w-[300px]" disabled>Discord linking required</Button>
+					<Button class="w-[300px]" disabled>{$_('contest.participate.discord_required')}</Button>
 				{:else if isEventEnded()}
-					<Button class="w-[200px]" disabled>Event ended</Button>
+					<Button class="w-[200px]" disabled>{$_('contest.participate.event_ended')}</Button>
 				{:else}
 					<Dialog.Root bind:open={claimOpened}>
 						<Dialog.Trigger>
-							<Button class="w-[200px]">Participate</Button>
+							<Button class="w-[200px]">{$_('contest.participate.participate')}</Button>
 						</Dialog.Trigger>
 						<Dialog.Content>
 							<Dialog.Header>
-								<Dialog.Title>Participate</Dialog.Title>
+								<Dialog.Title>{$_('contest.participate.participate_dialog.title')}</Dialog.Title>
 							</Dialog.Header>
 							{#if data.needProof}
-								<Textarea class="h-[125px]" placeholder="Provide proof" bind:value={proof} />
+								<Textarea class="h-[125px]" placeholder={$_('contest.participate.participate_dialog.proof_placeholder')} bind:value={proof} />
 							{:else}
-								<Textarea class="h-[125px]" placeholder="Message (optional)" bind:value={proof} />
+								<Textarea class="h-[125px]" placeholder={$_('contest.participate.participate_dialog.message_placeholder')} bind:value={proof} />
 							{/if}
-							<Button on:click={claimReward}>Continue</Button>
+							<Button on:click={claimReward}>{$_('contest.participate.participate_dialog.continue')}</Button>
 						</Dialog.Content>
 					</Dialog.Root>
 				{/if}
@@ -158,7 +159,7 @@
 		</div>
 	{:else}
 		<div class="md-[15px] mb-[15px] mt-[15px] flex justify-center">
-			<Button class="w-[200px]" disabled>Not eligible</Button>
+			<Button class="w-[200px]" disabled>{$_('contest.participate.not_eligible')}</Button>
 		</div>
 	{/if}
 {/if}

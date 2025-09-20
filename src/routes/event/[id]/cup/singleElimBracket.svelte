@@ -1,15 +1,16 @@
 <script lang="ts">
 	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import { _ } from 'svelte-i18n';
 
 	export let data;
 </script>
 
 <div class="w-[1800px]">
 	<div class="mb-[10px] flex w-full gap-[50px] pl-[10px] xl:pl-[200px]">
-		<div class="w-[250px] text-center">Round of 16</div>
-		<div class="w-[250px] text-center">Quarterfinals</div>
-		<div class="w-[250px] text-center">Semifinals</div>
-		<div class="w-[250px] text-center">Finals</div>
+		<div class="w-[250px] text-center">{$_('cup.rounds.round_of_16')}</div>
+		<div class="w-[250px] text-center">{$_('cup.rounds.quarterfinals')}</div>
+		<div class="w-[250px] text-center">{$_('cup.rounds.semifinals')}</div>
+		<div class="w-[250px] text-center">{$_('cup.rounds.finals')}</div>
 	</div>
 	<div class="flex items-center pl-[10px] xl:pl-[200px]">
 		<div class="flex flex-col gap-[20px]">

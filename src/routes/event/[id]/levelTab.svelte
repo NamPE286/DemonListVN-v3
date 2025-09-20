@@ -6,6 +6,7 @@
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { ExclamationTriangle } from 'svelte-radix';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import { _ } from 'svelte-i18n';
 
 	export let levels: (Level | null)[];
 	export let event: any;
@@ -40,17 +41,16 @@
 		<Alert.Root class="text-yellow-400">
 			<Alert.Title class="flex items-center gap-[10px]">
 				<ExclamationTriangle size={15} />
-				You need to link your account to a Discord account in order to submit. Go to {'Settings > Discord'}
-				to link.</Alert.Title
-			>
+				{$_('contest.alerts.discord_required')}
+			</Alert.Title>
 		</Alert.Root>
 	{/if}
 	{#if event.isSupporterOnly && !isActive($user.data.supporterUntil)}
 		<Alert.Root class="text-yellow-400">
 			<Alert.Title class="flex items-center gap-[10px]">
 				<ExclamationTriangle size={15} />
-				This event is Supporter only.</Alert.Title
-			>
+				{$_('contest.alerts.supporter_only')}
+			</Alert.Title>
 		</Alert.Root>
 	{/if}
 

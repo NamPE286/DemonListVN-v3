@@ -17,6 +17,7 @@
 	import { ExclamationTriangle } from 'svelte-radix';
 	import { flip } from 'svelte/animate';
 	import { cn } from '$lib/utils.js';
+	import { _ } from 'svelte-i18n';
 
 	export let levels: (Level | null)[];
 	export let event: any;
@@ -112,9 +113,9 @@
 
 		if (noti) {
 			toast.promise(upd, {
-				success: 'Refreshed!',
-				error: 'Failed to refresh',
-				loading: 'Refreshing...'
+				success: $_('contest.leaderboard.refresh.success'),
+				error: $_('contest.leaderboard.refresh.error'),
+				loading: $_('contest.leaderboard.refresh.loading')
 			});
 		} else {
 			await upd();
@@ -242,18 +243,18 @@
 		<Alert.Title class="flex items-center gap-[10px]">
 			<ExclamationTriangle size={15} />
 			{#if new Date(event.freeze) > new Date()}
-				The leaderboard will be frozen on {new Date(event.freeze).toLocaleString('vi-vn')}.
+				{$_('contest.leaderboard.frozen_notice')} {new Date(event.freeze).toLocaleString('vi-vn')}.
 			{:else if event.freeze == event.start}
-				The leaderboard is hidden.
+				{$_('contest.leaderboard.hidden_notice')}
 			{:else}
-				The leaderboard has been frozen since {new Date(event.freeze).toLocaleString('vi-vn')}.
+				{$_('contest.leaderboard.frozen_since')} {new Date(event.freeze).toLocaleString('vi-vn')}.
 			{/if}
 		</Alert.Title>
 	</Alert.Root>
 {/if}
 <div class="mb-[10px] flex justify-center gap-[10px]">
 	<a href="#me">
-		<Button class="w-[200px]" variant="outline">Jump to me</Button>
+		<Button class="w-[200px]" variant="outline">{$_('contest.leaderboard.jump_to_me')}</Button>
 	</a>
 	<Button
 		on:click={exportToCSV}
@@ -284,10 +285,10 @@
 	<Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
 		<Table.Header>
 			<Table.Row>
-				<Table.Head class="w-[100px]">Rank</Table.Head>
-				<Table.Head class="min-w-[200px]">Player</Table.Head>
-				<Table.Head class="w-[75px] text-center">Total</Table.Head>
-				<Table.Head class="w-[75px] text-center">Penalty</Table.Head>
+				<Table.Head class="w-[100px]">{$_('contest.leaderboard.rank')}</Table.Head>
+				<Table.Head class="min-w-[200px]">{$_('contest.leaderboard.player')}</Table.Head>
+				<Table.Head class="w-[75px] text-center">{$_('contest.leaderboard.total')}</Table.Head>
+				<Table.Head class="w-[75px] text-center">{$_('contest.leaderboard.penalty')}</Table.Head>
 				{#each levels as level, index}
 					<Table.Head class="w-[75px] text-center">
 						<Tooltip.Root>
@@ -322,10 +323,10 @@
 					<Table.Cell class="min-w-[200px]">
 						{#if $user.loggedIn && player.uid == $user.data.uid}
 							<div id="me">
-								<PlayerHoverCard {player} showTitle={true} titleType='elo' />
+								<PlayerHoverCard {player} showTitle={true} titleType="elo" />
 							</div>
 						{:else}
-							<PlayerHoverCard {player} showTitle={true} titleType='elo' />
+							<PlayerHoverCard {player} showTitle={true} titleType="elo" />
 						{/if}
 					</Table.Cell>
 					<Table.Cell class="w-[75px] text-center font-bold">
@@ -393,46 +394,46 @@
 										</Dialog.Trigger>
 										<Dialog.Content>
 											<Dialog.Header>
-												<Dialog.Title>Record's Detail</Dialog.Title>
+												<Dialog.Title>{$_('contest.leaderboard.record_detail')}</Dialog.Title>
 											</Dialog.Header>
 											<div class="flex flex-col gap-0">
 												<section>
-													<span class="font-bold">Submitted at: </span>
+													<span class="font-bold">{$_('contest.leaderboard.submitted_at')}: </span>
 													{new Date(record.created_at).toLocaleString('vi-vn')}
 												</section>
 												<section>
-													<span class="font-bold">Video's Link: </span><a
+													<span class="font-bold">{$_('contest.leaderboard.video_link')}: </span><a
 														href={record.videoLink}
 														class="text-[#95bdf7]"
 														target="_blank">Link</a
 													>
 												</section>
 												<section>
-													<span class="font-bold">Raw: </span>
+													<span class="font-bold">{$_('contest.leaderboard.raw')}: </span>
 													{#if record.raw}
 														<a href={record.raw} class="text-[#95bdf7]" target="_blank">Link</a>
 													{:else}
-														(Not provided)
+														{$_('contest.leaderboard.not_provided')}
 													{/if}
 												</section>
 												{#if record.accepted === null}
 													<section class="mt-[10px] text-[13px] opacity-50">
-														* This record legitimacy is not verified
+														{$_('contest.leaderboard.unverified_notice')}
 													</section>
 												{:else if record.accepted === false}
 													<section>
-														<span class="font-bold">Reject Reason: </span>
+														<span class="font-bold">{$_('contest.leaderboard.reject_reason')}: </span>
 														{record.rejectReason}
 													</section>
 													<section class="mt-[10px] text-[13px] opacity-50">
-														* This record is not counted
+														{$_('contest.leaderboard.rejected_notice')}
 													</section>
 												{/if}
 
 												{#if $user.loggedIn && $user.data.isAdmin && updateData}
 													<div class="grid gap-4 py-4">
 														<div class="grid grid-cols-4 items-center gap-4">
-															<Label for="name" class="text-right">Submitted at</Label>
+															<Label for="name" class="text-right">{$_('contest.leaderboard.submitted_at')}</Label>
 															<Input
 																type="datetime-local"
 																bind:value={updateData.created_at}
@@ -448,20 +449,20 @@
 															/>
 														</div>
 														<div class="grid grid-cols-4 items-center gap-4">
-															<Label for="name" class="text-right">Video's Link</Label>
+															<Label for="name" class="text-right">{$_('contest.leaderboard.video_link')}</Label>
 															<Input bind:value={updateData.videoLink} class="col-span-3" />
 														</div>
 														<div class="grid grid-cols-4 items-center gap-4">
 															<Label
 																for="name"
 																placeholder="Leave blank if not rejected"
-																class="text-right">Reject Reason</Label
+																class="text-right">{$_('contest.leaderboard.reject_reason')}</Label
 															>
 															<Input bind:value={updateData.rejectReason} class="col-span-3" />
 														</div>
 														{#if levels[index] && levels[index].needRaw}
 															<div class="grid grid-cols-4 items-center gap-4">
-																<Label for="name" class="text-right">Raw</Label>
+																<Label for="name" class="text-right">{$_('contest.leaderboard.raw')}</Label>
 																<Input bind:value={updateData.raw} class="col-span-3" />
 															</div>
 														{/if}
