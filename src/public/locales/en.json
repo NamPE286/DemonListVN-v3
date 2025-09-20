@@ -13,6 +13,10 @@
             "redirect": "You will be redirected to our payment portal"
         }
     },
+    "context": {
+        "copy_level_id": "Copy level's ID",
+        "copy_thumbnail": "Copy thumbnail image URL"
+    },
     "nav": {
         "classic": "Classic",
         "platformer": "Platformer",
@@ -173,5 +177,13 @@
         "comment": "Comment",
         "reviewed_by": "Reviewed by",
         "reviewer_cmt": "Reviewer's comment"
+    },
+    "search": {
+        "button": "Search",
+        "placeholder": "Type and press Enter to search...",
+        "no_result": "No results found",
+        "dlvn": "Levels from Demon List VN",
+        "gd": "Levels from Geometry Dash",
+        "players": "Players"
     }
 }

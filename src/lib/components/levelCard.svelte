@@ -134,7 +134,7 @@
 							on:click={async () => {
 								await navigator.clipboard.writeText(String(level.id));
 								toast.success(get(_)("toast.clipboard"));
-							}}>Copy level ID</ContextMenu.Item
+							}}>{$_("context.copy_level_id")}</ContextMenu.Item
 						>
 						<ContextMenu.Item
 							inset
@@ -143,7 +143,7 @@
 									`https://img.youtube.com/vi/${level.videoID}/0.jpg`
 								);
 								toast.success(get(_)("toast.clipboard"));
-							}}>Copy thumbnail image URL</ContextMenu.Item
+							}}>{$_("context.copy_thumbnail")}</ContextMenu.Item
 						>
 					</ContextMenu.Content>
 				</ContextMenu.Root>

@@ -7,6 +7,7 @@
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { toast } from 'svelte-sonner';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import { _ } from 'svelte-i18n';
 
 	export let open: boolean;
 	export let value: string = '';
@@ -114,18 +115,18 @@
 />
 
 <Command.Dialog bind:open>
-	<Command.Input bind:value placeholder="Type and press Enter to search..." disabled={state != 0} />
+	<Command.Input bind:value placeholder={$_("search.placeholder")} disabled={state != 0} />
 	<Command.List>
 		{#if state != 0}
 			{#if state != 1}
-				<Command.Empty>No results found.</Command.Empty>
+				<Command.Empty>{$_("search.no_result")}</Command.Empty>
 			{:else}
 				<Command.Empty>
 					<Loading inverted={true} />
 				</Command.Empty>
 			{/if}
 			{#if result.levels.length}
-				<Command.Group heading="Levels from Demon List VN">
+				<Command.Group heading={$_("search.dlvn")}>
 					{#each result.levels as item}
 						<ContextMenu.Root>
 							<ContextMenu.Trigger>
@@ -167,7 +168,7 @@
 				</Command.Group>
 			{/if}
 			{#if result.gdBrowserLevels.length}
-				<Command.Group heading="Levels from Geometry Dash">
+				<Command.Group heading={$_("search.gd")}>
 					{#each result.gdBrowserLevels as item}
 						<ContextMenu.Root>
 							<ContextMenu.Trigger>
@@ -186,7 +187,7 @@
 									on:click={async () => {
 										await navigator.clipboard.writeText(item.id);
 										toast.success('Copied to clipboard!');
-									}}>Copy level's ID</ContextMenu.Item
+									}}>{$_("context.copy_level_id")}</ContextMenu.Item
 								>
 							</ContextMenu.Content>
 						</ContextMenu.Root>
@@ -194,7 +195,7 @@
 				</Command.Group>
 			{/if}
 			{#if result.players.length}
-				<Command.Group heading="Players">
+				<Command.Group heading={$_("search.players")}>
 					{#each result.players as item}
 						<a href={`/player/${item.uid}`} data-sveltekit-preload-data="tap">
 							<Command.Item>

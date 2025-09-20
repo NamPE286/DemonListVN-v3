@@ -13,6 +13,10 @@
             "redirect": "Bạn sẽ được chuyển hướng đến cổng thanh toán của DLVN"
         }
     },
+    "context": {
+        "copy_level_id": "Sao chép ID level",
+        "copy_thumbnail": "Sao chép liên kết ảnh"
+    },
     "nav": {
         "classic": "Classic",
         "platformer": "Platformer",
@@ -173,5 +177,13 @@
         "comment": "Bình luận",
         "reviewed_by": "Đánh giá bởi",
         "reviewer_cmt": "Bình luận của người đánh giá"
+    },
+    "search": {
+        "button": "Tìm kiếm",
+        "placeholder": "Nhập và bấm Enter để tìm kiếm...",
+        "no_result": "Không có kết quả",
+        "dlvn": "Levels từ Demon List VN",
+        "gd": "Levels từ Geometry Dash",
+        "players": "Người chơi"
     }
 }
