@@ -385,12 +385,12 @@
 					</div>
 					{#if !level || !level.flTop || level.rating}
 						<div class="grid grid-cols-4 items-center gap-4">
-							<Label for="name" class="text-right">Raw</Label>
+							<Label for="name" class="text-right">{$_('submit.required.raw')}</Label>
 							<Input id="name" bind:value={submission.raw} class="col-span-3" />
 						</div>
 					{/if}
 					<div class="grid grid-cols-4 items-center gap-4">
-						<Label for="name" class="text-right">{$_('submit.required.raw')}</Label>
+						<Label for="name" class="text-right">{$_('submit.required.platform')}</Label>
 						<Select.Root bind:selected={submission.mobile}>
 							<Select.Trigger class="col-span-3">
 								<Select.Value placeholder="Select a platform" />
