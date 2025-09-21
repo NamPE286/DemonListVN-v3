@@ -75,7 +75,16 @@
         "mod": "Mod",
         "rules": "Luật",
         "store": "Cửa hàng",
-        "supporter": "Ủng hộ"
+        "supporter": "Ủng hộ",
+        "sign_in": "Đăng nhập"
+    },
+    "dropdown": {
+        "profile": "Hồ sơ",
+        "submissions": "Bản nộp",
+        "orders": "Đơn hàng",
+        "clan": "Hội",
+        "overwatch": "Overwatch",
+        "sign_out": "Đăng xuất"
     },
     "submit": {
         "button": "Nộp",

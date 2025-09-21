@@ -235,7 +235,7 @@
 			{/if}
 			{#if $user.checked && isVisible}
 				{#if !$user.loggedIn}
-					<Button variant="outline" on:click={signIn}>Sign In</Button>
+					<Button variant="outline" on:click={signIn}>{$_("nav.sign_in")}</Button>
 				{:else}
 					<SubmitButton />
 					<NotificationButton />
@@ -271,23 +271,23 @@
 							</DropdownMenu.Label>
 							<DropdownMenu.Separator />
 							<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
-								>Profile</DropdownMenu.Item
+								>{$_('dropdown.profile')}</DropdownMenu.Item
 							>
 							<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
-								>Submissions</DropdownMenu.Item
+								>{$_('dropdown.submissions')}</DropdownMenu.Item
 							>
-							<DropdownMenu.Item on:click={() => goto(`/orders`)}>Orders</DropdownMenu.Item>
+							<DropdownMenu.Item on:click={() => goto(`/orders`)}>{$_('dropdown.orders')}</DropdownMenu.Item>
 							{#if $user.data.clan}
 								<DropdownMenu.Item on:click={() => goto(`/clan/${$user.data.clan}`)}
-									>Clan</DropdownMenu.Item
+									>{$_('dropdown.clan')}</DropdownMenu.Item
 								>
 							{/if}
 							{#if $user.data.isTrusted || $user.data.isAdmin}
-								<DropdownMenu.Item on:click={() => goto(`/overwatch`)}>Overwatch</DropdownMenu.Item>
+								<DropdownMenu.Item on:click={() => goto(`/overwatch`)}>{$_('dropdown.overwatch')}</DropdownMenu.Item>
 							{/if}
 							<DropdownMenu.Separator />
 							<DropdownMenu.Item on:click={signOut}>
-								<span style="color: red">Sign out</span>
+								<span style="color: red">{$_('dropdown.sign_out')}</span>
 							</DropdownMenu.Item>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>

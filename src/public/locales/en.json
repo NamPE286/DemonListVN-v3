@@ -75,7 +75,16 @@
         "mod": "Mod",
         "rules": "Rules",
         "store": "Store",
-        "supporter": "Support Us"
+        "supporter": "Support Us",
+        "sign_in": "Sign In"
+    },
+    "dropdown": {
+        "profile": "Profile",
+        "submissions": "Submissions", 
+        "orders": "Orders",
+        "clan": "Clan",
+        "overwatch": "Overwatch",
+        "sign_out": "Sign out"
     },
     "submit": {
         "button": "Submit",
