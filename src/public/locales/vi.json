@@ -130,8 +130,7 @@
         "tabs": {
             "general": "Chung",
             "api": "API",
-            "sub": "Gói",
-            "discord": "Discord"
+            "sub": "Gói"
         },
         "general": {
             "theme": {
@@ -170,9 +169,13 @@
             "active_until": "Có hiệu lực đến",
             "expired": "Hết hạn"
         },
-        "discord": {
+        "account": {
             "linked": "Đã liên kết",
-            "link": "Liên kết tài khoản"
+            "link": "Liên kết tài khoản",
+            "pointercrate": {
+                "title": "Liên kết tài khoản Pointercrate",
+                "placeholder": "Nhập access token Pointercrate"
+            }
         }
     },
     "heatmap": {
@@ -411,6 +414,11 @@
     },
     "discord_link": {
         "loading": "Đang liên kết tài khoản Discord của bạn",
+        "success": "Đã liên kết!",
+        "error": "Liên kết thất bại"
+    },
+    "pointercrate_link": {
+        "loading": "Đang liên kết tài khoản Pointercrate của bạn",
         "success": "Đã liên kết!",
         "error": "Liên kết thất bại"
     },

@@ -80,7 +80,7 @@
     },
     "dropdown": {
         "profile": "Profile",
-        "submissions": "Submissions", 
+        "submissions": "Submissions",
         "orders": "Orders",
         "clan": "Clan",
         "overwatch": "Overwatch",
@@ -170,9 +170,13 @@
             "active_until": "Active until",
             "expired": "Expired"
         },
-        "discord": {
+        "account": {
             "linked": "Linked",
-            "link": "Link account"
+            "link": "Link account",
+            "pointercrate": {
+                "title": "Link Pointercrate account",
+                "placeholder": "Enter Pointercrate access token"
+            }
         }
     },
     "heatmap": {
@@ -411,6 +415,11 @@
     },
     "discord_link": {
         "loading": "Linking your Discord account",
+        "success": "Linked!",
+        "error": "Failed to link"
+    },
+    "pointercrate_link": {
+        "loading": "Linking your Pointercrate account",
         "success": "Linked!",
         "error": "Failed to link"
     },
