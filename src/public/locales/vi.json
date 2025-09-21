@@ -453,7 +453,11 @@
         "progress": "Tiến độ",
         "time": "Thời gian",
         "queue_no": "Số thứ tự",
-        "forwarded": "Đã chuyển tiếp"
+        "forwarded": "Đã chuyển tiếp",
+        "cancel": {
+            "title": "Huỷ bản nộp?",
+            "description": "Hành động này không thể hoàn tác."
+        }
     },
     "home": {
         "newest_dl": "Levels mới nhất từ Demon List",

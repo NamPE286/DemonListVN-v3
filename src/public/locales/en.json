@@ -454,7 +454,11 @@
         "progress": "Progress",
         "time": "Time",
         "queue_no": "Queue no.",
-        "forwarded": "Forwarded"
+        "forwarded": "Forwarded",
+        "cancel": {
+            "title": "Cancel submission?",
+            "description": "This action cannot be undone."
+        }
     },
     "home": {
         "newest_dl": "Newest levels from Demon List",
