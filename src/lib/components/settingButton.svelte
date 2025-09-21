@@ -378,7 +378,7 @@
 				{#if $user.loggedIn}
 					{#if $user.data.pointercrate}
 						<Button class="w-full" variant="outline" disabled
-							>{$_('settings.account.linked')} ({$user.data.pointercrate})</Button
+							>{$_('settings.account.linked')}</Button
 						>
 					{:else}
 						<Dialog.Root bind:open={open1}>
