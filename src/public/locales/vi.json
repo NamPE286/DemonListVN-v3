@@ -474,7 +474,11 @@
         "action": "Hành động",
         "store_items": "Sản phẩm cửa hàng",
         "restore": "Khôi phục",
-        "detail": "Chi tiết"
+        "detail": "Chi tiết",
+        "cancel": {
+            "confirm": "Huỷ đơn hàng này?",
+            "loading": "Đang huỷ..."
+        }
     },
     "order_detail": {
         "title": "Chi tiết đơn hàng",

@@ -28,11 +28,11 @@
 	}
 
 	function cancel() {
-		if (!confirm('Cancel this order?')) {
+		if (!confirm($_('orders.cancel.confirm'))) {
 			return;
 		}
 
-		toast.loading('Cancelling...');
+		toast.loading($_('orders.cancel.loading'));
 		window.location.href = `${import.meta.env.VITE_API_URL}/payment/cancelled?orderCode=${data.id}`;
 	}
 

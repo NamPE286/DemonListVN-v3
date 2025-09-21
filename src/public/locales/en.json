@@ -475,7 +475,11 @@
         "action": "Action",
         "store_items": "Store Item(s)",
         "restore": "Restore",
-        "detail": "Detail"
+        "detail": "Detail",
+        "cancel": {
+            "confirm": "Cancel this order?",
+            "loading": "Cancelling..."
+        }
     },
     "order_detail": {
         "title": "Order Details",
