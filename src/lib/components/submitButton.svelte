@@ -331,9 +331,9 @@
 								type="number"
 								inputmode="numeric"
 								bind:value={submission.progress}
-								placeholder={level
+								placeholder={level.rating
 									? `${$_('submit.required.minimum')} ${level.minProgress}%`
-									: `{$_('submit.required.minimum')} 0%`}
+									: `${$_('submit.required.minimum')} 100%`}
 								class="col-span-3"
 							/>
 						</div>
