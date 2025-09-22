@@ -70,7 +70,7 @@
 </script>
 
 <svelte:head>
-	<title>Thẻ {data.name} - Demon List VN</title>
+	<title>{data.name} - Demon List VN</title>
 </svelte:head>
 
 <div
