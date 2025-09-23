@@ -269,11 +269,11 @@
 				<Alert.Description>
 					{#if $locale == 'vi'}
 						Bản nộp của <a class="underline" href="/supporter">Supporter</a> được ưu tiên duyệt. Những
-						bản nộp này đuọc coi như nộp sớm hơn 7 ngày (bỏ qua khoảng 150 bản nộp khác).
+						bản nộp này đuọc coi như nộp sớm hơn 30 ngày (bỏ qua khoảng hơn 1 nghìn bản nộp khác).
 					{:else}
 						<a class="underline" href="/supporter">Supporters'</a> submissions are prioritized in the
-						review queue. Their records are treated as if they were submitted 7 days earlier (skip ahead
-						by about 150 submissions).
+						review queue. Their records are treated as if they were submitted 30 days earlier (skip ahead
+						by about 1K+ submissions).
 					{/if}
 				</Alert.Description>
 			</Alert.Root>
