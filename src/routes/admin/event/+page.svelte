@@ -68,8 +68,6 @@
 			event.end = convertTime(event.end);
 			event.created_at = convertTime(event.created_at);
 			event.freeze = convertTime(event.freeze);
-
-			console.log(event);
 		} catch {
 			state = State.NO_EVENT;
 		}
