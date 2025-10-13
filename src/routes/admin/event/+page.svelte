@@ -42,7 +42,19 @@
 		priority: 0
 	};
 
+	function convertTime(x: string) {
+		if (!x) {
+			return '';
+		}
+
+		const d = new Date(x);
+		d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+
+		return d.toISOString().slice(0, 16);
+	}
+
 	async function fetchEvent() {
+		console.log(event.id);
 		if (!event.id) {
 			state = State.NEW_EVENT;
 			return;
@@ -52,17 +64,18 @@
 			event = await (await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}`)).json();
 			state = State.EDIT_EVENT;
 
+			event.start = convertTime(event.start);
+			event.end = convertTime(event.end);
+			event.created_at = convertTime(event.created_at);
+			event.freeze = convertTime(event.freeze);
+
 			console.log(event);
 		} catch {
 			state = State.NO_EVENT;
 		}
 	}
 
-	async function addEvent() {
-		if (!confirm(`Add ${event.title} event?`)) {
-			return;
-		}
-
+	function validate() {
 		const missing: string[] = [];
 
 		if (!event.title || String(event.title).trim() === '') {
@@ -78,8 +91,7 @@
 		if (minExpRaw === '' || minExpRaw === null || minExpRaw === undefined) {
 			missing.push('Min EXP');
 		} else if (isNaN(Number(minExpRaw))) {
-			toast.error('Min EXP must be a number');
-			return;
+			throw new Error('Min EXP must be a number');
 		}
 
 		const priorityRaw: any = event.priority;
@@ -87,22 +99,26 @@
 		if (priorityRaw === '' || priorityRaw === null || priorityRaw === undefined) {
 			missing.push('Priority');
 		} else if (isNaN(Number(priorityRaw))) {
-			toast.error('Priority must be a number');
-			return;
+			throw new Error('Priority must be a number');
 		}
 
 		if (missing.length) {
-			toast.error(`Missing required fields: ${missing.join(', ')}`);
-			return;
+			throw new Error(`Missing required fields: ${missing.join(', ')}`);
 		}
 
 		if (event.data && typeof event.data === 'string') {
 			try {
 				event.data = JSON.parse(event.data);
 			} catch (e) {
-				toast.error('Data must be valid JSON');
-				return;
+				throw new Error('Data must be valid JSON');
 			}
+		}
+
+		event.minExp = Number(event.minExp);
+		event.priority = Number(event.priority);
+
+		if (event.exp !== undefined && event.exp !== null) {
+			event.exp = Number(event.exp);
 		}
 
 		if (event.created_at) {
@@ -127,10 +143,23 @@
 		}
 
 		if (event.freeze) {
-			event.end = new Date(event.freeze).toISOString();
+			event.freeze = new Date(event.freeze).toISOString();
 		} else {
 			// @ts-ignore
 			delete event.freeze;
+		}
+	}
+
+	async function addEvent() {
+		if (!confirm(`Add ${event.title} event?`)) {
+			return;
+		}
+
+		try {
+			validate();
+		} catch (err: any) {
+			toast.error(err.message);
+			return;
 		}
 
 		toast.promise(
@@ -151,7 +180,32 @@
 	}
 
 	async function editEvent() {
-		// TODO
+		if (!confirm(`Edit ${event.title} event?`)) {
+			return;
+		}
+
+		try {
+			validate();
+		} catch (err: any) {
+			toast.error(err.message);
+			return;
+		}
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}`, {
+				method: 'PATCH',
+				body: JSON.stringify(event),
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				}
+			}),
+			{
+				success: 'Event edited!',
+				loading: 'Editing...',
+				error: 'Failed to edit'
+			}
+		);
 	}
 </script>
 
@@ -161,13 +215,14 @@
 	<div class="input">
 		<Label for="id" class="w-[100px]">Event's ID</Label>
 		<Input
+			bind:value={event.id}
 			placeholder="Leave blank for new event"
 			id="id"
 			type="number"
 			inputmode="numeric"
 			class="w-[300px]"
 		/>
-		<Button on:click={fetchEvent} bind:value={event.id}>Fetch</Button>
+		<Button on:click={fetchEvent}>Fetch</Button>
 	</div>
 
 	{#if state == State.NO_EVENT}
@@ -306,7 +361,11 @@
 			<Switch bind:checked={event.isCalculated} />
 		</div>
 		<div class="input mt-[20px]">
-			<Button on:click={addEvent}>Add</Button>
+			{#if state == State.NEW_EVENT}
+				<Button on:click={addEvent}>Add</Button>
+			{:else if state == State.EDIT_EVENT}
+				<Button on:click={editEvent}>Edit</Button>
+			{/if}
 		</div>
 	{/if}
 </div>
