@@ -213,6 +213,10 @@
 			}
 		);
 	}
+
+	async function uploadBanner() {
+        // TODO
+    }
 </script>
 
 <Title value="Event manager" />
@@ -289,7 +293,10 @@
 			<Label for="imgUrl" class="w-[100px]">Banner</Label>
 			<Input id="imgUrl" class="w-[195px]" placeholder="image URL" bind:value={event.imgUrl} />
 			or
-			<Button>Upload</Button>
+			<Button disabled={event.id === undefined}>Upload</Button>
+			{#if event.id === undefined}
+				<span class="text-xs">can be uploaded after the event is added</span>
+			{/if}
 		</div>
 		<div class="input">
 			<Label for="exp" class="w-[100px]">EXP</Label>
