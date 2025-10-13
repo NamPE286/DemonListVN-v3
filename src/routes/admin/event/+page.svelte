@@ -222,6 +222,17 @@
 			return;
 		}
 
+		const MAX_BYTES = 200 * 1024;
+        
+		if (file.size > MAX_BYTES) {
+			toast.error('File must be 200 KB or smaller');
+
+			try {
+				e.target.value = '';
+			} catch {}
+			return;
+		}
+
 		if (!event.id) {
 			toast.error('Event ID is required to upload');
 			return;
