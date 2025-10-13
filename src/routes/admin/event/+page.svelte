@@ -8,6 +8,7 @@
 	import * as Alert from '$lib/components/ui/alert';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
+    import webp from 'webp-converter';
 
 	let state = 0;
 
@@ -214,9 +215,17 @@
 		);
 	}
 
-	async function uploadBanner() {
-        // TODO
-    }
+	async function handleUpload(e: any) {
+		const file: File | null = e.target.files[0]
+
+        if(!file) {
+            return;
+        }
+
+        // convert to webp here
+
+        // upload logic
+	}
 </script>
 
 <Title value="Event manager" />
@@ -293,7 +302,14 @@
 			<Label for="imgUrl" class="w-[100px]">Banner</Label>
 			<Input id="imgUrl" class="w-[195px]" placeholder="image URL" bind:value={event.imgUrl} />
 			or
-			<Button disabled={event.id === undefined}>Upload</Button>
+			<input
+				disabled={event.id === undefined}
+				type="file"
+				id="avatar"
+				name="avatar"
+				accept="image/*"
+                on:change={handleUpload}
+			/>
 			{#if event.id === undefined}
 				<span class="text-xs">can be uploaded after the event is added</span>
 			{/if}
