@@ -1,4 +1,4 @@
-export async function convertToWebpFile(file: File): Promise<File> {
+export async function convertToWebpFile(file: File, name: string | null = null): Promise<File> {
 	const img = new Image();
 	img.src = URL.createObjectURL(file);
 	await img.decode();
@@ -14,7 +14,11 @@ export async function convertToWebpFile(file: File): Promise<File> {
 		canvas.toBlob((b) => resolve(b!), 'image/webp', 1)
 	);
 
-	const webpFile = new File([blob], file.name.replace(/\.[^.]+$/, '.webp'), { type: 'image/webp' });
+	const webpFile = new File(
+		[blob],
+		name ? `${name}.webp` : file.name.replace(/\.[^.]+$/, '.webp'),
+		{ type: 'image/webp' }
+	);
 
 	return webpFile;
 }

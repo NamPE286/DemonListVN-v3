@@ -8,7 +8,9 @@
 	import * as Alert from '$lib/components/ui/alert';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
-    import webp from 'webp-converter';
+	import webp from 'webp-converter';
+	import { convertToWebpFile } from '$lib/client/image';
+	import { upload } from '$lib/client/storage';
 
 	let state = 0;
 
@@ -216,15 +218,24 @@
 	}
 
 	async function handleUpload(e: any) {
-		const file: File | null = e.target.files[0]
+		const file: File | null = e.target.files[0];
 
-        if(!file) {
-            return;
-        }
+		if (!file) {
+			return;
+		}
 
-        // convert to webp here
+		toast.loading('Converting image...');
 
-        // upload logic
+		const cImg = await convertToWebpFile(file, String(event.id));
+
+		toast.promise(upload(`event-banner/${event.id}.webp`, cImg, (await $user.token())!), {
+			success: () => {
+				window.location.reload();
+				return 'Uploaded!';
+			},
+			loading: 'Uploading...',
+			error: 'Failed to upload'
+		});
 	}
 </script>
 
@@ -308,7 +319,7 @@
 				id="avatar"
 				name="avatar"
 				accept="image/*"
-                on:change={handleUpload}
+				on:change={handleUpload}
 			/>
 			{#if event.id === undefined}
 				<span class="text-xs">can be uploaded after the event is added</span>
