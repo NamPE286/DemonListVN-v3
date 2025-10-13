@@ -56,6 +56,14 @@
 			state = State.NO_EVENT;
 		}
 	}
+
+    async function addEvent() {
+        // TODO
+    }
+
+    async function editEvent() {
+        // TODO
+    }
 </script>
 
 <Title value="Event manager" />
