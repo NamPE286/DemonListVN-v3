@@ -10,6 +10,7 @@
 	import { toast } from 'svelte-sonner';
 	import { upload } from '$lib/client/storage';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
+	import LevelCard from '../../event/[id]/levelCard.svelte';
 
 	enum State {
 		DEFAULT,
@@ -448,13 +449,38 @@
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="contest">
-				{#if event.id === undefined}
-					Need to be added first
-				{:else if !event.isContest}
-					Event is not contest
-				{:else}
-					<!-- TODO -->
-				{/if}
+				<div class="flex flex-col gap-[10px]">
+					{#if event.id === undefined}
+						Need to be added first
+					{:else if !event.isContest}
+						Event is not contest
+					{:else}
+						<div class="input">
+							<Label class="w-[100px]">Ranked</Label>
+							<Switch bind:checked={event.isRanked} />
+						</div>
+						<div class="input">
+							<Label for="freeze" class="w-[100px]">Freeze</Label>
+							<Input
+								id="freeze"
+								type="datetime-local"
+								class="w-[300px]"
+								bind:value={event.freeze}
+							/>
+						</div>
+						<Button class='w-[100px]' on:click={editEvent}>Save</Button>
+						{#each levels as level, index}
+							<div class="flex items-center gap-[10px]">
+								<div class="w-[700px]">
+									<LevelCard {level} {index} records={[]} {event} />
+								</div>
+
+								<Button class='w-[100px]'>Edit</Button>
+							</div>
+						{/each}
+						<Button class="w-[200px]">Add new level</Button>
+					{/if}
+				</div>
 			</Tabs.Content>
 		</Tabs.Root>
 	{/if}
