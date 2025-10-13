@@ -11,8 +11,6 @@
 	import { upload } from '$lib/client/storage';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 
-	let state = 0;
-
 	enum State {
 		DEFAULT,
 		NO_EVENT,
@@ -20,6 +18,8 @@
 		EDIT_EVENT
 	}
 
+	let state = 0;
+	let levels: any[] = [];
 	let event = {
 		id: undefined,
 		created_at: '',
@@ -70,6 +70,10 @@
 			event.end = convertTime(event.end);
 			event.created_at = convertTime(event.created_at);
 			event.freeze = convertTime(event.freeze);
+
+			if (event.isContest) {
+				await fetchLevels();
+			}
 		} catch {
 			state = State.NO_EVENT;
 		}
@@ -251,6 +255,10 @@
 			loading: 'Uploading...',
 			error: 'Failed to upload'
 		});
+	}
+
+	async function fetchLevels() {
+		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/levels`)).json();
 	}
 </script>
 
@@ -445,8 +453,8 @@
 				{:else if !event.isContest}
 					Event is not contest
 				{:else}
-                    <!-- TODO -->
-                {/if}
+					<!-- TODO -->
+				{/if}
 			</Tabs.Content>
 		</Tabs.Root>
 	{/if}
