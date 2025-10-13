@@ -55,6 +55,7 @@
 		"svelte-sonner": "^0.3.21",
 		"tailwind-merge": "^2.2.2",
 		"tailwind-variants": "^0.2.1",
-		"vaul-svelte": "^0.3.0"
+		"vaul-svelte": "^0.3.0",
+		"webp-converter": "^2.3.3"
 	}
 }
