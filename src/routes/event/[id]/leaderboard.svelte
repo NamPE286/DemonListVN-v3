@@ -233,6 +233,26 @@
 		});
 	}
 
+	async function calculate() {
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/calc`, {
+				method: 'PATCH',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			}),
+			{
+				success: () => {
+					window.location.reload();
+
+					return 'Calculated!';
+				},
+				loading: 'Calculating...',
+				error: 'Failed to calculate'
+			}
+		);
+	}
+
 	onMount(async () => {
 		await refresh();
 	});
@@ -279,6 +299,9 @@
 		>
 			Switch to {revealMode ? 'Normal' : 'Reveal'} Mode
 		</Button>
+		<Button variant="outline" disabled={event.isCalculated} on:click={calculate}
+			>Calculate rating</Button
+		>
 	{/if}
 </div>
 <div class="sticky top-[55px] z-10 bg-[hsl(var(--background))]">
@@ -422,7 +445,9 @@
 													</section>
 												{:else if record.accepted === false}
 													<section>
-														<span class="font-bold">{$_('contest.leaderboard.reject_reason')}: </span>
+														<span class="font-bold"
+															>{$_('contest.leaderboard.reject_reason')}:
+														</span>
 														{record.rejectReason}
 													</section>
 													<section class="mt-[10px] text-[13px] opacity-50">
@@ -433,7 +458,9 @@
 												{#if $user.loggedIn && $user.data.isAdmin && updateData}
 													<div class="grid gap-4 py-4">
 														<div class="grid grid-cols-4 items-center gap-4">
-															<Label for="name" class="text-right">{$_('contest.leaderboard.submitted_at')}</Label>
+															<Label for="name" class="text-right"
+																>{$_('contest.leaderboard.submitted_at')}</Label
+															>
 															<Input
 																type="datetime-local"
 																bind:value={updateData.created_at}
@@ -449,7 +476,9 @@
 															/>
 														</div>
 														<div class="grid grid-cols-4 items-center gap-4">
-															<Label for="name" class="text-right">{$_('contest.leaderboard.video_link')}</Label>
+															<Label for="name" class="text-right"
+																>{$_('contest.leaderboard.video_link')}</Label
+															>
 															<Input bind:value={updateData.videoLink} class="col-span-3" />
 														</div>
 														<div class="grid grid-cols-4 items-center gap-4">
@@ -462,7 +491,9 @@
 														</div>
 														{#if levels[index] && levels[index].needRaw}
 															<div class="grid grid-cols-4 items-center gap-4">
-																<Label for="name" class="text-right">{$_('contest.leaderboard.raw')}</Label>
+																<Label for="name" class="text-right"
+																	>{$_('contest.leaderboard.raw')}</Label
+																>
 																<Input bind:value={updateData.raw} class="col-span-3" />
 															</div>
 														{/if}
