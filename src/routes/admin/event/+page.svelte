@@ -170,7 +170,11 @@
 				}
 			}),
 			{
-				success: 'Event added!',
+				success: () => {
+					window.location.reload();
+
+					return 'Event added!';
+				},
 				loading: 'Adding...',
 				error: 'Failed to add'
 			}
@@ -199,7 +203,11 @@
 				}
 			}),
 			{
-				success: 'Event edited!',
+				success: () => {
+					window.location.reload();
+
+					return 'Event edited!';
+				},
 				loading: 'Editing...',
 				error: 'Failed to edit'
 			}
