@@ -162,52 +162,46 @@
 		</Card.Content>
 	</div>
 	<div class="ml-auto w-full md:mr-[22.5px] md:w-fit">
-		{#if false}
-			{#if $user.loggedIn && $user.data.discord && !isEventEnded() && level && (!event.isSupporterOnly || isActive($user.data.supporterUntil))}
-				{#if records.length == 0}
-					<Button class="w-full" variant="secondary" disabled>...</Button>
-				{:else if records[index] === null}
-					<Dialog.Root>
-						<Dialog.Trigger class="w-full">
-							<Button class="w-full">Submit</Button>
-						</Dialog.Trigger>
-						<Dialog.Content>
-							<Dialog.Header>
-								<Dialog.Title>Submit {level.name}</Dialog.Title>
-							</Dialog.Header>
+		<!-- {#if $user.loggedIn && $user.data.discord && !isEventEnded() && level && (!event.isSupporterOnly || isActive($user.data.supporterUntil))}
+			{#if records.length == 0}
+				<Button class="w-full" variant="secondary" disabled>...</Button>
+			{:else if records[index] === null}
+				<Dialog.Root>
+					<Dialog.Trigger class="w-full">
+						<Button class="w-full">Submit</Button>
+					</Dialog.Trigger>
+					<Dialog.Content>
+						<Dialog.Header>
+							<Dialog.Title>Submit {level.name}</Dialog.Title>
+						</Dialog.Header>
+						<div class="grid grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Progress</Label>
+							<Input
+								type="number"
+								inputmode="numeric"
+								min="1"
+								max="100"
+								bind:value={submitData.progress}
+								class="col-span-3"
+								placeholder="Required (decimal allowed .e.g 99.99)"
+							/>
+						</div>
+						<div class="grid grid-cols-4 items-center gap-4">
+							<Label for="name" class="text-right">Video's Link</Label>
+							<Input bind:value={submitData.videoLink} placeholder="Required" class="col-span-3" />
+						</div>
+						{#if level.needRaw}
 							<div class="grid grid-cols-4 items-center gap-4">
-								<Label for="name" class="text-right">Progress</Label>
-								<Input
-									type="number"
-									inputmode="numeric"
-									min="1"
-									max="100"
-									bind:value={submitData.progress}
-									class="col-span-3"
-									placeholder="Required (decimal allowed .e.g 99.99)"
-								/>
+								<Label for="name" class="text-right">Raw</Label>
+								<Input bind:value={submitData.raw} placeholder="Required" class="col-span-3" />
 							</div>
-							<div class="grid grid-cols-4 items-center gap-4">
-								<Label for="name" class="text-right">Video's Link</Label>
-								<Input
-									bind:value={submitData.videoLink}
-									placeholder="Required"
-									class="col-span-3"
-								/>
-							</div>
-							{#if level.needRaw}
-								<div class="grid grid-cols-4 items-center gap-4">
-									<Label for="name" class="text-right">Raw</Label>
-									<Input bind:value={submitData.raw} placeholder="Required" class="col-span-3" />
-								</div>
-							{/if}
-							<Button on:click={submit}>Submit</Button>
-						</Dialog.Content>
-					</Dialog.Root>
-				{:else}
-					<Button class="w-full" variant="destructive" on:click={cancel}>Cancel</Button>
-				{/if}
+						{/if}
+						<Button on:click={submit}>Submit</Button>
+					</Dialog.Content>
+				</Dialog.Root>
+			{:else}
+				<Button class="w-full" variant="destructive" on:click={cancel}>Cancel</Button>
 			{/if}
-		{/if}
+		{/if} -->
 	</div>
 </Card.Root>
