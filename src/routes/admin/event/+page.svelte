@@ -8,8 +8,6 @@
 	import * as Alert from '$lib/components/ui/alert';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
-	import webp from 'webp-converter';
-	import { convertToWebpFile } from '$lib/client/image';
 	import { upload } from '$lib/client/storage';
 
 	let state = 0;
@@ -224,11 +222,16 @@
 			return;
 		}
 
-		toast.loading('Converting image...');
+		if (!event.id) {
+			toast.error('Event ID is required to upload');
+			return;
+		}
 
-		const cImg = await convertToWebpFile(file, String(event.id));
+		const fileToUpload = new File([file], `${event.id}.webp`, {
+			type: 'image/webp'
+		});
 
-		toast.promise(upload(`event-banner/${event.id}.webp`, cImg, (await $user.token())!), {
+		toast.promise(upload(`event-banner/${event.id}.webp`, fileToUpload, (await $user.token())!), {
 			success: () => {
 				window.location.reload();
 				return 'Uploaded!';
@@ -318,7 +321,7 @@
 				type="file"
 				id="avatar"
 				name="avatar"
-				accept="image/*"
+				accept="image/webp"
 				on:change={handleUpload}
 			/>
 			{#if event.id === undefined}
