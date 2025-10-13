@@ -7,6 +7,7 @@
 	import { Switch } from '$lib/components/ui/switch';
 	import * as Alert from '$lib/components/ui/alert';
 	import { user } from '$lib/client';
+	import { toast } from 'svelte-sonner';
 
 	let state = 0;
 
@@ -57,13 +58,101 @@
 		}
 	}
 
-    async function addEvent() {
-        // TODO
-    }
+	async function addEvent() {
+		if (!confirm(`Add ${event.title} event?`)) {
+			return;
+		}
 
-    async function editEvent() {
-        // TODO
-    }
+		const missing: string[] = [];
+
+		if (!event.title || String(event.title).trim() === '') {
+			missing.push('Title');
+		}
+
+		if (!event.description || String(event.description).trim() === '') {
+			missing.push('Description');
+		}
+
+		const minExpRaw: any = event.minExp;
+
+		if (minExpRaw === '' || minExpRaw === null || minExpRaw === undefined) {
+			missing.push('Min EXP');
+		} else if (isNaN(Number(minExpRaw))) {
+			toast.error('Min EXP must be a number');
+			return;
+		}
+
+		const priorityRaw: any = event.priority;
+
+		if (priorityRaw === '' || priorityRaw === null || priorityRaw === undefined) {
+			missing.push('Priority');
+		} else if (isNaN(Number(priorityRaw))) {
+			toast.error('Priority must be a number');
+			return;
+		}
+
+		if (missing.length) {
+			toast.error(`Missing required fields: ${missing.join(', ')}`);
+			return;
+		}
+
+		if (event.data && typeof event.data === 'string') {
+			try {
+				event.data = JSON.parse(event.data);
+			} catch (e) {
+				toast.error('Data must be valid JSON');
+				return;
+			}
+		}
+
+		if (event.created_at) {
+			event.created_at = new Date(event.created_at).toISOString();
+		} else {
+			// @ts-ignore
+			delete event.created_at;
+		}
+
+		if (event.start) {
+			event.start = new Date(event.start).toISOString();
+		} else {
+			// @ts-ignore
+			delete event.start;
+		}
+
+		if (event.end) {
+			event.end = new Date(event.end).toISOString();
+		} else {
+			// @ts-ignore
+			delete event.end;
+		}
+
+		if (event.freeze) {
+			event.end = new Date(event.freeze).toISOString();
+		} else {
+			// @ts-ignore
+			delete event.freeze;
+		}
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event`, {
+				method: 'POST',
+				body: JSON.stringify(event),
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				}
+			}),
+			{
+				success: 'Event added!',
+				loading: 'Adding...',
+				error: 'Failed to add'
+			}
+		);
+	}
+
+	async function editEvent() {
+		// TODO
+	}
 </script>
 
 <Title value="Event manager" />
@@ -89,20 +178,14 @@
 	{:else if state == State.NEW_EVENT}
 		<Alert.Root class="w-[500px]">
 			<Alert.Title>Attention!</Alert.Title>
-			<Alert.Description>Will create new event</Alert.Description>
+			<Alert.Description>Creating new event</Alert.Description>
 		</Alert.Root>
 	{/if}
 
 	{#if state == State.NEW_EVENT || state == State.EDIT_EVENT}
 		<div class="input mt-[50px]">
 			<Label for="title" class="w-[100px]">Title</Label>
-			<Input
-				id="title"
-				class="w-[300px]"
-				placeholder="Required"
-				required
-				bind:value={event.title}
-			/>
+			<Input id="title" class="w-[300px]" placeholder="Required" bind:value={event.title} />
 		</div>
 		<div class="input">
 			<Label for="created_at" class="w-[100px]">Created at</Label>
@@ -113,7 +196,7 @@
 				placeholder="Required"
 				bind:value={event.created_at}
 			/>
-			<span class="text-xs">Required</span>
+			<span class="text-xs">default to now</span>
 		</div>
 		<div class="input">
 			<Label for="start" class="w-[100px]">Start</Label>
@@ -124,7 +207,7 @@
 				placeholder="Required"
 				bind:value={event.start}
 			/>
-			<span class="text-xs">Required</span>
+			<span class="text-xs">default to now</span>
 		</div>
 		<div class="input">
 			<Label for="end" class="w-[100px]">End</Label>
@@ -142,8 +225,10 @@
 			/>
 		</div>
 		<div class="input">
-			<Label for="imgUrl" class="w-[100px]">Image URL</Label>
-			<Input id="imgUrl" class="w-[300px]" placeholder="https://..." bind:value={event.imgUrl} />
+			<Label for="imgUrl" class="w-[100px]">Banner</Label>
+			<Input id="imgUrl" class="w-[195px]" placeholder="image URL" bind:value={event.imgUrl} />
+			or
+			<Button>Upload</Button>
 		</div>
 		<div class="input">
 			<Label for="exp" class="w-[100px]">EXP</Label>
@@ -221,75 +306,7 @@
 			<Switch bind:checked={event.isCalculated} />
 		</div>
 		<div class="input mt-[20px]">
-			<Button
-				on:click={async () => {
-					try {
-						const method = event.id ? 'PUT' : 'POST';
-						const url = `${import.meta.env.VITE_API_URL}/event${event.id ? `/${event.id}` : ''}`;
-						const body = JSON.stringify(event);
-						const res = await fetch(url, {
-							method,
-							headers: { 'Content-Type': 'application/json' },
-							body
-						});
-						if (!res.ok) {
-							console.error('Save failed', await res.text());
-							return;
-						}
-						event = await res.json();
-						state = State.EDIT_EVENT;
-					} catch (e) {
-						console.error(e);
-					}
-				}}
-			>
-				Save
-			</Button>
-
-			{#if state == State.EDIT_EVENT}
-				<Button
-					variant="destructive"
-					on:click={async () => {
-						try {
-							const res = await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}`, {
-								method: 'DELETE'
-							});
-							if (!res.ok) {
-								console.error('Delete failed', await res.text());
-								return;
-							}
-							event = {
-								id: undefined,
-								created_at: '',
-								start: '',
-								end: '',
-								title: '',
-								description: '',
-								imgUrl: '',
-								exp: NaN,
-								content: '',
-								redirect: null,
-								minExp: 0,
-								needProof: false,
-								isSupporterOnly: true,
-								isContest: false,
-								hidden: false,
-								freeze: '',
-								isExternal: false,
-								data: null,
-								isRanked: false,
-								isCalculated: false,
-								priority: 0
-							};
-							state = State.NEW_EVENT;
-						} catch (e) {
-							console.error(e);
-						}
-					}}
-				>
-					Delete
-				</Button>
-			{/if}
+			<Button on:click={addEvent}>Add</Button>
 		</div>
 	{/if}
 </div>
