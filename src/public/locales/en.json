@@ -70,6 +70,11 @@
             "success": "Order placed!",
             "loading": "Placing order...",
             "error": "Failed to place order"
+        },
+        "filter": {
+            "success": "Filter applied",
+            "loading": "Applying...",
+            "error": "Failed to apply"
         }
     },
     "context": {
@@ -332,11 +337,31 @@
         }
     },
     "events": {
+        "contest": "Contest",
         "ranked": "Ranked",
         "supporter_only": "Supporter Only",
         "starts_at": "Starts at",
         "ended_at": "Ended at",
         "permanent": "Permanent"
+    },
+    "event_filter": {
+        "title": "Event Filter",
+        "collapse": "Collapse",
+        "expand": "Expand",
+        "search_placeholder": "Search events...",
+        "event_type": "Event Type",
+        "all_events": "All",
+        "contest_only": "Contest only",
+        "non_contest": "Not contest",
+        "ranking": "Ranking (Contest)",
+        "all_ranking": "All",
+        "has_ranking": "Has ranking",
+        "no_ranking": "No ranking",
+        "time_period": "Time Period",
+        "start_date": "Start date",
+        "end_date": "End date",
+        "clear_filters": "Clear filters",
+        "apply": "Apply"
     },
     "cup": {
         "tabs": {

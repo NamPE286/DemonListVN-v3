@@ -70,6 +70,11 @@
             "success": "Đã đặt hàng!",
             "loading": "Đang đặt hàng...",
             "error": "Đặt hàng thất bại"
+        },
+        "filter": {
+            "success": "Đã áp dụng bộ lọc",
+            "loading": "Đang áp dụng...",
+            "error": "Áp dụng thất bại"
         }
     },
     "context": {
@@ -331,11 +336,31 @@
         }
     },
     "events": {
+        "contest": "Cuộc thi",
         "ranked": "Có xếp hạng",
         "supporter_only": "Chỉ dành cho Supporter",
         "starts_at": "Bắt đầu lúc",
         "ended_at": "Kết thúc lúc",
         "permanent": "Vô thời hạn"
+    },
+    "event_filter": {
+        "title": "Bộ lọc sự kiện",
+        "collapse": "Thu gọn",
+        "expand": "Mở rộng",
+        "search_placeholder": "Tìm kiếm sự kiện...",
+        "event_type": "Loại sự kiện",
+        "all_events": "Tất cả",
+        "contest_only": "Cuộc thi",
+        "non_contest": "Thường",
+        "ranking": "Xếp hạng (cuộc thi)",
+        "all_ranking": "Tất cả",
+        "has_ranking": "Có xếp hạng",
+        "no_ranking": "Không có xếp hạng",
+        "time_period": "Thời gian",
+        "start_date": "Ngày bắt đầu",
+        "end_date": "Ngày kết thúc",
+        "clear_filters": "Xóa bộ lọc",
+        "apply": "Áp dụng"
     },
     "cup": {
         "tabs": {
