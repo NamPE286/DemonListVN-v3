@@ -237,19 +237,33 @@
 							<HamburgerMenu size={18} />
 						</Button>
 					</DropdownMenu.Trigger>
-					<DropdownMenu.Content align="end">
-						{#each links as link}
-							<a href={link.route} data-sveltekit-preload-data="tap">
-								<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
-							</a>
+					<DropdownMenu.Content align="end" class="w-64">
+						{#each linkGroup as group}
+							{#if group.routes}
+								<DropdownMenu.Group>
+									<DropdownMenu.Label>{group.name}</DropdownMenu.Label>
+									{#each group.routes as link}
+										<a href={link.route} data-sveltekit-preload-data="tap">
+											<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
+										</a>
+									{/each}
+								</DropdownMenu.Group>
+								<DropdownMenu.Separator />
+							{:else if group.route}
+								<a href={group.route} data-sveltekit-preload-data="tap">
+									<DropdownMenu.Item>{group.name}</DropdownMenu.Item>
+								</a>
+							{/if}
 						{/each}
 						<DropdownMenu.Item>
 							{#if $user.loggedIn && isActive($user.data.supporterUntil)}
-								<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
-							{:else}
-								<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter"
-									>Support Us</Button
+								<a href="/supporter" class="link" data-sveltekit-preload-data="tap"
+									>{$_('nav.supporter')}</a
 								>
+							{:else}
+								<Button class="bg-yellow-400 hover:bg-yellow-500" href="/supporter">
+									{$_('nav.supporter')}
+								</Button>
 							{/if}
 						</DropdownMenu.Item>
 					</DropdownMenu.Content>
