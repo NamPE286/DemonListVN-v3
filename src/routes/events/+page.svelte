@@ -21,13 +21,9 @@
 		end: ''
 	};
 
-	// Handle filter apply - gửi filter đến API để lấy dữ liệu mới
 	function handleFilterApply(event: CustomEvent<Filter>) {
 		filter = event.detail;
 		console.log('Applying filter to fetch data from API:', filter);
-		
-		// TODO: Gọi API với filter parameters
-		// Ví dụ: fetchEventsWithFilter(filter)
 	}
 
 	onMount(() => {
