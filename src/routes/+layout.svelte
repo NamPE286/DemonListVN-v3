@@ -40,6 +40,7 @@
 				{ route: '/list/fl', name: $locale === 'en' ? 'Featured' : 'Featured' }
 			]
 		},
+		{ route: '/events', name: $locale === 'en' ? 'Event' : 'Sự kiện' },
 		{
 			name: $locale === 'en' ? 'Community' : 'Cộng đồng',
 			routes: [
