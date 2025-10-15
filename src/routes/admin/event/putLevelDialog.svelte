@@ -9,8 +9,7 @@
 
 	export let event: any;
 	export let title: string;
-
-	let data = {
+	export let data = {
 		eventID: event.id,
 		levelID: NaN,
 		point: 0,
@@ -18,18 +17,21 @@
 	};
 
 	async function save() {
-		toast.promise(fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/levels`, {
-			method: 'PUT',
-			headers: {
-				Authorization: 'Bearer ' + (await $user.token()),
-				'Content-Type': 'application/json'
-			},
-			body: JSON.stringify(data)
-		}), {
-			success: "Saved!",
-			loading: "Saving...",
-			error: "Failed to save"
-		})
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/levels`, {
+				method: 'PUT',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(data)
+			}),
+			{
+				success: 'Saved!',
+				loading: 'Saving...',
+				error: 'Failed to save'
+			}
+		);
 	}
 </script>
 
