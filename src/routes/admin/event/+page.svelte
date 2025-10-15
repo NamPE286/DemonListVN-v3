@@ -11,6 +11,7 @@
 	import { upload } from '$lib/client/storage';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import LevelCard from '../../event/[id]/levelCard.svelte';
+	import PutLevelDialog from './putLevelDialog.svelte';
 
 	enum State {
 		DEFAULT,
@@ -468,17 +469,16 @@
 								bind:value={event.freeze}
 							/>
 						</div>
-						<Button class='w-[100px]' on:click={editEvent}>Save</Button>
+						<Button class="w-[100px]" on:click={editEvent}>Save</Button>
 						{#each levels as level, index}
 							<div class="flex items-center gap-[10px]">
 								<div class="w-[700px]">
 									<LevelCard {level} {index} records={[]} {event} />
 								</div>
-
-								<Button class='w-[100px]'>Edit</Button>
+								<Button class="w-[100px]">Edit</Button>
 							</div>
 						{/each}
-						<Button class="w-[200px]">Add new level</Button>
+						<PutLevelDialog {event} title="Add" />
 					{/if}
 				</div>
 			</Tabs.Content>
