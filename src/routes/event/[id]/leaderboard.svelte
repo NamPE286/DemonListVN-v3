@@ -2,7 +2,7 @@
 	import * as Table from '$lib/components/ui/table/index.js';
 	import Download from 'svelte-radix/Download.svelte';
 	import { onMount } from 'svelte';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerCard.svelte';
 	import type { Level } from './type';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { user } from '$lib/client';

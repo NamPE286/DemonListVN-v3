@@ -5,7 +5,7 @@
 	import { user } from '$lib/client';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerCard.svelte';
 	import { _ } from 'svelte-i18n';
 
 	let orders: any[] = [];

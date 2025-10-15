@@ -9,7 +9,7 @@
 	import { user } from '$lib/client';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import type { PageData } from './$types';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerCard.svelte';
 	import { onMount } from 'svelte';
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 	import LockClosed from 'svelte-radix/LockClosed.svelte';

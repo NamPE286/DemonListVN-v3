@@ -7,7 +7,7 @@
 	import { Slider } from '$lib/components/ui/slider';
 	import { Input } from '$lib/components/ui/input';
 	import Loading from '$lib/components/animation/loading.svelte';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerCard.svelte';
 	import { _, locale } from 'svelte-i18n';
 	import { get } from 'svelte/store';
 

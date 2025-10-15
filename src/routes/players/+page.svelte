@@ -8,7 +8,7 @@
 	import { toast } from 'svelte-sonner';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import Loading from '$lib/components/animation/loading.svelte';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerCard.svelte';
 	import type { PageData } from './$types';
 	import Ads from '$lib/components/ads.svelte';
 	import { _ } from 'svelte-i18n';

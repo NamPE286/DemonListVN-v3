@@ -12,7 +12,7 @@
 	import { toast } from 'svelte-sonner';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { Switch } from '$lib/components/ui/switch';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerCard.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
 	import { _, locale } from 'svelte-i18n';
