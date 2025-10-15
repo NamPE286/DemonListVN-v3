@@ -166,8 +166,13 @@
 					</div>
 				</div>
 			</div>
+
 			<div class="flex justify-end gap-2">
 				<Button variant="outline" size="sm">{$_('event_filter.clear_filters')}</Button>
+				<Button size="sm">{$_('event_filter.apply')}</Button>
+			</div>
+		{:else}
+			<div class="flex justify-end">
 				<Button size="sm">{$_('event_filter.apply')}</Button>
 			</div>
 		{/if}
