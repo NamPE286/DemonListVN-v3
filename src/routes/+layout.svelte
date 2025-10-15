@@ -31,6 +31,30 @@
 	import { page } from '$app/stores';
 	import { _, locale } from 'svelte-i18n';
 
+	$: linkGroup = [
+		{
+			name: 'List',
+			routes: [
+				{ route: '/list/dl', name: $locale === 'en' ? 'Classic' : 'Classic' },
+				{ route: '/list/pl', name: $locale === 'en' ? 'Platformer' : 'Platformer' },
+				{ route: '/list/fl', name: $locale === 'en' ? 'Featured' : 'Featured' }
+			]
+		},
+		{
+			name: $locale === 'en' ? 'Community' : 'Cộng đồng',
+			routes: [
+				{ route: '/players', name: $locale === 'en' ? 'Players' : 'Người chơi' },
+				{ route: '/clans', name: $locale === 'en' ? 'Clans' : 'Hội' }
+			]
+		},
+		{
+			route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases',
+			name: $locale === 'en' ? 'Mod' : 'Mod'
+		},
+		{ route: '/rules', name: $locale === 'en' ? 'Rules' : 'Luật' },
+		{ route: '/store', name: $locale === 'en' ? 'Store' : 'Cửa hàng' }
+	];
+
 	$: links = [
 		{ route: '/list/dl', name: $locale === 'en' ? 'Classic' : 'Classic' },
 		{ route: '/list/pl', name: $locale === 'en' ? 'Platformer' : 'Platformer' },
@@ -176,8 +200,25 @@
 				>
 			</a>
 			<div class="links">
-				{#each links as link}
-					<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
+				{#each linkGroup as group}
+					{#if group.routes}
+						<DropdownMenu.Root>
+							<DropdownMenu.Trigger>
+								<span class="link">{group.name}</span>
+							</DropdownMenu.Trigger>
+							<DropdownMenu.Content>
+								<DropdownMenu.Group>
+									{#each group.routes as link}
+										<a href={link.route}>
+											<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
+										</a>
+									{/each}
+								</DropdownMenu.Group>
+							</DropdownMenu.Content>
+						</DropdownMenu.Root>
+					{:else if group.route}
+						<a href={group.route} class="link">{group.name}</a>
+					{/if}
 				{/each}
 				{#if $user.loggedIn && isActive($user.data.supporterUntil)}
 					<a href="/supporter" class="link" data-sveltekit-preload-data="tap"
@@ -196,19 +237,33 @@
 							<HamburgerMenu size={18} />
 						</Button>
 					</DropdownMenu.Trigger>
-					<DropdownMenu.Content align="end">
-						{#each links as link}
-							<a href={link.route} data-sveltekit-preload-data="tap">
-								<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
-							</a>
+					<DropdownMenu.Content align="end" class="w-64">
+						{#each linkGroup as group}
+							{#if group.routes}
+								<DropdownMenu.Group>
+									<DropdownMenu.Label>{group.name}</DropdownMenu.Label>
+									{#each group.routes as link}
+										<a href={link.route} data-sveltekit-preload-data="tap">
+											<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
+										</a>
+									{/each}
+								</DropdownMenu.Group>
+								<DropdownMenu.Separator />
+							{:else if group.route}
+								<a href={group.route} data-sveltekit-preload-data="tap">
+									<DropdownMenu.Item>{group.name}</DropdownMenu.Item>
+								</a>
+							{/if}
 						{/each}
 						<DropdownMenu.Item>
 							{#if $user.loggedIn && isActive($user.data.supporterUntil)}
-								<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
-							{:else}
-								<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter"
-									>Support Us</Button
+								<a href="/supporter" class="link" data-sveltekit-preload-data="tap"
+									>{$_('nav.supporter')}</a
 								>
+							{:else}
+								<Button class="bg-yellow-400 hover:bg-yellow-500" href="/supporter">
+									{$_('nav.supporter')}
+								</Button>
 							{/if}
 						</DropdownMenu.Item>
 					</DropdownMenu.Content>
@@ -220,7 +275,7 @@
 				<Button variant="outline" on:click={() => (searchToggled = true)}>
 					<div class="searchBtn">
 						<MagnifyingGlass size={20} />
-						<p>{$_("search.button")}</p>
+						<p>{$_('search.button')}</p>
 						<kbd
 							class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
 						>
@@ -235,7 +290,7 @@
 			{/if}
 			{#if $user.checked && isVisible}
 				{#if !$user.loggedIn}
-					<Button variant="outline" on:click={signIn}>{$_("nav.sign_in")}</Button>
+					<Button variant="outline" on:click={signIn}>{$_('nav.sign_in')}</Button>
 				{:else}
 					<SubmitButton />
 					<NotificationButton />
@@ -276,14 +331,18 @@
 							<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
 								>{$_('dropdown.submissions')}</DropdownMenu.Item
 							>
-							<DropdownMenu.Item on:click={() => goto(`/orders`)}>{$_('dropdown.orders')}</DropdownMenu.Item>
+							<DropdownMenu.Item on:click={() => goto(`/orders`)}
+								>{$_('dropdown.orders')}</DropdownMenu.Item
+							>
 							{#if $user.data.clan}
 								<DropdownMenu.Item on:click={() => goto(`/clan/${$user.data.clan}`)}
 									>{$_('dropdown.clan')}</DropdownMenu.Item
 								>
 							{/if}
 							{#if $user.data.isTrusted || $user.data.isAdmin}
-								<DropdownMenu.Item on:click={() => goto(`/overwatch`)}>{$_('dropdown.overwatch')}</DropdownMenu.Item>
+								<DropdownMenu.Item on:click={() => goto(`/overwatch`)}
+									>{$_('dropdown.overwatch')}</DropdownMenu.Item
+								>
 							{/if}
 							<DropdownMenu.Separator />
 							<DropdownMenu.Item on:click={signOut}>
@@ -305,7 +364,7 @@
 
 {#if !$user.loggedIn || (!isActive($user.data.supporterUntil) && pathname !== '/supporter')}
 	<Card.Root
-		class="relative z-[10] mx-[55px] mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950"
+		class="relative z-[10] mx-4 sm:mx-[55px] mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950"
 	>
 		<Card.Content class="mb-[-12px] mt-[10px] text-center">
 			<p class="text-pink-700 dark:text-pink-300">

@@ -13,6 +13,16 @@
         "ascending": "Tăng dần",
         "apply": "Áp dụng"
     },
+    "time_unit": {
+        "second": "giây",
+        "minute": "phút",
+        "hour": "giờ",
+        "day": "ngày",
+        "month": "tháng",
+        "year": "năm",
+        "ago": "trước",
+        "now": "bây giờ"
+    },
     "toast": {
         "clipboard": "Đã sao chép vào bảng nhớ tạm!",
         "payment": {
@@ -76,7 +86,8 @@
         "rules": "Luật",
         "store": "Cửa hàng",
         "supporter": "Ủng hộ",
-        "sign_in": "Đăng nhập"
+        "sign_in": "Đăng nhập",
+        "community": "Cộng đồng"
     },
     "dropdown": {
         "profile": "Hồ sơ",

@@ -13,6 +13,16 @@
         "ascending": "Ascending",
         "apply": "Apply"
     },
+    "time_unit": {
+        "second": "second",
+        "minute": "minute",
+        "hour": "hour",
+        "day": "day",
+        "month": "month",
+        "year": "year",
+        "ago": "ago",
+        "now": "now"
+    },
     "toast": {
         "clipboard": "Copied to clipboard!",
         "payment": {
@@ -76,7 +86,8 @@
         "rules": "Rules",
         "store": "Store",
         "supporter": "Support Us",
-        "sign_in": "Sign In"
+        "sign_in": "Sign In",
+        "community": "Community"
     },
     "dropdown": {
         "profile": "Profile",
