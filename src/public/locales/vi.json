@@ -331,6 +331,7 @@
         }
     },
     "events": {
+        "contest": "Cuộc thi",
         "ranked": "Có xếp hạng",
         "supporter_only": "Chỉ dành cho Supporter",
         "starts_at": "Bắt đầu lúc",

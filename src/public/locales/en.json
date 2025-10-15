@@ -332,6 +332,7 @@
         }
     },
     "events": {
+        "contest": "Contest",
         "ranked": "Ranked",
         "supporter_only": "Supporter Only",
         "starts_at": "Starts at",
