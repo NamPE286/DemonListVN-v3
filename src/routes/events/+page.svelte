@@ -20,9 +20,9 @@
 		</div>
 	</div>
 	<div class="hidden lg:grid lg:grid-cols-[300px_1fr] lg:gap-6">
-		<div class="sticky top-4 h-fit">
-			<FilterCard />
-		</div>
+        <div class="sticky top-[75px] h-fit">
+            <FilterCard />
+        </div>
 		<div class="grid grid-cols-1 gap-[10px] xl:grid-cols-2">
 			{#each data.events as event}
 				<EventCard {event} />
