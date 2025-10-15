@@ -261,7 +261,14 @@
 	}
 
 	async function fetchLevels() {
-		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/levels`)).json();
+		levels = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/levels`, {
+				method: 'GET',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			})
+		).json();
 	}
 </script>
 
@@ -472,25 +479,27 @@
 						</div>
 						<Button class="w-[100px]" on:click={editEvent}>Save</Button>
 						{#each levels as level, index}
-							<div class="flex items-center gap-[10px]">
-								<div class="w-[700px]">
-									<LevelCard {level} {index} records={[]} {event} />
+							{#if level}
+								<div class="flex items-center gap-[10px]">
+									<div class="w-[700px]">
+										<LevelCard {level} {index} records={[]} {event} />
+									</div>
+									<div class="flex flex-col gap-[10px]">
+										<PutLevelDialog
+											{event}
+											data={{
+												id: level.id,
+												eventID: event.id,
+												levelID: level.levelID,
+												point: level.point,
+												needRaw: level.needRaw
+											}}
+											title="Edit"
+										/>
+										<DeleteLevelDialog eventID={event.id} levelID={level.levelID} />
+									</div>
 								</div>
-								<div class="flex flex-col gap-[10px]">
-									<PutLevelDialog
-										{event}
-										data={{
-											id: level.id,
-											eventID: event.id,
-											levelID: level.levelID,
-											point: level.point,
-											needRaw: level.needRaw
-										}}
-										title="Edit"
-									/>
-									<DeleteLevelDialog eventID={event.id} levelID={level.levelID} />
-								</div>
-							</div>
+							{/if}
 						{/each}
 						<PutLevelDialog {event} title="Add" />
 					{/if}
