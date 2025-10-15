@@ -1,6 +1,6 @@
 <script lang="ts">
+	import * as Popover from '$lib/components/ui/popover/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import * as HoverCard from '$lib/components/ui/hover-card/index.js';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { getTitle } from '$lib/client';
 	import { badgeVariants } from '$lib/components/ui/badge';
@@ -40,7 +40,7 @@
 </script>
 
 <div class="wrapper">
-	<HoverCard.Root>
+	<Popover.Root>
 		{#if showTitle && getTitle(titleType, player)?.title}
 			<Tooltip.Root>
 				<Tooltip.Trigger>
@@ -59,9 +59,7 @@
 				>{player.clans.tag}</a
 			>
 		{/if}
-		<HoverCard.Trigger
-			href={`/player/${player.uid}`}
-			rel="noreferrer noopener"
+		<Popover.Trigger
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
 			<div class="flex items-center gap-[5px]">
@@ -78,8 +76,8 @@
 					</div>
 				{/if}
 			</div>
-		</HoverCard.Trigger>
-		<HoverCard.Content
+		</Popover.Trigger>
+		<Popover.Content
 			class="w-80"
 			style={isActive(player.supporterUntil)
 				? `background-color: ${player.bgColor}; border-color: ${player.borderColor}; ${player.bgColor ? 'color: white' : ''}`
@@ -122,7 +120,7 @@
 							{#if player.clan && !isActive(player.clans.boostedUntil)}
 								<a href={`/clan/${player.clan}`}>[{player.clans.tag}]</a>
 							{/if}
-							{player.name}
+							<a href={`/player/${player.uid}`}>{player.name}</a>
 						</span>
 					</h4>
 				</div>
@@ -190,8 +188,8 @@
 					</div>
 				</div>
 			</div>
-		</HoverCard.Content>
-	</HoverCard.Root>
+		</Popover.Content>
+	</Popover.Root>
 </div>
 
 <style lang="scss">
