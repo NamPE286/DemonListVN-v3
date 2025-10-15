@@ -1,9 +1,11 @@
 <script lang="ts">
+	import { user } from '$lib/client';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { Switch } from '$lib/components/ui/switch/index.js';
+	import { toast } from 'svelte-sonner';
 
 	export let event: any;
 	export let title: string;
@@ -16,7 +18,18 @@
 	};
 
 	async function save() {
-		
+		toast.promise(fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/levels`, {
+			method: 'PUT',
+			headers: {
+				Authorization: 'Bearer ' + (await $user.token()),
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data)
+		}), {
+			success: "Saved!",
+			loading: "Saving...",
+			error: "Failed to save"
+		})
 	}
 </script>
 
@@ -29,7 +42,13 @@
 		<div class="grid gap-4 py-4">
 			<div class="grid grid-cols-4 items-center gap-4">
 				<Label for="level" class="text-right">Level ID</Label>
-				<Input placeholder='Add level via Level Manager first' id="point" type="number" bind:value={data.levelID} class="col-span-3" />
+				<Input
+					placeholder="Add level via Level Manager first"
+					id="point"
+					type="number"
+					bind:value={data.levelID}
+					class="col-span-3"
+				/>
 			</div>
 
 			<div class="grid grid-cols-4 items-center gap-4">
