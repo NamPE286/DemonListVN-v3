@@ -475,7 +475,16 @@
 								<div class="w-[700px]">
 									<LevelCard {level} {index} records={[]} {event} />
 								</div>
-								<Button class="w-[100px]">Edit</Button>
+								<PutLevelDialog
+									{event}
+									data={{
+										eventID: event.id,
+										levelID: level.levelID,
+										point: level.point,
+										needRaw: level.needRaw
+									}}
+									title="Edit"
+								/>
 							</div>
 						{/each}
 						<PutLevelDialog {event} title="Add" />
