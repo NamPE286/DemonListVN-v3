@@ -9,7 +9,7 @@
 
 	export let event: any;
 	export let title: string;
-	export let data = {
+	export let data: any = {
 		eventID: event.id,
 		levelID: NaN,
 		point: 0,

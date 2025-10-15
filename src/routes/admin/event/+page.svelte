@@ -12,6 +12,7 @@
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import LevelCard from '../../event/[id]/levelCard.svelte';
 	import PutLevelDialog from './putLevelDialog.svelte';
+	import DeleteLevelDialog from './deleteLevelDialog.svelte';
 
 	enum State {
 		DEFAULT,
@@ -475,16 +476,20 @@
 								<div class="w-[700px]">
 									<LevelCard {level} {index} records={[]} {event} />
 								</div>
-								<PutLevelDialog
-									{event}
-									data={{
-										eventID: event.id,
-										levelID: level.levelID,
-										point: level.point,
-										needRaw: level.needRaw
-									}}
-									title="Edit"
-								/>
+								<div class="flex flex-col gap-[10px]">
+									<PutLevelDialog
+										{event}
+										data={{
+											id: level.id,
+											eventID: event.id,
+											levelID: level.levelID,
+											point: level.point,
+											needRaw: level.needRaw
+										}}
+										title="Edit"
+									/>
+									<DeleteLevelDialog eventID={event.id} levelID={level.levelID} />
+								</div>
 							</div>
 						{/each}
 						<PutLevelDialog {event} title="Add" />
