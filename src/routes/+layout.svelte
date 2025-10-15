@@ -364,7 +364,7 @@
 
 {#if !$user.loggedIn || (!isActive($user.data.supporterUntil) && pathname !== '/supporter')}
 	<Card.Root
-		class="relative z-[10] mx-[55px] mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950"
+		class="relative z-[10] mx-4 sm:mx-[55px] mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950"
 	>
 		<Card.Content class="mb-[-12px] mt-[10px] text-center">
 			<p class="text-pink-700 dark:text-pink-300">
