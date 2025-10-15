@@ -55,20 +55,6 @@
 		{ route: '/store', name: $locale === 'en' ? 'Store' : 'Cửa hàng' }
 	];
 
-	$: links = [
-		{ route: '/list/dl', name: $locale === 'en' ? 'Classic' : 'Classic' },
-		{ route: '/list/pl', name: $locale === 'en' ? 'Platformer' : 'Platformer' },
-		{ route: '/list/fl', name: $locale === 'en' ? 'Featured' : 'Featured' },
-		{ route: '/players', name: $locale === 'en' ? 'Players' : 'Người chơi' },
-		{ route: '/clans', name: $locale === 'en' ? 'Clans' : 'Hội' },
-		{
-			route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases',
-			name: $locale === 'en' ? 'Mod' : 'Mod'
-		},
-		{ route: '/rules', name: $locale === 'en' ? 'Rules' : 'Luật' },
-		{ route: '/store', name: $locale === 'en' ? 'Store' : 'Cửa hàng' }
-	];
-
 	let searchQuery = '';
 	let searchToggled = false;
 	let isVisible = false;
@@ -153,8 +139,9 @@
 				return;
 			}
 
-			links[0].route = `/list/dl?uid=${data.data.uid}`;
-			links[2].route = `/list/fl?uid=${data.data.uid}`;
+			linkGroup[0].routes![0].route = `/list/dl?uid=${data.data.uid}`;
+			linkGroup[0].routes![1].route = `/list/dl?uid=${data.data.uid}`;
+			linkGroup[0].routes![2].route = `/list/fl?uid=${data.data.uid}`;
 		});
 
 		updateNavbarOnTop();
@@ -364,7 +351,7 @@
 
 {#if !$user.loggedIn || (!isActive($user.data.supporterUntil) && pathname !== '/supporter')}
 	<Card.Root
-		class="relative z-[10] mx-4 sm:mx-[55px] mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950"
+		class="relative z-[10] mx-4 mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950 sm:mx-[55px]"
 	>
 		<Card.Content class="mb-[-12px] mt-[10px] text-center">
 			<p class="text-pink-700 dark:text-pink-300">
