@@ -13,6 +13,16 @@
         "ascending": "Tăng dần",
         "apply": "Áp dụng"
     },
+    "time_unit": {
+        "second": "giây",
+        "minute": "phút",
+        "hour": "giờ",
+        "day": "ngày",
+        "month": "tháng",
+        "year": "năm",
+        "ago": "trước",
+        "now": "bây giờ"
+    },
     "toast": {
         "clipboard": "Đã sao chép vào bảng nhớ tạm!",
         "payment": {
