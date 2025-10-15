@@ -6,9 +6,9 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
-	import { Switch } from '$lib/components/ui/switch';
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import { Separator } from '$lib/components/ui/separator';
+    import { _ } from 'svelte-i18n';
 
 	let search = '';
 	let isContest = false;
@@ -23,7 +23,7 @@
 		<div class="flex items-center justify-between">
 			<CardTitle class="flex items-center gap-2">
 				<MixerHorizontal class="h-5 w-5" />
-				Bộ lọc sự kiện
+				{$_('event_filter.title')}
 			</CardTitle>
 			<Button
 				on:click={() => {
@@ -32,7 +32,7 @@
 				variant="ghost"
 				size="sm"
 			>
-				{isExpanded ? 'Thu gọn' : 'Mở rộng'}
+				{isExpanded ? $_('event_filter.collapse') : $_('event_filter.expand')}
 			</Button>
 		</div>
 	</CardHeader>
@@ -43,7 +43,7 @@
 			<MagnifyingGlass
 				class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
 			/>
-			<Input type="text" placeholder="Tìm kiếm sự kiện..." value={search} class="pl-10" />
+			<Input type="text" placeholder={$_('event_filter.search_placeholder')} value={search} class="pl-10" />
 		</div>
 
 		{#if isExpanded}
@@ -52,7 +52,7 @@
 			<div class="grid gap-4 md:grid-cols-2">
 				<!-- Contest Filter -->
 				<div class="space-y-3">
-					<Label class="text-sm font-medium">Loại sự kiện</Label>
+					<Label class="text-sm font-medium">{$_('event_filter.event_type')}</Label>
 					<div class="space-y-2">
 						<div class="flex items-center space-x-2">
 							<input
@@ -63,7 +63,7 @@
 								checked={isContest}
 								class="h-4 w-4"
 							/>
-							<Label for="all-events" class="text-sm">Tất cả</Label>
+							<Label for="all-events" class="text-sm">{$_('event_filter.all_events')}</Label>
 						</div>
 						<div class="flex items-center space-x-2">
 							<input
@@ -74,7 +74,7 @@
 								checked={isContest}
 								class="h-4 w-4"
 							/>
-							<Label for="contest-only" class="text-sm">Chỉ contest</Label>
+							<Label for="contest-only" class="text-sm">{$_('event_filter.contest_only')}</Label>
 						</div>
 						<div class="flex items-center space-x-2">
 							<input
@@ -85,7 +85,7 @@
 								checked={isContest}
 								class="h-4 w-4"
 							/>
-							<Label for="non-contest" class="text-sm">Không phải contest</Label>
+							<Label for="non-contest" class="text-sm">{$_('event_filter.non_contest')}</Label>
 						</div>
 					</div>
 				</div>
@@ -94,7 +94,7 @@
 				<div class="space-y-3">
 					<Label class="flex items-center gap-2 text-sm font-medium">
 						<Star class="h-4 w-4" />
-						Xếp hạng (Contest)
+						{$_('event_filter.ranking')}
 					</Label>
 					<div class="space-y-2">
 						<div class="flex items-center space-x-2">
@@ -111,7 +111,7 @@
 								for="all-ranking"
 								class={`text-sm ${isContest ? 'text-muted-foreground' : ''}`}
 							>
-								Tất cả
+								{$_('event_filter.all_ranking')}
 							</Label>
 						</div>
 						<div class="flex items-center space-x-2">
@@ -126,7 +126,7 @@
 								for="has-ranking"
 								class={`text-sm ${isContest === false ? 'text-muted-foreground' : ''}`}
 							>
-								Có xếp hạng
+								{$_('event_filter.has_ranking')}
 							</Label>
 						</div>
 						<div class="flex items-center space-x-2">
@@ -141,7 +141,7 @@
 								for="no-ranking"
 								class={`text-sm ${isContest === false ? 'text-muted-foreground' : ''}`}
 							>
-								Không có xếp hạng
+								{$_('event_filter.no_ranking')}
 							</Label>
 						</div>
 					</div>
@@ -153,22 +153,22 @@
 			<div class="space-y-3">
 				<Label class="flex items-center gap-2 text-sm font-medium">
 					<Calendar class="h-4 w-4" />
-					Thời gian
+					{$_('event_filter.time_period')}
 				</Label>
 				<div class="grid gap-3 md:grid-cols-2">
 					<div class="space-y-2">
-						<Label for="start-date" class="text-xs text-muted-foreground">Ngày bắt đầu</Label>
+						<Label for="start-date" class="text-xs text-muted-foreground">{$_('event_filter.start_date')}</Label>
 						<Input id="start-date" type="date" value={startDate} class="text-sm" />
 					</div>
 					<div class="space-y-2">
-						<Label for="end-date" class="text-xs text-muted-foreground">Ngày kết thúc</Label>
+						<Label for="end-date" class="text-xs text-muted-foreground">{$_('event_filter.end_date')}</Label>
 						<Input id="end-date" type="date" value={endDate} class="text-sm" />
 					</div>
 				</div>
 			</div>
 			<div class="flex justify-end gap-2">
-				<Button variant="outline" size="sm">Xóa bộ lọc</Button>
-				<Button size="sm">Áp dụng</Button>
+				<Button variant="outline" size="sm">{$_('event_filter.clear_filters')}</Button>
+				<Button size="sm">{$_('event_filter.apply')}</Button>
 			</div>
 		{/if}
 	</CardContent>
