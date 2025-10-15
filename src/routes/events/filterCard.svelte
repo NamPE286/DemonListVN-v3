@@ -173,9 +173,3 @@
 		{/if}
 	</CardContent>
 </Card>
-
-<style>
-	:global(.text-muted-foreground) {
-		opacity: 0.5;
-	}
-</style>

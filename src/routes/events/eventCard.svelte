@@ -56,7 +56,6 @@
 			</div>
 		</CardHeader>
 		<CardContent>
-			<!-- Event Image -->
 			<div class="mb-4">
 				<img
 					src={event.imgUrl || `https://cdn.demonlistvn.com/event-banner/${event.id}.webp`}
@@ -65,7 +64,7 @@
 					loading="lazy"
 				/>
 			</div>
-			<div class="space-y-2 text-sm text-muted-foreground">
+			<div class="space-y-2 text-sm text-foreground/80">
 				<div class="flex items-center gap-2">
 					<Calendar class="h-4 w-4" />
 					<span>{formatDate(event.start)}</span>
@@ -75,7 +74,7 @@
 					<span>{formatTime(event.start)} - {formatTime(event.end)}</span>
 				</div>
 				{#if event.minExp > 0}
-					<div class="text-xs">
+					<div class="text-sm text-foreground/70">
 						Minimum EXP: <span class="font-medium">{event.minExp}</span>
 					</div>
 				{/if}
