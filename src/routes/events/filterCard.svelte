@@ -46,10 +46,6 @@
 		filter.contestType = 'all';
 	}
 
-	async function apply() {
-		
-	}
-
 	onMount(() => {
 		const checkWidth = () => {
 			isExpanded = window.innerWidth >= 1024;
