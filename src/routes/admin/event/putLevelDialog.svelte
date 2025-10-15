@@ -34,7 +34,7 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger class={`${buttonVariants()} w-[200px]`}>{title}</Dialog.Trigger>
+	<Dialog.Trigger class={`${buttonVariants()} w-[50px]`}>{title}</Dialog.Trigger>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
 			<Dialog.Title>{title}</Dialog.Title>
