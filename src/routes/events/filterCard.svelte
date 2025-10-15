@@ -9,6 +9,7 @@
 	import { Card, CardContent, CardHeader, CardTitle } from '$lib/components/ui/card';
 	import { Separator } from '$lib/components/ui/separator';
     import { _ } from 'svelte-i18n';
+	import { onMount } from 'svelte';
 
 	let search = '';
 	let isContest = false;
@@ -16,6 +17,20 @@
 	let startDate = '';
 	let endDate = '';
 	let isExpanded = false;
+	
+	
+	onMount(() => {
+		const checkWidth = () => {
+			isExpanded = window.innerWidth >= 1024;
+		};
+		
+		checkWidth();
+		window.addEventListener('resize', checkWidth);
+		
+		return () => {
+			window.removeEventListener('resize', checkWidth);
+		};
+	});
 </script>
 
 <Card class="w-full">
@@ -38,7 +53,6 @@
 	</CardHeader>
 
 	<CardContent class="space-y-4">
-		<!-- Search Bar -->
 		<div class="relative">
 			<MagnifyingGlass
 				class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
@@ -49,8 +63,7 @@
 		{#if isExpanded}
 			<Separator />
 
-			<div class="grid gap-4 md:grid-cols-2">
-				<!-- Contest Filter -->
+			<div class="grid gap-4 lg:grid-cols-1 md:grid-cols-2">
 				<div class="space-y-3">
 					<Label class="text-sm font-medium">{$_('event_filter.event_type')}</Label>
 					<div class="space-y-2">
@@ -90,7 +103,6 @@
 					</div>
 				</div>
 
-				<!-- Ranking Filter (only for contests) -->
 				<div class="space-y-3">
 					<Label class="flex items-center gap-2 text-sm font-medium">
 						<Star class="h-4 w-4" />
@@ -155,7 +167,7 @@
 					<Calendar class="h-4 w-4" />
 					{$_('event_filter.time_period')}
 				</Label>
-				<div class="grid gap-3 md:grid-cols-2">
+				<div class="grid gap-3 lg:grid-cols-1 md:grid-cols-2">
 					<div class="space-y-2">
 						<Label for="start-date" class="text-xs text-muted-foreground">{$_('event_filter.start_date')}</Label>
 						<Input id="start-date" type="date" value={startDate} class="text-sm" />
