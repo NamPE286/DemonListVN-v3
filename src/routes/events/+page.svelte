@@ -41,6 +41,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Sự kiện - Demon List VN</title>
+</svelte:head>
+
 <div class="mx-auto mt-[20px] w-full max-w-[1500px] px-1">
 	<div class="flex flex-col gap-[10px] lg:hidden">
 		<FilterCard bind:filter on:filterApply={handleFilterApply} />
