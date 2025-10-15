@@ -24,7 +24,7 @@
 	}
 </script>
 
-<Card class="w-full max-w-md">
+<Card class="w-full">
 	<CardHeader>
 		<div class="flex items-start justify-between">
 			<div class="flex-1">
@@ -55,7 +55,7 @@
 			<img
 				src={event.imgUrl || `https://cdn.demonlistvn.com/event-banner/${event.id}.webp`}
 				alt={event.title}
-				class="w-full h-32 object-cover rounded-md"
+				class="w-full aspect-[4/1] object-cover rounded-md"
 				loading="lazy"
 			/>
 		</div>

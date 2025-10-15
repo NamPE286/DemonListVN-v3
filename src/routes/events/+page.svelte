@@ -9,6 +9,8 @@
 	});
 </script>
 
-{#each data.events as event}
-	<EventCard {event} />
-{/each}
+<div class="grid grid-cols-1 md:grid-cols-2 gap-[10px] w-full max-w-7xl mx-auto px-4">
+	{#each data.events as event}
+		<EventCard {event} />
+	{/each}
+</div>
