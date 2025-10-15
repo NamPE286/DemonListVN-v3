@@ -1,7 +1,6 @@
 <script lang="ts">
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 	import Calendar from 'svelte-radix/Calendar.svelte';
-	import Star from 'svelte-radix/Star.svelte';
 	import MixerHorizontal from 'svelte-radix/MixerHorizontal.svelte';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import { Button } from '$lib/components/ui/button';
@@ -116,7 +115,6 @@
 
 				<div class="space-y-3">
 					<Label class="flex items-center gap-2 text-sm font-medium">
-						<Star class="h-4 w-4" />
 						{$_('event_filter.ranking')}
 					</Label>
 					<RadioGroup.Root 
