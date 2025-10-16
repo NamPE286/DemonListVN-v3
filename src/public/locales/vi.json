@@ -461,11 +461,11 @@
     "list": {
         "classic": {
             "title": "Classic List",
-            "description": "Level classic khó nhất được Việt hoàn thành"
+            "description": "Level classic khó nhất được đánh bại bởi người Việt"
         },
         "platformer": {
             "title": "Platformer List",
-            "description": "Level platformer khó nhất được người Việt hoàn thành"
+            "description": "Level platformer khó nhất được đánh bại bởi người Việt"
         },
         "featured": {
             "title": "Featured List",
