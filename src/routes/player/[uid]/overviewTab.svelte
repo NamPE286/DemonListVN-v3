@@ -54,10 +54,10 @@
 	}
 
 	const defaultCards: CardConfig[] = [
-		{ id: 'heatmap', visible: true, size: '4x1', order: 0 },
-		{ id: 'ratings', visible: true, size: '2x1', order: 1 },
-		{ id: 'totalRecords', visible: true, size: '1x1', order: 2 },
-		{ id: 'deviceStats', visible: true, size: '1x1', order: 3 },
+		{ id: 'ratings', visible: true, size: '2x1', order: 0 },
+		{ id: 'heatmap', visible: true, size: '2x1', order: 1 },
+		{ id: 'totalRecords', visible: false, size: '1x1', order: 2 },
+		{ id: 'deviceStats', visible: false, size: '1x1', order: 3 },
 		{ id: 'hardestDemon', visible: false, size: '2x1', order: 4 },
 		{ id: 'recentActivity', visible: false, size: '2x1', order: 5 }
 	];
@@ -163,7 +163,9 @@
 		return '';
 	}
 
-	function saveCardPositions(positions: Record<string, { order: number; visible: boolean; size: CardSize }>) {
+	function saveCardPositions(
+		positions: Record<string, { order: number; visible: boolean; size: CardSize }>
+	) {
 		// TODO: Implement save card positions logic
 		console.log('Saving card positions:', positions);
 	}
