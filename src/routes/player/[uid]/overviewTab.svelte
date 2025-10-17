@@ -8,6 +8,7 @@
 	import { getTitle } from '$lib/client';
 	import { _ } from 'svelte-i18n';
 	import { getExpLevel } from '$lib/client/getExpLevel';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 
@@ -38,6 +39,14 @@
 		selectedRecord = { uid, levelID };
 		recordDetailOpen = true;
 	}
+
+	function getBorderStyle() {
+		if (isActive(data.player.supporterUntil)) {
+			return `border-color: ${data.player.borderColor}`;
+		}
+
+		return '';
+	}
 </script>
 
 {#if selectedRecord}
@@ -55,7 +64,7 @@
 		{/key}
 	</div>
 
-	<Card.Root class="card-2x1">
+	<Card.Root class="card-2x1" style={getBorderStyle()}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.ratings')}</Card.Title>
 		</Card.Header>
@@ -121,7 +130,7 @@
 		</Card.Content>
 	</Card.Root>
 
-	<Card.Root>
+	<Card.Root style={getBorderStyle()}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.total_records')}</Card.Title>
 		</Card.Header>
@@ -144,7 +153,7 @@
 		</Card.Content>
 	</Card.Root>
 
-	<Card.Root>
+	<Card.Root style={getBorderStyle()}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.device_stats')}</Card.Title>
 		</Card.Header>
@@ -180,7 +189,7 @@
 	</Card.Root>
 
 	{#if hardestLevel}
-		<Card.Root class="card-2x1">
+		<Card.Root class="card-2x1" style={getBorderStyle()}>
 			<Card.Header>
 				<Card.Title class="text-lg">{$_('player.overview.hardest_demon')}</Card.Title>
 			</Card.Header>
@@ -190,7 +199,7 @@
 		</Card.Root>
 	{/if}
 
-	<Card.Root class="card-2x1">
+	<Card.Root class={'card-2x1'} style={getBorderStyle()}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.recent_activity')}</Card.Title>
 		</Card.Header>
