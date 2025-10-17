@@ -15,6 +15,7 @@
 
 	let exp = player.exp + player.extraExp;
 	let isBannerFailedToLoad = false;
+	let isPopoverOpen = false;
 
 	function truncateText(str: string) {
 		if (!truncate) {
@@ -40,7 +41,7 @@
 </script>
 
 <div class="wrapper">
-	<Popover.Root>
+	<Popover.Root bind:open={isPopoverOpen}>
 		{#if showTitle && getTitle(titleType, player)?.title}
 			<Tooltip.Root>
 				<Tooltip.Trigger>
@@ -62,20 +63,42 @@
 		<Popover.Trigger
 			class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
 		>
-			<div class="flex items-center gap-[5px]">
-				<span class={isActive(player.supporterUntil) ? 'text-yellow-500' : ''}>
-					{truncateText(
-						player.clan && !isActive(player.clans.boostedUntil)
-							? `[${player.clans.tag}] ${player.name}`
-							: player.name
-					)}
-				</span>
-				{#if player.isTrusted}
-					<div class="mb-[2.5px] h-[12px] w-[12px] rounded-full bg-black dark:invert">
-						<img class="invert" src="/tick-svgrepo-com.svg" alt="tick" />
+			{#if isPopoverOpen}
+				<a
+					href={`/player/${player.uid}`}
+					class="rounded-sm underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-8 focus-visible:outline-black"
+				>
+					<div class="flex items-center gap-[5px]">
+						<span class={isActive(player.supporterUntil) ? 'text-yellow-500' : ''}>
+							{truncateText(
+								player.clan && !isActive(player.clans.boostedUntil)
+									? `[${player.clans.tag}] ${player.name}`
+									: player.name
+							)}
+						</span>
+						{#if player.isTrusted}
+							<div class="mb-[2.5px] h-[12px] w-[12px] rounded-full bg-black dark:invert">
+								<img class="invert" src="/tick-svgrepo-com.svg" alt="tick" />
+							</div>
+						{/if}
 					</div>
-				{/if}
-			</div>
+				</a>
+			{:else}
+				<div class="flex items-center gap-[5px]">
+					<span class={isActive(player.supporterUntil) ? 'text-yellow-500' : ''}>
+						{truncateText(
+							player.clan && !isActive(player.clans.boostedUntil)
+								? `[${player.clans.tag}] ${player.name}`
+								: player.name
+						)}
+					</span>
+					{#if player.isTrusted}
+						<div class="mb-[2.5px] h-[12px] w-[12px] rounded-full bg-black dark:invert">
+							<img class="invert" src="/tick-svgrepo-com.svg" alt="tick" />
+						</div>
+					{/if}
+				</div>
+			{/if}
 		</Popover.Trigger>
 		<Popover.Content
 			class="w-80"

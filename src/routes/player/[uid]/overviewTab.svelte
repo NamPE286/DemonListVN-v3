@@ -203,7 +203,7 @@
 			}));
 		}
 
-		if (!isActive(data.player.supporterUntil)) {
+		if (isOwner && !isActive(data.player.supporterUntil)) {
 			await resetToDefault();
 		}
 	});
