@@ -13,6 +13,7 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { user } from '$lib/client';
 	import { onMount } from 'svelte';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
 
@@ -65,23 +66,6 @@
 	let cardConfigs: CardConfig[] = [];
 	let savedCardConfigs: CardConfig[] = [];
 
-	onMount(() => {
-		const saved = localStorage.getItem(`player-cards-${data.player.uid}`);
-		if (saved) {
-			try {
-				cardConfigs = JSON.parse(saved);
-			} catch {
-				cardConfigs = [...defaultCards];
-			}
-		} else {
-			cardConfigs = [...defaultCards];
-		}
-	});
-
-	function saveConfig() {
-		localStorage.setItem(`player-cards-${data.player.uid}`, JSON.stringify(cardConfigs));
-	}
-
 	$: visibleCards = cardConfigs.filter((c) => c.visible).sort((a, b) => a.order - b.order);
 
 	function toggleCardVisibility(cardId: string) {
@@ -93,13 +77,11 @@
 	}
 
 	function startCustomizing() {
-		// Save current state before entering customize mode
 		savedCardConfigs = JSON.parse(JSON.stringify(cardConfigs));
 		isCustomizing = true;
 	}
 
 	function cancelCustomizing() {
-		// Revert to saved state
 		cardConfigs = JSON.parse(JSON.stringify(savedCardConfigs));
 		isCustomizing = false;
 	}
@@ -145,9 +127,19 @@
 		draggedCard = null;
 	}
 
-	function resetToDefault() {
+	async function resetToDefault() {
 		cardConfigs = [...defaultCards];
-		saveConfig();
+
+		const positions: Record<string, { order: number; visible: boolean; size: CardSize }> = {};
+		cardConfigs.forEach((card) => {
+			positions[card.id] = {
+				order: card.order,
+				visible: card.visible,
+				size: card.size
+			};
+		});
+
+		await saveCardPositions(positions);
 	}
 
 	function openRecordDetail(uid: string, levelID: number) {
@@ -163,11 +155,28 @@
 		return '';
 	}
 
-	function saveCardPositions(
+	async function saveCardPositions(
 		positions: Record<string, { order: number; visible: boolean; size: CardSize }>
 	) {
-		// TODO: Implement save card positions logic
 		console.log('Saving card positions:', positions);
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/player`, {
+				method: 'PUT',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					uid: data.player.uid,
+					overviewData: positions
+				})
+			}),
+			{
+				success: 'Saved!',
+				loading: 'Saving...',
+				error: 'Failed to save'
+			}
+		);
 	}
 
 	function handleSavePositions() {
@@ -180,9 +189,44 @@
 			};
 		});
 		saveCardPositions(positions);
-		saveConfig();
 		isCustomizing = false;
 	}
+
+	onMount(() => {
+		if (data.player.overviewData) {
+			try {
+				const overviewData = data.player.overviewData;
+				cardConfigs = Object.keys(overviewData).map((id) => ({
+					id,
+					visible: overviewData[id].visible,
+					size: overviewData[id].size,
+					order: overviewData[id].order
+				}));
+			} catch {
+				const saved = localStorage.getItem(`player-cards-${data.player.uid}`);
+				if (saved) {
+					try {
+						cardConfigs = JSON.parse(saved);
+					} catch {
+						cardConfigs = [...defaultCards];
+					}
+				} else {
+					cardConfigs = [...defaultCards];
+				}
+			}
+		} else {
+			const saved = localStorage.getItem(`player-cards-${data.player.uid}`);
+			if (saved) {
+				try {
+					cardConfigs = JSON.parse(saved);
+				} catch {
+					cardConfigs = [...defaultCards];
+				}
+			} else {
+				cardConfigs = [...defaultCards];
+			}
+		}
+	});
 </script>
 
 {#if selectedRecord}
