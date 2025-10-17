@@ -350,7 +350,7 @@
 	<div class="filler"></div>
 {/if}
 
-{#if !$user.loggedIn || (!isActive($user.data.supporterUntil) && pathname !== '/supporter')}
+{#if (!$user.loggedIn || !isActive($user.data.supporterUntil)) && pathname !== '/supporter' && !pathname.startsWith('/player/') && !pathname.startsWith('/@')}
 	<Card.Root
 		class="relative z-[10] mx-4 mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950 sm:mx-[55px]"
 	>
