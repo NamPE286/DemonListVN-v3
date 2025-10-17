@@ -35,12 +35,12 @@
 						allRecords.filter((r) => r.refreshRate).length
 				)
 			: 0;
+	$: isOwner = $user.loggedIn && $user.data?.uid === data.player.uid;
+	$: canCustomize = isOwner && isActive(data.player.supporterUntil);
 
 	let selectedRecord: { uid: string; levelID: number } | null = null;
 	let recordDetailOpen = false;
 
-	$: isOwner = $user.loggedIn && $user.data?.uid === data.player.uid;
-	$: canCustomize = isOwner && isActive(data.player.supporterUntil);
 	let isCustomizing = false;
 	let draggedCard: string | null = null;
 
@@ -58,11 +58,12 @@
 		{ id: 'ratings', visible: true, size: '2x1', order: 1 },
 		{ id: 'totalRecords', visible: true, size: '1x1', order: 2 },
 		{ id: 'deviceStats', visible: true, size: '1x1', order: 3 },
-		{ id: 'hardestDemon', visible: true, size: '2x1', order: 4 },
-		{ id: 'recentActivity', visible: true, size: '2x1', order: 5 }
+		{ id: 'hardestDemon', visible: false, size: '2x1', order: 4 },
+		{ id: 'recentActivity', visible: false, size: '2x1', order: 5 }
 	];
 
 	let cardConfigs: CardConfig[] = [];
+	let savedCardConfigs: CardConfig[] = [];
 
 	onMount(() => {
 		const saved = localStorage.getItem(`player-cards-${data.player.uid}`);
@@ -85,12 +86,22 @@
 
 	function toggleCardVisibility(cardId: string) {
 		cardConfigs = cardConfigs.map((c) => (c.id === cardId ? { ...c, visible: !c.visible } : c));
-		saveConfig();
 	}
 
 	function changeCardSize(cardId: string, size: CardSize) {
 		cardConfigs = cardConfigs.map((c) => (c.id === cardId ? { ...c, size } : c));
-		saveConfig();
+	}
+
+	function startCustomizing() {
+		// Save current state before entering customize mode
+		savedCardConfigs = JSON.parse(JSON.stringify(cardConfigs));
+		isCustomizing = true;
+	}
+
+	function cancelCustomizing() {
+		// Revert to saved state
+		cardConfigs = JSON.parse(JSON.stringify(savedCardConfigs));
+		isCustomizing = false;
 	}
 
 	function handleDragStart(e: DragEvent, cardId: string) {
@@ -129,8 +140,6 @@
 				}
 				return c;
 			});
-
-			saveConfig();
 		}
 
 		draggedCard = null;
@@ -153,6 +162,25 @@
 
 		return '';
 	}
+
+	function saveCardPositions(positions: Record<string, { order: number; visible: boolean; size: CardSize }>) {
+		// TODO: Implement save card positions logic
+		console.log('Saving card positions:', positions);
+	}
+
+	function handleSavePositions() {
+		const positions: Record<string, { order: number; visible: boolean; size: CardSize }> = {};
+		cardConfigs.forEach((card) => {
+			positions[card.id] = {
+				order: card.order,
+				visible: card.visible,
+				size: card.size
+			};
+		});
+		saveCardPositions(positions);
+		saveConfig();
+		isCustomizing = false;
+	}
 </script>
 
 {#if selectedRecord}
@@ -168,13 +196,16 @@
 		<Button
 			variant={isCustomizing ? 'default' : 'outline'}
 			size="sm"
-			on:click={() => (isCustomizing = !isCustomizing)}
+			on:click={() => (isCustomizing ? cancelCustomizing() : startCustomizing())}
 		>
 			{isCustomizing ? $_('player.overview.exit_customize') : $_('player.overview.customize')}
 		</Button>
 		{#if isCustomizing}
 			<Button variant="outline" size="sm" on:click={resetToDefault}>
 				{$_('player.overview.reset_layout')}
+			</Button>
+			<Button variant="default" size="sm" on:click={handleSavePositions}>
+				{$_('player.overview.save') || 'Save'}
 			</Button>
 		{/if}
 	</div>

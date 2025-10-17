@@ -587,7 +587,7 @@
       "avg_fps": "Average FPS",
       "activity_heatmap": "Activity Heatmap",
       "customize": "Customize Layout",
-      "exit_customize": "Exit Customize",
+      "exit_customize": "Cancel",
       "reset_layout": "Reset Layout",
       "card_settings": "Card Settings",
       "drag_hint": "💡 Drag cards to rearrange them",
@@ -596,7 +596,8 @@
       "card_totalRecords": "Total Records",
       "card_deviceStats": "Device Statistics",
       "card_hardestDemon": "Hardest Demon",
-      "card_recentActivity": "Recent Activity"
+      "card_recentActivity": "Recent Activity",
+      "save": "Save"
     }
   },
   "supporter": {
