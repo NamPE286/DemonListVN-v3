@@ -180,7 +180,7 @@
 	</Card.Root>
 
 	{#if hardestLevel}
-		<Card.Root>
+		<Card.Root class="card-2x1">
 			<Card.Header>
 				<Card.Title class="text-lg">{$_('player.overview.hardest_demon')}</Card.Title>
 			</Card.Header>
@@ -190,7 +190,7 @@
 		</Card.Root>
 	{/if}
 
-	<Card.Root>
+	<Card.Root class="card-2x1">
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.recent_activity')}</Card.Title>
 		</Card.Header>
@@ -227,6 +227,7 @@
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 		gap: 20px;
 		padding: 20px;
+        width: 1400px;
 		max-width: 100%;
 		margin: 0 auto;
 	}
