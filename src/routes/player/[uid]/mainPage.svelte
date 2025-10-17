@@ -4,21 +4,16 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Switch } from '$lib/components/ui/switch';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import * as Tooltip from '$lib/components/ui/tooltip';
 	import * as Table from '$lib/components/ui/table';
 	import * as Tabs from '$lib/components/ui/tabs';
-	import * as Card from '$lib/components/ui/card';
 	import * as Select from '$lib/components/ui/select';
 	import { user } from '$lib/client';
 	import ProfileEditButton from '$lib/components/profileEditButton.svelte';
-	import Heatmap from '$lib/components/heatmap.svelte';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import Ads from '$lib/components/ads.svelte';
-	import { getTitle } from '$lib/client';
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
-	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import MedalsTab from './medalsTab.svelte';
 	import { _ } from 'svelte-i18n';
@@ -33,8 +28,6 @@
 		ascending: false
 	};
 
-	let exp = data.player.exp + data.player.extraExp;
-	let expLevel = getExpLevel(exp);
 	let isBannerFailedToLoad = false;
 
 	function getTimeString(ms: number) {
@@ -54,6 +47,14 @@
 
 		data.records = records;
 		data = data;
+	}
+
+	function getBgColor() {
+		if (isActive(data.player.supporterUntil)) {
+			return `background-color: ${data.player.bgColor}`;
+		}
+
+		return '';
 	}
 </script>
 
@@ -88,13 +89,13 @@
 		{$_('player.hidden_notice')}
 	</div>
 {/if}
-<div class="relative">
+<div class='relative' style={getBgColor()}>
 	{#if isActive(data.player.supporterUntil) && !isBannerFailedToLoad}
 		<img
 			on:error={() => {
 				isBannerFailedToLoad = true;
 			}}
-			class="bgGradient absolute z-0 mt-[-55px] h-[330px] w-full object-cover"
+			style="mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%); position: absolute; z-index: 0; margin-top: -55px; height: 330px; width: 100%; object-fit: cover;"
 			src={`https://cdn.demonlistvn.com/banners/${data.player.uid}${
 				data.player.isBannerGif ? '.gif' : '.jpg'
 			}?version=${data.player.bannerVersion}`}
@@ -102,8 +103,8 @@
 		/>
 	{/if}
 
-	<div class="wrapper z-1 relative">
-		<div class="playerInfo">
+	<div style="padding-inline: 80px; padding-top: 50px; z-index: 1; position: relative;">
+		<div style="display: flex; align-items: center; gap: 30px; padding-bottom: 20px;">
 			<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
 				<Avatar.Image
 					class="object-cover"
@@ -190,7 +191,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 		{#if !isActive(data.player.supporterUntil)}
 			<Ads dataAdFormat="rectangle" />
 		{/if}
@@ -321,6 +322,12 @@
 		{/if}
 	</div>
 </div>
+{#if isActive(data.player.supporterUntil)}
+	<div
+		class="mt-[-10px] h-[100px] w-full"
+		style={`background: linear-gradient(to bottom, ${data.player.bgColor}, transparent);`}
+	/>
+{/if}
 
 <style lang="scss">
 	.bgGradient {
