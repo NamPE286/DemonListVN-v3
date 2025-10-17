@@ -1,8 +1,10 @@
 <script lang="ts">
 	import type { PageData } from './$types';
-    import PlayerMainPage from './mainPage.svelte';
+	import PlayerMainPage from './mainPage.svelte';
 
 	export let data: PageData;
 </script>
 
-<PlayerMainPage {data} />
+{#key data}
+	<PlayerMainPage {data} />
+{/key}
