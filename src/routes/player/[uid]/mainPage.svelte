@@ -89,7 +89,7 @@
 		{$_('player.hidden_notice')}
 	</div>
 {/if}
-<div class='relative' style={getBgColor()}>
+<div class="relative" style={getBgColor()}>
 	{#if isActive(data.player.supporterUntil) && !isBannerFailedToLoad}
 		<img
 			on:error={() => {
@@ -214,7 +214,7 @@
 						>{$_('player.tabs.medals')}</Tabs.Trigger
 					>
 				</Tabs.List>
-				<Tabs.Content value="overview">
+				<Tabs.Content value="overview" class="w-[1200px] max-w-full">
 					<OverviewTab {data} />
 				</Tabs.Content>
 				<Tabs.Content value="medals">

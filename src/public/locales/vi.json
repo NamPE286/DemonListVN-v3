@@ -582,8 +582,20 @@
       "completion_rate": "tỉ lệ hoàn thành",
       "points": "điểm",
       "no_records": "Chưa có bản ghi",
+      "no_data": "Không có dữ liệu",
       "avg_fps": "FPS trung bình",
-      "activity_heatmap": "Bản đồ nhiệt hoạt động"
+      "activity_heatmap": "Bản đồ nhiệt hoạt động",
+      "customize": "Tuỳ chỉnh bố cục",
+      "exit_customize": "Thoát tuỳ chỉnh",
+      "reset_layout": "Đặt lại bố cục",
+      "card_settings": "Cài đặt thẻ",
+      "drag_hint": "💡 Kéo thẻ để sắp xếp lại",
+      "card_heatmap": "Bản đồ nhiệt hoạt động",
+      "card_ratings": "Điểm số",
+      "card_totalRecords": "Tổng số bản ghi",
+      "card_deviceStats": "Thống kê thiết bị",
+      "card_hardestDemon": "Demon khó nhất",
+      "card_recentActivity": "Hoạt động gần đây"
     }
   },
   "players": {

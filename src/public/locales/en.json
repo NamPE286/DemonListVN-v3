@@ -583,8 +583,20 @@
       "completion_rate": "completion rate",
       "points": "points",
       "no_records": "No records yet",
+      "no_data": "No data available",
       "avg_fps": "Average FPS",
-      "activity_heatmap": "Activity Heatmap"
+      "activity_heatmap": "Activity Heatmap",
+      "customize": "Customize Layout",
+      "exit_customize": "Exit Customize",
+      "reset_layout": "Reset Layout",
+      "card_settings": "Card Settings",
+      "drag_hint": "💡 Drag cards to rearrange them",
+      "card_heatmap": "Activity Heatmap",
+      "card_ratings": "Ratings",
+      "card_totalRecords": "Total Records",
+      "card_deviceStats": "Device Statistics",
+      "card_hardestDemon": "Hardest Demon",
+      "card_recentActivity": "Recent Activity"
     }
   },
   "supporter": {
