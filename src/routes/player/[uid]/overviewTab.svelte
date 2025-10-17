@@ -192,39 +192,19 @@
 		isCustomizing = false;
 	}
 
-	onMount(() => {
+	onMount(async () => {
 		if (data.player.overviewData) {
-			try {
-				const overviewData = data.player.overviewData;
-				cardConfigs = Object.keys(overviewData).map((id) => ({
-					id,
-					visible: overviewData[id].visible,
-					size: overviewData[id].size,
-					order: overviewData[id].order
-				}));
-			} catch {
-				const saved = localStorage.getItem(`player-cards-${data.player.uid}`);
-				if (saved) {
-					try {
-						cardConfigs = JSON.parse(saved);
-					} catch {
-						cardConfigs = [...defaultCards];
-					}
-				} else {
-					cardConfigs = [...defaultCards];
-				}
-			}
-		} else {
-			const saved = localStorage.getItem(`player-cards-${data.player.uid}`);
-			if (saved) {
-				try {
-					cardConfigs = JSON.parse(saved);
-				} catch {
-					cardConfigs = [...defaultCards];
-				}
-			} else {
-				cardConfigs = [...defaultCards];
-			}
+			const overviewData = data.player.overviewData;
+			cardConfigs = Object.keys(overviewData).map((id) => ({
+				id,
+				visible: overviewData[id].visible,
+				size: overviewData[id].size,
+				order: overviewData[id].order
+			}));
+		}
+
+		if (!isActive(data.player.supporterUntil)) {
+			await resetToDefault();
 		}
 	});
 </script>
