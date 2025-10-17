@@ -569,6 +569,21 @@
     },
     "medals": {
       "achieved_on": "Đạt được vào"
+    },
+    "overview": {
+      "total_records": "Tổng số bản ghi",
+      "device_stats": "Thống kê thiết bị",
+      "completion_stats": "Thống kê hoàn thành",
+      "hardest_demon": "Demon khó nhất",
+      "recent_activity": "Hoạt động gần đây",
+      "top_points": "Điểm cao nhất",
+      "ratings": "Điểm số",
+      "completed_levels": "level đã hoàn thành",
+      "completion_rate": "tỉ lệ hoàn thành",
+      "points": "điểm",
+      "no_records": "Chưa có bản ghi",
+      "avg_fps": "FPS trung bình",
+      "activity_heatmap": "Bản đồ nhiệt hoạt động"
     }
   },
   "players": {

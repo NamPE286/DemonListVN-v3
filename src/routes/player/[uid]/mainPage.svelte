@@ -22,6 +22,7 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import MedalsTab from './medalsTab.svelte';
 	import { _ } from 'svelte-i18n';
+	import OverviewTab from './overviewTab.svelte';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' | 'pl' | '' = 'dl';
@@ -305,7 +306,9 @@
 						>{$_('player.tabs.medals')}</Tabs.Trigger
 					>
 				</Tabs.List>
-				<Tabs.Content value="overview">TODO</Tabs.Content>
+				<Tabs.Content value="overview">
+					<OverviewTab {data} />
+				</Tabs.Content>
 				<Tabs.Content value="medals">
 					<MedalsTab userID={data.player.uid} />
 				</Tabs.Content>

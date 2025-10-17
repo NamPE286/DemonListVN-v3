@@ -570,6 +570,21 @@
     },
     "medals": {
       "achieved_on": "Achieved on"
+    },
+    "overview": {
+      "total_records": "Total Records",
+      "device_stats": "Device Statistics",
+      "completion_stats": "Completion Statistics",
+      "hardest_demon": "Hardest Demon",
+      "recent_activity": "Recent Activity",
+      "top_points": "Top Points",
+      "ratings": "Ratings",
+      "completed_levels": "completed levels",
+      "completion_rate": "completion rate",
+      "points": "points",
+      "no_records": "No records yet",
+      "avg_fps": "Average FPS",
+      "activity_heatmap": "Activity Heatmap"
     }
   },
   "supporter": {
