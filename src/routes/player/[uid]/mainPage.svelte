@@ -25,7 +25,7 @@
 	import OverviewTab from './overviewTab.svelte';
 
 	export let data: PageData;
-	let list: 'dl' | 'fl' | 'pl' | '' = 'dl';
+	let list: 'dl' | 'fl' | 'pl' | '' = '';
 	let recordDetailOpened = false;
 	let selectedRecord: any = null;
 	let filter = {
@@ -190,104 +190,11 @@
 				</div>
 			</div>
 		</div>
-		<div class="playerInfo2Wrapper">
-			<div class="playerInfo2">
-				<Card.Root
-					style={isActive(data.player.supporterUntil)
-						? `background-color: ${data.player.bgColor}; border-color: ${data.player.borderColor}; ${data.player.bgColor ? 'color: white' : ''}`
-						: ''}
-				>
-					<Card.Header>
-						<Card.Title tag="h1">{$_('player_card.title')}</Card.Title>
-					</Card.Header>
-					<Card.Content>
-						<div class="flex flex-col gap-[3px]">
-							<div class="rating">
-								<div class="flex justify-center">
-									<div class="leftCol">
-										<b>{$_('player.level')}.{expLevel.level}</b>
-									</div>
-								</div>
-								<div class="progressBar">
-									<div class="progress" style={`width: ${expLevel.progress}%`}>
-										<b>{expLevel.progress}%</b>
-									</div>
-								</div>
-								<Tooltip.Root>
-									<Tooltip.Trigger>{exp}/{expLevel.upperBound}</Tooltip.Trigger>
-									<Tooltip.Content>
-										<p>{expLevel.upperBound - exp} {$_('player.exp_to_next')}</p>
-									</Tooltip.Content>
-								</Tooltip.Root>
-							</div>
-							<div class="rating">
-								<Tooltip.Root>
-									<Tooltip.Trigger>
-										<div class="leftCol">
-											<div
-												class="title text-white"
-												style={`background-color: ${getTitle('dl', data.player)?.color}`}
-											>
-												{data.player.rating}
-											</div>
-										</div>
-									</Tooltip.Trigger>
-									<Tooltip.Content>{getTitle('dl', data.player)?.fullTitle}</Tooltip.Content>
-								</Tooltip.Root>
-								<div class="rankWrapper">
-									{$_('player_card.rating')}
-									<div class="rank">
-										#{data.player.overallRank}
-									</div>
-								</div>
-							</div>
-							<div class="rating">
-								<div class="leftCol">
-									<div class="title">{data.player.totalFLpt}</div>
-								</div>
-								<div class="rankWrapper">
-									{$_('player_card.featured')}
-									<div class="rank">
-										#{data.player.flrank}
-									</div>
-								</div>
-							</div>
-							<div class="rating">
-								<div class="leftCol">
-									<Tooltip.Root>
-										<Tooltip.Trigger>
-											<div class="leftCol">
-												<div
-													class="title"
-													style={`background-color: ${getTitle('elo', data.player)?.color}`}
-												>
-													{#if data.player.matchCount < 5}
-														<span class="opacity-50">{`${data.player.elo}?`}</span>
-													{:else}
-														{data.player.elo}
-													{/if}
-												</div>
-											</div>
-										</Tooltip.Trigger>
-										<Tooltip.Content>{getTitle('elo', data.player)?.fullTitle}</Tooltip.Content>
-									</Tooltip.Root>
-								</div>
-								<div class="rankWrapper">
-									{$_('player_card.contest')}
-								</div>
-							</div>
-						</div>
-					</Card.Content>
-				</Card.Root>
-			</div>
-			{#key data.player.uid}
-				<Heatmap uid={data.player.uid} />
-			{/key}
-		</div>
+		
 		{#if !isActive(data.player.supporterUntil)}
 			<Ads dataAdFormat="rectangle" />
 		{/if}
-		<Tabs.Root value="dl">
+		<Tabs.Root value="overview">
 			<div class="tabs">
 				<Tabs.List class="grid w-[500px] max-w-full grid-cols-5">
 					<Tabs.Trigger value="overview" on:click={() => (list = '')}
