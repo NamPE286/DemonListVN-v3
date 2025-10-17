@@ -224,11 +224,10 @@
 <style lang="scss">
 	.overview-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+		grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 		gap: 20px;
 		padding: 20px;
-        width: 1400px;
-		max-width: 100%;
+		width: 100%;
 		margin: 0 auto;
 	}
 
@@ -241,6 +240,10 @@
 
 	:global(.card-2x1) {
 		grid-column: span 2;
+	}
+
+	:global(.card-3x1) {
+		grid-column: span 3;
 	}
 
 	.exp-section {
@@ -435,7 +438,8 @@
 	}
 
 	@media screen and (max-width: 900px) {
-		:global(.card-2x1) {
+		:global(.card-2x1),
+		:global(.card-3x1) {
 			grid-column: span 1;
 		}
 	}
