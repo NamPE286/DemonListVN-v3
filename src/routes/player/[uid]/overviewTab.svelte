@@ -201,6 +201,8 @@
 				size: overviewData[id].size,
 				order: overviewData[id].order
 			}));
+		} else {
+			cardConfigs = [...defaultCards];
 		}
 
 		if (isOwner && !isActive(data.player.supporterUntil)) {
