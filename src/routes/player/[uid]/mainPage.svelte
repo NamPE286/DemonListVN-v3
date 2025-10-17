@@ -288,7 +288,10 @@
 		{/if}
 		<Tabs.Root value="dl">
 			<div class="tabs">
-				<Tabs.List class="grid w-[400px] max-w-full grid-cols-4">
+				<Tabs.List class="grid w-[500px] max-w-full grid-cols-5">
+					<Tabs.Trigger value="overview" on:click={() => (list = '')}
+						>{$_('player.tabs.overview')}</Tabs.Trigger
+					>
 					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}
 						>{$_('player.tabs.dl')}</Tabs.Trigger
 					>
@@ -302,6 +305,7 @@
 						>{$_('player.tabs.medals')}</Tabs.Trigger
 					>
 				</Tabs.List>
+				<Tabs.Content value="overview">TODO</Tabs.Content>
 				<Tabs.Content value="medals">
 					<MedalsTab userID={data.player.uid} />
 				</Tabs.Content>
@@ -339,7 +343,8 @@
 				</div>
 			</div>
 			<Table.Root>
-				<Table.Caption>{$_('player.table.total_record')}: {data.records[list].length}</Table.Caption>
+				<Table.Caption>{$_('player.table.total_record')}: {data.records[list].length}</Table.Caption
+				>
 				<Table.Header>
 					<Table.Row>
 						<Table.Head>{$_('player.table.level')}</Table.Head>
