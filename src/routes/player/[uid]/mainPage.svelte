@@ -94,7 +94,7 @@
 			on:error={() => {
 				isBannerFailedToLoad = true;
 			}}
-			class="bgGradient absolute z-0 mt-[-55px] h-[600px] w-full object-cover"
+			class="bgGradient absolute z-0 mt-[-55px] h-[330px] w-full object-cover"
 			src={`https://cdn.demonlistvn.com/banners/${data.player.uid}${
 				data.player.isBannerGif ? '.gif' : '.jpg'
 			}?version=${data.player.bannerVersion}`}
@@ -324,7 +324,7 @@
 
 <style lang="scss">
 	.bgGradient {
-		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
+		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);
 	}
 	.levelBG {
 		padding-right: 10px;
