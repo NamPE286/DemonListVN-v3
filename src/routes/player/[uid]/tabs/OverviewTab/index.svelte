@@ -84,7 +84,6 @@
 	async function saveCardPositions(
 		positions: Record<string, { order: number; visible: boolean; size: CardSize }>
 	) {
-		console.log('Saving card positions:', positions);
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/player`, {
 				method: 'PUT',

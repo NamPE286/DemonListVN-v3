@@ -45,8 +45,6 @@
 				levels[list] = levels[list].concat(res);
 				filter[list].from += res.length;
 				filter[list].to += res.length;
-
-				console.log(levels, filter);
 			});
 	}
 

@@ -125,7 +125,6 @@
 					setMode('dark');
 					setTheme('dark');
 				} else {
-					console.log('ok');
 					setTheme(currentTheme);
 				}
 			});

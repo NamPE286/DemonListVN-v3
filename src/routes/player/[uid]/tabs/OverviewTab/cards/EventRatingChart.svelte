@@ -37,6 +37,8 @@
 			ratings.push(currentRating);
 		});
 
+        
+
 		return { labels, ratings };
 	}
 

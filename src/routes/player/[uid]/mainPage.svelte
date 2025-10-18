@@ -58,10 +58,6 @@
 
 		return '';
 	}
-
-	onMount(() => {
-		console.log(data);
-	});
 </script>
 
 <svelte:head>
