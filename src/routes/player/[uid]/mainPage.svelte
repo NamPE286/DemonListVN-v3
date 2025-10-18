@@ -197,7 +197,7 @@
 		{/if}
 		<Tabs.Root value="overview">
 			<div class="tabs">
-				<Tabs.List class="grid w-[500px] max-w-full grid-cols-5">
+				<Tabs.List class="flex w-fit h-fit flex-wrap">
 					<Tabs.Trigger value="overview" on:click={() => (list = '')}
 						>{$_('player.tabs.overview')}</Tabs.Trigger
 					>
