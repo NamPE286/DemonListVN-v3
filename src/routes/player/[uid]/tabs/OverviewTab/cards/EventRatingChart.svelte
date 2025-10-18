@@ -3,7 +3,6 @@
 	import * as Card from '$lib/components/ui/card';
 	import Chart from 'chart.js/auto';
 	import 'chartjs-adapter-date-fns';
-	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
 	import type { CardConfig } from './types';
 	import annotationPlugin from 'chartjs-plugin-annotation';
@@ -158,7 +157,7 @@
 						}
 					},
 					legend: {
-						display: true,
+						display: false,
 						position: 'top'
 					}
 				}
@@ -166,10 +165,6 @@
 			plugins: [backgroundColorPlugin]
 		});
 	}
-
-	onMount(() => {
-		// Chart will be created when the canvas element is mounted
-	});
 </script>
 
 <BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
