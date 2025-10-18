@@ -103,8 +103,8 @@
 		/>
 	{/if}
 
-	<div style="padding-inline: 80px; padding-top: 50px; z-index: 1; position: relative;">
-		<div style="display: flex; align-items: center; gap: 30px; padding-bottom: 20px;">
+	<div class="relative z-10 px-1 xl:px-20 pt-12.5">
+		<div class="flex items-center gap-7.5 pb-5">
 			<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
 				<Avatar.Image
 					class="object-cover"
