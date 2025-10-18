@@ -103,8 +103,7 @@
 					{
 						label: 'Rating',
 						data: ratings,
-						borderColor: 'rgb(75, 192, 192)',
-						backgroundColor: 'rgba(75, 192, 192, 0.2)',
+						borderColor: data.player.borderColor,
 						tension: 0.1,
 						fill: true,
 						pointRadius: 5,
