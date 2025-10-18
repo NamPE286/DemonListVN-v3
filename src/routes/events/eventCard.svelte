@@ -70,25 +70,27 @@
 					loading="lazy"
 				/>
 			</div>
-			<div class="space-y-2 text-sm text-foreground/80">
-				<div class="flex items-center gap-2">
-					<Calendar class="h-4 w-4" />
-					{#if isMultiDayEvent(event.start, event.end)}
-						<span>{formatDate(event.start)} - {formatDate(event.end)}</span>
-					{:else}
-						<span>{formatDate(event.start)}</span>
+			{#if event.end}
+				<div class="space-y-2 text-sm text-foreground/80">
+					<div class="flex items-center gap-2">
+						<Calendar class="h-4 w-4" />
+						{#if isMultiDayEvent(event.start, event.end)}
+							<span>{formatDate(event.start)} - {formatDate(event.end)}</span>
+						{:else}
+							<span>{formatDate(event.start)}</span>
+						{/if}
+					</div>
+					<div class="flex items-center gap-2">
+						<Clock class="h-4 w-4" />
+						<span>{formatTime(event.start)} - {formatTime(event.end)}</span>
+					</div>
+					{#if event.minExp > 0}
+						<div class="text-sm text-foreground/70">
+							Minimum EXP: <span class="font-medium">{event.minExp}</span>
+						</div>
 					{/if}
 				</div>
-				<div class="flex items-center gap-2">
-					<Clock class="h-4 w-4" />
-					<span>{formatTime(event.start)} - {formatTime(event.end)}</span>
-				</div>
-				{#if event.minExp > 0}
-					<div class="text-sm text-foreground/70">
-						Minimum EXP: <span class="font-medium">{event.minExp}</span>
-					</div>
-				{/if}
-			</div>
+			{/if}
 		</CardContent>
 	</Card>
 </a>
