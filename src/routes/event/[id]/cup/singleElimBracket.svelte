@@ -1,5 +1,5 @@
 <script lang="ts">
-	import PlayerHoverCard from '$lib/components/playerCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import { _ } from 'svelte-i18n';
 
 	export let data;

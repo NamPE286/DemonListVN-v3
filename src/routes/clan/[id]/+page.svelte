@@ -15,7 +15,7 @@
 	import CrossCircled from 'svelte-radix/CrossCircled.svelte';
 	import StarFilled from 'svelte-radix/StarFilled.svelte';
 	import type { PageData } from './$types';
-	import PlayerHoverCard from '$lib/components/playerCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import PlayerHoverCard from '$lib/components/playerCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import type { PageData } from './$types';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { fade, scale, fly } from 'svelte/transition';

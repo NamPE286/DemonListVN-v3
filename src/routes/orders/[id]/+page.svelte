@@ -3,7 +3,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Table from '$lib/components/ui/table/index.js';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import PlayerHoverCard from '$lib/components/playerCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 	import { page } from '$app/state';

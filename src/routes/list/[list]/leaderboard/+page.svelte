@@ -2,7 +2,7 @@
 	import * as Pagination from '$lib/components/ui/pagination';
 	import * as Table from '$lib/components/ui/table';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import PlayerHoverCard from '$lib/components/playerCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 
 	import { getTitle } from '$lib/client';
 	import { onMount } from 'svelte';
