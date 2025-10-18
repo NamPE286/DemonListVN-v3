@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-
 	type CardSize = '1x1' | '2x1' | '3x1' | '4x1';
 
 	interface CardConfig {
@@ -10,40 +8,50 @@
 		order: number;
 	}
 
+	export let cardConfigs: CardConfig[];
 	export let config: CardConfig;
+	export let draggedCard: string | null;
 	export let isCustomizing: boolean = false;
 
-	const dispatch = createEventDispatcher();
-
-	function handleDragStart(e: DragEvent) {
-		if (!isCustomizing) {
-			return;
-		}
-
+	function handleDragStart(e: DragEvent, cardId: string) {
+		if (!isCustomizing) return;
+		draggedCard = cardId;
 		if (e.dataTransfer) {
 			e.dataTransfer.effectAllowed = 'move';
 		}
-
-		dispatch('dragstart', { cardId: config.id });
 	}
 
 	function handleDragOver(e: DragEvent) {
-		if (!isCustomizing) {
-			return;
-		}
-
+		if (!isCustomizing) return;
 		e.preventDefault();
-
 		if (e.dataTransfer) {
 			e.dataTransfer.dropEffect = 'move';
 		}
 	}
 
-	function handleDrop(e: DragEvent) {
-		if (!isCustomizing) return;
+	function handleDrop(e: DragEvent, targetCardId: string) {
+		if (!isCustomizing || !draggedCard) return;
 		e.preventDefault();
 
-		dispatch('drop', { targetCardId: config.id });
+		const draggedIndex = cardConfigs.findIndex((c) => c.id === draggedCard);
+		const targetIndex = cardConfigs.findIndex((c) => c.id === targetCardId);
+
+		if (draggedIndex !== -1 && targetIndex !== -1) {
+			const draggedOrder = cardConfigs[draggedIndex].order;
+			const targetOrder = cardConfigs[targetIndex].order;
+
+			cardConfigs = cardConfigs.map((c) => {
+				if (c.id === draggedCard) {
+					return { ...c, order: targetOrder };
+				}
+				if (c.id === targetCardId) {
+					return { ...c, order: draggedOrder };
+				}
+				return c;
+			});
+		}
+
+		draggedCard = null;
 	}
 </script>
 
@@ -53,9 +61,9 @@
 	draggable={isCustomizing}
 	role="button"
 	tabindex={isCustomizing ? 0 : -1}
-	on:dragstart={handleDragStart}
+	on:dragstart={(e) => handleDragStart(e, config.id)}
 	on:dragover={handleDragOver}
-	on:drop={handleDrop}
+	on:drop={(e) => handleDrop(e, config.id)}
 >
 	<slot />
 </div>

@@ -1,4 +1,5 @@
 <script lang="ts">
+	import BaseCard from './cards/BaseCard.svelte';
 	import type { PageData } from './$types';
 	import * as Card from '$lib/components/ui/card';
 	import * as Tooltip from '$lib/components/ui/tooltip';
@@ -14,6 +15,7 @@
 	import { user } from '$lib/client';
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
+	import HeatmapCard from './cards/HeatmapCard.svelte';
 
 	export let data: PageData;
 
@@ -283,33 +285,9 @@
 <div class="overview-grid" class:customizing={isCustomizing}>
 	{#each visibleCards as config (config.id)}
 		{#if config.id === 'heatmap'}
-			<div
-				class="card-wrapper card-{config.size}"
-				class:dragging={isCustomizing}
-				draggable={isCustomizing}
-				role="button"
-				tabindex={isCustomizing ? 0 : -1}
-				on:dragstart={(e) => handleDragStart(e, config.id)}
-				on:dragover={handleDragOver}
-				on:drop={(e) => handleDrop(e, config.id)}
-			>
-				<div class="heatmap-wrapper">
-					{#key data.player.uid}
-						<Heatmap uid={data.player.uid} />
-					{/key}
-				</div>
-			</div>
+			<HeatmapCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
 		{:else if config.id === 'ratings'}
-			<div
-				class="card-wrapper card-{config.size}"
-				class:dragging={isCustomizing}
-				draggable={isCustomizing}
-				role="button"
-				tabindex={isCustomizing ? 0 : -1}
-				on:dragstart={(e) => handleDragStart(e, config.id)}
-				on:dragover={handleDragOver}
-				on:drop={(e) => handleDrop(e, config.id)}
-			>
+			<BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
 				<Card.Root style={getBorderStyle()}>
 					<Card.Header>
 						<Card.Title class="text-lg">{$_('player.overview.ratings')}</Card.Title>
@@ -375,7 +353,7 @@
 						</div>
 					</Card.Content>
 				</Card.Root>
-			</div>
+			</BaseCard>
 		{:else if config.id === 'totalRecords'}
 			<div
 				class="card-wrapper card-{config.size}"
