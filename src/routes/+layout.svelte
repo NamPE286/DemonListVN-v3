@@ -30,6 +30,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { page } from '$app/stores';
 	import { _, locale } from 'svelte-i18n';
+	import PlayerCard from '$lib/components/playerCard.svelte';
 
 	$: linkGroup = [
 		{
@@ -303,12 +304,12 @@
 								</Avatar.Root>
 							</Button>
 						</DropdownMenu.Trigger>
-						<DropdownMenu.Content align="end" class="z-[99999] w-56">
-							<DropdownMenu.Label>
+						<DropdownMenu.Content align="end" class="z-[99999] w-[320px]">
+							<DropdownMenu.Label class="font-normal">
 								{#if $user.loggedIn && isActive($user.data.supporterUntil)}
-									<span class="text-yellow-500">{$user.data.name}</span>
+									<PlayerCard player={$user.data} />
 								{:else}
-									{$user.data.name}
+									<span class="font-bold"> {$user.data.name} </span>
 								{/if}
 							</DropdownMenu.Label>
 							<DropdownMenu.Separator />
