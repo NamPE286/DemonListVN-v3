@@ -24,6 +24,10 @@
 	});
 
 	$: pastEvents = data.events.filter((event: any) => {
+		if (!event.end) {
+			return false;
+		}
+
 		const eventEnd = new Date(event.end);
 		return eventEnd < currentTime;
 	});
