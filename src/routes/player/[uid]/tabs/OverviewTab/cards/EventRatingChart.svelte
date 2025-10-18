@@ -13,33 +13,25 @@
 	export let isCustomizing: boolean = false;
 
 	let chart: any = null;
+	let diffData: (number | null)[] = [];
 	const INITIAL_RATING = 1500;
 
-	// Calculate rating progression
 	function calculateRatings() {
-		if (!data.events || data.events.length === 0) {
-			return { labels: [], ratings: [] };
+		const labels: string[] = ['Initial'];
+		const ratings: number[] = [INITIAL_RATING];
+		const diffs: (number | null)[] = [null];
+
+		for (const i of [...data.events].reverse()) {
+			if (!(i.events.isContest && i.events.isRanked && i.diff !== null)) {
+				continue;
+			}
+
+			labels.push(i.events.title);
+			ratings.push(ratings.at(-1) + i.diff);
+			diffs.push(i.diff);
 		}
 
-		// Sort events by date (oldest first)
-		const sortedEvents = [...data.events]
-			.filter((e) => e.accepted && e.events.isRanked && e.events.isContest)
-			.sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime());
-
-		const labels: string[] = ['Start'];
-		const ratings: number[] = [INITIAL_RATING];
-
-		let currentRating = INITIAL_RATING;
-
-		sortedEvents.forEach((event) => {
-			currentRating += event.diff;
-			labels.push(event.events.title);
-			ratings.push(currentRating);
-		});
-
-        
-
-		return { labels, ratings };
+		return { labels, ratings, diffs };
 	}
 
 	function createChart(node: any) {
@@ -47,7 +39,8 @@
 			chart.destroy();
 		}
 
-		const { labels, ratings } = calculateRatings();
+		const { labels, ratings, diffs } = calculateRatings();
+		diffData = diffs;
 
 		chart = new Chart(node, {
 			type: 'line',
@@ -73,16 +66,17 @@
 					y: {
 						beginAtZero: false,
 						title: {
-							display: true,
+							display: false,
 							text: 'Rating'
 						}
 					},
 					x: {
 						title: {
-							display: true,
+							display: false,
 							text: 'Events'
 						},
 						ticks: {
+							display: false,
 							maxRotation: 45,
 							minRotation: 45
 						}
@@ -92,7 +86,15 @@
 					tooltip: {
 						callbacks: {
 							label: function (context) {
-								return `Rating: ${context.parsed.y}`;
+								const diff = diffData[context.dataIndex];
+								const rating = context.parsed.y;
+
+								if (diff === null) {
+									return `Rating: ${rating}`;
+								}
+
+								const diffStr = diff >= 0 ? `+${diff}` : `${diff}`;
+								return [`Rating: ${rating}`, `Change: ${diffStr}`];
 							}
 						}
 					},
