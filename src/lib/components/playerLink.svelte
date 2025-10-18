@@ -7,6 +7,7 @@
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { _ } from 'svelte-i18n';
+	import PlayerCard from '$lib/components/playerCard.svelte';
 
 	export let player: any;
 	export let showTitle = false;
@@ -100,117 +101,8 @@
 				</div>
 			{/if}
 		</Popover.Trigger>
-		<Popover.Content
-			class="w-80"
-			style={isActive(player.supporterUntil)
-				? `background-color: ${player.bgColor}; border-color: ${player.borderColor}; ${player.bgColor ? 'color: white' : ''}`
-				: ''}
-		>
-			{#if isActive(player.supporterUntil) && !isBannerFailedToLoad}
-				<img
-					on:error={() => {
-						isBannerFailedToLoad = true;
-					}}
-					class="bgGradient absolute top-[50px] z-0 ml-[-15px] h-[80px] w-full rounded object-cover"
-					src={`https://cdn.demonlistvn.com/banners/${player.uid}${
-						player.isBannerGif ? '.gif' : '.jpg'
-					}`}
-					alt=""
-				/>
-			{/if}
-			<div class="relative">
-				<div class="hoverName">
-					<Avatar.Root>
-						<Avatar.Image
-							class="object-cover"
-							src={`https://cdn.demonlistvn.com/avatars/${player.uid}${
-								isActive(player.supporterUntil) && player.isAvatarGif ? '.gif' : '.jpg'
-							}`}
-							alt=""
-						/>
-						<Avatar.Fallback>{player.name[0]}</Avatar.Fallback>
-					</Avatar.Root>
-					{#if player.clan && isActive(player.clans.boostedUntil)}
-						<a
-							href={`/clan/${player.clan}`}
-							class={badgeVariants({ variant: 'secondary' })}
-							style={`background-color: ${player.clans.tagBgColor}; color: ${player.clans.tagTextColor};`}
-							>{player.clans.tag}</a
-						>
-					{/if}
-					<h4 class="font-semibold">
-						<span class={isActive(player.supporterUntil) ? 'text-yellow-500' : ''}>
-							{#if player.clan && !isActive(player.clans.boostedUntil)}
-								<a href={`/clan/${player.clan}`}>[{player.clans.tag}]</a>
-							{/if}
-							<a href={`/player/${player.uid}`}>{player.name}</a>
-						</span>
-					</h4>
-				</div>
-				<div class="content">
-					<div class="rating">
-						<div class="flex justify-center">
-							<div class="leftCol">
-								<b>Lv.{getExpLevel(exp).level}</b>
-							</div>
-						</div>
-						<div class="progressBar">
-							<div class="progress" style={`width: ${getExpLevel(exp).progress}%`}>
-								<b>{getExpLevel(exp).progress}%</b>
-							</div>
-						</div>
-					</div>
-					<div class="rating">
-						<Tooltip.Root>
-							<Tooltip.Trigger>
-								<div class="leftCol">
-									<div
-										class="title text-white"
-										style={`background-color: ${getTitle('dl', player)?.color}`}
-									>
-										{player.rating}
-									</div>
-								</div>
-							</Tooltip.Trigger>
-							<Tooltip.Content>{getTitle('dl', player)?.fullTitle}</Tooltip.Content>
-						</Tooltip.Root>
-						<div class="rankWrapper">
-							{$_('player_card.rating')}
-							<div class="rank">
-								#{player.overallRank}
-							</div>
-						</div>
-					</div>
-					<div class="rating">
-						<div class="leftCol">
-							<div class="title">{player.totalFLpt}</div>
-						</div>
-						<div class="rankWrapper">
-							{$_('player_card.featured')}
-							<div class="rank">
-								#{player.flrank}
-							</div>
-						</div>
-					</div>
-					<div class="rating">
-						<Tooltip.Root>
-							<Tooltip.Trigger>
-								<div class="leftCol">
-									<div class="title" style={`background-color: ${getTitle('elo', player)?.color}`}>
-										{#if player.matchCount < 5}
-											<span class="opacity-50">{`${player.elo}?`}</span>
-										{:else}
-											{player.elo}
-										{/if}
-									</div>
-								</div>
-							</Tooltip.Trigger>
-							<Tooltip.Content>{getTitle('elo', player)?.fullTitle}</Tooltip.Content>
-						</Tooltip.Root>
-						<div class="rankWrapper">{$_('player_card.contest')}</div>
-					</div>
-				</div>
-			</div>
+		<Popover.Content class="w-80 p-0 border-transparent">
+			<PlayerCard {player} />
 		</Popover.Content>
 	</Popover.Root>
 </div>
