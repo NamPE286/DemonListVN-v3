@@ -348,7 +348,11 @@
     "event_name": "Tên sự kiện",
     "event_type": "Loại sự kiện",
     "elo_change": "Thay đổi ELO",
-    "date": "Ngày"
+    "date": "Ngày",
+    "upcoming": "Sự kiện sắp diễn ra",
+    "ongoing": "Sự kiện đang diễn ra",
+    "past": "Sự kiện đã kết thúc",
+    "permanent_event": "Sự kiện vô thời hạn"
   },
   "event_filter": {
     "title": "Bộ lọc sự kiện",

@@ -6,6 +6,28 @@
 
 	export let data: any;
 
+	$: currentTime = new Date();
+
+	$: upcomingEvents = data.events.filter((event: any) => {
+		const eventStart = new Date(event.start);
+		return eventStart > currentTime;
+	});
+
+	$: ongoingEvents = data.events.filter((event: any) => {
+		const eventStart = new Date(event.start);
+		const eventEnd = new Date(event.end);
+		return eventStart <= currentTime && eventEnd >= currentTime;
+	});
+
+	$: permanentEvents = data.events.filter((event: any) => {
+		return !event.end;
+	});
+
+	$: pastEvents = data.events.filter((event: any) => {
+		const eventEnd = new Date(event.end);
+		return eventEnd < currentTime;
+	});
+
 	interface Filter {
 		search: string;
 		eventType: 'all' | 'contest' | 'nonContest';
@@ -48,20 +70,78 @@
 <div class="mx-auto mt-[20px] w-full max-w-[1500px] px-1">
 	<div class="flex flex-col gap-[10px] lg:hidden">
 		<FilterCard bind:filter on:filterApply={handleFilterApply} />
-		<div class="grid grid-cols-1 gap-[10px] md:grid-cols-2">
-			{#each data.events as event}
-				<EventCard {event} />
-			{/each}
+		<div class="mt-[10px]">
+			{#if upcomingEvents.length}
+				<h2 class="mb-[20px] text-center text-xl font-bold">{$_('events.upcoming')}</h2>
+				<div class="mb-[20px] grid grid-cols-1 gap-[10px] xl:grid-cols-2">
+					{#each upcomingEvents as event}
+						<EventCard {event} />
+					{/each}
+				</div>
+			{/if}
+			{#if ongoingEvents.length}
+				<h2 class="mb-[20px] text-center text-xl font-bold">{$_('events.ongoing')}</h2>
+				<div class="mb-[20px] grid grid-cols-1 gap-[10px] xl:grid-cols-2">
+					{#each ongoingEvents as event}
+						<EventCard {event} />
+					{/each}
+				</div>
+			{/if}
+			{#if permanentEvents.length}
+				<h2 class="mb-[20px] text-center text-xl font-bold">{$_('events.permanent_event')}</h2>
+				<div class="mb-[20px] grid grid-cols-1 gap-[10px] xl:grid-cols-2">
+					{#each permanentEvents as event}
+						<EventCard {event} />
+					{/each}
+				</div>
+			{/if}
+			{#if pastEvents.length}
+				<h2 class="mb-[20px] text-center text-xl font-bold">{$_('events.past')}</h2>
+				<div class="mb-[20px] grid grid-cols-1 gap-[10px] xl:grid-cols-2">
+					{#each pastEvents as event}
+						<EventCard {event} />
+					{/each}
+				</div>
+			{/if}
 		</div>
 	</div>
 	<div class="hidden lg:grid lg:grid-cols-[300px_1fr] lg:gap-6">
 		<div class="sticky top-[75px] h-fit">
 			<FilterCard bind:filter on:filterApply={handleFilterApply} />
 		</div>
-		<div class="grid grid-cols-1 gap-[10px] xl:grid-cols-2">
-			{#each data.events as event}
-				<EventCard {event} />
-			{/each}
+		<div>
+			{#if upcomingEvents.length}
+				<h2 class="mb-[20px] text-center text-xl font-bold">{$_('events.upcoming')}</h2>
+				<div class="mb-[20px] grid grid-cols-1 gap-[10px] xl:grid-cols-2">
+					{#each upcomingEvents as event}
+						<EventCard {event} />
+					{/each}
+				</div>
+			{/if}
+			{#if ongoingEvents.length}
+				<h2 class="mb-[20px] text-center text-xl font-bold">{$_('events.ongoing')}</h2>
+				<div class="mb-[20px] grid grid-cols-1 gap-[10px] xl:grid-cols-2">
+					{#each ongoingEvents as event}
+						<EventCard {event} />
+					{/each}
+				</div>
+			{/if}
+			{#if permanentEvents.length}
+				<h2 class="mb-[20px] text-center text-xl font-bold">{$_('events.permanent_event')}</h2>
+				<div class="mb-[20px] grid grid-cols-1 gap-[10px] xl:grid-cols-2">
+					{#each permanentEvents as event}
+						<EventCard {event} />
+					{/each}
+				</div>
+			{/if}
+			{#if pastEvents.length}
+				<h2 class="mb-[20px] text-center text-xl font-bold">{$_('events.past')}</h2>
+				<div class="mb-[20px] grid grid-cols-1 gap-[10px] xl:grid-cols-2">
+					{#each pastEvents as event}
+						<EventCard {event} />
+					{/each}
+				</div>
+			{/if}
 		</div>
 	</div>
 </div>

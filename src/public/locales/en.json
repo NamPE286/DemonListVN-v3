@@ -349,7 +349,11 @@
     "event_name": "Event Name",
     "event_type": "Event Type",
     "elo_change": "ELO Change",
-    "date": "Date"
+    "date": "Date",
+    "upcoming": "Upcoming Events",
+    "ongoing": "Ongoing Events",
+    "past": "Past Events",
+    "permanent_event": "Permanent Events"
   },
   "event_filter": {
     "title": "Event Filter",
