@@ -11,7 +11,10 @@
     "reject": "Reject",
     "sort_by": "Sort by",
     "ascending": "Ascending",
-    "apply": "Apply"
+    "apply": "Apply",
+    "status": "Status",
+    "accepted": "Accepted",
+    "pending": "Pending"
   },
   "time_unit": {
     "second": "second",
@@ -342,7 +345,11 @@
     "supporter_only": "Supporter Only",
     "starts_at": "Starts at",
     "ended_at": "Ended at",
-    "permanent": "Permanent"
+    "permanent": "Permanent",
+    "event_name": "Event Name",
+    "event_type": "Event Type",
+    "elo_change": "ELO Change",
+    "date": "Date"
   },
   "event_filter": {
     "title": "Event Filter",
@@ -562,6 +569,7 @@
     },
     "table": {
       "total_record": "Total record",
+      "total_events": "Total events",
       "level": "Level",
       "submitted_on": "Submitted on",
       "device": "Device",
@@ -569,6 +577,7 @@
       "time": "Time",
       "progress": "Progress"
     },
+    "no_events": "No events participated yet",
     "medals": {
       "achieved_on": "Achieved on"
     },

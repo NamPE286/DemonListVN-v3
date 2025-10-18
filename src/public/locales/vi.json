@@ -11,7 +11,10 @@
     "reject": "Từ chối",
     "sort_by": "Sắp xếp theo",
     "ascending": "Tăng dần",
-    "apply": "Áp dụng"
+    "apply": "Áp dụng",
+    "status": "Trạng thái",
+    "accepted": "Đã chấp nhận",
+    "pending": "Đang chờ"
   },
   "time_unit": {
     "second": "giây",
@@ -341,7 +344,11 @@
     "supporter_only": "Chỉ dành cho Supporter",
     "starts_at": "Bắt đầu lúc",
     "ended_at": "Kết thúc lúc",
-    "permanent": "Vô thời hạn"
+    "permanent": "Vô thời hạn",
+    "event_name": "Tên sự kiện",
+    "event_type": "Loại sự kiện",
+    "elo_change": "Thay đổi ELO",
+    "date": "Ngày"
   },
   "event_filter": {
     "title": "Bộ lọc sự kiện",
@@ -561,6 +568,7 @@
     },
     "table": {
       "total_record": "Số bản ghi",
+      "total_events": "Tổng số sự kiện",
       "level": "Level",
       "submitted_on": "Nộp lúc",
       "device": "Thiết bị",
@@ -568,6 +576,7 @@
       "time": "Thời gian",
       "progress": "Tiến độ"
     },
+    "no_events": "Chưa tham gia sự kiện nào",
     "medals": {
       "achieved_on": "Đạt được vào"
     },
