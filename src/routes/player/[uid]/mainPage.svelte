@@ -103,9 +103,9 @@
 		/>
 	{/if}
 
-	<div class="pt-12 relative z-10 px-1 xl:px-20">
+	<div class="relative z-10 px-1 pt-12 xl:px-20">
 		<div class="gap-7.5 flex items-center pb-5">
-			<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40 mr-6">
+			<Avatar.Root class="mr-6 h-32 w-32 lg:h-40 lg:w-40">
 				<Avatar.Image
 					class="object-cover"
 					src={`https://cdn.demonlistvn.com/avatars/${data.player.uid}${
@@ -213,7 +213,11 @@
 					<Tabs.Trigger value="medals" on:click={() => (list = '')}
 						>{$_('player.tabs.medals')}</Tabs.Trigger
 					>
+					<Tabs.Trigger value="events" on:click={() => (list = '')}
+						>{$_('player.tabs.events')}</Tabs.Trigger
+					>
 				</Tabs.List>
+				<Tabs.Content value="events">TODO</Tabs.Content>
 				<Tabs.Content value="overview" class="w-[1200px] max-w-full">
 					<OverviewTab {data} />
 				</Tabs.Content>

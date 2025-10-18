@@ -552,7 +552,8 @@
       "pl": "Platformer",
       "fl": "Featured",
       "medals": "Medal",
-      "overview": "Overview"
+      "overview": "Overview",
+      "events": "Events"
     },
     "filter": {
       "sort_by": "Sort by",
