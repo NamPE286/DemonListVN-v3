@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import Medal from './medal.svelte';
+	import Medal from '../medal.svelte';
 
 	export let userID: string;
 

@@ -15,11 +15,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
 	import { isActive } from '$lib/client/isSupporterActive';
-	import MedalsTab from './medalsTab.svelte';
+	import MedalsTab from './tabs/MedalsTab.svelte';
 	import { _ } from 'svelte-i18n';
 	import OverviewTab from './tabs/OverviewTab/index.svelte';
 	import { onMount } from 'svelte';
-	import EventTab from './tabs/EventTab.svelte';
+	import EventTab from './tabs/EventsTab.svelte';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' | 'pl' | '' = '';
