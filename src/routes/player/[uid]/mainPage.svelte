@@ -103,8 +103,8 @@
 		/>
 	{/if}
 
-	<div class="relative z-10 px-1 xl:px-20 pt-12.5">
-		<div class="flex items-center gap-7.5 pb-5">
+	<div class="pt-12.5 relative z-10 px-1 xl:px-20">
+		<div class="gap-7.5 flex items-center pb-5">
 			<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
 				<Avatar.Image
 					class="object-cover"
@@ -197,7 +197,7 @@
 		{/if}
 		<Tabs.Root value="overview">
 			<div class="tabs">
-				<Tabs.List class="flex w-fit h-fit flex-wrap">
+				<Tabs.List class="flex h-fit w-fit flex-wrap">
 					<Tabs.Trigger value="overview" on:click={() => (list = '')}
 						>{$_('player.tabs.overview')}</Tabs.Trigger
 					>
@@ -367,17 +367,6 @@
 		width: 100%;
 		border-radius: 10px;
 		overflow: hidden;
-
-		b {
-			color: var(--textColorInverted);
-			margin-right: 5px;
-		}
-
-		.progress {
-			background-color: var(--textColor);
-			text-align: right;
-			border-radius: 10px;
-		}
 	}
 
 	.filter {
@@ -420,30 +409,11 @@
 		gap: 10px;
 		align-items: center;
 		font-size: 13px;
-
-		.title {
-			padding: 2px;
-			padding-inline: 5px;
-			border-radius: 5px;
-			font-weight: bold;
-			font-size: 12px;
-			user-select: none;
-			width: fit-content;
-		}
 	}
 
 	.rankWrapper {
 		display: flex;
 		gap: 5px;
-
-		.rank {
-			background-color: var(--textColor);
-			color: var(--textColorInverted);
-			padding-inline: 6px;
-			height: fit-content;
-			border-radius: 5px;
-			font-weight: 600;
-		}
 	}
 
 	.leftCol {
