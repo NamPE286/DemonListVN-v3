@@ -6,6 +6,7 @@
 	import { _ } from 'svelte-i18n';
 	import type { CardConfig } from './types';
 	import annotationPlugin from 'chartjs-plugin-annotation';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	Chart.register(annotationPlugin);
 
@@ -164,10 +165,17 @@
 			plugins: [backgroundColorPlugin]
 		});
 	}
+
+	function getBorderStyle() {
+		if (isActive(data.player.supporterUntil)) {
+			return `border-color: ${data.player.borderColor}`;
+		}
+		return '';
+	}
 </script>
 
 <BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
-	<Card.Root class="h-full">
+	<Card.Root class="h-full" style={getBorderStyle()}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.event_rating')}</Card.Title>
 		</Card.Header>
