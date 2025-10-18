@@ -439,14 +439,6 @@
 						<Label class="w-[100px]">Contest</Label>
 						<Switch bind:checked={event.isContest} />
 					</div>
-					<div class="input">
-						<Label class="w-[100px]">Ranked</Label>
-						<Switch bind:checked={event.isRanked} />
-					</div>
-					<div class="input">
-						<Label for="freeze" class="w-[100px]">Freeze</Label>
-						<Input id="freeze" type="datetime-local" class="w-[300px]" bind:value={event.freeze} />
-					</div>
 					<div class="input mt-[20px]">
 						{#if state == State.NEW_EVENT}
 							<Button on:click={addEvent}>Add</Button>
