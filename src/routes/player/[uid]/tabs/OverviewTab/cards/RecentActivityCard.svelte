@@ -4,6 +4,7 @@
 	import { _ } from 'svelte-i18n';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import type { CardConfig } from './types';
+	import { getBorderStyle } from './getBorderStyle';
 
 	export let data: any;
 	export let cardConfigs: CardConfig[];
@@ -19,17 +20,10 @@
 	$: recentRecords = allRecords
 		.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
 		.slice(0, 5);
-
-	function getBorderStyle() {
-		if (isActive(data.player.supporterUntil)) {
-			return `border-color: ${data.player.borderColor}`;
-		}
-		return '';
-	}
 </script>
 
 <BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
-	<Card.Root class="h-full" style={getBorderStyle()}>
+	<Card.Root class="h-full" style={getBorderStyle(data.player)}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.recent_activity')}</Card.Title>
 		</Card.Header>

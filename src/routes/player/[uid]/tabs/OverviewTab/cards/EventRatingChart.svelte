@@ -7,6 +7,7 @@
 	import type { CardConfig } from './types';
 	import annotationPlugin from 'chartjs-plugin-annotation';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import { getBorderStyle } from './getBorderStyle';
 
 	Chart.register(annotationPlugin);
 
@@ -165,17 +166,10 @@
 			plugins: [backgroundColorPlugin]
 		});
 	}
-
-	function getBorderStyle() {
-		if (isActive(data.player.supporterUntil)) {
-			return `border-color: ${data.player.borderColor}`;
-		}
-		return '';
-	}
 </script>
 
 <BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
-	<Card.Root class="h-full" style={getBorderStyle()}>
+	<Card.Root class="h-full" style={getBorderStyle(data.player)}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.event_rating')}</Card.Title>
 		</Card.Header>
