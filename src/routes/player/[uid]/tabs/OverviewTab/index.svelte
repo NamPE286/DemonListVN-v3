@@ -31,7 +31,7 @@
 	const defaultCards: CardConfig[] = [
 		{ id: 'ratings', visible: true, size: '2x1', order: 0 },
 		{ id: 'heatmap', visible: true, size: '2x1', order: 1 },
-		{ id: 'eventRating', visible: true, size: '2x1', order: 2 },
+		{ id: 'eventRating', visible: false, size: '2x1', order: 2 },
 		{ id: 'totalRecords', visible: false, size: '1x1', order: 3 },
 		{ id: 'deviceStats', visible: false, size: '1x1', order: 4 },
 		{ id: 'hardestDemon', visible: false, size: '2x1', order: 5 },
