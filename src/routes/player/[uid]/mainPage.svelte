@@ -103,7 +103,7 @@
 		/>
 	{/if}
 
-	<div class="pt-12.5 relative z-10 px-1 xl:px-20">
+	<div class="pt-12 relative z-10 px-1 xl:px-20">
 		<div class="gap-7.5 flex items-center pb-5">
 			<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
 				<Avatar.Image
