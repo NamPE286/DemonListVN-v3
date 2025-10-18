@@ -1,15 +1,7 @@
 <script lang="ts">
 	import Heatmap from '$lib/components/heatmap.svelte';
 	import BaseCard from './BaseCard.svelte';
-
-	type CardSize = '1x1' | '2x1' | '3x1' | '4x1';
-
-	interface CardConfig {
-		id: string;
-		visible: boolean;
-		size: CardSize;
-		order: number;
-	}
+	import type { CardConfig } from './types';
 
 	export let data: any;
 	export let cardConfigs: CardConfig[];
