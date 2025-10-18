@@ -26,7 +26,7 @@
 </script>
 
 <BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
-	<Card.Root style={getBorderStyle()}>
+	<Card.Root class="h-full" style={getBorderStyle()}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.ratings')}</Card.Title>
 		</Card.Header>
