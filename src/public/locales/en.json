@@ -603,11 +603,14 @@
       "drag_hint": "💡 Drag cards to rearrange them",
       "card_heatmap": "Activity Heatmap",
       "card_ratings": "Ratings",
+      "card_eventRating": "Event Rating Chart",
       "card_totalRecords": "Total Records",
       "card_deviceStats": "Device Statistics",
       "card_hardestDemon": "Hardest Demon",
       "card_recentActivity": "Recent Activity",
-      "save": "Save"
+      "save": "Save",
+      "event_rating": "Event Rating Progression",
+      "no_event_data": "No event data available"
     }
   },
   "supporter": {

@@ -602,11 +602,14 @@
       "drag_hint": "💡 Kéo thẻ để sắp xếp lại",
       "card_heatmap": "Bản đồ nhiệt hoạt động",
       "card_ratings": "Điểm số",
+      "card_eventRating": "Biểu đồ điểm số sự kiện",
       "card_totalRecords": "Tổng số bản ghi",
       "card_deviceStats": "Thống kê thiết bị",
       "card_hardestDemon": "Demon khó nhất",
       "card_recentActivity": "Hoạt động gần đây",
-      "save": "Lưu"
+      "save": "Lưu",
+      "event_rating": "Tiến trình điểm số sự kiện",
+      "no_event_data": "Không có dữ liệu sự kiện"
     }
   },
   "players": {
