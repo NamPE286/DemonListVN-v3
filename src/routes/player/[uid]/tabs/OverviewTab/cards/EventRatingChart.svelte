@@ -6,6 +6,9 @@
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
 	import type { CardConfig } from './types';
+	import annotationPlugin from 'chartjs-plugin-annotation';
+
+	Chart.register(annotationPlugin);
 
 	export let data: any;
 	export let cardConfigs: CardConfig[];
@@ -17,6 +20,47 @@
 	let diffData: (number | null)[] = [];
 	let eventTitles: string[] = [];
 	const INITIAL_RATING = 1500;
+
+	const eloRanks = [
+		{ min: 3500, max: Infinity, color: 'rgba(170, 0, 0, 0.15)', label: 'Legendary Grandmaster' },
+		{ min: 3000, max: 3500, color: 'rgba(255, 51, 51, 0.15)', label: 'International Grandmaster' },
+		{ min: 2500, max: 3000, color: 'rgba(255, 128, 0, 0.15)', label: 'Grandmaster' },
+		{ min: 2000, max: 2500, color: 'rgba(170, 0, 170, 0.15)', label: 'Master' },
+		{ min: 1500, max: 2000, color: 'rgba(0, 128, 255, 0.15)', label: 'Expert' },
+		{ min: 1000, max: 1500, color: 'rgba(0, 200, 150, 0.15)', label: 'Specialist' },
+		{ min: 500, max: 1000, color: 'rgba(100, 200, 100, 0.15)', label: 'Pupil' },
+		{ min: 0, max: 500, color: 'rgba(150, 150, 150, 0.15)', label: 'Newbie' }
+	];
+
+	const backgroundColorPlugin = {
+		id: 'backgroundColorPlugin',
+		beforeDraw: (chart: any) => {
+			const ctx = chart.ctx;
+			const chartArea = chart.chartArea;
+			const yScale = chart.scales.y;
+
+			if (!chartArea || !yScale) return;
+
+			ctx.save();
+
+			eloRanks.forEach((rank) => {
+				const yTop = yScale.getPixelForValue(Math.min(rank.max, yScale.max));
+				const yBottom = yScale.getPixelForValue(Math.max(rank.min, yScale.min));
+
+				if (yBottom > chartArea.top && yTop < chartArea.bottom) {
+					ctx.fillStyle = rank.color;
+					ctx.fillRect(
+						chartArea.left,
+						Math.max(yTop, chartArea.top),
+						chartArea.right - chartArea.left,
+						Math.min(yBottom, chartArea.bottom) - Math.max(yTop, chartArea.top)
+					);
+				}
+			});
+
+			ctx.restore();
+		}
+	};
 
 	function calculateRatings() {
 		const labels: string[] = ['Initial'];
@@ -118,7 +162,8 @@
 						position: 'top'
 					}
 				}
-			}
+			},
+			plugins: [backgroundColorPlugin]
 		});
 	}
 
