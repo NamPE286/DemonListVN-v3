@@ -2,6 +2,7 @@
 	import BaseCard from './BaseCard.svelte';
 	import * as Card from '$lib/components/ui/card';
 	import Chart from 'chart.js/auto';
+	import 'chartjs-adapter-date-fns';
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
 	import type { CardConfig } from './types';
@@ -14,24 +15,32 @@
 
 	let chart: any = null;
 	let diffData: (number | null)[] = [];
+	let eventTitles: string[] = [];
 	const INITIAL_RATING = 1500;
 
 	function calculateRatings() {
 		const labels: string[] = ['Initial'];
 		const ratings: number[] = [INITIAL_RATING];
 		const diffs: (number | null)[] = [null];
+		const titles: string[] = [];
 
 		for (const i of [...data.events].reverse()) {
 			if (!(i.events.isContest && i.events.isRanked && i.diff !== null)) {
 				continue;
 			}
 
-			labels.push(i.events.title);
+			labels.push(i.events.start);
 			ratings.push(ratings.at(-1) + i.diff);
 			diffs.push(i.diff);
+			titles.push(i.events.title);
 		}
 
-		return { labels, ratings, diffs };
+		return {
+			labels: labels.slice(1),
+			ratings: ratings.slice(1),
+			diffs: diffs.slice(1),
+			titles: titles
+		};
 	}
 
 	function createChart(node: any) {
@@ -39,8 +48,9 @@
 			chart.destroy();
 		}
 
-		const { labels, ratings, diffs } = calculateRatings();
+		const { labels, ratings, diffs, titles } = calculateRatings();
 		diffData = diffs;
+		eventTitles = titles;
 
 		chart = new Chart(node, {
 			type: 'line',
@@ -79,12 +89,17 @@
 							display: false,
 							maxRotation: 45,
 							minRotation: 45
-						}
+						},
+						type: 'time'
 					}
 				},
 				plugins: {
 					tooltip: {
 						callbacks: {
+							title: function (context) {
+								const eventTitle = eventTitles[context[0].dataIndex];
+								return eventTitle || '';
+							},
 							label: function (context) {
 								const diff = diffData[context.dataIndex];
 								const rating = context.parsed.y;
