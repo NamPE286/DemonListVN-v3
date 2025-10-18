@@ -40,6 +40,8 @@
 		"@sveltejs/adapter-cloudflare": "^7.1.2",
 		"browser-image-compression": "^2.0.2",
 		"chart.js": "^4.4.2",
+		"chartjs-adapter-date-fns": "^3.0.0",
+		"chartjs-plugin-annotation": "^3.1.0",
 		"clsx": "^2.1.0",
 		"cmdk-sv": "^0.0.17",
 		"embla-carousel-autoplay": "^8.3.0",

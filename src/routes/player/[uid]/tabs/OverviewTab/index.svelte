@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageData } from '../../$types';
 	import * as Select from '$lib/components/ui/select';
 	import { Button } from '$lib/components/ui/button';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
@@ -14,6 +14,7 @@
 	import DeviceStatsCard from './cards/DeviceStatsCard.svelte';
 	import HardestDemonCard from './cards/HardestDemonCard.svelte';
 	import RecentActivityCard from './cards/RecentActivityCard.svelte';
+	import EventRatingChart from './cards/EventRatingChart.svelte';
 	import type { CardConfig, CardSize } from './cards/types';
 
 	export let data: PageData;
@@ -30,10 +31,11 @@
 	const defaultCards: CardConfig[] = [
 		{ id: 'ratings', visible: true, size: '2x1', order: 0 },
 		{ id: 'heatmap', visible: true, size: '2x1', order: 1 },
-		{ id: 'totalRecords', visible: false, size: '1x1', order: 2 },
-		{ id: 'deviceStats', visible: false, size: '1x1', order: 3 },
-		{ id: 'hardestDemon', visible: false, size: '2x1', order: 4 },
-		{ id: 'recentActivity', visible: false, size: '2x1', order: 5 }
+		{ id: 'eventRating', visible: false, size: '2x1', order: 2 },
+		{ id: 'totalRecords', visible: false, size: '1x1', order: 3 },
+		{ id: 'deviceStats', visible: false, size: '1x1', order: 4 },
+		{ id: 'hardestDemon', visible: false, size: '2x1', order: 5 },
+		{ id: 'recentActivity', visible: false, size: '2x1', order: 6 }
 	];
 
 	let cardConfigs: CardConfig[] = [];
@@ -82,7 +84,6 @@
 	async function saveCardPositions(
 		positions: Record<string, { order: number; visible: boolean; size: CardSize }>
 	) {
-		console.log('Saving card positions:', positions);
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/player`, {
 				method: 'PUT',
@@ -119,12 +120,18 @@
 	onMount(async () => {
 		if (data.player.overviewData) {
 			const overviewData = data.player.overviewData;
+
 			cardConfigs = Object.keys(overviewData).map((id) => ({
 				id,
 				visible: overviewData[id].visible,
 				size: overviewData[id].size,
 				order: overviewData[id].order
 			}));
+
+			const existingIds = new Set(cardConfigs.map((c) => c.id));
+			const missingConfigs = defaultCards.filter((card) => !existingIds.has(card.id));
+
+			cardConfigs = [...cardConfigs, ...missingConfigs];
 		} else {
 			cardConfigs = [...defaultCards];
 		}
@@ -210,6 +217,8 @@
 			<HeatmapCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
 		{:else if config.id === 'ratings'}
 			<RatingsCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
+		{:else if config.id === 'eventRating'}
+			<EventRatingChart {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
 		{:else if config.id === 'totalRecords'}
 			<TotalRecordsCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
 		{:else if config.id === 'deviceStats'}

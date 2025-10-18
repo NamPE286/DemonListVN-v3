@@ -7,6 +7,7 @@
 	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import type { CardConfig } from './types';
+	import { getBorderStyle } from './getBorderStyle';
 
 	export let data: any;
 	export let cardConfigs: CardConfig[];
@@ -16,17 +17,10 @@
 
 	$: exp = data.player.exp + data.player.extraExp;
 	$: expLevel = getExpLevel(exp);
-
-	function getBorderStyle() {
-		if (isActive(data.player.supporterUntil)) {
-			return `border-color: ${data.player.borderColor}`;
-		}
-		return '';
-	}
 </script>
 
 <BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
-	<Card.Root class="h-full" style={getBorderStyle()}>
+	<Card.Root class="h-full" style={getBorderStyle(data.player)}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.ratings')}</Card.Title>
 		</Card.Header>

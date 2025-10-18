@@ -59,7 +59,6 @@
 	}
 
 	async function fetchEvent() {
-		console.log(event.id);
 		if (!event.id) {
 			state = State.NEW_EVENT;
 			return;

@@ -5,6 +5,7 @@
 	import { _ } from 'svelte-i18n';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import type { CardConfig } from './types';
+	import { getBorderStyle } from './getBorderStyle';
 
 	export let data: any;
 	export let cardConfigs: CardConfig[];
@@ -14,17 +15,10 @@
 
 	$: dlRecords = data.records.dl || [];
 	$: hardestLevel = dlRecords.length > 0 ? dlRecords[0] : null;
-
-	function getBorderStyle() {
-		if (isActive(data.player.supporterUntil)) {
-			return `border-color: ${data.player.borderColor}`;
-		}
-		return '';
-	}
 </script>
 
 <BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
-	<Card.Root class="h-full" style={getBorderStyle()}>
+	<Card.Root class="h-full" style={getBorderStyle(data.player)}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.hardest_demon')}</Card.Title>
 		</Card.Header>

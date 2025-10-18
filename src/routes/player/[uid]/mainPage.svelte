@@ -15,9 +15,11 @@
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
 	import { isActive } from '$lib/client/isSupporterActive';
-	import MedalsTab from './medalsTab.svelte';
+	import MedalsTab from './tabs/MedalsTab.svelte';
 	import { _ } from 'svelte-i18n';
-	import OverviewTab from './overviewTab.svelte';
+	import OverviewTab from './tabs/OverviewTab/index.svelte';
+	import { onMount } from 'svelte';
+	import EventTab from './tabs/EventsTab.svelte';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' | 'pl' | '' = '';
@@ -103,9 +105,9 @@
 		/>
 	{/if}
 
-	<div class="pt-12 relative z-10 px-1 xl:px-20">
+	<div class="relative z-10 px-1 pt-12 xl:px-20">
 		<div class="gap-7.5 flex items-center pb-5">
-			<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40 mr-6">
+			<Avatar.Root class="mr-6 h-32 w-32 lg:h-40 lg:w-40">
 				<Avatar.Image
 					class="object-cover"
 					src={`https://cdn.demonlistvn.com/avatars/${data.player.uid}${
@@ -213,7 +215,13 @@
 					<Tabs.Trigger value="medals" on:click={() => (list = '')}
 						>{$_('player.tabs.medals')}</Tabs.Trigger
 					>
+					<Tabs.Trigger value="events" on:click={() => (list = '')}
+						>{$_('player.tabs.events')}</Tabs.Trigger
+					>
 				</Tabs.List>
+				<Tabs.Content value="events" class="w-[1200px] max-w-full">
+					<EventTab {data} />
+				</Tabs.Content>
 				<Tabs.Content value="overview" class="w-[1200px] max-w-full">
 					<OverviewTab {data} />
 				</Tabs.Content>
