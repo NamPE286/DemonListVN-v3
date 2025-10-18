@@ -22,6 +22,12 @@
 			minute: '2-digit'
 		});
 	}
+
+	function isMultiDayEvent(start: string, end: string) {
+		const startDate = new Date(start).toDateString();
+		const endDate = new Date(end).toDateString();
+		return startDate !== endDate;
+	}
 </script>
 
 <a href={`/event/${event.id}`}>
@@ -67,7 +73,11 @@
 			<div class="space-y-2 text-sm text-foreground/80">
 				<div class="flex items-center gap-2">
 					<Calendar class="h-4 w-4" />
-					<span>{formatDate(event.start)}</span>
+					{#if isMultiDayEvent(event.start, event.end)}
+						<span>{formatDate(event.start)} - {formatDate(event.end)}</span>
+					{:else}
+						<span>{formatDate(event.start)}</span>
+					{/if}
 				</div>
 				<div class="flex items-center gap-2">
 					<Clock class="h-4 w-4" />
