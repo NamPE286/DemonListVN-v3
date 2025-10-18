@@ -17,7 +17,7 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import MedalsTab from './medalsTab.svelte';
 	import { _ } from 'svelte-i18n';
-	import OverviewTab from './overviewTab.svelte';
+	import OverviewTab from './tabs/overviewTabs/+page.svelte';
 	import { onMount } from 'svelte';
 
 	export let data: PageData;
