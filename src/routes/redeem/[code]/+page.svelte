@@ -22,9 +22,6 @@
 				}
 			});
 			data = await response.json();
-			console.log(data);
-		} catch (error) {
-			console.error('Error fetching coupon:', error);
 		} finally {
 			loading = false;
 
@@ -37,22 +34,16 @@
 	async function claimGift() {
 		claiming = true;
 		try {
-			// Add your claim API call here
-			const response = await fetch(
-				`${import.meta.env.VITE_API_URL}/coupon/${page.params.code}/claim`,
-				{
-					method: 'POST',
-					headers: {
-						Authorization: 'Bearer ' + (await $user.token())
-					}
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/coupon/${page.params.code}`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
 				}
-			);
+			});
 
 			if (response.ok) {
 				claimed = true;
 			}
-		} catch (error) {
-			console.error('Error claiming gift:', error);
 		} finally {
 			claiming = false;
 		}
@@ -99,14 +90,12 @@
 							? 'opacity-100'
 							: 'opacity-0'}"
 					>
-						<!-- Gift Icon Header -->
 						<div class="mb-6 flex justify-center">
 							<div class="rounded-full bg-white/20 p-6 backdrop-blur-sm">
 								<Gift class="h-16 w-16 animate-pulse text-white" />
 							</div>
 						</div>
 
-						<!-- Title -->
 						<h1 class="mb-2 text-center text-3xl font-bold">
 							{claimed ? '🎉 Đã Nhận Quà!' : 'Bạn Có Một Món Quà!'}
 						</h1>
@@ -116,7 +105,6 @@
 								: 'Nhấn nút bên dưới để nhận quà'}
 						</p>
 
-						<!-- Gift Details -->
 						<div class="mb-8 space-y-4 rounded-lg bg-white/10 p-6 backdrop-blur-md">
 							<div class="flex items-center gap-3">
 								<Package class="h-5 w-5 text-purple-300" />
@@ -134,16 +122,6 @@
 								</div>
 							</div>
 						</div>
-
-						<!-- Gift Code -->
-						<div class="mb-8 text-center">
-							<p class="mb-2 text-sm text-white/70">Mã quà tặng</p>
-							<div class="inline-block rounded-lg bg-white/20 px-6 py-3 backdrop-blur-sm">
-								<code class="font-mono text-2xl font-bold tracking-wider">{page.params.code}</code>
-							</div>
-						</div>
-
-						<!-- Claim Button -->
 						{#if !claimed}
 							<Button
 								on:click={claimGift}
