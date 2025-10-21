@@ -68,6 +68,14 @@
       "success": "Đã huỷ bản nộp!",
       "error": "Huỷ bản nộp thất bại."
     },
+    "submission_submit": {
+      "loading": "Đang nộp...",
+      "success": "Đã nộp!",
+      "error": "Nộp thất bại",
+      "fill_required": "Vui lòng điền đầy đủ các trường bắt buộc",
+      "invalid_progress": "Tiến độ không hợp lệ",
+      "cancel_confirm": "Huỷ bản nộp? Hành động này không thể hoàn tác"
+    },
     "order_restore": "Đang khôi phục đơn hàng của bạn...",
     "order_place": {
       "success": "Đã đặt hàng!",
@@ -414,6 +422,9 @@
       "discord_required": "Bạn cần liên kết tài khoản với Discord để có thể nộp bài. Vào Cài đặt > Discord để liên kết.",
       "supporter_only": "Sự kiện này chỉ dành cho Supporter."
     },
+    "show_death_count": "Hiển thị số lần chết",
+    "raw_required": "Yêu cầu Raw",
+    "deaths": "Số lần chết",
     "participate": {
       "reward_claimed": "Đã nhận phần thưởng",
       "cancel_participation": "Huỷ tham gia",

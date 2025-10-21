@@ -7,10 +7,13 @@
 	import { ExclamationTriangle } from 'svelte-radix';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { _ } from 'svelte-i18n';
+	import { Switch } from '$lib/components/ui/switch/index.js';
+	import { Label } from '$lib/components/ui/label/index.js';
 
 	export let levels: (Level | null)[];
 	export let event: any;
 	let records: any[] = [];
+	let showDeathCount: boolean = true;
 
 	async function fetchRecord() {
 		if (!$user.loggedIn) {
@@ -37,6 +40,11 @@
 </script>
 
 <div class="ml-auto mr-auto flex w-[1000px] max-w-full flex-col gap-[10px]">
+	<div class="flex items-center justify-center gap-2 rounded-lg border p-3">
+		<Switch id="death-count-toggle" bind:checked={showDeathCount} />
+		<Label for="death-count-toggle" class="cursor-pointer">{$_('contest.show_death_count')}</Label>
+	</div>
+
 	{#if $user.loggedIn && !$user.data.discord}
 		<Alert.Root class="text-yellow-400">
 			<Alert.Title class="flex items-center gap-[10px]">
@@ -56,7 +64,7 @@
 
 	{#key records}
 		{#each levels as level, index}
-			<LevelCard {level} {index} {records} {event} />
+			<LevelCard {level} {index} {event} {showDeathCount} />
 		{/each}
 	{/key}
 </div>

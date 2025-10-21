@@ -11,6 +11,7 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { onMount } from 'svelte';
 	import Chart from 'chart.js/auto';
+	import { _ } from 'svelte-i18n';
 
 	interface SubmitData {
 		levelID: number | null;
@@ -21,8 +22,8 @@
 
 	export let level: Level | null;
 	export let index: number;
-	export let records: any[];
 	export let event: any;
+	export let showDeathCount: boolean = true;
 
 	let submitData: SubmitData = {
 		levelID: level ? level.id : 0,
@@ -57,17 +58,17 @@
 		}
 
 		if (!submitData.progress || !submitData.videoLink) {
-			toast.error('Please fill in all required fields');
+			toast.error($_('toast.submission_submit.fill_required'));
 			return;
 		}
 
 		if (level.needRaw && !submitData.raw) {
-			toast.error('Please fill in all required fields');
+			toast.error($_('toast.submission_submit.fill_required'));
 			return;
 		}
 
 		if (!(0 < submitData.progress && submitData.progress <= 100)) {
-			toast.error('Invalid progress');
+			toast.error($_('toast.submission_submit.invalid_progress'));
 			return;
 		}
 
@@ -83,10 +84,10 @@
 			{
 				success: () => {
 					window.location.reload();
-					return 'Submitted!';
+					return $_('toast.submission_submit.success');
 				},
-				error: 'Failed to submit',
-				loading: 'Submitting...'
+				error: $_('toast.submission_submit.error'),
+				loading: $_('toast.submission_submit.loading')
 			}
 		);
 	}
@@ -96,7 +97,7 @@
 			return;
 		}
 
-		if (!confirm('Cancel submission? This cannot be undone')) {
+		if (!confirm($_('toast.submission_submit.cancel_confirm'))) {
 			return;
 		}
 
@@ -110,10 +111,10 @@
 			{
 				success: () => {
 					window.location.reload();
-					return 'Cancelled!';
+					return $_('toast.submission_cancel.success');
 				},
-				error: 'Failed to cancel',
-				loading: 'Cancelling...'
+				error: $_('toast.submission_cancel.error'),
+				loading: $_('toast.submission_cancel.loading')
 			}
 		);
 	}
@@ -125,8 +126,8 @@
 
 		navigator.clipboard
 			.writeText(level.levelID.toString())
-			.then(() => toast.success('Copied to clipboard!'))
-			.catch(() => toast.error('Failed to copy'));
+			.then(() => toast.success($_('toast.clipboard')))
+			.catch(() => toast.error($_('toast.player_edit.error')));
 	}
 
 	async function getDeathCount() {
@@ -165,7 +166,7 @@
 				labels: genPercent(),
 				datasets: [
 					{
-						label: 'Death count',
+						label: $_('record_detail.tabs.death_count'),
 						data: deathCount,
 						borderWidth: 1,
 						backgroundColor: 'rgba(75, 192, 192, 0.6)',
@@ -192,7 +193,7 @@
 					tooltip: {
 						callbacks: {
 							label: function (context) {
-								return `Deaths: ${context.parsed.y}`;
+								return `${$_('contest.deaths')}: ${context.parsed.y}`;
 							}
 						}
 					},
@@ -237,7 +238,7 @@
 							{#if level && level.needRaw}
 								<span
 									class="inline rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
-									>Raw Required</span
+									>{$_('contest.raw_required')}</span
 								>
 							{/if}
 						</div>
@@ -255,7 +256,7 @@
 			</div>
 		</div>
 
-		{#if deathCount.length > 0}
+		{#if deathCount.length > 0 && showDeathCount}
 			<div class="flex w-full min-w-0 md:ml-auto md:flex-1 lg:max-w-[300px]">
 				<div class="h-[150px] w-full lg:h-[115px]">
 					<canvas use:createChart />

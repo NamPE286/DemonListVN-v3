@@ -68,6 +68,14 @@
       "success": "Submission cancelled!",
       "error": "Failed to cancel submission."
     },
+    "submission_submit": {
+      "loading": "Submitting...",
+      "success": "Submitted!",
+      "error": "Failed to submit",
+      "fill_required": "Please fill in all required fields",
+      "invalid_progress": "Invalid progress",
+      "cancel_confirm": "Cancel submission? This cannot be undone"
+    },
     "order_restore": "Restoring your order...",
     "order_place": {
       "success": "Order placed!",
@@ -415,6 +423,9 @@
       "discord_required": "You need to link your account to a Discord account in order to submit. Go to Settings > Discord to link.",
       "supporter_only": "This event is Supporter only."
     },
+    "show_death_count": "Show Death Count",
+    "raw_required": "Raw Required",
+    "deaths": "Deaths",
     "participate": {
       "reward_claimed": "Reward claimed",
       "cancel_participation": "Cancel participation",
