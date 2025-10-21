@@ -427,7 +427,9 @@
     "raw_required": "Raw Required",
     "deaths": "Deaths",
     "death_count": {
+      "level_death_count": "Level Death Count",
       "level_death_rate": "Level Death Rate",
+      "player_death_count": "Player Death Count",
       "player_death_rate": "Player Death Rate",
       "deaths": "deaths",
       "total": "Total",

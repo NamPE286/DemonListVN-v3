@@ -291,7 +291,7 @@
 						<div class="grid grid-cols-2 gap-4 text-sm">
 							<div>
 								<div class="font-semibold text-[rgba(75,192,192,1)]">
-									{$_('contest.death_count.level_death_rate')}
+									{$_('contest.death_count.level_death_count')}
 								</div>
 								<div class="opacity-70">
 									{$_('contest.death_count.total')}: {levelDeathCount.reduce((a, b) => a + b, 0)}
@@ -299,7 +299,7 @@
 							</div>
 							<div>
 								<div class="font-semibold text-[rgba(255,99,132,1)]">
-									{$_('contest.death_count.player_death_rate')}
+									{$_('contest.death_count.player_death_count')}
 								</div>
 								<div class="opacity-70">
 									{$_('contest.death_count.total')}: {playerDeathCount.reduce((a, b) => a + b, 0)}
