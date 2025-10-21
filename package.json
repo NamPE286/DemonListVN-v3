@@ -47,6 +47,7 @@
 		"embla-carousel-autoplay": "^8.3.0",
 		"embla-carousel-svelte": "^8.0.1",
 		"esbuild": "^0.25.4",
+		"lucide-svelte": "^0.546.0",
 		"mode-watcher": "^0.3.1",
 		"non.geist": "^1.0.2",
 		"svelte-i18n": "^4.0.1",
