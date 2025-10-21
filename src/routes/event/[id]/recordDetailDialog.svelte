@@ -107,12 +107,12 @@
 			? {
 					levelData: convertToRate(levelDeathCount),
 					playerData: convertToRate(playerDeathCount),
-					yLabel: 'Percentage (%)'
+					yLabel: $_('contest.death_count.percentage_label')
 				}
 			: {
 					levelData: levelDeathCount,
 					playerData: playerDeathCount,
-					yLabel: 'Count'
+					yLabel: $_('contest.death_count.count_label')
 				};
 
 		chart = new Chart(node, {
@@ -121,18 +121,14 @@
 				labels: genPercent(),
 				datasets: [
 					{
-						label: showRate
-							? $_('contest.death_count.level_death_rate')
-							: $_('contest.death_count.level_death_count'),
+						label: $_('contest.death_count.level'),
 						data: chartData.levelData,
 						backgroundColor: 'rgba(75, 192, 192, 0.6)',
 						borderColor: 'rgba(75, 192, 192, 1)',
 						borderWidth: 1
 					},
 					{
-						label: showRate
-							? $_('contest.death_count.player_death_rate')
-							: $_('contest.death_count.player_death_count'),
+						label: $_('contest.death_count.player'),
 						data: chartData.playerData,
 						backgroundColor: 'rgba(255, 99, 132, 0.6)',
 						borderColor: 'rgba(255, 99, 132, 1)',
@@ -150,7 +146,7 @@
 							precision: 0
 						},
 						title: {
-							display: false,
+							display: true,
 							text: chartData.yLabel
 						}
 					}

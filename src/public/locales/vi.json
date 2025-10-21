@@ -258,7 +258,7 @@
   "record_detail": {
     "tabs": {
       "detail": "Chi tiết",
-      "death_count": "Số lần chết",
+      "death_count": "Lần chết",
       "share": "Chia sẻ",
       "edit": "Chỉnh sửa",
       "review": "Đánh giá"
@@ -436,7 +436,11 @@
       "rate": "Tỷ lệ",
       "count": "Số lượng",
       "showing_rate": "Hiển thị tỷ lệ",
-      "showing_count": "Hiển thị số lượng"
+      "showing_count": "Hiển thị số lượng",
+      "level": "Level",
+      "player": "Người chơi",
+      "percentage_label": "Phần trăm (%)",
+      "count_label": "Số lượng"
     },
     "participate": {
       "reward_claimed": "Đã nhận phần thưởng",

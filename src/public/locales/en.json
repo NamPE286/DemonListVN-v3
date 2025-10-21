@@ -259,7 +259,7 @@
   "record_detail": {
     "tabs": {
       "detail": "Detail",
-      "death_count": "Death count",
+      "death_count": "Death",
       "share": "Share",
       "edit": "Edit",
       "review": "Review"
@@ -437,7 +437,11 @@
       "rate": "Rate",
       "count": "Count",
       "showing_rate": "Showing Rate",
-      "showing_count": "Showing Count"
+      "showing_count": "Showing Count",
+      "level": "Level",
+      "player": "Player",
+      "percentage_label": "Percentage (%)",
+      "count_label": "Count"
     },
     "participate": {
       "reward_claimed": "Reward claimed",
