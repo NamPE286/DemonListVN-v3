@@ -215,7 +215,7 @@
 </script>
 
 <Card.Root class="flex flex-col p-2">
-	<div class="flex flex-col gap-4 lg:flex-row lg:gap-6">
+	<div class="flex flex-col gap-4 md:flex-row md:gap-6">
 		<!-- Left side: Level Info -->
 		<div class="flex flex-col items-center md:flex-row">
 			<div class="flex w-full items-center">

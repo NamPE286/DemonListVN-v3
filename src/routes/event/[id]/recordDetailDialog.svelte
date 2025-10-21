@@ -176,7 +176,7 @@
 		<Dialog.Header>
 			<Dialog.Title>{$_('contest.leaderboard.record_detail')}</Dialog.Title>
 		</Dialog.Header>
-		<Tabs.Root value="detail" class="w-[400px]" onValueChange={handleTabChange}>
+		<Tabs.Root value="detail" class="w-full" onValueChange={handleTabChange}>
 			<Tabs.List>
 				<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
 				<Tabs.Trigger value="deathcount">Death count</Tabs.Trigger>
@@ -272,7 +272,7 @@
 				<div class="flex flex-col gap-4 py-4">
 					{#if isLoadingDeathCount}
 						<div class="flex h-[250px] items-center justify-center">
-							<Loading />
+							<Loading inverted />
 						</div>
 					{:else if levelDeathCount.length > 0 || playerDeathCount.length > 0}
 						<div class="h-[200px] w-full">
