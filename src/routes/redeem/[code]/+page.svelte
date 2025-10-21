@@ -73,6 +73,14 @@
 	}
 </script>
 
+<svelte:head>
+	<title>Nhận quà - Demon List VN</title>
+	<meta
+		property="og:title"
+		content={`Nhận quà - Demon List VN`}
+	/>
+</svelte:head>
+
 {#if loading}
 	<div class="mt-[40px] flex items-center justify-center" style="height: calc(100vh - 150px)">
 		<div class="flex items-center justify-center py-20">
@@ -101,9 +109,7 @@
 							{claimed ? $_('redeem.title_claimed') : $_('redeem.title_available')}
 						</h1>
 						<p class="mb-8 text-center text-white/80">
-							{claimed
-								? $_('redeem.description_claimed')
-								: $_('redeem.description_available')}
+							{claimed ? $_('redeem.description_claimed') : $_('redeem.description_available')}
 						</p>
 
 						<div class="mb-8 space-y-4 rounded-lg bg-white/10 p-6 backdrop-blur-md">
@@ -111,7 +117,10 @@
 								<Package class="h-5 w-5 text-purple-300" />
 								<div class="flex-1">
 									<p class="text-sm text-white/70">{$_('redeem.product')}</p>
-									<p class="text-lg font-semibold">{data.products.name} ({data.quantity} {$_('redeem.days')})</p>
+									<p class="text-lg font-semibold">
+										{data.products.name} ({data.quantity}
+										{$_('redeem.days')})
+									</p>
 								</div>
 							</div>
 
