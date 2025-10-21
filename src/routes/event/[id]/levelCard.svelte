@@ -256,7 +256,7 @@
 		</div>
 
 		{#if deathCount.length > 0}
-			<div class="ml-auto flex min-w-0 flex-1 lg:max-w-[300px]">
+			<div class="flex w-full min-w-0 md:ml-auto md:flex-1 lg:max-w-[300px]">
 				<div class="h-[150px] w-full lg:h-[115px]">
 					<canvas use:createChart />
 				</div>
