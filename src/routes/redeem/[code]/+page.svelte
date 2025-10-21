@@ -22,11 +22,12 @@
 				}
 			});
 			data = await response.json();
+			console.log(data);
 		} catch (error) {
 			console.error('Error fetching coupon:', error);
 		} finally {
 			loading = false;
-			// Trigger fade-in animation after loading completes
+
 			setTimeout(() => {
 				showContent = true;
 			}, 50);
@@ -57,14 +58,26 @@
 		}
 	}
 
-	function formatDate(dateString: string) {
-		return new Date(dateString).toLocaleDateString('vi-VN', {
-			day: '2-digit',
-			month: '2-digit',
-			year: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit'
-		});
+	function getTimeLeft(validUntil: string) {
+		const now = new Date();
+		const endDate = new Date(validUntil);
+		const timeDiff = endDate.getTime() - now.getTime();
+
+		if (timeDiff <= 0) {
+			return 'Đã hết hạn';
+		}
+
+		const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+		const hours = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+		const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+
+		if (days > 0) {
+			return `${days} ngày ${hours} giờ`;
+		} else if (hours > 0) {
+			return `${hours} giờ ${minutes} phút`;
+		} else {
+			return `${minutes} phút`;
+		}
 	}
 </script>
 
@@ -74,7 +87,7 @@
 			<Loading inverted={true} />
 		</div>
 	</div>
-{:else if data}
+{:else if data && data.percent == 1}
 	<div class="mt-[40px] flex items-center justify-center" style="height: calc(100vh - 150px)">
 		<Card.Root class="mx-auto w-full max-w-[600px] overflow-hidden border-0 shadow-2xl">
 			<div class="bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 p-[2px]">
@@ -109,15 +122,15 @@
 								<Package class="h-5 w-5 text-purple-300" />
 								<div class="flex-1">
 									<p class="text-sm text-white/70">Sản phẩm</p>
-									<p class="text-lg font-semibold">{data.products.name} x{data.quantity}</p>
+									<p class="text-lg font-semibold">{data.products.name} ({data.quantity} ngày)</p>
 								</div>
 							</div>
 
 							<div class="flex items-center gap-3">
 								<Calendar class="h-5 w-5 text-yellow-300" />
 								<div class="flex-1">
-									<p class="text-sm text-white/70">Có hiệu lực đến</p>
-									<p class="font-semibold">{formatDate(data.validUntil)}</p>
+									<p class="text-sm text-white/70">Thời gian còn lại</p>
+									<p class="font-semibold">{getTimeLeft(data.validUntil)}</p>
 								</div>
 							</div>
 						</div>
@@ -156,7 +169,10 @@
 		</Card.Root>
 	</div>
 {:else}
-	<div class="p-8 text-center text-white">
+	<div
+		class="mt-[40px] flex flex-col items-center justify-center"
+		style="height: calc(100vh - 150px)"
+	>
 		<p class="text-xl">❌ Không tìm thấy mã quà tặng</p>
 		<p class="mt-2 text-white/70">Vui lòng kiểm tra lại mã của bạn</p>
 	</div>
