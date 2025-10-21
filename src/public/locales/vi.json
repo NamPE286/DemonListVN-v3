@@ -798,5 +798,23 @@
         "place_order": "Đặt hàng"
       }
     }
+  },
+  "redeem": {
+    "title_claimed": "🎉 Đã Nhận Quà!",
+    "title_available": "Bạn Có Một Món Quà!",
+    "description_claimed": "Quà tặng đã được thêm vào tài khoản của bạn",
+    "description_available": "Nhấn nút bên dưới để nhận quà",
+    "product": "Sản phẩm",
+    "time_left": "Thời gian còn lại",
+    "days": "ngày",
+    "hours": "giờ",
+    "minutes": "phút",
+    "expired": "Đã hết hạn",
+    "claiming": "Đang nhận...",
+    "claim_button": "Nhận Quà Ngay",
+    "out_of_stock": "Quà đã hết",
+    "success_message": "✓ Đã nhận quà thành công!",
+    "not_found": "❌ Không tìm thấy mã quà tặng",
+    "check_code": "Vui lòng kiểm tra lại mã của bạn"
   }
 }

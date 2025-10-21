@@ -778,5 +778,23 @@
         "place_order": "Place Order"
       }
     }
+  },
+  "redeem": {
+    "title_claimed": "🎉 Gift Claimed!",
+    "title_available": "You Have a Gift!",
+    "description_claimed": "The gift has been added to your account",
+    "description_available": "Click the button below to claim your gift",
+    "product": "Product",
+    "time_left": "Time Remaining",
+    "days": "days",
+    "hours": "hours",
+    "minutes": "minutes",
+    "expired": "Expired",
+    "claiming": "Claiming...",
+    "claim_button": "Claim Gift Now",
+    "out_of_stock": "Gift Out of Stock",
+    "success_message": "✓ Gift claimed successfully!",
+    "not_found": "❌ Gift code not found",
+    "check_code": "Please check your code"
   }
 }

@@ -6,6 +6,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Gift, Calendar, Package, Percent } from 'lucide-svelte';
 	import Loading from '$lib/components/animation/loading.svelte';
+	import { _ } from 'svelte-i18n';
 
 	let data: any = null;
 	let loading = true;
@@ -55,7 +56,7 @@
 		const timeDiff = endDate.getTime() - now.getTime();
 
 		if (timeDiff <= 0) {
-			return 'Đã hết hạn';
+			return $_('redeem.expired');
 		}
 
 		const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
@@ -63,11 +64,11 @@
 		const minutes = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
 
 		if (days > 0) {
-			return `${days} ngày ${hours} giờ`;
+			return `${days} ${$_('redeem.days')} ${hours} ${$_('redeem.hours')}`;
 		} else if (hours > 0) {
-			return `${hours} giờ ${minutes} phút`;
+			return `${hours} ${$_('redeem.hours')} ${minutes} ${$_('redeem.minutes')}`;
 		} else {
-			return `${minutes} phút`;
+			return `${minutes} ${$_('redeem.minutes')}`;
 		}
 	}
 </script>
@@ -97,27 +98,27 @@
 						</div>
 
 						<h1 class="mb-2 text-center text-3xl font-bold">
-							{claimed ? '🎉 Đã Nhận Quà!' : 'Bạn Có Một Món Quà!'}
+							{claimed ? $_('redeem.title_claimed') : $_('redeem.title_available')}
 						</h1>
 						<p class="mb-8 text-center text-white/80">
 							{claimed
-								? 'Quà tặng đã được thêm vào tài khoản của bạn'
-								: 'Nhấn nút bên dưới để nhận quà'}
+								? $_('redeem.description_claimed')
+								: $_('redeem.description_available')}
 						</p>
 
 						<div class="mb-8 space-y-4 rounded-lg bg-white/10 p-6 backdrop-blur-md">
 							<div class="flex items-center gap-3">
 								<Package class="h-5 w-5 text-purple-300" />
 								<div class="flex-1">
-									<p class="text-sm text-white/70">Sản phẩm</p>
-									<p class="text-lg font-semibold">{data.products.name} ({data.quantity} ngày)</p>
+									<p class="text-sm text-white/70">{$_('redeem.product')}</p>
+									<p class="text-lg font-semibold">{data.products.name} ({data.quantity} {$_('redeem.days')})</p>
 								</div>
 							</div>
 
 							<div class="flex items-center gap-3">
 								<Calendar class="h-5 w-5 text-yellow-300" />
 								<div class="flex-1">
-									<p class="text-sm text-white/70">Thời gian còn lại</p>
+									<p class="text-sm text-white/70">{$_('redeem.time_left')}</p>
 									<p class="font-semibold">{getTimeLeft(data.validUntil)}</p>
 								</div>
 							</div>
@@ -129,16 +130,16 @@
 								class="w-full transform rounded-lg bg-white py-6 text-lg font-bold text-purple-900 shadow-lg transition-all hover:scale-105 hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
 							>
 								{#if claiming}
-									<span>Đang nhận...</span>
+									<span>{$_('redeem.claiming')}</span>
 								{:else if data.usageLeft <= 0}
-									Quà đã hết
+									{$_('redeem.out_of_stock')}
 								{:else}
-									Nhận Quà Ngay
+									{$_('redeem.claim_button')}
 								{/if}
 							</Button>
 						{:else}
 							<div class="rounded-lg border-2 border-green-400 bg-green-500/20 p-4 text-center">
-								<p class="font-semibold text-green-300">✓ Đã nhận quà thành công!</p>
+								<p class="font-semibold text-green-300">{$_('redeem.success_message')}</p>
 							</div>
 						{/if}
 					</div>
@@ -151,7 +152,7 @@
 		class="mt-[40px] flex flex-col items-center justify-center"
 		style="height: calc(100vh - 150px)"
 	>
-		<p class="text-xl">❌ Không tìm thấy mã quà tặng</p>
-		<p class="mt-2 text-white/70">Vui lòng kiểm tra lại mã của bạn</p>
+		<p class="text-xl">{$_('redeem.not_found')}</p>
+		<p class="mt-2 text-white/70">{$_('redeem.check_code')}</p>
 	</div>
 {/if}
