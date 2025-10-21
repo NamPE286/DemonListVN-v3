@@ -33,7 +33,8 @@
 	};
 
 	let deathCount: number[] = [];
-	let chart: any = null;
+	let smallChart: any = null;
+	let dialogChart: any = null;
 	let chartDialogOpen = false;
 
 	function isEventEnded() {
@@ -157,11 +158,13 @@
 	}
 
 	function createChart(node: any, showFull: boolean = false) {
-		if (chart != null) {
-			chart.destroy();
+		const chartRef = showFull ? dialogChart : smallChart;
+		
+		if (chartRef != null) {
+			chartRef.destroy();
 		}
 
-		chart = new Chart(node, {
+		const newChart = new Chart(node, {
 			type: 'bar',
 			data: {
 				labels: genPercent(),
@@ -216,6 +219,12 @@
 				}
 			}
 		});
+
+		if (showFull) {
+			dialogChart = newChart;
+		} else {
+			smallChart = newChart;
+		}
 	}
 
 	onMount(async () => {

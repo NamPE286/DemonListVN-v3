@@ -24,6 +24,7 @@
 	let chart: any = null;
 	let isLoadingDeathCount = false;
 	let showRate = true;
+	let currentTab = 'detail';
 
 	function handleTriggerClick() {
 		updateData = structuredClone(record);
@@ -182,6 +183,9 @@
 	}
 
 	function handleTabChange(value: string | undefined) {
+		if (value) {
+			currentTab = value;
+		}
 		if (value === 'deathcount' && levelDeathCount.length === 0) {
 			loadDeathCountData();
 		}
@@ -216,7 +220,7 @@
 			</span>
 		{/if}
 	</Dialog.Trigger>
-	<Dialog.Content>
+	<Dialog.Content class={currentTab === 'deathcount' ? 'max-w-6xl max-h-[90vh]' : ''}>
 		<Dialog.Header>
 			<Dialog.Title>{$_('contest.leaderboard.record_detail')}</Dialog.Title>
 		</Dialog.Header>
@@ -319,7 +323,7 @@
 							<Loading inverted />
 						</div>
 					{:else if levelDeathCount.length > 0 || playerDeathCount.length > 0}
-						<div class="h-[200px] w-full">
+						<div class="h-[400px] w-full">
 							<canvas use:createChart />
 						</div>
 						<div class="mb-2 flex items-center justify-center gap-4">
