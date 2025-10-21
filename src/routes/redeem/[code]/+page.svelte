@@ -109,25 +109,7 @@
 								<Package class="h-5 w-5 text-purple-300" />
 								<div class="flex-1">
 									<p class="text-sm text-white/70">Sản phẩm</p>
-									<p class="text-lg font-semibold">{data.products.name}</p>
-								</div>
-							</div>
-
-							{#if data.percent > 0}
-								<div class="flex items-center gap-3">
-									<Percent class="h-5 w-5 text-pink-300" />
-									<div class="flex-1">
-										<p class="text-sm text-white/70">Giảm giá</p>
-										<p class="text-lg font-semibold">{data.percent * 100}%</p>
-									</div>
-								</div>
-							{/if}
-
-							<div class="flex items-center gap-3">
-								<Package class="h-5 w-5 text-red-300" />
-								<div class="flex-1">
-									<p class="text-sm text-white/70">Số lượng còn lại</p>
-									<p class="text-lg font-semibold">{data.usageLeft} / {data.quantity}</p>
+									<p class="text-lg font-semibold">{data.products.name} x{data.quantity}</p>
 								</div>
 							</div>
 
