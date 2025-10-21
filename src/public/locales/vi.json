@@ -432,7 +432,11 @@
       "total": "Tổng",
       "no_data": "Không có dữ liệu số lần chết",
       "level_death_count": "Số lần chết của Level",
-      "player_death_count": "Số lần chết của người chơi"
+      "player_death_count": "Số lần chết của người chơi",
+      "rate": "Tỷ lệ",
+      "count": "Số lượng",
+      "showing_rate": "Hiển thị tỷ lệ",
+      "showing_count": "Hiển thị số lượng"
     },
     "participate": {
       "reward_claimed": "Đã nhận phần thưởng",

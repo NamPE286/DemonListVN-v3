@@ -433,7 +433,11 @@
       "player_death_rate": "Player Death Rate",
       "deaths": "deaths",
       "total": "Total",
-      "no_data": "No death count data available"
+      "no_data": "No death count data available",
+      "rate": "Rate",
+      "count": "Count",
+      "showing_rate": "Showing Rate",
+      "showing_count": "Showing Count"
     },
     "participate": {
       "reward_claimed": "Reward claimed",

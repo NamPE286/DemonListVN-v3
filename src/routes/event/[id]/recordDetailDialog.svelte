@@ -7,6 +7,7 @@
 	import { user } from '$lib/client';
 	import { _ } from 'svelte-i18n';
 	import * as Tabs from '$lib/components/ui/tabs';
+	import * as Switch from '$lib/components/ui/switch';
 	import Chart from 'chart.js/auto';
 	import { onMount } from 'svelte';
 	import Loading from '$lib/components/animation/loading.svelte';
@@ -22,6 +23,7 @@
 	let playerDeathCount: number[] = [];
 	let chart: any = null;
 	let isLoadingDeathCount = false;
+	let showRate = true;
 
 	function handleTriggerClick() {
 		updateData = structuredClone(record);
@@ -100,21 +102,37 @@
 			chart.destroy();
 		}
 
+		const chartData = showRate
+			? {
+					levelData: convertToRate(levelDeathCount),
+					playerData: convertToRate(playerDeathCount),
+					yLabel: 'Percentage (%)'
+				}
+			: {
+					levelData: levelDeathCount,
+					playerData: playerDeathCount,
+					yLabel: 'Count'
+				};
+
 		chart = new Chart(node, {
 			type: 'bar',
 			data: {
 				labels: genPercent(),
 				datasets: [
 					{
-						label: $_('contest.death_count.level_death_rate'),
-						data: convertToRate(levelDeathCount),
+						label: showRate
+							? $_('contest.death_count.level_death_rate')
+							: $_('contest.death_count.level_death_count'),
+						data: chartData.levelData,
 						backgroundColor: 'rgba(75, 192, 192, 0.6)',
 						borderColor: 'rgba(75, 192, 192, 1)',
 						borderWidth: 1
 					},
 					{
-						label: $_('contest.death_count.player_death_rate'),
-						data: convertToRate(playerDeathCount),
+						label: showRate
+							? $_('contest.death_count.player_death_rate')
+							: $_('contest.death_count.player_death_count'),
+						data: chartData.playerData,
 						backgroundColor: 'rgba(255, 99, 132, 0.6)',
 						borderColor: 'rgba(255, 99, 132, 1)',
 						borderWidth: 1
@@ -129,6 +147,10 @@
 						beginAtZero: true,
 						ticks: {
 							precision: 0
+						},
+						title: {
+							display: false,
+							text: chartData.yLabel
 						}
 					}
 				},
@@ -138,10 +160,15 @@
 							label: function (context) {
 								const datasetIndex = context.datasetIndex;
 								const dataIndex = context.dataIndex;
-								const rate = context.parsed.y.toFixed(2);
 								const count =
 									datasetIndex === 0 ? levelDeathCount[dataIndex] : playerDeathCount[dataIndex];
-								return `${context.dataset.label}: ${rate}% (${count} ${$_('contest.death_count.deaths')})`;
+
+								if (showRate) {
+									const rate = context.parsed.y.toFixed(2);
+									return `${context.dataset.label}: ${rate}% (${count} ${$_('contest.death_count.deaths')})`;
+								} else {
+									return `${context.dataset.label}: ${count} ${$_('contest.death_count.deaths')}`;
+								}
 							}
 						}
 					},
@@ -159,6 +186,13 @@
 			loadDeathCountData();
 		}
 	}
+	$: (showRate,
+	() => {
+		if (chart) {
+			const canvas = chart.canvas;
+			createChart(canvas);
+		}
+	})();
 </script>
 
 <Dialog.Root>
@@ -287,6 +321,17 @@
 					{:else if levelDeathCount.length > 0 || playerDeathCount.length > 0}
 						<div class="h-[200px] w-full">
 							<canvas use:createChart />
+						</div>
+						<div class="mb-2 flex items-center justify-center gap-4">
+							<Label for="chart-toggle" class="cursor-pointer text-sm">
+								{$_('contest.death_count.count') || 'Count'}
+							</Label>
+							<div class="flex items-center gap-2">
+								<Switch.Root id="chart-toggle" bind:checked={showRate} />
+							</div>
+							<Label for="chart-toggle" class="cursor-pointer text-sm">
+								{$_('contest.death_count.rate') || 'Rate'}
+							</Label>
 						</div>
 						<div class="grid grid-cols-2 gap-4 text-sm">
 							<div>
