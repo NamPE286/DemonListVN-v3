@@ -426,6 +426,13 @@
     "show_death_count": "Show Death Count",
     "raw_required": "Raw Required",
     "deaths": "Deaths",
+    "death_count": {
+      "level_death_rate": "Level Death Rate",
+      "player_death_rate": "Player Death Rate",
+      "deaths": "deaths",
+      "total": "Total",
+      "no_data": "No death count data available"
+    },
     "participate": {
       "reward_claimed": "Reward claimed",
       "cancel_participation": "Cancel participation",

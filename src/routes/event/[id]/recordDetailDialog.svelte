@@ -42,6 +42,11 @@
 		updateData.created_at = new Date(updateData.created_at).toISOString().slice(0, 16);
 	}
 
+	function convertToRate(arr: number[]) {
+		const sum = arr.reduce((acc, val) => acc + val, 0);
+		return arr.map((val) => (sum === 0 ? 0 : (val / sum) * 100));
+	}
+
 	async function getLevelDeathCount(levelID: number) {
 		const res = await (
 			await fetch(`${import.meta.env.VITE_API_URL}/level/${levelID}/deathCount`)
@@ -60,7 +65,7 @@
 
 	async function loadDeathCountData() {
 		if (!record || !levels[index]) return;
-		
+
 		isLoadingDeathCount = true;
 		try {
 			const levelID = levels[index].levelID;
@@ -101,15 +106,15 @@
 				labels: genPercent(),
 				datasets: [
 					{
-						label: 'Level Death Count',
-						data: levelDeathCount,
+						label: $_('contest.death_count.level_death_rate'),
+						data: convertToRate(levelDeathCount),
 						backgroundColor: 'rgba(75, 192, 192, 0.6)',
 						borderColor: 'rgba(75, 192, 192, 1)',
 						borderWidth: 1
 					},
 					{
-						label: 'Player Death Count',
-						data: playerDeathCount,
+						label: $_('contest.death_count.player_death_rate'),
+						data: convertToRate(playerDeathCount),
 						backgroundColor: 'rgba(255, 99, 132, 0.6)',
 						borderColor: 'rgba(255, 99, 132, 1)',
 						borderWidth: 1
@@ -131,7 +136,12 @@
 					tooltip: {
 						callbacks: {
 							label: function (context) {
-								return `${context.dataset.label}: ${context.parsed.y}`;
+								const datasetIndex = context.datasetIndex;
+								const dataIndex = context.dataIndex;
+								const rate = context.parsed.y.toFixed(2);
+								const count =
+									datasetIndex === 0 ? levelDeathCount[dataIndex] : playerDeathCount[dataIndex];
+								return `${context.dataset.label}: ${rate}% (${count} ${$_('contest.death_count.deaths')})`;
 							}
 						}
 					},
@@ -178,8 +188,8 @@
 		</Dialog.Header>
 		<Tabs.Root value="detail" class="w-full" onValueChange={handleTabChange}>
 			<Tabs.List>
-				<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
-				<Tabs.Trigger value="deathcount">Death count</Tabs.Trigger>
+				<Tabs.Trigger value="detail">{$_('record_detail.tabs.detail')}</Tabs.Trigger>
+				<Tabs.Trigger value="deathcount">{$_('record_detail.tabs.death_count')}</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="detail">
 				<div class="flex flex-col gap-0">
@@ -280,17 +290,25 @@
 						</div>
 						<div class="grid grid-cols-2 gap-4 text-sm">
 							<div>
-								<div class="font-semibold text-[rgba(75,192,192,1)]">Level Death Count</div>
-								<div class="opacity-70">Total: {levelDeathCount.reduce((a, b) => a + b, 0)}</div>
+								<div class="font-semibold text-[rgba(75,192,192,1)]">
+									{$_('contest.death_count.level_death_rate')}
+								</div>
+								<div class="opacity-70">
+									{$_('contest.death_count.total')}: {levelDeathCount.reduce((a, b) => a + b, 0)}
+								</div>
 							</div>
 							<div>
-								<div class="font-semibold text-[rgba(255,99,132,1)]">Player Death Count</div>
-								<div class="opacity-70">Total: {playerDeathCount.reduce((a, b) => a + b, 0)}</div>
+								<div class="font-semibold text-[rgba(255,99,132,1)]">
+									{$_('contest.death_count.player_death_rate')}
+								</div>
+								<div class="opacity-70">
+									{$_('contest.death_count.total')}: {playerDeathCount.reduce((a, b) => a + b, 0)}
+								</div>
 							</div>
 						</div>
 					{:else}
 						<div class="flex h-[400px] items-center justify-center opacity-50">
-							No death count data available
+							{$_('contest.death_count.no_data')}
 						</div>
 					{/if}
 				</div>
