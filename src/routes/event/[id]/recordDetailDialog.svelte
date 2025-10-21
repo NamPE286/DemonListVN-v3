@@ -220,7 +220,7 @@
 			</span>
 		{/if}
 	</Dialog.Trigger>
-	<Dialog.Content class={currentTab === 'deathcount' ? 'max-w-6xl max-h-[90vh]' : ''}>
+	<Dialog.Content class={currentTab === 'deathcount' ? 'md:max-w-[80vw] max-h-[90vh]' : ''}>
 		<Dialog.Header>
 			<Dialog.Title>{$_('contest.leaderboard.record_detail')}</Dialog.Title>
 		</Dialog.Header>
