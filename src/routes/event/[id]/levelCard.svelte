@@ -34,6 +34,7 @@
 
 	let deathCount: number[] = [];
 	let chart: any = null;
+	let chartDialogOpen = false;
 
 	function isEventEnded() {
 		return new Date(event.end) < new Date();
@@ -155,7 +156,7 @@
 		return res;
 	}
 
-	function createChart(node: any) {
+	function createChart(node: any, showFull: boolean = false) {
 		if (chart != null) {
 			chart.destroy();
 		}
@@ -179,14 +180,22 @@
 				maintainAspectRatio: false,
 				scales: {
 					x: {
-						display: false
+						display: showFull,
+						title: showFull ? {
+							display: true,
+							text: $_('record_detail.tabs.progress')
+						} : undefined
 					},
 					y: {
-						display: false,
+						display: showFull,
 						beginAtZero: true,
 						ticks: {
 							precision: 0
-						}
+						},
+						title: showFull ? {
+							display: true,
+							text: $_('contest.deaths')
+						} : undefined
 					}
 				},
 				plugins: {
@@ -201,7 +210,8 @@
 						display: true
 					},
 					title: {
-						display: false
+						display: showFull,
+						text: showFull ? `${$_('record_detail.tabs.death_count')} - ${level ? level.name : '???'}` : ''
 					}
 				}
 			}
@@ -258,10 +268,22 @@
 
 		{#if deathCount.length > 0 && showDeathCount}
 			<div class="flex w-full min-w-0 md:ml-auto md:flex-1 lg:max-w-[300px]">
-				<div class="h-[150px] w-full lg:h-[115px]">
+				<button 
+					class="h-[150px] w-full cursor-pointer lg:h-[115px]" 
+					on:click={() => chartDialogOpen = true}
+					type="button"
+				>
 					<canvas use:createChart />
-				</div>
+				</button>
 			</div>
 		{/if}
 	</div>
 </Card.Root>
+
+<Dialog.Root bind:open={chartDialogOpen}>
+	<Dialog.Content class="max-w-4xl">
+		<div class="h-[500px] w-full">
+			<canvas use:createChart={true} />
+		</div>
+	</Dialog.Content>
+</Dialog.Root>
