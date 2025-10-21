@@ -71,6 +71,12 @@
 			return `${minutes} ${$_('redeem.minutes')}`;
 		}
 	}
+
+	function isCouponExpired(validUntil: string) {
+		const now = new Date();
+		const endDate = new Date(validUntil);
+		return endDate.getTime() - now.getTime() <= 0;
+	}
 </script>
 
 <svelte:head>
@@ -135,11 +141,13 @@
 						{#if !claimed}
 							<Button
 								on:click={claimGift}
-								disabled={claiming || data.usageLeft <= 0}
+								disabled={claiming || data.usageLeft <= 0 || isCouponExpired(data.validUntil)}
 								class="w-full transform rounded-lg bg-white py-6 text-lg font-bold text-purple-900 shadow-lg transition-all hover:scale-105 hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:scale-100"
 							>
 								{#if claiming}
 									<span>{$_('redeem.claiming')}</span>
+								{:else if isCouponExpired(data.validUntil)}
+									{$_('redeem.expired')}
 								{:else if data.usageLeft <= 0}
 									{$_('redeem.out_of_stock')}
 								{:else}
