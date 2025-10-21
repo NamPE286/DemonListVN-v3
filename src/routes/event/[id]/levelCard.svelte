@@ -9,6 +9,8 @@
 	import { user } from '$lib/client';
 	import { Copy } from 'svelte-radix';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import { onMount } from 'svelte';
+	import Chart from 'chart.js/auto';
 
 	interface SubmitData {
 		levelID: number | null;
@@ -28,6 +30,9 @@
 		videoLink: '',
 		raw: ''
 	};
+
+	let deathCount: number[] = [];
+	let chart: any = null;
 
 	function isEventEnded() {
 		return new Date(event.end) < new Date();
@@ -123,85 +128,139 @@
 			.then(() => toast.success('Copied to clipboard!'))
 			.catch(() => toast.error('Failed to copy'));
 	}
+
+	async function getDeathCount() {
+		if (!level) return;
+		
+		try {
+			const res = await (
+				await fetch(`${import.meta.env.VITE_API_URL}/level/${level.levelID}/deathCount`)
+			).json();
+
+			if (res && res.count) {
+				deathCount = res.count;
+			}
+		} catch (error) {
+			console.error('Failed to fetch death count:', error);
+			deathCount = Array(100).fill(0);
+		}
+	}
+
+	function genPercent() {
+		const res = Array(100);
+		for (let i = 0; i < 100; i++) {
+			res[i] = `${i + 1}%`;
+		}
+		return res;
+	}
+
+	function createChart(node: any) {
+		if (chart != null) {
+			chart.destroy();
+		}
+
+		chart = new Chart(node, {
+			type: 'bar',
+			data: {
+				labels: genPercent(),
+				datasets: [
+					{
+						label: 'Death count',
+						data: deathCount,
+						borderWidth: 1,
+						backgroundColor: 'rgba(75, 192, 192, 0.6)',
+						borderColor: 'rgba(75, 192, 192, 1)'
+					}
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				scales: {
+					x: {
+						display: false
+					},
+					y: {
+						display: false,
+						beginAtZero: true,
+						ticks: {
+							precision: 0
+						}
+					}
+				},
+				plugins: {
+					tooltip: {
+						callbacks: {
+							label: function (context) {
+								return `Deaths: ${context.parsed.y}`;
+							}
+						}
+					},
+					legend: {
+						display: true
+					},
+					title: {
+						display: false
+					}
+				}
+			}
+		});
+	}
+
+	onMount(async () => {
+		if (level) {
+			await getDeathCount();
+		}
+	});
 </script>
 
-<Card.Root class="flex flex-col items-center p-2 md:flex-row">
-	<div class="flex w-full items-center">
-		<a href={`https://www.youtube.com/watch?v=${level ? level.videoID : ''}`} target="_blank">
-			<img
-				src={`https://img.youtube.com/vi/${level ? level.videoID : ''}/0.jpg`}
-				alt="level"
-				class="h-[100px] w-[177px] rounded-xl object-cover"
-			/>
-		</a>
-		<Card.Content class="mt-[22.5px] flex flex-col justify-center">
-			<div class="flex items-center gap-[10px]">
-				<div class="flex items-center gap-[5px]">
-					<h2 class="text-xl font-bold">{indexToRoman(index + 1)}. {level ? level.name : '???'}</h2>
-					<span
-						class="inline h-fit rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
-						>{level ? level.point : '???'}pt</span
-					>
-					{#if level && level.needRaw}
-						<span
-							class="inline rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
-							>Raw Required</span
-						>
-					{/if}
+<Card.Root class="flex flex-col p-2">
+	<div class="flex flex-col gap-4 lg:flex-row lg:gap-6">
+		<!-- Left side: Level Info -->
+		<div class="flex flex-col items-center md:flex-row">
+			<div class="flex w-full items-center">
+				<a href={`https://www.youtube.com/watch?v=${level ? level.videoID : ''}`} target="_blank">
+					<img
+						src={`https://img.youtube.com/vi/${level ? level.videoID : ''}/0.jpg`}
+						alt="level"
+						class="h-[100px] w-[177px] rounded-xl object-cover"
+					/>
+				</a>
+				<Card.Content class="mt-[22.5px] flex flex-col justify-center">
+					<div class="flex items-center gap-[10px]">
+						<div class="flex items-center gap-[5px]">
+							<h2 class="text-xl font-bold">{indexToRoman(index + 1)}. {level ? level.name : '???'}</h2>
+							<span
+								class="inline h-fit rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
+								>{level ? level.point : '???'}pt</span
+							>
+							{#if level && level.needRaw}
+								<span
+									class="inline rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
+									>Raw Required</span
+								>
+							{/if}
+						</div>
+					</div>
+					<div class="flex flex-col">
+						by {level ? level.creator : '???'}
+						<button class="flex items-center gap-[5px]" on:click={copyID}>
+							ID: {level ? level.levelID : '???'}
+							{#if level}
+								<Copy size={15} />
+							{/if}
+						</button>
+					</div>
+				</Card.Content>
+			</div>
+		</div>
+
+		{#if deathCount.length > 0}
+			<div class="ml-auto flex min-w-0 flex-1 lg:max-w-[300px]">
+				<div class="h-[150px] w-full lg:h-[115px]">
+					<canvas use:createChart />
 				</div>
 			</div>
-			<div class="flex flex-col">
-				by {level ? level.creator : '???'}
-				<button class="flex items-center gap-[5px]" on:click={copyID}>
-					ID: {level ? level.levelID : '???'}
-					{#if level}
-						<Copy size={15} />
-					{/if}
-				</button>
-			</div>
-		</Card.Content>
-	</div>
-	<div class="ml-auto w-full md:mr-[22.5px] md:w-fit">
-		<!-- {#if $user.loggedIn && $user.data.discord && !isEventEnded() && level && (!event.isSupporterOnly || isActive($user.data.supporterUntil))}
-			{#if records.length == 0}
-				<Button class="w-full" variant="secondary" disabled>...</Button>
-			{:else if records[index] === null}
-				<Dialog.Root>
-					<Dialog.Trigger class="w-full">
-						<Button class="w-full">Submit</Button>
-					</Dialog.Trigger>
-					<Dialog.Content>
-						<Dialog.Header>
-							<Dialog.Title>Submit {level.name}</Dialog.Title>
-						</Dialog.Header>
-						<div class="grid grid-cols-4 items-center gap-4">
-							<Label for="name" class="text-right">Progress</Label>
-							<Input
-								type="number"
-								inputmode="numeric"
-								min="1"
-								max="100"
-								bind:value={submitData.progress}
-								class="col-span-3"
-								placeholder="Required (decimal allowed .e.g 99.99)"
-							/>
-						</div>
-						<div class="grid grid-cols-4 items-center gap-4">
-							<Label for="name" class="text-right">Video's Link</Label>
-							<Input bind:value={submitData.videoLink} placeholder="Required" class="col-span-3" />
-						</div>
-						{#if level.needRaw}
-							<div class="grid grid-cols-4 items-center gap-4">
-								<Label for="name" class="text-right">Raw</Label>
-								<Input bind:value={submitData.raw} placeholder="Required" class="col-span-3" />
-							</div>
-						{/if}
-						<Button on:click={submit}>Submit</Button>
-					</Dialog.Content>
-				</Dialog.Root>
-			{:else}
-				<Button class="w-full" variant="destructive" on:click={cancel}>Cancel</Button>
-			{/if}
-		{/if} -->
+		{/if}
 	</div>
 </Card.Root>
