@@ -70,6 +70,10 @@
 			return 0;
 		}
 
+		if(event.type == 'raid') {
+			return record.progress;
+		}
+
 		const res = (record.progress / 100) * levels[index].point;
 
 		return Math.round(res * 100) / 100;
@@ -321,7 +325,9 @@
 				<Table.Head class="w-[100px]">{$_('contest.leaderboard.rank')}</Table.Head>
 				<Table.Head class="min-w-[200px]">{$_('contest.leaderboard.player')}</Table.Head>
 				<Table.Head class="w-[75px] text-center">{$_('contest.leaderboard.total')}</Table.Head>
-				<Table.Head class="w-[75px] text-center">{$_('contest.leaderboard.penalty')}</Table.Head>
+				{#if event.type == 'basic'}
+					<Table.Head class="w-[75px] text-center">{$_('contest.leaderboard.penalty')}</Table.Head>
+				{/if}
 				{#each levels as level, index}
 					<Table.Head class="w-[75px] text-center">
 						<Tooltip.Root>
@@ -365,14 +371,16 @@
 					<Table.Cell class="w-[75px] text-center font-bold">
 						{getTotalPoint(player.eventRecords)}
 					</Table.Cell>
-					<Table.Cell class="w-[75px] text-center">
-						<Tooltip.Root>
-							<Tooltip.Trigger>
-								{getPenalty(player.eventRecords, 60000)}
-							</Tooltip.Trigger>
-							<Tooltip.Content>{getPenaltyTooltip(player.eventRecords)}</Tooltip.Content>
-						</Tooltip.Root>
-					</Table.Cell>
+					{#if event.type == 'basic'}
+						<Table.Cell class="w-[75px] text-center">
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									{getPenalty(player.eventRecords, 60000)}
+								</Tooltip.Trigger>
+								<Tooltip.Content>{getPenaltyTooltip(player.eventRecords)}</Tooltip.Content>
+							</Tooltip.Root>
+						</Table.Cell>
+					{/if}
 					{#each player.eventRecords as record, index}
 						{#if !revealMode}
 							<Table.Cell class="w-[75px] text-center">
@@ -389,6 +397,7 @@
 										{levels}
 										{getPoint}
 										onUpdate={updateRecord}
+										type={event.type}
 									/>
 								{/if}
 							</Table.Cell>
