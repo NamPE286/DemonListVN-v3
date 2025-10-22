@@ -26,10 +26,10 @@
 	export let showDeathCount: boolean = true;
 	export let type: 'basic' | 'raid';
 
-	$: dmgTaken = (level as any)?.dmgTaken || 0;
+	$: totalProgress = (level as any)?.totalProgress || 0;
 	$: totalHP = level?.point || 0;
-	$: hpRemaining = Math.max(0, totalHP - dmgTaken);
-	$: hpPercentage = totalHP > 0 ? (hpRemaining / totalHP) * 100 : 0;
+	$: hpRemaining = Math.max(0, totalHP - totalProgress);
+	$: hpPercentage = totalHP > 0 ? (hpRemaining / totalHP) * 100 : 100;
 
 	let submitData: SubmitData = {
 		levelID: level ? level.id : 0,
