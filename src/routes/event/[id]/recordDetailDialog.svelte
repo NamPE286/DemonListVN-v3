@@ -17,6 +17,7 @@
 	export let levels: any[];
 	export let getPoint: (record: any, index: number) => number;
 	export let onUpdate: (record: any) => void;
+	export let type: 'basic' | 'raid';
 
 	let updateData: any = null;
 	let levelDeathCount: number[] = [];
@@ -197,7 +198,9 @@
 
 <Dialog.Root>
 	<Dialog.Trigger on:click={handleTriggerClick}>
-		{#if record && record.accepted === false}
+		{#if type == 'raid'}
+			{Math.round(record.progress * 100) / 100}
+		{:else if record && record.accepted === false}
 			<s>
 				{getPoint(record, index)}<br />
 				<span class="text-[11px] opacity-50">
@@ -216,7 +219,7 @@
 			</span>
 		{/if}
 	</Dialog.Trigger>
-	<Dialog.Content class={currentTab === 'deathcount' ? 'md:max-w-[80vw] max-h-[90vh]' : ''}>
+	<Dialog.Content class={currentTab === 'deathcount' ? 'max-h-[90vh] md:max-w-[80vw]' : ''}>
 		<Dialog.Header>
 			<Dialog.Title>{$_('contest.leaderboard.record_detail')}</Dialog.Title>
 		</Dialog.Header>

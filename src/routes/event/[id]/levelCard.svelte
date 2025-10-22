@@ -24,6 +24,12 @@
 	export let index: number;
 	export let event: any;
 	export let showDeathCount: boolean = true;
+	export let type: 'basic' | 'raid';
+
+	$: totalProgress = (level as any)?.totalProgress || 0;
+	$: totalHP = level?.point || 0;
+	$: hpRemaining = Math.max(0, totalHP - totalProgress);
+	$: hpPercentage = totalHP > 0 ? (hpRemaining / totalHP) * 100 : 100;
 
 	let submitData: SubmitData = {
 		levelID: level ? level.id : 0,
@@ -134,7 +140,7 @@
 
 	async function getDeathCount() {
 		if (!level) return;
-		
+
 		try {
 			const res = await (
 				await fetch(`${import.meta.env.VITE_API_URL}/level/${level.levelID}/deathCount`)
@@ -159,7 +165,7 @@
 
 	function createChart(node: any, showFull: boolean = false) {
 		const chartRef = showFull ? dialogChart : smallChart;
-		
+
 		if (chartRef != null) {
 			chartRef.destroy();
 		}
@@ -184,10 +190,12 @@
 				scales: {
 					x: {
 						display: showFull,
-						title: showFull ? {
-							display: true,
-							text: $_('record_detail.tabs.progress')
-						} : undefined
+						title: showFull
+							? {
+									display: true,
+									text: $_('record_detail.tabs.progress')
+								}
+							: undefined
 					},
 					y: {
 						display: showFull,
@@ -195,10 +203,12 @@
 						ticks: {
 							precision: 0
 						},
-						title: showFull ? {
-							display: true,
-							text: $_('contest.deaths')
-						} : undefined
+						title: showFull
+							? {
+									display: true,
+									text: $_('contest.deaths')
+								}
+							: undefined
 					}
 				},
 				plugins: {
@@ -214,7 +224,9 @@
 					},
 					title: {
 						display: showFull,
-						text: showFull ? `${$_('record_detail.tabs.death_count')} - ${level ? level.name : '???'}` : ''
+						text: showFull
+							? `${$_('record_detail.tabs.death_count')} - ${level ? level.name : '???'}`
+							: ''
 					}
 				}
 			}
@@ -231,59 +243,92 @@
 		if (level) {
 			await getDeathCount();
 		}
+
+		console.log(level)
 	});
 </script>
 
 <Card.Root class="flex flex-col p-2">
-	<div class="flex flex-col gap-4 md:flex-row md:gap-6">
-		<!-- Left side: Level Info -->
-		<div class="flex flex-col items-center md:flex-row">
-			<div class="flex w-full items-center">
-				<a href={`https://www.youtube.com/watch?v=${level ? level.videoID : ''}`} target="_blank">
-					<img
-						src={`https://img.youtube.com/vi/${level ? level.videoID : ''}/0.jpg`}
-						alt="level"
-						class="h-[100px] w-[177px] rounded-xl object-cover"
-					/>
-				</a>
-				<Card.Content class="mt-[22.5px] flex flex-col justify-center">
-					<div class="flex items-center gap-[10px]">
-						<div class="flex items-center gap-[5px]">
-							<h2 class="text-xl font-bold">{indexToRoman(index + 1)}. {level ? level.name : '???'}</h2>
-							<span
-								class="inline h-fit rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
-								>{level ? level.point : '???'}pt</span
-							>
-							{#if level && level.needRaw}
+	<div class="flex flex-col gap-4">
+		<!-- Level Info Row -->
+		<div class="flex flex-col gap-4 md:flex-row md:gap-6">
+			<!-- Left side: Level Info -->
+			<div class="flex flex-col items-center md:flex-row">
+				<div class="flex w-full items-center">
+					<a href={`https://www.youtube.com/watch?v=${level ? level.videoID : ''}`} target="_blank">
+						<img
+							src={`https://img.youtube.com/vi/${level ? level.videoID : ''}/0.jpg`}
+							alt="level"
+							class="h-[100px] w-[177px] rounded-xl object-cover"
+						/>
+					</a>
+					<Card.Content class="mt-[22.5px] flex flex-col justify-center">
+						<div class="flex items-center gap-[10px]">
+							<div class="flex items-center gap-[5px]">
+								<h2 class="text-xl font-bold">
+									{indexToRoman(index + 1)}. {level ? level.name : '???'}
+								</h2>
 								<span
-									class="inline rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
-									>{$_('contest.raw_required')}</span
+									class="inline h-fit rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
+									>{level ? level.point : '???'}pt</span
 								>
-							{/if}
+								{#if level && level.needRaw}
+									<span
+										class="inline rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
+										>{$_('contest.raw_required')}</span
+									>
+								{/if}
+							</div>
 						</div>
-					</div>
-					<div class="flex flex-col">
-						by {level ? level.creator : '???'}
-						<button class="flex items-center gap-[5px]" on:click={copyID}>
-							ID: {level ? level.levelID : '???'}
-							{#if level}
-								<Copy size={15} />
-							{/if}
-						</button>
-					</div>
-				</Card.Content>
+						<div class="flex flex-col">
+							by {level ? level.creator : '???'}
+							<button class="flex items-center gap-[5px]" on:click={copyID}>
+								ID: {level ? level.levelID : '???'}
+								{#if level}
+									<Copy size={15} />
+								{/if}
+							</button>
+						</div>
+					</Card.Content>
+				</div>
 			</div>
+
+			{#if deathCount.length > 0 && showDeathCount}
+				<div class="flex w-full min-w-0 md:ml-auto md:flex-1 lg:max-w-[300px]">
+					<button
+						class="h-[150px] w-full cursor-pointer lg:h-[115px]"
+						on:click={() => (chartDialogOpen = true)}
+						type="button"
+					>
+						<canvas use:createChart />
+					</button>
+				</div>
+			{/if}
 		</div>
 
-		{#if deathCount.length > 0 && showDeathCount}
-			<div class="flex w-full min-w-0 md:ml-auto md:flex-1 lg:max-w-[300px]">
-				<button 
-					class="h-[150px] w-full cursor-pointer lg:h-[115px]" 
-					on:click={() => chartDialogOpen = true}
-					type="button"
-				>
-					<canvas use:createChart />
-				</button>
+		<!-- HP Bar Row (Raid only) -->
+		{#if type === 'raid'}
+			<div class="flex w-full flex-col gap-2 px-2">
+				<div class="flex items-center justify-between text-sm text-white">
+					<span class="font-semibold">HP</span>
+					<span class="text-xs">
+						{hpRemaining.toFixed(2)} / {totalHP}
+						<span class="opacity-80">({hpPercentage.toFixed(1)}%)</span>
+					</span>
+				</div>
+				<div class="relative h-8 w-full overflow-hidden rounded-full bg-gray-300 dark:bg-gray-700">
+					<div
+						class="h-full transition-all duration-300"
+						style="width: {hpPercentage}%; background: linear-gradient(90deg, 
+							{hpPercentage > 50 ? '#10b981' : hpPercentage > 25 ? '#f59e0b' : '#ef4444'} 0%, 
+							{hpPercentage > 50 ? '#059669' : hpPercentage > 25 ? '#d97706' : '#dc2626'} 100%)"
+					/>
+					<div
+						class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white"
+					>
+						{hpPercentage.toFixed(1)}%
+					</div>
+				</div>
 			</div>
 		{/if}
 	</div>

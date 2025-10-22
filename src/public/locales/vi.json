@@ -425,6 +425,7 @@
     "show_death_count": "Hiển thị số lần chết",
     "raw_required": "Yêu cầu Raw",
     "deaths": "Số lần chết",
+    "damage_taken": "Sát thương gây ra",
     "death_count": {
       "level_death_rate": "Tỷ lệ chết của Level",
       "player_death_rate": "Tỷ lệ chết của người chơi",
