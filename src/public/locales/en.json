@@ -426,6 +426,7 @@
     "show_death_count": "Show Death Count",
     "raw_required": "Raw Required",
     "deaths": "Deaths",
+    "damage_taken": "Damage Taken",
     "death_count": {
       "level_death_count": "Level Death Count",
       "level_death_rate": "Level Death Rate",

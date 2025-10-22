@@ -64,7 +64,7 @@
 
 	{#key records}
 		{#each levels as level, index}
-			<LevelCard {level} {index} {event} {showDeathCount} />
+			<LevelCard {level} {index} {event} {showDeathCount} type={event.type} />
 		{/each}
 	{/key}
 </div>
