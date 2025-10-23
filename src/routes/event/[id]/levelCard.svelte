@@ -243,6 +243,8 @@
 		if (level) {
 			await getDeathCount();
 		}
+
+		console.log(level);
 	});
 </script>
 
@@ -266,10 +268,19 @@
 								<h2 class="text-xl font-bold">
 									{indexToRoman(index + 1)}. {level ? level.name : '???'}
 								</h2>
-								<span
-									class="inline h-fit rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
-									>{level ? level.point : '???'}pt</span
-								>
+								{#if event.type == 'basic'}
+									<span
+										class="inline h-fit rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
+										>{level ? level.point : '???'}pt</span
+									>
+								{/if}
+
+								{#if event.type == 'raid'}
+									<span
+										class="inline h-fit rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
+										>{level ? level.minEventProgress : '???'}% min</span
+									>
+								{/if}
 								{#if level && level.needRaw}
 									<span
 										class="inline rounded-sm bg-[var(--textColor)] pl-[5px] pr-[5px] text-[12px] font-semibold text-[var(--textColorInverted)]"
