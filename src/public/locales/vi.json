@@ -416,6 +416,10 @@
         "success": "Đã làm mới!",
         "error": "Làm mới thất bại",
         "loading": "Đang làm mới..."
+      },
+      "display_mode": {
+        "total_points": "Tổng điểm",
+        "contribution_percentage": "Đóng góp %"
       }
     },
     "alerts": {

@@ -15,6 +15,8 @@
 	import { cn } from '$lib/utils.js';
 	import { _ } from 'svelte-i18n';
 	import RecordDetailDialog from './recordDetailDialog.svelte';
+	import * as Switch from '$lib/components/ui/switch/index.js';
+	import Label from '$lib/components/ui/label/label.svelte';
 
 	export let levels: (Level | null)[];
 	export let event: any;
@@ -24,6 +26,7 @@
 	let refreshing = false;
 	let revealMode = false;
 	let previousScores: Map<string, number> = new Map();
+	let showPercentage = false;
 
 	function indexToRoman(num: number): string {
 		const romanNumerals = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
@@ -88,6 +91,30 @@
 		}
 
 		return Math.round(res * 100) / 100;
+	}
+
+	function getTotalLevelPoints() {
+		let res = 0;
+		
+		for (let i = 0; i < levels.length; i++) {
+			if (levels[i]) {
+				res += levels[i]!.point;
+			}
+		}
+		
+		return res;
+	}
+
+	function getContributionPercentage(records: any[]) {
+		const totalPoint = getTotalPoint(records);
+		const totalLevelPoints = getTotalLevelPoints();
+		
+		if (totalLevelPoints === 0) {
+			return 0;
+		}
+		
+		const percentage = (totalPoint / totalLevelPoints) * 100;
+		return Math.round(percentage * 100) / 100;
 	}
 
 	function getScoreDiff(uid: string, currentScore: number) {
@@ -305,6 +332,12 @@
 	</Alert.Root>
 {/if}
 <div class="mb-[10px] flex justify-center gap-[10px]">
+	<div class="flex items-center gap-[10px] rounded-md border border-input bg-background px-3">
+		<Label for="percentage-switch" class="cursor-pointer text-sm">
+			{showPercentage ? $_('contest.leaderboard.display_mode.contribution_percentage') : $_('contest.leaderboard.display_mode.total_points')}
+		</Label>
+		<Switch.Root id="percentage-switch" bind:checked={showPercentage} />
+	</div>
 	<a href="#me">
 		<Button class="w-[200px]" variant="outline">{$_('contest.leaderboard.jump_to_me')}</Button>
 	</a>
@@ -390,7 +423,11 @@
 						{/if}
 					</Table.Cell>
 					<Table.Cell class="w-[75px] text-center font-bold">
-						{getTotalPoint(player.eventRecords)}
+						{#if showPercentage}
+							{getContributionPercentage(player.eventRecords)}%
+						{:else}
+							{getTotalPoint(player.eventRecords)}
+						{/if}
 					</Table.Cell>
 					{#if event.type == 'basic'}
 						<Table.Cell class="w-[75px] text-center">

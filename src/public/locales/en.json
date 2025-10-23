@@ -417,6 +417,10 @@
         "success": "Refreshed!",
         "error": "Refresh failed",
         "loading": "Refreshing..."
+      },
+      "display_mode": {
+        "total_points": "Total Points",
+        "contribution_percentage": "Contribution %"
       }
     },
     "alerts": {
