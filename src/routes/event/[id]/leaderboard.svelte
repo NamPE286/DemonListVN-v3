@@ -23,6 +23,7 @@
 	let leaderboard1: any[] = [];
 	let refreshing = false;
 	let revealMode = false;
+	let previousScores: Map<string, number> = new Map();
 
 	function indexToRoman(num: number): string {
 		const romanNumerals = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
@@ -89,9 +90,26 @@
 		return Math.round(res * 100) / 100;
 	}
 
+	function getScoreDiff(uid: string, currentScore: number) {
+		const previousScore = previousScores.get(uid);
+		if (previousScore === undefined) {
+			return 0;
+		}
+		return Math.round((currentScore - previousScore) * 100) / 100;
+	}
+
 	async function refresh(noti = false) {
 		const upd = async () => {
 			refreshing = true;
+			
+			// Store previous scores before refresh for raid events
+			if (event.type == 'raid' && leaderboard.length > 0) {
+				previousScores = new Map();
+				for (const player of leaderboard) {
+					previousScores.set(player.uid, getTotalPoint(player.eventRecords));
+				}
+			}
+			
 			leaderboard = await (
 				await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/leaderboard`, {
 					method: 'GET',
@@ -338,6 +356,9 @@
 						</Tooltip.Root>
 					</Table.Head>
 				{/each}
+				{#if event.type == 'raid' && previousScores.size > 0}
+					<Table.Head class="w-[75px] text-center">Δ</Table.Head>
+				{/if}
 				{#if event.isCalculated}
 					<Table.Head class="w-[75px] text-center">Δ</Table.Head>
 				{/if}
@@ -433,6 +454,15 @@
 							</Table.Cell>
 						{/if}
 					{/each}
+					{#if event.type == 'raid' && previousScores.size > 0}
+						{@const currentScore = getTotalPoint(player.eventRecords)}
+						{@const scoreDiff = getScoreDiff(player.uid, currentScore)}
+						<Table.Cell
+							class={`w-[75px] text-center ${Math.sign(scoreDiff) > 0 ? 'text-green-600 dark:text-green-400' : scoreDiff < 0 ? 'text-red-600 dark:text-red-400' : ''}`}
+						>
+							{Math.sign(scoreDiff) > 0 ? '+' : ''}{scoreDiff}
+						</Table.Cell>
+					{/if}
 					{#if event.isCalculated}
 						<Table.Cell
 							class={`w-[75px] text-center ${Math.sign(player.diff) > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}

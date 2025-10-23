@@ -243,8 +243,6 @@
 		if (level) {
 			await getDeathCount();
 		}
-
-		console.log(level)
 	});
 </script>
 
