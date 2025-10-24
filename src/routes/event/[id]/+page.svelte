@@ -11,10 +11,26 @@
 	import type { Level } from './type';
 	import Ads from '$lib/components/ads.svelte';
 	import { _ } from 'svelte-i18n';
-	
+	import { toast } from 'svelte-sonner';
+
 	export let data: PageData;
 
 	let levels: (Level | null)[] = [];
+
+	async function refresh() {
+		toast.promise(
+			async () => {
+				levels = await (
+					await fetch(`${import.meta.env.VITE_API_URL}/event/${data.id}/levels`)
+				).json();
+			},
+			{
+				loading: 'Refreshing...',
+				success: 'Refreshed!',
+				error: 'Failed to refresh'
+			}
+		);
+	}
 
 	onMount(async () => {
 		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/event/${data.id}/levels`)).json();
@@ -25,7 +41,10 @@
 	<title>{data.title} - Demon List VN</title>
 	<meta property="og:title" content={`${data.title} - Demon List VN`} />
 	<meta property="og:description" content={data.description} />
-	<meta property="og:image" content={data.imgUrl ? data.imgUrl : `https://cdn.demonlistvn.com/event-banner/${data.id}.webp`} />
+	<meta
+		property="og:image"
+		content={data.imgUrl ? data.imgUrl : `https://cdn.demonlistvn.com/event-banner/${data.id}.webp`}
+	/>
 </svelte:head>
 
 <EventBanner {data} />
@@ -48,7 +67,9 @@
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="levels" class="mt-[20px] w-full pl-[10px] pr-[10px]">
-				<LevelTab {levels} event={data} />
+				{#key levels}
+					<LevelTab {levels} event={data} {refresh} />
+				{/key}
 			</Tabs.Content>
 			<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px]">
 				{#if levels.length}
