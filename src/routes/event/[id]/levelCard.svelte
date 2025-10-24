@@ -30,6 +30,7 @@
 	$: totalHP = level?.point || 0;
 	$: hpRemaining = Math.max(0, totalHP - totalProgress);
 	$: hpPercentage = totalHP > 0 ? (hpRemaining / totalHP) * 100 : 100;
+	$: isBeaten = level && type === 'raid' && hpRemaining <= 0;
 
 	let submitData: SubmitData = {
 		levelID: level ? level.id : 0,
@@ -246,7 +247,7 @@
 	});
 </script>
 
-<Card.Root class="flex flex-col p-2">
+<Card.Root class="flex flex-col p-2 transition-opacity duration-300 {isBeaten ? 'opacity-50' : ''}">
 	<div class="flex flex-col gap-4">
 		<!-- Level Info Row -->
 		<div class="flex flex-col gap-4 md:flex-row md:gap-6">
@@ -257,7 +258,7 @@
 						<img
 							src={`https://img.youtube.com/vi/${level ? level.videoID : ''}/0.jpg`}
 							alt="level"
-							class="h-[100px] w-[177px] rounded-xl object-cover"
+							class="h-[100px] w-[177px] rounded-xl object-cover {isBeaten ? 'grayscale' : ''}"
 						/>
 					</a>
 					<Card.Content class="mt-[22.5px] flex flex-col justify-center">
