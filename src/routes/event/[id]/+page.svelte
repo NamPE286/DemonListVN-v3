@@ -25,9 +25,9 @@
 				).json();
 			},
 			{
-				loading: 'Refreshing...',
-				success: 'Refreshed!',
-				error: 'Failed to refresh'
+				success: $_('contest.leaderboard.refresh.success'),
+				error: $_('contest.leaderboard.refresh.error'),
+				loading: $_('contest.leaderboard.refresh.loading')
 			}
 		);
 	}
