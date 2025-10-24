@@ -30,7 +30,7 @@
 	$: totalHP = level?.point || 0;
 	$: hpRemaining = Math.max(0, totalHP - totalProgress);
 	$: hpPercentage = totalHP > 0 ? (hpRemaining / totalHP) * 100 : 100;
-	$: isBeaten = level && type === 'raid' && hpRemaining <= 0;
+	$: isBeaten = !isEventEnded() && level && type === 'raid' && hpRemaining <= 0;
 
 	let submitData: SubmitData = {
 		levelID: level ? level.id : 0,
