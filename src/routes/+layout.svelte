@@ -54,7 +54,8 @@
 			name: $locale === 'en' ? 'Mod' : 'Mod'
 		},
 		{ route: '/rules', name: $locale === 'en' ? 'Rules' : 'Luật' },
-		{ route: '/store', name: $locale === 'en' ? 'Store' : 'Cửa hàng' }
+		{ route: '/store', name: $locale === 'en' ? 'Store' : 'Cửa hàng' },
+		{ route: '/roulette', name: $locale === 'en' ? 'Roulette' : 'Vòng quay' }
 	];
 
 	let searchQuery = '';
