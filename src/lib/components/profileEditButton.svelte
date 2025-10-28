@@ -14,6 +14,7 @@
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { upload } from '$lib/client/storage';
+	import { _ } from 'svelte-i18n';
 
 	export let data: any;
 	export let open = false;
@@ -64,13 +65,11 @@
 			};
 
 			toast.promise(handleUpload, {
-				loading: 'Uploading...',
-				success: 'Uploaded! It may take a while to take effect.	',
-				error: 'Upload failed.'
+				loading: $_('toast.player_edit.uploading'),
+				success: $_('toast.player_edit.success'),
+				error: $_('toast.player_edit.error')
 			});
 		} else {
-			toast.loading('Compressing image...');
-
 			const cImg = await imageCompression(image, {
 				maxSizeMB: 0.035,
 				maxWidthOrHeight: 480,
@@ -93,9 +92,9 @@
 			};
 
 			toast.promise(handleUpload, {
-				loading: 'Uploading...',
-				success: 'Uploaded! It may take a while to take effect.	',
-				error: 'Upload failed.'
+				loading: $_('toast.player_edit.uploading'),
+				success: $_('toast.player_edit.success'),
+				error: $_('toast.player_edit.error')
 			});
 		}
 	}
@@ -125,9 +124,9 @@
 			};
 
 			toast.promise(handleUpload, {
-				loading: 'Uploading...',
-				success: 'Uploaded! It may take a while to take effect.	',
-				error: 'Upload failed.'
+				loading: $_('toast.player_edit.uploading'),
+				success: $_('toast.player_edit.success'),
+				error: $_('toast.player_edit.error')
 			});
 		} else {
 			const options = {
@@ -154,9 +153,9 @@
 			};
 
 			toast.promise(handleUpload, {
-				loading: 'Uploading...',
-				success: 'Uploaded! It may take a while to take effect.	',
-				error: 'Upload failed.'
+				loading: $_('toast.player_edit.uploading'),
+				success: $_('toast.player_edit.success'),
+				error: $_('toast.player_edit.error')
 			});
 		}
 	}
@@ -166,7 +165,7 @@
 		player.city = cityItem.value;
 
 		if (!/^[A-Za-z0-9]+$/.test(player.name)) {
-			toast.error('Name must contain only letters and numbers.');
+			toast.error($_('toast.player_edit.name'));
 			return;
 		}
 
@@ -179,11 +178,10 @@
 			},
 			body: JSON.stringify(player)
 		});
-
 		toast.promise(promise, {
-			loading: 'Saving...',
-			success: 'Saved!',
-			error: 'Failed to save.'
+			loading: $_('toast.player_edit.save.loading'),
+			success: $_('toast.player_edit.save.success'),
+			error: $_('toast.player_edit.save.error')
 		});
 
 		data = player;
@@ -219,13 +217,13 @@
 	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}><Pencil1 /></Dialog.Trigger>
 	<Dialog.Content>
 		<Dialog.Header>
-			<Dialog.Title>Edit profile</Dialog.Title>
+			<Dialog.Title>{$_('profile_edit.title')}</Dialog.Title>
 			<Dialog.Description>
-				Make changes to your profile here. Click save when you're done.
+				{$_('profile_edit.description')}
 			</Dialog.Description>
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label for="name" class="text-right">Name</Label>
+					<Label for="name" class="text-right">{$_('profile_edit.name')}</Label>
 					<Input
 						id="name"
 						bind:value={player.name}
@@ -241,7 +239,7 @@
 						placeholder="Avatar"
 						on:click={() => {
 							fileinput.click();
-						}}>Upload avatar</Button
+						}}>{$_('profile_edit.upload_avatar')}</Button
 					>
 					<Button
 						class="w-full"
@@ -251,20 +249,20 @@
 						disabled={!isActive(player.supporterUntil)}
 						on:click={() => {
 							fileinput1.click();
-						}}>Upload banner</Button
+						}}>{$_('profile_edit.upload_banner')}</Button
 					>
 				</div>
 				{#if isActive(player.supporterUntil)}
 					<div class="mb-[10px] flex items-center gap-[10px] text-sm">
-						Border
+						{$_('profile_edit.border')}
 						<Input type="color" bind:value={player.borderColor} />
-						Background
+						{$_('profile_edit.background')}
 						<Input type="color" bind:value={player.bgColor} />
 						<Button
 							variant="outline"
 							on:click={() => {
 								player.borderColor = player.bgColor = null;
-							}}>Reset</Button
+							}}>{$_('profile_edit.reset')}</Button
 						>
 					</div>
 				{/if}
@@ -277,7 +275,7 @@
 					<Input id="facebook" bind:value={player.facebook} class="col-span-3" />
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label for="province" class="text-right">Province</Label>
+					<Label for="province" class="text-right">{$_('profile_edit.province')}</Label>
 					<Select.Root bind:selected={provinceItem}>
 						<Select.Trigger class="col-span-3">
 							<Select.Value placeholder="Province" />
@@ -301,7 +299,7 @@
 					</Select.Root>
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label for="province" class="text-right">City</Label>
+					<Label for="province" class="text-right">{$_('profile_edit.city')}</Label>
 					<Select.Root bind:selected={cityItem} disabled={provinceItem.value == null}>
 						<Select.Trigger class="col-span-3">
 							<Select.Value placeholder="City" />
@@ -316,12 +314,12 @@
 					</Select.Root>
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label for="airplane-mode" class="text-right">Hide profile</Label>
+					<Label for="airplane-mode" class="text-right">{$_('profile_edit.hide_profile')}</Label>
 					<Switch id="airplane-mode" class="col-span-3" bind:checked={player.isHidden} />
 				</div>
 			</div>
 			<Dialog.Footer>
-				<Button type="submit" on:click={saveChanges}>Save changes</Button>
+				<Button type="submit" on:click={saveChanges}>{$_('profile_edit.save')}</Button>
 			</Dialog.Footer>
 		</Dialog.Header>
 	</Dialog.Content>

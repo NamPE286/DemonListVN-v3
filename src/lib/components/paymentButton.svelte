@@ -7,7 +7,9 @@
 	import { Slider } from '$lib/components/ui/slider';
 	import { Input } from '$lib/components/ui/input';
 	import Loading from '$lib/components/animation/loading.svelte';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerLink.svelte';
+	import { _, locale } from 'svelte-i18n';
+	import { get } from 'svelte/store';
 
 	export let title: string;
 
@@ -34,13 +36,13 @@
 			giftTo = await (await fetch(`${import.meta.env.VITE_API_URL}/player/${giftToUID}`)).json();
 			fetchState = 2;
 		} catch {
-			toast.error('Player not found');
+			toast.error(get(_)("toast.payment.no_player"));
 			fetchState = 0;
 		}
 	}
 
 	async function purchase() {
-		toast.loading('You will be redirected to our payment portal');
+		toast.loading(get(_)('toast.payment.redirect'));
 
 		const res: any = await (
 			await fetch(
@@ -70,7 +72,7 @@
 	<Dialog.Content>
 		{#if state == 0}
 			<Dialog.Header>
-				<Dialog.Title>Who are you buying this for</Dialog.Title>
+				<Dialog.Title>{$_("payment.recipent.title")}</Dialog.Title>
 			</Dialog.Header>
 			<div class="flex flex-col gap-[5px]">
 				<Button
@@ -78,14 +80,14 @@
 					class={`h-[70px] justify-start ${nextState == 2 ? 'border-white' : ''}`}
 					on:click={() => {
 						nextState = 2;
-					}}>For myself</Button
+					}}>{$_("payment.recipent.self")}</Button
 				>
 				<Button
 					variant="outline"
 					class={`h-[70px] justify-start ${nextState == 1 ? 'border-white' : ''}`}
 					on:click={() => {
 						nextState = 1;
-					}}>For a friend</Button
+					}}>{$_("payment.recipent.friend")}</Button
 				>
 			</div>
 			<Dialog.Footer>
@@ -93,23 +95,23 @@
 					disabled={nextState == 0}
 					on:click={() => {
 						state = nextState;
-					}}>Next</Button
+					}}>{$_("general.next")}</Button
 				>
 			</Dialog.Footer>
 		{:else if state == 1}
 			<Dialog.Header>
-				<Dialog.Title>Select a friend to gift</Dialog.Title>
+				<Dialog.Title>{$_("payment.gift.title")}</Dialog.Title>
 			</Dialog.Header>
 			<div>
 				<div class="mb-[20px] flex gap-[10px]">
 					<Input bind:value={giftToUID} placeholder="Player's UID" />
-					<Button on:click={fetchPlayer} disabled={fetchState != 0}>Select</Button>
+					<Button on:click={fetchPlayer} disabled={fetchState != 0}>{$_("general.select")}</Button>
 				</div>
 				<div class="flex items-center justify-center">
 					{#if fetchState == 1}
 						<Loading inverted={true} />
 					{:else if fetchState == 2}
-						You are going to gift <span class="ml-[5px] font-bold"
+						{$_("payment.gift.confirm")} <span class="ml-[5px] font-bold"
 							><PlayerHoverCard player={giftTo} /></span
 						>
 					{/if}
@@ -120,15 +122,15 @@
 					disabled={giftTo === undefined}
 					on:click={() => {
 						state = 2;
-					}}>Next</Button
+					}}>{$_("general.next")}</Button
 				>
 			</Dialog.Footer>
 		{:else if state == 2}
 			<Dialog.Header>
-				<Dialog.Title>Select quantity</Dialog.Title>
+				<Dialog.Title>{$_("payment.quantity.title")}</Dialog.Title>
 			</Dialog.Header>
 			<div>
-				<p>{formatPrice(49000 * quantity[0])}₫/{quantity[0]} month</p>
+				<p>{formatPrice(49000 * quantity[0])}₫/{quantity[0]} {$_("general.month")}{quantity[0] > 1 && $locale == 'en' ? 's' : ''}</p>
 				<Slider bind:value={quantity} max={12} step={1} />
 			</div>
 			<Dialog.Footer>
@@ -136,20 +138,20 @@
 					disabled={!quantity[0]}
 					on:click={() => {
 						state = 3;
-					}}>Next</Button
+					}}>{$_("general.next")}</Button
 				>
 			</Dialog.Footer>
 		{:else if state == 3}
 			<Dialog.Header>
-				<Dialog.Title>Review your order</Dialog.Title>
+				<Dialog.Title>{$_("payment.review.title")}</Dialog.Title>
 			</Dialog.Header>
 			<div class="flex text-sm">
-				<p>Demon List VN Supporter Role ({quantity[0]} month{quantity[0] > 1 ? 's' : ''})</p>
+				<p>Demon List VN Supporter Role ({quantity[0]} {$_("general.month")}{quantity[0] > 1 && $locale == 'en' ? 's' : ''})</p>
 				<p class="ml-auto"><b>{formatPrice(49000 * quantity[0])}₫</b></p>
 			</div>
 			<hr />
 			<div class="flex text-sm">
-				<p>Recipient</p>
+				<p>{$_("payment.review.recipent")}</p>
 				<p class="ml-auto">
 					<b>
 						{#if giftTo}
@@ -161,10 +163,10 @@
 				</p>
 			</div>
 			<p class="text-sm italic text-gray-500">
-				Please do not close the payment window until you are redirected back to Demon List VN
+				{$_("payment.review.caution")}
 			</p>
 			<Dialog.Footer>
-				<Button on:click={purchase}>Proceed to Payment</Button>
+				<Button on:click={purchase}>{$_("payment.review.proceed")}</Button>
 			</Dialog.Footer>
 		{/if}
 	</Dialog.Content>

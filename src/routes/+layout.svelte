@@ -2,7 +2,9 @@
 	import '../app.pcss';
 	import '../app.scss';
 	import 'non.geist';
-	import { ModeWatcher } from 'mode-watcher';
+	import '../i18n';
+
+	import { ModeWatcher, setMode } from 'mode-watcher';
 
 	import HamburgerMenu from 'svelte-radix/HamburgerMenu.svelte';
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
@@ -25,17 +27,34 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import * as Card from '$lib/components/ui/card/index.js';
+	import { page } from '$app/stores';
+	import { _, locale } from 'svelte-i18n';
+	import PlayerCard from '$lib/components/playerCard.svelte';
 
-	let links = [
-		{ route: '/list/dl', name: 'Classic' },
-		{ route: '/list/pl', name: 'Platformer' },
-		{ route: '/list/fl', name: 'Featured' },
-		{ route: '/players', name: 'Players' },
-		{ route: '/clans', name: 'Clans' },
-		{ route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases', name: 'Mod' },
-		{ route: '/rules', name: 'Rules' },
-		{ route: '/store', name: 'Store' },
-		{ route: '/roulette', name: 'Roulette' },
+	$: linkGroup = [
+		{
+			name: 'List',
+			routes: [
+				{ route: '/list/dl', name: $locale === 'en' ? 'Classic' : 'Classic' },
+				{ route: '/list/pl', name: $locale === 'en' ? 'Platformer' : 'Platformer' },
+				{ route: '/list/fl', name: $locale === 'en' ? 'Featured' : 'Featured' }
+			]
+		},
+		{ route: '/events', name: $locale === 'en' ? 'Event' : 'Sự kiện' },
+		{
+			name: $locale === 'en' ? 'Community' : 'Cộng đồng',
+			routes: [
+				{ route: '/players', name: $locale === 'en' ? 'Players' : 'Người chơi' },
+				{ route: '/clans', name: $locale === 'en' ? 'Clans' : 'Hội' }
+			]
+		},
+		{
+			route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases',
+			name: $locale === 'en' ? 'Mod' : 'Mod'
+		},
+		{ route: '/rules', name: $locale === 'en' ? 'Rules' : 'Luật' },
+		{ route: '/store', name: $locale === 'en' ? 'Store' : 'Cửa hàng' }
 	];
 
 	let searchQuery = '';
@@ -43,6 +62,9 @@
 	let isVisible = false;
 	let hideNav = false;
 	let removePad = false;
+	let pathname = '';
+	$: pathname = $page.url.pathname;
+
 	const isDesktop = mediaQuery('(min-width: 1350px)');
 
 	function signIn() {
@@ -77,7 +99,40 @@
 		}
 	}
 
+	function setTheme(theme: string) {
+		document.documentElement.setAttribute('data-theme', theme);
+		localStorage.setItem('theme', theme);
+	}
+
 	onMount(() => {
+		const savedLocale = localStorage.getItem('locale');
+
+		locale.set(savedLocale || 'vi');
+		locale.subscribe((value) => {
+			if (value) {
+				localStorage.setItem('locale', value);
+			}
+		});
+
+		const currentTheme =
+			localStorage.getItem('theme') || document.documentElement.getAttribute('data-theme');
+
+		if (!currentTheme) {
+			setMode('dark');
+			setTheme('dark');
+		} else if (currentTheme !== 'light' && currentTheme !== 'dark') {
+			user.subscribe((u) => {
+				if (u.checked && (!u.loggedIn || !isActive(u.data.supporterUntil))) {
+					setMode('dark');
+					setTheme('dark');
+				} else {
+					setTheme(currentTheme);
+				}
+			});
+		} else {
+			setTheme(currentTheme);
+		}
+
 		isVisible = true;
 
 		user.subscribe((data) => {
@@ -85,8 +140,9 @@
 				return;
 			}
 
-			links[0].route = `/list/dl?uid=${data.data.uid}`;
-			links[2].route = `/list/fl?uid=${data.data.uid}`;
+			linkGroup[0].routes![0].route = `/list/dl?uid=${data.data.uid}`;
+			linkGroup[0].routes![1].route = `/list/dl?uid=${data.data.uid}`;
+			linkGroup[0].routes![2].route = `/list/fl?uid=${data.data.uid}`;
 		});
 
 		updateNavbarOnTop();
@@ -127,16 +183,39 @@
 				<div class="logo-img-wrapper">
 					<img src="/favicon.png" alt="logo" />
 				</div>
-				<span id="logo-name"><b>Demon List VN</b></span>
+				<span id="logo-name" style="font-family: 'Geist Variable', sans-serif;"
+					><b>Demon List VN</b></span
+				>
 			</a>
 			<div class="links">
-				{#each links as link}
-					<a href={link.route} class="link" data-sveltekit-preload-data="tap">{link.name}</a>
+				{#each linkGroup as group}
+					{#if group.routes}
+						<DropdownMenu.Root>
+							<DropdownMenu.Trigger>
+								<span class="link">{group.name}</span>
+							</DropdownMenu.Trigger>
+							<DropdownMenu.Content>
+								<DropdownMenu.Group>
+									{#each group.routes as link}
+										<a href={link.route}>
+											<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
+										</a>
+									{/each}
+								</DropdownMenu.Group>
+							</DropdownMenu.Content>
+						</DropdownMenu.Root>
+					{:else if group.route}
+						<a href={group.route} class="link">{group.name}</a>
+					{/if}
 				{/each}
 				{#if $user.loggedIn && isActive($user.data.supporterUntil)}
-					<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
+					<a href="/supporter" class="link" data-sveltekit-preload-data="tap"
+						>{$_('nav.supporter')}</a
+					>
 				{:else}
-					<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter">Support Us</Button>
+					<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter"
+						>{$_('nav.supporter')}</Button
+					>
 				{/if}
 			</div>
 			<div class="menu">
@@ -146,19 +225,33 @@
 							<HamburgerMenu size={18} />
 						</Button>
 					</DropdownMenu.Trigger>
-					<DropdownMenu.Content align="end">
-						{#each links as link}
-							<a href={link.route} data-sveltekit-preload-data="tap">
-								<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
-							</a>
+					<DropdownMenu.Content align="end" class="w-64">
+						{#each linkGroup as group}
+							{#if group.routes}
+								<DropdownMenu.Group>
+									<DropdownMenu.Label>{group.name}</DropdownMenu.Label>
+									{#each group.routes as link}
+										<a href={link.route} data-sveltekit-preload-data="tap">
+											<DropdownMenu.Item>{link.name}</DropdownMenu.Item>
+										</a>
+									{/each}
+								</DropdownMenu.Group>
+								<DropdownMenu.Separator />
+							{:else if group.route}
+								<a href={group.route} data-sveltekit-preload-data="tap">
+									<DropdownMenu.Item>{group.name}</DropdownMenu.Item>
+								</a>
+							{/if}
 						{/each}
 						<DropdownMenu.Item>
 							{#if $user.loggedIn && isActive($user.data.supporterUntil)}
-								<a href="/supporter" class="link" data-sveltekit-preload-data="tap">Support Us</a>
-							{:else}
-								<Button class=" bg-yellow-400 hover:bg-yellow-500" href="/supporter"
-									>Support Us</Button
+								<a href="/supporter" class="link" data-sveltekit-preload-data="tap"
+									>{$_('nav.supporter')}</a
 								>
+							{:else}
+								<Button class="bg-yellow-400 hover:bg-yellow-500" href="/supporter">
+									{$_('nav.supporter')}
+								</Button>
 							{/if}
 						</DropdownMenu.Item>
 					</DropdownMenu.Content>
@@ -170,7 +263,7 @@
 				<Button variant="outline" on:click={() => (searchToggled = true)}>
 					<div class="searchBtn">
 						<MagnifyingGlass size={20} />
-						<p>Search</p>
+						<p>{$_('search.button')}</p>
 						<kbd
 							class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
 						>
@@ -185,7 +278,7 @@
 			{/if}
 			{#if $user.checked && isVisible}
 				{#if !$user.loggedIn}
-					<Button variant="outline" on:click={signIn}>Sign In</Button>
+					<Button variant="outline" on:click={signIn}>{$_('nav.sign_in')}</Button>
 				{:else}
 					<SubmitButton />
 					<NotificationButton />
@@ -211,33 +304,37 @@
 								</Avatar.Root>
 							</Button>
 						</DropdownMenu.Trigger>
-						<DropdownMenu.Content align="end" class="z-[99999] w-56">
-							<DropdownMenu.Label>
+						<DropdownMenu.Content align="end" class="z-[99999] w-[320px]">
+							<DropdownMenu.Label class="font-normal">
 								{#if $user.loggedIn && isActive($user.data.supporterUntil)}
-									<span class="text-yellow-500">{$user.data.name}</span>
+									<PlayerCard player={$user.data} />
 								{:else}
-									{$user.data.name}
+									<span class="font-bold"> {$user.data.name} </span>
 								{/if}
 							</DropdownMenu.Label>
 							<DropdownMenu.Separator />
 							<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
-								>Profile</DropdownMenu.Item
+								>{$_('dropdown.profile')}</DropdownMenu.Item
 							>
 							<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
-								>Submissions</DropdownMenu.Item
+								>{$_('dropdown.submissions')}</DropdownMenu.Item
 							>
-							<DropdownMenu.Item on:click={() => goto(`/orders`)}>Orders</DropdownMenu.Item>
+							<DropdownMenu.Item on:click={() => goto(`/orders`)}
+								>{$_('dropdown.orders')}</DropdownMenu.Item
+							>
 							{#if $user.data.clan}
 								<DropdownMenu.Item on:click={() => goto(`/clan/${$user.data.clan}`)}
-									>Clan</DropdownMenu.Item
+									>{$_('dropdown.clan')}</DropdownMenu.Item
 								>
 							{/if}
 							{#if $user.data.isTrusted || $user.data.isAdmin}
-								<DropdownMenu.Item on:click={() => goto(`/overwatch`)}>Overwatch</DropdownMenu.Item>
+								<DropdownMenu.Item on:click={() => goto(`/overwatch`)}
+									>{$_('dropdown.overwatch')}</DropdownMenu.Item
+								>
 							{/if}
 							<DropdownMenu.Separator />
 							<DropdownMenu.Item on:click={signOut}>
-								<span style="color: red">Sign out</span>
+								<span style="color: red">{$_('dropdown.sign_out')}</span>
 							</DropdownMenu.Item>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
@@ -253,6 +350,23 @@
 	<div class="filler"></div>
 {/if}
 
+{#if (!$user.loggedIn || !isActive($user.data.supporterUntil)) && pathname !== '/supporter' && !pathname.startsWith('/player/') && !pathname.startsWith('/@')}
+	<Card.Root
+		class="relative z-[10] mx-4 mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950 sm:mx-[55px]"
+	>
+		<Card.Content class="mb-[-12px] mt-[10px] text-center">
+			<p class="text-pink-700 dark:text-pink-300">
+				{#if $locale == 'vi'}
+					💖 Trở thành <a href="/supporter" class="underline">Supporter</a> để ủng hộ và giúp DLVN phát
+					triển hơn 💖
+				{:else}
+					💖 Consider becoming a <a href="/supporter" class="underline">Supporter</a> to help DLVN grow!
+					💖
+				{/if}
+			</p>
+		</Card.Content>
+	</Card.Root>
+{/if}
 <slot />
 
 <footer>

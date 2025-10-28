@@ -2,7 +2,7 @@
 	import * as Tabs from '$lib/components/ui/tabs';
 
 	import BigTitle from '$lib/components/bigTitle.svelte';
-
+	import { _ } from 'svelte-i18n';
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Ads from '$lib/components/ads.svelte';
@@ -16,18 +16,12 @@
 	$: ($page.url, update());
 </script>
 
-<svelte:head>
-	<title
-		>Leaderboard - {$page.params.list == 'dl' ? 'Demon' : 'Featured'} List - Demon List VN</title
-	>
-</svelte:head>
-
 {#if $page.params.list == 'dl'}
-	<BigTitle value="Classic List" description="Hardest classic level beaten by Vietnamese" />
+	<BigTitle value={$_('list.classic.title')} description={$_('list.classic.description')} />
 {:else if $page.params.list == 'pl'}
-	<BigTitle value="Platformer List" description="Hardest platformer level beaten by Vietnamese" />
+	<BigTitle value={$_('list.platformer.title')} description={$_('list.platformer.description')} />
 {:else if $page.params.list == 'fl'}
-	<BigTitle value="Featured List" description="Hardest level created by Vietnamese" />
+	<BigTitle value={$_('list.featured.title')} description={$_('list.featured.description')} />
 {/if}
 
 <!-- Temporary if check, will remove after player plat rating is finished -->
@@ -39,13 +33,13 @@
 					value="levels"
 					on:click={() => {
 						goto(`/list/${$page.params.list}`);
-					}}>Levels</Tabs.Trigger
+					}}>{$_('list.tabs.levels')}</Tabs.Trigger
 				>
 				<Tabs.Trigger
 					value="leaderboard"
 					on:click={() => {
 						goto(`/list/${$page.params.list}/leaderboard`);
-					}}>Leaderboard</Tabs.Trigger
+					}}>{$_('list.tabs.leaderboard')}</Tabs.Trigger
 				>
 			</Tabs.List>
 		</div>

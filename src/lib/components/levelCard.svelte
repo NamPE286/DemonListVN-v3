@@ -9,6 +9,8 @@
 	import { user } from '$lib/client';
 	import { calcRating } from '$lib/client/rating';
 	import { isActive } from '$lib/client/isSupporterActive';
+	import { _ } from 'svelte-i18n';
+	import { get } from 'svelte/store';
 
 	let failedToLoad = false;
 
@@ -22,6 +24,7 @@
 
 	export let level: any;
 	export let type: string;
+	export let top: number | null = null;
 </script>
 
 {#if level}
@@ -31,7 +34,7 @@
 				<ContextMenu.Root>
 					<ContextMenu.Trigger>
 						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
-							<div class="relative h-[235px] flex justify-center">
+							<div class="relative flex h-[235px] justify-center">
 								<img
 									src={`https://img.youtube.com/vi/${level.videoID}/0.jpg`}
 									alt=""
@@ -53,10 +56,17 @@
 						</a>
 						<a href={`/level/${level.id}`} data-sveltekit-preload-data="tap">
 							<div class="levelInfo">
-								<div class="top">#{level[`${type == 'fl' ? 'fl' : 'dl'}Top`]}</div>
+								{#if top}
+									<div class="top">#{top}</div>
+								{:else}
+									<div class="top">#{level[`${type == 'fl' ? 'fl' : 'dl'}Top`]}</div>
+								{/if}
 								<div class="info">
 									<div class="levelName">
 										<div class="name">
+											{#if top}
+												#{level[`${type == 'fl' ? 'fl' : 'dl'}Top`]}
+											{/if}
 											{level.name}
 										</div>
 										<div class="pt">
@@ -123,8 +133,8 @@
 							inset
 							on:click={async () => {
 								await navigator.clipboard.writeText(String(level.id));
-								toast.success('Copied to clipboard!');
-							}}>Copy level ID</ContextMenu.Item
+								toast.success($_("toast.clipboard"));
+							}}>{$_("context.copy_level_id")}</ContextMenu.Item
 						>
 						<ContextMenu.Item
 							inset
@@ -132,8 +142,8 @@
 								await navigator.clipboard.writeText(
 									`https://img.youtube.com/vi/${level.videoID}/0.jpg`
 								);
-								toast.success('Copied to clipboard!');
-							}}>Copy thumbnail image URL</ContextMenu.Item
+								toast.success($_("toast.clipboard"));
+							}}>{$_("context.copy_thumbnail")}</ContextMenu.Item
 						>
 					</ContextMenu.Content>
 				</ContextMenu.Root>

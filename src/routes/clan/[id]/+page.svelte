@@ -15,7 +15,7 @@
 	import CrossCircled from 'svelte-radix/CrossCircled.svelte';
 	import StarFilled from 'svelte-radix/StarFilled.svelte';
 	import type { PageData } from './$types';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
@@ -32,8 +32,9 @@
 	import Markdown from '$lib/components/markdown.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
-	import { Content } from '$lib/components/ui/alert-dialog';
-
+	import Levels from './levels.svelte';
+	import { _ } from 'svelte-i18n';
+	
 	export let data: PageData;
 	let editedData = structuredClone(data);
 	let transferUID = '';
@@ -151,11 +152,11 @@
 	}
 
 	async function leaveClan() {
-		if (!confirm('Are you sure to leave this clan?')) {
+		if (!confirm($_('toast.clan_leave.confirm'))) {
 			return;
 		}
 
-		toast.loading('Leaving clan...');
+		toast.loading($_('toast.clan_leave.loading'));
 
 		fetch(`${import.meta.env.VITE_API_URL}/clan/leave`, {
 			method: 'PUT',
@@ -183,10 +184,10 @@
 			{
 				success: () => {
 					window.location.reload();
-					return 'Updated! This page will be refreshed.';
+					return $_('toast.clan_update.success');
 				},
-				loading: 'Updating...',
-				error: 'Failed to update.'
+				loading: $_('toast.clan_update.loading'),
+				error: $_('toast.clan_update.error')
 			}
 		);
 	}
@@ -199,7 +200,7 @@
 	}
 
 	async function deleteClan() {
-		if (!confirm('Do you wish to delete this clan?')) {
+		if (!confirm($_('toast.clan_delete.confirm'))) {
 			return;
 		}
 
@@ -214,10 +215,10 @@
 				success: () => {
 					goto('/clans');
 					$user.refresh();
-					return 'Deleted!';
+					return $_('toast.clan_delete.success');
 				},
-				loading: 'Deleting...',
-				error: 'Failed to delete.'
+				loading: $_('toast.clan_delete.loading'),
+				error: $_('toast.clan_delete.error')
 			}
 		);
 	}
@@ -249,11 +250,10 @@
 				body: JSON.stringify(editedData)
 			});
 		};
-
 		toast.promise(handleUpload, {
-			loading: 'Uploading...',
-			success: 'Uploaded! It may take a while to take effect.	',
-			error: 'Upload failed.'
+			loading: $_('toast.player_edit.uploading'),
+			success: $_('toast.player_edit.success'),
+			error: $_('toast.player_edit.error')
 		});
 	}
 
@@ -355,8 +355,8 @@
 </script>
 
 <svelte:head>
-	<title>{data.name}'s clan info - Demon List VN</title>
-	<meta property="og:title" content={`${data.name}'s clan info - Demon List VN`} />
+	<title>Hội {data.name} - Demon List VN</title>
+	<meta property="og:title" content={`Hội ${data.name} - Demon List VN`} />
 	<meta
 		property="og:image"
 		content={`https://cdn.demonlistvn.com/clan-photos/${$page.params.id}.jpg?version=${data.imageVersion}`}
@@ -387,9 +387,9 @@
 					<h2>{data.name}</h2>
 					<div class="flex items-center gap-[5px]">
 						{#if data.isPublic}
-							<Globe size={20} /> Public
+							<Globe size={20} /> {$_("clan.public")}
 						{:else}
-							<LockClosed size={20} /> Invite only
+							<LockClosed size={20} /> {$_("clan.invite_only")}
 						{/if}
 					</div>
 					<div class="flex items-center gap-[5px]">
@@ -405,7 +405,7 @@
 						{/if}
 					</div>
 					{#if invitation}
-						<p class="mb-[-10px] text-center">You've been invited to this clan</p>
+						<p class="mb-[-10px] text-center">{$_("clan.invited")}</p>
 					{/if}
 					<div class="bannerBtn">
 						{#if $user.loggedIn}
@@ -414,14 +414,14 @@
 									class="w-full"
 									on:click={() => {
 										acceptInvitation(parseInt(String($page.params.id)));
-									}}>Accept</Button
+									}}>{$_("general.accept")}</Button
 								>
 								<Button
 									variant="outline"
 									class="w-full"
 									on:click={() => {
 										rejectInvitation(parseInt(String($page.params.id)));
-									}}>Reject</Button
+									}}>{$_("general.reject")}</Button
 								>
 							{:else if $user.data.clan == $page.params.id}
 								{#if data.isPublic || data.owner == $user.data.uid}
@@ -436,7 +436,7 @@
 					</div>
 					{#if new Date(data.boostedUntil) > new Date()}
 						<p class="text-center text-sm text-gray-500">
-							Boosted until: {new Date(data.boostedUntil).toLocaleDateString('vi-vn')}
+							{$_("clan.boosted_until")}: {new Date(data.boostedUntil).toLocaleDateString('vi-vn')}
 						</p>
 					{/if}
 				</div>
@@ -451,13 +451,14 @@
 		<Tabs.Root bind:value={currentTab} class="flex w-[100%] flex-col items-center">
 			<Tabs.List class="mb-[5px] w-fit">
 				{#if isActive(data.boostedUntil)}
-					<Tabs.Trigger value="home">Home</Tabs.Trigger>
+					<Tabs.Trigger value="home">{$_("clan.tabs.home")}</Tabs.Trigger>
+					<Tabs.Trigger value="levels">{$_("clan.tabs.levels")}</Tabs.Trigger>
 				{/if}
-				<Tabs.Trigger value="members">Members</Tabs.Trigger>
-				<Tabs.Trigger value="records">Records</Tabs.Trigger>
+				<Tabs.Trigger value="records">{$_("clan.tabs.records")}</Tabs.Trigger>
+				<Tabs.Trigger value="members">{$_("clan.tabs.members")}</Tabs.Trigger>
 				{#if $user.loggedIn && $user.data.clan == $page.params.id}
-					<Tabs.Trigger value="invitations">Invitations</Tabs.Trigger>
-					<Tabs.Trigger value="settings">Settings</Tabs.Trigger>
+					<Tabs.Trigger value="invitations">{$_("clan.tabs.invitations")}</Tabs.Trigger>
+					<Tabs.Trigger value="settings">{$_("clan.tabs.settings")}</Tabs.Trigger>
 				{/if}
 			</Tabs.List>
 			{#if isActive(data.boostedUntil)}
@@ -473,10 +474,13 @@
 					{/if}
 				</Tabs.Content>
 			{/if}
+			<Tabs.Content value="levels" class="w-full">
+				<Levels clan={data} />
+			</Tabs.Content>
 			<Tabs.Content value="members" class="w-full">
 				<div class="filter">
 					<div class="filterItem">
-						<Label>Sort by</Label>
+						<Label>{$_("general.sort_by")}</Label>
 						<Select.Root
 							selected={{
 								label: 'A-Z',
@@ -491,16 +495,16 @@
 							</Select.Trigger>
 							<Select.Content>
 								<Select.Item value="name">A-Z</Select.Item>
-								<Select.Item value="rating">Demon List Rating</Select.Item>
-								<Select.Item value="totalFLpt">Total FL point</Select.Item>
+								<Select.Item value="rating">{$_("player_card.rating")}</Select.Item>
+								<Select.Item value="totalFLpt">{$_("player_card.featured")}</Select.Item>
 							</Select.Content>
 						</Select.Root>
 					</div>
 					<div class="filterItem">
-						<Label>Ascending</Label>
+						<Label>{$_("general.ascending")}</Label>
 						<Switch bind:checked={membersFilter.ascending} />
 					</div>
-					<Button variant="outline" on:click={fetchMembers}>Apply</Button>
+					<Button variant="outline" on:click={fetchMembers}>{$_("general.apply")}</Button>
 				</div>
 				<Table.Root>
 					<Table.Header>
@@ -508,7 +512,7 @@
 							<Table.Head class="w-[50px]">No.</Table.Head>
 							<Table.Head>Player</Table.Head>
 							{#if appliedMembersFilter.sortBy == 'rating'}
-								<Table.Head class="w-[100px] text-right">Rating</Table.Head>
+								<Table.Head class="w-[100px] text-right">Classic Rating</Table.Head>
 							{:else if appliedMembersFilter.sortBy == 'totalFLpt'}
 								<Table.Head class="w-[100px] text-right">Total FL point</Table.Head>
 							{:else}
@@ -571,10 +575,10 @@
 			<Tabs.Content value="records" class="w-full">
 				<div class="filter">
 					<div class="filterItem">
-						<Label>Sort by</Label>
+						<Label>{$_("general.sort_by")}</Label>
 						<Select.Root
 							selected={{
-								label: 'Date submitted',
+								label: $_("clan.sort.timestamp"),
 								value: 'timestamp'
 							}}
 							onSelectedChange={(e) => {
@@ -585,17 +589,17 @@
 								<Select.Value placeholder="Select item to sort by" />
 							</Select.Trigger>
 							<Select.Content>
-								<Select.Item value="timestamp" selected>Date submitted</Select.Item>
-								<Select.Item value="dlPt">Demon List Rating</Select.Item>
-								<Select.Item value="flPt">FL point</Select.Item>
+								<Select.Item value="timestamp" selected>{$_("clan.sort.timestamp")}</Select.Item>
+								<Select.Item value="dlPt">{$_("clan.sort.dlPt")}</Select.Item>
+								<Select.Item value="flPt">{$_("clan.sort.flPt")}</Select.Item>
 							</Select.Content>
 						</Select.Root>
 					</div>
 					<div class="filterItem">
-						<Label>Ascending</Label>
+						<Label>{$_("general.ascending")}</Label>
 						<Switch bind:checked={recordsFilter.ascending} />
 					</div>
-					<Button variant="outline" on:click={fetchRecords}>Apply</Button>
+					<Button variant="outline" on:click={fetchRecords}>{$_("general.apply")}</Button>
 				</div>
 				<Table.Root>
 					<Table.Header>

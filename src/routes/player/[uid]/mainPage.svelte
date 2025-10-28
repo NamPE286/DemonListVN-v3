@@ -4,26 +4,25 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Switch } from '$lib/components/ui/switch';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import * as Tooltip from '$lib/components/ui/tooltip';
 	import * as Table from '$lib/components/ui/table';
 	import * as Tabs from '$lib/components/ui/tabs';
-	import * as Card from '$lib/components/ui/card';
 	import * as Select from '$lib/components/ui/select';
 	import { user } from '$lib/client';
 	import ProfileEditButton from '$lib/components/profileEditButton.svelte';
-	import Heatmap from '$lib/components/heatmap.svelte';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import Ads from '$lib/components/ads.svelte';
-	import { getTitle } from '$lib/client';
 	import { Button } from '$lib/components/ui/button';
 	import { page } from '$app/stores';
-	import { getExpLevel } from '$lib/client/getExpLevel';
 	import { isActive } from '$lib/client/isSupporterActive';
-	import MedalsTab from './medalsTab.svelte';
+	import MedalsTab from './tabs/MedalsTab.svelte';
+	import { _ } from 'svelte-i18n';
+	import OverviewTab from './tabs/OverviewTab/index.svelte';
+	import { onMount } from 'svelte';
+	import EventTab from './tabs/EventsTab.svelte';
 
 	export let data: PageData;
-	let list: 'dl' | 'fl' | 'pl' | '' = 'dl';
+	let list: 'dl' | 'fl' | 'pl' | '' = '';
 	let recordDetailOpened = false;
 	let selectedRecord: any = null;
 	let filter = {
@@ -31,8 +30,6 @@
 		ascending: false
 	};
 
-	let exp = data.player.exp + data.player.extraExp;
-	let expLevel = getExpLevel(exp);
 	let isBannerFailedToLoad = false;
 
 	function getTimeString(ms: number) {
@@ -53,14 +50,22 @@
 		data.records = records;
 		data = data;
 	}
+
+	function getBgColor() {
+		if (isActive(data.player.supporterUntil)) {
+			return `background-color: ${data.player.bgColor}`;
+		}
+
+		return '';
+	}
 </script>
 
 <svelte:head>
-	<title>{data.player.name}'s profile - Demon List VN</title>
-	<meta property="og:title" content={`${data.player.name}'s profile - Demon List VN`} />
+	<title>{data.player.name} - Demon List VN</title>
+	<meta property="og:title" content={`${data.player.name} - Demon List VN`} />
 	<meta
 		property="og:description"
-		content={`Rating: ${data.player.rating} #${data.player.overallRank}\nTotal Featured List point: ${data.player.totalFLpt} #${data.player.flrank}`}
+		content={`Điểm Classic: ${data.player.rating} #${data.player.overallRank}\nTổng điểm Featured List: ${data.player.totalFLpt} #${data.player.flrank}\nĐiểm cuộc thi: ${data.player.elo}`}
 	/>
 	<meta
 		property="og:image"
@@ -77,21 +82,22 @@
 		bind:levelID={selectedRecord.levelid}
 	/>
 {/if}
-
 {#if data.player.isBanned}
 	<div class="flex h-[50px] items-center justify-center bg-red-600">
-		This player is banned. If this is your profile, contact a moderator to appeal this decision.
+		{$_('player.banned_notice')}
 	</div>
 {:else if data.player.isHidden}
-	<div class="flex h-[50px] items-center justify-center bg-yellow-600">This profile is hidden.</div>
+	<div class="flex h-[50px] items-center justify-center bg-yellow-600">
+		{$_('player.hidden_notice')}
+	</div>
 {/if}
-<div class="relative">
+<div class="relative" style={getBgColor()}>
 	{#if isActive(data.player.supporterUntil) && !isBannerFailedToLoad}
 		<img
 			on:error={() => {
 				isBannerFailedToLoad = true;
 			}}
-			class="bgGradient absolute z-0 mt-[-55px] h-[600px] w-full object-cover"
+			style="mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%); position: absolute; z-index: 0; margin-top: -55px; height: 330px; width: 100%; object-fit: cover;"
 			src={`https://cdn.demonlistvn.com/banners/${data.player.uid}${
 				data.player.isBannerGif ? '.gif' : '.jpg'
 			}?version=${data.player.bannerVersion}`}
@@ -99,9 +105,9 @@
 		/>
 	{/if}
 
-	<div class="wrapper z-1 relative">
-		<div class="playerInfo">
-			<Avatar.Root class="h-32 w-32 lg:h-40 lg:w-40">
+	<div class="relative z-10 px-1 pt-12 xl:px-20">
+		<div class="gap-7.5 flex items-center pb-5">
+			<Avatar.Root class="mr-6 h-32 w-32 lg:h-40 lg:w-40">
 				<Avatar.Image
 					class="object-cover"
 					src={`https://cdn.demonlistvn.com/avatars/${data.player.uid}${
@@ -127,7 +133,7 @@
 					<button
 						on:click={() => {
 							navigator.clipboard.writeText(data.player.uid);
-							toast.success('Copied UID to clipboard!');
+							toast.success($_('player.copy_uid'));
 						}}
 					>
 						<h2 class={isActive(data.player.supporterUntil) ? 'text-yellow-500' : ''}>
@@ -187,109 +193,38 @@
 				</div>
 			</div>
 		</div>
-		<div class="playerInfo2Wrapper">
-			<div class="playerInfo2">
-				<Card.Root
-					style={isActive(data.player.supporterUntil)
-						? `background-color: ${data.player.bgColor}; border-color: ${data.player.borderColor}; ${data.player.bgColor ? 'color: white' : ''}`
-						: ''}
-				>
-					<Card.Header>
-						<Card.Title tag="h1">Player's statistic</Card.Title>
-					</Card.Header>
-					<Card.Content>
-						<div class="flex flex-col gap-[3px]">
-							<div class="rating">
-								<div class="flex justify-center">
-									<div class="leftCol">
-										<b>Lv.{expLevel.level}</b>
-									</div>
-								</div>
-								<div class="progressBar">
-									<div class="progress" style={`width: ${expLevel.progress}%`}>
-										<b>{expLevel.progress}%</b>
-									</div>
-								</div>
-								<Tooltip.Root>
-									<Tooltip.Trigger>{exp}/{expLevel.upperBound}</Tooltip.Trigger>
-									<Tooltip.Content>
-										<p>{expLevel.upperBound - exp} EXP to next level</p>
-									</Tooltip.Content>
-								</Tooltip.Root>
-							</div>
-							<div class="rating">
-								<Tooltip.Root>
-									<Tooltip.Trigger>
-										<div class="leftCol">
-											<div
-												class="title text-white"
-												style={`background-color: ${getTitle('dl', data.player)?.color}`}
-											>
-												{data.player.rating}
-											</div>
-										</div>
-									</Tooltip.Trigger>
-									<Tooltip.Content>{getTitle('dl', data.player)?.fullTitle}</Tooltip.Content>
-								</Tooltip.Root>
-								<div class="rankWrapper">
-									Classic Rating
-									<div class="rank">
-										#{data.player.overallRank}
-									</div>
-								</div>
-							</div>
-							<div class="rating">
-								<div class="leftCol">
-									<div class="title">{data.player.totalFLpt}</div>
-								</div>
-								<div class="rankWrapper">
-									Total Featured List Point
-									<div class="rank">
-										#{data.player.flrank}
-									</div>
-								</div>
-							</div>
-							<div class="rating">
-								<div class="leftCol">
-									<Tooltip.Root>
-										<Tooltip.Trigger>
-											<div class="leftCol">
-												<div
-													class="title"
-													style={`background-color: ${getTitle('elo', data.player)?.color}`}
-												>
-													{#if data.player.matchCount < 5}
-														<span class="opacity-50">{`${data.player.elo}?`}</span>
-													{:else}
-														{data.player.elo}
-													{/if}
-												</div>
-											</div>
-										</Tooltip.Trigger>
-										<Tooltip.Content>{getTitle('elo', data.player)?.fullTitle}</Tooltip.Content>
-									</Tooltip.Root>
-								</div>
-								<div class="rankWrapper">Contest Rating</div>
-							</div>
-						</div>
-					</Card.Content>
-				</Card.Root>
-			</div>
-			{#key data.player.uid}
-				<Heatmap uid={data.player.uid} />
-			{/key}
-		</div>
+
 		{#if !isActive(data.player.supporterUntil)}
 			<Ads dataAdFormat="rectangle" />
 		{/if}
-		<Tabs.Root value="dl">
+		<Tabs.Root value="overview">
 			<div class="tabs">
-				<Tabs.List class="grid w-[400px] max-w-full grid-cols-4">
-					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}>Classic</Tabs.Trigger>
-					<Tabs.Trigger value="pl" on:click={() => (list = 'pl')}>Platformer</Tabs.Trigger>
-					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}>Featured</Tabs.Trigger>
-					<Tabs.Trigger value="medals" on:click={() => (list = '')}>Medal</Tabs.Trigger>
+				<Tabs.List class="flex h-fit w-fit flex-wrap">
+					<Tabs.Trigger value="overview" on:click={() => (list = '')}
+						>{$_('player.tabs.overview')}</Tabs.Trigger
+					>
+					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}
+						>{$_('player.tabs.dl')}</Tabs.Trigger
+					>
+					<Tabs.Trigger value="pl" on:click={() => (list = 'pl')}
+						>{$_('player.tabs.pl')}</Tabs.Trigger
+					>
+					<Tabs.Trigger value="fl" on:click={() => (list = 'fl')}
+						>{$_('player.tabs.fl')}</Tabs.Trigger
+					>
+					<Tabs.Trigger value="medals" on:click={() => (list = '')}
+						>{$_('player.tabs.medals')}</Tabs.Trigger
+					>
+					<Tabs.Trigger value="events" on:click={() => (list = '')}
+						>{$_('player.tabs.events')}</Tabs.Trigger
+					>
 				</Tabs.List>
+				<Tabs.Content value="events" class="w-[1200px] max-w-full">
+					<EventTab {data} />
+				</Tabs.Content>
+				<Tabs.Content value="overview" class="w-[1200px] max-w-full">
+					<OverviewTab {data} />
+				</Tabs.Content>
 				<Tabs.Content value="medals">
 					<MedalsTab userID={data.player.uid} />
 				</Tabs.Content>
@@ -298,10 +233,10 @@
 		{#if list.length}
 			<div class="filter">
 				<div class="filterItem">
-					<Label>Sort by</Label>
+					<Label>{$_('general.sort_by')}</Label>
 					<Select.Root
 						selected={{
-							label: 'Point',
+							label: $_('player.filter.point'),
 							value: 'pt'
 						}}
 						onSelectedChange={(e) => {
@@ -310,34 +245,35 @@
 						}}
 					>
 						<Select.Trigger class="w-[180px]">
-							<Select.Value placeholder="Select item to sort by" />
+							<Select.Value placeholder={$_('player.filter.sort_by')} />
 						</Select.Trigger>
 						<Select.Content>
-							<Select.Item value="pt">Point</Select.Item>
-							<Select.Item value="timestamp">Date submitted</Select.Item>
+							<Select.Item value="pt">{$_('player.filter.point')}</Select.Item>
+							<Select.Item value="timestamp">{$_('player.filter.date_submitted')}</Select.Item>
 						</Select.Content>
 					</Select.Root>
 				</div>
 				<div class="filterItem">
-					<Label>Ascending</Label>
+					<Label>{$_('general.ascending')}</Label>
 					<Switch bind:checked={filter.ascending} />
 				</div>
 				<div class="filterItem">
-					<Button variant="outline" on:click={applyFilter}>Apply</Button>
+					<Button variant="outline" on:click={applyFilter}>{$_('general.apply')}</Button>
 				</div>
 			</div>
 			<Table.Root>
-				<Table.Caption>Total record: {data.records[list].length}</Table.Caption>
+				<Table.Caption>{$_('player.table.total_record')}: {data.records[list].length}</Table.Caption
+				>
 				<Table.Header>
 					<Table.Row>
-						<Table.Head>Level</Table.Head>
-						<Table.Head class="w-[100px] text-center">Submitted on</Table.Head>
-						<Table.Head class="w-[100px] text-center">Device</Table.Head>
-						<Table.Head class="w-[80px] text-center">Point</Table.Head>
+						<Table.Head>{$_('player.table.level')}</Table.Head>
+						<Table.Head class="w-[100px] text-center">{$_('player.table.submitted_on')}</Table.Head>
+						<Table.Head class="w-[100px] text-center">{$_('player.table.device')}</Table.Head>
+						<Table.Head class="w-[80px] text-center">{$_('player.table.point')}</Table.Head>
 						{#if list == 'pl'}
-							<Table.Head class="w-[80px] text-center">Time</Table.Head>
+							<Table.Head class="w-[80px] text-center">{$_('player.table.time')}</Table.Head>
 						{:else}
-							<Table.Head class="w-[80px] text-center">Progress</Table.Head>
+							<Table.Head class="w-[80px] text-center">{$_('player.table.progress')}</Table.Head>
 						{/if}
 					</Table.Row>
 				</Table.Header>
@@ -394,10 +330,16 @@
 		{/if}
 	</div>
 </div>
+{#if isActive(data.player.supporterUntil)}
+	<div
+		class="mt-[-10px] h-[100px] w-full"
+		style={`background: linear-gradient(to bottom, ${data.player.bgColor}, transparent);`}
+	/>
+{/if}
 
 <style lang="scss">
 	.bgGradient {
-		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0) 75%);
+		mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%);
 	}
 	.levelBG {
 		padding-right: 10px;
@@ -433,17 +375,6 @@
 		width: 100%;
 		border-radius: 10px;
 		overflow: hidden;
-
-		b {
-			color: var(--textColorInverted);
-			margin-right: 5px;
-		}
-
-		.progress {
-			background-color: var(--textColor);
-			text-align: right;
-			border-radius: 10px;
-		}
 	}
 
 	.filter {
@@ -486,30 +417,11 @@
 		gap: 10px;
 		align-items: center;
 		font-size: 13px;
-
-		.title {
-			padding: 2px;
-			padding-inline: 5px;
-			border-radius: 5px;
-			font-weight: bold;
-			font-size: 12px;
-			user-select: none;
-			width: fit-content;
-		}
 	}
 
 	.rankWrapper {
 		display: flex;
 		gap: 5px;
-
-		.rank {
-			background-color: var(--textColor);
-			color: var(--textColorInverted);
-			padding-inline: 6px;
-			height: fit-content;
-			border-radius: 5px;
-			font-weight: 600;
-		}
 	}
 
 	.leftCol {

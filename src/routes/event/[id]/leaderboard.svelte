@@ -2,21 +2,21 @@
 	import * as Table from '$lib/components/ui/table/index.js';
 	import Download from 'svelte-radix/Download.svelte';
 	import { onMount } from 'svelte';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import type { Level } from './type';
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { user } from '$lib/client';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { toast } from 'svelte-sonner';
 	import { Reload } from 'svelte-radix';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
-	import * as Select from '$lib/components/ui/select/index.js';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { ExclamationTriangle } from 'svelte-radix';
 	import { flip } from 'svelte/animate';
 	import { cn } from '$lib/utils.js';
+	import { _ } from 'svelte-i18n';
+	import RecordDetailDialog from './recordDetailDialog.svelte';
+	import * as Switch from '$lib/components/ui/switch/index.js';
+	import Label from '$lib/components/ui/label/label.svelte';
 
 	export let levels: (Level | null)[];
 	export let event: any;
@@ -24,8 +24,9 @@
 	let leaderboard: any[] = [];
 	let leaderboard1: any[] = [];
 	let refreshing = false;
-	let updateData: any = null;
 	let revealMode = false;
+	let previousScores: Map<string, number> = new Map();
+	let showPercentage = false;
 
 	function indexToRoman(num: number): string {
 		const romanNumerals = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];
@@ -73,6 +74,10 @@
 			return 0;
 		}
 
+		if(event.type == 'raid') {
+			return record.progress;
+		}
+
 		const res = (record.progress / 100) * levels[index].point;
 
 		return Math.round(res * 100) / 100;
@@ -88,9 +93,50 @@
 		return Math.round(res * 100) / 100;
 	}
 
+	function getTotalLevelPoints() {
+		let res = 0;
+		
+		for (let i = 0; i < levels.length; i++) {
+			if (levels[i]) {
+				res += levels[i]!.point;
+			}
+		}
+		
+		return res;
+	}
+
+	function getContributionPercentage(records: any[]) {
+		const totalPoint = getTotalPoint(records);
+		const totalLevelPoints = getTotalLevelPoints();
+		
+		if (totalLevelPoints === 0) {
+			return 0;
+		}
+		
+		const percentage = (totalPoint / totalLevelPoints) * 100;
+		return Math.round(percentage * 100) / 100;
+	}
+
+	function getScoreDiff(uid: string, currentScore: number) {
+		const previousScore = previousScores.get(uid);
+		if (previousScore === undefined) {
+			return 0;
+		}
+		return Math.round((currentScore - previousScore) * 100) / 100;
+	}
+
 	async function refresh(noti = false) {
 		const upd = async () => {
 			refreshing = true;
+			
+			// Store previous scores before refresh for raid events
+			if (event.type == 'raid' && leaderboard.length > 0) {
+				previousScores = new Map();
+				for (const player of leaderboard) {
+					previousScores.set(player.uid, getTotalPoint(player.eventRecords));
+				}
+			}
+			
 			leaderboard = await (
 				await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/leaderboard`, {
 					method: 'GET',
@@ -112,16 +158,16 @@
 
 		if (noti) {
 			toast.promise(upd, {
-				success: 'Refreshed!',
-				error: 'Failed to refresh',
-				loading: 'Refreshing...'
+				success: $_('contest.leaderboard.refresh.success'),
+				error: $_('contest.leaderboard.refresh.error'),
+				loading: $_('contest.leaderboard.refresh.loading')
 			});
 		} else {
 			await upd();
 		}
 	}
 
-	async function updateRecord(record: any) {
+	async function updateRecord(updateData: any) {
 		updateData.accepted = updateData.accepted.value;
 
 		toast.promise(
@@ -139,8 +185,6 @@
 				loading: 'Updating...'
 			}
 		);
-
-		record = updateData;
 	}
 
 	function exportToCSV() {
@@ -232,6 +276,42 @@
 		});
 	}
 
+	async function calculate() {
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/calc`, {
+				method: 'PATCH',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			}),
+			{
+				success: () => {
+					window.location.reload();
+
+					return 'Calculated!';
+				},
+				loading: 'Calculating...',
+				error: 'Failed to calculate'
+			}
+		);
+	}
+
+	async function getLevelDeathCount(levelID: number) {
+		const res = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/level/${levelID}/deathCount`)
+		).json();
+
+		return res;
+	}
+
+	async function getPlayerDeathCount(levelID: number, userID: string) {
+		const res = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/deathCount/${userID}/${levelID}`)
+		).json();
+
+		return res;
+	}
+
 	onMount(async () => {
 		await refresh();
 	});
@@ -242,18 +322,24 @@
 		<Alert.Title class="flex items-center gap-[10px]">
 			<ExclamationTriangle size={15} />
 			{#if new Date(event.freeze) > new Date()}
-				The leaderboard will be frozen on {new Date(event.freeze).toLocaleString('vi-vn')}.
+				{$_('contest.leaderboard.frozen_notice')} {new Date(event.freeze).toLocaleString('vi-vn')}.
 			{:else if event.freeze == event.start}
-				The leaderboard is hidden.
+				{$_('contest.leaderboard.hidden_notice')}
 			{:else}
-				The leaderboard has been frozen since {new Date(event.freeze).toLocaleString('vi-vn')}.
+				{$_('contest.leaderboard.frozen_since')} {new Date(event.freeze).toLocaleString('vi-vn')}.
 			{/if}
 		</Alert.Title>
 	</Alert.Root>
 {/if}
 <div class="mb-[10px] flex justify-center gap-[10px]">
+	<div class="flex items-center gap-[10px] rounded-md border border-input bg-background px-3">
+		<Label for="percentage-switch" class="cursor-pointer text-sm">
+			{showPercentage ? $_('contest.leaderboard.display_mode.contribution_percentage') : $_('contest.leaderboard.display_mode.total_points')}
+		</Label>
+		<Switch.Root id="percentage-switch" bind:checked={showPercentage} />
+	</div>
 	<a href="#me">
-		<Button class="w-[200px]" variant="outline">Jump to me</Button>
+		<Button class="w-[200px]" variant="outline">{$_('contest.leaderboard.jump_to_me')}</Button>
 	</a>
 	<Button
 		on:click={exportToCSV}
@@ -278,16 +364,21 @@
 		>
 			Switch to {revealMode ? 'Normal' : 'Reveal'} Mode
 		</Button>
+		<Button variant="outline" disabled={event.isCalculated} on:click={calculate}
+			>Calculate rating</Button
+		>
 	{/if}
 </div>
 <div class="sticky top-[55px] z-10 bg-[hsl(var(--background))]">
 	<Table.Root class="ml-auto mr-auto w-[1500px] max-w-full">
 		<Table.Header>
 			<Table.Row>
-				<Table.Head class="w-[100px]">Rank</Table.Head>
-				<Table.Head class="min-w-[200px]">Player</Table.Head>
-				<Table.Head class="w-[75px] text-center">Total</Table.Head>
-				<Table.Head class="w-[75px] text-center">Penalty</Table.Head>
+				<Table.Head class="w-[100px]">{$_('contest.leaderboard.rank')}</Table.Head>
+				<Table.Head class="min-w-[200px]">{$_('contest.leaderboard.player')}</Table.Head>
+				<Table.Head class="w-[75px] text-center">{$_('contest.leaderboard.total')}</Table.Head>
+				{#if event.type == 'basic'}
+					<Table.Head class="w-[75px] text-center">{$_('contest.leaderboard.penalty')}</Table.Head>
+				{/if}
 				{#each levels as level, index}
 					<Table.Head class="w-[75px] text-center">
 						<Tooltip.Root>
@@ -298,6 +389,9 @@
 						</Tooltip.Root>
 					</Table.Head>
 				{/each}
+				{#if event.type == 'raid' && previousScores.size > 0}
+					<Table.Head class="w-[75px] text-center">Δ</Table.Head>
+				{/if}
 				{#if event.isCalculated}
 					<Table.Head class="w-[75px] text-center">Δ</Table.Head>
 				{/if}
@@ -322,23 +416,29 @@
 					<Table.Cell class="min-w-[200px]">
 						{#if $user.loggedIn && player.uid == $user.data.uid}
 							<div id="me">
-								<PlayerHoverCard {player} showTitle={true} titleType='elo' />
+								<PlayerHoverCard {player} showTitle={true} titleType="elo" />
 							</div>
 						{:else}
-							<PlayerHoverCard {player} showTitle={true} titleType='elo' />
+							<PlayerHoverCard {player} showTitle={true} titleType="elo" />
 						{/if}
 					</Table.Cell>
 					<Table.Cell class="w-[75px] text-center font-bold">
-						{getTotalPoint(player.eventRecords)}
+						{#if showPercentage}
+							{getContributionPercentage(player.eventRecords)}%
+						{:else}
+							{getTotalPoint(player.eventRecords)}
+						{/if}
 					</Table.Cell>
-					<Table.Cell class="w-[75px] text-center">
-						<Tooltip.Root>
-							<Tooltip.Trigger>
-								{getPenalty(player.eventRecords, 60000)}
-							</Tooltip.Trigger>
-							<Tooltip.Content>{getPenaltyTooltip(player.eventRecords)}</Tooltip.Content>
-						</Tooltip.Root>
-					</Table.Cell>
+					{#if event.type == 'basic'}
+						<Table.Cell class="w-[75px] text-center">
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									{getPenalty(player.eventRecords, 60000)}
+								</Tooltip.Trigger>
+								<Tooltip.Content>{getPenaltyTooltip(player.eventRecords)}</Tooltip.Content>
+							</Tooltip.Root>
+						</Table.Cell>
+					{/if}
 					{#each player.eventRecords as record, index}
 						{#if !revealMode}
 							<Table.Cell class="w-[75px] text-center">
@@ -349,144 +449,14 @@
 										-
 									{/if}
 								{:else}
-									<Dialog.Root>
-										<Dialog.Trigger
-											on:click={() => {
-												updateData = structuredClone(record);
-												delete updateData.eventLevels;
-
-												updateData.accepted = {
-													disabled: false,
-													label: (() => {
-														if (updateData.accepted === null) {
-															return 'Undecided';
-														}
-
-														return updateData.accepted ? 'Accepted' : 'Rejected';
-													})(),
-													value: updateData.accepted
-												};
-
-												updateData.created_at = new Date(updateData.created_at)
-													.toISOString()
-													.slice(0, 16);
-											}}
-										>
-											{#if record && record.accepted === false}
-												<s>
-													{getPoint(record, index)}<br />
-													<span class="text-[11px] opacity-50">
-														{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
-													</span>
-												</s>
-											{:else if record && record.accepted === null}
-												{getPoint(record, index)}*<br />
-												<span class="text-[11px] opacity-50">
-													{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
-												</span>
-											{:else}
-												{getPoint(record, index)}<br />
-												<span class="text-[11px] opacity-50">
-													{record ? `${Math.round(record.progress * 100) / 100}%` : ''}
-												</span>
-											{/if}
-										</Dialog.Trigger>
-										<Dialog.Content>
-											<Dialog.Header>
-												<Dialog.Title>Record's Detail</Dialog.Title>
-											</Dialog.Header>
-											<div class="flex flex-col gap-0">
-												<section>
-													<span class="font-bold">Submitted at: </span>
-													{new Date(record.created_at).toLocaleString('vi-vn')}
-												</section>
-												<section>
-													<span class="font-bold">Video's Link: </span><a
-														href={record.videoLink}
-														class="text-[#95bdf7]"
-														target="_blank">Link</a
-													>
-												</section>
-												<section>
-													<span class="font-bold">Raw: </span>
-													{#if record.raw}
-														<a href={record.raw} class="text-[#95bdf7]" target="_blank">Link</a>
-													{:else}
-														(Not provided)
-													{/if}
-												</section>
-												{#if record.accepted === null}
-													<section class="mt-[10px] text-[13px] opacity-50">
-														* This record legitimacy is not verified
-													</section>
-												{:else if record.accepted === false}
-													<section>
-														<span class="font-bold">Reject Reason: </span>
-														{record.rejectReason}
-													</section>
-													<section class="mt-[10px] text-[13px] opacity-50">
-														* This record is not counted
-													</section>
-												{/if}
-
-												{#if $user.loggedIn && $user.data.isAdmin && updateData}
-													<div class="grid gap-4 py-4">
-														<div class="grid grid-cols-4 items-center gap-4">
-															<Label for="name" class="text-right">Submitted at</Label>
-															<Input
-																type="datetime-local"
-																bind:value={updateData.created_at}
-																class="col-span-3"
-															/>
-														</div>
-														<div class="grid grid-cols-4 items-center gap-4">
-															<Label for="name" class="text-right">Progress</Label>
-															<Input
-																type="number"
-																bind:value={updateData.progress}
-																class="col-span-3"
-															/>
-														</div>
-														<div class="grid grid-cols-4 items-center gap-4">
-															<Label for="name" class="text-right">Video's Link</Label>
-															<Input bind:value={updateData.videoLink} class="col-span-3" />
-														</div>
-														<div class="grid grid-cols-4 items-center gap-4">
-															<Label
-																for="name"
-																placeholder="Leave blank if not rejected"
-																class="text-right">Reject Reason</Label
-															>
-															<Input bind:value={updateData.rejectReason} class="col-span-3" />
-														</div>
-														{#if levels[index] && levels[index].needRaw}
-															<div class="grid grid-cols-4 items-center gap-4">
-																<Label for="name" class="text-right">Raw</Label>
-																<Input bind:value={updateData.raw} class="col-span-3" />
-															</div>
-														{/if}
-														<div class="grid grid-cols-4 items-center gap-4">
-															<Label for="name" class="text-right">Accept state</Label>
-															<Select.Root bind:selected={updateData.accepted}>
-																<Select.Trigger class="col-span-3">
-																	<Select.Value placeholder="Select a platform" />
-																</Select.Trigger>
-																<Select.Content>
-																	<Select.Group>
-																		<Select.Item value={null}>Undecided</Select.Item>
-																		<Select.Item value={true}>Accepted</Select.Item>
-																		<Select.Item value={false}>Rejected</Select.Item>
-																	</Select.Group>
-																</Select.Content>
-																<Select.Input name="platform" value={true} />
-															</Select.Root>
-														</div>
-														<Button on:click={() => updateRecord(record)}>Update</Button>
-													</div>
-												{/if}
-											</div>
-										</Dialog.Content>
-									</Dialog.Root>
+									<RecordDetailDialog
+										{record}
+										{index}
+										{levels}
+										{getPoint}
+										onUpdate={updateRecord}
+										type={event.type}
+									/>
 								{/if}
 							</Table.Cell>
 						{:else}
@@ -521,6 +491,15 @@
 							</Table.Cell>
 						{/if}
 					{/each}
+					{#if event.type == 'raid' && previousScores.size > 0}
+						{@const currentScore = getTotalPoint(player.eventRecords)}
+						{@const scoreDiff = getScoreDiff(player.uid, currentScore)}
+						<Table.Cell
+							class={`w-[75px] text-center ${Math.sign(scoreDiff) > 0 ? 'text-green-600 dark:text-green-400' : scoreDiff < 0 ? 'text-red-600 dark:text-red-400' : ''}`}
+						>
+							{Math.sign(scoreDiff) > 0 ? '+' : ''}{scoreDiff}
+						</Table.Cell>
+					{/if}
 					{#if event.isCalculated}
 						<Table.Cell
 							class={`w-[75px] text-center ${Math.sign(player.diff) > 0 ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'}`}

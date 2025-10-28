@@ -9,7 +9,7 @@
 	import { user } from '$lib/client';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import type { PageData } from './$types';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import { onMount } from 'svelte';
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 	import LockClosed from 'svelte-radix/LockClosed.svelte';
@@ -18,6 +18,7 @@
 	import Person from 'svelte-radix/Person.svelte';
 	import { goto } from '$app/navigation';
 	import Ads from '$lib/components/ads.svelte';
+	import { _ } from 'svelte-i18n';
 
 	export let data: PageData;
 	const newClanData = {
@@ -108,72 +109,72 @@
 </script>
 
 <svelte:head>
-	<title>Clans - Demon List VN</title>
+	<title>Hội - Demon List VN</title>
 </svelte:head>
 
 <div class="titleWrapper">
-	<Title value="Clans" />
+	<Title value={$_("clans.title")} />
 	<Dialog.Root>
 		{#if $user.loggedIn && !$user.data.clan}
 			<Dialog.Trigger>
 				{#if $user.data.rating || $user.data.totalFLpt}
-					<Button>Create clan</Button>
+					<Button>{$_("clans.create.button")}</Button>
 				{:else}
-					<Button disabled>Create clan</Button>
+					<Button disabled>{$_("clans.create.button")}</Button>
 				{/if}
 			</Dialog.Trigger>
 		{/if}
 		<Dialog.Content>
 			<Dialog.Header>
-				<Dialog.Title>Create new clan</Dialog.Title>
+				<Dialog.Title>{$_("clans.create.title")}</Dialog.Title>
 				<Dialog.Description
-					>Additional configurations can be found in clan's settings after creation</Dialog.Description
+					>{$_("clans.create.description")}</Dialog.Description
 				>
 			</Dialog.Header>
 			<div class="grid gap-4 py-4">
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label class="text-right">Name</Label>
+					<Label class="text-right">{$_("clans.create.name")}</Label>
 					<Input class="col-span-3" bind:value={newClanData.name} />
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label class="text-right">Tag</Label>
+					<Label class="text-right">{$_("clans.create.tag")}</Label>
 					<Input
 						class="col-span-3"
-						placeholder="2-6 characters, alphanumeric, no space"
+						placeholder={$_("clans.create.tag_placeholder")}
 						bind:value={newClanData.tag}
 						maxlength={6}
 					/>
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label class="text-right">Member limit</Label>
+					<Label class="text-right">{$_("clans.create.member_limit")}</Label>
 					<Input
 						class="col-span-3"
 						bind:value={newClanData.memberLimit}
 						type="number" inputmode="numeric"
-						placeholder="Enter 0 for unlimited"
+						placeholder={$_("clans.create.member_limit_placeholder")}
 					/>
 				</div>
 				<div class="grid grid-cols-4 items-center gap-4">
-					<Label class="text-right">Public</Label>
+					<Label class="text-right">{$_("clans.create.public")}</Label>
 					<Switch bind:checked={newClanData.isPublic} />
 				</div>
 			</div>
 			<Dialog.Footer>
-				<Button on:click={createClan}>Create</Button>
+				<Button on:click={createClan}>{$_("clans.create.create_button")}</Button>
 			</Dialog.Footer>
 		</Dialog.Content>
 	</Dialog.Root>
 </div>
 <Tabs.Root value="clans" class="flex w-[100%] flex-col items-center">
 	<Tabs.List class="mb-[5px] w-fit">
-		<Tabs.Trigger value="clans">Clan listing</Tabs.Trigger>
+		<Tabs.Trigger value="clans">{$_("clans.tabs.listing")}</Tabs.Trigger>
 		{#if $user.loggedIn && !$user.data.clan}
-			<Tabs.Trigger value="invitations">Invitations</Tabs.Trigger>
+			<Tabs.Trigger value="invitations">{$_("clans.tabs.invitations")}</Tabs.Trigger>
 		{/if}
 	</Tabs.List>
 	<Tabs.Content value="clans" class="w-full">
 		<div class="flex justify-center gap-[10px] pl-[10px] pr-[10px]">
-			<Input placeholder="Search" class="mb-[20px] w-[400px] max-w-full" bind:value={searchQuery} />
+			<Input placeholder={$_("clans.search_placeholder")} class="mb-[20px] w-[400px] max-w-full" bind:value={searchQuery} />
 			<Button on:click={fetchClanList}><MagnifyingGlass /></Button>
 		</div>
 		<Ads dataAdFormat="rectangle" />
@@ -195,9 +196,9 @@
 						<div class="flex gap-[10px]">
 							<div class="flex items-center gap-[5px]">
 								{#if clan.isPublic}
-									<Globe size={20} /> Public
+									<Globe size={20} /> {$_("clan.public")}
 								{:else}
-									<LockClosed size={20} /> Invite only
+									<LockClosed size={20} /> {$_("clan.invite_only")}
 								{/if}
 							</div>
 							<div class="flex items-center gap-[5px]">
@@ -228,12 +229,12 @@
 					<div class="info">
 						<a href={`/clan/${invitation.clans.id}`}><h3>{invitation.clans.name}</h3></a>
 						<span class="flex gap-[10px]"
-							>Owned by <PlayerHoverCard player={invitation.clans.players} /></span
+							>{$_("clans.owned_by")} <PlayerHoverCard player={invitation.clans.players} /></span
 						>
 						<div class="mt-[20px]">
 							<Button on:click={() => acceptInvitation(invitation.clans.id)}>Accept</Button>
 							<Button on:click={() => rejectInvitation(invitation.clans.id)} variant="outline"
-								>Reject</Button
+								>{$_("general.reject")}</Button
 							>
 						</div>
 					</div>

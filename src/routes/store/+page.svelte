@@ -4,6 +4,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import Autoplay from 'embla-carousel-autoplay';
+	import { _ } from 'svelte-i18n';
 
 	export let data: PageData;
 
@@ -13,18 +14,18 @@
 </script>
 
 <svelte:head>
-	<title>Store - Demon List VN</title>
+	<title>Cửa hàng - Demon List VN</title>
 </svelte:head>
 
 <div
 	class="mb-[50px] ml-auto mr-auto mt-[30px] flex w-[1200px] max-w-full items-center pl-[15px] pr-[15px]"
 >
 	<a href="/store">
-		<h2>Store</h2>
+		<h2>{$_('store.title')}</h2>
 	</a>
 	<a href="/store/cart" class="ml-auto">
 		<Button>
-			View my cart
+			{$_('store.view_cart')}
 			{#if $cart.items.length}
 				({$cart.items.length})
 			{/if}
@@ -66,7 +67,7 @@
 		<Carousel.Previous />
 		<Carousel.Next />
 	</Carousel.Root>
-	<h3 class="mt-[5px] text-[25px] font-medium">All products</h3>
+	<h3 class="mt-[5px] text-[25px] font-medium">{$_('store.all_products')}</h3>
 	<div class="flex w-[1200px] max-w-full flex-wrap justify-center gap-[10px]">
 		{#each data.data as item}
 			<a href={item.redirect ? item.redirect : `/store/product/${item.id}`}>

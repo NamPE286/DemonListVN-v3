@@ -36,19 +36,21 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@sentry/cloudflare": "^10.0.0",
-		"@sentry/sveltekit": "^10.0.0",
 		"@supabase/supabase-js": "^2.41.1",
 		"@sveltejs/adapter-cloudflare": "^7.1.2",
 		"browser-image-compression": "^2.0.2",
 		"chart.js": "^4.4.2",
+		"chartjs-adapter-date-fns": "^3.0.0",
+		"chartjs-plugin-annotation": "^3.1.0",
 		"clsx": "^2.1.0",
 		"cmdk-sv": "^0.0.17",
 		"embla-carousel-autoplay": "^8.3.0",
 		"embla-carousel-svelte": "^8.0.1",
 		"esbuild": "^0.25.4",
-		"mode-watcher": "^0.3.0",
+		"lucide-svelte": "^0.546.0",
+		"mode-watcher": "^0.3.1",
 		"non.geist": "^1.0.2",
+		"svelte-i18n": "^4.0.1",
 		"svelte-legos": "^0.2.2",
 		"svelte-loading-bar": "^1.2.0",
 		"svelte-markdown": "^0.4.1",
@@ -56,6 +58,7 @@
 		"svelte-sonner": "^0.3.21",
 		"tailwind-merge": "^2.2.2",
 		"tailwind-variants": "^0.2.1",
-		"vaul-svelte": "^0.3.0"
+		"vaul-svelte": "^0.3.0",
+		"webp-converter": "^2.3.3"
 	}
 }

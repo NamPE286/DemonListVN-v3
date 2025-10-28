@@ -42,7 +42,6 @@
 
 	async function updateLevel() {
 		if (!level.isPlatformer) {
-			console.log('ok');
 			level.isPlatformer = false;
 		}
 

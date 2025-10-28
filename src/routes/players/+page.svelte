@@ -8,9 +8,10 @@
 	import { toast } from 'svelte-sonner';
 	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import Loading from '$lib/components/animation/loading.svelte';
-	import PlayerHoverCard from '$lib/components/playerHoverCard.svelte';
+	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import type { PageData } from './$types';
 	import Ads from '$lib/components/ads.svelte';
+	import { _ } from 'svelte-i18n';
 
 	export let data: PageData;
 	let players: any[] = [];
@@ -62,20 +63,20 @@
 </script>
 
 <svelte:head>
-	<title>Players - Demon List VN</title>
+	<title>Người chơi - Demon List VN</title>
 </svelte:head>
 
 <div class="wrapper">
 	<Card.Root class="mb-[50px] ml-auto mr-auto max-w-[1000px]">
 		<Card.Header>
-			<Card.Title>Filter</Card.Title>
+			<Card.Title>{$_('players.title', { default: 'Filter' })}</Card.Title>
 		</Card.Header>
 		<Card.Content>
-			<h4>Location</h4>
+			<h4>{$_('players.filter.location')}</h4>
 			<div class="selectWrapper">
 				<Select.Root bind:selected={filter.province}>
 					<Select.Trigger>
-						<Select.Value placeholder="Province" />
+						<Select.Value placeholder={$_('players.filter.province')} />
 					</Select.Trigger>
 					<Select.Content>
 						<ScrollArea class="h-[300px]">
@@ -89,7 +90,7 @@
 				</Select.Root>
 				<Select.Root disabled={filter.province == null} bind:selected={filter.city}>
 					<Select.Trigger>
-						<Select.Value placeholder="City" />
+						<Select.Value placeholder={$_('players.filter.city')} />
 					</Select.Trigger>
 					<Select.Content>
 						<ScrollArea class="h-[300px]">
@@ -100,25 +101,27 @@
 					</Select.Content>
 				</Select.Root>
 			</div>
-			<h4 class="mt-[10px]">Option</h4>
+			<h4 class="mt-[10px]">{$_('players.filter.options')}</h4>
 			<div class="selectWrapper">
 				<Select.Root bind:selected={filter.sortBy}>
 					<Select.Trigger>
-						<Select.Value placeholder="Sort by" />
+						<Select.Value placeholder={$_('players.filter.sort_by')} />
 					</Select.Trigger>
 					<Select.Content>
-						<Select.Item value="rating">Rating</Select.Item>
-						<Select.Item value="totalFLpt">Featured list point</Select.Item>
+						<Select.Item value="rating">{$_('players.filter.rating')}</Select.Item>
+						<Select.Item value="totalFLpt">{$_('players.filter.featured_list_point')}</Select.Item>
 					</Select.Content>
 				</Select.Root>
 				<div class="flex items-center space-x-2">
 					<Switch id="airplane-mode" bind:checked={filter.ascending} />
-					<Label for="airplane-mode">Sort ascending</Label>
+					<Label for="airplane-mode">{$_('players.filter.sort_ascending')}</Label>
 				</div>
 			</div>
 		</Card.Content>
 		<Card.Footer>
-			<Button variant="outline" class="ml-auto" on:click={reset}>Reset</Button>
+			<Button variant="outline" class="ml-auto" on:click={reset}
+				>{$_('players.filter.reset')}</Button
+			>
 			<Button type="submit" class="ml-[10px] transition-all" on:click={apply}>Apply</Button>
 		</Card.Footer>
 	</Card.Root>
@@ -127,13 +130,13 @@
 		<Loading inverted />
 	{:else if state == 2}
 		<Table.Root>
-			<Table.Caption>Total player: {players.length}</Table.Caption>
+			<Table.Caption>{$_('players.table.total_player')}: {players.length}</Table.Caption>
 			<Table.Header>
 				<Table.Row>
-					<Table.Head class="w-[75px] text-center">No.</Table.Head>
-					<Table.Head>Player</Table.Head>
+					<Table.Head class="w-[75px] text-center">{$_('players.table.no')}</Table.Head>
+					<Table.Head>{$_('players.table.player')}</Table.Head>
 					<Table.Head class="w-[100px] text-center">
-						{pointProp == 'rating' ? 'Rating' : 'Total point'}
+						{pointProp == 'rating' ? $_('players.table.rating') : $_('players.table.total_point')}
 					</Table.Head>
 				</Table.Row>
 			</Table.Header>

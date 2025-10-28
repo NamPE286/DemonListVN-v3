@@ -10,10 +10,27 @@
 	import ParticipateButton from './participateButton.svelte';
 	import type { Level } from './type';
 	import Ads from '$lib/components/ads.svelte';
+	import { _ } from 'svelte-i18n';
+	import { toast } from 'svelte-sonner';
 
 	export let data: PageData;
 
 	let levels: (Level | null)[] = [];
+
+	async function refresh() {
+		toast.promise(
+			async () => {
+				levels = await (
+					await fetch(`${import.meta.env.VITE_API_URL}/event/${data.id}/levels`)
+				).json();
+			},
+			{
+				success: $_('contest.leaderboard.refresh.success'),
+				error: $_('contest.leaderboard.refresh.error'),
+				loading: $_('contest.leaderboard.refresh.loading')
+			}
+		);
+	}
 
 	onMount(async () => {
 		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/event/${data.id}/levels`)).json();
@@ -24,7 +41,10 @@
 	<title>{data.title} - Demon List VN</title>
 	<meta property="og:title" content={`${data.title} - Demon List VN`} />
 	<meta property="og:description" content={data.description} />
-	<meta property="og:image" content={data.imgUrl} />
+	<meta
+		property="og:image"
+		content={data.imgUrl ? data.imgUrl : `https://cdn.demonlistvn.com/event-banner/${data.id}.webp`}
+	/>
 </svelte:head>
 
 <EventBanner {data} />
@@ -35,9 +55,9 @@
 	{#if data.isContest}
 		<Tabs.Root value="detail" class="mt-[20px] flex flex-col items-center">
 			<Tabs.List>
-				<Tabs.Trigger value="detail">Detail</Tabs.Trigger>
-				<Tabs.Trigger value="levels">Levels</Tabs.Trigger>
-				<Tabs.Trigger value="leaderboard">Leaderboard</Tabs.Trigger>
+				<Tabs.Trigger value="detail">{$_('contest.tabs.detail')}</Tabs.Trigger>
+				<Tabs.Trigger value="levels">{$_('contest.tabs.levels')}</Tabs.Trigger>
+				<Tabs.Trigger value="leaderboard">{$_('contest.tabs.leaderboard')}</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="detail">
 				<div class="markdown">
@@ -47,7 +67,9 @@
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="levels" class="mt-[20px] w-full pl-[10px] pr-[10px]">
-				<LevelTab {levels} event={data} />
+				{#key levels}
+					<LevelTab {levels} event={data} {refresh} />
+				{/key}
 			</Tabs.Content>
 			<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px]">
 				{#if levels.length}

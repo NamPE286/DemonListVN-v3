@@ -6,42 +6,28 @@
 	import { user } from '$lib/client';
 	import supabase from '$lib/client/supabase';
 	import { dateStore } from 'svelte-legos';
-
+	import { _, locale } from 'svelte-i18n';
 	let notifications: any[] = [];
 
 	function timeSince(date: any) {
-		var seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
-		var interval = seconds / 31536000;
+		const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
+		const intervals = [
+			{ unit: 'year', seconds: 31536000 },
+			{ unit: 'month', seconds: 2592000 },
+			{ unit: 'day', seconds: 86400 },
+			{ unit: 'hour', seconds: 3600 },
+			{ unit: 'minute', seconds: 60 },
+			{ unit: 'second', seconds: 1 }
+		];
 
-		if (interval > 1) {
-			return Math.floor(interval) + ' years';
+		for (const { unit, seconds: intervalSeconds } of intervals) {
+			const count = Math.floor(seconds / intervalSeconds);
+			if (count >= 1) {
+				return count + ' ' + $_(`time_unit.${unit}`) + ($locale === 'en' && count > 1 ? 's' : '');
+			}
 		}
 
-		interval = seconds / 2592000;
-
-		if (interval > 1) {
-			return Math.floor(interval) + ' months';
-		}
-
-		interval = seconds / 86400;
-
-		if (interval > 1) {
-			return Math.floor(interval) + ' days';
-		}
-
-		interval = seconds / 3600;
-
-		if (interval > 1) {
-			return Math.floor(interval) + ' hours';
-		}
-
-		interval = seconds / 60;
-
-		if (interval > 1) {
-			return Math.floor(interval) + ' minutes';
-		}
-
-		return Math.floor(seconds) + ' seconds';
+		return $_('time_unit.now').charAt(0).toUpperCase() + $_('time_unit.now').slice(1);
 	}
 
 	async function fetchNotifications() {
@@ -58,7 +44,10 @@
 		if ($user.data.recordCount === 0) {
 			notifications = [
 				{
-					content: 'Beat Platinum Adventure to fully unlock your account',
+					content:
+						$locale == 'en'
+							? 'Beat Platinum Adventure (or any level in the list) to fully unlock your account'
+							: 'Đánh bại Platinum Adventure (hoặc bất cứ level nào trong list) để mở khóa toàn bộ tài khoản',
 					redirect: '/level/5904109',
 					timestamp: new Date().toISOString()
 				}
@@ -72,7 +61,10 @@
 		if ($user.data.recordCount === 0) {
 			notifications = [
 				{
-					content: 'Beat Platinum Adventure to fully unlock your account',
+					content:
+						$locale == 'en'
+							? 'Beat Platinum Adventure (or any level in the list) to fully unlock your account'
+							: 'Đánh bại Platinum Adventure (hoặc bất cứ level nào trong list) để mở khóa toàn bộ tài khoản',
 					redirect: '/level/5904109',
 					timestamp: new Date().toISOString()
 				}
@@ -105,13 +97,13 @@
 	</Popover.Trigger>
 	<Popover.Content class="z-[99999] w-[350px]">
 		<div class="header">
-			<h4 class="font-medium leading-none">Notifications</h4>
+			<h4 class="font-medium leading-none">{$_('notifications.title')}</h4>
 			<div class="buttonWrapper">
-				<Button variant="link" on:click={clear}>Clear all</Button>
+				<Button variant="link" on:click={clear}>{$_('notifications.clear_all')}</Button>
 			</div>
 		</div>
 		{#if notifications.length == 0}
-			<p class="noNoti">No notification</p>
+			<p class="noNoti">{$_('notifications.no_noti')}</p>
 		{:else}
 			<div class="notiWrapper">
 				{#each notifications as notification}
@@ -121,11 +113,13 @@
 								<a class="notiContent" href={notification.redirect ? notification.redirect : '#!'}
 									>{notification.content}
 									{#if notification.redirect}
-										<span class="navigate"> - Click to navigate</span>
+										<span class="navigate"> - {$_('notifications.navigate')}</span>
 									{/if}
 								</a></Card.Title
 							>
-							<Card.Description>{timeSince(notification.timestamp)} ago</Card.Description>
+							<Card.Description
+								>{timeSince(notification.timestamp)} {$_('notifications.ago')}</Card.Description
+							>
 						</Card.Header>
 					</Card.Root>
 				{/each}
