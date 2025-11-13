@@ -14,7 +14,7 @@
 	export let isCustomizing: boolean = false;
 
 	$: isOwner = $user.loggedIn && $user.data?.uid === data.player.uid;
-	$: customImageUrl = data.player.overviewData?.customImage?.imageUrl || '';
+	$: customImageUrl = data.player.overviewData?.[config.id]?.imageUrl || '';
 
 	let isEditing = false;
 	let imageUrlInput = '';
@@ -49,8 +49,8 @@
 			const currentOverviewData = data.player.overviewData || {};
 			const updatedOverviewData = {
 				...currentOverviewData,
-				customImage: {
-					...(currentOverviewData.customImage || {}),
+				[config.id]: {
+					...(currentOverviewData[config.id] || {}),
 					imageUrl: imageUrlInput.trim()
 				}
 			};
@@ -74,10 +74,10 @@
 			if (!data.player.overviewData) {
 				data.player.overviewData = {};
 			}
-			if (!data.player.overviewData.customImage) {
-				data.player.overviewData.customImage = {};
+			if (!data.player.overviewData[config.id]) {
+				data.player.overviewData[config.id] = {};
 			}
-			data.player.overviewData.customImage.imageUrl = imageUrlInput.trim();
+			data.player.overviewData[config.id].imageUrl = imageUrlInput.trim();
 			
 			toast.success($_('player.overview.image_saved') || 'Image URL saved successfully!');
 			isEditing = false;
@@ -96,11 +96,11 @@
 			// Get current overviewData
 			const currentOverviewData = data.player.overviewData || {};
 			
-			// Update the customImage card data to remove the imageUrl
+			// Update the custom image card data to remove the imageUrl
 			const updatedOverviewData = {
 				...currentOverviewData,
-				customImage: {
-					...(currentOverviewData.customImage || {}),
+				[config.id]: {
+					...(currentOverviewData[config.id] || {}),
 					imageUrl: ''
 				}
 			};
@@ -122,8 +122,8 @@
 			}
 
 			// Update local data
-			if (data.player.overviewData?.customImage) {
-				data.player.overviewData.customImage.imageUrl = '';
+			if (data.player.overviewData?.[config.id]) {
+				data.player.overviewData[config.id].imageUrl = '';
 			}
 			
 			toast.success($_('player.overview.image_removed') || 'Image removed successfully!');

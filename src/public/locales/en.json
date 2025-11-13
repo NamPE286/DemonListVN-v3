@@ -16,7 +16,8 @@
     "accepted": "Accepted",
     "pending": "Pending",
     "save": "Save",
-    "saving": "Saving"
+    "saving": "Saving",
+    "delete": "Delete"
   },
   "time_unit": {
     "second": "second",
@@ -663,7 +664,8 @@
       "image_saved": "Image URL saved successfully!",
       "save_failed": "Failed to save image URL",
       "image_removed": "Image removed successfully!",
-      "remove_failed": "Failed to remove image"
+      "remove_failed": "Failed to remove image",
+      "add_custom_image_card": "+ Add Custom Image Card"
     }
   },
   "supporter": {

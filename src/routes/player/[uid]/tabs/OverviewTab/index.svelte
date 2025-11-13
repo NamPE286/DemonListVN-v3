@@ -53,6 +53,26 @@
 		cardConfigs = cardConfigs.map((c) => (c.id === cardId ? { ...c, size } : c));
 	}
 
+	function addCustomImageCard() {
+		const customImageCards = cardConfigs.filter((c) => c.id.startsWith('customImage'));
+		const nextIndex = customImageCards.length;
+		const newCardId = nextIndex === 0 ? 'customImage' : `customImage${nextIndex + 1}`;
+		const maxOrder = Math.max(...cardConfigs.map((c) => c.order), -1);
+
+		const newCard: CardConfig = {
+			id: newCardId,
+			visible: true,
+			size: '2x1',
+			order: maxOrder + 1
+		};
+
+		cardConfigs = [...cardConfigs, newCard];
+	}
+
+	function removeCard(cardId: string) {
+		cardConfigs = cardConfigs.filter((c) => c.id !== cardId);
+	}
+
 	function startCustomizing() {
 		savedCardConfigs = JSON.parse(JSON.stringify(cardConfigs));
 		isCustomizing = true;
@@ -184,30 +204,48 @@
 							checked={config.visible}
 							on:change={() => toggleCardVisibility(config.id)}
 						/>
-						<span>{$_(`player.overview.card_${config.id}`)}</span>
+						<span>
+							{#if config.id.startsWith('customImage')}
+								{$_('player.overview.card_customImage') || 'Custom Image'} {config.id === 'customImage' ? '' : config.id.replace('customImage', '#')}
+							{:else}
+								{$_(`player.overview.card_${config.id}`)}
+							{/if}
+						</span>
 					</label>
-					{#if config.visible}
-						<Select.Root
-							selected={{ label: config.size, value: config.size }}
-							onSelectedChange={(e) => {
-								if (e && e.value) {
-									changeCardSize(config.id, e.value);
-								}
-							}}
-						>
-							<Select.Trigger class="w-[100px]">
-								<Select.Value />
-							</Select.Trigger>
-							<Select.Content>
-								<Select.Item value="1x1">1x1</Select.Item>
-								<Select.Item value="2x1">2x1</Select.Item>
-								<Select.Item value="3x1">3x1</Select.Item>
-								<Select.Item value="4x1">4x1</Select.Item>
-							</Select.Content>
-						</Select.Root>
-					{/if}
+					<div class="card-control-actions">
+						{#if config.visible}
+							<Select.Root
+								selected={{ label: config.size, value: config.size }}
+								onSelectedChange={(e) => {
+									if (e && e.value) {
+										changeCardSize(config.id, e.value);
+									}
+								}}
+							>
+								<Select.Trigger class="w-[100px]">
+									<Select.Value />
+								</Select.Trigger>
+								<Select.Content>
+									<Select.Item value="1x1">1x1</Select.Item>
+									<Select.Item value="2x1">2x1</Select.Item>
+									<Select.Item value="3x1">3x1</Select.Item>
+									<Select.Item value="4x1">4x1</Select.Item>
+								</Select.Content>
+							</Select.Root>
+						{/if}
+						{#if config.id.startsWith('customImage')}
+							<Button variant="destructive" size="sm" on:click={() => removeCard(config.id)}>
+								{$_('general.delete') || 'Delete'}
+							</Button>
+						{/if}
+					</div>
 				</div>
 			{/each}
+		</div>
+		<div class="customize-actions">
+			<Button variant="outline" size="sm" on:click={addCustomImageCard}>
+				{$_('player.overview.add_custom_image_card') || '+ Add Custom Image Card'}
+			</Button>
 		</div>
 		<p class="customize-hint">{$_('player.overview.drag_hint')}</p>
 	</div>
@@ -236,7 +274,7 @@
 				bind:isCustomizing
 				onRecordClick={openRecordDetail}
 			/>
-		{:else if config.id === 'customImage'}
+		{:else if config.id.startsWith('customImage')}
 			<CustomImageCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
 		{/if}
 	{/each}
@@ -281,6 +319,12 @@
 		border-radius: 6px;
 	}
 
+	.card-control-actions {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+	}
+
 	.card-control-label {
 		display: flex;
 		align-items: center;
@@ -296,6 +340,12 @@
 		span {
 			font-size: 0.95rem;
 		}
+	}
+
+	.customize-actions {
+		display: flex;
+		justify-content: center;
+		margin-top: 10px;
 	}
 
 	.customize-hint {

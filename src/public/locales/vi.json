@@ -16,7 +16,8 @@
     "accepted": "Đã chấp nhận",
     "pending": "Đang chờ",
     "save": "Lưu",
-    "saving": "Đang lưu"
+    "saving": "Đang lưu",
+    "delete": "Xóa"
   },
   "time_unit": {
     "second": "giây",
@@ -662,7 +663,8 @@
       "image_saved": "Đã lưu URL ảnh thành công!",
       "save_failed": "Không thể lưu URL ảnh",
       "image_removed": "Đã xóa ảnh thành công!",
-      "remove_failed": "Không thể xóa ảnh"
+      "remove_failed": "Không thể xóa ảnh",
+      "add_custom_image_card": "+ Thêm thẻ ảnh tuỳ chỉnh"
     }
   },
   "players": {
