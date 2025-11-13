@@ -86,9 +86,12 @@
 	async function resetToDefault() {
 		cardConfigs = [...defaultCards];
 
-		const positions: Record<string, { order: number; visible: boolean; size: CardSize }> = {};
+		const currentOverviewData = data.player.overviewData || {};
+		const positions: Record<string, any> = {};
+		
 		cardConfigs.forEach((card) => {
 			positions[card.id] = {
+				...(currentOverviewData[card.id] || {}), // Preserve existing properties like imageUrl
 				order: card.order,
 				visible: card.visible,
 				size: card.size
@@ -127,14 +130,18 @@
 	}
 
 	function handleSavePositions() {
-		const positions: Record<string, { order: number; visible: boolean; size: CardSize }> = {};
+		const currentOverviewData = data.player.overviewData || {};
+		const positions: Record<string, any> = {};
+		
 		cardConfigs.forEach((card) => {
 			positions[card.id] = {
+				...(currentOverviewData[card.id] || {}),
 				order: card.order,
 				visible: card.visible,
 				size: card.size
 			};
 		});
+		
 		saveCardPositions(positions);
 		isCustomizing = false;
 	}
