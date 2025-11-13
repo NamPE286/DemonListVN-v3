@@ -848,5 +848,13 @@
     "total_records": "Total Records",
     "total_experience": "Total Experience",
     "location": "Location"
+  },
+  "misc": {
+    "supporter_feature": {
+      "title": "Supporter Feature",
+      "description": "This section contains exclusive features for supporters. Please consider supporting us to unlock these premium features!",
+      "go_home": "Go Home",
+      "become_supporter": "Become a Supporter"
+    }
   }
 }

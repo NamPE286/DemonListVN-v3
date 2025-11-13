@@ -868,5 +868,13 @@
     "total_records": "Tổng Số Bản Ghi",
     "total_experience": "Tổng Kinh Nghiệm",
     "location": "Vị Trí"
+  },
+  "misc": {
+    "supporter_feature": {
+      "title": "Tính Năng Supporter",
+      "description": "Phần này chứa các tính năng độc quyền dành cho supporter. Vui lòng xem xét ủng hộ chúng tôi để mở khóa các tính năng cao cấp này!",
+      "go_home": "Về Trang Chủ",
+      "become_supporter": "Trở Thành Supporter"
+    }
   }
 }

@@ -54,7 +54,20 @@
 			name: $locale === 'en' ? 'Mod' : 'Mod'
 		},
 		{ route: '/rules', name: $locale === 'en' ? 'Rules' : 'Luật' },
-		{ route: '/store', name: $locale === 'en' ? 'Store' : 'Cửa hàng' }
+		{ route: '/store', name: $locale === 'en' ? 'Store' : 'Cửa hàng' },
+		{
+			name: $locale === 'en' ? 'Misc' : 'Khác',
+			routes: [
+				{
+					route: '/misc/compare',
+					name: $locale === 'en' ? 'Player comparison' : 'So sánh người chơi'
+				},
+				{
+					route: '/misc/roulette',
+					name: 'Roulette'
+				}
+			]
+		}
 	];
 
 	let searchQuery = '';
