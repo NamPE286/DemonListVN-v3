@@ -648,6 +648,7 @@
       "card_hardestDemon": "Demon khó nhất",
       "card_recentActivity": "Hoạt động gần đây",
       "card_customImage": "Ảnh tuỳ chỉnh",
+      "card_customMarkdown": "Markdown tuỳ chỉnh",
       "save": "Lưu",
       "event_rating": "Biểu đồ điểm cuộc thi",
       "no_event_data": "Không có dữ liệu sự kiện",
@@ -664,7 +665,15 @@
       "save_failed": "Không thể lưu URL ảnh",
       "image_removed": "Đã xóa ảnh thành công!",
       "remove_failed": "Không thể xóa ảnh",
-      "add_custom_image_card": "+ Thêm thẻ ảnh tuỳ chỉnh"
+      "add_custom_image_card": "+ Thêm thẻ ảnh tuỳ chỉnh",
+      "add_custom_markdown_card": "+ Thêm thẻ markdown tuỳ chỉnh",
+      "no_custom_markdown": "Chưa có markdown tuỳ chỉnh",
+      "add_markdown": "Thêm Markdown",
+      "edit_markdown": "Chỉnh sửa Markdown",
+      "remove_markdown": "Xóa Markdown",
+      "empty_markdown": "Vui lòng nhập nội dung markdown",
+      "markdown_saved": "Đã lưu markdown thành công!",
+      "markdown_removed": "Đã xóa markdown thành công!"
     }
   },
   "players": {

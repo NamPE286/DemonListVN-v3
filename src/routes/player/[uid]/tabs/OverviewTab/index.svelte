@@ -16,6 +16,7 @@
 	import RecentActivityCard from './cards/RecentActivityCard.svelte';
 	import EventRatingChart from './cards/EventRatingChart.svelte';
 	import CustomImageCard from './cards/CustomImageCard.svelte';
+	import CustomMarkdownCard from './cards/CustomMarkdownCard.svelte';
 	import type { CardConfig, CardSize } from './cards/types';
 
 	export let data: PageData;
@@ -37,7 +38,8 @@
 		{ id: 'deviceStats', visible: false, size: '1x1', order: 4 },
 		{ id: 'hardestDemon', visible: false, size: '2x1', order: 5 },
 		{ id: 'recentActivity', visible: false, size: '2x1', order: 6 },
-		{ id: 'customImage', visible: false, size: '2x1', order: 7 }
+		{ id: 'customImage', visible: false, size: '2x1', order: 7 },
+		{ id: 'customMarkdown', visible: false, size: '2x1', order: 8 }
 	];
 
 	let cardConfigs: CardConfig[] = [];
@@ -57,6 +59,22 @@
 		const customImageCards = cardConfigs.filter((c) => c.id.startsWith('customImage'));
 		const nextIndex = customImageCards.length;
 		const newCardId = nextIndex === 0 ? 'customImage' : `customImage${nextIndex + 1}`;
+		const maxOrder = Math.max(...cardConfigs.map((c) => c.order), -1);
+
+		const newCard: CardConfig = {
+			id: newCardId,
+			visible: true,
+			size: '2x1',
+			order: maxOrder + 1
+		};
+
+		cardConfigs = [...cardConfigs, newCard];
+	}
+
+	function addCustomMarkdownCard() {
+		const customMarkdownCards = cardConfigs.filter((c) => c.id.startsWith('customMarkdown'));
+		const nextIndex = customMarkdownCards.length;
+		const newCardId = nextIndex === 0 ? 'customMarkdown' : `customMarkdown${nextIndex + 1}`;
 		const maxOrder = Math.max(...cardConfigs.map((c) => c.order), -1);
 
 		const newCard: CardConfig = {
@@ -214,6 +232,8 @@
 						<span>
 							{#if config.id.startsWith('customImage')}
 								{$_('player.overview.card_customImage') || 'Custom Image'} {config.id === 'customImage' ? '' : config.id.replace('customImage', '#')}
+							{:else if config.id.startsWith('customMarkdown')}
+								{$_('player.overview.card_customMarkdown') || 'Custom Markdown'} {config.id === 'customMarkdown' ? '' : config.id.replace('customMarkdown', '#')}
 							{:else}
 								{$_(`player.overview.card_${config.id}`)}
 							{/if}
@@ -240,7 +260,7 @@
 								</Select.Content>
 							</Select.Root>
 						{/if}
-						{#if config.id.startsWith('customImage')}
+						{#if config.id.startsWith('customImage') || config.id.startsWith('customMarkdown')}
 							<Button variant="destructive" size="sm" on:click={() => removeCard(config.id)}>
 								{$_('general.delete') || 'Delete'}
 							</Button>
@@ -252,6 +272,9 @@
 		<div class="customize-actions">
 			<Button variant="outline" size="sm" on:click={addCustomImageCard}>
 				{$_('player.overview.add_custom_image_card') || '+ Add Custom Image Card'}
+			</Button>
+			<Button variant="outline" size="sm" on:click={addCustomMarkdownCard}>
+				{$_('player.overview.add_custom_markdown_card') || '+ Add Custom Markdown Card'}
 			</Button>
 		</div>
 		<p class="customize-hint">{$_('player.overview.drag_hint')}</p>
@@ -283,6 +306,8 @@
 			/>
 		{:else if config.id.startsWith('customImage')}
 			<CustomImageCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
+		{:else if config.id.startsWith('customMarkdown')}
+			<CustomMarkdownCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
 		{/if}
 	{/each}
 </div>
@@ -352,7 +377,9 @@
 	.customize-actions {
 		display: flex;
 		justify-content: center;
+		gap: 10px;
 		margin-top: 10px;
+		flex-wrap: wrap;
 	}
 
 	.customize-hint {

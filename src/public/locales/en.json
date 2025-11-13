@@ -649,6 +649,7 @@
       "card_hardestDemon": "Hardest Demon",
       "card_recentActivity": "Recent Activity",
       "card_customImage": "Custom Image",
+      "card_customMarkdown": "Custom Markdown",
       "save": "Save",
       "event_rating": "Contest Rating Chart",
       "no_event_data": "No event data available",
@@ -665,7 +666,15 @@
       "save_failed": "Failed to save image URL",
       "image_removed": "Image removed successfully!",
       "remove_failed": "Failed to remove image",
-      "add_custom_image_card": "+ Add Custom Image Card"
+      "add_custom_image_card": "+ Add Custom Image Card",
+      "add_custom_markdown_card": "+ Add Custom Markdown Card",
+      "no_custom_markdown": "No custom markdown",
+      "add_markdown": "Add Markdown",
+      "edit_markdown": "Edit Markdown",
+      "remove_markdown": "Remove Markdown",
+      "empty_markdown": "Please enter some markdown content",
+      "markdown_saved": "Markdown saved successfully!",
+      "markdown_removed": "Markdown removed successfully!"
     }
   },
   "supporter": {
