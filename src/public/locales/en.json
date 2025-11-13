@@ -14,7 +14,9 @@
     "apply": "Apply",
     "status": "Status",
     "accepted": "Accepted",
-    "pending": "Pending"
+    "pending": "Pending",
+    "save": "Save",
+    "saving": "Saving"
   },
   "time_unit": {
     "second": "second",
@@ -645,9 +647,23 @@
       "card_deviceStats": "Device Statistics",
       "card_hardestDemon": "Hardest Demon",
       "card_recentActivity": "Recent Activity",
+      "card_customImage": "Custom Image",
       "save": "Save",
       "event_rating": "Contest Rating Chart",
-      "no_event_data": "No event data available"
+      "no_event_data": "No event data available",
+      "upload_image": "Upload Image",
+      "uploading": "Uploading...",
+      "no_custom_image": "No custom image",
+      "remove_image": "Remove Image",
+      "add_image_url": "Add Image URL",
+      "change_image": "Change Image",
+      "set_image_url": "Set Image URL",
+      "empty_url": "Please enter an image URL",
+      "invalid_url": "Please enter a valid URL",
+      "image_saved": "Image URL saved successfully!",
+      "save_failed": "Failed to save image URL",
+      "image_removed": "Image removed successfully!",
+      "remove_failed": "Failed to remove image"
     }
   },
   "supporter": {

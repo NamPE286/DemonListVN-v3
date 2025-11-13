@@ -15,6 +15,7 @@
 	import HardestDemonCard from './cards/HardestDemonCard.svelte';
 	import RecentActivityCard from './cards/RecentActivityCard.svelte';
 	import EventRatingChart from './cards/EventRatingChart.svelte';
+	import CustomImageCard from './cards/CustomImageCard.svelte';
 	import type { CardConfig, CardSize } from './cards/types';
 
 	export let data: PageData;
@@ -35,7 +36,8 @@
 		{ id: 'totalRecords', visible: false, size: '1x1', order: 3 },
 		{ id: 'deviceStats', visible: false, size: '1x1', order: 4 },
 		{ id: 'hardestDemon', visible: false, size: '2x1', order: 5 },
-		{ id: 'recentActivity', visible: false, size: '2x1', order: 6 }
+		{ id: 'recentActivity', visible: false, size: '2x1', order: 6 },
+		{ id: 'customImage', visible: false, size: '2x1', order: 7 }
 	];
 
 	let cardConfigs: CardConfig[] = [];
@@ -234,6 +236,8 @@
 				bind:isCustomizing
 				onRecordClick={openRecordDetail}
 			/>
+		{:else if config.id === 'customImage'}
+			<CustomImageCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
 		{/if}
 	{/each}
 </div>

@@ -14,7 +14,9 @@
     "apply": "Áp dụng",
     "status": "Trạng thái",
     "accepted": "Đã chấp nhận",
-    "pending": "Đang chờ"
+    "pending": "Đang chờ",
+    "save": "Lưu",
+    "saving": "Đang lưu"
   },
   "time_unit": {
     "second": "giây",
@@ -644,9 +646,23 @@
       "card_deviceStats": "Thống kê thiết bị",
       "card_hardestDemon": "Demon khó nhất",
       "card_recentActivity": "Hoạt động gần đây",
+      "card_customImage": "Ảnh tuỳ chỉnh",
       "save": "Lưu",
       "event_rating": "Biểu đồ điểm cuộc thi",
-      "no_event_data": "Không có dữ liệu sự kiện"
+      "no_event_data": "Không có dữ liệu sự kiện",
+      "upload_image": "Tải ảnh lên",
+      "uploading": "Đang tải lên...",
+      "no_custom_image": "Chưa có ảnh tuỳ chỉnh",
+      "remove_image": "Xóa ảnh",
+      "add_image_url": "Thêm URL ảnh",
+      "change_image": "Đổi ảnh",
+      "set_image_url": "Đặt URL ảnh",
+      "empty_url": "Vui lòng nhập URL ảnh",
+      "invalid_url": "Vui lòng nhập URL hợp lệ",
+      "image_saved": "Đã lưu URL ảnh thành công!",
+      "save_failed": "Không thể lưu URL ảnh",
+      "image_removed": "Đã xóa ảnh thành công!",
+      "remove_failed": "Không thể xóa ảnh"
     }
   },
   "players": {
