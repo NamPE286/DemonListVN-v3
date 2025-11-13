@@ -480,6 +480,7 @@
   "level": {
     "description": "Mô tả",
     "minimum_progress": "Tiến độ tối thiểu",
+    "base_time": "Thời gian cơ bản",
     "difficulty": "Độ khó",
     "id": "ID",
     "total_records": "Tổng số bản ghi",

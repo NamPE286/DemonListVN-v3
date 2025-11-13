@@ -267,7 +267,14 @@
 								<span>{data.pointercrate.requirement}% (Pointercrate)</span>
 							</p>
 						{:else if 'level' in data && data.level.rating}
-							<p><b>{$_('level.minimum_progress')}:</b> <span>{data.level.minProgress}%</span></p>
+							<p>
+								<b>{data.level.isPlatformer ? $_('level.base_time') : $_('level.minimum_progress')}:</b>
+								<span>
+									{data.level.isPlatformer
+										? getTimeString(data.level.minProgress)
+										: `${data.level.minProgress}%`}
+								</span>
+							</p>
 						{/if}
 						<p><b>{$_('level.difficulty')}: </b><span>{levelAPI.difficulty}</span></p>
 						<p><b>{$_('level.id')}: </b><span>{levelAPI.id}</span></p>

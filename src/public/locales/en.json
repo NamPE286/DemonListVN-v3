@@ -481,6 +481,7 @@
   "level": {
     "description": "Description",
     "minimum_progress": "Minimum progress",
+    "base_time": "Base Time",
     "difficulty": "Difficulty",
     "id": "ID",
     "total_records": "Total record",
