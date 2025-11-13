@@ -53,7 +53,7 @@
 				<Table.Head class="w-[55px]">{$_('list.tabs.rank')}</Table.Head>
 				<Table.Head>{$_('list.tabs.player')}</Table.Head>
 				<Table.Head class="w-[70px] text-right">
-					{$page.params.list == 'dl' ? $_('list.tabs.rating') : $_('list.tabs.total_point')}
+					{$page.params.list == 'dl' || 'pl' ? $_('list.tabs.rating') : $_('list.tabs.total_point')}
 				</Table.Head>
 			</Table.Row>
 		</Table.Header>
@@ -61,22 +61,36 @@
 			{#each data.leaderboard as player}
 				<Table.Row>
 					<Table.Cell class="font-medium">
-						#{$page.params.list == 'dl' ? player.overallRank : player[$page.params.list + 'rank']}
+						#{(() => {
+							if ($page.params.list == 'dl') {
+								return player.overallRank;
+							}
+
+							return player[$page.params.list + 'rank'];
+						})()}
 					</Table.Cell>
 					<Table.Cell>
 						<div class="playerNameWrapper">
-							<PlayerHoverCard {player} showTitle={true} />
+							<PlayerHoverCard {player} showTitle={$page.params.list != 'pl'} />
 						</div>
 					</Table.Cell>
 					<Table.Cell class="text-right">
-						{$page.params.list == 'dl'
-							? player.rating
-							: player[
-									'total' +
-										// @ts-ignore
-										$page.params.list.toUpperCase() +
-										'pt'
-								]}
+						{(() => {
+							if ($page.params.list == 'dl') {
+								return player.rating;
+							}
+
+							if ($page.params.list == 'pl') {
+								return player.plRating;
+							}
+
+							return player[
+								'total' +
+									// @ts-ignore
+									$page.params.list.toUpperCase() +
+									'pt'
+							];
+						})()}
 					</Table.Cell>
 				</Table.Row>
 			{/each}

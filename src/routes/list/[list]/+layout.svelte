@@ -24,27 +24,24 @@
 	<BigTitle value={$_('list.featured.title')} description={$_('list.featured.description')} />
 {/if}
 
-<!-- Temporary if check, will remove after player plat rating is finished -->
-{#if $page.params.list != 'pl'}
-	<Tabs.Root bind:value={curTab} class="tabs">
-		<div class="tabsWrapper">
-			<Tabs.List>
-				<Tabs.Trigger
-					value="levels"
-					on:click={() => {
-						goto(`/list/${$page.params.list}`);
-					}}>{$_('list.tabs.levels')}</Tabs.Trigger
-				>
-				<Tabs.Trigger
-					value="leaderboard"
-					on:click={() => {
-						goto(`/list/${$page.params.list}/leaderboard`);
-					}}>{$_('list.tabs.leaderboard')}</Tabs.Trigger
-				>
-			</Tabs.List>
-		</div>
-	</Tabs.Root>
-{/if}
+<Tabs.Root bind:value={curTab} class="tabs">
+	<div class="tabsWrapper">
+		<Tabs.List>
+			<Tabs.Trigger
+				value="levels"
+				on:click={() => {
+					goto(`/list/${$page.params.list}`);
+				}}>{$_('list.tabs.levels')}</Tabs.Trigger
+			>
+			<Tabs.Trigger
+				value="leaderboard"
+				on:click={() => {
+					goto(`/list/${$page.params.list}/leaderboard`);
+				}}>{$_('list.tabs.leaderboard')}</Tabs.Trigger
+			>
+		</Tabs.List>
+	</div>
+</Tabs.Root>
 
 <Ads dataAdFormat="auto" unit="leaderboard" />
 
