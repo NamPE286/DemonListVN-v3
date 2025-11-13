@@ -101,7 +101,7 @@
 												</div>
 											{:else if type == 'pl'}
 												<div class="pt">
-													{getTimeString(level.minProgress)} Max
+													{getTimeString(level.minProgress)} Base
 												</div>
 											{/if}
 										{/if}
