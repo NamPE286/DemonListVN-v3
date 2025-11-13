@@ -600,7 +600,8 @@
       "fl": "Featured",
       "medals": "Medal",
       "overview": "Overview",
-      "events": "Events"
+      "events": "Events",
+      "cards": "Card collection"
     },
     "filter": {
       "sort_by": "Sort by",

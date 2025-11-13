@@ -20,6 +20,7 @@
 	import OverviewTab from './tabs/OverviewTab/index.svelte';
 	import { onMount } from 'svelte';
 	import EventTab from './tabs/EventsTab.svelte';
+	import CardCollectionTab from './tabs/CardCollectionTab.svelte';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' | 'pl' | '' = '';
@@ -218,6 +219,9 @@
 					<Tabs.Trigger value="events" on:click={() => (list = '')}
 						>{$_('player.tabs.events')}</Tabs.Trigger
 					>
+					<Tabs.Trigger value="cards" on:click={() => (list = '')}>
+						{$_('player.tabs.cards')}
+					</Tabs.Trigger>
 				</Tabs.List>
 				<Tabs.Content value="events" class="w-[1200px] max-w-full">
 					<EventTab {data} />
@@ -227,6 +231,9 @@
 				</Tabs.Content>
 				<Tabs.Content value="medals">
 					<MedalsTab userID={data.player.uid} />
+				</Tabs.Content>
+				<Tabs.Content value="cards" class="w-[1200px] max-w-full">
+					<CardCollectionTab userID={data.player.uid} />
 				</Tabs.Content>
 			</div>
 		</Tabs.Root>
