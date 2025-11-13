@@ -852,5 +852,21 @@
     "success_message": "✓ Đã nhận quà thành công!",
     "not_found": "❌ Không tìm thấy mã quà tặng",
     "check_code": "Vui lòng kiểm tra lại mã của bạn"
+  },
+  "compare": {
+    "title": "So Sánh Người Chơi",
+    "player_1": "Người chơi 1",
+    "player_2": "Người chơi 2",
+    "select_player": "Chọn người chơi",
+    "statistics_comparison": "So Sánh Thống Kê",
+    "rating": "Điểm Classic",
+    "platformer_rating": "Điểm Platformer",
+    "featured_list_points": "Điểm Featured List",
+    "contest_elo": "ELO Cuộc Thi",
+    "best_classic": "Classic Tốt Nhất",
+    "best_platformer": "Platformer Tốt Nhất",
+    "total_records": "Tổng Số Bản Ghi",
+    "total_experience": "Tổng Kinh Nghiệm",
+    "location": "Vị Trí"
   }
 }

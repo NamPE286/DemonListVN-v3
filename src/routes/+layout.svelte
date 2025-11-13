@@ -327,11 +327,6 @@
 									>{$_('dropdown.clan')}</DropdownMenu.Item
 								>
 							{/if}
-							{#if isActive($user.data.supporterUntil)}
-								<DropdownMenu.Item on:click={() => goto(`/compare`)}>
-									<span class="text-yellow-500">{$_('dropdown.compare')}</span>
-								</DropdownMenu.Item>
-							{/if}
 							{#if $user.data.isTrusted || $user.data.isAdmin}
 								<DropdownMenu.Item on:click={() => goto(`/overwatch`)}
 									>{$_('dropdown.overwatch')}</DropdownMenu.Item
