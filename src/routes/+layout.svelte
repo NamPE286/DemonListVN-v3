@@ -36,9 +36,9 @@
 		{
 			name: 'List',
 			routes: [
-				{ route: '/list/dl', name: $locale === 'en' ? 'Classic' : 'Classic' },
-				{ route: '/list/pl', name: $locale === 'en' ? 'Platformer' : 'Platformer' },
-				{ route: '/list/fl', name: $locale === 'en' ? 'Featured' : 'Featured' }
+				{ route: '/list/dl', name: 'Classic' },
+				{ route: '/list/pl', name: 'Platformer' },
+				{ route: '/list/fl', name: 'Featured' }
 			]
 		},
 		{ route: '/events', name: $locale === 'en' ? 'Event' : 'Sự kiện' },
@@ -141,7 +141,7 @@
 			}
 
 			linkGroup[0].routes![0].route = `/list/dl?uid=${data.data.uid}`;
-			linkGroup[0].routes![1].route = `/list/dl?uid=${data.data.uid}`;
+			linkGroup[0].routes![1].route = `/list/pl?uid=${data.data.uid}`;
 			linkGroup[0].routes![2].route = `/list/fl?uid=${data.data.uid}`;
 		});
 
