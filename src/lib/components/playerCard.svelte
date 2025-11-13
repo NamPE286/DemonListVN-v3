@@ -25,7 +25,7 @@
 			on:error={() => {
 				isBannerFailedToLoad = true;
 			}}
-			class="bgGradient absolute top-[50px] ml-[-15px] z-[-1] h-[80px] w-full rounded object-cover"
+			class="bgGradient absolute top-[50px] z-[-1] ml-[-15px] h-[80px] w-full rounded object-cover"
 			src={`https://cdn.demonlistvn.com/banners/${player.uid}${player.isBannerGif ? '.gif' : '.jpg'}`}
 			alt=""
 		/>
@@ -89,6 +89,27 @@
 				{$_('player_card.rating')}
 				<div class="rank">
 					#{player.overallRank}
+				</div>
+			</div>
+		</div>
+		<div class="rating">
+			<Tooltip.Root>
+				<Tooltip.Trigger>
+					<div class="leftCol">
+						<div
+							class="title text-white"
+							style={`background-color: ${getTitle('pl', player)?.color}`}
+						>
+							{player.plRating}
+						</div>
+					</div>
+				</Tooltip.Trigger>
+				<Tooltip.Content>{getTitle('pl', player)?.fullTitle}</Tooltip.Content>
+			</Tooltip.Root>
+			<div class="rankWrapper">
+				{$_('player_card.plat_rating')}
+				<div class="rank">
+					#{player.plrank}
 				</div>
 			</div>
 		</div>

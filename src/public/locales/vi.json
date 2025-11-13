@@ -242,7 +242,8 @@
     "title": "Thông số người chơi",
     "rating": "Điểm Classic",
     "featured": "Tổng điểm Featured",
-    "contest": "Điểm cuộc thi"
+    "contest": "Điểm cuộc thi",
+    "plat_rating": "Điểm Platformer"
   },
   "profile_edit": {
     "title": "Chỉnh sửa hồ sơ",

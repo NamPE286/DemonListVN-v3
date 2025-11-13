@@ -243,7 +243,8 @@
     "title": "Player's statistic",
     "rating": "Classic rating",
     "featured": "Total Featured List point",
-    "contest": "Contest rating"
+    "contest": "Contest rating",
+    "plat_rating": "Platformer Rating"
   },
   "profile_edit": {
     "title": "Edit profile",

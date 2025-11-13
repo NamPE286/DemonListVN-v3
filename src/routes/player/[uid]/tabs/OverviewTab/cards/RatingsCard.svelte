@@ -58,6 +58,13 @@
 					<span class="rating-rank">#{data.player.overallRank}</span>
 				</div>
 				<div class="rating-item">
+					<span class="rating-label">{$_('player_card.plat_rating')}</span>
+					<div class="rating-badge">
+						{data.player.plRating}
+					</div>
+					<span class="rating-rank">#{data.player.plrank}</span>
+				</div>
+				<div class="rating-item">
 					<span class="rating-label">{$_('player_card.featured')}</span>
 					<div class="rating-badge">
 						{data.player.totalFLpt}
@@ -91,71 +98,76 @@
 	.exp-section {
 		display: flex;
 		align-items: center;
-		gap: 15px;
-		margin-bottom: 20px;
-		padding: 15px;
+		gap: 10px;
+		margin-bottom: 12px;
+		padding: 10px;
 		background-color: rgba(128, 128, 128, 0.1);
-		border-radius: 8px;
+		border-radius: 6px;
 	}
 
 	.exp-level {
-		min-width: 60px;
+		min-width: 50px;
 		text-align: center;
-		font-size: 1rem;
+		font-size: 0.9rem;
 	}
 
 	.progressBar {
 		background-color: gray;
 		flex: 1;
-		border-radius: 10px;
+		border-radius: 8px;
 		overflow: hidden;
 
 		b {
 			color: var(--textColorInverted);
 			margin-right: 5px;
+			font-size: 0.85rem;
 		}
 
 		.progress {
 			background-color: var(--textColor);
 			text-align: right;
-			border-radius: 10px;
-			padding: 2px 0;
+			border-radius: 8px;
+			padding: 1px 0;
 		}
+	}
+
+	.exp-text {
+		font-size: 0.85rem;
 	}
 
 	.ratings-grid {
 		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-		gap: 15px;
+		grid-template-columns: repeat(4, 1fr);
+		gap: 10px;
 	}
 
 	.rating-item {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 10px;
-		padding: 15px;
+		gap: 6px;
+		padding: 10px;
 		background-color: rgba(128, 128, 128, 0.1);
-		border-radius: 8px;
+		border-radius: 6px;
 	}
 
 	.rating-label {
-		font-size: 0.85rem;
+		font-size: 0.75rem;
 		opacity: 0.7;
 		text-align: center;
 	}
 
 	.rating-badge {
-		padding: 8px 16px;
-		border-radius: 8px;
+		padding: 6px 12px;
+		border-radius: 6px;
 		font-weight: bold;
-		font-size: 1.5rem;
+		font-size: 1.25rem;
 		background-color: rgba(128, 128, 128, 0.2);
 		cursor: pointer;
 	}
 
 	.rating-rank {
-		font-size: 0.9rem;
+		font-size: 0.8rem;
 		font-weight: 600;
 		opacity: 0.8;
 	}
