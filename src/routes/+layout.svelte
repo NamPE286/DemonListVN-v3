@@ -333,7 +333,7 @@
 							<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
 								>{$_('dropdown.profile')}</DropdownMenu.Item
 							>
-							<DropdownMenu.Item on:click={() => goto(`/inventory/${$user.data.uid}`)}
+							<DropdownMenu.Item on:click={() => goto(`/inventory`)}
 								>{$_('dropdown.inventory')}</DropdownMenu.Item
 							>
 							<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
