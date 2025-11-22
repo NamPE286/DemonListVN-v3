@@ -282,7 +282,7 @@
 						<MagnifyingGlass size={20} />
 						<p>{$_('search.button')}</p>
 						<kbd
-							class="bg-muted text-muted-foreground pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border px-1.5 font-mono text-[10px] font-medium opacity-100"
+							class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
 						>
 							<span class="text-xs">Ctrl K</span>
 						</kbd>
@@ -333,6 +333,9 @@
 							<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
 								>{$_('dropdown.profile')}</DropdownMenu.Item
 							>
+							<DropdownMenu.Item on:click={() => goto(`/inventory/${$user.data.uid}`)}
+								>{$_('dropdown.inventory')}</DropdownMenu.Item
+							>
 							<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
 								>{$_('dropdown.submissions')}</DropdownMenu.Item
 							>
@@ -369,7 +372,7 @@
 
 {#if (!$user.loggedIn || !isActive($user.data.supporterUntil)) && pathname !== '/supporter' && !pathname.startsWith('/player/') && !pathname.startsWith('/@')}
 	<Card.Root
-		class="relative z-[10] mx-4 mt-[10px] border-pink-500 bg-pink-300 sm:mx-[55px] dark:bg-pink-950"
+		class="relative z-[10] mx-4 mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950 sm:mx-[55px]"
 	>
 		<Card.Content class="mb-[-12px] mt-[10px] text-center">
 			<p class="text-pink-700 dark:text-pink-300">
