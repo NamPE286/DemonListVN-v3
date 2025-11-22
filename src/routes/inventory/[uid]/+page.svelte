@@ -5,6 +5,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
+	import CaseDialog from '$lib/components/caseDialog.svelte';
 
 	type Item = {
 		userID: string;
@@ -382,93 +383,13 @@
 											{#if selectedItems[item.inventoryId].data.type == 'case'}
 												<AlertDialog.Root>
 													<AlertDialog.Trigger>
-														<Button
-															variant="secondary"
-															on:click={() =>
-																openCase(
-																	item.inventoryId,
-																	selectedItems[item.inventoryId].data.caseItems
-																)}>Open Case</Button
-														>
+														<Button variant="secondary">Open Case</Button>
 													</AlertDialog.Trigger>
-													<AlertDialog.Content>
-														<div style="min-width:420px;">
-															{#if isFetchingResult}
-																<div class="py-6 text-center">
-																	<Loading inverted />
-																	<div class="mt-2 text-sm text-gray-300">
-																		Waiting for server response...
-																	</div>
-																</div>
-															{:else if isRolling}
-																<div class="case-container-small">
-																	<div class="case-window-small">
-																		<div class="selector-line-small"></div>
-																		<div
-																			class="items-container-small"
-																			style="transform: translateX({-rollScroll}px); transition: none;"
-																		>
-																			{#each rollDisplay as d}
-																				<div
-																					class="case-item-small"
-																					style="border-color: {rarityColor(d?.rarity ?? 0)}"
-																				>
-																					{#if d && d.id && d.id !== 0}
-																						<img
-																							src={`https://cdn.demonlistvn.com/items/${d.id}.webp`}
-																							alt={d.name}
-																							class="case-img"
-																						/>
-																						<div class="case-name">{d.name} x{d.quantity}</div>
-																					{:else}
-																						<div class="case-empty">Nothing</div>
-																					{/if}
-																				</div>
-																			{/each}
-																		</div>
-																	</div>
-																</div>
-															{:else if !isRolling && !hasRolled}
-																<div class="p-4 text-center">Click Open Case to start rolling.</div>
-															{:else}
-																<div class="p-4">
-																	{#if rollResult && rollResult.items}
-																		<div class="result-viewport">
-																			<div
-																				class="result-thumb"
-																				style="border-color: {rarityColor(
-																					rollResult.items.rarity ?? 0
-																				)}"
-																			>
-																				<img
-																					src={`https://cdn.demonlistvn.com/items/${rollResult.items.id}.webp`}
-																					alt={rollResult.items.name}
-																					class="h-full w-full object-cover p-[10px]"
-																				/>
-																			</div>
-																			<div class="mt-3 text-center">
-																				<div class="text-lg font-semibold">
-																					{rollResult.items.name} x{rollResult.quantity}
-																				</div>
-																				<div class="text-sm text-gray-300">
-																					You received an item from the case
-																				</div>
-																			</div>
-																		</div>
-																	{:else}
-																		<div class="text-center">
-																			<div class="text-2xl font-semibold">Nothing</div>
-																			<div class="text-sm text-gray-300">Better luck next time</div>
-																		</div>
-																	{/if}
-																	<div class="h-[10px]"></div>
-																	<AlertDialog.Cancel class="w-full" on:click={closeAllAndReload}
-																		>Close</AlertDialog.Cancel
-																	>
-																</div>
-															{/if}
-														</div>
-													</AlertDialog.Content>
+													<CaseDialog
+														inventoryItemId={item.inventoryId}
+														caseItems={selectedItems[item.inventoryId].data.caseItems}
+														on:close={closeAllAndReload}
+													/>
 												</AlertDialog.Root>
 											{/if}
 										</div>
@@ -518,87 +439,5 @@
 <style>
 	.item-thumb {
 		background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.02));
-	}
-
-	.case-container-small {
-		position: relative;
-		overflow: hidden;
-		height: 180px;
-		background: linear-gradient(180deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.6));
-		border-radius: 8px;
-		padding: 12px;
-	}
-
-	.case-window-small {
-		position: relative;
-		height: 100%;
-		display: flex;
-		align-items: center;
-	}
-
-	.selector-line-small {
-		position: absolute;
-		left: 50%;
-		top: 0;
-		height: 100%;
-		width: 3px;
-		background: rgba(255, 215, 0, 0.9);
-		transform: translateX(-50%);
-		z-index: 10;
-		box-shadow: 0 0 12px rgba(255, 215, 0, 0.6);
-	}
-
-	.items-container-small {
-		display: flex;
-		gap: 8px;
-		padding-left: 50%;
-		will-change: transform;
-	}
-
-	.case-item-small {
-		min-width: 160px;
-		width: 160px;
-		height: 140px;
-		background: #0b1220;
-		border: 2px solid;
-		border-radius: 6px;
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: center;
-		padding: 8px;
-		color: #fff;
-	}
-
-	.case-img {
-		height: 84px;
-		width: 84px;
-		object-fit: contain;
-	}
-
-	.case-name {
-		font-size: 12px;
-		margin-top: 6px;
-		text-align: center;
-	}
-
-	.case-empty {
-		font-weight: 700;
-		color: #9ca3af;
-	}
-
-	.result-viewport {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 8px;
-	}
-
-	.result-thumb {
-		width: 180px;
-		height: 180px;
-		overflow: hidden;
-		border: 3px solid;
-		border-radius: 8px;
 	}
 </style>
