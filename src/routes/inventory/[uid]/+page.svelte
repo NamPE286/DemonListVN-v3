@@ -4,6 +4,7 @@
 	import { onMount } from 'svelte';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 
 	type Item = {
 		userID: string;
@@ -97,7 +98,6 @@
 	let rollResult: any = null;
 
 	async function openCase(inventoryItemId: number, caseItems: any[] = []) {
-		console.log(caseItems);
 		if (isRolling) {
 			return;
 		}
@@ -235,6 +235,21 @@
 		await fetchInventory();
 	});
 
+	async function closeAllAndReload() {
+		try {
+			const closeBtns = document.querySelectorAll('.absolute.right-4.top-4');
+			closeBtns.forEach((b) => {
+				if (b instanceof HTMLElement) b.click();
+			});
+
+			await new Promise((r) => setTimeout(r, 150));
+
+			await fetchInventory();
+		} catch (e) {
+			console.error('Failed to close dialogs or reload inventory', e);
+		}
+	}
+
 	const rarityClass = (r: number) => {
 		switch (r) {
 			case 1:
@@ -365,8 +380,8 @@
 										</div>
 										<div class="mt-auto">
 											{#if selectedItems[item.inventoryId].data.type == 'case'}
-												<Dialog.Root>
-													<Dialog.Trigger>
+												<AlertDialog.Root>
+													<AlertDialog.Trigger>
 														<Button
 															variant="secondary"
 															on:click={() =>
@@ -375,8 +390,8 @@
 																	selectedItems[item.inventoryId].data.caseItems
 																)}>Open Case</Button
 														>
-													</Dialog.Trigger>
-													<Dialog.Content>
+													</AlertDialog.Trigger>
+													<AlertDialog.Content>
 														<div style="min-width:420px;">
 															{#if isFetchingResult}
 																<div class="py-6 text-center">
@@ -446,11 +461,15 @@
 																			<div class="text-sm text-gray-300">Better luck next time</div>
 																		</div>
 																	{/if}
+																	<div class="h-[10px]"></div>
+																	<AlertDialog.Cancel class="w-full" on:click={closeAllAndReload}
+																		>Close</AlertDialog.Cancel
+																	>
 																</div>
 															{/if}
 														</div>
-													</Dialog.Content>
-												</Dialog.Root>
+													</AlertDialog.Content>
+												</AlertDialog.Root>
 											{/if}
 										</div>
 									</div>
