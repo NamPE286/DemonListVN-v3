@@ -97,13 +97,17 @@
 	let rollResult: any = null;
 
 	async function openCase(inventoryItemId: number, caseItems: any[] = []) {
+		console.log(caseItems);
 		if (isRolling) {
 			return;
 		}
 
 		const pollEntries =
 			caseItems && caseItems.length > 0
-				? caseItems.map((c: any) => ({ item: c.items, rate: c.rate ?? 0 }))
+				? caseItems.map((c: any) => ({
+						item: { ...c.items, quantity: c.quantity ?? 1 },
+						rate: c.rate ?? 0
+					}))
 				: [];
 		const nothingEntry = { item: { id: 0, name: 'Nothing', type: 'none', rarity: 0 }, rate: 0 };
 		const entries = [...pollEntries, nothingEntry];
@@ -400,7 +404,7 @@
 																							alt={d.name}
 																							class="case-img"
 																						/>
-																						<div class="case-name">{d.name}</div>
+																						<div class="case-name">{d.name} x{d.quantity}</div>
 																					{:else}
 																						<div class="case-empty">Nothing</div>
 																					{/if}
@@ -429,19 +433,17 @@
 																			</div>
 																			<div class="mt-3 text-center">
 																				<div class="text-lg font-semibold">
-																					{rollResult.items.name}
+																					{rollResult.items.name} x{rollResult.quantity}
 																				</div>
 																				<div class="text-sm text-gray-300">
-																					You received an item from the case.
+																					You received an item from the case
 																				</div>
 																			</div>
 																		</div>
 																	{:else}
 																		<div class="text-center">
 																			<div class="text-2xl font-semibold">Nothing</div>
-																			<div class="text-sm text-gray-300">
-																				This time you didn't get anything.
-																			</div>
+																			<div class="text-sm text-gray-300">Better luck next time</div>
 																		</div>
 																	{/if}
 																</div>
