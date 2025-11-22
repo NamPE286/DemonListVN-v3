@@ -244,11 +244,14 @@
 													<AlertDialog.Trigger>
 														<Button variant="secondary">Open Case</Button>
 													</AlertDialog.Trigger>
-													<CaseDialog
-														inventoryItemId={item.inventoryId}
-														caseItems={selectedItems[item.inventoryId].data.caseItems}
-														on:close={closeAllAndReload}
-													/>
+													<AlertDialog.Content>
+														<CaseDialog
+															{item}
+															inventoryItemId={item.inventoryId}
+															caseItems={selectedItems[item.inventoryId].data.caseItems}
+															on:close={closeAllAndReload}
+														/>
+													</AlertDialog.Content>
 												</AlertDialog.Root>
 											{/if}
 										</div>
@@ -270,7 +273,7 @@
 												/>
 												<div class="text-xs font-medium">{c.items.name}</div>
 												<div class="text-xs text-gray-400">
-													Rate: {Math.round((c.rate ?? 0) * 100)}%
+													Rate: {(c.rate ?? 0) * 100}%
 												</div>
 											</div>
 										{/each}

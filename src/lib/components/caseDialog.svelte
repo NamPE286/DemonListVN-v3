@@ -6,6 +6,7 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 
 	export let inventoryItemId: number;
+	export let item: any;
 	export let caseItems: any[] = [];
 
 	const dispatch = createEventDispatcher();
@@ -159,83 +160,82 @@
 		isRolling = false;
 	}
 
-	onMount(() => {
-		if (inventoryItemId) {
-			openCase();
-		}
-	});
-
 	function handleClose() {
 		dispatch('close');
 	}
 </script>
 
-<AlertDialog.Content>
-	<div style="min-width:420px;">
-		{#if isFetchingResult}
-			<div class="py-6 text-center">
-				<Loading inverted />
-			</div>
-		{:else if isRolling}
-			<div class="case-container-small">
-				<div class="case-window-small">
-					<div class="selector-line-small"></div>
-					<div
-						class="items-container-small"
-						style="transform: translateX({-rollScroll}px); transition: none;"
-					>
-						{#each rollDisplay as d}
-							<div class="case-item-small" style="border-color: {rarityColor(d?.rarity ?? 0)}">
-								{#if d && d.id && d.id !== 0}
-									<img
-										src={`https://cdn.demonlistvn.com/items/${d.id}.webp`}
-										alt={d.name}
-										class="case-img"
-									/>
-									<div class="case-name">{d.name}</div>
-								{:else}
-									<div class="case-empty">Nothing</div>
-								{/if}
-							</div>
-						{/each}
-					</div>
+<div style="min-width:420px;">
+	{#if isFetchingResult}
+		<div class="py-6 text-center">
+			<Loading inverted />
+		</div>
+	{:else if isRolling}
+		<div class="case-container-small">
+			<div class="case-window-small">
+				<div class="selector-line-small"></div>
+				<div
+					class="items-container-small"
+					style="transform: translateX({-rollScroll}px); transition: none;"
+				>
+					{#each rollDisplay as d}
+						<div class="case-item-small" style="border-color: {rarityColor(d?.rarity ?? 0)}">
+							{#if d && d.id && d.id !== 0}
+								<img
+									src={`https://cdn.demonlistvn.com/items/${d.id}.webp`}
+									alt={d.name}
+									class="case-img"
+								/>
+								<div class="case-name">{d.name}</div>
+							{:else}
+								<div class="case-empty">Nothing</div>
+							{/if}
+						</div>
+					{/each}
 				</div>
 			</div>
-		{:else if !isRolling && !hasRolled}
-			<div class="p-4 text-center">Preparing case...</div>
-		{:else}
-			<div class="p-4">
-				{#if rollResult && rollResult.items}
-					<div class="result-viewport">
-						<div
-							class="result-thumb"
-							style="border-color: {rarityColor(rollResult.items.rarity ?? 0)}"
-						>
-							<img
-								src={`https://cdn.demonlistvn.com/items/${rollResult.items.id}.webp`}
-								alt={rollResult.items.name}
-								class="h-full w-full object-cover p-[10px]"
-							/>
-						</div>
-						<div class="mt-3 text-center">
-							<div class="text-lg font-semibold">
-								{rollResult.items.name}
-							</div>
-							<div class="text-sm text-gray-300">You received an item from the case</div>
-						</div>
-					</div>
-				{:else}
-					<div class="text-center">
-						<div class="text-2xl font-semibold">Nothing</div>
-						<div class="text-sm text-gray-300">Better luck next time</div>
-					</div>
-				{/if}
-				<div class="h-[10px]"></div>
-				<AlertDialog.Cancel class="w-full" on:click={handleClose}>Close</AlertDialog.Cancel>
+		</div>
+	{:else if !isRolling && !hasRolled}
+		<div class="p-4 text-center">
+			Open 1 <span class='font-bold' style="color: {rarityColor(item.rarity)}">{item.name}</span>?
+
+			<div class='flex gap-[10px] w-full mt-[10px]'>
+				<AlertDialog.Cancel class='w-full'>Cancel</AlertDialog.Cancel>
+				<Button class='w-full' on:click={openCase}>Open</Button>
 			</div>
-		{/if}
-	</div>
-</AlertDialog.Content>
+		</div>
+	{:else}
+		<div class="p-4">
+			{#if rollResult && rollResult.items}
+				<div class="result-viewport">
+					<div
+						class="result-thumb"
+						style="border-color: {rarityColor(rollResult.items.rarity ?? 0)}"
+					>
+						<img
+							src={`https://cdn.demonlistvn.com/items/${rollResult.items.id}.webp`}
+							alt={rollResult.items.name}
+							class="h-full w-full object-cover p-[10px]"
+						/>
+					</div>
+					<div class="mt-3 text-center">
+						<div class="text-lg font-semibold">
+							{rollResult.items.name}
+						</div>
+						<div class="text-sm text-gray-300">You received an item from the case</div>
+					</div>
+				</div>
+			{:else}
+				<div class="text-center">
+					<div class="text-2xl font-semibold">Nothing</div>
+					<div class="text-sm text-gray-300">Better luck next time</div>
+				</div>
+			{/if}
+			<div class="h-[10px]"></div>
+			<AlertDialog.Cancel class="w-full" on:click={handleClose}>Close</AlertDialog.Cancel>
+		</div>
+	{/if}
+</div>
 
 <style>
 	.case-container-small {
