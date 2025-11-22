@@ -118,6 +118,36 @@
     "sign_out": "Sign out",
     "inventory": "Inventory"
   },
+  "inventory": {
+    "page_title": "Inventory - Demon List VN",
+    "title": "Inventory",
+    "empty": "No items in inventory.",
+    "failed_load": "Failed to load inventory",
+    "failed_load_item": "Failed to load item details",
+    "rarity": "Rarity",
+    "expire_at": "Expire at",
+    "open_case": "Open Case",
+    "use": "Use",
+    "possible_items": "Possible items to acquire",
+    "rate": "Rate",
+    "redirect_success": "You will be redirected!",
+    "redirecting": "Redirecting...",
+    "redirect_error": "Failed to redirect",
+    "rarity_names": {
+      "common": "Common",
+      "uncommon": "Uncommon",
+      "rare": "Rare",
+      "epic": "Epic",
+      "legendary": "Legendary"
+    }
+    ,
+    "nothing": "Nothing",
+    "open_one_prefix": "Open 1",
+    "open_one_suffix": "?",
+    "open_button": "Open",
+    "received_from_case": "You received an item from the case",
+    "better_luck": "Better luck next time"
+  },
   "submit": {
     "button": "Submit",
     "next": "Next",

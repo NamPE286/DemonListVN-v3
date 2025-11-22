@@ -8,6 +8,8 @@
 	import CaseDialog from '$lib/components/caseDialog.svelte';
 	import { goto } from '$app/navigation';
 	import { toast } from 'svelte-sonner';
+	import { _ } from 'svelte-i18n';
+	import { get } from 'svelte/store';
 
 	type Item = {
 		userID: string;
@@ -44,7 +46,7 @@
 			items = Array.isArray(res) ? res : [];
 		} catch (e) {
 			console.error(e);
-			error = 'Failed to load inventory';
+			error = get(_ )('inventory.failed_load');
 		} finally {
 			loading = false;
 		}
@@ -105,7 +107,7 @@
 			console.error(e);
 			selectedItems = {
 				...selectedItems,
-				[inventoryId]: { loading: false, data: null, error: 'Failed to load item details' }
+				[inventoryId]: { loading: false, data: null, error: get(_ )('inventory.failed_load_item') }
 			};
 		}
 	}
@@ -147,15 +149,15 @@
 	function rarityName(r: number) {
 		switch (r) {
 			case 1:
-				return 'Uncommon';
+				return get(_ )('inventory.rarity_names.uncommon');
 			case 2:
-				return 'Rare';
+				return get(_ )('inventory.rarity_names.rare');
 			case 3:
-				return 'Epic';
+				return get(_ )('inventory.rarity_names.epic');
 			case 4:
-				return 'Covert';
+				return get(_ )('inventory.rarity_names.legendary');
 			default:
-				return 'Common';
+				return get(_ )('inventory.rarity_names.common');
 		}
 	}
 
@@ -185,21 +187,21 @@
 			{
 				success: () => {
 					goto(redirect);
-					return 'You will be redirected!';
+					return get(_ )('inventory.redirect_success');
 				},
-				loading: 'Redirecting...',
-				error: 'Failed to redirect'
+				loading: get(_ )('inventory.redirecting'),
+				error: get(_ )('inventory.redirect_error')
 			}
 		);
 	}
 </script>
 
 <svelte:head>
-	<title>Kho đồ - Demon List VN</title>
+	<title>{$_('inventory.page_title')}</title>
 </svelte:head>
 
 <div class="px-[10px] pt-[20px] xl:px-[100px]">
-	<h1 class="mb-4 text-2xl font-semibold">Inventory</h1>
+	<h1 class="mb-4 text-2xl font-semibold">{$_('inventory.title')}</h1>
 
 	{#if loading}
 		<div class="text-sm text-gray-500">
@@ -208,7 +210,7 @@
 	{:else if error}
 		<div class="text-sm text-red-500">{error}</div>
 	{:else if items.length === 0}
-		<div class="text-sm text-gray-500">No items in inventory.</div>
+		<div class="text-sm text-gray-500">{$_('inventory.empty')}</div>
 	{:else}
 		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-6">
 			{#each items as item (item.inventoryId)}
@@ -300,7 +302,7 @@
 												>
 											</Dialog.Header>
 											<div class="mt-3 text-sm text-gray-300">
-												Rarity: <span
+												{$_('inventory.rarity')}: <span
 													class="font-semibold"
 													style="color: {rarityColor(
 														selectedItems[item.inventoryId].data.rarity ?? item.rarity
@@ -312,7 +314,7 @@
 											</div>
 											{#if selectedItems[item.inventoryId].data.expireAt}
 												<div class="text-sm text-gray-300">
-													Expire at: {new Date(
+													{$_('inventory.expire_at')}: {new Date(
 														selectedItems[item.inventoryId].data.expireAt
 													).toLocaleString('vi-vn')}
 												</div>
@@ -322,7 +324,7 @@
 											{#if selectedItems[item.inventoryId].data.type == 'case'}
 												<AlertDialog.Root>
 													<AlertDialog.Trigger>
-														<Button variant="secondary">Open Case</Button>
+														<Button variant="secondary">{$_('inventory.open_case')}</Button>
 													</AlertDialog.Trigger>
 													<AlertDialog.Content>
 														<CaseDialog
@@ -338,7 +340,7 @@
 													variant="secondary"
 													on:click={() =>
 														use(item.inventoryId, selectedItems[item.inventoryId].data.useRedirect)}
-													>Use</Button
+													>{$_('inventory.use')}</Button
 												>
 											{/if}
 										</div>
@@ -346,7 +348,7 @@
 								</div>
 							</div>
 							{#if item.type == 'case'}
-								<b class="text-center">Possible items to acquire</b>
+								<b class="text-center">{$_('inventory.possible_items')}</b>
 								{#if selectedItems[item.inventoryId].data.caseItems && selectedItems[item.inventoryId].data.caseItems.length > 0}
 									<div class="mt-2 grid grid-cols-3 gap-2">
 										{#each selectedItems[item.inventoryId].data.caseItems as c (c.id)}
@@ -360,7 +362,7 @@
 												/>
 												<div class="text-xs font-medium">{c.items.name}</div>
 												<div class="text-xs text-gray-400">
-													Rate: {(c.rate ?? 0) * 100}%
+													{$_('inventory.rate')}: {(c.rate ?? 0) * 100}%
 												</div>
 											</div>
 										{/each}

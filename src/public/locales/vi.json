@@ -118,6 +118,36 @@
     "sign_out": "Đăng xuất",
     "inventory": "Kho đồ"
   },
+  "inventory": {
+    "page_title": "Kho đồ - Demon List VN",
+    "title": "Kho đồ",
+    "empty": "Không có vật phẩm trong kho.",
+    "failed_load": "Tải kho đồ thất bại",
+    "failed_load_item": "Tải thông tin vật phẩm thất bại",
+    "rarity": "Độ hiếm",
+    "expire_at": "Hết hạn",
+    "open_case": "Mở hòm",
+    "use": "Sử dụng",
+    "possible_items": "Vật phẩm có thể nhận",
+    "rate": "Tỷ lệ",
+    "redirect_success": "Bạn sẽ được chuyển hướng!",
+    "redirecting": "Đang chuyển hướng...",
+    "redirect_error": "Chuyển hướng thất bại",
+    "rarity_names": {
+      "common": "Phổ thông",
+      "uncommon": "Không phổ thông",
+      "rare": "Hiếm",
+      "epic": "Sử thi",
+      "legendary": "Huyền thoại"
+    }
+    ,
+    "nothing": "Không có",
+    "open_one_prefix": "Mở 1",
+    "open_one_suffix": "?",
+    "open_button": "Mở",
+    "received_from_case": "Bạn đã nhận một vật phẩm từ hòm",
+    "better_luck": "Chúc may mắn lần sau"
+  },
   "submit": {
     "button": "Nộp",
     "next": "Tiếp",

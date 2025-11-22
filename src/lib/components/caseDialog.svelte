@@ -4,6 +4,8 @@
 	import Loading from '$lib/components/animation/loading.svelte';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { _ } from 'svelte-i18n';
+	import { get } from 'svelte/store';
 
 	export let inventoryItemId: number;
 	export let item: any;
@@ -62,7 +64,7 @@
 						rate: c.rate ?? 0
 					}))
 				: [];
-		const nothingEntry = { item: { id: 0, name: 'Nothing', type: 'none', rarity: 0 }, rate: 0 };
+		const nothingEntry = { item: { id: 0, name: get(_ )('inventory.nothing'), type: 'none', rarity: 0 }, rate: 0 };
 		const entries = [...pollEntries, nothingEntry];
 
 		const randomizedEntries = shuffleArray(entries);
@@ -187,8 +189,8 @@
 									class="case-img"
 								/>
 								<div class="case-name">{d.name}</div>
-							{:else}
-								<div class="case-empty">Nothing</div>
+								{:else}
+								<div class="case-empty">{$_('inventory.nothing')}</div>
 							{/if}
 						</div>
 					{/each}
@@ -196,14 +198,14 @@
 			</div>
 		</div>
 	{:else if !isRolling && !hasRolled}
-		<div class="p-4 text-center">
-			Open 1 <span class='font-bold' style="color: {rarityColor(item.rarity)}">{item.name}</span>?
+			<div class="p-4 text-center">
+				{$_('inventory.open_one_prefix')} <span class='font-bold' style="color: {rarityColor(item.rarity)}">{item.name}</span>{$_('inventory.open_one_suffix')}
 
-			<div class='flex gap-[10px] w-full mt-[10px]'>
-				<AlertDialog.Cancel class='w-full'>Cancel</AlertDialog.Cancel>
-				<Button class='w-full' on:click={openCase}>Open</Button>
+				<div class='flex gap-[10px] w-full mt-[10px]'>
+					<AlertDialog.Cancel class='w-full'>{$_('general.cancel')}</AlertDialog.Cancel>
+					<Button class='w-full' on:click={openCase}>{$_('inventory.open_button')}</Button>
+				</div>
 			</div>
-		</div>
 	{:else}
 		<div class="p-4">
 			{#if rollResult && rollResult.items}
@@ -222,17 +224,17 @@
 						<div class="text-lg font-semibold">
 							{rollResult.items.name}
 						</div>
-						<div class="text-sm text-gray-300">You received an item from the case</div>
+						<div class="text-sm text-gray-300">{$_('inventory.received_from_case')}</div>
 					</div>
 				</div>
 			{:else}
 				<div class="text-center">
-					<div class="text-2xl font-semibold">Nothing</div>
-					<div class="text-sm text-gray-300">Better luck next time</div>
+					<div class="text-2xl font-semibold">{$_('inventory.nothing')}</div>
+					<div class="text-sm text-gray-300">{$_('inventory.better_luck')}</div>
 				</div>
 			{/if}
 			<div class="h-[10px]"></div>
-			<AlertDialog.Cancel class="w-full" on:click={handleClose}>Close</AlertDialog.Cancel>
+			<AlertDialog.Cancel class="w-full" on:click={handleClose}>{$_('general.close')}</AlertDialog.Cancel>
 		</div>
 	{/if}
 </div>
