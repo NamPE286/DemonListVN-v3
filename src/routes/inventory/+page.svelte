@@ -6,6 +6,8 @@
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import CaseDialog from '$lib/components/caseDialog.svelte';
+	import { goto } from '$app/navigation';
+	import { toast } from 'svelte-sonner';
 
 	type Item = {
 		userID: string;
@@ -48,9 +50,9 @@
 		}
 	}
 
-	async function fetchItem(id: number) {
-		const res = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/item/${id}`, {
+	async function fetchItem(itemId: number, inventoryId: number) {
+		const inventoryItem = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/inventory/${inventoryId}`, {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())
@@ -58,7 +60,20 @@
 			})
 		).json();
 
-		return res;
+		if (inventoryItem.type == 'case') {
+			const item = await (
+				await fetch(`${import.meta.env.VITE_API_URL}/item/${itemId}`, {
+					method: 'GET',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token())
+					}
+				})
+			).json();
+
+			inventoryItem.caseItems = item.caseItems;
+		}
+
+		return inventoryItem;
 	}
 
 	let selectedItems: Record<
@@ -77,7 +92,7 @@
 		};
 
 		try {
-			const data = await fetchItem(itemId);
+			const data = await fetchItem(itemId, inventoryId);
 			selectedItems = {
 				...selectedItems,
 				[inventoryId]: { loading: false, data, error: null }
@@ -110,7 +125,7 @@
 		}
 	}
 
-	const rarityClass = (r: number) => {
+	function rarityClass(r: number) {
 		switch (r) {
 			case 1:
 				return 'border-blue-500';
@@ -123,9 +138,9 @@
 			default:
 				return 'border-gray-400';
 		}
-	};
+	}
 
-	const rarityName = (r: number) => {
+	function rarityName(r: number) {
 		switch (r) {
 			case 1:
 				return 'Uncommon';
@@ -138,9 +153,9 @@
 			default:
 				return 'Common';
 		}
-	};
+	}
 
-	const rarityColor = (r: number) => {
+	function rarityColor(r: number) {
 		switch (r) {
 			case 1:
 				return '#3b82f6';
@@ -153,7 +168,26 @@
 			default:
 				return '#9ca3af';
 		}
-	};
+	}
+
+	async function use(inventoryId: number, redirect: string) {
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/inventory/${inventoryId}/consume`, {
+				method: 'DELETE',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			}),
+			{
+				success: () => {
+					goto(redirect);
+					return 'You will be redirected!';
+				},
+				loading: 'Redirecting...',
+				error: 'Failed to redirect'
+			}
+		);
+	}
 </script>
 
 <svelte:head>
@@ -237,6 +271,11 @@
 													)}</span
 												>
 											</div>
+											<div class="text-sm text-gray-300">
+												Expire at: {new Date(
+													selectedItems[item.inventoryId].data.expireAt
+												).toLocaleString('vi-vn')}
+											</div>
 										</div>
 										<div class="mt-auto">
 											{#if selectedItems[item.inventoryId].data.type == 'case'}
@@ -253,6 +292,13 @@
 														/>
 													</AlertDialog.Content>
 												</AlertDialog.Root>
+											{:else if selectedItems[item.inventoryId].data.useRedirect}
+												<Button
+													variant="secondary"
+													on:click={() =>
+														use(item.inventoryId, selectedItems[item.inventoryId].data.useRedirect)}
+													>Use</Button
+												>
 											{/if}
 										</div>
 									</div>
