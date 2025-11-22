@@ -2,10 +2,8 @@
 	import { user } from '$lib/client';
 	import Loading from '$lib/components/animation/loading.svelte';
 	import { onMount } from 'svelte';
-	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
+	import { Button } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
-	import { Input } from '$lib/components/ui/input/index.js';
-	import { Label } from '$lib/components/ui/label/index.js';
 
 	type Item = {
 		userID: string;
@@ -25,9 +23,10 @@
 	let loading = false;
 	let error: string | null = null;
 
-	async function fetchData() {
+	async function fetchInventory() {
 		loading = true;
 		error = null;
+
 		try {
 			const res = await (
 				await fetch(`${import.meta.env.VITE_API_URL}/inventory`, {
@@ -47,8 +46,53 @@
 		}
 	}
 
+	async function fetchItem(id: number) {
+		const res = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/item/${id}`, {
+				method: 'GET',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			})
+		).json();
+
+		return res;
+	}
+
+	// store fetched data per inventoryId so multiple dialogs can be opened independently
+	let selectedItems: Record<
+		number,
+		{
+			loading: boolean;
+			data: any | null;
+			error: string | null;
+		}
+	> = {};
+
+	async function loadItem(itemId: number, inventoryId: number) {
+		// initialize entry
+		selectedItems = {
+			...selectedItems,
+			[inventoryId]: { loading: true, data: null, error: null }
+		};
+
+		try {
+			const data = await fetchItem(itemId);
+			selectedItems = {
+				...selectedItems,
+				[inventoryId]: { loading: false, data, error: null }
+			};
+		} catch (e) {
+			console.error(e);
+			selectedItems = {
+				...selectedItems,
+				[inventoryId]: { loading: false, data: null, error: 'Failed to load item details' }
+			};
+		}
+	}
+
 	onMount(async () => {
-		await fetchData();
+		await fetchInventory();
 	});
 
 	const rarityClass = (r: number) => {
@@ -118,6 +162,7 @@
 				<Dialog.Root>
 					<Dialog.Trigger>
 						<button
+							on:click={() => loadItem(item.itemId, item.inventoryId)}
 							class={`w-full transform rounded-md border-b-4 bg-white/5 p-0 transition-transform hover:scale-105 ${rarityClass(item.rarity)} cursor-pointer overflow-hidden text-left`}
 							title={item.name}
 							aria-label={`Open ${item.name}`}
@@ -134,42 +179,126 @@
 							</div>
 						</button>
 					</Dialog.Trigger>
+
 					<Dialog.Content>
-						<div class="flex items-start gap-4">
-							<div
-								class={`h-40 w-40 flex-shrink-0 overflow-hidden rounded-md border-b-4 ${rarityClass(
-									item.rarity
-								)} bg-neutral-800 p-2`}
-							>
-								<img
-									src={`https://cdn.demonlistvn.com/items/${item.itemId}.webp`}
-									alt={item.name}
-									class="h-full w-full object-cover"
-								/>
+						{#if selectedItems[item.inventoryId]?.loading}
+							<div class="py-6">
+								<Loading inverted />
 							</div>
-							<div class="h-full flex-1">
-								<div class="flex h-full flex-1 flex-col">
-									<div>
-										<Dialog.Header>
-											<Dialog.Title>{item.name}</Dialog.Title>
-											<Dialog.Description
-												>{item.description ?? 'No description available.'}</Dialog.Description
-											>
-										</Dialog.Header>
-										<div class="mt-3 text-sm text-gray-300">
-											Rarity: <span class="font-semibold" style="color: {rarityColor(item.rarity)}"
-												>{rarityName(item.rarity)}</span
-											>
+						{:else if selectedItems[item.inventoryId]?.error}
+							<div class="py-4 text-sm text-red-400">{selectedItems[item.inventoryId].error}</div>
+						{:else if selectedItems[item.inventoryId]?.data}
+							<div class="flex items-start gap-4">
+								<div
+									class={`h-40 w-40 flex-shrink-0 overflow-hidden rounded-md border-b-4 ${rarityClass(selectedItems[item.inventoryId].data.rarity ?? item.rarity)} bg-neutral-800 p-2`}
+								>
+									<img
+										src={`https://cdn.demonlistvn.com/items/${item.itemId}.webp`}
+										alt={selectedItems[item.inventoryId].data.name ?? item.name}
+										class="h-full w-full object-cover"
+									/>
+								</div>
+								<div class="h-full flex-1">
+									<div class="flex h-full flex-1 flex-col">
+										<div>
+											<Dialog.Header>
+												<Dialog.Title
+													>{selectedItems[item.inventoryId].data.name ?? item.name}</Dialog.Title
+												>
+												<Dialog.Description
+													>{selectedItems[item.inventoryId].data.description ??
+														item.description ??
+														'No description available.'}</Dialog.Description
+												>
+											</Dialog.Header>
+											<div class="mt-3 text-sm text-gray-300">
+												Rarity: <span
+													class="font-semibold"
+													style="color: {rarityColor(
+														selectedItems[item.inventoryId].data.rarity ?? item.rarity
+													)}"
+													>{rarityName(
+														selectedItems[item.inventoryId].data.rarity ?? item.rarity
+													)}</span
+												>
+											</div>
 										</div>
-									</div>
-									<div class="mt-auto">
-										{#if item.type == 'case'}
-											<Button variant="secondary">Open Case</Button>
-										{/if}
+										<div class="mt-auto">
+											{#if selectedItems[item.inventoryId].data.type == 'case'}
+												<Button variant="secondary">Open Case</Button>
+											{/if}
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+							{#if item.type == 'case'}
+								<b class="text-center">Possible items to acquire</b>
+								{#if selectedItems[item.inventoryId].data.caseItems && selectedItems[item.inventoryId].data.caseItems.length > 0}
+									<div class="mt-2 grid grid-cols-3 gap-2">
+										{#each selectedItems[item.inventoryId].data.caseItems as c (c.id)}
+											<div
+												class={`flex flex-col items-center rounded-md border-b-4 bg-neutral-900 p-2 text-center ${rarityClass(c.items.rarity ?? item.rarity)}`}
+											>
+												<img
+													src={`https://cdn.demonlistvn.com/items/${c.items.id}.webp`}
+													alt={c.items.name}
+													class="mb-1 h-16 w-16 object-contain"
+												/>
+												<div class="text-xs font-medium">{c.items.name} x{c.quantity}</div>
+												<div class="text-xs text-gray-400">
+													Rate: {Math.round((c.rate ?? 0) * 100)}%
+												</div>
+											</div>
+										{/each}
+									</div>
+								{:else}
+									<div
+										class={`h-40 w-40 flex-shrink-0 overflow-hidden rounded-md border-b-4 ${rarityClass(item.rarity)} mt-2 bg-neutral-800 p-2`}
+									>
+										<img
+											src={`https://cdn.demonlistvn.com/items/${item.itemId}.webp`}
+											alt={item.name}
+											class="h-full w-full object-cover"
+										/>
+									</div>
+								{/if}
+							{/if}
+						{:else}
+							<div class="flex items-start gap-4">
+								<div
+									class={`h-40 w-40 flex-shrink-0 overflow-hidden rounded-md border-b-4 ${rarityClass(item.rarity)} bg-neutral-800 p-2`}
+								>
+									<img
+										src={`https://cdn.demonlistvn.com/items/${item.itemId}.webp`}
+										alt={item.name}
+										class="h-full w-full object-cover"
+									/>
+								</div>
+								<div class="h-full flex-1">
+									<div class="flex h-full flex-1 flex-col">
+										<div>
+											<Dialog.Header>
+												<Dialog.Title>{item.name}</Dialog.Title>
+												<Dialog.Description
+													>{item.description ?? 'No description available.'}</Dialog.Description
+												>
+											</Dialog.Header>
+											<div class="mt-3 text-sm text-gray-300">
+												Rarity: <span
+													class="font-semibold"
+													style="color: {rarityColor(item.rarity)}">{rarityName(item.rarity)}</span
+												>
+											</div>
+										</div>
+										<div class="mt-auto">
+											{#if item.type == 'case'}
+												<Button variant="secondary">Open Case</Button>
+											{/if}
+										</div>
+									</div>
+								</div>
+							</div>
+						{/if}
 					</Dialog.Content>
 				</Dialog.Root>
 			{/each}
