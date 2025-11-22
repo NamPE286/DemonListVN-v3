@@ -57,7 +57,7 @@
 		const pollEntries =
 			caseItems && caseItems.length > 0
 				? caseItems.map((c: any) => ({
-						item: { ...c.items, quantity: c.quantity ?? 1 },
+						item: { ...c.items },
 						rate: c.rate ?? 0
 					}))
 				: [];
@@ -83,8 +83,6 @@
 					}
 				})
 			).json();
-
-            res.items.quantity = res.quantity;
 		} catch (e) {
 			console.error(e);
 			res = {};
@@ -194,7 +192,7 @@
 										alt={d.name}
 										class="case-img"
 									/>
-									<div class="case-name">{d.name} x{d.quantity}</div>
+									<div class="case-name">{d.name}</div>
 								{:else}
 									<div class="case-empty">Nothing</div>
 								{/if}
@@ -221,7 +219,7 @@
 						</div>
 						<div class="mt-3 text-center">
 							<div class="text-lg font-semibold">
-								{rollResult.items.name} x{rollResult.quantity}
+								{rollResult.items.name}
 							</div>
 							<div class="text-sm text-gray-300">You received an item from the case</div>
 						</div>

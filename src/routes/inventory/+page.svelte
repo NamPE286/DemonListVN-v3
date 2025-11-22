@@ -268,7 +268,7 @@
 													alt={c.items.name}
 													class="mb-1 h-16 w-16 object-contain"
 												/>
-												<div class="text-xs font-medium">{c.items.name} x{c.quantity}</div>
+												<div class="text-xs font-medium">{c.items.name}</div>
 												<div class="text-xs text-gray-400">
 													Rate: {Math.round((c.rate ?? 0) * 100)}%
 												</div>
