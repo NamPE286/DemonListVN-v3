@@ -84,6 +84,10 @@
 			error: string | null;
 		}
 	> = {};
+	
+	function hasExpire(it: any) {
+		return !!(it?.expireAt || selectedItems[it.inventoryId]?.data?.expireAt);
+	}
 
 	async function loadItem(itemId: number, inventoryId: number) {
 		selectedItems = {
@@ -212,7 +216,7 @@
 					<Dialog.Trigger>
 						<button
 							on:click={() => loadItem(item.itemId, item.inventoryId)}
-							class={`w-full transform rounded-md border-b-4 bg-white/5 p-0 transition-transform hover:scale-105 ${rarityClass(item.rarity)} cursor-pointer overflow-hidden text-left`}
+							class={`relative w-full transform rounded-md border-b-4 bg-white/5 p-0 transition-transform hover:scale-105 ${rarityClass(item.rarity)} cursor-pointer overflow-hidden text-left`}
 							title={item.name}
 							aria-label={`Open ${item.name}`}
 						>
@@ -223,6 +227,41 @@
 									class="h-full w-full object-contain py-1"
 								/>
 							</div>
+
+							{#if hasExpire(item)}
+								<div
+									class="absolute right-2 top-2 z-10 rounded-full bg-black/60 p-1"
+									aria-hidden="true"
+								>
+									<!-- Clock icon -->
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-4 w-4 text-white"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+									>
+										<circle
+											cx="12"
+											cy="12"
+											r="10"
+											stroke="currentColor"
+											stroke-width="2"
+											fill="none"
+										/>
+										<path
+											d="M12 6v6l4 2"
+											stroke="currentColor"
+											stroke-width="2"
+											stroke-linecap="round"
+											stroke-linejoin="round"
+											fill="none"
+										/>
+									</svg>
+								</div>
+							{/if}
+
 							<div class="p-2">
 								<div class="truncate text-sm font-medium text-white">{item.name}</div>
 							</div>
@@ -271,11 +310,13 @@
 													)}</span
 												>
 											</div>
-											<div class="text-sm text-gray-300">
-												Expire at: {new Date(
-													selectedItems[item.inventoryId].data.expireAt
-												).toLocaleString('vi-vn')}
-											</div>
+											{#if selectedItems[item.inventoryId].data.expireAt}
+												<div class="text-sm text-gray-300">
+													Expire at: {new Date(
+														selectedItems[item.inventoryId].data.expireAt
+													).toLocaleString('vi-vn')}
+												</div>
+											{/if}
 										</div>
 										<div class="mt-auto">
 											{#if selectedItems[item.inventoryId].data.type == 'case'}
