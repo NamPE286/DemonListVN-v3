@@ -395,7 +395,15 @@
     "upcoming": "Sự kiện sắp diễn ra",
     "ongoing": "Sự kiện đang diễn ra",
     "past": "Sự kiện đã kết thúc",
-    "permanent_event": "Sự kiện vô thời hạn"
+    "permanent_event": "Sự kiện vô thời hạn",
+    "quest": {
+      "claim_button": "Nhận",
+      "claimed": "Đã nhận",
+      "claiming": "Đang nhận...",
+      "claim_error": "Nhận thất bại",
+      "claimed_success": "Đã nhận! Vui lòng kiểm tra kho đồ của bạn",
+      "rarity_label": "Độ hiếm:"
+    }
   },
   "event_filter": {
     "title": "Bộ lọc sự kiện",

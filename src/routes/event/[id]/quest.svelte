@@ -70,10 +70,10 @@
 					status = 'claimed';
 					claimBtnDisabled = true;
 
-					return 'Claimed! Please check your inventory';
+					return get(_)('events.quest.claimed_success');
 				},
-				loading: 'Claiming...',
-				error: 'Failed to claim'
+				loading: get(_)('events.quest.claiming'),
+				error: get(_)('events.quest.claim_error')
 			}
 		);
 	}
@@ -122,7 +122,7 @@
 									<div>
 										<div class="font-medium">{reward.name}</div>
 										<div class="text-sm text-neutral-400">
-											Rarity:
+											{get(_)('events.quest.rarity_label')}
 											<span class="font-bold" style="color: {rarityColor(reward.rarity)}"
 												>{rarityName(reward.rarity)}</span
 											>
@@ -142,9 +142,9 @@
 			{:else}
 				<Button class="ml-auto" disabled={claimBtnDisabled} on:click={claim}>
 					{#if status == 'claimable' || status == 'unclaimable'}
-						Claim
-					{:else if status == 'claimed'}
-						Claimed
+							{get(_)('events.quest.claim_button')}
+						{:else if status == 'claimed'}
+							{get(_)('events.quest.claimed')}
 					{/if}
 				</Button>
 			{/if}

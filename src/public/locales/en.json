@@ -396,7 +396,15 @@
     "upcoming": "Upcoming Events",
     "ongoing": "Ongoing Events",
     "past": "Past Events",
-    "permanent_event": "Permanent Events"
+    "permanent_event": "Permanent Events",
+    "quest": {
+      "claim_button": "Claim",
+      "claimed": "Claimed",
+      "claiming": "Claiming...",
+      "claim_error": "Failed to claim",
+      "claimed_success": "Claimed! Please check your inventory",
+      "rarity_label": "Rarity:"
+    }
   },
   "event_filter": {
     "title": "Event Filter",
