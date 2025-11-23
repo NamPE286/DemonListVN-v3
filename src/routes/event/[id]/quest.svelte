@@ -6,9 +6,13 @@
 	import { get } from 'svelte/store';
 	import { _ } from 'svelte-i18n';
 	import { user } from '$lib/client';
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
+	import { toast } from 'svelte-sonner';
 
 	export let quest: any;
 	let claimBtnDisabled = true;
+	let loading = true;
+	let status = '';
 
 	function rarityColor(r: number) {
 		switch (r) {
@@ -41,20 +45,46 @@
 	}
 
 	async function checkQuest() {
-		const res = await fetch(`${import.meta.env.VITE_API_URL}/event/quest/${quest.id}/check`, {
-			method: 'GET',
-			headers: {
-				Authorization: 'Bearer ' + (await $user.token())
-			}
-		});
+		const res = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/event/quest/${quest.id}/check`, {
+				method: 'GET',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			})
+		).json();
 
-		return res.ok;
+		return res;
+	}
+
+	async function claim() {
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/event/quest/${quest.id}/claim`, {
+				method: 'POST',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			}),
+			{
+				success: () => {
+					status = 'claimed';
+					claimBtnDisabled = true;
+
+					return 'Claimed! Please check your inventory';
+				},
+				loading: 'Claiming...',
+				error: 'Failed to claim'
+			}
+		);
 	}
 
 	onMount(async () => {
-		const claimable = await checkQuest();
+		const res = await checkQuest();
 
-		if (claimable) {
+		loading = false;
+		status = res.status;
+
+		if (res.status == 'claimable') {
 			claimBtnDisabled = false;
 		}
 	});
@@ -107,7 +137,17 @@
 					{/each}
 				</div>
 			</div>
-			<Button class="ml-auto" disabled={claimBtnDisabled}>Claim</Button>
+			{#if loading}
+				<Skeleton class="ml-auto h-[35px] w-[70px]" />
+			{:else}
+				<Button class="ml-auto" disabled={claimBtnDisabled} on:click={claim}>
+					{#if status == 'claimable' || status == 'unclaimable'}
+						Claim
+					{:else if status == 'claimed'}
+						Claimed
+					{/if}
+				</Button>
+			{/if}
 		</div>
 	</Card.Header>
 </Card.Root>
