@@ -139,8 +139,7 @@
       "rare": "Hiếm",
       "epic": "Sử thi",
       "legendary": "Huyền thoại"
-    }
-    ,
+    },
     "nothing": "Không có",
     "open_one_prefix": "Mở 1",
     "open_one_suffix": "?",
@@ -507,7 +506,8 @@
     "tabs": {
       "detail": "Chi tiết",
       "levels": "Levels",
-      "leaderboard": "Bảng xếp hạng"
+      "leaderboard": "Bảng xếp hạng",
+      "quests": "Nhiệm vụ"
     }
   },
   "level": {

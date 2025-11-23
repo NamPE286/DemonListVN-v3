@@ -12,6 +12,7 @@
 	import Ads from '$lib/components/ads.svelte';
 	import { _ } from 'svelte-i18n';
 	import { toast } from 'svelte-sonner';
+	import QuestTab from './questTab.svelte';
 
 	export let data: PageData;
 
@@ -58,6 +59,7 @@
 				<Tabs.Trigger value="detail">{$_('contest.tabs.detail')}</Tabs.Trigger>
 				<Tabs.Trigger value="levels">{$_('contest.tabs.levels')}</Tabs.Trigger>
 				<Tabs.Trigger value="leaderboard">{$_('contest.tabs.leaderboard')}</Tabs.Trigger>
+				<Tabs.Trigger value="quests">{$_('contest.tabs.quests')}</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="detail">
 				<div class="markdown">
@@ -75,6 +77,9 @@
 				{#if levels.length}
 					<Leaderboard {levels} event={data} />
 				{/if}
+			</Tabs.Content>
+			<Tabs.Content value="quests" class="mt-[20px] w-full pl-[10px] pr-[10px]">
+				<QuestTab event={data} />
 			</Tabs.Content>
 		</Tabs.Root>
 	{:else}

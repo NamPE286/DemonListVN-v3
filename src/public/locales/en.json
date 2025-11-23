@@ -139,8 +139,7 @@
       "rare": "Rare",
       "epic": "Epic",
       "legendary": "Legendary"
-    }
-    ,
+    },
     "nothing": "Nothing",
     "open_one_prefix": "Open 1",
     "open_one_suffix": "?",
@@ -508,7 +507,8 @@
     "tabs": {
       "detail": "Detail",
       "levels": "Levels",
-      "leaderboard": "Leaderboard"
+      "leaderboard": "Leaderboard",
+      "quests": "Quests"
     }
   },
   "level": {
