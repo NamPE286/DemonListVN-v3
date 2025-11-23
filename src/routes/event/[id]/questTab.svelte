@@ -5,6 +5,7 @@
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import { get } from 'svelte/store';
 	import { _ } from 'svelte-i18n';
+	import Quest from './quest.svelte';
 
 	export let event: any;
 	let data: any[] = [];
@@ -54,56 +55,6 @@
 
 <div class="mx-auto flex flex-col gap-[10px] lg:w-[1000px]">
 	{#each data as quest}
-		<Card.Root>
-			<Card.Header>
-				<div class="flex w-full items-center">
-					<div class="flex flex-col gap-[10px]">
-						<Card.Title>{quest.title}</Card.Title>
-						<div class="flex gap-[10px]">
-							{#each quest.rewards as reward}
-								<Popover.Root>
-									<Popover.Trigger>
-										<button class="clickable">
-											<div
-												class="flex h-[75px] w-[75px] items-center justify-center overflow-hidden rounded-md bg-neutral-800"
-												style="border-bottom: 4px solid {rarityColor(reward.rarity)};"
-											>
-												<img
-													class="max-h-full max-w-full object-contain p-2"
-													src={`https://cdn.demonlistvn.com/items/${reward.id}.webp`}
-													alt={reward.name}
-												/>
-											</div>
-										</button>
-									</Popover.Trigger>
-									<Popover.Content>
-										<div class="flex items-start gap-3">
-											<img
-												class="h-16 w-16 object-contain"
-												src={`https://cdn.demonlistvn.com/items/${reward.id}.webp`}
-												alt={reward.name}
-											/>
-											<div>
-												<div class="font-medium">{reward.name}</div>
-												<div class="text-sm text-neutral-400">
-													Rarity:
-													<span class="font-bold" style="color: {rarityColor(reward.rarity)}"
-														>{rarityName(reward.rarity)}</span
-													>
-												</div>
-												{#if reward.description}
-													<div class="text-sm text-neutral-400">{reward.description}</div>
-												{/if}
-											</div>
-										</div>
-									</Popover.Content>
-								</Popover.Root>
-							{/each}
-						</div>
-					</div>
-					<Button class="ml-auto">Claim</Button>
-				</div>
-			</Card.Header>
-		</Card.Root>
+		<Quest {quest} />
 	{/each}
 </div>
