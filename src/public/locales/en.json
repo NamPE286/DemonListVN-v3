@@ -184,7 +184,8 @@
         "title": "Something happened",
         "description": "We are unable to send your submission. If this problem persist, please contact a moderator to resolve this issue."
       }
-    }
+    },
+    "copy": "Copy error"
   },
   "settings": {
     "title": "Settings",

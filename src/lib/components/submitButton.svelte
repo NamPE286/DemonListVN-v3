@@ -505,6 +505,30 @@
 							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
+							<Button
+								variant="outline"
+								on:click={() => {
+									const submissionInfo = {
+										levelId: submission.levelid,
+										levelName: apiLevel?.name || 'N/A',
+										levelAuthor: apiLevel?.author || 'N/A',
+										progress: apiLevel?.length == 5 
+											? { minutes: time.m || 0, seconds: time.s || 0, milliseconds: time.ms || 0 }
+											: { percentage: submission.progress },
+										fps: submission.refreshRate,
+										videoLink: submission.videoLink,
+										rawLink: submission.raw,
+										platform: submission.mobile?.value ? 'Mobile' : 'PC',
+										suggestedRating: submission.suggestedRating || null,
+										comment: submission.comment || null,
+										error: errorMessage
+									};
+									navigator.clipboard.writeText(JSON.stringify(submissionInfo, null, 2));
+									toast.success('Copied to clipboard');
+								}}
+							>
+								{$_('submit.copy') || 'Copy Error'}
+							</Button>
 							<AlertDialog.Cancel on:click={() => (open = false)}
 								>{$_('submit.close')}</AlertDialog.Cancel
 							>
