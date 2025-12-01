@@ -46,6 +46,7 @@
 	let step = 0;
 	let nextDisabled = false;
 	let errorMessage = '';
+	let errorResponse = '';
 	let time = {
 		m: null,
 		s: null,
@@ -95,10 +96,17 @@
 				sendStatus = 2;
 			}
 
-			if ($locale == 'vi') {
-				errorMessage = ((await res.json()) as any).vi;
-			} else {
-				errorMessage = ((await res.json()) as any).en;
+			const responseText = await res.text();
+			errorResponse = responseText;
+			try {
+				const responseJson = JSON.parse(responseText);
+				if ($locale == 'vi') {
+					errorMessage = responseJson.vi;
+				} else {
+					errorMessage = responseJson.en;
+				}
+			} catch {
+				errorMessage = responseText;
 			}
 		});
 	}
@@ -509,21 +517,23 @@
 								variant="outline"
 								on:click={() => {
 									const submissionInfo = {
-										levelId: submission.levelid,
-										levelName: apiLevel?.name || 'N/A',
-										levelAuthor: apiLevel?.author || 'N/A',
-										progress: apiLevel?.length == 5 
-											? { minutes: time.m || 0, seconds: time.s || 0, milliseconds: time.ms || 0 }
-											: { percentage: submission.progress },
-										fps: submission.refreshRate,
-										videoLink: submission.videoLink,
-										rawLink: submission.raw,
-										platform: submission.mobile?.value ? 'Mobile' : 'PC',
-										suggestedRating: submission.suggestedRating || null,
-										comment: submission.comment || null,
-										error: errorMessage
+										request: {
+											levelId: submission.levelid,
+											levelName: apiLevel?.name || 'N/A',
+											levelAuthor: apiLevel?.author || 'N/A',
+											progress: apiLevel?.length == 5 
+												? { minutes: time.m || 0, seconds: time.s || 0, milliseconds: time.ms || 0 }
+												: { percentage: submission.progress },
+											fps: submission.refreshRate,
+											videoLink: submission.videoLink,
+											rawLink: submission.raw,
+											platform: submission.mobile?.value ? 'Mobile' : 'PC',
+											suggestedRating: submission.suggestedRating || null,
+											comment: submission.comment || null
+										},
+										response: errorResponse
 									};
-									navigator.clipboard.writeText(JSON.stringify(submissionInfo, null, 2));
+									navigator.clipboard.writeText("```json\n" + JSON.stringify(submissionInfo, null, 2) + "```");
 									toast.success('Copied to clipboard');
 								}}
 							>
