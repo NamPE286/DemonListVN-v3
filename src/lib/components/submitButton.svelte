@@ -47,6 +47,7 @@
 	let nextDisabled = false;
 	let errorMessage = '';
 	let errorResponse = '';
+	let submitId = 0;
 	let time = {
 		m: null,
 		s: null,
@@ -82,7 +83,9 @@
 			submission.mobile = submission.mobile.value;
 		}
 
-		fetch(`${import.meta.env.VITE_API_URL}/submission`, {
+		submitId = new Date().getTime();
+
+		fetch(`${import.meta.env.VITE_API_URL}/submission?id=${submitId}`, {
 			method: 'POST',
 			body: JSON.stringify(submission),
 			headers: {
