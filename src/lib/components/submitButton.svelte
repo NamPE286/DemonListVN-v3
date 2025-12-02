@@ -47,6 +47,7 @@
 	let nextDisabled = false;
 	let errorMessage = '';
 	let errorResponse = '';
+	let submitId = 0;
 	let time = {
 		m: null,
 		s: null,
@@ -81,6 +82,8 @@
 		if (submission.mobile != null) {
 			submission.mobile = submission.mobile.value;
 		}
+
+		submitId = new Date().getTime();
 
 		fetch(`${import.meta.env.VITE_API_URL}/submission`, {
 			method: 'POST',
@@ -531,6 +534,7 @@
 											suggestedRating: submission.suggestedRating || null,
 											comment: submission.comment || null
 										},
+										submitId: submitId,
 										response: errorResponse
 									};
 									navigator.clipboard.writeText("```json\n" + JSON.stringify(submissionInfo, null, 2) + "```");
