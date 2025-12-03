@@ -95,7 +95,7 @@
 		};
 
 		tmp.data = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/record/${uid}/${levelID}`)
+			await fetch(`${import.meta.env.VITE_API_URL}/records/${uid}/${levelID}`)
 		).json();
 
 		try {
@@ -114,7 +114,7 @@
 		disableBtn = true;
 		toast.promise(
 			fetch(
-				`${import.meta.env.VITE_API_URL}/record/${uid}/${levelID}/changeSuggestedRating/${record.data.suggestedRating}`,
+				`${import.meta.env.VITE_API_URL}/records/${uid}/${levelID}/changeSuggestedRating/${record.data.suggestedRating}`,
 				{
 					method: 'PUT',
 					headers: {
@@ -174,7 +174,7 @@
 		delete data.players;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/record`, {
+			fetch(`${import.meta.env.VITE_API_URL}/records`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
@@ -200,7 +200,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/record/${record.data.userid}/${record.data.levelid}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/records/${record.data.userid}/${record.data.levelid}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())!

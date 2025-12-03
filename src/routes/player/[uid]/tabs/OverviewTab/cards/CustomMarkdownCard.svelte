@@ -49,7 +49,7 @@
 				}
 			};
 
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/players`, {
 				method: 'PUT',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token()),
@@ -97,7 +97,7 @@
 				}
 			};
 
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/players`, {
 				method: 'PUT',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token()),

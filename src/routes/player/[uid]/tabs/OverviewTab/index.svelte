@@ -128,7 +128,7 @@
 		positions: Record<string, { order: number; visible: boolean; size: CardSize }>
 	) {
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/player`, {
+			fetch(`${import.meta.env.VITE_API_URL}/players`, {
 				method: 'PUT',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token()),

@@ -18,7 +18,7 @@
 
 	onMount(async () => {
 		try {
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/player/${userID}/cards`);
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/players/${userID}/cards`);
 			cards = await response.json();
 		} catch (error) {
 			console.error('Failed to fetch cards:', error);

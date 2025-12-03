@@ -5,7 +5,7 @@ export async function load({ params, url, fetch }) {
     const levels = [];
 
     const players: any[] =
-        await (await fetch(`${import.meta.env.VITE_API_URL}/players`, {
+        await (await fetch(`${import.meta.env.VITE_API_URL}/players/batch`, {
             method: "POST",
             body: JSON.stringify({
                 batch: [uidA, uidB],

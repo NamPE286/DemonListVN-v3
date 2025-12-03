@@ -33,7 +33,7 @@
 		fetchState = 1;
 
 		try {
-			giftTo = await (await fetch(`${import.meta.env.VITE_API_URL}/player/${giftToUID}`)).json();
+			giftTo = await (await fetch(`${import.meta.env.VITE_API_URL}/players/${giftToUID}`)).json();
 			fetchState = 2;
 		} catch {
 			toast.error(get(_)("toast.payment.no_player"));

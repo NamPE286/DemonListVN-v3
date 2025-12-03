@@ -17,7 +17,7 @@
 	};
 
 	async function add() {
-		fetch(`${import.meta.env.VITE_API_URL}/record`, {
+		fetch(`${import.meta.env.VITE_API_URL}/records`, {
 			method: 'PUT',
 			body: JSON.stringify(data),
 			headers: {

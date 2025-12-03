@@ -54,7 +54,7 @@
 				player.isAvatarGif = true;
 				player.avatarVersion++;
 
-				await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+				await fetch(`${import.meta.env.VITE_API_URL}/players`, {
 					method: 'PUT',
 					headers: {
 						Authorization: 'Bearer ' + (await $user.token()),
@@ -81,7 +81,7 @@
 				player.isAvatarGif = false;
 				player.avatarVersion++;
 
-				await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+				await fetch(`${import.meta.env.VITE_API_URL}/players`, {
 					method: 'PUT',
 					headers: {
 						Authorization: 'Bearer ' + (await $user.token()),
@@ -113,7 +113,7 @@
 				player.isBannerGif = true;
 				player.bannerVersion++;
 
-				await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+				await fetch(`${import.meta.env.VITE_API_URL}/players`, {
 					method: 'PUT',
 					headers: {
 						Authorization: 'Bearer ' + (await $user.token()),
@@ -142,7 +142,7 @@
 				player.isBannerGif = false;
 				player.bannerVersion++;
 
-				await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+				await fetch(`${import.meta.env.VITE_API_URL}/players`, {
 					method: 'PUT',
 					headers: {
 						Authorization: 'Bearer ' + (await $user.token()),
@@ -170,7 +170,7 @@
 		}
 
 		const token = await $user.token();
-		const promise = fetch(`${import.meta.env.VITE_API_URL}/player`, {
+		const promise = fetch(`${import.meta.env.VITE_API_URL}/players`, {
 			method: 'PUT',
 			headers: {
 				Authorization: 'Bearer ' + token,

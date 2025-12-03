@@ -40,7 +40,7 @@
 	}
 
 	function fetchData() {
-		fetch(`${import.meta.env.VITE_API_URL}/player/${uid}/heatmap/${year}`)
+		fetch(`${import.meta.env.VITE_API_URL}/players/${uid}/heatmap/${year}`)
 			.then((res) => res.json())
 			.then((res: any) => {
 				data = res.days;

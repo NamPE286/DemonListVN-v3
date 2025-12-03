@@ -7,7 +7,7 @@
 	let medals: any[] = [];
 
 	onMount(async () => {
-		medals = await (await fetch(`${import.meta.env.VITE_API_URL}/player/${userID}/medals`)).json();
+		medals = await (await fetch(`${import.meta.env.VITE_API_URL}/players/${userID}/medals`)).json();
 	});
 </script>
 

@@ -35,7 +35,7 @@
 
 		toast.loading('Submitting verdict... This page will be refreshed.');
 
-		await fetch(`${import.meta.env.VITE_API_URL}/record`, {
+		await fetch(`${import.meta.env.VITE_API_URL}/records`, {
 			method: 'PUT',
 			body: JSON.stringify({
 				userid: userID,
@@ -48,7 +48,7 @@
 			}
 		});
 
-		await fetch(`${import.meta.env.VITE_API_URL}/notification`, {
+		await fetch(`${import.meta.env.VITE_API_URL}/notifications`, {
 			method: 'POST',
 			body: JSON.stringify({
 				to: userID,
@@ -73,14 +73,14 @@
 
 		toast.loading('Submitting verdict... This page will be refreshed.');
 
-		await fetch(`${import.meta.env.VITE_API_URL}/record/${userID}/${level.id}`, {
+		await fetch(`${import.meta.env.VITE_API_URL}/records/${userID}/${level.id}`, {
 			method: 'DELETE',
 			headers: {
 				Authorization: `Bearer ${await $user.token()}`
 			}
 		});
 
-		await fetch(`${import.meta.env.VITE_API_URL}/notification`, {
+		await fetch(`${import.meta.env.VITE_API_URL}/notifications`, {
 			method: 'POST',
 			body: JSON.stringify({
 				to: userID,

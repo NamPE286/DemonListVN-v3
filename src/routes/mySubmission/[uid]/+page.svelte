@@ -31,7 +31,7 @@
 		const token = await $user.token();
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/record/${uid}/${lvID}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/records/${uid}/${lvID}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: 'Bearer ' + token

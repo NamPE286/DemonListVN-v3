@@ -25,7 +25,7 @@
 			body: JSON.stringify(data)
 		});
 
-		await fetch(`${import.meta.env.VITE_API_URL}/notification`, {
+		await fetch(`${import.meta.env.VITE_API_URL}/notifications`, {
 			method: 'POST',
 			body: JSON.stringify({
 				to: item.players.uid,
@@ -57,7 +57,7 @@
 			}
 		});
 
-		await fetch(`${import.meta.env.VITE_API_URL}/notification`, {
+		await fetch(`${import.meta.env.VITE_API_URL}/notifications`, {
 			method: 'POST',
 			body: JSON.stringify({
 				to: item.players.uid,

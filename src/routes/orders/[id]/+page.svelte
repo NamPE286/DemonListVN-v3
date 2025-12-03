@@ -38,7 +38,7 @@
 
 	async function fetchData() {
 		data = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/order/${page.params.id}`, {
+			await fetch(`${import.meta.env.VITE_API_URL}/orders/${page.params.id}`, {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())

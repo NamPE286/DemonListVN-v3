@@ -10,7 +10,7 @@
 
 	async function retrieve() {
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/record/retrieve`, {
+			fetch(`${import.meta.env.VITE_API_URL}/records/retrieve`, {
 				headers: {
 					Authorization: `Bearer ${await $user.token()}`,
 					'Content-Type': 'application/json'

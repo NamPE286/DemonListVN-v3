@@ -45,7 +45,7 @@
 		let orderID = 0;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/order`, {
+			fetch(`${import.meta.env.VITE_API_URL}/orders`, {
 				method: 'POST',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token()),

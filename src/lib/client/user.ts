@@ -23,7 +23,7 @@ async function addNewUser() {
 		throw error;
 	}
 
-	await fetch(`${import.meta.env.VITE_API_URL}/player`, {
+	await fetch(`${import.meta.env.VITE_API_URL}/players`, {
 		method: 'POST',
 		headers: {
 			Authorization: `Bearer ${await userData.token()}`,
@@ -41,7 +41,7 @@ let userData: userType = {
 	loggedIn: false,
 	checked: false,
 	syncRole: async () => {
-		await fetch(`${import.meta.env.VITE_API_URL}/player/syncRole`, {
+		await fetch(`${import.meta.env.VITE_API_URL}/players/syncRole`, {
 			method: 'PATCH',
 			headers: {
 				Authorization: 'Bearer ' + (await userData.token())
@@ -58,12 +58,12 @@ let userData: userType = {
 		}
 
 		const tmp = Promise.all([
-			fetch(`${import.meta.env.VITE_API_URL}/player/${data.user.id}?cached=true`)
+			fetch(`${import.meta.env.VITE_API_URL}/players/${data.user.id}?cached=true`)
 				.then((res) => res.json())
 				.then((res) => {
 					userData.data = res;
 				}),
-			fetch(`${import.meta.env.VITE_API_URL}/player/${data.user.id}/records?ratingOnly=true`)
+			fetch(`${import.meta.env.VITE_API_URL}/players/${data.user.id}/records?ratingOnly=true`)
 				.then((res) => res.json())
 				.then((res: any) => {
 					userData.ratings = res;
@@ -77,12 +77,12 @@ let userData: userType = {
 			.catch((err) => {
 				addNewUser().then(() => {
 					Promise.all([
-						fetch(`${import.meta.env.VITE_API_URL}/player/${data.user.id}?cached=true`)
+						fetch(`${import.meta.env.VITE_API_URL}/players/${data.user.id}?cached=true`)
 							.then((res) => res.json())
 							.then((res) => {
 								userData.data = res;
 							}),
-						fetch(`${import.meta.env.VITE_API_URL}/player/${data.user.id}/records?ratingOnly=true`)
+						fetch(`${import.meta.env.VITE_API_URL}/players/${data.user.id}/records?ratingOnly=true`)
 							.then((res) => res.json())
 							.then((res: any) => {
 								userData.ratings = res;

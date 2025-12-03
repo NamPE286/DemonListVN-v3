@@ -27,8 +27,8 @@
 	async function loadPlayer(uid: string, playerSlot: 1 | 2) {
 		try {
 			const [playerRes, recordsRes] = await Promise.all([
-				fetch(`${import.meta.env.VITE_API_URL}/player/${uid}`),
-				fetch(`${import.meta.env.VITE_API_URL}/player/${uid}/records`)
+				fetch(`${import.meta.env.VITE_API_URL}/players/${uid}`),
+				fetch(`${import.meta.env.VITE_API_URL}/players/${uid}/records`)
 			]);
 
 			const data = await playerRes.json();

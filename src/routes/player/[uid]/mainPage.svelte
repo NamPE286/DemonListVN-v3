@@ -44,7 +44,7 @@
 	async function applyFilter() {
 		const records: any[] = await (
 			await fetch(
-				`${import.meta.env.VITE_API_URL}/player/${$page.params.uid}/records?sortBy=${filter.sortBy}&ascending=${filter.ascending}&end=500`
+				`${import.meta.env.VITE_API_URL}/players/${$page.params.uid}/records?sortBy=${filter.sortBy}&ascending=${filter.ascending}&end=500`
 			)
 		).json();
 

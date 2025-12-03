@@ -4,7 +4,7 @@ export async function load({ params, url, fetch }) {
         await (await fetch(`${import.meta.env.VITE_API_URL}/events/${id}`))
             .json();
     event.data.players =
-        await (await fetch(`${import.meta.env.VITE_API_URL}/players`, {
+        await (await fetch(`${import.meta.env.VITE_API_URL}/players/batch`, {
             method: "POST",
             body: JSON.stringify({
                 batch: event.data.players,
