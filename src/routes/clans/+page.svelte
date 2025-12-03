@@ -45,7 +45,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/clan`, {
+			fetch(`${import.meta.env.VITE_API_URL}/clans`, {
 				method: 'POST',
 				body: JSON.stringify(newClanData),
 				headers: {
@@ -69,7 +69,7 @@
 	}
 
 	async function acceptInvitation(clanID: number) {
-		fetch(`${import.meta.env.VITE_API_URL}/clan/${clanID}/invite`, {
+		fetch(`${import.meta.env.VITE_API_URL}/clans/${clanID}/invite`, {
 			method: 'PATCH',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())
@@ -78,7 +78,7 @@
 	}
 
 	async function rejectInvitation(clanID: number) {
-		fetch(`${import.meta.env.VITE_API_URL}/clan/${clanID}/invite`, {
+		fetch(`${import.meta.env.VITE_API_URL}/clans/${clanID}/invite`, {
 			method: 'DELETE',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())
@@ -96,7 +96,7 @@
 
 	onMount(async () => {
 		if ($user.loggedIn) {
-			fetch(`${import.meta.env.VITE_API_URL}/clan/invitations`, {
+			fetch(`${import.meta.env.VITE_API_URL}/clans/invitations`, {
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token()),
 					'Content-Type': 'application/json'

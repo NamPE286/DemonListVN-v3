@@ -13,7 +13,7 @@
 		opened = false;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/clan/invite/${invitePlayerUID}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/clans/invite/${invitePlayerUID}`, {
 				method: 'POST',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())

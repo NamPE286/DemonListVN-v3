@@ -1,6 +1,6 @@
 export async function load({ params, url, fetch }) {
     const { id } = params
-    const clan: any = await (await fetch(`${import.meta.env.VITE_API_URL}/clan/${id}`)).json()
+    const clan: any = await (await fetch(`${import.meta.env.VITE_API_URL}/clans/${id}`)).json()
 
     return clan
 };

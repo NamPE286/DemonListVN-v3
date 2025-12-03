@@ -81,7 +81,7 @@
 		appliedMembersFilter = structuredClone(membersFilter);
 
 		fetch(
-			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/members?${new URLSearchParams(membersFilter).toString()}`
+			`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}/members?${new URLSearchParams(membersFilter).toString()}`
 		)
 			.then((res) => res.json())
 			.then((res: any) => {
@@ -117,7 +117,7 @@
 		appliedRecordsFilter = structuredClone(recordsFilter);
 
 		fetch(
-			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/records?${new URLSearchParams(recordsFilter).toString()}`
+			`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}/records?${new URLSearchParams(recordsFilter).toString()}`
 		)
 			.then((res) => res.json())
 			.then((res: any) => {
@@ -136,14 +136,14 @@
 	}
 
 	function fetchInvitations() {
-		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/invitations`)
+		fetch(`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}/invitations`)
 			.then((res) => res.json())
 			.then((res: any) => (invitations = res));
 	}
 
 	async function joinClan() {
 		toast.loading('Joining clan...');
-		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/join`, {
+		fetch(`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}/join`, {
 			method: 'PUT',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())
@@ -158,7 +158,7 @@
 
 		toast.loading($_('toast.clan_leave.loading'));
 
-		fetch(`${import.meta.env.VITE_API_URL}/clan/leave`, {
+		fetch(`${import.meta.env.VITE_API_URL}/clans/leave`, {
 			method: 'PUT',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())
@@ -173,7 +173,7 @@
 		delete editedData.boostedUntil;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}`, {
 				method: 'PATCH',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token()),
@@ -205,7 +205,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())
@@ -241,7 +241,7 @@
 			editedData.imageVersion++;
 
 			await upload(`clan-photos/${$page.params.id}.jpg`, cImg, (await $user.token())!);
-			await fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}`, {
+			await fetch(`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}`, {
 				method: 'PATCH',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token()),
@@ -258,7 +258,7 @@
 	}
 
 	async function acceptInvitation(clanID: number) {
-		fetch(`${import.meta.env.VITE_API_URL}/clan/${clanID}/invite`, {
+		fetch(`${import.meta.env.VITE_API_URL}/clans/${clanID}/invite`, {
 			method: 'PATCH',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())
@@ -267,7 +267,7 @@
 	}
 
 	async function rejectInvitation(clanID: number) {
-		fetch(`${import.meta.env.VITE_API_URL}/clan/${clanID}/invite`, {
+		fetch(`${import.meta.env.VITE_API_URL}/clans/${clanID}/invite`, {
 			method: 'DELETE',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())
@@ -280,7 +280,7 @@
 			return;
 		}
 
-		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/kick/${player.uid}`, {
+		fetch(`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}/kick/${player.uid}`, {
 			method: 'PATCH',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())
@@ -301,7 +301,7 @@
 		}
 
 		fetch(
-			`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/ban/${player.uid}?reason=${reason}`,
+			`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}/ban/${player.uid}?reason=${reason}`,
 			{
 				method: 'POST',
 				headers: {
@@ -316,7 +316,7 @@
 			return;
 		}
 
-		fetch(`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/invitation/${uid}`, {
+		fetch(`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}/invitation/${uid}`, {
 			method: 'DELETE',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())
@@ -328,7 +328,7 @@
 		(() => {
 			if ($user.loggedIn) {
 				fetch(
-					`${import.meta.env.VITE_API_URL}/clan/${$page.params.id}/invitation/${$user.data.uid}`
+					`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}/invitation/${$user.data.uid}`
 				)
 					.then((res) => res.json())
 					.then((res) => (invitation = res));

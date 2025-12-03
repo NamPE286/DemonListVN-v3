@@ -38,7 +38,7 @@
 	async function fetchLevels() {
 		fetch(
 			// @ts-ignore
-			`${import.meta.env.VITE_API_URL}/clan/${clan.id}/list/${list}?${new URLSearchParams(filter[list]).toString()}`
+			`${import.meta.env.VITE_API_URL}/clans/${clan.id}/list/${list}?${new URLSearchParams(filter[list]).toString()}`
 		)
 			.then((res) => res.json())
 			.then((res: any) => {
