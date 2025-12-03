@@ -12,7 +12,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/${eventID}/level/${levelID}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/${eventID}/level/${levelID}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())

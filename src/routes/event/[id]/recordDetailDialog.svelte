@@ -53,7 +53,7 @@
 
 	async function getLevelDeathCount(levelID: number) {
 		const res = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/level/${levelID}/deathCount`)
+			await fetch(`${import.meta.env.VITE_API_URL}/levels/${levelID}/deathCount`)
 		).json();
 
 		return res;

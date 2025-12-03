@@ -138,7 +138,7 @@
 			}
 			
 			leaderboard = await (
-				await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/leaderboard`, {
+				await fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/leaderboard`, {
 					method: 'GET',
 					headers: {
 						Authorization: $user.loggedIn ? 'Bearer ' + (await $user.token()) : ''
@@ -148,7 +148,7 @@
 
 			if ($user.loggedIn && $user.data.isAdmin) {
 				leaderboard1 = await (
-					await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/leaderboard`)
+					await fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/leaderboard`)
 				).json();
 			}
 
@@ -171,7 +171,7 @@
 		updateData.accepted = updateData.accepted.value;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/submission`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/submission`, {
 				method: 'PATCH',
 				body: JSON.stringify(updateData),
 				headers: {
@@ -278,7 +278,7 @@
 
 	async function calculate() {
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/calc`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/calc`, {
 				method: 'PATCH',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())
@@ -298,7 +298,7 @@
 
 	async function getLevelDeathCount(levelID: number) {
 		const res = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/level/${levelID}/deathCount`)
+			await fetch(`${import.meta.env.VITE_API_URL}/levels/${levelID}/deathCount`)
 		).json();
 
 		return res;

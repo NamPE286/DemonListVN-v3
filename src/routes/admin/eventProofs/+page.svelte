@@ -16,7 +16,7 @@
 
 		toast.loading('Submitting verdict... This page will be refreshed');
 
-		await fetch(`${import.meta.env.VITE_API_URL}/event/proof`, {
+		await fetch(`${import.meta.env.VITE_API_URL}/events/proof`, {
 			method: 'PUT',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())!,
@@ -50,7 +50,7 @@
 
 		toast.loading('Submitting verdict... This page will be refreshed');
 
-		await fetch(`${import.meta.env.VITE_API_URL}/event/${item.eventID}/proof/${item.players.uid}`, {
+		await fetch(`${import.meta.env.VITE_API_URL}/events/${item.eventID}/proof/${item.players.uid}`, {
 			method: 'DELETE',
 			headers: {
 				Authorization: 'Bearer ' + (await $user.token())!

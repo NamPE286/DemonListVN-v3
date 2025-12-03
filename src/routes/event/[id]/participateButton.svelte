@@ -30,7 +30,7 @@
 			return;
 		}
 
-		fetch(`${import.meta.env.VITE_API_URL}/event/${data.id}/proof/${$user.data.uid}`)
+		fetch(`${import.meta.env.VITE_API_URL}/events/${data.id}/proof/${$user.data.uid}`)
 			.then((res) => {
 				if (!res.ok) {
 					rewardState = 4;
@@ -51,7 +51,7 @@
 		claimOpened = false;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/proof`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/proof`, {
 				method: 'POST',
 				body: JSON.stringify({
 					eventID: data.id,
@@ -79,7 +79,7 @@
 		cancelOpened = false;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/${data.id}/proof/${$user.data.uid}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/${data.id}/proof/${$user.data.uid}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())!

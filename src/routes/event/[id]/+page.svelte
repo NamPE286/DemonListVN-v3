@@ -22,7 +22,7 @@
 		toast.promise(
 			async () => {
 				levels = await (
-					await fetch(`${import.meta.env.VITE_API_URL}/event/${data.id}/levels`)
+					await fetch(`${import.meta.env.VITE_API_URL}/events/${data.id}/levels`)
 				).json();
 			},
 			{
@@ -34,7 +34,7 @@
 	}
 
 	onMount(async () => {
-		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/event/${data.id}/levels`)).json();
+		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/events/${data.id}/levels`)).json();
 	});
 </script>
 

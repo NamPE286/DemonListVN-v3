@@ -22,14 +22,14 @@
 	};
 
 	async function fetchLevel() {
-		fetch(`${import.meta.env.VITE_API_URL}/level/${level.id}`)
+		fetch(`${import.meta.env.VITE_API_URL}/levels/${level.id}`)
 			.then((res) => res.json())
 			.then((res: any) => {
 				level = res;
 				state = 1;
 			})
 			.catch((err) => {
-				fetch(`${import.meta.env.VITE_API_URL}/level/${level.id}?fromGD=1`)
+				fetch(`${import.meta.env.VITE_API_URL}/levels/${level.id}?fromGD=1`)
 					.then((res) => res.json())
 					.then((res: any) => {
 						level.name = res.name;
@@ -53,7 +53,7 @@
 			}
 		}
 
-		fetch(`${import.meta.env.VITE_API_URL}/level`, {
+		fetch(`${import.meta.env.VITE_API_URL}/levels`, {
 			method: 'PUT',
 			body: JSON.stringify(level),
 			headers: {
@@ -76,7 +76,7 @@
 			return;
 		}
 
-		fetch(`${import.meta.env.VITE_API_URL}/level/${level.id}`, {
+		fetch(`${import.meta.env.VITE_API_URL}/levels/${level.id}`, {
 			method: 'DELETE',
 			headers: {
 				Authorization: `Bearer ${await $user.token()}`

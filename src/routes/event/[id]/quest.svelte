@@ -46,7 +46,7 @@
 
 	async function checkQuest() {
 		const res = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/event/quest/${quest.id}/check`, {
+			await fetch(`${import.meta.env.VITE_API_URL}/events/quest/${quest.id}/check`, {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())
@@ -59,7 +59,7 @@
 
 	async function claim() {
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/quest/${quest.id}/claim`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/quest/${quest.id}/claim`, {
 				method: 'POST',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())

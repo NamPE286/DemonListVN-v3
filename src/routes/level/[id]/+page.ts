@@ -4,7 +4,7 @@ export async function load({ params, url, fetch }) {
 	const { id } = params;
 
 	if (url.searchParams.get('list') == 'other') {
-		let gdbrowserLevel: any = await (await fetch(`${import.meta.env.VITE_API_URL}/level/${id}?fromGD=1`)).json();
+		let gdbrowserLevel: any = await (await fetch(`${import.meta.env.VITE_API_URL}/levels/${id}?fromGD=1`)).json();
 
 		if (!('demonList' in gdbrowserLevel)) {
 			return {
@@ -28,7 +28,7 @@ export async function load({ params, url, fetch }) {
 
 	try {
 		return {
-			level: (await (await fetch(`${import.meta.env.VITE_API_URL}/level/${id}`)).json()) as any
+			level: (await (await fetch(`${import.meta.env.VITE_API_URL}/levels/${id}`)).json()) as any
 		};
 	} catch {
 		throw error(404, 'Level does not exist');

@@ -65,7 +65,7 @@
 		}
 
 		try {
-			event = await (await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}`)).json();
+			event = await (await fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}`)).json();
 			state = State.EDIT_EVENT;
 
 			event.start = convertTime(event.start);
@@ -169,7 +169,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events`, {
 				method: 'POST',
 				body: JSON.stringify(event),
 				headers: {
@@ -202,7 +202,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}`, {
 				method: 'PATCH',
 				body: JSON.stringify(event),
 				headers: {
@@ -261,7 +261,7 @@
 
 	async function fetchLevels() {
 		levels = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/levels`, {
+			await fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/levels`, {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())

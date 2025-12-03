@@ -1,7 +1,7 @@
 export async function load({ params, url, fetch }) {
     const { id } = params;
     const event: any =
-        await (await fetch(`${import.meta.env.VITE_API_URL}/event/${id}`))
+        await (await fetch(`${import.meta.env.VITE_API_URL}/events/${id}`))
             .json();
     event.data.players =
         await (await fetch(`${import.meta.env.VITE_API_URL}/players`, {

@@ -24,7 +24,7 @@
 		}
 
 		records = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/submissions`, {
+			await fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/submissions`, {
 				method: 'GET',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())

@@ -18,7 +18,7 @@
 
 	async function save() {
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/levels`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/levels`, {
 				method: 'PUT',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token()),

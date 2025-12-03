@@ -117,12 +117,12 @@
 	async function fetchLevel() {
 		try {
 			level = await (
-				await fetch(`${import.meta.env.VITE_API_URL}/level/${submission.levelid}`)
+				await fetch(`${import.meta.env.VITE_API_URL}/levels/${submission.levelid}`)
 			).json();
 		} catch {}
 
 		apiLevel = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/level/${submission.levelid}?fromGD=1`)
+			await fetch(`${import.meta.env.VITE_API_URL}/levels/${submission.levelid}?fromGD=1`)
 		).json();
 	}
 

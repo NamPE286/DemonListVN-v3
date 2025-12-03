@@ -12,7 +12,7 @@
 
 	async function fetchData() {
 		const res = await (
-			await fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/quest`)
+			await fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/quest`)
 		).json();
 
 		return res;

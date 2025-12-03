@@ -82,7 +82,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/submit`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/submit`, {
 				method: 'POST',
 				body: JSON.stringify(submitData),
 				headers: {
@@ -111,7 +111,7 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/event/${event.id}/submission/${level.id}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/submission/${level.id}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: `Bearer ${await $user.token()}`
@@ -144,7 +144,7 @@
 
 		try {
 			const res = await (
-				await fetch(`${import.meta.env.VITE_API_URL}/level/${level.levelID}/deathCount`)
+				await fetch(`${import.meta.env.VITE_API_URL}/levels/${level.levelID}/deathCount`)
 			).json();
 
 			if (res && res.count) {

@@ -88,15 +88,15 @@
 		records = [];
 		deathCount = [];
 
-		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}?fromGD=1`)
+		fetch(`${import.meta.env.VITE_API_URL}/levels/${$page.params.id}?fromGD=1`)
 			.then((res) => res.json())
 			.then((res) => (levelAPI = res));
 
-		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/records?end=500`)
+		fetch(`${import.meta.env.VITE_API_URL}/levels/${$page.params.id}/records?end=500`)
 			.then((res) => res.json())
 			.then((res: any) => (records = res));
 
-		fetch(`${import.meta.env.VITE_API_URL}/level/${$page.params.id}/deathCount`)
+		fetch(`${import.meta.env.VITE_API_URL}/levels/${$page.params.id}/deathCount`)
 			.then((res) => res.json())
 			.then((res: any) => {
 				deathCount = res.count;
