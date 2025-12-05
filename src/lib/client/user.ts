@@ -41,6 +41,10 @@ let userData: userType = {
 	loggedIn: false,
 	checked: false,
 	syncRole: async () => {
+		if(!userData.loggedIn) {
+			return;
+		}
+		
 		await fetch(`${import.meta.env.VITE_API_URL}/players/syncRole`, {
 			method: 'PATCH',
 			headers: {
