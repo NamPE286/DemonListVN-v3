@@ -97,8 +97,8 @@
 		});
 	}
 
-	function signOut() {
-		supabase.auth.signOut();
+	async function signOut() {
+		await supabase.auth.signOut();
 		window.location.reload();
 	}
 
