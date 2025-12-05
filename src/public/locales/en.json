@@ -183,7 +183,8 @@
       "failed": {
         "title": "Something happened",
         "description": "We are unable to send your submission. If this problem persist, please contact a moderator to resolve this issue."
-      }
+      },
+      "detail": "Chi tiết"
     },
     "copy": "Copy error"
   },

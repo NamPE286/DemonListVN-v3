@@ -121,8 +121,6 @@ let userData: userType = {
 		const userId = data.user.id;
 		const cachedData = loadCachedUserData();
 
-		console.log(cachedData)
-
 		if (cachedData && cachedData.userId === userId) {
 			userData.data = cachedData.data;
 			userData.ratings = cachedData.ratings;

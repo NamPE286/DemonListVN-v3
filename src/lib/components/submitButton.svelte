@@ -39,10 +39,12 @@
 		comment: ''
 	};
 
+	let submitLog: string[] = [];
 	let apiLevel: any = null;
 	let level: any = null;
 	let sendStatus = 0;
 	let open = false;
+	let logsOpen = false;
 	let step = 0;
 	let nextDisabled = false;
 	let errorMessage = '';
@@ -102,15 +104,19 @@
 			const responseText = await res.text();
 			errorResponse = responseText;
 			try {
-				const responseJson = JSON.parse(responseText);
+				const resJson = JSON.parse(responseText);
+				submitLog = resJson.logs;
+
 				if ($locale == 'vi') {
-					errorMessage = responseJson.vi;
+					errorMessage = resJson.vi;
 				} else {
-					errorMessage = responseJson.en;
+					errorMessage = resJson.en;
 				}
 			} catch {
 				errorMessage = responseText;
 			}
+
+			console.log(JSON.parse(responseText));
 		});
 	}
 
@@ -507,7 +513,7 @@
 						</AlertDialog.Footer>
 					</AlertDialog.Content>
 				{:else if sendStatus == 2}
-					<AlertDialog.Content>
+					<AlertDialog.Content class="max-h-[80vh] max-w-[600px] overflow-y-auto">
 						<AlertDialog.Header>
 							<AlertDialog.Title>{$_('submit.send.failed.title')}</AlertDialog.Title>
 							<AlertDialog.Description>
@@ -515,7 +521,12 @@
 								ⓘ {errorMessage}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
-						<AlertDialog.Footer>
+						<AlertDialog.Footer class='gap-[5px] lg:gap-0'>
+							{#if submitLog && submitLog.length > 0}
+								<Button on:click={() => (logsOpen = true)} variant="outline">
+								{$_('submit.send.detail')}<br />
+								</Button>
+							{/if}
 							<Button
 								variant="outline"
 								on:click={() => {
@@ -524,9 +535,14 @@
 											levelId: submission.levelid,
 											levelName: apiLevel?.name || 'N/A',
 											levelAuthor: apiLevel?.author || 'N/A',
-											progress: apiLevel?.length == 5 
-												? { minutes: time.m || 0, seconds: time.s || 0, milliseconds: time.ms || 0 }
-												: { percentage: submission.progress },
+											progress:
+												apiLevel?.length == 5
+													? {
+															minutes: time.m || 0,
+															seconds: time.s || 0,
+															milliseconds: time.ms || 0
+														}
+													: { percentage: submission.progress },
 											fps: submission.refreshRate,
 											videoLink: submission.videoLink,
 											rawLink: submission.raw,
@@ -534,10 +550,13 @@
 											suggestedRating: submission.suggestedRating || null,
 											comment: submission.comment || null
 										},
-										submitId: new Date().getTime(),
-										response: errorResponse
+										submitId: submitId,
+										response: errorResponse,
+										logs: submitLog
 									};
-									navigator.clipboard.writeText("```json\n" + JSON.stringify(submissionInfo, null, 2) + "```");
+									navigator.clipboard.writeText(
+										'```json\n' + JSON.stringify(submissionInfo, null, 2) + '```'
+									);
 									toast.success('Copied to clipboard');
 								}}
 							>
@@ -551,5 +570,66 @@
 				{/if}
 			</AlertDialog.Root>
 		</Dialog.Footer>
+	</Dialog.Content>
+</Dialog.Root>
+
+<Dialog.Root bind:open={logsOpen}>
+	<Dialog.Content class="flex max-h-[80vh] max-w-[800px] flex-col overflow-hidden">
+		<Dialog.Header>
+			<Dialog.Title>Submission Logs</Dialog.Title>
+			<Dialog.Description>
+				Detailed submission process logs ({submitLog.length} entries)
+			</Dialog.Description>
+		</Dialog.Header>
+		<div class="flex-1 overflow-y-auto rounded-md border bg-muted/50 p-4">
+			<div class="space-y-2 font-mono text-xs">
+				{#each submitLog as log, index}
+					<div
+						class="rounded border-l-2 bg-background p-2 {log.includes('Error') ||
+						log.includes('error')
+							? 'border-red-500'
+							: log.includes('success') || log.includes('approved')
+								? 'border-green-500'
+								: 'border-blue-500'}"
+					>
+						<div class="flex gap-2">
+							<span class="select-none text-muted-foreground">{index + 1}.</span>
+							<div class="flex-1 whitespace-pre-wrap break-words">
+								{#if log.includes('{') || log.includes('[')}
+									{@const parsed = (() => {
+										try {
+											const match = log.match(/(\{.*\}|\[.*\])/s);
+											if (match) {
+												return {
+													prefix: log.substring(0, match.index),
+													json: JSON.parse(match[1]),
+													hasJson: true
+												};
+											}
+										} catch {}
+										return { prefix: log, hasJson: false };
+									})()}
+
+									{#if parsed.hasJson}
+										<div>
+											<span class="text-foreground">{parsed.prefix}</span>
+											<pre class="mt-1 overflow-x-auto text-green-400">{JSON.stringify(
+													parsed.json,
+													null,
+													2
+												)}</pre>
+										</div>
+									{:else}
+										<span class="text-foreground">{log}</span>
+									{/if}
+								{:else}
+									<span class="text-foreground">{log}</span>
+								{/if}
+							</div>
+						</div>
+					</div>
+				{/each}
+			</div>
+		</div>
 	</Dialog.Content>
 </Dialog.Root>

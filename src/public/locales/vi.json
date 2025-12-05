@@ -183,7 +183,8 @@
       "failed": {
         "title": "Đã có sự cố xảy ra",
         "description": "Bản ghi của bạn chưa được ghi nhận. Nếu việc này tiếp diễn, vui lòng liên hệ với quản trị viên để giải quyết."
-      }
+      },
+      "detail": "Chi tiết"
     },
     "copy": "Sao chép lỗi"
   },
