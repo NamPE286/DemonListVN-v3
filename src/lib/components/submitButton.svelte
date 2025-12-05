@@ -508,7 +508,12 @@
 								{/if}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
-						<AlertDialog.Footer>
+						<AlertDialog.Footer class="gap-[5px] lg:gap-0">
+							{#if submitLog && submitLog.length > 0}
+								<Button on:click={() => (logsOpen = true)} variant="outline">
+									{$_('submit.send.detail')}<br />
+								</Button>
+							{/if}
 							<AlertDialog.Cancel on:click={() => (open = false)}>Close</AlertDialog.Cancel>
 						</AlertDialog.Footer>
 					</AlertDialog.Content>
@@ -521,10 +526,10 @@
 								ⓘ {errorMessage}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
-						<AlertDialog.Footer class='gap-[5px] lg:gap-0'>
+						<AlertDialog.Footer class="gap-[5px] lg:gap-0">
 							{#if submitLog && submitLog.length > 0}
 								<Button on:click={() => (logsOpen = true)} variant="outline">
-								{$_('submit.send.detail')}<br />
+									{$_('submit.send.detail')}<br />
 								</Button>
 							{/if}
 							<Button
