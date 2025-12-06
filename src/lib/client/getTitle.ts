@@ -145,9 +145,9 @@ export function getTitle(list: string, player: any) {
 		}
 
 		return {
-			fullTitle: 'P',
-			title: 'Plastic',
-			color: 'P'
+			fullTitle: 'Plastic',
+			title: 'P',
+			color: 'gray'
 		};
 	}
 }
