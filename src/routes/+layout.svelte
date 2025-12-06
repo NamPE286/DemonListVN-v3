@@ -293,76 +293,71 @@
 					<MagnifyingGlass size={20} />
 				</button>
 			{/if}
-			{#if $user.checked && isVisible}
-				{#if !$user.loggedIn}
-					<Button variant="outline" on:click={signIn}>{$_('nav.sign_in')}</Button>
-				{:else}
-					<SubmitButton />
-					<NotificationButton />
-					<DropdownMenu.Root>
-						<DropdownMenu.Trigger asChild let:builder>
-							<Button
-								variant="outline"
-								size="icon"
-								class={`overflow-hidden rounded-full ${isActive($user.data.supporterUntil) ? 'border-[2px] border-yellow-400' : ''}`}
-								builders={[builder]}
-							>
-								<Avatar.Root>
-									<Avatar.Image
-										class="object-cover"
-										src={`https://cdn.demonlistvn.com/avatars/${$user.data.uid}${
-											isActive($user.data.supporterUntil) && $user.data.isAvatarGif
-												? '.gif'
-												: '.jpg'
-										}?version=${$user.data.avatarVersion}`}
-										alt=""
-									/>
-									<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
-								</Avatar.Root>
-							</Button>
-						</DropdownMenu.Trigger>
-						<DropdownMenu.Content align="end" class="z-[99999] w-[320px]">
-							<DropdownMenu.Label class="font-normal">
-								{#if $user.loggedIn && isActive($user.data.supporterUntil)}
-									<PlayerCard player={$user.data} />
-								{:else}
-									<span class="font-bold"> {$user.data.name} </span>
-								{/if}
-							</DropdownMenu.Label>
-							<DropdownMenu.Separator />
-							<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
-								>{$_('dropdown.profile')}</DropdownMenu.Item
-							>
-							<DropdownMenu.Item on:click={() => goto(`/inventory`)}
-								>{$_('dropdown.inventory')}</DropdownMenu.Item
-							>
-							<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
-								>{$_('dropdown.submissions')}</DropdownMenu.Item
-							>
-							<DropdownMenu.Item on:click={() => goto(`/orders`)}
-								>{$_('dropdown.orders')}</DropdownMenu.Item
-							>
-							{#if $user.data.clan}
-								<DropdownMenu.Item on:click={() => goto(`/clan/${$user.data.clan}`)}
-									>{$_('dropdown.clan')}</DropdownMenu.Item
-								>
-							{/if}
-							{#if $user.data.isTrusted || $user.data.isAdmin}
-								<DropdownMenu.Item on:click={() => goto(`/overwatch`)}
-									>{$_('dropdown.overwatch')}</DropdownMenu.Item
-								>
-							{/if}
-							<DropdownMenu.Separator />
-							<DropdownMenu.Item on:click={signOut}>
-								<span style="color: red">{$_('dropdown.sign_out')}</span>
-							</DropdownMenu.Item>
-						</DropdownMenu.Content>
-					</DropdownMenu.Root>
-				{/if}
-				<SettingButton />
+
+			{#if !$user.loggedIn}
+				<Button variant="outline" on:click={signIn}>{$_('nav.sign_in')}</Button>
 			{:else}
-				<Skeleton class="h-[30px] w-[200px]" />
+				<SubmitButton />
+				<NotificationButton />
+				<DropdownMenu.Root>
+					<DropdownMenu.Trigger asChild let:builder>
+						<Button
+							variant="outline"
+							size="icon"
+							class={`overflow-hidden rounded-full ${isActive($user.data.supporterUntil) ? 'border-[2px] border-yellow-400' : ''}`}
+							builders={[builder]}
+						>
+							<Avatar.Root>
+								<Avatar.Image
+									class="object-cover"
+									src={`https://cdn.demonlistvn.com/avatars/${$user.data.uid}${
+										isActive($user.data.supporterUntil) && $user.data.isAvatarGif ? '.gif' : '.jpg'
+									}?version=${$user.data.avatarVersion}`}
+									alt=""
+								/>
+								<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
+							</Avatar.Root>
+						</Button>
+					</DropdownMenu.Trigger>
+					<DropdownMenu.Content align="end" class="z-[99999] w-[320px]">
+						<DropdownMenu.Label class="font-normal">
+							{#if $user.loggedIn && isActive($user.data.supporterUntil)}
+								<PlayerCard player={$user.data} />
+							{:else}
+								<span class="font-bold"> {$user.data.name} </span>
+							{/if}
+						</DropdownMenu.Label>
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item on:click={() => goto(`/player/${$user.data.uid}`)}
+							>{$_('dropdown.profile')}</DropdownMenu.Item
+						>
+						<DropdownMenu.Item on:click={() => goto(`/inventory`)}
+							>{$_('dropdown.inventory')}</DropdownMenu.Item
+						>
+						<DropdownMenu.Item on:click={() => goto(`/mySubmission/${$user.data.uid}`)}
+							>{$_('dropdown.submissions')}</DropdownMenu.Item
+						>
+						<DropdownMenu.Item on:click={() => goto(`/orders`)}
+							>{$_('dropdown.orders')}</DropdownMenu.Item
+						>
+						{#if $user.data.clan}
+							<DropdownMenu.Item on:click={() => goto(`/clan/${$user.data.clan}`)}
+								>{$_('dropdown.clan')}</DropdownMenu.Item
+							>
+						{/if}
+						{#if $user.data.isTrusted || $user.data.isAdmin}
+							<DropdownMenu.Item on:click={() => goto(`/overwatch`)}
+								>{$_('dropdown.overwatch')}</DropdownMenu.Item
+							>
+						{/if}
+						<DropdownMenu.Separator />
+						<DropdownMenu.Item on:click={signOut}>
+							<span style="color: red">{$_('dropdown.sign_out')}</span>
+						</DropdownMenu.Item>
+					</DropdownMenu.Content>
+				</DropdownMenu.Root>
 			{/if}
+			<SettingButton />
 		</div>
 	</div>
 {/if}
