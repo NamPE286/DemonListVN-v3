@@ -80,7 +80,7 @@ export function getTitle(list: string, player: any) {
 			};
 		}
 
-		if (player.elo >= 3500) {
+		if (player.elo >= 2400) {
 			return {
 				fullTitle: 'Global Elite',
 				title: 'GE',
@@ -88,7 +88,7 @@ export function getTitle(list: string, player: any) {
 			};
 		}
 
-		if (player.elo >= 3000) {
+		if (player.elo >= 2200) {
 			return {
 				fullTitle: 'Elite',
 				title: 'E',
@@ -96,7 +96,7 @@ export function getTitle(list: string, player: any) {
 			};
 		}
 
-		if (player.elo >= 2500) {
+		if (player.elo >= 2000) {
 			return {
 				fullTitle: 'Challenger First Class',
 				title: 'CFE',
@@ -104,7 +104,7 @@ export function getTitle(list: string, player: any) {
 			};
 		}
 
-		if (player.elo >= 2000) {
+		if (player.elo >= 1800) {
 			return {
 				fullTitle: 'Challenger',
 				title: 'CH',
@@ -112,7 +112,7 @@ export function getTitle(list: string, player: any) {
 			};
 		}
 
-		if (player.elo >= 1500) {
+		if (player.elo >= 1600) {
 			return {
 				fullTitle: 'Diamond',
 				title: 'DM',
@@ -120,7 +120,7 @@ export function getTitle(list: string, player: any) {
 			};
 		}
 
-		if (player.elo >= 1000) {
+		if (player.elo >= 1400) {
 			return {
 				fullTitle: 'Gold',
 				title: 'GD',
@@ -128,7 +128,7 @@ export function getTitle(list: string, player: any) {
 			};
 		}
 
-		if (player.elo >= 500) {
+		if (player.elo >= 1200) {
 			return {
 				fullTitle: 'Silver',
 				title: 'SV',
@@ -136,7 +136,7 @@ export function getTitle(list: string, player: any) {
 			};
 		}
 
-		if (player.elo >= 200) {
+		if (player.elo >= 1000) {
 			return {
 				fullTitle: 'Iron',
 				title: 'I',
