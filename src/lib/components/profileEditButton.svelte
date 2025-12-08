@@ -302,7 +302,7 @@
 					<Label for="province" class="text-right">{$_('profile_edit.city')}</Label>
 					<Select.Root bind:selected={cityItem} disabled={provinceItem.value == null}>
 						<Select.Trigger class="col-span-3">
-							<Select.Value placeholder="City" />
+							<Select.Value placeholder={$_('profile_edit.city')} />
 						</Select.Trigger>
 						<Select.Content>
 							<ScrollArea class="h-72">
