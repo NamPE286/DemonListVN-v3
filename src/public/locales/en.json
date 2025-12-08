@@ -289,7 +289,7 @@
     "background": "Background",
     "reset": "Reset",
     "province": "Province",
-    "city": "City",
+    "city": "Ward",
     "hide_profile": "Hide profile",
     "save": "Save changes"
   },
@@ -896,6 +896,11 @@
       "description": "This section contains exclusive features for supporters. Please consider supporting us to unlock these premium features!",
       "go_home": "Go Home",
       "become_supporter": "Become a Supporter"
+    }
+  },
+  "players": {
+    "filter": {
+      "city": "Ward"
     }
   }
 }

@@ -94,8 +94,8 @@
 					</Select.Trigger>
 					<Select.Content>
 						<ScrollArea class="h-[300px]">
-							{#each data.provinces.map[filter.province.value].cities as city}
-								<Select.Item value={city}>{city}</Select.Item>
+							{#each data.provinces.map[filter.province.value].wards as ward}
+								<Select.Item value={ward}>{ward}</Select.Item>
 							{/each}
 						</ScrollArea>
 					</Select.Content>

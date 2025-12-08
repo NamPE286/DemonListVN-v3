@@ -288,7 +288,7 @@
     "background": "Nền",
     "reset": "Đặt lại",
     "province": "Tỉnh",
-    "city": "Thành phố",
+    "city": "Xã/Phường",
     "hide_profile": "Ẩn hồ sơ",
     "save": "Lưu thay đổi"
   },
@@ -726,7 +726,7 @@
     "filter": {
       "location": "Vị trí",
       "province": "Tỉnh",
-      "city": "Thành phố",
+      "city": "Xã/Phường",
       "options": "Tuỳ chọn",
       "sort_by": "Sắp xếp theo",
       "rating": "Điểm xếp hạng",

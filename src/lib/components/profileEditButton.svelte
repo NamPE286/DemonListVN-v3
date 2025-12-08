@@ -306,8 +306,8 @@
 						</Select.Trigger>
 						<Select.Content>
 							<ScrollArea class="h-72">
-								{#each provinces[provinceItem.value].cities as city}
-									<Select.Item value={city}>{city}</Select.Item>
+								{#each provinces[provinceItem.value].wards as ward}
+									<Select.Item value={ward}>{ward}</Select.Item>
 								{/each}
 							</ScrollArea>
 						</Select.Content>
