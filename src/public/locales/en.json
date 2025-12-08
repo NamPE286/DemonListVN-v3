@@ -899,8 +899,24 @@
     }
   },
   "players": {
+    "title": "Players",
     "filter": {
-      "city": "Ward"
+      "location": "Location",
+      "province": "Province",
+      "city": "City",
+      "options": "Options",
+      "sort_by": "Sort by",
+      "rating": "Rating",
+      "featured_list_point": "Featured List point",
+      "sort_ascending": "Ascending",
+      "reset": "Reset"
+    },
+    "table": {
+      "total_player": "Total players",
+      "no": "No.",
+      "player": "Player",
+      "rating": "Rating",
+      "total_point": "Total point"
     }
   }
 }
