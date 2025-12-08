@@ -903,7 +903,7 @@
     "filter": {
       "location": "Location",
       "province": "Province",
-      "city": "City",
+      "city": "Ward",
       "options": "Options",
       "sort_by": "Sort by",
       "rating": "Rating",
