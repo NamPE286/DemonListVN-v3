@@ -734,6 +734,11 @@
     "price": "49.000₫/month",
     "or": "or",
     "store_button": "Check out our store",
+    "alert": {
+      "title": "Support Demon List VN 💖",
+      "description": "Consider becoming a Supporter to help DLVN grow and get exclusive perks!",
+      "learn_more": "Learn more"
+    },
     "top_supporters": {
       "title": "Top Supporters (Last 30 Days)",
       "view_leaderboard": "View full leaderboard →",

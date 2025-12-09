@@ -754,6 +754,11 @@
     "price": "49.000₫/tháng",
     "or": "hoặc",
     "store_button": "Xem cửa hàng của chúng tôi",
+    "alert": {
+      "title": "Ủng hộ Demon List VN 💖",
+      "description": "Trở thành Supporter để ủng hộ và giúp DLVN phát triển hơn, đồng thời nhận các quyền lợi độc quyền!",
+      "learn_more": "Tìm hiểu thêm"
+    },
     "top_supporters": {
       "title": "Supporter Hàng Đầu (30 Ngày Qua)",
       "view_leaderboard": "Xem bảng xếp hạng đầy đủ →",

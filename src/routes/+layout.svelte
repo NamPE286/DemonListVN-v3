@@ -8,6 +8,7 @@
 
 	import HamburgerMenu from 'svelte-radix/HamburgerMenu.svelte';
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
+	import X from 'svelte-radix/Cross2.svelte';
 
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Toaster } from '$lib/components/ui/sonner';
@@ -28,6 +29,7 @@
 	import { onMount } from 'svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { page } from '$app/stores';
 	import { _, locale } from 'svelte-i18n';
 	import PlayerCard from '$lib/components/playerCard.svelte';
@@ -80,6 +82,7 @@
 	let hideNav = false;
 	let removePad = false;
 	let pathname = '';
+	let supporterAlertDismissed = false;
 	$: pathname = $page.url.pathname;
 
 	const isDesktop = mediaQuery('(min-width: 1350px)');
@@ -183,6 +186,10 @@
 			}
 		});
 	});
+
+	function dismissSupporterAlert() {
+		supporterAlertDismissed = true;
+	}
 </script>
 
 <ModeWatcher defaultMode="system" />
@@ -365,22 +372,32 @@
 	<div class="filler"></div>
 {/if}
 
-{#if $user.checked && isVisible && (!$user.loggedIn || !isActive($user.data.supporterUntil)) && pathname !== '/supporter' && !pathname.startsWith('/player/') && !pathname.startsWith('/@')}
-	<Card.Root
-		class="relative z-[10] mx-4 mt-[10px] border-pink-500 bg-pink-300 dark:bg-pink-950 sm:mx-[55px]"
-	>
-		<Card.Content class="mb-[-12px] mt-[10px] text-center">
-			<p class="text-pink-700 dark:text-pink-300">
-				{#if $locale == 'vi'}
-					💖 Trở thành <a href="/supporter" class="underline">Supporter</a> để ủng hộ và giúp DLVN phát
-					triển hơn 💖
-				{:else}
-					💖 Consider becoming a <a href="/supporter" class="underline">Supporter</a> to help DLVN grow!
-					💖
-				{/if}
-			</p>
-		</Card.Content>
-	</Card.Root>
+{#if !supporterAlertDismissed && $user.checked && isVisible && (!$user.loggedIn || !isActive($user.data.supporterUntil)) && pathname !== '/supporter' && !pathname.startsWith('/player/') && !pathname.startsWith('/@')}
+	<div class="px-[5px] pt-[20px] md:px-[55px]">
+		<Alert.Root
+			class="relative flex items-center gap-[10px] border-pink-200 bg-pink-50 pb-[7px] dark:border-pink-800 dark:bg-pink-950"
+		>
+			<div class="text-3xl mt-[-8px]">💖</div>
+			<div>
+				<Alert.Title class="pr-8">{$_('supporter.alert.title')}</Alert.Title>
+				<Alert.Description>
+					{$_('supporter.alert.description')}
+					<a
+						href="/supporter"
+						class="font-semibold underline hover:text-pink-600"
+						>{$_('supporter.alert.learn_more')}</a
+					>
+				</Alert.Description>
+				<button
+					on:click={dismissSupporterAlert}
+					class="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100"
+					aria-label="Dismiss"
+				>
+					<X class="h-4 w-4" />
+				</button>
+			</div>
+		</Alert.Root>
+	</div>
 {/if}
 
 <slot />
