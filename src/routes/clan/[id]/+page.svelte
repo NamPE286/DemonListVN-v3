@@ -810,13 +810,13 @@
 
 <style lang="scss">
 	.pageBackground {
-		position: absolute;
+		position: fixed;
 		inset: 0;
 		background: center/cover no-repeat;
 		filter: blur(24px);
 		transform: scale(1.04);
 		opacity: 0.35;
-		z-index: 0;
+		z-index: -1;
 		pointer-events: none;
 	}
 
@@ -833,11 +833,7 @@
 		grid-template-columns: 400px calc(100% - 400px);
 		gap: 40px;
 		padding-inline: 80px;
-
-		> :not(.pageBackground) {
-			position: relative;
-			z-index: 1;
-		}
+		z-index: 0;
 
 		.banner {
 			width: 100%;
