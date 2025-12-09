@@ -38,7 +38,7 @@
 			{$_('supporter.why_support.title')}
 		</h1>
 		<div class="flex flex-wrap justify-center gap-[10px]">
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.why_support.support_team.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -46,7 +46,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.why_support.server_infrastructure.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -54,7 +54,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.why_support.self_sustaining.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -67,7 +67,7 @@
 			{$_('supporter.perks.title')}
 		</h1>
 		<div class="flex flex-wrap justify-center gap-[10px]">
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.highlighted_name.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -75,7 +75,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.animated_media.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -83,7 +83,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.ads_free.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -91,7 +91,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.priority_queue.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -99,7 +99,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.short_url.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -108,7 +108,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.discord_role.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -116,7 +116,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.discord_notifications.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -124,7 +124,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.exclusive_events.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -132,7 +132,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.autofill_level.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -140,7 +140,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.rating_prediction.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -148,7 +148,15 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
+				<Card.Header>
+					<Card.Title>{$_('supporter.perks.discord_bot.title')}</Card.Title>
+					<Card.Description class="w-[250px]">
+						{$_('supporter.perks.discord_bot.description')}
+					</Card.Description>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.early_access.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
@@ -156,7 +164,7 @@
 					</Card.Description>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root>
+			<Card.Root class="w-[300px]">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.more_coming.title')}</Card.Title>
 					<Card.Description class="w-[250px]">

@@ -812,6 +812,10 @@
       "more_coming": {
         "title": "Umm... that pretty much it",
         "description": "Don't worry. More feature for supporters will be added in the future."
+      },
+      "discord_bot": {
+        "title": "Use advanced Discord Bot command",
+        "description": "Gain access to advanced commands and features in our Discord bot, enhancing your experience."
       }
     },
     "decision": {

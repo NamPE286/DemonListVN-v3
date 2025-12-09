@@ -832,6 +832,10 @@
       "more_coming": {
         "title": "Ừm... đó là tất cả",
         "description": "Đừng lo lắng. Sẽ có thêm nhiều tính năng cho supporter trong tương lai."
+      },
+      "discord_bot": {
+        "title": "Sử dụng lệnh Discord Bot nâng cao",
+        "description": "Có quyền truy cập vào các lệnh và tính năng nâng cao trong bot Discord của chúng tôi, nâng cao trải nghiệm của bạn."
       }
     },
     "decision": {
