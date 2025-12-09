@@ -734,6 +734,20 @@
     "price": "49.000₫/month",
     "or": "or",
     "store_button": "Check out our store",
+    "top_supporters": {
+      "title": "Top Supporters (Last 30 Days)",
+      "view_leaderboard": "View full leaderboard →",
+      "page_title": "Top Supporter",
+      "last_30_days": "Last 30 Days",
+      "last_14_days": "Last 14 Days",
+      "last_7_days": "Last 7 Days",
+      "total_revenue": "Total Revenue",
+      "from_all_supporters": "From all supporters",
+      "top_supporter": "Top Supporter",
+      "average_spending": "Average Spending",
+      "supporters": "supporters",
+      "no_buyers_found": "No buyers found"
+    },
     "why_support": {
       "title": "Why should you support Demon List VN",
       "support_team": {

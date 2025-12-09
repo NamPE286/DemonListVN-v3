@@ -754,6 +754,20 @@
     "price": "49.000₫/tháng",
     "or": "hoặc",
     "store_button": "Xem cửa hàng của chúng tôi",
+    "top_supporters": {
+      "title": "Supporter Hàng Đầu (30 Ngày Qua)",
+      "view_leaderboard": "Xem bảng xếp hạng đầy đủ →",
+      "page_title": "Supporter Hàng Đầu",
+      "last_30_days": "30 Ngày Qua",
+      "last_14_days": "14 Ngày Qua",
+      "last_7_days": "7 Ngày Qua",
+      "total_revenue": "Tổng Doanh Thu",
+      "from_all_supporters": "Từ tất cả supporters",
+      "top_supporter": "Supporter Hàng Đầu",
+      "average_spending": "Chi Tiêu Trung Bình",
+      "supporters": "supporters",
+      "no_buyers_found": "Không tìm thấy người mua"
+    },
     "why_support": {
       "title": "Tại sao bạn nên ủng hộ Demon List VN",
       "support_team": {

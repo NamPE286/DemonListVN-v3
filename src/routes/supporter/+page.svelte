@@ -5,6 +5,10 @@
 	import PaymentButton from '$lib/components/paymentButton.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import { _ } from 'svelte-i18n';
+	import PlayerLink from '$lib/components/playerLink.svelte';
+	import { Star } from 'svelte-radix';
+
+	export let data: any;
 </script>
 
 <svelte:head>
@@ -28,6 +32,57 @@
 				<Button>{$_('supporter.store_button')}</Button>
 			</a>
 		</div>
+
+		{#if data.topBuyers && data.topBuyers.length > 0}
+			<div class="mt-[50px] w-full max-w-[1000px]">
+				<h2 class="mb-4 flex items-center justify-center gap-2 text-center text-2xl font-bold">
+					<Star class="h-6 w-6 text-yellow-500" />
+					{$_('supporter.top_supporters.title')}
+					<Star class="h-6 w-6 text-yellow-500" />
+				</h2>
+				<div class="grid grid-cols-1 gap-3 md:grid-cols-3">
+					{#each data.topBuyers.slice(0, 3) as buyer, index}
+						<Card.Root class="relative overflow-hidden">
+							<div
+								class="absolute bottom-0 left-0 top-0 w-2 {index === 0
+									? 'bg-yellow-500'
+									: index === 1
+										? 'bg-gray-400'
+										: 'bg-amber-600'}"
+							></div>
+							<Card.Header class='flex'>
+								<div
+									class="text-2xl font-bold {index === 0
+										? 'text-yellow-500'
+										: index === 1
+											? 'text-gray-400'
+											: 'text-amber-600'}"
+								>
+									#{index + 1}
+								</div>
+								<div class="flex flex-col justify-between">
+									<div class="flex items-center gap-3">
+										<PlayerLink player={buyer.player} />
+									</div>
+									<div class="text-lg font-semibold text-green-600">
+										{new Intl.NumberFormat('vi-VN', {
+											style: 'currency',
+											currency: 'VND'
+										}).format(buyer.totalAmount)}
+									</div>
+								</div>
+							</Card.Header>
+						</Card.Root>
+					{/each}
+				</div>
+				<div class="mt-4 text-center">
+					<a href="/supporter/top" class="text-sm text-muted-foreground hover:underline">
+						{$_('supporter.top_supporters.view_leaderboard')}
+					</a>
+				</div>
+			</div>
+		{/if}
+
 		<h1 class="mb-[40px] mt-[75px] text-center text-3xl font-bold">
 			{$_('supporter.why_support.title')}
 		</h1>
@@ -57,7 +112,9 @@
 				</Card.Header>
 			</Card.Root>
 		</div>
-		<h1 class="mb-[40px] mt-[40px] text-center text-3xl font-bold">{$_('supporter.perks.title')}</h1>
+		<h1 class="mb-[40px] mt-[40px] text-center text-3xl font-bold">
+			{$_('supporter.perks.title')}
+		</h1>
 		<div class="flex flex-wrap justify-center gap-[10px]">
 			<Card.Root>
 				<Card.Header>
