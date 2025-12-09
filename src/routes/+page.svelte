@@ -101,7 +101,7 @@
 		<Alert.Root
 			class="relative flex items-center gap-[10px] border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
 		>
-			<img src="/discord.svg" alt="Discord" class="mt-[-4px] scale-75" />
+			<img src="/discord.svg" alt="Discord" class="mt-[-4px] scale-75 dark:invert-0 invert" />
 			<div>
 				<Alert.Title class="pr-8">{$_('home.discord_alert.title')}</Alert.Title>
 				<Alert.Description>
