@@ -560,7 +560,7 @@
 		border-bottom: 1px solid;
 		border-color: var(--border1);
 		backdrop-filter: blur(20px);
-		z-index: 20;
+		z-index: 100;
 		.right {
 			display: flex;
 

@@ -209,6 +209,9 @@
       },
       "language": {
         "title": "Language"
+      },
+      "dashboard": {
+        "title": "Use dashboard"
       }
     },
     "api": {
@@ -987,5 +990,33 @@
     "command_params": "Parameters:",
     "param_required": "required",
     "param_optional": "optional"
+  },
+  "dashboard": {
+    "welcome": "Welcome to",
+    "profile": "Your Profile",
+    "login_prompt": "Sign in to view your profile",
+    "login": "Sign In",
+    "pending_submissions": "Pending Submissions",
+    "login_submissions": "Sign in to view submissions",
+    "no_submissions": "No pending submissions",
+    "view_all": "View All",
+    "events": "Events",
+    "no_events": "No active events",
+    "scroll_down": "Scroll down for more",
+    "settings": {
+      "title": "Dashboard Settings",
+      "description": "Customize your dashboard appearance",
+      "bg_url": "Background Image URL",
+      "bg_hint": "Enter a URL to an image for your dashboard background",
+      "bg_saved": "Background saved!",
+      "bg_cleared": "Background cleared!",
+      "save": "Save",
+      "clear": "Clear",
+      "overlay": "Background Overlay",
+      "overlay_none": "None",
+      "overlay_dark": "Darker",
+      "overlay_blur": "Blur",
+      "overlay_both": "Dark + Blur"
+    }
   }
 }

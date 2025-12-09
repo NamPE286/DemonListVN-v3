@@ -8,10 +8,17 @@
 	import { _ } from 'svelte-i18n';
 	import * as Alert from '$lib/components/ui/alert';
 	import { X } from 'lucide-svelte';
+	import Dashboard from './dashboard.svelte';
+	import { user } from '$lib/client';
+	import { isActive } from '$lib/client/isSupporterActive';
+	import { browser } from '$app/environment';
 
 	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
 	let showDiscordAlert = false;
+	let dashboardEnabled = false;
+	let showDashboard = false;
+	let dashboardVisible = false;
 	let recent: any = {
 		dl: null,
 		fl: null,
@@ -68,6 +75,9 @@
 			showDiscordAlert = true;
 		}
 
+		// Check dashboard setting
+		dashboardEnabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
+
 		getRecentDemonListLevel().then((data) => (recent.dl = data));
 		getRecentFeaturedListLevel().then((data) => (recent.fl = data));
 		getRecentPlatformerListLevel().then((data) => (recent.pl = data));
@@ -86,6 +96,38 @@
 		showDiscordAlert = false;
 		localStorage.setItem('discordAlertDismissed', 'true');
 	}
+
+	function animateScrollUp() {
+		// First, scroll to bottom instantly (while dashboard is hidden)
+		window.scrollTo({ top: window.innerHeight, behavior: 'instant' });
+		// Now show the dashboard
+		dashboardVisible = true;
+		// Then animate scroll to top
+		requestAnimationFrame(() => {
+			setTimeout(() => {
+				window.scrollTo({
+					top: 0,
+					behavior: 'smooth'
+				});
+			}, 50);
+		});
+	}
+
+	// Reactively check if dashboard should be shown and trigger scroll animation
+	$: if (browser && $user.checked) {
+		const isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
+		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
+		const shouldShow = isSupporter && enabled;
+		
+		if (shouldShow && !showDashboard) {
+			showDashboard = true;
+			// Scroll up animation when dashboard becomes visible
+			setTimeout(() => animateScrollUp(), 50);
+		} else if (!shouldShow && showDashboard) {
+			showDashboard = false;
+			dashboardVisible = false;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -96,17 +138,26 @@
 	/>
 </svelte:head>
 
+{#if dashboardVisible}
+	<Dashboard {events} />
+{/if}
+
 {#if showDiscordAlert}
 	<div class="px-[5px] pt-[20px] md:px-[55px]">
 		<Alert.Root
-			class="relative flex items-center gap-[10px] pb-[7px] border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
+			class="relative flex items-center gap-[10px] border-blue-200 bg-blue-50 pb-[7px] dark:border-blue-800 dark:bg-blue-950"
 		>
-			<img src="/discord.svg" alt="Discord" class="mt-[-4px] scale-75 dark:invert-0 invert" />
+			<img src="/discord.svg" alt="Discord" class="mt-[-4px] scale-75 invert dark:invert-0" />
 			<div>
 				<Alert.Title class="pr-8">{$_('home.discord_alert.title')}</Alert.Title>
 				<Alert.Description>
 					{$_('home.discord_alert.description')}
-					<a href="https://discord.gg/MnGVdtjq49" target="_blank" class="font-semibold underline hover:text-blue-600">{$_('home.discord_alert.join_now')}</a>
+					<a
+						href="https://discord.gg/MnGVdtjq49"
+						target="_blank"
+						class="font-semibold underline hover:text-blue-600"
+						>{$_('home.discord_alert.join_now')}</a
+					>
 				</Alert.Description>
 				<button
 					on:click={dismissDiscordAlert}
@@ -120,6 +171,7 @@
 	</div>
 {/if}
 
+{#if !showDashboard}
 <div class="promotionWrapper mt-[20px] w-full pl-[50px] pr-[50px]">
 	<Carousel.Root
 		class="h-fit w-full"
@@ -148,6 +200,7 @@
 		<Carousel.Next />
 	</Carousel.Root>
 </div>
+{/if}
 <Ads dataAdFormat="auto" unit="leaderboard" />
 <div class="wrapper">
 	<h4>{$_('home.newest_dl')}</h4>

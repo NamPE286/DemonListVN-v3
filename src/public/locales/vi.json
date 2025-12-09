@@ -208,6 +208,9 @@
       },
       "language": {
         "title": "Ngôn ngữ"
+      },
+      "dashboard": {
+        "title": "Sử dụng trang tổng quan"
       }
     },
     "api": {
@@ -986,5 +989,33 @@
     "command_params": "Tham số:",
     "param_required": "bắt buộc",
     "param_optional": "tùy chọn"
+  },
+  "dashboard": {
+    "welcome": "Chào mừng đến",
+    "profile": "Hồ sơ của bạn",
+    "login_prompt": "Đăng nhập để xem hồ sơ",
+    "login": "Đăng nhập",
+    "pending_submissions": "Bản nộp đang chờ",
+    "login_submissions": "Đăng nhập để xem bản nộp",
+    "no_submissions": "Không có bản nộp đang chờ",
+    "view_all": "Xem tất cả",
+    "events": "Sự kiện",
+    "no_events": "Không có sự kiện nào đang diễn ra",
+    "scroll_down": "Cuộn xuống để xem thêm",
+    "settings": {
+      "title": "Cài đặt Dashboard",
+      "description": "Tuỳ chỉnh giao diện dashboard",
+      "bg_url": "URL hình nền",
+      "bg_hint": "Nhập URL hình ảnh để làm hình nền dashboard",
+      "bg_saved": "Đã lưu hình nền!",
+      "bg_cleared": "Đã xóa hình nền!",
+      "save": "Lưu",
+      "clear": "Xóa",
+      "overlay": "Lớp phủ nền",
+      "overlay_none": "Không",
+      "overlay_dark": "Tối hơn",
+      "overlay_blur": "Mờ",
+      "overlay_both": "Tối + Mờ"
+    }
   }
 }

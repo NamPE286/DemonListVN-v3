@@ -5,6 +5,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { Button } from '$lib/components/ui/button/index.js';
+	import { Switch } from '$lib/components/ui/switch';
 	import { user } from '$lib/client';
 	import { setMode } from 'mode-watcher';
 	import { toast } from 'svelte-sonner';
@@ -16,10 +17,21 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { locale, _ } from 'svelte-i18n';
 	import { Input } from '$lib/components/ui/input';
+	import { browser } from '$app/environment';
 
 	let token = '';
 	let open1 = false;
 	let APIKeys: any[] = [];
+	let dashboardEnabled = browser ? localStorage.getItem('settings.dashboardEnabled') === 'true' : false;
+
+	function toggleDashboard(checked: boolean) {
+		dashboardEnabled = checked;
+		if (browser) {
+			localStorage.setItem('settings.dashboardEnabled', String(checked));
+			// Trigger page reload to apply dashboard change
+			window.location.reload();
+		}
+	}
 
 	async function fetchAPIKeys() {
 		if (!$user.loggedIn) {
@@ -262,6 +274,29 @@
 						>
 							{$locale === 'vi' ? 'Tiếng Việt' : 'English'}
 						</Button>
+					</div>
+				</div>
+				<!-- Dashboard Toggle (Supporter Only) -->
+				<div class="setting">
+					<div class="flex flex-col">
+						<Label>{$_('settings.general.dashboard.title')}</Label>
+					</div>
+					<div class="right">
+						{#if $user.loggedIn && isActive($user.data?.supporterUntil)}
+							<Switch
+								checked={dashboardEnabled}
+								onCheckedChange={toggleDashboard}
+							/>
+						{:else}
+							<Tooltip.Root>
+								<Tooltip.Trigger>
+									<Switch disabled checked={false} />
+								</Tooltip.Trigger>
+								<Tooltip.Content>
+									<p>{$_('settings.general.dashboard.supporter_only') || 'Supporter only'}</p>
+								</Tooltip.Content>
+							</Tooltip.Root>
+						{/if}
 					</div>
 				</div>
 			</Tabs.Content>
