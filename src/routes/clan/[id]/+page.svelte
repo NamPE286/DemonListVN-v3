@@ -818,7 +818,6 @@
 		opacity: 0.35;
 		z-index: 0;
 		pointer-events: none;
-		opacity: 0.15;
 	}
 
 	section {
