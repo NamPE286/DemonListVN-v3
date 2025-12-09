@@ -47,9 +47,11 @@
 	/>
 </div>
 
-<div class="container relative mx-auto max-w-6xl px-4 py-8">
+<div class='relative'>
 	<BigTitle value={$_('supporter.top_supporters.page_title')} />
+</div>
 
+<div class="container relative mx-auto max-w-6xl px-4 py-8">
 	<Tabs.Root value={data.interval} class="mb-6">
 		<Tabs.List class="grid w-full grid-cols-3">
 			<Tabs.Trigger value="30" on:click={() => handleIntervalChange('30')}
@@ -58,24 +60,32 @@
 			<Tabs.Trigger value="14" on:click={() => handleIntervalChange('14')}
 				>{$_('supporter.top_supporters.last_14_days')}</Tabs.Trigger
 			>
-			<Tabs.Trigger value="7" on:click={() => handleIntervalChange('7')}>{$_('supporter.top_supporters.last_7_days')}</Tabs.Trigger>
+			<Tabs.Trigger value="7" on:click={() => handleIntervalChange('7')}
+				>{$_('supporter.top_supporters.last_7_days')}</Tabs.Trigger
+			>
 		</Tabs.List>
 	</Tabs.Root>
 
 	<div class="mb-8 grid gap-4 md:grid-cols-3">
 		<Card>
 			<CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<CardTitle class="text-sm font-medium">{$_('supporter.top_supporters.total_revenue')}</CardTitle>
+				<CardTitle class="text-sm font-medium"
+					>{$_('supporter.top_supporters.total_revenue')}</CardTitle
+				>
 			</CardHeader>
 			<CardContent>
 				<div class="text-2xl font-bold text-green-600">{totalRevenue}</div>
-				<p class="text-xs text-muted-foreground">{$_('supporter.top_supporters.from_all_supporters')}</p>
+				<p class="text-xs text-muted-foreground">
+					{$_('supporter.top_supporters.from_all_supporters')}
+				</p>
 			</CardContent>
 		</Card>
 
 		<Card>
 			<CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<CardTitle class="text-sm font-medium">{$_('supporter.top_supporters.top_supporter')}</CardTitle>
+				<CardTitle class="text-sm font-medium"
+					>{$_('supporter.top_supporters.top_supporter')}</CardTitle
+				>
 			</CardHeader>
 			<CardContent>
 				{#if topBuyer}
@@ -97,11 +107,16 @@
 
 		<Card>
 			<CardHeader class="flex flex-row items-center justify-between space-y-0 pb-2">
-				<CardTitle class="text-sm font-medium">{$_('supporter.top_supporters.average_spending')}</CardTitle>
+				<CardTitle class="text-sm font-medium"
+					>{$_('supporter.top_supporters.average_spending')}</CardTitle
+				>
 			</CardHeader>
 			<CardContent>
 				<div class="text-2xl font-bold">{averageSpending}</div>
-				<p class="text-xs text-muted-foreground">{data.buyers.length} {$_('supporter.top_supporters.supporters')}</p>
+				<p class="text-xs text-muted-foreground">
+					{data.buyers.length}
+					{$_('supporter.top_supporters.supporters')}
+				</p>
 			</CardContent>
 		</Card>
 	</div>
