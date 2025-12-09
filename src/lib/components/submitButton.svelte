@@ -562,7 +562,7 @@
 									navigator.clipboard.writeText(
 										'```json\n' + JSON.stringify(submissionInfo, null, 2) + '```'
 									);
-									toast.success('Copied to clipboard');
+									toast.success($_('toast.clipboard'));
 								}}
 							>
 								{$_('submit.copy') || 'Copy Error'}
