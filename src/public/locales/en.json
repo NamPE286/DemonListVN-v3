@@ -589,7 +589,8 @@
   },
   "home": {
     "newest_dl": "Newest levels from Demon List",
-    "newest_fl": "Newest levels from Featured List"
+    "newest_fl": "Newest levels from Featured List",
+    "newest_pl": "Newest levels from Platformer List"
   },
   "orders": {
     "title": "Orders",

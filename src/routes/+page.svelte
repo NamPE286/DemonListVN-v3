@@ -11,7 +11,8 @@
 	let visible = false;
 	let recent: any = {
 		dl: null,
-		fl: null
+		fl: null,
+		pl: null
 	};
 	let events: any = null;
 
@@ -39,6 +40,18 @@
 		).json();
 	}
 
+	async function getRecentPlatformerListLevel() {
+		const query = new URLSearchParams({
+			end: '9',
+			sortBy: 'created_at',
+			ascending: 'false'
+		});
+
+		return await (
+			await fetch(`${import.meta.env.VITE_API_URL}/list/pl?${query.toString()}`)
+		).json();
+	}
+
 	async function getEvents() {
 		return await (await fetch(`${import.meta.env.VITE_API_URL}/events/ongoing`)).json();
 	}
@@ -48,6 +61,7 @@
 
 		getRecentDemonListLevel().then((data) => (recent.dl = data));
 		getRecentFeaturedListLevel().then((data) => (recent.fl = data));
+		getRecentPlatformerListLevel().then((data) => (recent.pl = data));
 		getEvents().then((data) => (events = data));
 
 		const interval = setInterval(() => {
@@ -146,6 +160,34 @@
 					{#each { length: 5 } as _}
 						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
 							<LevelCard level={null} type="dl" />
+						</Carousel.Item>
+					{/each}
+				</Carousel.Content>
+				<Carousel.Previous />
+				<Carousel.Next />
+			</Carousel.Root>
+		{/if}
+	</div>
+	<h4>{$_('home.newest_pl')}</h4>
+	<div class="carouselWrapper">
+		{#if recent.pl}
+			<Carousel.Root>
+				<Carousel.Content>
+					{#each recent.pl as level}
+						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+							<LevelCard {level} type="pl" />
+						</Carousel.Item>
+					{/each}
+				</Carousel.Content>
+				<Carousel.Previous />
+				<Carousel.Next />
+			</Carousel.Root>
+		{:else}
+			<Carousel.Root>
+				<Carousel.Content>
+					{#each { length: 5 } as _}
+						<Carousel.Item class="sm:basis-1/1 md:basis-1/2 lg:basis-1/3 xl:basis-1/4">
+							<LevelCard level={null} type="pl" />
 						</Carousel.Item>
 					{/each}
 				</Carousel.Content>

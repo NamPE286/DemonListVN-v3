@@ -588,7 +588,8 @@
   },
   "home": {
     "newest_dl": "Levels mới nhất từ Demon List",
-    "newest_fl": "Levels mới nhất từ Featured List"
+    "newest_fl": "Levels mới nhất từ Featured List",
+    "newest_pl": "Levels mới nhất từ Platformer List"
   },
   "orders": {
     "title": "Đơn hàng",
