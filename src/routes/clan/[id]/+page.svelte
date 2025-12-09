@@ -34,7 +34,7 @@
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import Levels from './levels.svelte';
 	import { _ } from 'svelte-i18n';
-	
+
 	export let data: PageData;
 	let editedData = structuredClone(data);
 	let transferUID = '';
@@ -372,7 +372,14 @@
 />
 <RecordDetail {levelID} {uid} bind:open={opened} />
 
-<div class="wrapper">
+<div class="wrapper mt-[-50px] min-h-[100vh] pt-[85px]">
+	{#if isActive(data.boostedUntil)}
+		<div
+			class="pageBackground"
+			aria-hidden="true"
+			style={`background-image: url(https://cdn.demonlistvn.com/clan-photos/${$page.params.id}.jpg?version=${data.imageVersion});`}
+		/>
+	{/if}
 	<div class="leftWrapper">
 		<div class="banner">
 			<img
@@ -387,9 +394,9 @@
 					<h2>{data.name}</h2>
 					<div class="flex items-center gap-[5px]">
 						{#if data.isPublic}
-							<Globe size={20} /> {$_("clan.public")}
+							<Globe size={20} /> {$_('clan.public')}
 						{:else}
-							<LockClosed size={20} /> {$_("clan.invite_only")}
+							<LockClosed size={20} /> {$_('clan.invite_only')}
 						{/if}
 					</div>
 					<div class="flex items-center gap-[5px]">
@@ -405,7 +412,7 @@
 						{/if}
 					</div>
 					{#if invitation}
-						<p class="mb-[-10px] text-center">{$_("clan.invited")}</p>
+						<p class="mb-[-10px] text-center">{$_('clan.invited')}</p>
 					{/if}
 					<div class="bannerBtn">
 						{#if $user.loggedIn}
@@ -414,14 +421,14 @@
 									class="w-full"
 									on:click={() => {
 										acceptInvitation(parseInt(String($page.params.id)));
-									}}>{$_("general.accept")}</Button
+									}}>{$_('general.accept')}</Button
 								>
 								<Button
 									variant="outline"
 									class="w-full"
 									on:click={() => {
 										rejectInvitation(parseInt(String($page.params.id)));
-									}}>{$_("general.reject")}</Button
+									}}>{$_('general.reject')}</Button
 								>
 							{:else if $user.data.clan == $page.params.id}
 								{#if data.isPublic || data.owner == $user.data.uid}
@@ -436,7 +443,7 @@
 					</div>
 					{#if new Date(data.boostedUntil) > new Date()}
 						<p class="text-center text-sm text-gray-500">
-							{$_("clan.boosted_until")}: {new Date(data.boostedUntil).toLocaleDateString('vi-vn')}
+							{$_('clan.boosted_until')}: {new Date(data.boostedUntil).toLocaleDateString('vi-vn')}
 						</p>
 					{/if}
 				</div>
@@ -451,14 +458,14 @@
 		<Tabs.Root bind:value={currentTab} class="flex w-[100%] flex-col items-center">
 			<Tabs.List class="mb-[5px] w-fit">
 				{#if isActive(data.boostedUntil)}
-					<Tabs.Trigger value="home">{$_("clan.tabs.home")}</Tabs.Trigger>
-					<Tabs.Trigger value="levels">{$_("clan.tabs.levels")}</Tabs.Trigger>
+					<Tabs.Trigger value="home">{$_('clan.tabs.home')}</Tabs.Trigger>
+					<Tabs.Trigger value="levels">{$_('clan.tabs.levels')}</Tabs.Trigger>
 				{/if}
-				<Tabs.Trigger value="records">{$_("clan.tabs.records")}</Tabs.Trigger>
-				<Tabs.Trigger value="members">{$_("clan.tabs.members")}</Tabs.Trigger>
+				<Tabs.Trigger value="records">{$_('clan.tabs.records')}</Tabs.Trigger>
+				<Tabs.Trigger value="members">{$_('clan.tabs.members')}</Tabs.Trigger>
 				{#if $user.loggedIn && $user.data.clan == $page.params.id}
-					<Tabs.Trigger value="invitations">{$_("clan.tabs.invitations")}</Tabs.Trigger>
-					<Tabs.Trigger value="settings">{$_("clan.tabs.settings")}</Tabs.Trigger>
+					<Tabs.Trigger value="invitations">{$_('clan.tabs.invitations')}</Tabs.Trigger>
+					<Tabs.Trigger value="settings">{$_('clan.tabs.settings')}</Tabs.Trigger>
 				{/if}
 			</Tabs.List>
 			{#if isActive(data.boostedUntil)}
@@ -480,7 +487,7 @@
 			<Tabs.Content value="members" class="w-full">
 				<div class="filter">
 					<div class="filterItem">
-						<Label>{$_("general.sort_by")}</Label>
+						<Label>{$_('general.sort_by')}</Label>
 						<Select.Root
 							selected={{
 								label: 'A-Z',
@@ -495,16 +502,16 @@
 							</Select.Trigger>
 							<Select.Content>
 								<Select.Item value="name">A-Z</Select.Item>
-								<Select.Item value="rating">{$_("player_card.rating")}</Select.Item>
-								<Select.Item value="totalFLpt">{$_("player_card.featured")}</Select.Item>
+								<Select.Item value="rating">{$_('player_card.rating')}</Select.Item>
+								<Select.Item value="totalFLpt">{$_('player_card.featured')}</Select.Item>
 							</Select.Content>
 						</Select.Root>
 					</div>
 					<div class="filterItem">
-						<Label>{$_("general.ascending")}</Label>
+						<Label>{$_('general.ascending')}</Label>
 						<Switch bind:checked={membersFilter.ascending} />
 					</div>
-					<Button variant="outline" on:click={fetchMembers}>{$_("general.apply")}</Button>
+					<Button variant="outline" on:click={fetchMembers}>{$_('general.apply')}</Button>
 				</div>
 				<Table.Root>
 					<Table.Header>
@@ -575,10 +582,10 @@
 			<Tabs.Content value="records" class="w-full">
 				<div class="filter">
 					<div class="filterItem">
-						<Label>{$_("general.sort_by")}</Label>
+						<Label>{$_('general.sort_by')}</Label>
 						<Select.Root
 							selected={{
-								label: $_("clan.sort.timestamp"),
+								label: $_('clan.sort.timestamp'),
 								value: 'timestamp'
 							}}
 							onSelectedChange={(e) => {
@@ -589,17 +596,17 @@
 								<Select.Value placeholder="Select item to sort by" />
 							</Select.Trigger>
 							<Select.Content>
-								<Select.Item value="timestamp" selected>{$_("clan.sort.timestamp")}</Select.Item>
-								<Select.Item value="dlPt">{$_("clan.sort.dlPt")}</Select.Item>
-								<Select.Item value="flPt">{$_("clan.sort.flPt")}</Select.Item>
+								<Select.Item value="timestamp" selected>{$_('clan.sort.timestamp')}</Select.Item>
+								<Select.Item value="dlPt">{$_('clan.sort.dlPt')}</Select.Item>
+								<Select.Item value="flPt">{$_('clan.sort.flPt')}</Select.Item>
 							</Select.Content>
 						</Select.Root>
 					</div>
 					<div class="filterItem">
-						<Label>{$_("general.ascending")}</Label>
+						<Label>{$_('general.ascending')}</Label>
 						<Switch bind:checked={recordsFilter.ascending} />
 					</div>
-					<Button variant="outline" on:click={fetchRecords}>{$_("general.apply")}</Button>
+					<Button variant="outline" on:click={fetchRecords}>{$_('general.apply')}</Button>
 				</div>
 				<Table.Root>
 					<Table.Header>
@@ -802,6 +809,18 @@
 </div>
 
 <style lang="scss">
+	.pageBackground {
+		position: absolute;
+		inset: 0;
+		background: center/cover no-repeat;
+		filter: blur(24px);
+		transform: scale(1.04);
+		opacity: 0.35;
+		z-index: 0;
+		pointer-events: none;
+		opacity: 0.15;
+	}
+
 	section {
 		h3 {
 			margin-bottom: 10px;
@@ -809,11 +828,17 @@
 	}
 
 	.wrapper {
-		margin-top: 35px;
+		position: relative;
+		overflow: hidden;
 		display: grid;
 		grid-template-columns: 400px calc(100% - 400px);
 		gap: 40px;
 		padding-inline: 80px;
+
+		> :not(.pageBackground) {
+			position: relative;
+			z-index: 1;
+		}
 
 		.banner {
 			width: 100%;
