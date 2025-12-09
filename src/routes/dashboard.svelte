@@ -458,7 +458,6 @@
 							<div class="space-y-2">
 								{#each { length: 2 } as _}
 									<div class="flex items-center gap-3">
-										<Skeleton class="h-8 w-8 rounded" />
 										<div class="flex-1">
 											<Skeleton class="mb-1 h-3 w-24" />
 											<Skeleton class="h-2 w-16" />
