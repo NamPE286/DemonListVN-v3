@@ -8,7 +8,7 @@
 
 	const BOT_INVITE_URL =
 		'https://discord.com/oauth2/authorize?client_id=1071500325338488843&permissions=85056&integration_type=0&scope=bot';
-	const SERVER_INVITE_URL = 'https://discord.gg/demonlistvn';
+	const SERVER_INVITE_URL = 'https://discord.com/invite/MnGVdtjq49';
 
 	interface Command {
 		name: string;
