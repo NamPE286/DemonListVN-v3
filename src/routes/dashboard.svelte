@@ -227,181 +227,359 @@
 		<div class="absolute inset-0 z-[1] backdrop-blur-sm"></div>
 	{/if}
 
-	<!-- Top Left: Clock & Date -->
-	<div class="absolute left-4 top-[70px] z-20">
-		<div class="rounded-xl bg-background/60 p-4 backdrop-blur-md">
-			<div class="text-4xl font-bold tracking-tight md:text-5xl lg:text-6xl">
-				{currentTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+	<!-- Mobile Layout: Stacked content -->
+	<div class="relative z-20 flex h-full min-h-[100vh] w-full flex-col px-3 pt-[70px] sm:px-4 lg:hidden">
+		<!-- Top: Clock & Date + Settings -->
+		<div class="flex items-start justify-between gap-2">
+			<div class="rounded-xl bg-background/60 p-3 backdrop-blur-md sm:p-4">
+				<div class="text-2xl font-bold tracking-tight xs:text-3xl sm:text-4xl">
+					{currentTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+				</div>
+				<div class="mt-1 text-xs text-muted-foreground sm:text-sm">
+					{currentTime.toLocaleDateString('vi-VN', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
+				</div>
 			</div>
-			<div class="mt-1 text-sm text-muted-foreground md:text-base">
-				{currentTime.toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-			</div>
+			<button
+				class="flex-shrink-0 rounded-full bg-background/60 p-2.5 backdrop-blur-md transition-all hover:bg-background/80 sm:p-3"
+				on:click={() => (settingsOpen = true)}
+			>
+				<Gear class="h-4 w-4 sm:h-5 sm:w-5" />
+			</button>
 		</div>
-	</div>
 
-	<!-- Top Right: Settings Button -->
-	<button
-		class="absolute right-4 top-[70px] z-20 rounded-full bg-background/60 p-3 backdrop-blur-md transition-all hover:bg-background/80 md:right-8"
-		on:click={() => (settingsOpen = true)}
-	>
-		<Gear class="h-5 w-5" />
-	</button>
+		<!-- Middle: Cards Grid -->
+		<div class="mt-4 flex flex-1 flex-col gap-3 pb-20 sm:gap-4">
+			<!-- Player Profile -->
+			<div class="w-full">
+				{#if $user.loggedIn && $user.data}
+					<PlayerCard player={$user.data} />
+				{:else if $user.checked}
+					<Card.Root class="bg-background/60 backdrop-blur-md">
+						<Card.Content class="flex flex-col items-center gap-3 py-4 text-center sm:gap-4 sm:py-6">
+							<p class="text-sm text-muted-foreground sm:text-base">{$_('dashboard.login_prompt') || 'Sign in to view your profile'}</p>
+							<Button variant="outline" href="/discord" size="sm">
+								{$_('dashboard.login') || 'Sign In'}
+							</Button>
+						</Card.Content>
+					</Card.Root>
+				{:else}
+					<Card.Root class="bg-background/60 backdrop-blur-md">
+						<Card.Content class="space-y-2 py-3 sm:space-y-3 sm:py-4">
+							<Skeleton class="h-10 w-10 rounded-full sm:h-12 sm:w-12" />
+							<Skeleton class="h-3 w-24 sm:h-4 sm:w-32" />
+							<Skeleton class="h-16 w-full sm:h-20" />
+						</Card.Content>
+					</Card.Root>
+				{/if}
+			</div>
 
-	<!-- Left Side: Player Profile + Pending Submissions -->
-	<div class="absolute bottom-24 left-4 z-20 flex flex-col gap-4 md:left-8">
-		<!-- Pending Submissions -->
-		{#if $user.loggedIn}
-			<Card.Root class="w-[320px] max-w-[calc(100vw-2rem)] bg-background/60 backdrop-blur-md md:w-[350px]">
-				<Card.Header class="pb-2">
-					<Card.Title class="flex items-center justify-between text-base">
-						<span>{$_('dashboard.pending_submissions') || 'Pending Submissions'}</span>
-						{#if submissions.length > 0}
-							<a href={`/mySubmission/${$user.data?.uid}`} class="text-sm text-muted-foreground hover:text-foreground">
-								{$_('dashboard.view_all') || 'View All'} →
-							</a>
+			<!-- Pending Submissions -->
+			{#if $user.loggedIn}
+				<Card.Root class="w-full bg-background/60 backdrop-blur-md">
+					<Card.Header class="px-3 pb-2 pt-3 sm:px-6 sm:pt-6">
+						<Card.Title class="flex items-center justify-between text-sm sm:text-base">
+							<span>{$_('dashboard.pending_submissions') || 'Pending Submissions'}</span>
+							{#if submissions.length > 0}
+								<a href={`/mySubmission/${$user.data?.uid}`} class="text-xs text-muted-foreground hover:text-foreground sm:text-sm">
+									{$_('dashboard.view_all') || 'View All'} →
+								</a>
+							{/if}
+						</Card.Title>
+					</Card.Header>
+					<Card.Content class="px-3 pb-3 sm:px-6 sm:pb-6">
+						{#if loadingSubmissions}
+							<div class="space-y-2">
+								{#each { length: 2 } as _}
+									<div class="flex items-center gap-2 sm:gap-3">
+										<Skeleton class="h-7 w-7 rounded sm:h-8 sm:w-8" />
+										<div class="flex-1">
+											<Skeleton class="mb-1 h-2.5 w-20 sm:h-3 sm:w-24" />
+											<Skeleton class="h-2 w-12 sm:w-16" />
+										</div>
+									</div>
+								{/each}
+							</div>
+						{:else if submissions.length === 0}
+							<p class="py-2 text-center text-xs text-muted-foreground sm:text-sm">{$_('dashboard.no_submissions') || 'No pending submissions'}</p>
+						{:else}
+							<div class="space-y-1">
+								{#each submissions.slice(0, 3) as submission}
+									<a
+										href={`/level/${submission.levelid}`}
+										class="flex items-center gap-2 rounded-md p-1.5 transition-colors hover:bg-muted/50 sm:gap-3 sm:p-2"
+									>
+										<div class="flex h-7 w-7 items-center justify-center rounded bg-muted text-[10px] font-bold sm:h-8 sm:w-8 sm:text-xs">
+											{submission.progress}%
+										</div>
+										<div class="flex-1 overflow-hidden">
+											<p class="truncate text-xs font-medium sm:text-sm">{submission.levels?.name || `Level #${submission.levelid}`}</p>
+											<p class="text-[10px] text-muted-foreground sm:text-xs">#{submission.queueNo || '-'}</p>
+										</div>
+									</a>
+								{/each}
+							</div>
 						{/if}
+					</Card.Content>
+				</Card.Root>
+			{/if}
+
+			<!-- Event Carousel -->
+			<Card.Root class="w-full bg-background/60 backdrop-blur-md">
+				<Card.Header class="px-3 pb-2 pt-3 sm:px-6 sm:pt-6">
+					<Card.Title class="flex items-center justify-between text-sm sm:text-base">
+						<span>{$_('dashboard.events') || 'Events'}</span>
+						<a href="/events" class="text-xs text-muted-foreground hover:text-foreground sm:text-sm">
+							{$_('dashboard.view_all') || 'View All'} →
+						</a>
 					</Card.Title>
 				</Card.Header>
-				<Card.Content>
-					{#if loadingSubmissions}
-						<div class="space-y-2">
-							{#each { length: 2 } as _}
-								<div class="flex items-center gap-3">
-									<Skeleton class="h-8 w-8 rounded" />
-									<div class="flex-1">
-										<Skeleton class="mb-1 h-3 w-24" />
-										<Skeleton class="h-2 w-16" />
-									</div>
-								</div>
-							{/each}
-						</div>
-					{:else if submissions.length === 0}
-						<p class="py-2 text-center text-sm text-muted-foreground">{$_('dashboard.no_submissions') || 'No pending submissions'}</p>
+				<Card.Content class="px-3 pb-3 sm:px-6 sm:pb-6">
+					{#if events && events.length > 0}
+						<Carousel.Root
+							class="w-full"
+							plugins={[
+								Autoplay({
+									delay: 5000
+								})
+							]}
+						>
+							<Carousel.Content>
+								{#each events as event}
+									<Carousel.Item>
+										<a href={`/event/${event.id}`} class="block">
+											<div class="event-card relative overflow-hidden rounded-lg">
+												<img
+													src={event.imgUrl || `https://cdn.demonlistvn.com/event-banner/${event.id}.webp`}
+													alt={event.title}
+													class="aspect-[16/9] w-full object-cover"
+												/>
+												<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+												<div class="absolute bottom-0 left-0 right-0 p-2 sm:p-3">
+													<div class="mb-1 flex flex-wrap items-center gap-1">
+														<div class="flex items-center gap-1 rounded-full bg-white/20 px-1.5 py-0.5 text-[10px] text-white backdrop-blur-sm sm:px-2 sm:text-xs">
+															<Clock class="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+															{getEventInterval(event)}
+														</div>
+														{#if event.isRanked}
+															<div class="rounded-full bg-yellow-500/80 px-1.5 py-0.5 text-[10px] text-white sm:px-2 sm:text-xs">
+																{$_('events.ranked') || 'Ranked'}
+															</div>
+														{/if}
+													</div>
+													<h3 class="line-clamp-1 text-xs font-semibold text-white sm:text-sm">{event.title}</h3>
+												</div>
+											</div>
+										</a>
+									</Carousel.Item>
+								{/each}
+							</Carousel.Content>
+							<div class="mt-2 flex justify-center gap-2">
+								<Carousel.Previous class="static h-6 w-6 translate-x-0 translate-y-0 sm:h-7 sm:w-7" />
+								<Carousel.Next class="static h-6 w-6 translate-x-0 translate-y-0 sm:h-7 sm:w-7" />
+							</div>
+						</Carousel.Root>
 					{:else}
-						<div class="space-y-1">
-							{#each submissions.slice(0, 3) as submission}
-								<a
-									href={`/level/${submission.levelid}`}
-									class="flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted/50"
-								>
-									<div class="flex h-8 w-8 items-center justify-center rounded bg-muted text-xs font-bold">
-										{submission.progress}%
-									</div>
-									<div class="flex-1 overflow-hidden">
-										<p class="truncate text-sm font-medium">{submission.levels?.name || `Level #${submission.levelid}`}</p>
-										<p class="text-xs text-muted-foreground">#{submission.queueNo || '-'}</p>
-									</div>
-								</a>
-							{/each}
+						<div class="flex aspect-[16/9] items-center justify-center rounded-lg bg-muted">
+							<p class="text-xs text-muted-foreground sm:text-sm">{$_('dashboard.no_events') || 'No active events'}</p>
 						</div>
 					{/if}
 				</Card.Content>
 			</Card.Root>
-		{/if}
-
-		<!-- Player Profile -->
-		<div class="w-[320px] max-w-[calc(100vw-2rem)] md:w-[350px]">
-			{#if $user.loggedIn && $user.data}
-				<PlayerCard player={$user.data} />
-			{:else if $user.checked}
-				<Card.Root class="bg-background/60 backdrop-blur-md">
-					<Card.Content class="flex flex-col items-center gap-4 py-6 text-center">
-						<p class="text-muted-foreground">{$_('dashboard.login_prompt') || 'Sign in to view your profile'}</p>
-						<Button variant="outline" href="/discord">
-							{$_('dashboard.login') || 'Sign In'}
-						</Button>
-					</Card.Content>
-				</Card.Root>
-			{:else}
-				<Card.Root class="bg-background/60 backdrop-blur-md">
-					<Card.Content class="space-y-3 py-4">
-						<Skeleton class="h-12 w-12 rounded-full" />
-						<Skeleton class="h-4 w-32" />
-						<Skeleton class="h-20 w-full" />
-					</Card.Content>
-				</Card.Root>
-			{/if}
 		</div>
+
+		<!-- Scroll Down Indicator (Mobile) -->
+		<button
+			class="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 animate-bounce flex-col items-center gap-1 text-foreground/80 transition-colors hover:text-foreground sm:bottom-6"
+			on:click={scrollToContent}
+		>
+			<span class="rounded-full bg-background/60 px-3 py-1 text-xs font-medium backdrop-blur-md sm:px-4 sm:text-sm">{$_('dashboard.scroll_down') || 'Scroll down for more'}</span>
+			<ChevronDown class="h-5 w-5 sm:h-6 sm:w-6" />
+		</button>
 	</div>
 
-	<!-- Bottom Right: Event Carousel -->
-	<div class="absolute bottom-24 right-4 z-20 w-[320px] max-w-[calc(100vw-2rem)] md:right-8 md:w-[380px]">
-		<Card.Root class="bg-background/60 backdrop-blur-md">
-			<Card.Header class="pb-2">
-				<Card.Title class="flex items-center justify-between text-base">
-					<span>{$_('dashboard.events') || 'Events'}</span>
-					<a href="/events" class="text-sm text-muted-foreground hover:text-foreground">
-						{$_('dashboard.view_all') || 'View All'} →
-					</a>
-				</Card.Title>
-			</Card.Header>
-			<Card.Content>
-				{#if events && events.length > 0}
-					<Carousel.Root
-						class="w-full"
-						plugins={[
-							Autoplay({
-								delay: 5000
-							})
-						]}
-					>
-						<Carousel.Content>
-							{#each events as event}
-								<Carousel.Item>
-									<a href={`/event/${event.id}`} class="block">
-										<div class="event-card relative overflow-hidden rounded-lg">
-											<img
-												src={event.imgUrl || `https://cdn.demonlistvn.com/event-banner/${event.id}.webp`}
-												alt={event.title}
-												class="aspect-[16/9] w-full object-cover"
-											/>
-											<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
-											<div class="absolute bottom-0 left-0 right-0 p-3">
-												<div class="mb-1 flex flex-wrap items-center gap-1">
-													<div class="flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-xs text-white backdrop-blur-sm">
-														<Clock class="h-3 w-3" />
-														{getEventInterval(event)}
-													</div>
-													{#if event.isRanked}
-														<div class="rounded-full bg-yellow-500/80 px-2 py-0.5 text-xs text-white">
-															{$_('events.ranked') || 'Ranked'}
-														</div>
-													{/if}
-												</div>
-												<h3 class="line-clamp-1 text-sm font-semibold text-white">{event.title}</h3>
-											</div>
+	<!-- Desktop Layout: Absolute positioned elements -->
+	<div class="hidden lg:block">
+		<!-- Top Left: Clock & Date -->
+		<div class="absolute left-8 top-[70px] z-20">
+			<div class="rounded-xl bg-background/60 p-4 backdrop-blur-md">
+				<div class="text-5xl font-bold tracking-tight xl:text-6xl">
+					{currentTime.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+				</div>
+				<div class="mt-1 text-base text-muted-foreground">
+					{currentTime.toLocaleDateString('vi-VN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+				</div>
+			</div>
+		</div>
+
+		<!-- Top Right: Settings Button -->
+		<button
+			class="absolute right-8 top-[70px] z-20 rounded-full bg-background/60 p-3 backdrop-blur-md transition-all hover:bg-background/80"
+			on:click={() => (settingsOpen = true)}
+		>
+			<Gear class="h-5 w-5" />
+		</button>
+
+		<!-- Left Side: Player Profile + Pending Submissions -->
+		<div class="absolute bottom-24 left-8 z-20 flex flex-col gap-4">
+			<!-- Pending Submissions -->
+			{#if $user.loggedIn}
+				<Card.Root class="w-[350px] bg-background/60 backdrop-blur-md xl:w-[380px]">
+					<Card.Header class="pb-2">
+						<Card.Title class="flex items-center justify-between text-base">
+							<span>{$_('dashboard.pending_submissions') || 'Pending Submissions'}</span>
+							{#if submissions.length > 0}
+								<a href={`/mySubmission/${$user.data?.uid}`} class="text-sm text-muted-foreground hover:text-foreground">
+									{$_('dashboard.view_all') || 'View All'} →
+								</a>
+							{/if}
+						</Card.Title>
+					</Card.Header>
+					<Card.Content>
+						{#if loadingSubmissions}
+							<div class="space-y-2">
+								{#each { length: 2 } as _}
+									<div class="flex items-center gap-3">
+										<Skeleton class="h-8 w-8 rounded" />
+										<div class="flex-1">
+											<Skeleton class="mb-1 h-3 w-24" />
+											<Skeleton class="h-2 w-16" />
+										</div>
+									</div>
+								{/each}
+							</div>
+						{:else if submissions.length === 0}
+							<p class="py-2 text-center text-sm text-muted-foreground">{$_('dashboard.no_submissions') || 'No pending submissions'}</p>
+						{:else}
+							<div class="space-y-1">
+								{#each submissions.slice(0, 3) as submission}
+									<a
+										href={`/level/${submission.levelid}`}
+										class="flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted/50"
+									>
+										<div class="flex h-8 w-8 items-center justify-center rounded bg-muted text-xs font-bold">
+											{submission.progress}%
+										</div>
+										<div class="flex-1 overflow-hidden">
+											<p class="truncate text-sm font-medium">{submission.levels?.name || `Level #${submission.levelid}`}</p>
+											<p class="text-xs text-muted-foreground">#{submission.queueNo || '-'}</p>
 										</div>
 									</a>
-								</Carousel.Item>
-							{/each}
-						</Carousel.Content>
-						<div class="mt-2 flex justify-center gap-2">
-							<Carousel.Previous class="static h-7 w-7 translate-x-0 translate-y-0" />
-						<Carousel.Next class="static h-7 w-7 translate-x-0 translate-y-0" />
-					</div>
-				</Carousel.Root>
-			{:else}
-				<div class="flex aspect-[16/9] items-center justify-center rounded-lg bg-muted">
-					<p class="text-sm text-muted-foreground">{$_('dashboard.no_events') || 'No active events'}</p>
-				</div>
+								{/each}
+							</div>
+						{/if}
+					</Card.Content>
+				</Card.Root>
 			{/if}
-		</Card.Content>
-	</Card.Root>
-</div>
 
-	<!-- Scroll Down Indicator -->
-	<button
-		class="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 animate-bounce flex-col items-center gap-1 text-foreground/80 transition-colors hover:text-foreground"
-		on:click={scrollToContent}
-	>
-		<span class="rounded-full bg-background/60 px-4 py-1 text-sm font-medium backdrop-blur-md">{$_('dashboard.scroll_down') || 'Scroll down for more'}</span>
-		<ChevronDown class="h-6 w-6" />
-	</button>
+			<!-- Player Profile -->
+			<div class="w-[350px] xl:w-[380px]">
+				{#if $user.loggedIn && $user.data}
+					<PlayerCard player={$user.data} />
+				{:else if $user.checked}
+					<Card.Root class="bg-background/60 backdrop-blur-md">
+						<Card.Content class="flex flex-col items-center gap-4 py-6 text-center">
+							<p class="text-muted-foreground">{$_('dashboard.login_prompt') || 'Sign in to view your profile'}</p>
+							<Button variant="outline" href="/discord">
+								{$_('dashboard.login') || 'Sign In'}
+							</Button>
+						</Card.Content>
+					</Card.Root>
+				{:else}
+					<Card.Root class="bg-background/60 backdrop-blur-md">
+						<Card.Content class="space-y-3 py-4">
+							<Skeleton class="h-12 w-12 rounded-full" />
+							<Skeleton class="h-4 w-32" />
+							<Skeleton class="h-20 w-full" />
+						</Card.Content>
+					</Card.Root>
+				{/if}
+			</div>
+		</div>
+
+		<!-- Bottom Right: Event Carousel -->
+		<div class="absolute bottom-24 right-8 z-20 w-[380px] xl:w-[420px]">
+			<Card.Root class="bg-background/60 backdrop-blur-md">
+				<Card.Header class="pb-2">
+					<Card.Title class="flex items-center justify-between text-base">
+						<span>{$_('dashboard.events') || 'Events'}</span>
+						<a href="/events" class="text-sm text-muted-foreground hover:text-foreground">
+							{$_('dashboard.view_all') || 'View All'} →
+						</a>
+					</Card.Title>
+				</Card.Header>
+				<Card.Content>
+					{#if events && events.length > 0}
+						<Carousel.Root
+							class="w-full"
+							plugins={[
+								Autoplay({
+									delay: 5000
+								})
+							]}
+						>
+							<Carousel.Content>
+								{#each events as event}
+									<Carousel.Item>
+										<a href={`/event/${event.id}`} class="block">
+											<div class="event-card relative overflow-hidden rounded-lg">
+												<img
+													src={event.imgUrl || `https://cdn.demonlistvn.com/event-banner/${event.id}.webp`}
+													alt={event.title}
+													class="aspect-[16/9] w-full object-cover"
+												/>
+												<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+												<div class="absolute bottom-0 left-0 right-0 p-3">
+													<div class="mb-1 flex flex-wrap items-center gap-1">
+														<div class="flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-xs text-white backdrop-blur-sm">
+															<Clock class="h-3 w-3" />
+															{getEventInterval(event)}
+														</div>
+														{#if event.isRanked}
+															<div class="rounded-full bg-yellow-500/80 px-2 py-0.5 text-xs text-white">
+																{$_('events.ranked') || 'Ranked'}
+															</div>
+														{/if}
+													</div>
+													<h3 class="line-clamp-1 text-sm font-semibold text-white">{event.title}</h3>
+												</div>
+											</div>
+										</a>
+									</Carousel.Item>
+								{/each}
+							</Carousel.Content>
+							<div class="mt-2 flex justify-center gap-2">
+								<Carousel.Previous class="static h-7 w-7 translate-x-0 translate-y-0" />
+								<Carousel.Next class="static h-7 w-7 translate-x-0 translate-y-0" />
+							</div>
+						</Carousel.Root>
+					{:else}
+						<div class="flex aspect-[16/9] items-center justify-center rounded-lg bg-muted">
+							<p class="text-sm text-muted-foreground">{$_('dashboard.no_events') || 'No active events'}</p>
+						</div>
+					{/if}
+				</Card.Content>
+			</Card.Root>
+		</div>
+
+		<!-- Scroll Down Indicator (Desktop) -->
+		<button
+			class="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 animate-bounce flex-col items-center gap-1 text-foreground/80 transition-colors hover:text-foreground"
+			on:click={scrollToContent}
+		>
+			<span class="rounded-full bg-background/60 px-4 py-1 text-sm font-medium backdrop-blur-md">{$_('dashboard.scroll_down') || 'Scroll down for more'}</span>
+			<ChevronDown class="h-6 w-6" />
+		</button>
+	</div>
 </div><style lang="scss">
 	.dashboard-hero {
 		background-size: cover;
 		background-position: center;
-		background-attachment: fixed;
+		// Use scroll on mobile for better performance
+		background-attachment: scroll;
+		
+		@media (min-width: 1024px) {
+			background-attachment: fixed;
+		}
 	}
 
 	.event-card {
@@ -430,5 +608,13 @@
 
 	.animate-bounce {
 		animation: bounce 2s infinite;
+	}
+
+	// Extra small breakpoint for very small phones
+	@media (max-width: 350px) {
+		:global(.dashboard-hero) {
+			padding-left: 0.5rem !important;
+			padding-right: 0.5rem !important;
+		}
 	}
 </style>
