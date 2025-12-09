@@ -106,7 +106,7 @@
 				<Alert.Title class="pr-8">{$_('home.discord_alert.title')}</Alert.Title>
 				<Alert.Description>
 					{$_('home.discord_alert.description')}
-					<a href="/link/discord" class="font-semibold underline hover:text-blue-600">{$_('home.discord_alert.join_now')}</a>
+					<a href="https://discord.gg/MnGVdtjq49" target="_blank" class="font-semibold underline hover:text-blue-600">{$_('home.discord_alert.join_now')}</a>
 				</Alert.Description>
 				<button
 					on:click={dismissDiscordAlert}
