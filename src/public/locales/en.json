@@ -590,7 +590,12 @@
   "home": {
     "newest_dl": "Newest levels from Demon List",
     "newest_fl": "Newest levels from Featured List",
-    "newest_pl": "Newest levels from Platformer List"
+    "newest_pl": "Newest levels from Platformer List",
+    "discord_alert": {
+      "title": "Join our Discord Server!",
+      "description": "Connect with the community and get latest updates and annoucements.",
+      "join_now": "Join now"
+    }
   },
   "orders": {
     "title": "Orders",

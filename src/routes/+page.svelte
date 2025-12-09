@@ -6,9 +6,12 @@
 	import EventBanner from './event/eventBanner.svelte';
 	import Ads from '$lib/components/ads.svelte';
 	import { _ } from 'svelte-i18n';
+	import * as Alert from '$lib/components/ui/alert';
+	import { X } from 'lucide-svelte';
 
 	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
+	let showDiscordAlert = false;
 	let recent: any = {
 		dl: null,
 		fl: null,
@@ -59,6 +62,12 @@
 	onMount(() => {
 		visible = true;
 
+		// Check if Discord alert has been dismissed
+		const discordAlertDismissed = localStorage.getItem('discordAlertDismissed');
+		if (!discordAlertDismissed) {
+			showDiscordAlert = true;
+		}
+
 		getRecentDemonListLevel().then((data) => (recent.dl = data));
 		getRecentFeaturedListLevel().then((data) => (recent.fl = data));
 		getRecentPlatformerListLevel().then((data) => (recent.pl = data));
@@ -72,6 +81,11 @@
 			clearInterval(interval);
 		};
 	});
+
+	function dismissDiscordAlert() {
+		showDiscordAlert = false;
+		localStorage.setItem('discordAlertDismissed', 'true');
+	}
 </script>
 
 <svelte:head>
@@ -81,6 +95,30 @@
 		content="Chào mừng đến với Demon List VN, nơi chúng tôi theo dõi những demon khó nhất được tạo ra, xác minh và những demon khó nhất được đánh bại bởi người Việt Nam!"
 	/>
 </svelte:head>
+
+{#if showDiscordAlert}
+	<div class="px-[5px] pt-[20px] md:px-[55px]">
+		<Alert.Root
+			class="relative flex items-center gap-[10px] border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950"
+		>
+			<img src="/discord.svg" alt="Discord" class="mt-[-4px] scale-75" />
+			<div>
+				<Alert.Title class="pr-8">{$_('home.discord_alert.title')}</Alert.Title>
+				<Alert.Description>
+					{$_('home.discord_alert.description')}
+					<a href="/link/discord" class="font-semibold underline hover:text-blue-600">{$_('home.discord_alert.join_now')}</a>
+				</Alert.Description>
+				<button
+					on:click={dismissDiscordAlert}
+					class="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100"
+					aria-label="Dismiss"
+				>
+					<X class="h-4 w-4" />
+				</button>
+			</div>
+		</Alert.Root>
+	</div>
+{/if}
 
 <div class="promotionWrapper mt-[20px] w-full pl-[50px] pr-[50px]">
 	<Carousel.Root

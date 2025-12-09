@@ -589,7 +589,12 @@
   "home": {
     "newest_dl": "Levels mới nhất từ Demon List",
     "newest_fl": "Levels mới nhất từ Featured List",
-    "newest_pl": "Levels mới nhất từ Platformer List"
+    "newest_pl": "Levels mới nhất từ Platformer List",
+    "discord_alert": {
+      "title": "Tham gia máy chủ Discord của chúng tôi!",
+      "description": "Kết nối với cộng đồng và nhận cập nhật cũng như thông báo mới nhất.",
+      "join_now": "Tham gia ngay"
+    }
   },
   "orders": {
     "title": "Đơn hàng",
