@@ -587,7 +587,8 @@
     "cancel": {
       "title": "Huỷ bản nộp?",
       "description": "Hành động này không thể hoàn tác."
-    }
+    },
+    "queue": "Số thứ tự"
   },
   "home": {
     "newest_dl": "Levels mới nhất từ Demon List",

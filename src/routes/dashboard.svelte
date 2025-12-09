@@ -18,8 +18,12 @@
 	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
 	import { toast } from 'svelte-sonner';
 	import { _ } from 'svelte-i18n';
+	import RecordDetail from '$lib/components/recordDetail.svelte';
 
 	export let events: any[];
+
+	let selectedSubmission: any = null;
+	let recordDetailOpen = false;
 
 	let dashboardBg: string = '';
 	let tempBgUrl: string = '';
@@ -304,18 +308,33 @@
 						{:else}
 							<div class="space-y-1">
 								{#each submissions.slice(0, 3) as submission}
-									<a
-										href={`/level/${submission.levelid}`}
-										class="flex items-center gap-2 rounded-md p-1.5 transition-colors hover:bg-muted/50 sm:gap-3 sm:p-2"
+									<button
+										on:click={() => {
+											selectedSubmission = submission;
+											recordDetailOpen = true;
+										}}
+										class="flex w-full items gap-2 rounded-md p-1.5 transition-colors hover:bg-muted/50 sm:gap-3 sm:p-2"
 									>
-										<div class="flex h-7 w-7 items-center justify-center rounded bg-muted text-[10px] font-bold sm:h-8 sm:w-8 sm:text-xs">
-											{submission.progress}%
-										</div>
 										<div class="flex-1 overflow-hidden">
-											<p class="truncate text-xs font-medium sm:text-sm">{submission.levels?.name || `Level #${submission.levelid}`}</p>
-											<p class="text-[10px] text-muted-foreground sm:text-xs">#{submission.queueNo || '-'}</p>
+											<p class="truncate text-xs font-medium sm:text-sm">{submission.levels.name}</p>
+											<div class="flex items-center gap-1 text-[10px] text-muted-foreground sm:text-xs">
+												{#if !submission.levels?.isPlatformer}
+													<span>{submission.progress}%</span>
+												{/if}
+												{#if submission.levels?.isPlatformer}
+													<span>{Math.floor(submission.progress / 60000)}:{Math.floor((submission.progress % 60000) / 1000).toString().padStart(2, '0')}.{(submission.progress % 1000).toString().padStart(3, '0')}</span>
+												{/if}
+												<span>•</span>
+												{#if submission.needMod}
+													<span>{$_('submissions.forwarded')}</span>
+												{:else if !submission.queueNo}
+													<span>-</span>
+												{:else}
+													<span>Queue: {submission.queueNo}</span>
+												{/if}
+											</div>
 										</div>
-									</a>
+									</button>
 								{/each}
 							</div>
 						{/if}
@@ -452,18 +471,33 @@
 						{:else}
 							<div class="space-y-1">
 								{#each submissions.slice(0, 3) as submission}
-									<a
-										href={`/level/${submission.levelid}`}
-										class="flex items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted/50"
+									<button
+										on:click={() => {
+											selectedSubmission = submission;
+											recordDetailOpen = true;
+										}}
+										class="flex w-full items-center gap-3 rounded-md p-2 transition-colors hover:bg-muted/50"
 									>
-										<div class="flex h-8 w-8 items-center justify-center rounded bg-muted text-xs font-bold">
-											{submission.progress}%
+										<div class="flex flex-col overflow-hidden">
+											<p class="truncate text-sm font-medium">{submission.levels.name}</p>
+											<div class="flex items-center gap-1 text-xs text-muted-foreground">
+												{#if !submission.levels?.isPlatformer}
+													<span>{submission.progress}%</span>
+												{/if}
+												{#if submission.levels?.isPlatformer}
+													<span>{Math.floor(submission.progress / 60000)}:{Math.floor((submission.progress % 60000) / 1000).toString().padStart(2, '0')}.{(submission.progress % 1000).toString().padStart(3, '0')}</span>
+												{/if}
+												<span>•</span>
+												{#if submission.needMod}
+													<span>{$_('submissions.forwarded') || 'Forwarded'}</span>
+												{:else if !submission.queueNo}
+													<span>-</span>
+												{:else}
+													<span>{$_('submissions.queue')}: {submission.queueNo}</span>
+												{/if}
+											</div>
 										</div>
-										<div class="flex-1 overflow-hidden">
-											<p class="truncate text-sm font-medium">{submission.levels?.name || `Level #${submission.levelid}`}</p>
-											<p class="text-xs text-muted-foreground">#{submission.queueNo || '-'}</p>
-										</div>
-									</a>
+									</button>
 								{/each}
 							</div>
 						{/if}
@@ -570,7 +604,17 @@
 			<ChevronDown class="h-6 w-6" />
 		</button>
 	</div>
-</div><style lang="scss">
+</div>
+
+{#if selectedSubmission && $user.data}
+	<RecordDetail
+		uid={$user.data.uid}
+		levelID={selectedSubmission.levelid}
+		bind:open={recordDetailOpen}
+	/>
+{/if}
+
+<style lang="scss">
 	.dashboard-hero {
 		background-size: cover;
 		background-position: center;

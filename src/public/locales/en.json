@@ -588,7 +588,8 @@
     "cancel": {
       "title": "Cancel submission?",
       "description": "This action cannot be undone."
-    }
+    },
+    "queue": "Queue"
   },
   "home": {
     "newest_dl": "Newest levels from Demon List",
