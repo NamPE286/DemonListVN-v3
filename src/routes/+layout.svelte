@@ -14,7 +14,6 @@
 	import { Toaster } from '$lib/components/ui/sonner';
 	import * as DropdownMenu from '$lib/components/ui/dropdown-menu/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { LoadingBar } from 'svelte-loading-bar';
 
 	import Search from '$lib/components/search.svelte';
@@ -28,7 +27,6 @@
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
-	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Alert from '$lib/components/ui/alert/index.js';
 	import { page } from '$app/stores';
 	import { _, locale } from 'svelte-i18n';
@@ -55,6 +53,7 @@
 			route: 'https://github.com/NamPE286/DemonListVN-geode-mod/releases',
 			name: $locale === 'en' ? 'Mod' : 'Mod'
 		},
+		{ route: '/discord', name: 'Discord' },
 		{ route: '/rules', name: $locale === 'en' ? 'Rules' : 'Luật' },
 		{ route: '/store', name: $locale === 'en' ? 'Store' : 'Cửa hàng' },
 		{
@@ -377,14 +376,12 @@
 		<Alert.Root
 			class="relative flex items-center gap-[10px] border-pink-200 bg-pink-50 pb-[7px] dark:border-pink-800 dark:bg-pink-950"
 		>
-			<div class="text-3xl mt-[-8px]">💖</div>
+			<div class="mt-[-8px] text-3xl">💖</div>
 			<div>
 				<Alert.Title class="pr-8">{$_('supporter.alert.title')}</Alert.Title>
 				<Alert.Description>
 					{$_('supporter.alert.description')}
-					<a
-						href="/supporter"
-						class="font-semibold underline hover:text-pink-600"
+					<a href="/supporter" class="font-semibold underline hover:text-pink-600"
 						>{$_('supporter.alert.learn_more')}</a
 					>
 				</Alert.Description>

@@ -946,5 +946,45 @@
       "go_home": "Về Trang Chủ",
       "become_supporter": "Trở Thành Supporter"
     }
+  },
+  "discord_bot": {
+    "title": "Discord Bot",
+    "page_title": "Discord",
+    "page_description": "Tham gia cộng đồng hoặc thêm bot vào server của bạn",
+    "description": "Truy cập Demon List VN ngay trong Discord",
+    "server_title": "Tham Gia Server",
+    "server_description": "Kết nối với cộng đồng Demon List VN",
+    "server_feature_1": "Trò chuyện với người chơi khác",
+    "server_feature_2": "Nhận thông báo & cập nhật mới nhất",
+    "server_feature_3": "Tham gia các sự kiện",
+    "join_server": "Tham Gia Server",
+    "bot_title": "Thêm Bot",
+    "bot_description": "Đưa Demon List VN vào server của bạn",
+    "bot_feature_1": "Lệnh slash để truy cập nhanh",
+    "bot_feature_2": "Cập nhật dữ liệu theo thời gian thực",
+    "bot_feature_3": "Dễ dàng cài đặt",
+    "add_button": "Thêm vào Server",
+    "features_title": "Tính Năng Bot",
+    "features_subtitle": "Mọi thứ bạn cần ngay trong Discord",
+    "feature_level_search": {
+      "title": "Tra cứu level",
+      "description": "Xem thông tin chi tiết về bất kỳ level nào trong Demon List VN"
+    },
+    "feature_leaderboard": {
+      "title": "Bảng xếp hạng",
+      "description": "Theo dõi thứ hạng của người chơi trên các list khác nhau"
+    },
+    "feature_player_profile": {
+      "title": "Hồ sơ người chơi",
+      "description": "Xem hồ sơ, bản ghi và thành tích của người chơi"
+    },
+    "feature_latest_records": {
+      "title": "Bản ghi mới nhất",
+      "description": "Cập nhật các bản ghi được chấp nhận gần đây nhất"
+    },
+    "commands_title": "Danh sách lệnh",
+    "command_params": "Tham số:",
+    "param_required": "bắt buộc",
+    "param_optional": "tùy chọn"
   }
 }

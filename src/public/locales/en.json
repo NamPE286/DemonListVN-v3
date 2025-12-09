@@ -947,5 +947,45 @@
       "rating": "Rating",
       "total_point": "Total point"
     }
+  },
+  "discord_bot": {
+    "title": "Discord Bot",
+    "page_title": "Discord",
+    "page_description": "Join our community or add our bot to your server",
+    "description": "Access Demon List VN right in Discord",
+    "server_title": "Join Our Server",
+    "server_description": "Connect with the Demon List VN community",
+    "server_feature_1": "Chat with other players",
+    "server_feature_2": "Get latest updates & announcements",
+    "server_feature_3": "Participate in events",
+    "join_server": "Join Server",
+    "bot_title": "Add Our Bot",
+    "bot_description": "Bring Demon List VN to your server",
+    "bot_feature_1": "Slash commands for quick access",
+    "bot_feature_2": "Real-time data updates",
+    "bot_feature_3": "Easy to set up",
+    "add_button": "Add to Server",
+    "features_title": "Bot Features",
+    "features_subtitle": "Everything you need right in Discord",
+    "feature_level_search": {
+      "title": "Level Search",
+      "description": "View detailed information about any level in Demon List VN"
+    },
+    "feature_leaderboard": {
+      "title": "Leaderboard",
+      "description": "Track player rankings across different lists"
+    },
+    "feature_player_profile": {
+      "title": "Player Profile",
+      "description": "View player profiles, records and achievements"
+    },
+    "feature_latest_records": {
+      "title": "Latest Records",
+      "description": "Get updated with recently accepted records"
+    },
+    "commands_title": "Command List",
+    "command_params": "Parameters:",
+    "param_required": "required",
+    "param_optional": "optional"
   }
 }
