@@ -58,9 +58,9 @@
 			icon: 'https://www.google.com/s2/favicons?domain=github.com&sz=64'
 		},
 		{
-			name: 'Twitter',
-			url: 'https://twitter.com',
-			icon: 'https://www.google.com/s2/favicons?domain=twitter.com&sz=64'
+			name: 'Facebook',
+			url: 'https://facebook.com',
+			icon: 'https://www.google.com/s2/favicons?domain=facebook.com&sz=64'
 		},
 		{
 			name: 'Discord',
