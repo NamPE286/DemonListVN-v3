@@ -1,6 +1,6 @@
 {
     "i18n-ally.localesPaths": [
-        "../../../../../../Users/nambu/Desktop/DLVN/DemonListVN-v3/src/public/locales",
+        "../src/public/locales",
         "src/public/locales"
     ],
     "i18n-ally.keystyle": "nested",
