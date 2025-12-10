@@ -1059,6 +1059,7 @@
       "shortcut_required": "Tên và URL là bắt buộc",
       "reset_search": "Đặt lại cài đặt tìm kiếm",
       "search_reset": "Đã đặt lại cài đặt tìm kiếm!"
-    }
+    },
+    "weather_unavailable": "Không khả dụng"
   }
 }

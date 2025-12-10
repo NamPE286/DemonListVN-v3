@@ -7,6 +7,8 @@
 	let weather: { temp: number; location: string; condition: string; icon: string } | null = null;
 	let weatherLoading = true;
 	let weatherError = false;
+	let weatherLat: number | null = null;
+	let weatherLon: number | null = null;
 
 	// Settings
 	let weatherEnabled = true;
@@ -62,7 +64,6 @@
 
 				latitude = position.coords.latitude;
 				longitude = position.coords.longitude;
-
 			} else if (weatherLocationManual && weatherLocationManual.trim().length > 0) {
 				// Geocode manual location using Nominatim
 				const q = encodeURIComponent(weatherLocationManual.trim());
@@ -81,6 +82,10 @@
 				// No valid location provided
 				throw new Error('No location available');
 			}
+
+			// Save found coords and fetch weather data
+			weatherLat = latitude;
+			weatherLon = longitude;
 
 			// Fetch weather data
 			const weatherRes = await fetch(
@@ -126,6 +131,8 @@
 			console.error('Failed to fetch weather:', e);
 			weatherError = true;
 			weather = null;
+			weatherLat = null;
+			weatherLon = null;
 		} finally {
 			weatherLoading = false;
 		}
@@ -171,51 +178,86 @@
 
 	onDestroy(() => {
 		if (storageHandler) window.removeEventListener('storage', storageHandler);
-		if (customHandler) window.removeEventListener('dashboard.weather.updated', customHandler as EventListener);
+		if (customHandler)
+			window.removeEventListener('dashboard.weather.updated', customHandler as EventListener);
 	});
 
+	// Construct a URL to AccuWeather; prefer coordinates for better search results when available
+	$: accuUrl =
+		weatherLat !== null && weatherLon !== null
+			? `https://www.accuweather.com/en/search-locations?query=${encodeURIComponent(weatherLat + ',' + weatherLon)}`
+			: weather && weather.location
+				? `https://www.accuweather.com/en/search-locations?query=${encodeURIComponent(weather.location)}`
+				: 'https://www.accuweather.com/';
 </script>
 
 {#if !weatherEnabled}
-    <!-- Weather disabled by user -->
-{:else}
-	{#if weatherLoading}
-	<div class="rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
-		<div class="flex items-center gap-2">
-			<Skeleton class="h-6 w-6 rounded-full" />
-			<div class="space-y-1">
-				<Skeleton class="h-4 w-12" />
-				<Skeleton class="h-3 w-16" />
-			</div>
-		</div>
-	</div>
-
-{:else if weather && !weatherError}
-	<div class="rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
-		<div class="flex items-center gap-2">
-			<span class="text-xl sm:text-2xl">{weather.icon}</span>
-			<div>
-				<div class="text-sm font-semibold sm:text-base">{weather.temp}°C</div>
-				<div
-					class="max-w-[80px] truncate text-[10px] text-muted-foreground sm:max-w-[100px] sm:text-xs"
-				>
-					{weather.location}
+	<!-- Weather disabled by user -->
+{:else if weatherLoading}
+	<a
+		href={accuUrl}
+		target="_blank"
+		rel="noopener noreferrer"
+		class="block"
+		aria-label="Open AccuWeather"
+	>
+		<div
+			class="cursor-pointer rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3"
+		>
+			<div class="flex items-center gap-2">
+				<Skeleton class="h-6 w-6 rounded-full" />
+				<div class="space-y-1">
+					<Skeleton class="h-4 w-12" />
+					<Skeleton class="h-3 w-16" />
 				</div>
 			</div>
 		</div>
-	</div>
+	</a>
+{:else if weather && !weatherError}
+	<a
+		href={accuUrl}
+		target="_blank"
+		rel="noopener noreferrer"
+		class="block"
+		aria-label={`Open AccuWeather for ${weather?.location ?? 'location'}`}
+	>
+		<div
+			class="cursor-pointer rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3"
+		>
+			<div class="flex items-center gap-2">
+				<span class="text-xl sm:text-2xl">{weather.icon}</span>
+				<div>
+					<div class="text-sm font-semibold sm:text-base">{weather.temp}°C</div>
+					<div
+						class="max-w-[80px] truncate text-[10px] text-muted-foreground sm:max-w-[100px] sm:text-xs"
+					>
+						{weather.location}
+					</div>
+				</div>
+			</div>
+		</div>
+	</a>
 {:else}
 	<!-- Fallback when weather is unavailable or permission denied -->
-	<div class="rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
-		<div class="flex items-center gap-2">
-			<span class="text-xl sm:text-2xl">🌡️</span>
-			<div>
-				<div class="text-sm font-semibold sm:text-base">—°C</div>
-				<div class="max-w-[100px] truncate text-[10px] text-muted-foreground sm:text-xs">
-					{$_('dashboard.weather_unavailable') || 'Weather unavailable'}
+	<a
+		href={accuUrl}
+		target="_blank"
+		rel="noopener noreferrer"
+		class="block"
+		aria-label="Open AccuWeather"
+	>
+		<div
+			class="cursor-pointer rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3"
+		>
+			<div class="flex items-center gap-2">
+				<span class="text-xl sm:text-2xl">🌡️</span>
+				<div>
+					<div class="text-sm font-semibold sm:text-base">—°C</div>
+					<div class="max-w-[100px] truncate text-[10px] text-muted-foreground sm:text-xs">
+						{$_('dashboard.weather_unavailable') || 'Weather unavailable'}
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
-{/if}
+	</a>
 {/if}

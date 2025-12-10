@@ -1005,7 +1005,7 @@
     "events": "Events",
     "no_events": "No active events",
     "scroll_down": "Scroll down for more",
-      "search": {
+    "search": {
       "placeholder": "Search the web..."
     },
     "settings": {
@@ -1060,6 +1060,7 @@
       "shortcut_required": "Name and URL are required",
       "reset_search": "Reset Search Settings",
       "search_reset": "Search settings reset!"
-    }
+    },
+    "weather_unavailable": "Not available"
   }
 }
