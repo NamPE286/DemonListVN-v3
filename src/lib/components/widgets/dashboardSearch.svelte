@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { onMount, onDestroy } from 'svelte';
+	import { browser } from '$app/environment';
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 	import { _ } from 'svelte-i18n';
 
@@ -7,6 +9,7 @@
 	export let searchEngine: 'google' | 'bing' | 'duckduckgo' | 'yahoo' | 'yandex' | 'ecosisa' = 'google';
 	export let shortcutsVisible = true;
 	export let shortcuts: Array<{ name: string; url: string; icon: string }> = [];
+	export let searchOpenInNewTab = false;
 
 	const SEARCH_ENGINES = {
 		google: { name: 'Google', url: 'https://www.google.com/search?q=' },
@@ -18,19 +21,61 @@
 	};
 
 	let searchQuery = '';
+	// Whether to open search results in a new tab. Default: false (open in current tab)
+	let openInNewTab = false;
 
 	function handleSearch(e: Event) {
 		e.preventDefault();
 		if (searchQuery.trim()) {
 			const engineUrl = SEARCH_ENGINES[searchEngine].url;
-			window.open(engineUrl + encodeURIComponent(searchQuery.trim()), '_blank');
+			const url = engineUrl + encodeURIComponent(searchQuery.trim());
+			if (openInNewTab) {
+				window.open(url, '_blank');
+			} else {
+				// navigate in the same tab
+				window.location.href = url;
+			}
 			searchQuery = '';
 		}
 	}
+
+	function loadSettingsFromStorage() {
+		if (!browser) return;
+		const key = localStorage.getItem('dashboard.searchOpenInNewTab');
+		openInNewTab = key === 'true';
+	}
+
+	let storageHandler: (e: StorageEvent) => void;
+	let customHandler: () => void;
+
+	// If parent binds prop, reflect that.
+	$: if (typeof searchOpenInNewTab === 'boolean') {
+		openInNewTab = searchOpenInNewTab;
+	}
+
+	onMount(() => {
+		loadSettingsFromStorage();
+
+		storageHandler = (e: StorageEvent) => {
+			if (!e.key) return;
+			if (e.key === 'dashboard.searchOpenInNewTab') {
+				loadSettingsFromStorage();
+			}
+		};
+		window.addEventListener('storage', storageHandler);
+
+		customHandler = () => loadSettingsFromStorage();
+		window.addEventListener('dashboard.search.updated', customHandler as EventListener);
+	});
+
+	onDestroy(() => {
+		if (storageHandler) window.removeEventListener('storage', storageHandler);
+		if (customHandler) window.removeEventListener('dashboard.search.updated', customHandler as EventListener);
+	});
 </script>
 
 {#if searchEnabled}
-	<form on:submit={handleSearch} class="flex w-full flex-col items-center gap-3 sm:gap-4">
+	<form on:submit={handleSearch} class="flex w-full flex-col items-center gap-3 sm:gap-4" data-search-position={searchPosition}>
 		<div class="relative w-full max-w-md sm:max-w-xl">
 			<div class="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 sm:left-4">
 				<MagnifyingGlass class="h-4 w-4 text-foreground/70 sm:h-5 sm:w-5" />

@@ -34,6 +34,7 @@
 	let searchPosition: 'top' | 'center' | 'bottom' = 'center';
 	let shortcutsVisible = true;
 	let shortcuts: Array<{ name: string; url: string; icon: string }> = [];
+	let searchOpenInNewTab = false;
 
 	// Bottom left widgets settings
 	let bottomLeftWidgets: Array<'profile' | 'submissions'> = ['submissions', 'profile'];
@@ -117,6 +118,12 @@
 			}
 			searchPosition =
 				(localStorage.getItem(DASHBOARD_SEARCH_POSITION_KEY) as typeof searchPosition) || 'center';
+
+			// Initialize search open in new tab (default to false -> open in current tab)
+			if (localStorage.getItem('dashboard.searchOpenInNewTab') === null) {
+				localStorage.setItem('dashboard.searchOpenInNewTab', 'false');
+			}
+			searchOpenInNewTab = localStorage.getItem('dashboard.searchOpenInNewTab') === 'true';
 
 			// Initialize shortcuts visible
 			if (localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY) === null) {
@@ -228,6 +235,7 @@
 	bind:shortcutsVisible
 	bind:shortcuts
 	bind:bottomLeftWidgets
+	bind:searchOpenInNewTab
 />
 
 <div
@@ -242,134 +250,8 @@
 		<div class="absolute inset-0 z-[1] backdrop-blur-sm"></div>
 	{/if}
 
-	<!-- Mobile Layout: Stacked content -->
-	<div
-		class="relative z-20 flex h-full min-h-[100vh] w-full flex-col px-3 pt-[70px] sm:px-4 lg:hidden"
-	>
-		<!-- Top Search Bar (Mobile) -->
-		{#if searchEnabled && searchPosition === 'top'}
-			<div class="mb-4 w-full">
-				<DashboardSearch
-					bind:searchEnabled
-					bind:searchPosition
-					bind:searchEngine
-					bind:shortcutsVisible
-					bind:shortcuts
-				/>
-			</div>
-		{/if}
-
-		<!-- Top: Clock & Date + Weather + Settings -->
-		<div class="flex items-start justify-between gap-2">
-			<div class="rounded-xl bg-background/60 p-3 backdrop-blur-md sm:p-4">
-				<div class="xs:text-3xl text-2xl font-bold tracking-tight sm:text-4xl">
-					{currentTime.toLocaleTimeString('vi-VN', {
-						hour: '2-digit',
-						minute: '2-digit',
-						second: '2-digit'
-					})}
-				</div>
-				<div class="mt-1 text-xs text-muted-foreground sm:text-sm">
-					{currentTime.toLocaleDateString('vi-VN', {
-						weekday: 'short',
-						year: 'numeric',
-						month: 'short',
-						day: 'numeric'
-					})}
-				</div>
-			</div>
-			<div class="flex items-start gap-2">
-				<!-- Weather Card -->
-				<DashboardWeather />
-				<button
-					class="flex-shrink-0 rounded-full bg-background/60 p-2.5 backdrop-blur-md transition-all hover:bg-background/80 sm:p-3"
-					on:click={() => (settingsOpen = true)}
-				>
-					<Gear class="h-4 w-4 sm:h-5 sm:w-5" />
-				</button>
-			</div>
-		</div>
-
-		<!-- Middle: Cards Grid -->
-		<div class="mt-4 flex flex-1 flex-col gap-3 pb-20 sm:gap-4">
-			<!-- Player Profile -->
-			<div class="w-full">
-				{#if $user.loggedIn && $user.data}
-					<PlayerCard player={$user.data} />
-				{:else if $user.checked}
-					<Card.Root class="bg-background/60 backdrop-blur-md">
-						<Card.Content
-							class="flex flex-col items-center gap-3 py-4 text-center sm:gap-4 sm:py-6"
-						>
-							<p class="text-sm text-muted-foreground sm:text-base">
-								{$_('dashboard.login_prompt') || 'Sign in to view your profile'}
-							</p>
-							<Button variant="outline" href="/discord" size="sm">
-								{$_('dashboard.login') || 'Sign In'}
-							</Button>
-						</Card.Content>
-					</Card.Root>
-				{:else}
-					<Card.Root class="bg-background/60 backdrop-blur-md">
-						<Card.Content class="space-y-2 py-3 sm:space-y-3 sm:py-4">
-							<Skeleton class="h-10 w-10 rounded-full sm:h-12 sm:w-12" />
-							<Skeleton class="h-3 w-24 sm:h-4 sm:w-32" />
-							<Skeleton class="h-16 w-full sm:h-20" />
-						</Card.Content>
-					</Card.Root>
-				{/if}
-			</div>
-		</div>
-
-		<!-- Pending Submissions -->
-		{#if $user.loggedIn}
-			<DashboardSubmissions bind:submissions bind:loading={loadingSubmissions} />
-		{/if}
-
-		<!-- Event Carousel -->
-		<DashboardEvents bind:events bind:currentTime />
-
-		<!-- Center Search Bar (Mobile) -->
-		{#if searchEnabled && searchPosition === 'center'}
-			<div class="my-4 flex w-full flex-1 items-center justify-center">
-				<DashboardSearch
-					bind:searchEnabled
-					bind:searchPosition
-					bind:searchEngine
-					bind:shortcutsVisible
-					bind:shortcuts
-				/>
-			</div>
-		{/if}
-
-		<!-- Bottom Search Bar (Mobile) -->
-		{#if searchEnabled && searchPosition === 'bottom'}
-			<div class="mb-20 w-full">
-				<DashboardSearch
-					bind:searchEnabled
-					bind:searchPosition
-					bind:searchEngine
-					bind:shortcutsVisible
-					bind:shortcuts
-				/>
-			</div>
-		{/if}
-
-		<!-- Scroll Down Indicator (Mobile) -->
-		<button
-			class="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 animate-bounce flex-col items-center gap-1 text-foreground/80 transition-colors hover:text-foreground sm:bottom-6"
-			on:click={scrollToContent}
-		>
-			<span
-				class="rounded-full bg-background/60 px-3 py-1 text-xs font-medium backdrop-blur-md sm:px-4 sm:text-sm"
-				>{$_('dashboard.scroll_down') || 'Scroll down for more'}</span
-			>
-			<ChevronDown class="h-5 w-5 sm:h-6 sm:w-6" />
-		</button>
-	</div>
-
 	<!-- Desktop Layout: Absolute positioned elements -->
-	<div class="hidden lg:block">
+	<div>
 		<!-- Top Search Bar (Desktop) -->
 		{#if searchEnabled && searchPosition === 'top'}
 			<div class="absolute left-1/2 top-[70px] z-20 w-full max-w-xl -translate-x-1/2 px-8">
@@ -379,6 +261,7 @@
 					bind:searchEngine
 					bind:shortcutsVisible
 					bind:shortcuts
+					bind:searchOpenInNewTab
 				/>
 			</div>
 		{/if}
@@ -394,6 +277,7 @@
 					bind:searchEngine
 					bind:shortcutsVisible
 					bind:shortcuts
+					bind:searchOpenInNewTab
 				/>
 			</div>
 		{/if}
@@ -459,7 +343,7 @@
 		</div>
 
 		<!-- Left Side: Player Profile + Pending Submissions (Customizable) -->
-		<div class="absolute bottom-24 left-8 z-20 flex flex-col gap-4">
+		<div class="absolute bottom-24 left-8 z-20 hidden flex-col gap-4 lg:flex">
 			{#each bottomLeftWidgets as widget}
 				{#if widget === 'submissions' && $user.loggedIn}
 					<div class="w-[350px] xl:w-[380px]">
@@ -495,7 +379,7 @@
 		</div>
 
 		<!-- Bottom Right: Event Carousel -->
-		<div class="absolute bottom-24 right-8 z-20 w-[380px] xl:w-[420px]">
+		<div class="absolute bottom-24 right-8 z-20 w-[380px] xl:w-[420px] hidden lg:block">
 			<DashboardEvents bind:events bind:currentTime />
 		</div>
 

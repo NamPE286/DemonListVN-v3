@@ -16,6 +16,7 @@
 	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
 	let showDiscordAlert = false;
+	// When not running in SSR, default to showing dashboard until the user setting is checked
 	let dashboardEnabled = false;
 	let showDashboard = true; // Show dashboard by default until user is checked
 	let dashboardVisible = true; // Show dashboard by default until user is checked
@@ -27,6 +28,7 @@
 	};
 	let events: any = null;
 	let showEventBanner = true;
+	let isMobile = false;
 
 	async function getRecentDemonListLevel() {
 		const query = new URLSearchParams({
@@ -94,7 +96,33 @@
 		if (!shouldShow) {
 			setTimeout(() => animateScrollDown(), 50);
 		} else {
-			showEventBanner = false;
+			// If the user is on mobile, still show event banner
+			if (!isMobile) {
+				showEventBanner = false;
+			} else {
+				showEventBanner = true;
+			}
+		}
+	}
+
+	// Keep track of window size so we can update showEventBanner on resize
+	onMount(() => {
+		if (!browser) return;
+		const update = () => (isMobile = window.innerWidth < 1024);
+		update();
+		window.addEventListener('resize', update);
+		return () => window.removeEventListener('resize', update);
+	});
+
+	$: if (userChecked) {
+		const isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
+		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
+		const shouldShow = isSupporter && enabled;
+		if (shouldShow) {
+			// If we are on desktop, hide the event banner; on mobile keep it visible
+			showEventBanner = isMobile ? true : false;
+		} else {
+			showEventBanner = true;
 		}
 	}
 
@@ -102,10 +130,14 @@
 		visible = true;
 
 		const discordAlertDismissed = localStorage.getItem('discordAlertDismissed');
+
 		if (!discordAlertDismissed) {
 			showDiscordAlert = true;
 		}
 
+		if (browser && localStorage.getItem('settings.dashboardEnabled') === null) {
+			localStorage.setItem('settings.dashboardEnabled', 'true');
+		}
 		dashboardEnabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
 
 		getRecentDemonListLevel().then((data) => (recent.dl = data));
