@@ -8,7 +8,7 @@
 	import { _ } from 'svelte-i18n';
 	import * as Alert from '$lib/components/ui/alert';
 	import { X } from 'lucide-svelte';
-	import Dashboard from './dashboard.svelte';
+	import Dashboard from '$lib/components/dashboard.svelte';
 	import { user } from '$lib/client';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { browser } from '$app/environment';
@@ -17,14 +17,16 @@
 	let visible = false;
 	let showDiscordAlert = false;
 	let dashboardEnabled = false;
-	let showDashboard = false;
-	let dashboardVisible = false;
+	let showDashboard = true; // Show dashboard by default until user is checked
+	let dashboardVisible = true; // Show dashboard by default until user is checked
+	let userChecked = false;
 	let recent: any = {
 		dl: null,
 		fl: null,
 		pl: null
 	};
 	let events: any = null;
+	let showEventBanner = true;
 
 	async function getRecentDemonListLevel() {
 		const query = new URLSearchParams({
@@ -66,16 +68,44 @@
 		return await (await fetch(`${import.meta.env.VITE_API_URL}/events/ongoing`)).json();
 	}
 
+	function dismissDiscordAlert() {
+		showDiscordAlert = false;
+		localStorage.setItem('discordAlertDismissed', 'true');
+	}
+
+	function animateScrollDown() {
+		window.scrollTo({
+			top: window.innerHeight - 50,
+			behavior: 'smooth'
+		});
+		setTimeout(() => {
+			dashboardVisible = false;
+			showDashboard = false;
+			window.scrollTo({ top: 0, behavior: 'instant' });
+		}, 500);
+	}
+
+	$: if (browser && $user.checked && !userChecked) {
+		userChecked = true;
+		const isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
+		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
+		const shouldShow = isSupporter && enabled;
+
+		if (!shouldShow) {
+			setTimeout(() => animateScrollDown(), 50);
+		} else {
+			showEventBanner = false;
+		}
+	}
+
 	onMount(() => {
 		visible = true;
 
-		// Check if Discord alert has been dismissed
 		const discordAlertDismissed = localStorage.getItem('discordAlertDismissed');
 		if (!discordAlertDismissed) {
 			showDiscordAlert = true;
 		}
 
-		// Check dashboard setting
 		dashboardEnabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
 
 		getRecentDemonListLevel().then((data) => (recent.dl = data));
@@ -91,43 +121,6 @@
 			clearInterval(interval);
 		};
 	});
-
-	function dismissDiscordAlert() {
-		showDiscordAlert = false;
-		localStorage.setItem('discordAlertDismissed', 'true');
-	}
-
-	function animateScrollUp() {
-		// First, scroll to bottom instantly (while dashboard is hidden)
-		window.scrollTo({ top: window.innerHeight, behavior: 'instant' });
-		// Now show the dashboard
-		dashboardVisible = true;
-		// Then animate scroll to top
-		requestAnimationFrame(() => {
-			setTimeout(() => {
-				window.scrollTo({
-					top: 0,
-					behavior: 'smooth'
-				});
-			}, 50);
-		});
-	}
-
-	// Reactively check if dashboard should be shown and trigger scroll animation
-	$: if (browser && $user.checked) {
-		const isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
-		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
-		const shouldShow = isSupporter && enabled;
-		
-		if (shouldShow && !showDashboard) {
-			showDashboard = true;
-			// Scroll up animation when dashboard becomes visible
-			setTimeout(() => animateScrollUp(), 50);
-		} else if (!shouldShow && showDashboard) {
-			showDashboard = false;
-			dashboardVisible = false;
-		}
-	}
 </script>
 
 <svelte:head>
@@ -171,35 +164,35 @@
 	</div>
 {/if}
 
-{#if !showDashboard}
-<div class="promotionWrapper mt-[20px] w-full pl-[50px] pr-[50px]">
-	<Carousel.Root
-		class="h-fit w-full"
-		plugins={[
-			Autoplay({
-				delay: 10000
-			})
-		]}
-	>
-		<Carousel.Content>
-			{#if events}
-				{#each events as item, index}
+{#if showEventBanner}
+	<div class="promotionWrapper mt-[20px] w-full pl-[50px] pr-[50px]">
+		<Carousel.Root
+			class="h-fit w-full"
+			plugins={[
+				Autoplay({
+					delay: 10000
+				})
+			]}
+		>
+			<Carousel.Content>
+				{#if events}
+					{#each events as item, index}
+						<Carousel.Item>
+							<a href={`/event/${item.id}`}>
+								<EventBanner data={item} />
+							</a>
+						</Carousel.Item>
+					{/each}
+				{:else}
 					<Carousel.Item>
-						<a href={`/event/${item.id}`}>
-							<EventBanner data={item} />
-						</a>
+						<EventBanner data={null} />
 					</Carousel.Item>
-				{/each}
-			{:else}
-				<Carousel.Item>
-					<EventBanner data={null} />
-				</Carousel.Item>
-			{/if}
-		</Carousel.Content>
-		<Carousel.Previous />
-		<Carousel.Next />
-	</Carousel.Root>
-</div>
+				{/if}
+			</Carousel.Content>
+			<Carousel.Previous />
+			<Carousel.Next />
+		</Carousel.Root>
+	</div>
 {/if}
 <Ads dataAdFormat="auto" unit="leaderboard" />
 <div class="wrapper">
