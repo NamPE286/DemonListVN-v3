@@ -23,11 +23,14 @@
 	export let searchPosition: 'top' | 'center' | 'bottom' = 'center';
 	export let shortcutsVisible = true;
 	export let shortcuts: Array<{ name: string; url: string; icon: string }> = [];
+	export let bottomLeftWidgets: Array<'profile' | 'submissions'> = ['submissions', 'profile'];
 
 	// Weather settings (local temp copies)
 	let tempWeatherEnabled = true;
-	let tempWeatherAutoDetect = true;
-	let tempWeatherLocation = '';
+	// Do not auto-detect location by default
+	let tempWeatherAutoDetect = false;
+	// Default manual location to Hanoi
+	let tempWeatherLocation = 'Hanoi';
 
 	// Local copies for editing (initialize to safe defaults; sync on mount)
 	let tempBgUrl = '';
@@ -38,6 +41,38 @@
 	let tempSearchPosition: 'top' | 'center' | 'bottom' = 'center';
 	let tempShortcutsVisible = true;
 	let tempShortcuts: Array<{ name: string; url: string; icon: string }> = [];
+	type WidgetId = 'profile' | 'submissions';
+
+	// Internal structure supports enabled flag and ordering
+	let tempBottomLeftWidgets: Array<{ id: WidgetId; enabled: boolean }> = [
+		{ id: 'submissions', enabled: true },
+		{ id: 'profile', enabled: true }
+	];
+
+	// Drag drop index
+	let dragIndex: number | null = null;
+
+	function handleDragStart(event: DragEvent, idx: number) {
+		dragIndex = idx;
+		try { event.dataTransfer?.setData('text/plain', String(idx)); } catch {}
+	}
+
+	function handleDragOver(event: DragEvent) {
+		event.preventDefault();
+	}
+
+	function handleDrop(event: DragEvent, idx: number) {
+		event.preventDefault();
+		const data = event.dataTransfer?.getData('text/plain');
+		const sourceIndex = data ? parseInt(data, 10) : (dragIndex ?? -1);
+		if (sourceIndex < 0 || isNaN(sourceIndex)) return;
+		if (sourceIndex === idx) return;
+		const arr = [...tempBottomLeftWidgets];
+		const [item] = arr.splice(sourceIndex, 1);
+		arr.splice(idx, 0, item);
+		tempBottomLeftWidgets = arr;
+		dragIndex = null;
+	}
 
 	// Shortcut editing
 	let editingShortcutIndex: number | null = null;
@@ -128,6 +163,7 @@
 			const DASHBOARD_SEARCH_POSITION_KEY = 'dashboard.searchPosition';
 			const DASHBOARD_SHORTCUTS_VISIBLE_KEY = 'dashboard.shortcutsVisible';
 			const DASHBOARD_SHORTCUTS_KEY = 'dashboard.shortcuts';
+			const DASHBOARD_BOTTOM_LEFT_WIDGETS_KEY = 'dashboard.bottomLeftWidgets';
 			const DASHBOARD_WEATHER_ENABLED_KEY = 'dashboard.weatherEnabled';
 			const DASHBOARD_WEATHER_AUTODETECT_KEY = 'dashboard.weatherAutoDetect';
 			const DASHBOARD_WEATHER_LOCATION_KEY = 'dashboard.weatherLocation';
@@ -139,6 +175,10 @@
 			localStorage.setItem(DASHBOARD_SEARCH_POSITION_KEY, tempSearchPosition);
 			localStorage.setItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY, String(tempShortcutsVisible));
 			localStorage.setItem(DASHBOARD_SHORTCUTS_KEY, JSON.stringify(tempShortcuts));
+			// Persist both legacy array (enabled-only ids) and full state (id+enabled) for compatibility
+			const enabledIds = tempBottomLeftWidgets.filter((w) => w.enabled).map((w) => w.id);
+			localStorage.setItem(DASHBOARD_BOTTOM_LEFT_WIDGETS_KEY, JSON.stringify(enabledIds));
+			localStorage.setItem('dashboard.bottomLeftWidgetsState', JSON.stringify(tempBottomLeftWidgets));
 			localStorage.setItem(DASHBOARD_WEATHER_ENABLED_KEY, String(tempWeatherEnabled));
 			localStorage.setItem(DASHBOARD_WEATHER_AUTODETECT_KEY, String(tempWeatherAutoDetect));
 			localStorage.setItem(DASHBOARD_WEATHER_LOCATION_KEY, tempWeatherLocation);
@@ -156,6 +196,8 @@
 			searchPosition = tempSearchPosition;
 			shortcutsVisible = tempShortcutsVisible;
 			shortcuts = tempShortcuts.map((s) => ({ ...s }));
+			// expose as legacy array: only enabled widget ids in order
+			bottomLeftWidgets = tempBottomLeftWidgets.filter((w) => w.enabled).map((w) => w.id);
 
 			// No need to emit weather props here; weather component listens to storage changes
 
@@ -237,10 +279,35 @@
 				tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
 			}
 
+			const savedBottomLeftWidgetsState = localStorage.getItem('dashboard.bottomLeftWidgetsState');
+			const savedBottomLeftWidgets = localStorage.getItem('dashboard.bottomLeftWidgets');
+			if (savedBottomLeftWidgetsState) {
+				try {
+					const parsed = JSON.parse(savedBottomLeftWidgetsState);
+					if (Array.isArray(parsed) && parsed.every((it) => it && typeof it.id === 'string')) {
+						tempBottomLeftWidgets = parsed.map((it) => ({ id: it.id as WidgetId, enabled: (it.enabled ?? true) }));
+					} else {
+						tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+					}
+				} catch {
+					tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+				}
+			} else if (savedBottomLeftWidgets) {
+				try {
+					const parsed = JSON.parse(savedBottomLeftWidgets);
+					if (Array.isArray(parsed)) tempBottomLeftWidgets = parsed.map((id) => ({ id: id as WidgetId, enabled: true }));
+					else tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+				} catch {
+					tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+				}
+			} else {
+				tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+			}
+
 			tempWeatherEnabled = (localStorage.getItem('dashboard.weatherEnabled') ?? 'true') === 'true';
 			tempWeatherAutoDetect =
-				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'true') === 'true';
-			tempWeatherLocation = localStorage.getItem('dashboard.weatherLocation') || '';
+				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'false') === 'true';
+			tempWeatherLocation = localStorage.getItem('dashboard.weatherLocation') || 'Hanoi';
 			dashboardBg = tempBgUrl;
 			overlayType = tempOverlayType;
 			searchEnabled = tempSearchEnabled;
@@ -248,6 +315,7 @@
 			searchPosition = tempSearchPosition;
 			shortcutsVisible = tempShortcutsVisible;
 			shortcuts = tempShortcuts.map((s) => ({ ...s }));
+			bottomLeftWidgets = tempBottomLeftWidgets.filter((w) => w.enabled).map((w) => w.id);
 		}
 		open = newOpen;
 	}
@@ -289,10 +357,34 @@
 
 			tempWeatherEnabled = (localStorage.getItem('dashboard.weatherEnabled') ?? 'true') === 'true';
 			tempWeatherAutoDetect =
-				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'true') === 'true';
-			tempWeatherLocation = localStorage.getItem('dashboard.weatherLocation') || '';
+				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'false') === 'true';
+			tempWeatherLocation = localStorage.getItem('dashboard.weatherLocation') || 'Hanoi';
 		} else {
 			tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
+		}
+
+		const savedBottomLeftWidgetsState = localStorage.getItem('dashboard.bottomLeftWidgetsState');
+		const savedBottomLeftWidgets = localStorage.getItem('dashboard.bottomLeftWidgets');
+		if (savedBottomLeftWidgetsState) {
+			try {
+				const parsed = JSON.parse(savedBottomLeftWidgetsState);
+				if (Array.isArray(parsed) && parsed.every((it) => it && typeof it.id === 'string')) {
+					tempBottomLeftWidgets = parsed.map((it) => ({ id: it.id as WidgetId, enabled: (it.enabled ?? true) }));
+				} else {
+					tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+				}
+			} catch {
+				tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+			}
+		} else if (savedBottomLeftWidgets) {
+			try {
+				const parsed = JSON.parse(savedBottomLeftWidgets);
+				if (Array.isArray(parsed)) tempBottomLeftWidgets = parsed.map((id) => ({ id: id as WidgetId, enabled: true }));
+			} catch {
+				tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+			}
+		} else {
+			tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
 		}
 
 		dashboardBg = tempBgUrl;
@@ -302,6 +394,7 @@
 		searchPosition = tempSearchPosition;
 		shortcutsVisible = tempShortcutsVisible;
 		shortcuts = tempShortcuts.map((s) => ({ ...s }));
+		bottomLeftWidgets = tempBottomLeftWidgets.filter((w) => w.enabled).map((w) => w.id);
 	});
 </script>
 
@@ -575,16 +668,135 @@
 							variant="outline"
 							size="sm"
 							on:click={() => {
-								localStorage.removeItem('dashboard.weatherLocation');
-								localStorage.setItem('dashboard.weatherAutoDetect', 'true');
+								// Reset to app defaults: autoDetect disabled, default location Hanoi
+								localStorage.setItem('dashboard.weatherLocation', 'Hanoi');
+								localStorage.setItem('dashboard.weatherAutoDetect', 'false');
 								localStorage.setItem('dashboard.weatherEnabled', 'true');
-								tempWeatherLocation = '';
-								tempWeatherAutoDetect = true;
+								tempWeatherLocation = 'Hanoi';
+								tempWeatherAutoDetect = false;
 								tempWeatherEnabled = true;
 								toast.success($_('dashboard.settings.weather_reset'));
 							}}
 						>
 							{$_('dashboard.settings.reset_weather')}
+						</Button>
+					</div>
+
+					<!-- Divider -->
+					<div class="border-t"></div>
+
+					<!-- Bottom Left Widgets Section -->
+					<div class="space-y-4">
+						<h3 class="text-sm font-semibold">{$_('dashboard.settings.widgets_section') || 'Bottom Left Widgets'}</h3>
+						<p class="text-xs text-muted-foreground">
+							{$_('dashboard.settings.widgets_hint') || 'Customize which widgets appear in the bottom left corner and their order. Drag to reorder.'}
+						</p>
+
+						<div class="space-y-2 rounded-md border p-3" role="list">
+							{#each tempBottomLeftWidgets as widget, index (widget.id)}
+										<div
+											class="flex items-center gap-2 rounded-md bg-muted/50 p-2"
+											class:opacity-70={dragIndex === index}
+											draggable="true"
+											aria-grabbed={dragIndex === index}
+											role="listitem"
+											on:dragstart={(e) => handleDragStart(e, index)}
+											on:dragover={handleDragOver}
+											on:drop={(e) => handleDrop(e, index)}
+										>
+									<div class="flex flex-col gap-1">
+										<button
+											class="h-5 w-5 flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30"
+											disabled={index === 0}
+											on:click={() => {
+												if (index > 0) {
+													const newWidgets = [...tempBottomLeftWidgets];
+													const temp = newWidgets[index - 1];
+													newWidgets[index - 1] = newWidgets[index];
+													newWidgets[index] = temp;
+													tempBottomLeftWidgets = newWidgets;
+												}
+											}}
+										>
+											▲
+										</button>
+										<button
+											class="h-5 w-5 flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30"
+											disabled={index === tempBottomLeftWidgets.length - 1}
+											on:click={() => {
+												if (index < tempBottomLeftWidgets.length - 1) {
+													const newWidgets = [...tempBottomLeftWidgets];
+													const temp = newWidgets[index];
+													newWidgets[index] = newWidgets[index + 1];
+													newWidgets[index + 1] = temp;
+													tempBottomLeftWidgets = newWidgets;
+												}
+											}}
+										>
+											▼
+										</button>
+									</div>
+									<span class="flex-1 text-sm font-medium">
+										{widget.id === 'profile' ? ($_('dashboard.settings.widget_profile') || 'Player Profile') : ($_('dashboard.settings.widget_submissions') || 'Pending Submissions')}
+									</span>
+									<div class="mr-2">
+										<input
+											id={`widget-enable-${index}`}
+											type="checkbox"
+											class="h-4 w-4 rounded border-muted-foreground text-primary focus:ring-0"
+											checked={widget.enabled}
+											on:change={() => {
+												tempBottomLeftWidgets = tempBottomLeftWidgets.map((w, i) => i === index ? { ...w, enabled: !w.enabled } : w);
+											}}
+											aria-label={widget.id === 'profile' ? ($_('dashboard.settings.widget_profile') || 'Player Profile') : ($_('dashboard.settings.widget_submissions') || 'Pending Submissions')}
+										/>
+									</div>
+								</div>
+							{/each}
+							{#if tempBottomLeftWidgets.filter(w => w.enabled).length === 0}
+								<p class="py-2 text-center text-xs text-muted-foreground">
+									{$_('dashboard.settings.no_widgets') || 'No widgets selected'}
+								</p>
+							{/if}
+						</div>
+
+						<!-- Add Widget Buttons -->
+						<div class="flex flex-wrap gap-2">
+							{#if !tempBottomLeftWidgets.some((w) => w.id === 'profile')}
+								<Button
+									variant="outline"
+									size="sm"
+									on:click={() => {
+										tempBottomLeftWidgets = [...tempBottomLeftWidgets, { id: 'profile', enabled: true }];
+									}}
+								>
+									<Plus class="mr-1 h-3 w-3" />
+									{$_('dashboard.settings.add_widget_profile') || 'Add Profile'}
+								</Button>
+							{/if}
+							{#if !tempBottomLeftWidgets.some((w) => w.id === 'submissions')}
+								<Button
+									variant="outline"
+									size="sm"
+									on:click={() => {
+										tempBottomLeftWidgets = [...tempBottomLeftWidgets, { id: 'submissions', enabled: true }];
+									}}
+								>
+									<Plus class="mr-1 h-3 w-3" />
+									{$_('dashboard.settings.add_widget_submissions') || 'Add Submissions'}
+								</Button>
+							{/if}
+						</div>
+
+						<Button
+							variant="outline"
+							size="sm"
+							on:click={() => {
+								tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+								toast.success($_('dashboard.settings.widgets_reset') || 'Widgets reset to default');
+							}}
+						>
+							{$_('dashboard.settings.reset_widgets') || 'Reset to Default'}
 						</Button>
 					</div>
 				</div>

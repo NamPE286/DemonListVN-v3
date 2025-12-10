@@ -12,8 +12,9 @@
 
 	// Settings
 	let weatherEnabled = true;
-	let weatherAutoDetect = true;
-	let weatherLocationManual = '';
+	// Do not use geolocation by default — prefer manual default 'Hanoi'
+	let weatherAutoDetect = false;
+	let weatherLocationManual = 'Hanoi';
 
 	const WEATHER_CODES: Record<number, { condition: string; icon: string }> = {
 		0: { condition: 'Clear', icon: '☀️' },
@@ -79,8 +80,21 @@
 					throw new Error('Could not find location');
 				}
 			} else {
-				// No valid location provided
-				throw new Error('No location available');
+				// No valid location provided -> fallback to default manual location (Hanoi)
+				const fallback = 'Hanoi';
+				const q = encodeURIComponent(fallback);
+				const geoRes = await fetch(
+					`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1`
+				);
+				if (!geoRes.ok) throw new Error('Geocoding failed');
+				const geoJson = await geoRes.json();
+				if (Array.isArray(geoJson) && geoJson.length > 0) {
+					latitude = parseFloat(geoJson[0].lat);
+					longitude = parseFloat(geoJson[0].lon);
+					weatherLocationManual = fallback;
+				} else {
+					throw new Error('Could not find location');
+				}
 			}
 
 			// Save found coords and fetch weather data
@@ -148,19 +162,19 @@
 		const enabled = localStorage.getItem('dashboard.weatherEnabled');
 		weatherEnabled = enabled === 'true';
 
-		// Initialize auto detect
+		// Initialize auto detect (disabled by default)
 		if (localStorage.getItem('dashboard.weatherAutoDetect') === null) {
-			localStorage.setItem('dashboard.weatherAutoDetect', 'true');
+			localStorage.setItem('dashboard.weatherAutoDetect', 'false');
 		}
 		const autoDetect = localStorage.getItem('dashboard.weatherAutoDetect');
 		weatherAutoDetect = autoDetect === 'true';
 
-		// Initialize manual location
+		// Initialize manual location (default to Hanoi)
 		if (localStorage.getItem('dashboard.weatherLocation') === null) {
-			localStorage.setItem('dashboard.weatherLocation', '');
+			localStorage.setItem('dashboard.weatherLocation', 'Hanoi');
 		}
 		const manual = localStorage.getItem('dashboard.weatherLocation');
-		weatherLocationManual = manual || '';
+		weatherLocationManual = manual || 'Hanoi';
 	}
 
 	let storageHandler: (e: StorageEvent) => void;

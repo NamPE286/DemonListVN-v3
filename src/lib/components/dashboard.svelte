@@ -35,6 +35,9 @@
 	let shortcutsVisible = true;
 	let shortcuts: Array<{ name: string; url: string; icon: string }> = [];
 
+	// Bottom left widgets settings
+	let bottomLeftWidgets: Array<'profile' | 'submissions'> = ['submissions', 'profile'];
+
 	// Dashboard settings storage keys
 	const DASHBOARD_BG_KEY = 'dashboard.backgroundUrl';
 	const DASHBOARD_OVERLAY_KEY = 'dashboard.overlayType';
@@ -43,6 +46,7 @@
 	const DASHBOARD_SEARCH_POSITION_KEY = 'dashboard.searchPosition';
 	const DASHBOARD_SHORTCUTS_VISIBLE_KEY = 'dashboard.shortcutsVisible';
 	const DASHBOARD_SHORTCUTS_KEY = 'dashboard.shortcuts';
+	const DASHBOARD_BOTTOM_LEFT_WIDGETS_KEY = 'dashboard.bottomLeftWidgets';
 
 	// Search engines configuration
 	const SEARCH_ENGINES = {
@@ -135,6 +139,18 @@
 			} else {
 				shortcuts = [...DEFAULT_SHORTCUTS];
 			}
+
+			// Load bottom left widgets settings
+			const savedBottomLeftWidgets = localStorage.getItem(DASHBOARD_BOTTOM_LEFT_WIDGETS_KEY);
+			if (savedBottomLeftWidgets) {
+				try {
+					bottomLeftWidgets = JSON.parse(savedBottomLeftWidgets);
+				} catch {
+					bottomLeftWidgets = ['submissions', 'profile'];
+				}
+			} else {
+				bottomLeftWidgets = ['submissions', 'profile'];
+			}
 		}
 	}
 
@@ -211,6 +227,7 @@
 	bind:searchPosition
 	bind:shortcutsVisible
 	bind:shortcuts
+	bind:bottomLeftWidgets
 />
 
 <div
@@ -441,40 +458,40 @@
 			</button>
 		</div>
 
-		<!-- Left Side: Player Profile + Pending Submissions -->
+		<!-- Left Side: Player Profile + Pending Submissions (Customizable) -->
 		<div class="absolute bottom-24 left-8 z-20 flex flex-col gap-4">
-			<!-- Pending Submissions -->
-			{#if $user.loggedIn}
-				<div class="w-[350px] xl:w-[380px]">
-					<DashboardSubmissions bind:submissions bind:loading={loadingSubmissions} />
-				</div>
-			{/if}
-
-			<!-- Player Profile -->
-			<div class="w-[350px] xl:w-[380px]">
-				{#if $user.loggedIn && $user.data}
-					<PlayerCard player={$user.data} />
-				{:else if $user.checked}
-					<Card.Root class="bg-background/60 backdrop-blur-md">
-						<Card.Content class="flex flex-col items-center gap-4 py-6 text-center">
-							<p class="text-muted-foreground">
-								{$_('dashboard.login_prompt') || 'Sign in to view your profile'}
-							</p>
-							<Button variant="outline" href="/discord">
-								{$_('dashboard.login') || 'Sign In'}
-							</Button>
-						</Card.Content>
-					</Card.Root>
-				{:else}
-					<Card.Root class="bg-background/60 backdrop-blur-md">
-						<Card.Content class="space-y-3 py-4">
-							<Skeleton class="h-12 w-12 rounded-full" />
-							<Skeleton class="h-4 w-32" />
-							<Skeleton class="h-20 w-full" />
-						</Card.Content>
-					</Card.Root>
+			{#each bottomLeftWidgets as widget}
+				{#if widget === 'submissions' && $user.loggedIn}
+					<div class="w-[350px] xl:w-[380px]">
+						<DashboardSubmissions bind:submissions bind:loading={loadingSubmissions} />
+					</div>
+				{:else if widget === 'profile'}
+					<div class="w-[350px] xl:w-[380px]">
+						{#if $user.loggedIn && $user.data}
+							<PlayerCard player={$user.data} />
+						{:else if $user.checked}
+							<Card.Root class="bg-background/60 backdrop-blur-md">
+								<Card.Content class="flex flex-col items-center gap-4 py-6 text-center">
+									<p class="text-muted-foreground">
+										{$_('dashboard.login_prompt') || 'Sign in to view your profile'}
+									</p>
+									<Button variant="outline" href="/discord">
+										{$_('dashboard.login') || 'Sign In'}
+									</Button>
+								</Card.Content>
+							</Card.Root>
+						{:else}
+							<Card.Root class="bg-background/60 backdrop-blur-md">
+								<Card.Content class="space-y-3 py-4">
+									<Skeleton class="h-12 w-12 rounded-full" />
+									<Skeleton class="h-4 w-32" />
+									<Skeleton class="h-20 w-full" />
+								</Card.Content>
+							</Card.Root>
+						{/if}
+					</div>
 				{/if}
-			</div>
+			{/each}
 		</div>
 
 		<!-- Bottom Right: Event Carousel -->
