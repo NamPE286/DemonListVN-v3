@@ -7,7 +7,7 @@
 		CardTitle
 	} from '$lib/components/ui/card';
 	import { Badge } from '$lib/components/ui/badge';
-	import { Calendar, Clock, Star } from 'svelte-radix';
+	import { Calendar, Clock, Star } from 'lucide-svelte';
 	import { _ } from 'svelte-i18n';
 
 	interface Props {

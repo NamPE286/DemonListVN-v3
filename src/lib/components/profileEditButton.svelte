@@ -5,7 +5,7 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Select from '$lib/components/ui/select';
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
-	import Pencil1 from 'svelte-radix/Pencil1.svelte';
+	import { Pencil } from 'lucide-svelte';
 	import imageCompression from 'browser-image-compression';
 	import { user } from '$lib/client';
 	import { Label } from '$lib/components/ui/label/index.js';
@@ -222,7 +222,7 @@
 />
 
 <Dialog.Root bind:open>
-	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}><Pencil1 /></Dialog.Trigger>
+	<Dialog.Trigger class={buttonVariants({ variant: 'outline' })}><Pencil /></Dialog.Trigger>
 	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>{$_('profile_edit.title')}</Dialog.Title>

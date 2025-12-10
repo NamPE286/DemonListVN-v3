@@ -1,6 +1,6 @@
 <script>
 	import { Select as SelectPrimitive } from "bits-ui";
-	import Check from "svelte-radix/Check.svelte";
+	import { Check } from "lucide-svelte";
 	import { cn } from "$lib/utils.js";
 	let className = undefined;
 	export let value;

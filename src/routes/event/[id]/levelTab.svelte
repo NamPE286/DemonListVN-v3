@@ -4,13 +4,13 @@
 	import type { Level } from './type';
 	import { user } from '$lib/client';
 	import * as Alert from '$lib/components/ui/alert/index.js';
-	import { ExclamationTriangle } from 'svelte-radix';
+	import { AlertTriangle as ExclamationTriangle } from 'lucide-svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { _ } from 'svelte-i18n';
 	import { Switch } from '$lib/components/ui/switch/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import Button from '$lib/components/ui/button/button.svelte';
-	import { Reload } from 'svelte-radix';
+	import { RefreshCw as Reload } from 'lucide-svelte';
 
 	interface Props {
 		levels: (Level | null)[];

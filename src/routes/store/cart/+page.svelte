@@ -4,11 +4,11 @@
 	import { onMount } from 'svelte';
 	import { Button } from '$lib/components/ui/button';
 	import * as Table from '$lib/components/ui/table/index.js';
-	import { Cross2 } from 'svelte-radix';
+	import { X as Cross2 } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import CheckoutButton from './checkoutButton.svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
-	import { ExclamationTriangle } from 'svelte-radix';
+	import { AlertTriangle as ExclamationTriangle } from 'lucide-svelte';
 	import { _ } from 'svelte-i18n';
 
 	let data: any[] = $state([]);
@@ -91,7 +91,7 @@
 									toast.success($_('store.cart.remove_success', { values: { product: product.name } }));
 								}}
 							>
-								<Cross2 size={16} />
+								<X size={16} />
 							</Button>
 						</Table.Cell>
 					</Table.Row>

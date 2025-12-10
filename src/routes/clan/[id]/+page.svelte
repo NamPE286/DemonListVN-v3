@@ -11,11 +11,11 @@
 	import { Switch } from '$lib/components/ui/switch';
 	import { Button } from '$lib/components/ui/button';
 	import { Badge } from '$lib/components/ui/badge';
-	import LockClosed from 'svelte-radix/LockClosed.svelte';
-	import Globe from 'svelte-radix/Globe.svelte';
-	import Person from 'svelte-radix/Person.svelte';
-	import CrossCircled from 'svelte-radix/CrossCircled.svelte';
-	import StarFilled from 'svelte-radix/StarFilled.svelte';
+	import { Lock } from 'lucide-svelte';
+	import { Globe } from 'lucide-svelte';
+	import { User } from 'lucide-svelte';
+	import { XCircle } from 'lucide-svelte';
+	import { Star as StarFilled } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
@@ -404,7 +404,7 @@
 						{#if data.isPublic}
 							<Globe size={20} /> {$_('clan.public')}
 						{:else}
-							<LockClosed size={20} /> {$_('clan.invite_only')}
+							<Lock size={20} /> {$_('clan.invite_only')}
 						{/if}
 					</div>
 					<div class="flex items-center gap-[5px]">
@@ -412,7 +412,7 @@
 						<PlayerHoverCard player={data.players} />
 					</div>
 					<div class="flex items-center gap-[5px]">
-						<Person size={20} />
+						<User size={20} />
 						{#if data.memberLimit}
 							{data.memberCount}/{data.memberLimit}
 						{:else}
@@ -691,7 +691,7 @@
 										variant="icon"
 										on:click={() => {
 											revokeInvitation(invitation.players.uid);
-										}}><CrossCircled size={20} /></Button
+										}}><XCircle size={20} /></Button
 									>
 								</Table.Cell>
 							</Table.Row>

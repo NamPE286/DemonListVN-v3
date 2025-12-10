@@ -4,8 +4,8 @@
 	import { toast } from 'svelte-sonner';
 	import Title from '$lib/components/Title.svelte';
 	import { user } from '$lib/client';
-	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
-	import CrossCircled from 'svelte-radix/CrossCircled.svelte';
+	import { ExternalLink } from 'lucide-svelte';
+	import { XCircle } from 'lucide-svelte';
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
@@ -152,7 +152,7 @@
 									alertOpened = true;
 								}}
 							>
-								<CrossCircled size={20} />
+								<XCircle size={20} />
 							</button>
 						</Table.Cell>
 					</Table.Row>

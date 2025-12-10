@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Clock from 'svelte-radix/Clock.svelte';
-	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
-	import Star from 'svelte-radix/Star.svelte';
+	import { Clock } from 'lucide-svelte';
+	import { ExternalLink } from 'lucide-svelte';
+	import { Star } from 'lucide-svelte';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { _ } from 'svelte-i18n';
 

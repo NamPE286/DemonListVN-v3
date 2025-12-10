@@ -9,7 +9,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import * as RadioGroup from '$lib/components/ui/radio-group';
 	import { Input } from '$lib/components/ui/input';
-	import { Pencil1 } from 'svelte-radix';
+	import { Pencil as Pencil1 } from 'lucide-svelte';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 	import { Textarea } from '$lib/components/ui/textarea';
@@ -294,7 +294,7 @@
 								<Dialog.Root bind:open={open1}>
 									<Dialog.Trigger>
 										<Button variant="outline" size="icon" class="h-[30px]"
-											><Pencil1 size={18} /></Button
+											><Pencil size={18} /></Button
 										>
 									</Dialog.Trigger>
 									<Dialog.Content>

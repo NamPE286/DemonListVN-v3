@@ -1,6 +1,6 @@
 <script lang="ts">
 	import * as Table from '$lib/components/ui/table/index.js';
-	import Download from 'svelte-radix/Download.svelte';
+	import { Download } from 'lucide-svelte';
 	import { onMount } from 'svelte';
 	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import type { Level } from './type';
@@ -8,9 +8,9 @@
 	import { user } from '$lib/client';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { toast } from 'svelte-sonner';
-	import { Reload } from 'svelte-radix';
+	import { RefreshCw as Reload } from 'lucide-svelte';
 	import * as Alert from '$lib/components/ui/alert/index.js';
-	import { ExclamationTriangle } from 'svelte-radix';
+	import { AlertTriangle as ExclamationTriangle } from 'lucide-svelte';
 	import { flip } from 'svelte/animate';
 	import { cn } from '$lib/utils.js';
 	import { _ } from 'svelte-i18n';

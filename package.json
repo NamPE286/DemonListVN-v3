@@ -53,7 +53,6 @@
 		"svelte-i18n": "^4.0.1",
 		"svelte-loading-bar": "^2.0.4",
 		"svelte-markdown": "^0.4.1",
-		"svelte-radix": "^2.0.1",
 		"svelte-sonner": "^0.3.28",
 		"tailwind-merge": "^2.2.2",
 		"tailwind-variants": "^0.2.1",

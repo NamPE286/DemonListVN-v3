@@ -5,8 +5,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Table from '$lib/components/ui/table';
 	import * as Select from '$lib/components/ui/select';
-	import CrossCircled from 'svelte-radix/CrossCircled.svelte';
-	import CheckCircled from 'svelte-radix/CheckCircled.svelte';
+	import { XCircle } from 'lucide-svelte';
+	import { CheckCircle } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	import { user } from '$lib/client';
 	import { onMount } from 'svelte';
@@ -234,7 +234,7 @@
 							}}
 						>
 							<Button variant="icon">
-								<CheckCircled size={20} />
+								<CheckCircle size={20} />
 							</Button>
 						</button>
 					</Table.Cell>
@@ -245,7 +245,7 @@
 							}}
 						>
 							<Button variant="icon">
-								<CrossCircled size={20} />
+								<XCircle size={20} />
 							</Button>
 						</button>
 					</Table.Cell>

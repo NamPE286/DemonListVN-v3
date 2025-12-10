@@ -14,10 +14,10 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import Autoplay from 'embla-carousel-autoplay';
-	import Clock from 'svelte-radix/Clock.svelte';
-	import Gear from 'svelte-radix/Gear.svelte';
-	import ChevronDown from 'svelte-radix/ChevronDown.svelte';
-	import ExternalLink from 'svelte-radix/ExternalLink.svelte';
+	import { Clock } from 'lucide-svelte';
+	import { Settings } from 'lucide-svelte';
+	import { ChevronDown } from 'lucide-svelte';
+	import { ExternalLink } from 'lucide-svelte';
 	import { toast } from 'svelte-sonner';
 	import { _ } from 'svelte-i18n';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
@@ -255,7 +255,7 @@
 				class="flex-shrink-0 rounded-full bg-background/60 p-2.5 backdrop-blur-md transition-all hover:bg-background/80 sm:p-3"
 				onclick={() => (settingsOpen = true)}
 			>
-				<Gear class="h-4 w-4 sm:h-5 sm:w-5" />
+				<Settings class="h-4 w-4 sm:h-5 sm:w-5" />
 			</button>
 		</div>
 
@@ -443,7 +443,7 @@
 			class="absolute right-8 top-[70px] z-20 rounded-full bg-background/60 p-3 backdrop-blur-md transition-all hover:bg-background/80"
 			onclick={() => (settingsOpen = true)}
 		>
-			<Gear class="h-5 w-5" />
+			<Settings class="h-5 w-5" />
 		</button>
 
 		<!-- Left Side: Player Profile + Pending Submissions -->

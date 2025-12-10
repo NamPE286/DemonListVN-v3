@@ -7,7 +7,7 @@
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/client';
-	import { Copy } from 'svelte-radix';
+	import { Copy } from 'lucide-svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { onMount } from 'svelte';
 	import Chart from 'chart.js/auto';

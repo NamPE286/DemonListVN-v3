@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { run } from 'svelte/legacy';
 
-	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
-	import Calendar from 'svelte-radix/Calendar.svelte';
-	import MixerHorizontal from 'svelte-radix/MixerHorizontal.svelte';
+	import { Search } from 'lucide-svelte';
+	import { Calendar } from 'lucide-svelte';
+	import { SlidersHorizontal } from 'lucide-svelte';
 	import * as RadioGroup from '$lib/components/ui/radio-group/index.js';
 	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
@@ -71,7 +71,7 @@
 	<CardHeader class="pb-4">
 		<div class="flex items-center justify-between">
 			<CardTitle class="flex items-center gap-2">
-				<MixerHorizontal class="h-5 w-5" />
+				<SlidersHorizontal class="h-5 w-5" />
 				{$_('event_filter.title')}
 			</CardTitle>
 			<Button
@@ -88,7 +88,7 @@
 
 	<CardContent class="space-y-4">
 		<div class="relative">
-			<MagnifyingGlass
+			<Search
 				class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
 			/>
 			<Input

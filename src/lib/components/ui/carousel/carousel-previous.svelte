@@ -1,5 +1,5 @@
 <script>
-	import ArrowLeft from "svelte-radix/ArrowLeft.svelte";
+	import { ArrowLeft } from "lucide-svelte";
 	import { getEmblaContext } from "./context.js";
 	import { cn } from "$lib/utils.js";
 	import { Button } from "$lib/components/ui/button/index.js";

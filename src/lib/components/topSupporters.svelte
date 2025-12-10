@@ -2,7 +2,7 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import PlayerLink from '$lib/components/playerLink.svelte';
-	import { Star } from 'svelte-radix';
+	import { Star } from 'lucide-svelte';
 	import { _ } from 'svelte-i18n';
 	import { isActive } from '$lib/client/isSupporterActive';
 

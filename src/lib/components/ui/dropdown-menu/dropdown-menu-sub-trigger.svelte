@@ -1,6 +1,6 @@
 <script>
 	import { DropdownMenu as DropdownMenuPrimitive } from "bits-ui";
-	import ChevronRight from "svelte-radix/ChevronRight.svelte";
+	import { ChevronRight } from "lucide-svelte";
 	import { cn } from "$lib/utils.js";
 	let className = undefined;
 	export let inset = undefined;

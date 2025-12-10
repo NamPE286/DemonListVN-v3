@@ -11,10 +11,10 @@
 	import { user } from '$lib/client';
 	import { setMode } from 'mode-watcher';
 	import { toast } from 'svelte-sonner';
-	import Gear from 'svelte-radix/Gear.svelte';
-	import Sun from 'svelte-radix/Sun.svelte';
-	import Trash from 'svelte-radix/Trash.svelte';
-	import Moon from 'svelte-radix/Moon.svelte';
+	import { Settings } from 'lucide-svelte';
+	import { Sun } from 'lucide-svelte';
+	import { Trash2 } from 'lucide-svelte';
+	import { Moon } from 'lucide-svelte';
 	import Label from '$lib/components/ui/label/label.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { locale, _ } from 'svelte-i18n';
@@ -115,7 +115,7 @@
 	<Dialog.Trigger >
 		{#snippet children({ builder })}
 				<Button builders={[builder]} variant="outline" size="icon">
-				<Gear class="h-[1.2rem] w-[1.2rem]" />
+				<Settings class="h-[1.2rem] w-[1.2rem]" />
 				<span class="sr-only">{$_('settings.title')}</span>
 			</Button>
 					{/snippet}
@@ -343,7 +343,7 @@
 										<AlertDialog.Trigger asChild >
 											{#snippet children({ builder })}
 																						<Button variant="destructive" size="icon" builders={[builder]}
-													><Trash size={20} /></Button
+													><Trash2 size={20} /></Button
 												>
 																																{/snippet}
 																				</AlertDialog.Trigger>

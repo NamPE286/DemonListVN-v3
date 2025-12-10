@@ -2,8 +2,8 @@
 	import Title from '$lib/components/Title.svelte';
 	import { Button } from '$lib/components/ui/button';
 	import * as Table from '$lib/components/ui/table';
-	import CrossCircled from 'svelte-radix/CrossCircled.svelte';
-	import CheckCircled from 'svelte-radix/CheckCircled.svelte';
+	import { XCircle } from 'lucide-svelte';
+	import { CheckCircle } from 'lucide-svelte';
 	import type { PageData } from './$types';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
@@ -109,12 +109,12 @@
 					<Table.Cell>{item.content}</Table.Cell>
 					<Table.Cell>
 						<Button variant="icon" on:click={() => reject(item)}>
-							<CrossCircled size={20} />
+							<XCircle size={20} />
 						</Button>
 					</Table.Cell>
 					<Table.Cell>
 						<Button variant="icon" on:click={() => accept(item)}>
-							<CheckCircled size={20} />
+							<CheckCircle size={20} />
 						</Button>
 					</Table.Cell>
 				</Table.Row>

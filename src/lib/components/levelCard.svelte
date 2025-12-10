@@ -3,8 +3,8 @@
 	import * as ContextMenu from '$lib/components/ui/context-menu';
 	import { toast } from 'svelte-sonner';
 	import { Skeleton } from '$lib/components/ui/skeleton';
-	import Check from 'svelte-radix/Check.svelte';
-	import Clock from 'svelte-radix/Clock.svelte';
+	import { Check } from 'lucide-svelte';
+	import { Clock } from 'lucide-svelte';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import { user } from '$lib/client';
 	import { calcRating } from '$lib/client/rating';

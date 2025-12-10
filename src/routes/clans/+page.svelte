@@ -11,11 +11,11 @@
 	import type { PageData } from './$types';
 	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import { onMount } from 'svelte';
-	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
-	import LockClosed from 'svelte-radix/LockClosed.svelte';
-	import StarFilled from 'svelte-radix/StarFilled.svelte';
-	import Globe from 'svelte-radix/Globe.svelte';
-	import Person from 'svelte-radix/Person.svelte';
+	import { Search } from 'lucide-svelte';
+	import { Lock } from 'lucide-svelte';
+	import { Star as StarFilled } from 'lucide-svelte';
+	import { Globe } from 'lucide-svelte';
+	import { User } from 'lucide-svelte';
 	import { goto } from '$app/navigation';
 	import Ads from '$lib/components/ads.svelte';
 	import { _ } from 'svelte-i18n';
@@ -179,7 +179,7 @@
 	<Tabs.Content value="clans" class="w-full">
 		<div class="flex justify-center gap-[10px] pl-[10px] pr-[10px]">
 			<Input placeholder={$_("clans.search_placeholder")} class="mb-[20px] w-[400px] max-w-full" bind:value={searchQuery} />
-			<Button on:click={fetchClanList}><MagnifyingGlass /></Button>
+			<Button on:click={fetchClanList}><Search /></Button>
 		</div>
 		<Ads dataAdFormat="rectangle" />
 		<div class="clans">
@@ -202,11 +202,11 @@
 								{#if clan.isPublic}
 									<Globe size={20} /> {$_("clan.public")}
 								{:else}
-									<LockClosed size={20} /> {$_("clan.invite_only")}
+									<Lock size={20} /> {$_("clan.invite_only")}
 								{/if}
 							</div>
 							<div class="flex items-center gap-[5px]">
-								<Person size={20} />
+								<User size={20} />
 								{#if clan.memberLimit}
 									{clan.memberCount}/{clan.memberLimit}
 								{:else}

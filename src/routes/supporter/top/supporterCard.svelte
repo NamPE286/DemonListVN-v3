@@ -1,7 +1,7 @@
 <script lang="ts">
 	import PlayerCard from '$lib/components/playerCard.svelte';
 	import { Badge } from '$lib/components/ui/badge';
-	import { Star } from 'svelte-radix';
+	import { Star } from 'lucide-svelte';
 
 	interface Props {
 		buyer: any;
