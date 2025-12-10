@@ -400,13 +400,18 @@
 			</div>
 		</div>
 
-		<!-- Top Right: Settings Button -->
-		<button
-			class="absolute right-8 top-[70px] z-20 rounded-full bg-background/60 p-3 backdrop-blur-md transition-all hover:bg-background/80"
-			on:click={() => (settingsOpen = true)}
-		>
-			<Gear class="h-5 w-5" />
-		</button>
+		<!-- Top Right: Weather + Settings -->
+		<div class="absolute right-8 top-[70px] z-20 flex items-start gap-2">
+			<div class="shrink-0">
+				<DashboardWeather />
+			</div>
+			<button
+				class="rounded-full bg-background/60 p-3 backdrop-blur-md transition-all hover:bg-background/80"
+				on:click={() => (settingsOpen = true)}
+			>
+				<Gear class="h-5 w-5" />
+			</button>
+		</div>
 
 		<!-- Left Side: Player Profile + Pending Submissions -->
 		<div class="absolute bottom-24 left-8 z-20 flex flex-col gap-4">

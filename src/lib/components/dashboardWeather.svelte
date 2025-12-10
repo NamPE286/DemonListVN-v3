@@ -97,9 +97,8 @@
 	onMount(() => {
 		fetchWeather();
 	});
-</script>
 
-<div class="h-[100px] w-[100px] bg-slate-600"></div>
+</script>
 
 {#if weatherLoading}
 	<div class="rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
@@ -111,6 +110,7 @@
 			</div>
 		</div>
 	</div>
+
 {:else if weather && !weatherError}
 	<div class="rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
 		<div class="flex items-center gap-2">
@@ -121,6 +121,19 @@
 					class="max-w-[80px] truncate text-[10px] text-muted-foreground sm:max-w-[100px] sm:text-xs"
 				>
 					{weather.location}
+				</div>
+			</div>
+		</div>
+	</div>
+{:else}
+	<!-- Fallback when weather is unavailable or permission denied -->
+	<div class="rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
+		<div class="flex items-center gap-2">
+			<span class="text-xl sm:text-2xl">🌡️</span>
+			<div>
+				<div class="text-sm font-semibold sm:text-base">—°C</div>
+				<div class="max-w-[100px] truncate text-[10px] text-muted-foreground sm:text-xs">
+					{$_('dashboard.weather_unavailable') || 'Weather unavailable'}
 				</div>
 			</div>
 		</div>
