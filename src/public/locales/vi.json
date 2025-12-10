@@ -210,7 +210,8 @@
         "title": "Ngôn ngữ"
       },
       "dashboard": {
-        "title": "Sử dụng trang tổng quan"
+        "title": "Sử dụng trang tổng quan",
+        "supporter_only": "Chỉ dành cho Supporter"
       }
     },
     "api": {

@@ -29,7 +29,6 @@
 		dashboardEnabled = checked;
 		if (browser) {
 			localStorage.setItem('settings.dashboardEnabled', String(checked));
-			// Trigger page reload to apply dashboard change
 			window.location.reload();
 		}
 	}
@@ -103,8 +102,9 @@
 	$: ($user, fetchAPIKeys());
 
 	onMount(() => {
+		// If the key hasn't been set yet, enable the dashboard by default
 		if (browser && localStorage.getItem('settings.dashboardEnabled') === null) {
-			localStorage.setItem('settings.dashboardEnabled', 'false');
+			localStorage.setItem('settings.dashboardEnabled', 'true');
 		}
 	});
 
@@ -300,7 +300,7 @@
 									<Switch disabled checked={false} />
 								</Tooltip.Trigger>
 								<Tooltip.Content>
-									<p>{$_('settings.general.dashboard.supporter_only') || 'Supporter only'}</p>
+									<p>{$_('settings.general.dashboard.supporter_only')}</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 						{/if}

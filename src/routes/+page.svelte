@@ -16,6 +16,7 @@
 	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
 	let showDiscordAlert = false;
+	// When not running in SSR, default to showing dashboard until the user setting is checked
 	let dashboardEnabled = false;
 	let showDashboard = true; // Show dashboard by default until user is checked
 	let dashboardVisible = true; // Show dashboard by default until user is checked
@@ -113,7 +114,6 @@
 		return () => window.removeEventListener('resize', update);
 	});
 
-	// Re-evaluate showEventBanner when isMobile changes after userChecked
 	$: if (userChecked) {
 		const isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
 		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
@@ -130,10 +130,14 @@
 		visible = true;
 
 		const discordAlertDismissed = localStorage.getItem('discordAlertDismissed');
+
 		if (!discordAlertDismissed) {
 			showDiscordAlert = true;
 		}
 
+		if (browser && localStorage.getItem('settings.dashboardEnabled') === null) {
+			localStorage.setItem('settings.dashboardEnabled', 'true');
+		}
 		dashboardEnabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
 
 		getRecentDemonListLevel().then((data) => (recent.dl = data));
