@@ -1005,20 +1005,47 @@
     "events": "Events",
     "no_events": "No active events",
     "scroll_down": "Scroll down for more",
+    "search": {
+      "placeholder": "Search the web..."
+    },
     "settings": {
       "title": "Dashboard Settings",
       "description": "Customize your dashboard appearance",
+      "background_section": "Background",
       "bg_url": "Background Image URL",
       "bg_hint": "Enter a URL to an image for your dashboard background",
       "bg_saved": "Background saved!",
       "bg_cleared": "Background cleared!",
+      "clear_bg": "Clear Background",
       "save": "Save",
+      "saved": "Settings saved!",
       "clear": "Clear",
       "overlay": "Background Overlay",
       "overlay_none": "None",
       "overlay_dark": "Darker",
       "overlay_blur": "Blur",
-      "overlay_both": "Dark + Blur"
+      "overlay_both": "Dark + Blur",
+      "search_section": "Web Search",
+      "enable_search": "Enable Web Search",
+      "enable_search_hint": "Show search bar on dashboard",
+      "search_engine": "Search Engine",
+      "search_position": "Search Bar Position",
+      "position_top": "Top",
+      "position_center": "Center",
+      "position_bottom": "Bottom",
+      "show_shortcuts": "Show Shortcuts",
+      "show_shortcuts_hint": "Display quick access links below search",
+      "shortcuts": "Shortcuts",
+      "add_shortcut": "Add",
+      "edit_shortcut": "Edit Shortcut",
+      "no_shortcuts": "No shortcuts added",
+      "shortcut_name": "Name",
+      "shortcut_url": "URL",
+      "shortcut_icon": "Icon URL (optional)",
+      "shortcut_icon_hint": "Leave empty to auto-generate from website",
+      "shortcut_required": "Name and URL are required",
+      "reset_search": "Reset Search Settings",
+      "search_reset": "Search settings reset!"
     }
   }
 }

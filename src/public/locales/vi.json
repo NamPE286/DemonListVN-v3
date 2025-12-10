@@ -1004,20 +1004,47 @@
     "events": "Sự kiện",
     "no_events": "Không có sự kiện nào đang diễn ra",
     "scroll_down": "Cuộn xuống để xem thêm",
+    "search": {
+      "placeholder": "Tìm kiếm trên web..."
+    },
     "settings": {
       "title": "Cài đặt Dashboard",
       "description": "Tuỳ chỉnh giao diện dashboard",
+      "background_section": "Hình nền",
       "bg_url": "URL hình nền",
       "bg_hint": "Nhập URL hình ảnh để làm hình nền dashboard",
       "bg_saved": "Đã lưu hình nền!",
       "bg_cleared": "Đã xóa hình nền!",
+      "clear_bg": "Xóa hình nền",
       "save": "Lưu",
+      "saved": "Đã lưu cài đặt!",
       "clear": "Xóa",
       "overlay": "Lớp phủ nền",
       "overlay_none": "Không",
       "overlay_dark": "Tối hơn",
       "overlay_blur": "Mờ",
-      "overlay_both": "Tối + Mờ"
+      "overlay_both": "Tối + Mờ",
+      "search_section": "Tìm kiếm Web",
+      "enable_search": "Bật tìm kiếm Web",
+      "enable_search_hint": "Hiển thị thanh tìm kiếm trên dashboard",
+      "search_engine": "Công cụ tìm kiếm",
+      "search_position": "Vị trí thanh tìm kiếm",
+      "position_top": "Trên",
+      "position_center": "Giữa",
+      "position_bottom": "Dưới",
+      "show_shortcuts": "Hiển thị phím tắt",
+      "show_shortcuts_hint": "Hiển thị liên kết truy cập nhanh bên dưới tìm kiếm",
+      "shortcuts": "Phím tắt",
+      "add_shortcut": "Thêm",
+      "edit_shortcut": "Sửa phím tắt",
+      "no_shortcuts": "Chưa có phím tắt nào",
+      "shortcut_name": "Tên",
+      "shortcut_url": "URL",
+      "shortcut_icon": "URL biểu tượng (tùy chọn)",
+      "shortcut_icon_hint": "Để trống để tự động tạo từ trang web",
+      "shortcut_required": "Tên và URL là bắt buộc",
+      "reset_search": "Đặt lại cài đặt tìm kiếm",
+      "search_reset": "Đã đặt lại cài đặt tìm kiếm!"
     }
   }
 }
