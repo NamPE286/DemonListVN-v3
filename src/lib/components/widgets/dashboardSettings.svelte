@@ -23,6 +23,7 @@
 	export let searchPosition: 'top' | 'center' | 'bottom' = 'center';
 	export let shortcutsVisible = true;
 	export let shortcuts: Array<{ name: string; url: string; icon: string }> = [];
+	export let bottomLeftWidgets: Array<'profile' | 'submissions'> = ['submissions', 'profile'];
 
 	// Weather settings (local temp copies)
 	let tempWeatherEnabled = true;
@@ -38,6 +39,7 @@
 	let tempSearchPosition: 'top' | 'center' | 'bottom' = 'center';
 	let tempShortcutsVisible = true;
 	let tempShortcuts: Array<{ name: string; url: string; icon: string }> = [];
+	let tempBottomLeftWidgets: Array<'profile' | 'submissions'> = ['submissions', 'profile'];
 
 	// Shortcut editing
 	let editingShortcutIndex: number | null = null;
@@ -128,6 +130,7 @@
 			const DASHBOARD_SEARCH_POSITION_KEY = 'dashboard.searchPosition';
 			const DASHBOARD_SHORTCUTS_VISIBLE_KEY = 'dashboard.shortcutsVisible';
 			const DASHBOARD_SHORTCUTS_KEY = 'dashboard.shortcuts';
+			const DASHBOARD_BOTTOM_LEFT_WIDGETS_KEY = 'dashboard.bottomLeftWidgets';
 			const DASHBOARD_WEATHER_ENABLED_KEY = 'dashboard.weatherEnabled';
 			const DASHBOARD_WEATHER_AUTODETECT_KEY = 'dashboard.weatherAutoDetect';
 			const DASHBOARD_WEATHER_LOCATION_KEY = 'dashboard.weatherLocation';
@@ -139,6 +142,7 @@
 			localStorage.setItem(DASHBOARD_SEARCH_POSITION_KEY, tempSearchPosition);
 			localStorage.setItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY, String(tempShortcutsVisible));
 			localStorage.setItem(DASHBOARD_SHORTCUTS_KEY, JSON.stringify(tempShortcuts));
+			localStorage.setItem(DASHBOARD_BOTTOM_LEFT_WIDGETS_KEY, JSON.stringify(tempBottomLeftWidgets));
 			localStorage.setItem(DASHBOARD_WEATHER_ENABLED_KEY, String(tempWeatherEnabled));
 			localStorage.setItem(DASHBOARD_WEATHER_AUTODETECT_KEY, String(tempWeatherAutoDetect));
 			localStorage.setItem(DASHBOARD_WEATHER_LOCATION_KEY, tempWeatherLocation);
@@ -156,6 +160,7 @@
 			searchPosition = tempSearchPosition;
 			shortcutsVisible = tempShortcutsVisible;
 			shortcuts = tempShortcuts.map((s) => ({ ...s }));
+			bottomLeftWidgets = [...tempBottomLeftWidgets];
 
 			// No need to emit weather props here; weather component listens to storage changes
 
@@ -237,6 +242,17 @@
 				tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
 			}
 
+			const savedBottomLeftWidgets = localStorage.getItem('dashboard.bottomLeftWidgets');
+			if (savedBottomLeftWidgets) {
+				try {
+					tempBottomLeftWidgets = JSON.parse(savedBottomLeftWidgets);
+				} catch {
+					tempBottomLeftWidgets = ['submissions', 'profile'];
+				}
+			} else {
+				tempBottomLeftWidgets = ['submissions', 'profile'];
+			}
+
 			tempWeatherEnabled = (localStorage.getItem('dashboard.weatherEnabled') ?? 'true') === 'true';
 			tempWeatherAutoDetect =
 				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'true') === 'true';
@@ -248,6 +264,7 @@
 			searchPosition = tempSearchPosition;
 			shortcutsVisible = tempShortcutsVisible;
 			shortcuts = tempShortcuts.map((s) => ({ ...s }));
+			bottomLeftWidgets = [...tempBottomLeftWidgets];
 		}
 		open = newOpen;
 	}
@@ -293,6 +310,17 @@
 			tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
 		}
 
+		const savedBottomLeftWidgets = localStorage.getItem('dashboard.bottomLeftWidgets');
+		if (savedBottomLeftWidgets) {
+			try {
+				tempBottomLeftWidgets = JSON.parse(savedBottomLeftWidgets);
+			} catch {
+				tempBottomLeftWidgets = ['submissions', 'profile'];
+			}
+		} else {
+			tempBottomLeftWidgets = ['submissions', 'profile'];
+		}
+
 		dashboardBg = tempBgUrl;
 		overlayType = tempOverlayType;
 		searchEnabled = tempSearchEnabled;
@@ -300,6 +328,7 @@
 		searchPosition = tempSearchPosition;
 		shortcutsVisible = tempShortcutsVisible;
 		shortcuts = tempShortcuts.map((s) => ({ ...s }));
+		bottomLeftWidgets = [...tempBottomLeftWidgets];
 	});
 </script>
 
@@ -583,6 +612,113 @@
 							}}
 						>
 							{$_('dashboard.settings.reset_weather')}
+						</Button>
+					</div>
+
+					<!-- Divider -->
+					<div class="border-t"></div>
+
+					<!-- Bottom Left Widgets Section -->
+					<div class="space-y-4">
+						<h3 class="text-sm font-semibold">{$_('dashboard.settings.widgets_section') || 'Bottom Left Widgets'}</h3>
+						<p class="text-xs text-muted-foreground">
+							{$_('dashboard.settings.widgets_hint') || 'Customize which widgets appear in the bottom left corner and their order. Drag to reorder.'}
+						</p>
+
+						<div class="space-y-2 rounded-md border p-3">
+							{#each tempBottomLeftWidgets as widget, index (widget)}
+								<div class="flex items-center gap-2 rounded-md bg-muted/50 p-2">
+									<div class="flex flex-col gap-1">
+										<button
+											class="h-5 w-5 flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30"
+											disabled={index === 0}
+											on:click={() => {
+												if (index > 0) {
+													const newWidgets = [...tempBottomLeftWidgets];
+													const temp = newWidgets[index - 1];
+													newWidgets[index - 1] = newWidgets[index];
+													newWidgets[index] = temp;
+													tempBottomLeftWidgets = newWidgets;
+												}
+											}}
+										>
+											▲
+										</button>
+										<button
+											class="h-5 w-5 flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30"
+											disabled={index === tempBottomLeftWidgets.length - 1}
+											on:click={() => {
+												if (index < tempBottomLeftWidgets.length - 1) {
+													const newWidgets = [...tempBottomLeftWidgets];
+													const temp = newWidgets[index];
+													newWidgets[index] = newWidgets[index + 1];
+													newWidgets[index + 1] = temp;
+													tempBottomLeftWidgets = newWidgets;
+												}
+											}}
+										>
+											▼
+										</button>
+									</div>
+									<span class="flex-1 text-sm font-medium">
+										{widget === 'profile' ? ($_('dashboard.settings.widget_profile') || 'Player Profile') : ($_('dashboard.settings.widget_submissions') || 'Pending Submissions')}
+									</span>
+									<Button
+										variant="ghost"
+										size="sm"
+										class="h-7 w-7 p-0 text-destructive"
+										on:click={() => {
+											tempBottomLeftWidgets = tempBottomLeftWidgets.filter((_, i) => i !== index);
+										}}
+									>
+										<Trash class="h-3 w-3" />
+									</Button>
+								</div>
+							{/each}
+							{#if tempBottomLeftWidgets.length === 0}
+								<p class="py-2 text-center text-xs text-muted-foreground">
+									{$_('dashboard.settings.no_widgets') || 'No widgets selected'}
+								</p>
+							{/if}
+						</div>
+
+						<!-- Add Widget Buttons -->
+						<div class="flex flex-wrap gap-2">
+							{#if !tempBottomLeftWidgets.includes('profile')}
+								<Button
+									variant="outline"
+									size="sm"
+									on:click={() => {
+										tempBottomLeftWidgets = [...tempBottomLeftWidgets, 'profile'];
+									}}
+								>
+									<Plus class="mr-1 h-3 w-3" />
+									{$_('dashboard.settings.add_widget_profile') || 'Add Profile'}
+								</Button>
+							{/if}
+							{#if !tempBottomLeftWidgets.includes('submissions')}
+								<Button
+									variant="outline"
+									size="sm"
+									on:click={() => {
+										tempBottomLeftWidgets = [...tempBottomLeftWidgets, 'submissions'];
+									}}
+								>
+									<Plus class="mr-1 h-3 w-3" />
+									{$_('dashboard.settings.add_widget_submissions') || 'Add Submissions'}
+								</Button>
+							{/if}
+						</div>
+
+						<Button
+							variant="outline"
+							size="sm"
+							on:click={() => {
+								tempBottomLeftWidgets = ['submissions', 'profile'];
+								toast.success($_('dashboard.settings.widgets_reset') || 'Widgets reset to default');
+							}}
+						>
+							{$_('dashboard.settings.reset_widgets') || 'Reset to Default'}
 						</Button>
 					</div>
 				</div>

@@ -1058,7 +1058,16 @@
       "shortcut_icon_hint": "Để trống để tự động tạo từ trang web",
       "shortcut_required": "Tên và URL là bắt buộc",
       "reset_search": "Đặt lại cài đặt tìm kiếm",
-      "search_reset": "Đã đặt lại cài đặt tìm kiếm!"
+      "search_reset": "Đã đặt lại cài đặt tìm kiếm!",
+      "widgets_section": "Widget góc dưới bên trái",
+      "widgets_hint": "Tùy chỉnh các widget hiển thị ở góc dưới bên trái và thứ tự của chúng.",
+      "widget_profile": "Hồ sơ người chơi",
+      "widget_submissions": "Bản ghi đang chờ",
+      "no_widgets": "Chưa chọn widget nào",
+      "add_widget_profile": "Thêm hồ sơ",
+      "add_widget_submissions": "Thêm bản ghi",
+      "reset_widgets": "Đặt lại mặc định",
+      "widgets_reset": "Đã đặt lại widget về mặc định"
     },
     "weather_unavailable": "Không khả dụng"
   }

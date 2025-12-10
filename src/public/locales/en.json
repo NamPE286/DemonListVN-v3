@@ -1059,7 +1059,16 @@
       "shortcut_icon_hint": "Leave empty to auto-generate from website",
       "shortcut_required": "Name and URL are required",
       "reset_search": "Reset Search Settings",
-      "search_reset": "Search settings reset!"
+      "search_reset": "Search settings reset!",
+      "widgets_section": "Bottom Left Widgets",
+      "widgets_hint": "Customize which widgets appear in the bottom left corner and their order.",
+      "widget_profile": "Player Profile",
+      "widget_submissions": "Pending Submissions",
+      "no_widgets": "No widgets selected",
+      "add_widget_profile": "Add Profile",
+      "add_widget_submissions": "Add Submissions",
+      "reset_widgets": "Reset to Default",
+      "widgets_reset": "Widgets reset to default"
     },
     "weather_unavailable": "Not available"
   }
