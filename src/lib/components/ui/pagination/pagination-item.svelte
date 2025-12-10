@@ -1,9 +1,11 @@
 <script>
-	import { cn } from "$lib/utils.js";
-	let className = undefined;
-	export { className as class };
+	let {
+		ref = $bindable(null),
+		children,
+		...restProps
+	} = $props();
 </script>
 
-<li class={cn("", className)} {...$$restProps}>
-	<slot />
+<li bind:this={ref} {...restProps}>
+	{@render children?.()}
 </li>

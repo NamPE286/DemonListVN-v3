@@ -1,12 +1,18 @@
 <script>
 	import { cn } from "$lib/utils.js";
-	let className = undefined;
-	export { className as class };
+
+	let {
+		ref = $bindable(null),
+		class: className,
+		children,
+		...restProps
+	} = $props();
 </script>
 
 <span
-	class={cn("ml-auto text-xs tracking-widest text-muted-foreground", className)}
-	{...$$restProps}
+	class={cn("text-muted-foreground ml-auto text-xs tracking-widest", className)}
+	{...restProps}
+	bind:this={ref}
 >
-	<slot />
+	{@render children?.()}
 </span>

@@ -1,23 +1,25 @@
 <script>
 	import { Pagination as PaginationPrimitive } from "bits-ui";
-	import { ChevronRight } from "lucide-svelte";
-	import { Button } from "$lib/components/ui/button/index.js";
+	import ChevronRight from "@lucide/svelte/icons/chevron-right";
 	import { cn } from "$lib/utils.js";
-	let className = undefined;
-	export { className as class };
+	import { buttonVariants } from "$lib/components/ui/button/index.js";
+
+	let {
+		ref = $bindable(null),
+		class: className,
+		children,
+		...restProps
+	} = $props();
 </script>
 
-<PaginationPrimitive.NextButton asChild let:builder>
-	<Button
-		variant="ghost"
-		class={cn("gap-1 pr-2.5", className)}
-		builders={[builder]}
-		on:click
-		{...$$restProps}
-	>
-		<slot>
-			<span>Next</span>
-			<ChevronRight class="h-4 w-4" />
-		</slot>
-	</Button>
-</PaginationPrimitive.NextButton>
+{#snippet Fallback()}
+	<span>Next</span>
+	<ChevronRight />
+{/snippet}
+
+<PaginationPrimitive.NextButton
+	bind:ref
+	{...restProps}
+	class={cn(buttonVariants({ variant: "ghost", className: "gap-1 pr-2.5" }), className)}
+	children={children || Fallback}
+/>

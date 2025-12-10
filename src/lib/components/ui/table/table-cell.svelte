@@ -1,17 +1,21 @@
 <script>
 	import { cn } from "$lib/utils.js";
-	let className = undefined;
-	export { className as class };
+
+	let {
+		ref = $bindable(null),
+		class: className,
+		children,
+		...restProps
+	} = $props();
 </script>
 
 <td
+	bind:this={ref}
 	class={cn(
 		"p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]",
 		className
 	)}
-	{...$$restProps}
-	on:click
-	on:keydown
+	{...restProps}
 >
-	<slot />
+	{@render children?.()}
 </td>

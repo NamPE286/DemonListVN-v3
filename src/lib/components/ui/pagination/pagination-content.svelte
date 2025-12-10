@@ -1,9 +1,14 @@
 <script>
 	import { cn } from "$lib/utils.js";
-	let className = undefined;
-	export { className as class };
+
+	let {
+		ref = $bindable(null),
+		class: className,
+		children,
+		...restProps
+	} = $props();
 </script>
 
-<ul class={cn("flex flex-row items-center gap-1", className)} {...$$restProps}>
-	<slot />
+<ul bind:this={ref} class={cn("flex flex-row items-center gap-1", className)} {...restProps}>
+	{@render children?.()}
 </ul>

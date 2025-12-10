@@ -1,18 +1,18 @@
 <script>
 	import { cn } from "$lib/utils.js";
-	let className = undefined;
-	export { className as class };
+
+	let {
+		ref = $bindable(null),
+		class: className,
+		children,
+		...restProps
+	} = $props();
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
-	class={cn("rounded-xl border bg-card text-card-foreground shadow", className)}
-	{...$$restProps}
-	on:click
-	on:focusin
-	on:focusout
-	on:mouseenter
-	on:mouseleave
+	bind:this={ref}
+	class={cn("bg-card text-card-foreground rounded-xl border shadow", className)}
+	{...restProps}
 >
-	<slot />
+	{@render children?.()}
 </div>

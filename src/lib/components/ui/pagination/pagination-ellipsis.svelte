@@ -1,15 +1,20 @@
 <script>
-	import { MoreHorizontal } from "lucide-svelte";
+	import Ellipsis from "@lucide/svelte/icons/ellipsis";
 	import { cn } from "$lib/utils.js";
-	let className = undefined;
-	export { className as class };
+
+	let {
+		ref = $bindable(null),
+		class: className,
+		...restProps
+	} = $props();
 </script>
 
 <span
-	aria-hidden
-	class={cn("flex h-9 w-9 items-center justify-center", className)}
-	{...$$restProps}
+	bind:this={ref}
+	aria-hidden="true"
+	class={cn("flex size-9 items-center justify-center", className)}
+	{...restProps}
 >
-	<MoreHorizontal class="h-4 w-4" />
+	<Ellipsis class="size-4" />
 	<span class="sr-only">More pages</span>
 </span>

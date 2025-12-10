@@ -1,10 +1,12 @@
 <script>
 	import { Toaster as Sonner } from "svelte-sonner";
 	import { mode } from "mode-watcher";
+
+	let { ...restProps } = $props();
 </script>
 
 <Sonner
-	theme={$mode}
+	theme={mode.current}
 	class="toaster group"
 	toastOptions={{
 		classes: {
@@ -14,5 +16,5 @@
 			cancelButton: "group-[.toast]:bg-muted group-[.toast]:text-muted-foreground",
 		},
 	}}
-	{...$$restProps}
+	{...restProps}
 />
