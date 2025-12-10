@@ -27,8 +27,10 @@
 
 	// Weather settings (local temp copies)
 	let tempWeatherEnabled = true;
-	let tempWeatherAutoDetect = true;
-	let tempWeatherLocation = '';
+	// Do not auto-detect location by default
+	let tempWeatherAutoDetect = false;
+	// Default manual location to Hanoi
+	let tempWeatherLocation = 'Hanoi';
 
 	// Local copies for editing (initialize to safe defaults; sync on mount)
 	let tempBgUrl = '';
@@ -304,8 +306,8 @@
 
 			tempWeatherEnabled = (localStorage.getItem('dashboard.weatherEnabled') ?? 'true') === 'true';
 			tempWeatherAutoDetect =
-				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'true') === 'true';
-			tempWeatherLocation = localStorage.getItem('dashboard.weatherLocation') || '';
+				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'false') === 'true';
+			tempWeatherLocation = localStorage.getItem('dashboard.weatherLocation') || 'Hanoi';
 			dashboardBg = tempBgUrl;
 			overlayType = tempOverlayType;
 			searchEnabled = tempSearchEnabled;
@@ -355,8 +357,8 @@
 
 			tempWeatherEnabled = (localStorage.getItem('dashboard.weatherEnabled') ?? 'true') === 'true';
 			tempWeatherAutoDetect =
-				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'true') === 'true';
-			tempWeatherLocation = localStorage.getItem('dashboard.weatherLocation') || '';
+				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'false') === 'true';
+			tempWeatherLocation = localStorage.getItem('dashboard.weatherLocation') || 'Hanoi';
 		} else {
 			tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
 		}
@@ -666,11 +668,12 @@
 							variant="outline"
 							size="sm"
 							on:click={() => {
-								localStorage.removeItem('dashboard.weatherLocation');
-								localStorage.setItem('dashboard.weatherAutoDetect', 'true');
+								// Reset to app defaults: autoDetect disabled, default location Hanoi
+								localStorage.setItem('dashboard.weatherLocation', 'Hanoi');
+								localStorage.setItem('dashboard.weatherAutoDetect', 'false');
 								localStorage.setItem('dashboard.weatherEnabled', 'true');
-								tempWeatherLocation = '';
-								tempWeatherAutoDetect = true;
+								tempWeatherLocation = 'Hanoi';
+								tempWeatherAutoDetect = false;
 								tempWeatherEnabled = true;
 								toast.success($_('dashboard.settings.weather_reset'));
 							}}
