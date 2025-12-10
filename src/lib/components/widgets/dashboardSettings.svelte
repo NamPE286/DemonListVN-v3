@@ -24,6 +24,7 @@
 	export let shortcutsVisible = true;
 	export let shortcuts: Array<{ name: string; url: string; icon: string }> = [];
 	export let bottomLeftWidgets: Array<'profile' | 'submissions'> = ['submissions', 'profile'];
+	export let searchOpenInNewTab = false;
 
 	// Weather settings (local temp copies)
 	let tempWeatherEnabled = true;
@@ -41,6 +42,8 @@
 	let tempSearchPosition: 'top' | 'center' | 'bottom' = 'center';
 	let tempShortcutsVisible = true;
 	let tempShortcuts: Array<{ name: string; url: string; icon: string }> = [];
+	// Whether to open search results in a new tab. Default: false (open in current tab)
+	let tempSearchOpenInNewTab = false;
 	type WidgetId = 'profile' | 'submissions';
 
 	// Internal structure supports enabled flag and ordering
@@ -54,7 +57,9 @@
 
 	function handleDragStart(event: DragEvent, idx: number) {
 		dragIndex = idx;
-		try { event.dataTransfer?.setData('text/plain', String(idx)); } catch {}
+		try {
+			event.dataTransfer?.setData('text/plain', String(idx));
+		} catch {}
 	}
 
 	function handleDragOver(event: DragEvent) {
@@ -167,18 +172,23 @@
 			const DASHBOARD_WEATHER_ENABLED_KEY = 'dashboard.weatherEnabled';
 			const DASHBOARD_WEATHER_AUTODETECT_KEY = 'dashboard.weatherAutoDetect';
 			const DASHBOARD_WEATHER_LOCATION_KEY = 'dashboard.weatherLocation';
+			const DASHBOARD_SEARCH_OPEN_IN_NEW_TAB_KEY = 'dashboard.searchOpenInNewTab';
 
 			localStorage.setItem(DASHBOARD_BG_KEY, tempBgUrl);
 			localStorage.setItem(DASHBOARD_OVERLAY_KEY, tempOverlayType);
 			localStorage.setItem(DASHBOARD_SEARCH_ENABLED_KEY, String(tempSearchEnabled));
 			localStorage.setItem(DASHBOARD_SEARCH_ENGINE_KEY, tempSearchEngine);
 			localStorage.setItem(DASHBOARD_SEARCH_POSITION_KEY, tempSearchPosition);
+			localStorage.setItem(DASHBOARD_SEARCH_OPEN_IN_NEW_TAB_KEY, String(tempSearchOpenInNewTab));
 			localStorage.setItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY, String(tempShortcutsVisible));
 			localStorage.setItem(DASHBOARD_SHORTCUTS_KEY, JSON.stringify(tempShortcuts));
 			// Persist both legacy array (enabled-only ids) and full state (id+enabled) for compatibility
 			const enabledIds = tempBottomLeftWidgets.filter((w) => w.enabled).map((w) => w.id);
 			localStorage.setItem(DASHBOARD_BOTTOM_LEFT_WIDGETS_KEY, JSON.stringify(enabledIds));
-			localStorage.setItem('dashboard.bottomLeftWidgetsState', JSON.stringify(tempBottomLeftWidgets));
+			localStorage.setItem(
+				'dashboard.bottomLeftWidgetsState',
+				JSON.stringify(tempBottomLeftWidgets)
+			);
 			localStorage.setItem(DASHBOARD_WEATHER_ENABLED_KEY, String(tempWeatherEnabled));
 			localStorage.setItem(DASHBOARD_WEATHER_AUTODETECT_KEY, String(tempWeatherAutoDetect));
 			localStorage.setItem(DASHBOARD_WEATHER_LOCATION_KEY, tempWeatherLocation);
@@ -188,12 +198,19 @@
 				window.dispatchEvent(new Event('dashboard.weather.updated'));
 			} catch {}
 
+			// Also notify that search settings changed
+			try {
+				window.dispatchEvent(new Event('dashboard.search.updated'));
+			} catch {}
+
 			// Emit update
 			dashboardBg = tempBgUrl;
 			overlayType = tempOverlayType;
 			searchEnabled = tempSearchEnabled;
 			searchEngine = tempSearchEngine;
 			searchPosition = tempSearchPosition;
+			// reflect search open-in-new-tab
+			// Note: dashboardSearch component listens to 'dashboard.search.updated' or storage change
 			shortcutsVisible = tempShortcutsVisible;
 			shortcuts = tempShortcuts.map((s) => ({ ...s }));
 			// expose as legacy array: only enabled widget ids in order
@@ -232,12 +249,14 @@
 			localStorage.removeItem(DASHBOARD_SEARCH_POSITION_KEY);
 			localStorage.removeItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY);
 			localStorage.removeItem(DASHBOARD_SHORTCUTS_KEY);
+			localStorage.removeItem('dashboard.searchOpenInNewTab');
 
 			tempSearchEnabled = true;
 			tempSearchEngine = 'google';
 			tempSearchPosition = 'center';
 			tempShortcutsVisible = true;
 			tempShortcuts = [...DEFAULT_SHORTCUTS];
+			tempSearchOpenInNewTab = false;
 
 			toast.success($_('dashboard.settings.search_reset'));
 		}
@@ -264,6 +283,9 @@
 				DASHBOARD_SEARCH_POSITION_KEY
 			) as typeof searchPosition;
 
+			const savedSearchOpenInNewTab = localStorage.getItem('dashboard.searchOpenInNewTab');
+			tempSearchOpenInNewTab = savedSearchOpenInNewTab === 'true';
+
 			const savedShortcutsVisible = localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY);
 			tempShortcutsVisible =
 				savedShortcutsVisible === null ? true : savedShortcutsVisible === 'true';
@@ -285,23 +307,43 @@
 				try {
 					const parsed = JSON.parse(savedBottomLeftWidgetsState);
 					if (Array.isArray(parsed) && parsed.every((it) => it && typeof it.id === 'string')) {
-						tempBottomLeftWidgets = parsed.map((it) => ({ id: it.id as WidgetId, enabled: (it.enabled ?? true) }));
+						tempBottomLeftWidgets = parsed.map((it) => ({
+							id: it.id as WidgetId,
+							enabled: it.enabled ?? true
+						}));
 					} else {
-						tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+						tempBottomLeftWidgets = [
+							{ id: 'submissions', enabled: true },
+							{ id: 'profile', enabled: true }
+						];
 					}
 				} catch {
-					tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+					tempBottomLeftWidgets = [
+						{ id: 'submissions', enabled: true },
+						{ id: 'profile', enabled: true }
+					];
 				}
 			} else if (savedBottomLeftWidgets) {
 				try {
 					const parsed = JSON.parse(savedBottomLeftWidgets);
-					if (Array.isArray(parsed)) tempBottomLeftWidgets = parsed.map((id) => ({ id: id as WidgetId, enabled: true }));
-					else tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+					if (Array.isArray(parsed))
+						tempBottomLeftWidgets = parsed.map((id) => ({ id: id as WidgetId, enabled: true }));
+					else
+						tempBottomLeftWidgets = [
+							{ id: 'submissions', enabled: true },
+							{ id: 'profile', enabled: true }
+						];
 				} catch {
-					tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+					tempBottomLeftWidgets = [
+						{ id: 'submissions', enabled: true },
+						{ id: 'profile', enabled: true }
+					];
 				}
 			} else {
-				tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+				tempBottomLeftWidgets = [
+					{ id: 'submissions', enabled: true },
+					{ id: 'profile', enabled: true }
+				];
 			}
 
 			tempWeatherEnabled = (localStorage.getItem('dashboard.weatherEnabled') ?? 'true') === 'true';
@@ -316,6 +358,7 @@
 			shortcutsVisible = tempShortcutsVisible;
 			shortcuts = tempShortcuts.map((s) => ({ ...s }));
 			bottomLeftWidgets = tempBottomLeftWidgets.filter((w) => w.enabled).map((w) => w.id);
+			searchOpenInNewTab = tempSearchOpenInNewTab;
 		}
 		open = newOpen;
 	}
@@ -333,16 +376,27 @@
 
 		tempBgUrl = localStorage.getItem(DASHBOARD_BG_KEY) || '';
 		const overlay = localStorage.getItem(DASHBOARD_OVERLAY_KEY);
-		tempOverlayType = (overlay === 'none' || overlay === 'dark' || overlay === 'blur' || overlay === 'both') ? overlay as typeof tempOverlayType : 'none';
+		tempOverlayType =
+			overlay === 'none' || overlay === 'dark' || overlay === 'blur' || overlay === 'both'
+				? (overlay as typeof tempOverlayType)
+				: 'none';
 
 		const savedSearchEnabled = localStorage.getItem(DASHBOARD_SEARCH_ENABLED_KEY);
 		tempSearchEnabled = savedSearchEnabled === null ? true : savedSearchEnabled === 'true';
 
 		const engine = localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY);
-		tempSearchEngine = (engine && engine in SEARCH_ENGINES) ? engine as typeof tempSearchEngine : 'google';
+		tempSearchEngine =
+			engine && engine in SEARCH_ENGINES ? (engine as typeof tempSearchEngine) : 'google';
 
 		const position = localStorage.getItem(DASHBOARD_SEARCH_POSITION_KEY);
-		tempSearchPosition = (position === 'top' || position === 'center' || position === 'bottom') ? position as typeof tempSearchPosition : 'center';
+		tempSearchPosition =
+			position === 'top' || position === 'center' || position === 'bottom'
+				? (position as typeof tempSearchPosition)
+				: 'center';
+
+		// search open in new tab
+		const savedSearchOpenInNewTab = localStorage.getItem('dashboard.searchOpenInNewTab');
+		tempSearchOpenInNewTab = savedSearchOpenInNewTab === 'true';
 
 		const savedShortcutsVisible = localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY);
 		tempShortcutsVisible = savedShortcutsVisible === null ? true : savedShortcutsVisible === 'true';
@@ -369,22 +423,38 @@
 			try {
 				const parsed = JSON.parse(savedBottomLeftWidgetsState);
 				if (Array.isArray(parsed) && parsed.every((it) => it && typeof it.id === 'string')) {
-					tempBottomLeftWidgets = parsed.map((it) => ({ id: it.id as WidgetId, enabled: (it.enabled ?? true) }));
+					tempBottomLeftWidgets = parsed.map((it) => ({
+						id: it.id as WidgetId,
+						enabled: it.enabled ?? true
+					}));
 				} else {
-					tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+					tempBottomLeftWidgets = [
+						{ id: 'submissions', enabled: true },
+						{ id: 'profile', enabled: true }
+					];
 				}
 			} catch {
-				tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+				tempBottomLeftWidgets = [
+					{ id: 'submissions', enabled: true },
+					{ id: 'profile', enabled: true }
+				];
 			}
 		} else if (savedBottomLeftWidgets) {
 			try {
 				const parsed = JSON.parse(savedBottomLeftWidgets);
-				if (Array.isArray(parsed)) tempBottomLeftWidgets = parsed.map((id) => ({ id: id as WidgetId, enabled: true }));
+				if (Array.isArray(parsed))
+					tempBottomLeftWidgets = parsed.map((id) => ({ id: id as WidgetId, enabled: true }));
 			} catch {
-				tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+				tempBottomLeftWidgets = [
+					{ id: 'submissions', enabled: true },
+					{ id: 'profile', enabled: true }
+				];
 			}
 		} else {
-			tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+			tempBottomLeftWidgets = [
+				{ id: 'submissions', enabled: true },
+				{ id: 'profile', enabled: true }
+			];
 		}
 
 		dashboardBg = tempBgUrl;
@@ -392,6 +462,7 @@
 		searchEnabled = tempSearchEnabled;
 		searchEngine = tempSearchEngine;
 		searchPosition = tempSearchPosition;
+		searchOpenInNewTab = tempSearchOpenInNewTab;
 		shortcutsVisible = tempShortcutsVisible;
 		shortcuts = tempShortcuts.map((s) => ({ ...s }));
 		bottomLeftWidgets = tempBottomLeftWidgets.filter((w) => w.enabled).map((w) => w.id);
@@ -526,7 +597,17 @@
 								</Select.Content>
 							</Select.Root>
 						</div>
-
+						<!-- Open results in new tab -->
+						<div class="flex items-center justify-between">
+							<div>
+								<Label>{$_('dashboard.settings.open_in_new_tab')}</Label>
+								<p class="text-xs text-muted-foreground">
+									{$_('dashboard.settings.open_in_new_tab_hint') ||
+										'Open search results in a new tab by default'}
+								</p>
+							</div>
+							<Switch bind:checked={tempSearchOpenInNewTab} />
+						</div>
 						<!-- Search Bar Position -->
 						<div class="grid gap-2">
 							<Label>{$_('dashboard.settings.search_position')}</Label>
@@ -687,26 +768,29 @@
 
 					<!-- Bottom Left Widgets Section -->
 					<div class="space-y-4">
-						<h3 class="text-sm font-semibold">{$_('dashboard.settings.widgets_section') || 'Bottom Left Widgets'}</h3>
+						<h3 class="text-sm font-semibold">
+							{$_('dashboard.settings.widgets_section') || 'Bottom Left Widgets'}
+						</h3>
 						<p class="text-xs text-muted-foreground">
-							{$_('dashboard.settings.widgets_hint') || 'Customize which widgets appear in the bottom left corner and their order. Drag to reorder.'}
+							{$_('dashboard.settings.widgets_hint') ||
+								'Customize which widgets appear in the bottom left corner and their order. Drag to reorder.'}
 						</p>
 
 						<div class="space-y-2 rounded-md border p-3" role="list">
 							{#each tempBottomLeftWidgets as widget, index (widget.id)}
-										<div
-											class="flex items-center gap-2 rounded-md bg-muted/50 p-2"
-											class:opacity-70={dragIndex === index}
-											draggable="true"
-											aria-grabbed={dragIndex === index}
-											role="listitem"
-											on:dragstart={(e) => handleDragStart(e, index)}
-											on:dragover={handleDragOver}
-											on:drop={(e) => handleDrop(e, index)}
-										>
+								<div
+									class="flex items-center gap-2 rounded-md bg-muted/50 p-2"
+									class:opacity-70={dragIndex === index}
+									draggable="true"
+									aria-grabbed={dragIndex === index}
+									role="listitem"
+									on:dragstart={(e) => handleDragStart(e, index)}
+									on:dragover={handleDragOver}
+									on:drop={(e) => handleDrop(e, index)}
+								>
 									<div class="flex flex-col gap-1">
 										<button
-											class="h-5 w-5 flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30"
+											class="flex h-5 w-5 items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30"
 											disabled={index === 0}
 											on:click={() => {
 												if (index > 0) {
@@ -721,7 +805,7 @@
 											▲
 										</button>
 										<button
-											class="h-5 w-5 flex items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30"
+											class="flex h-5 w-5 items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30"
 											disabled={index === tempBottomLeftWidgets.length - 1}
 											on:click={() => {
 												if (index < tempBottomLeftWidgets.length - 1) {
@@ -737,7 +821,9 @@
 										</button>
 									</div>
 									<span class="flex-1 text-sm font-medium">
-										{widget.id === 'profile' ? ($_('dashboard.settings.widget_profile') || 'Player Profile') : ($_('dashboard.settings.widget_submissions') || 'Pending Submissions')}
+										{widget.id === 'profile'
+											? $_('dashboard.settings.widget_profile') || 'Player Profile'
+											: $_('dashboard.settings.widget_submissions') || 'Pending Submissions'}
 									</span>
 									<div class="mr-2">
 										<input
@@ -746,14 +832,18 @@
 											class="h-4 w-4 rounded border-muted-foreground text-primary focus:ring-0"
 											checked={widget.enabled}
 											on:change={() => {
-												tempBottomLeftWidgets = tempBottomLeftWidgets.map((w, i) => i === index ? { ...w, enabled: !w.enabled } : w);
+												tempBottomLeftWidgets = tempBottomLeftWidgets.map((w, i) =>
+													i === index ? { ...w, enabled: !w.enabled } : w
+												);
 											}}
-											aria-label={widget.id === 'profile' ? ($_('dashboard.settings.widget_profile') || 'Player Profile') : ($_('dashboard.settings.widget_submissions') || 'Pending Submissions')}
+											aria-label={widget.id === 'profile'
+												? $_('dashboard.settings.widget_profile') || 'Player Profile'
+												: $_('dashboard.settings.widget_submissions') || 'Pending Submissions'}
 										/>
 									</div>
 								</div>
 							{/each}
-							{#if tempBottomLeftWidgets.filter(w => w.enabled).length === 0}
+							{#if tempBottomLeftWidgets.filter((w) => w.enabled).length === 0}
 								<p class="py-2 text-center text-xs text-muted-foreground">
 									{$_('dashboard.settings.no_widgets') || 'No widgets selected'}
 								</p>
@@ -767,7 +857,10 @@
 									variant="outline"
 									size="sm"
 									on:click={() => {
-										tempBottomLeftWidgets = [...tempBottomLeftWidgets, { id: 'profile', enabled: true }];
+										tempBottomLeftWidgets = [
+											...tempBottomLeftWidgets,
+											{ id: 'profile', enabled: true }
+										];
 									}}
 								>
 									<Plus class="mr-1 h-3 w-3" />
@@ -779,7 +872,10 @@
 									variant="outline"
 									size="sm"
 									on:click={() => {
-										tempBottomLeftWidgets = [...tempBottomLeftWidgets, { id: 'submissions', enabled: true }];
+										tempBottomLeftWidgets = [
+											...tempBottomLeftWidgets,
+											{ id: 'submissions', enabled: true }
+										];
 									}}
 								>
 									<Plus class="mr-1 h-3 w-3" />
@@ -792,7 +888,10 @@
 							variant="outline"
 							size="sm"
 							on:click={() => {
-								tempBottomLeftWidgets = [ { id: 'submissions', enabled: true }, { id: 'profile', enabled: true } ];
+								tempBottomLeftWidgets = [
+									{ id: 'submissions', enabled: true },
+									{ id: 'profile', enabled: true }
+								];
 								toast.success($_('dashboard.settings.widgets_reset') || 'Widgets reset to default');
 							}}
 						>

@@ -1060,6 +1060,8 @@
       "shortcut_required": "Name and URL are required",
       "reset_search": "Reset Search Settings",
       "search_reset": "Search settings reset!",
+                    "open_in_new_tab": "Open search results in a new tab",
+                    "open_in_new_tab_hint": "Open search results in a new tab by default",
       "widgets_section": "Bottom Left Widgets",
       "widgets_hint": "Customize which widgets appear in the bottom left corner and their order.",
       "widget_profile": "Player Profile",

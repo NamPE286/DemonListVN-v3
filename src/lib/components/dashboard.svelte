@@ -34,6 +34,7 @@
 	let searchPosition: 'top' | 'center' | 'bottom' = 'center';
 	let shortcutsVisible = true;
 	let shortcuts: Array<{ name: string; url: string; icon: string }> = [];
+	let searchOpenInNewTab = false;
 
 	// Bottom left widgets settings
 	let bottomLeftWidgets: Array<'profile' | 'submissions'> = ['submissions', 'profile'];
@@ -117,6 +118,12 @@
 			}
 			searchPosition =
 				(localStorage.getItem(DASHBOARD_SEARCH_POSITION_KEY) as typeof searchPosition) || 'center';
+
+			// Initialize search open in new tab (default to false -> open in current tab)
+			if (localStorage.getItem('dashboard.searchOpenInNewTab') === null) {
+				localStorage.setItem('dashboard.searchOpenInNewTab', 'false');
+			}
+			searchOpenInNewTab = localStorage.getItem('dashboard.searchOpenInNewTab') === 'true';
 
 			// Initialize shortcuts visible
 			if (localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY) === null) {
@@ -228,6 +235,7 @@
 	bind:shortcutsVisible
 	bind:shortcuts
 	bind:bottomLeftWidgets
+    bind:searchOpenInNewTab
 />
 
 <div
@@ -255,6 +263,7 @@
 					bind:searchEngine
 					bind:shortcutsVisible
 					bind:shortcuts
+					bind:searchOpenInNewTab
 				/>
 			</div>
 		{/if}
@@ -338,6 +347,7 @@
 					bind:searchEngine
 					bind:shortcutsVisible
 					bind:shortcuts
+					bind:searchOpenInNewTab
 				/>
 			</div>
 		{/if}
@@ -351,6 +361,7 @@
 					bind:searchEngine
 					bind:shortcutsVisible
 					bind:shortcuts
+					bind:searchOpenInNewTab
 				/>
 			</div>
 		{/if}
@@ -379,6 +390,7 @@
 					bind:searchEngine
 					bind:shortcutsVisible
 					bind:shortcuts
+					bind:searchOpenInNewTab
 				/>
 			</div>
 		{/if}
@@ -394,6 +406,7 @@
 					bind:searchEngine
 					bind:shortcutsVisible
 					bind:shortcuts
+					bind:searchOpenInNewTab
 				/>
 			</div>
 		{/if}

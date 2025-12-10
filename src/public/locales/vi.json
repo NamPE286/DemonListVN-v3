@@ -1059,6 +1059,8 @@
       "shortcut_required": "Tên và URL là bắt buộc",
       "reset_search": "Đặt lại cài đặt tìm kiếm",
       "search_reset": "Đã đặt lại cài đặt tìm kiếm!",
+      "open_in_new_tab": "Mở kết quả tìm kiếm trong tab mới",
+      "open_in_new_tab_hint": "Mở kết quả tìm kiếm trong tab mới thay vì tab hiện tại",
       "widgets_section": "Widget góc dưới bên trái",
       "widgets_hint": "Tùy chỉnh các widget hiển thị ở góc dưới bên trái và thứ tự của chúng.",
       "widget_profile": "Hồ sơ người chơi",
