@@ -737,24 +737,17 @@
 										{widget.id === 'profile' ? ($_('dashboard.settings.widget_profile') || 'Player Profile') : ($_('dashboard.settings.widget_submissions') || 'Pending Submissions')}
 									</span>
 									<div class="mr-2">
-										<Switch
+										<input
+											id={`widget-enable-${index}`}
+											type="checkbox"
+											class="h-4 w-4 rounded border-muted-foreground text-primary focus:ring-0"
 											checked={widget.enabled}
 											on:change={() => {
-												// toggle enabled using a copy to trigger reactivity
 												tempBottomLeftWidgets = tempBottomLeftWidgets.map((w, i) => i === index ? { ...w, enabled: !w.enabled } : w);
 											}}
+											aria-label={widget.id === 'profile' ? ($_('dashboard.settings.widget_profile') || 'Player Profile') : ($_('dashboard.settings.widget_submissions') || 'Pending Submissions')}
 										/>
 									</div>
-									<Button
-										variant="ghost"
-										size="sm"
-										class="h-7 w-7 p-0 text-destructive"
-										on:click={() => {
-											tempBottomLeftWidgets = tempBottomLeftWidgets.filter((_, i) => i !== index);
-										}}
-									>
-										<Trash class="h-3 w-3" />
-									</Button>
 								</div>
 							{/each}
 							{#if tempBottomLeftWidgets.filter(w => w.enabled).length === 0}
