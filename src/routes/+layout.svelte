@@ -261,13 +261,13 @@
 			</div>
 			<div class="menu">
 				<DropdownMenu.Root>
-					<DropdownMenu.Trigger asChild >
+					<DropdownMenu.Trigger asChild>
 						{#snippet children({ builder })}
-												<Button builders={[builder]} variant="outline" size="icon">
+							<Button builders={[builder]} variant="outline" size="icon">
 								<Menu size={18} />
 							</Button>
-																	{/snippet}
-										</DropdownMenu.Trigger>
+						{/snippet}
+					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end" class="w-64">
 						{#each linkGroup as group}
 							{#if group.routes}
@@ -326,9 +326,9 @@
 				<SubmitButton />
 				<NotificationButton />
 				<DropdownMenu.Root>
-					<DropdownMenu.Trigger asChild >
+					<DropdownMenu.Trigger asChild>
 						{#snippet children({ builder })}
-												<Button
+							<Button
 								variant="outline"
 								size="icon"
 								class={`overflow-hidden rounded-full ${isActive($user.data.supporterUntil) ? 'border-[2px] border-yellow-400' : ''}`}
@@ -345,8 +345,8 @@
 									<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
 								</Avatar.Root>
 							</Button>
-																	{/snippet}
-										</DropdownMenu.Trigger>
+						{/snippet}
+					</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end" class="z-[99999] w-[320px]">
 						<DropdownMenu.Label class="font-normal">
 							{#if $user.loggedIn && isActive($user.data.supporterUntil)}
