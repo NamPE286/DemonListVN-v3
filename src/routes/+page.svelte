@@ -27,6 +27,7 @@
 	};
 	let events: any = null;
 	let showEventBanner = true;
+	let isMobile = false;
 
 	async function getRecentDemonListLevel() {
 		const query = new URLSearchParams({
@@ -94,7 +95,34 @@
 		if (!shouldShow) {
 			setTimeout(() => animateScrollDown(), 50);
 		} else {
-			showEventBanner = false;
+			// If the user is on mobile, still show event banner
+			if (!isMobile) {
+				showEventBanner = false;
+			} else {
+				showEventBanner = true;
+			}
+		}
+	}
+
+	// Keep track of window size so we can update showEventBanner on resize
+	onMount(() => {
+		if (!browser) return;
+		const update = () => (isMobile = window.innerWidth < 1024);
+		update();
+		window.addEventListener('resize', update);
+		return () => window.removeEventListener('resize', update);
+	});
+
+	// Re-evaluate showEventBanner when isMobile changes after userChecked
+	$: if (userChecked) {
+		const isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
+		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
+		const shouldShow = isSupporter && enabled;
+		if (shouldShow) {
+			// If we are on desktop, hide the event banner; on mobile keep it visible
+			showEventBanner = isMobile ? true : false;
+		} else {
+			showEventBanner = true;
 		}
 	}
 
