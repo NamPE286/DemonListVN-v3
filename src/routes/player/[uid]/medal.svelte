@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { _ } from "svelte-i18n";
 
-	export let medal: any;
+	interface Props {
+		medal: any;
+	}
+
+	let { medal }: Props = $props();
 </script>
 
 <a href={medal.redirect ? medal.redirect : "#!"}>

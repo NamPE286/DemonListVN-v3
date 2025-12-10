@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
@@ -19,10 +21,10 @@
 	import { Input } from '$lib/components/ui/input';
 	import { browser } from '$app/environment';
 
-	let token = '';
-	let open1 = false;
-	let APIKeys: any[] = [];
-	let dashboardEnabled = browser ? localStorage.getItem('settings.dashboardEnabled') === 'true' : false;
+	let token = $state('');
+	let open1 = $state(false);
+	let APIKeys: any[] = $state([]);
+	let dashboardEnabled = $state(browser ? localStorage.getItem('settings.dashboardEnabled') === 'true' : false);
 
 	function toggleDashboard(checked: boolean) {
 		dashboardEnabled = checked;
@@ -99,7 +101,9 @@
 		);
 	}
 
-	$: ($user, fetchAPIKeys());
+	run(() => {
+		($user, fetchAPIKeys());
+	});
 
 	function setTheme(theme: string) {
 		document.documentElement.setAttribute('data-theme', theme);
@@ -108,12 +112,14 @@
 </script>
 
 <Dialog.Root>
-	<Dialog.Trigger let:builder>
-		<Button builders={[builder]} variant="outline" size="icon">
-			<Gear class="h-[1.2rem] w-[1.2rem]" />
-			<span class="sr-only">{$_('settings.title')}</span>
-		</Button>
-	</Dialog.Trigger>
+	<Dialog.Trigger >
+		{#snippet children({ builder })}
+				<Button builders={[builder]} variant="outline" size="icon">
+				<Gear class="h-[1.2rem] w-[1.2rem]" />
+				<span class="sr-only">{$_('settings.title')}</span>
+			</Button>
+					{/snippet}
+		</Dialog.Trigger>
 	<Dialog.Content>
 		<Dialog.Header>
 			<Dialog.Title>{$_('settings.title')}</Dialog.Title>
@@ -131,128 +137,142 @@
 					<Label>{$_('settings.general.theme.title')}</Label>
 					<div class="right">
 						<Tooltip.Root>
-							<Tooltip.Trigger let:builder>
-								<Button
-									builders={[builder]}
-									variant="outline"
-									size="icon"
-									on:click={() => {
-										setMode('light');
-										setTheme('light');
-									}}
-								>
-									<Sun class="h-[1.2rem] w-[1.2rem]" />
-								</Button>
-							</Tooltip.Trigger>
+							<Tooltip.Trigger >
+								{#snippet children({ builder })}
+																<Button
+										builders={[builder]}
+										variant="outline"
+										size="icon"
+										on:click={() => {
+											setMode('light');
+											setTheme('light');
+										}}
+									>
+										<Sun class="h-[1.2rem] w-[1.2rem]" />
+									</Button>
+																							{/snippet}
+														</Tooltip.Trigger>
 							<Tooltip.Content>
 								<p>{$_('settings.general.theme.light')}</p>
 							</Tooltip.Content>
 						</Tooltip.Root>
 						<Tooltip.Root>
-							<Tooltip.Trigger let:builder>
-								<Button
-									builders={[builder]}
-									variant="outline"
-									size="icon"
-									on:click={() => {
-										setMode('dark');
-										setTheme('dark');
-									}}
-								>
-									<Moon class="h-[1.2rem] w-[1.2rem]" />
-								</Button>
-							</Tooltip.Trigger>
+							<Tooltip.Trigger >
+								{#snippet children({ builder })}
+																<Button
+										builders={[builder]}
+										variant="outline"
+										size="icon"
+										on:click={() => {
+											setMode('dark');
+											setTheme('dark');
+										}}
+									>
+										<Moon class="h-[1.2rem] w-[1.2rem]" />
+									</Button>
+																							{/snippet}
+														</Tooltip.Trigger>
 							<Tooltip.Content>
 								<p>{$_('settings.general.theme.dark')}</p>
 							</Tooltip.Content>
 						</Tooltip.Root>
 						{#if $user.loggedIn && isActive($user.data.supporterUntil)}
 							<Tooltip.Root>
-								<Tooltip.Trigger let:builder>
-									<Button
-										builders={[builder]}
-										variant="outline"
-										size="icon"
-										on:click={() => {
-											setMode('dark');
-											setTheme('red');
-										}}
-									>
-										<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-red-500"></div>
-									</Button>
-								</Tooltip.Trigger>
+								<Tooltip.Trigger >
+									{#snippet children({ builder })}
+																		<Button
+											builders={[builder]}
+											variant="outline"
+											size="icon"
+											on:click={() => {
+												setMode('dark');
+												setTheme('red');
+											}}
+										>
+											<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-red-500"></div>
+										</Button>
+																										{/snippet}
+																</Tooltip.Trigger>
 								<Tooltip.Content>
 									<p>{$_('settings.general.theme.red')}</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 							<Tooltip.Root>
-								<Tooltip.Trigger let:builder>
-									<Button
-										builders={[builder]}
-										variant="outline"
-										size="icon"
-										on:click={() => {
-											setMode('dark');
-											setTheme('green');
-										}}
-									>
-										<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-green-500"></div>
-									</Button>
-								</Tooltip.Trigger>
+								<Tooltip.Trigger >
+									{#snippet children({ builder })}
+																		<Button
+											builders={[builder]}
+											variant="outline"
+											size="icon"
+											on:click={() => {
+												setMode('dark');
+												setTheme('green');
+											}}
+										>
+											<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-green-500"></div>
+										</Button>
+																										{/snippet}
+																</Tooltip.Trigger>
 								<Tooltip.Content>
 									<p>{$_('settings.general.theme.green')}</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 							<Tooltip.Root>
-								<Tooltip.Trigger let:builder>
-									<Button
-										builders={[builder]}
-										variant="outline"
-										size="icon"
-										on:click={() => {
-											setMode('dark');
-											setTheme('blue');
-										}}
-									>
-										<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-blue-500"></div>
-									</Button>
-								</Tooltip.Trigger>
+								<Tooltip.Trigger >
+									{#snippet children({ builder })}
+																		<Button
+											builders={[builder]}
+											variant="outline"
+											size="icon"
+											on:click={() => {
+												setMode('dark');
+												setTheme('blue');
+											}}
+										>
+											<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-blue-500"></div>
+										</Button>
+																										{/snippet}
+																</Tooltip.Trigger>
 								<Tooltip.Content>
 									<p>{$_('settings.general.theme.blue')}</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 							<Tooltip.Root>
-								<Tooltip.Trigger let:builder>
-									<Button
-										builders={[builder]}
-										variant="outline"
-										size="icon"
-										on:click={() => {
-											setMode('dark');
-											setTheme('pink');
-										}}
-									>
-										<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-pink-500"></div>
-									</Button>
-								</Tooltip.Trigger>
+								<Tooltip.Trigger >
+									{#snippet children({ builder })}
+																		<Button
+											builders={[builder]}
+											variant="outline"
+											size="icon"
+											on:click={() => {
+												setMode('dark');
+												setTheme('pink');
+											}}
+										>
+											<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-pink-500"></div>
+										</Button>
+																										{/snippet}
+																</Tooltip.Trigger>
 								<Tooltip.Content>
 									<p>{$_('settings.general.theme.pink')}</p>
 								</Tooltip.Content>
 							</Tooltip.Root>
 							<Tooltip.Root>
-								<Tooltip.Trigger let:builder>
-									<Button
-										builders={[builder]}
-										variant="outline"
-										size="icon"
-										on:click={() => {
-											setMode('dark');
-											setTheme('gold');
-										}}
-									>
-										<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-yellow-500"></div>
-									</Button>
-								</Tooltip.Trigger>
+								<Tooltip.Trigger >
+									{#snippet children({ builder })}
+																		<Button
+											builders={[builder]}
+											variant="outline"
+											size="icon"
+											on:click={() => {
+												setMode('dark');
+												setTheme('gold');
+											}}
+										>
+											<div class="h-[1.2rem] w-[1.2rem] rounded-full bg-yellow-500"></div>
+										</Button>
+																										{/snippet}
+																</Tooltip.Trigger>
 								<Tooltip.Content>
 									<p>{$_('settings.general.theme.gold')}</p>
 								</Tooltip.Content>
@@ -313,18 +333,20 @@
 						{#each APIKeys as key}
 							<Table.Row>
 								<Table.Cell class="font-medium" on:click={() => {}}>
-									<button on:click={() => copyToClipboard(key.key)} class="w-[50px] truncate">
+									<button onclick={() => copyToClipboard(key.key)} class="w-[50px] truncate">
 										{key.key}
 									</button>
 								</Table.Cell>
 								<Table.Cell>{new Date(key.created_at).toLocaleString('vi-VN')}</Table.Cell>
 								<Table.Cell class="text-right">
 									<AlertDialog.Root>
-										<AlertDialog.Trigger asChild let:builder>
-											<Button variant="destructive" size="icon" builders={[builder]}
-												><Trash size={20} /></Button
-											>
-										</AlertDialog.Trigger>
+										<AlertDialog.Trigger asChild >
+											{#snippet children({ builder })}
+																						<Button variant="destructive" size="icon" builders={[builder]}
+													><Trash size={20} /></Button
+												>
+																																{/snippet}
+																				</AlertDialog.Trigger>
 										<AlertDialog.Content>
 											<AlertDialog.Header>
 												<AlertDialog.Title>{$_('settings.api.delete.title')}</AlertDialog.Title>
@@ -346,11 +368,13 @@
 					</Table.Body>
 				</Table.Root>
 				<AlertDialog.Root>
-					<AlertDialog.Trigger asChild let:builder>
-						<Button builders={[builder]} class="mt-[10px] w-full" variant="outline"
-							>{$_('settings.api.create.button')}</Button
-						>
-					</AlertDialog.Trigger>
+					<AlertDialog.Trigger asChild >
+						{#snippet children({ builder })}
+												<Button builders={[builder]} class="mt-[10px] w-full" variant="outline"
+								>{$_('settings.api.create.button')}</Button
+							>
+																	{/snippet}
+										</AlertDialog.Trigger>
 					<AlertDialog.Content>
 						<AlertDialog.Header>
 							<AlertDialog.Title>{$_('settings.api.create.title')}</AlertDialog.Title>

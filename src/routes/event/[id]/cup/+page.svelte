@@ -10,10 +10,14 @@
 	import Ads from '$lib/components/ads.svelte';
 	import { _ } from 'svelte-i18n';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	let levels: (Level | null)[] = [];
-	let tab = 'detail';
+	let tab = $state('detail');
 
 	onMount(async () => {
 		levels = await (await fetch(`${import.meta.env.VITE_API_URL}/events/${data.id}/levels`)).json();
@@ -56,7 +60,7 @@
 				frameborder="0"
 				scrolling="no"
 				title="schedule"
-			/>
+			></iframe>
 		</Tabs.Content>
 	</Tabs.Root>
 {/if}

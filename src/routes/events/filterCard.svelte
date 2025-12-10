@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
 	import Calendar from 'svelte-radix/Calendar.svelte';
 	import MixerHorizontal from 'svelte-radix/MixerHorizontal.svelte';
@@ -31,19 +33,25 @@
 		end: ''
 	};
 
-	export let filter: Filter = {
+	interface Props {
+		filter?: Filter;
+	}
+
+	let { filter = $bindable({
 		search: '',
 		eventType: 'all',
 		contestType: 'all',
 		start: '',
 		end: ''
-	};
+	}) }: Props = $props();
 
-	let isExpanded = false;
+	let isExpanded = $state(false);
 
-	$: if (filter.eventType !== 'contest') {
-		filter.contestType = 'all';
-	}
+	run(() => {
+		if (filter.eventType !== 'contest') {
+			filter.contestType = 'all';
+		}
+	});
 
 	onMount(() => {
 		const checkWidth = () => {

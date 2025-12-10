@@ -19,16 +19,20 @@
 	import CustomMarkdownCard from './cards/CustomMarkdownCard.svelte';
 	import type { CardConfig, CardSize } from './cards/types';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
 
-	$: isOwner = $user.loggedIn && $user.data?.uid === data.player.uid;
-	$: canCustomize = isOwner && isActive(data.player.supporterUntil);
+	let { data }: Props = $props();
 
-	let selectedRecord: { uid: string; levelID: number } | null = null;
-	let recordDetailOpen = false;
+	let isOwner = $derived($user.loggedIn && $user.data?.uid === data.player.uid);
+	let canCustomize = $derived(isOwner && isActive(data.player.supporterUntil));
 
-	let isCustomizing = false;
-	let draggedCard: string | null = null;
+	let selectedRecord: { uid: string; levelID: number } | null = $state(null);
+	let recordDetailOpen = $state(false);
+
+	let isCustomizing = $state(false);
+	let draggedCard: string | null = $state(null);
 
 	const defaultCards: CardConfig[] = [
 		{ id: 'ratings', visible: true, size: '2x1', order: 0 },
@@ -42,10 +46,10 @@
 		{ id: 'customMarkdown', visible: false, size: '2x1', order: 8 }
 	];
 
-	let cardConfigs: CardConfig[] = [];
+	let cardConfigs: CardConfig[] = $state([]);
 	let savedCardConfigs: CardConfig[] = [];
 
-	$: visibleCards = cardConfigs.filter((c) => c.visible).sort((a, b) => a.order - b.order);
+	let visibleCards = $derived(cardConfigs.filter((c) => c.visible).sort((a, b) => a.order - b.order));
 
 	function toggleCardVisibility(cardId: string) {
 		cardConfigs = cardConfigs.map((c) => (c.id === cardId ? { ...c, visible: !c.visible } : c));
@@ -227,7 +231,7 @@
 						<input
 							type="checkbox"
 							checked={config.visible}
-							on:change={() => toggleCardVisibility(config.id)}
+							onchange={() => toggleCardVisibility(config.id)}
 						/>
 						<span>
 							{#if config.id.startsWith('customImage')}
@@ -284,30 +288,30 @@
 <div class="overview-grid" class:customizing={isCustomizing}>
 	{#each visibleCards as config (config.id)}
 		{#if config.id === 'heatmap'}
-			<HeatmapCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
+			<HeatmapCard {data} bind:draggedCard bind:cardConfigs {config} bind:isCustomizing />
 		{:else if config.id === 'ratings'}
-			<RatingsCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
+			<RatingsCard {data} bind:draggedCard bind:cardConfigs {config} bind:isCustomizing />
 		{:else if config.id === 'eventRating'}
-			<EventRatingChart {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
+			<EventRatingChart {data} bind:draggedCard bind:cardConfigs {config} bind:isCustomizing />
 		{:else if config.id === 'totalRecords'}
-			<TotalRecordsCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
+			<TotalRecordsCard {data} bind:draggedCard bind:cardConfigs {config} bind:isCustomizing />
 		{:else if config.id === 'deviceStats'}
-			<DeviceStatsCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
+			<DeviceStatsCard {data} bind:draggedCard bind:cardConfigs {config} bind:isCustomizing />
 		{:else if config.id === 'hardestDemon'}
-			<HardestDemonCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
+			<HardestDemonCard {data} bind:draggedCard bind:cardConfigs {config} bind:isCustomizing />
 		{:else if config.id === 'recentActivity'}
 			<RecentActivityCard
 				{data}
 				bind:draggedCard
 				bind:cardConfigs
-				bind:config
+				{config}
 				bind:isCustomizing
 				onRecordClick={openRecordDetail}
 			/>
 		{:else if config.id.startsWith('customImage')}
-			<CustomImageCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
+			<CustomImageCard {data} bind:draggedCard bind:cardConfigs {config} bind:isCustomizing />
 		{:else if config.id.startsWith('customMarkdown')}
-			<CustomMarkdownCard {data} bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing />
+			<CustomMarkdownCard {data} bind:draggedCard bind:cardConfigs {config} bind:isCustomizing />
 		{/if}
 	{/each}
 </div>

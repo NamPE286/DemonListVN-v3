@@ -6,7 +6,11 @@
 	import Autoplay from 'embla-carousel-autoplay';
 	import { _ } from 'svelte-i18n';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 
 	function getFirstLine(str: string) {
 		return str.split('\n')[0];

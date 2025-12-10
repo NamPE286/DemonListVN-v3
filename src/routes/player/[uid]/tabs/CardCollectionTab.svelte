@@ -1,7 +1,11 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 
-	export let userID: string;
+	interface Props {
+		userID: string;
+	}
+
+	let { userID }: Props = $props();
 
 	interface CardData {
 		id: string;
@@ -13,8 +17,8 @@
 		img: string;
 	}
 
-	let cards: CardData[] = [];
-	let loading = true;
+	let cards: CardData[] = $state([]);
+	let loading = $state(true);
 
 	onMount(async () => {
 		try {

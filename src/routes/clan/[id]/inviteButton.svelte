@@ -6,8 +6,8 @@
 	import { user } from '$lib/client';
 	import { _ } from 'svelte-i18n';
 
-	let invitePlayerUID = '';
-	let opened = false;
+	let invitePlayerUID = $state('');
+	let opened = $state(false);
 
 	async function invitePlayer() {
 		opened = false;

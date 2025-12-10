@@ -1,8 +1,8 @@
 <script>
-	import { page } from '$app/stores';
+	import { page } from '$app/state';
 	import { Confetti } from 'svelte-confetti';
 
-	const id = $page.url.searchParams.get('id');
+	const id = page.url.searchParams.get('id');
 </script>
 
 <svelte:head>

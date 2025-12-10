@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { Button } from '$lib/components/ui/button';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Skeleton } from '$lib/components/ui/skeleton';
@@ -9,12 +11,16 @@
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { _ } from 'svelte-i18n';
 
-	export let data: any;
+	interface Props {
+		data: any;
+	}
 
-	let rewardState = 0;
-	let proof = '';
-	let claimOpened = false;
-	let cancelOpened = false;
+	let { data }: Props = $props();
+
+	let rewardState = $state(0);
+	let proof = $state('');
+	let claimOpened = $state(false);
+	let cancelOpened = $state(false);
 
 	function isEventEnded() {
 		return new Date(data.end) < new Date();
@@ -97,7 +103,9 @@
 		);
 	}
 
-	$: $user.loggedIn && getRewardState();
+	run(() => {
+		$user.loggedIn && getRewardState();
+	});
 
 	onMount(() => {
 		getRewardState();

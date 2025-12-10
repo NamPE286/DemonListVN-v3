@@ -12,7 +12,7 @@
 	import { _ } from 'svelte-i18n';
 	import { get } from 'svelte/store';
 
-	let failedToLoad = false;
+	let failedToLoad = $state(false);
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -22,9 +22,13 @@
 		return `${minutes}:${seconds.toString().padStart(2, '0')}.${milliseconds}`;
 	}
 
-	export let level: any;
-	export let type: string;
-	export let top: number | null = null;
+	interface Props {
+		level: any;
+		type: string;
+		top?: number | null;
+	}
+
+	let { level, type, top = null }: Props = $props();
 </script>
 
 {#if level}
@@ -47,7 +51,7 @@
 										alt=""
 										loading="lazy"
 										class="thumbnail z-1 absolute translate-x-4 opacity-0 transition-all duration-300 ease-in-out hover:translate-x-0 hover:opacity-100"
-										on:error={() => {
+										onerror={() => {
 											failedToLoad = true;
 										}}
 									/>

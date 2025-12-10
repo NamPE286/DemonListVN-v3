@@ -7,18 +7,28 @@
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 
-	export let data: any;
-	export let cardConfigs: CardConfig[];
-	export let config: CardConfig;
-	export let draggedCard: string | null;
-	export let isCustomizing: boolean = false;
+	interface Props {
+		data: any;
+		cardConfigs: CardConfig[];
+		config: CardConfig;
+		draggedCard: string | null;
+		isCustomizing?: boolean;
+	}
 
-	$: isOwner = $user.loggedIn && $user.data?.uid === data.player.uid;
-	$: customImageUrl = data.player.overviewData?.[config.id]?.imageUrl || '';
+	let {
+		data = $bindable(),
+		cardConfigs = $bindable(),
+		config,
+		draggedCard = $bindable(),
+		isCustomizing = $bindable(false)
+	}: Props = $props();
 
-	let isEditing = false;
-	let imageUrlInput = '';
-	let saving = false;
+	let isOwner = $derived($user.loggedIn && $user.data?.uid === data.player.uid);
+	let customImageUrl = $derived(data.player.overviewData?.[config.id]?.imageUrl || '');
+
+	let isEditing = $state(false);
+	let imageUrlInput = $state('');
+	let saving = $state(false);
 
 	function startEditing() {
 		imageUrlInput = customImageUrl;
@@ -136,7 +146,7 @@
 	}
 </script>
 
-<BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
+<BaseCard bind:draggedCard bind:cardConfigs {config} bind:isCustomizing>
 	<div class="custom-image-card">
 		{#if customImageUrl}
 			<div class="image-container">

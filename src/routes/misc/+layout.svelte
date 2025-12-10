@@ -5,6 +5,11 @@
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { _ } from 'svelte-i18n';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
+
+	let { children }: Props = $props();
 </script>
 
 <svelte:head>
@@ -12,7 +17,7 @@
 </svelte:head>
 
 {#if $user.loggedIn && isActive($user.data.supporterUntil)}
-	<slot />
+	{@render children?.()}
 {:else}
 	<Card.Root class="mx-auto mt-[100px] max-w-[600px]">
 		<Card.Header>

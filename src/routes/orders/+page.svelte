@@ -8,7 +8,7 @@
 	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import { _ } from 'svelte-i18n';
 
-	let orders: any[] = [];
+	let orders: any[] = $state([]);
 
 	async function getOrders() {
 		orders = await (

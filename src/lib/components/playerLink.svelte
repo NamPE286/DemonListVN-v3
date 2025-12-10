@@ -9,14 +9,23 @@
 	import { _ } from 'svelte-i18n';
 	import PlayerCard from '$lib/components/playerCard.svelte';
 
-	export let player: any;
-	export let showTitle = false;
-	export let titleType: 'dl' | 'pl' | 'elo' = 'dl';
-	export let truncate: number | null = null;
+	interface Props {
+		player: any;
+		showTitle?: boolean;
+		titleType?: 'dl' | 'pl' | 'elo';
+		truncate?: number | null;
+	}
+
+	let {
+		player,
+		showTitle = false,
+		titleType = 'dl',
+		truncate = null
+	}: Props = $props();
 
 	let exp = player.exp + player.extraExp;
 	let isBannerFailedToLoad = false;
-	let isPopoverOpen = false;
+	let isPopoverOpen = $state(false);
 
 	function truncateText(str: string) {
 		if (!truncate) {

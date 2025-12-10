@@ -12,13 +12,17 @@
 	import { onMount } from 'svelte';
 	import { toast } from 'svelte-sonner';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data = $bindable() }: Props = $props();
 
 	let originalData: PageData = {
 		data: []
 	};
-	let isOpen = false;
-	let userID: string, levelID: number;
+	let isOpen = $state(false);
+	let userID: string = $state(), levelID: number = $state();
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -225,7 +229,7 @@
 					>
 					<Table.Cell class="text-center">
 						<button
-							on:click={() => {
+							onclick={() => {
 								accept(record.players.uid, record.levels);
 							}}
 						>
@@ -236,7 +240,7 @@
 					</Table.Cell>
 					<Table.Cell class="text-center">
 						<button
-							on:click={() => {
+							onclick={() => {
 								reject(record.players.uid, record.levels);
 							}}
 						>

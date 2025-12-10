@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Table from '$lib/components/ui/table';
 	import * as Select from '$lib/components/ui/select';
@@ -35,33 +37,37 @@
 	import Levels from './levels.svelte';
 	import { _ } from 'svelte-i18n';
 
-	export let data: PageData;
-	let editedData = structuredClone(data);
-	let transferUID = '';
-	let currentTab: string = isActive(data.boostedUntil) && data.homeContent ? 'home' : 'members';
-	let members: any[] = [];
-	let records: any[] = [];
-	let invitations: any[] = [];
-	let membersFilter: any = {
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
+	let editedData = $state(structuredClone(data));
+	let transferUID = $state('');
+	let currentTab: string = $state(isActive(data.boostedUntil) && data.homeContent ? 'home' : 'members');
+	let members: any[] = $state([]);
+	let records: any[] = $state([]);
+	let invitations: any[] = $state([]);
+	let membersFilter: any = $state({
 		start: 0,
 		end: 49,
 		sortBy: 'name',
 		ascending: true
-	};
-	let recordsFilter: any = {
+	});
+	let recordsFilter: any = $state({
 		start: 0,
 		end: 49,
 		sortBy: 'timestamp',
 		ascending: false
-	};
-	let appliedMembersFilter = structuredClone(membersFilter);
-	let appliedRecordsFilter = structuredClone(recordsFilter);
-	let opened = false;
-	let uid: string, levelID: number;
-	let fileinput: any;
+	});
+	let appliedMembersFilter = $state(structuredClone(membersFilter));
+	let appliedRecordsFilter = $state(structuredClone(recordsFilter));
+	let opened = $state(false);
+	let uid: string = $state(), levelID: number = $state();
+	let fileinput: any = $state();
 	let membersState = 0;
 	let recordsState = 0;
-	let invitation: any = null;
+	let invitation: any = $state(null);
 
 	function fetchMembers(e: any, append = false) {
 		membersState = 1;
@@ -324,16 +330,18 @@
 		}).then((res) => window.location.reload());
 	}
 
-	$: ($user,
-		(() => {
-			if ($user.loggedIn) {
-				fetch(
-					`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}/invitation/${$user.data.uid}`
-				)
-					.then((res) => res.json())
-					.then((res) => (invitation = res));
-			}
-		})());
+	run(() => {
+		($user,
+			(() => {
+				if ($user.loggedIn) {
+					fetch(
+						`${import.meta.env.VITE_API_URL}/clans/${$page.params.id}/invitation/${$user.data.uid}`
+					)
+						.then((res) => res.json())
+						.then((res) => (invitation = res));
+				}
+			})());
+	});
 
 	onMount(async () => {
 		fetchMembers(null);
@@ -367,7 +375,7 @@
 	style="display:none"
 	type="file"
 	accept=".jpg, .jpeg"
-	on:change={(e) => getImage(e)}
+	onchange={(e) => getImage(e)}
 	bind:this={fileinput}
 />
 <RecordDetail {levelID} {uid} bind:open={opened} />
@@ -378,7 +386,7 @@
 			class="pageBackground"
 			aria-hidden="true"
 			style={`background-image: url(https://cdn.demonlistvn.com/clan-photos/${$page.params.id}.jpg?version=${data.imageVersion});`}
-		/>
+		></div>
 	{/if}
 	<div class="leftWrapper">
 		<div class="banner">
@@ -477,7 +485,7 @@
 							class="h-[calc(100vh-180px)] w-full rounded-lg"
 							src={data.homeContent}
 							title="home"
-						/>
+						></iframe>
 					{/if}
 				</Tabs.Content>
 			{/if}

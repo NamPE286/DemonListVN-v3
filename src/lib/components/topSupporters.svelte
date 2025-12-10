@@ -6,9 +6,13 @@
 	import { _ } from 'svelte-i18n';
 	import { isActive } from '$lib/client/isSupporterActive';
 
-	export let topBuyers: any[];
+	interface Props {
+		topBuyers: any[];
+	}
 
-	let isBannerFailedToLoad: boolean[] = [];
+	let { topBuyers }: Props = $props();
+
+	let isBannerFailedToLoad: boolean[] = $state([]);
 </script>
 
 {#if topBuyers && topBuyers.length > 0}
@@ -28,7 +32,7 @@
 				>
 					{#if isActive(buyer.player.supporterUntil) && !isBannerFailedToLoad[index]}
 						<img
-							on:error={() => {
+							onerror={() => {
 								isBannerFailedToLoad[index] = true;
 							}}
 							class="absolute left-0 top-0 z-0 h-full w-full rounded-xl object-cover opacity-20"

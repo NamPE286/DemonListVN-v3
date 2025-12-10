@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import LevelCard from '$lib/components/levelCard.svelte';
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
@@ -7,7 +9,11 @@
 	import { user } from '$lib/client';
 	import { goto } from '$app/navigation';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data = $bindable() }: Props = $props();
 	let prefix = data.levels.slice(0, 4);
 	let curPage = 1;
 	let loaded = true;
@@ -67,7 +73,9 @@
 		return 'None';
 	}
 
-	$: (data, update());
+	run(() => {
+		(data, update());
+	});
 
 	onMount(() => {
 		user.subscribe((value) => {

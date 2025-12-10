@@ -21,15 +21,15 @@
 	}
 
 	const LEVEL_LIMIT = 50;
-	let list: string | null = null;
-	let isOpening = false;
-	let hasOpened = false;
-	let levels: Level[] = [];
-	let displayEntries: PollEntry[] = [];
-	let scrollPosition = 0;
-	let wonLevel: Level | null = null;
-	let minProgress = 0;
-	let selectedList = { value: 'all', label: 'All Levels' };
+	let list: string | null = $state(null);
+	let isOpening = $state(false);
+	let hasOpened = $state(false);
+	let levels: Level[] = $state([]);
+	let displayEntries: PollEntry[] = $state([]);
+	let scrollPosition = $state(0);
+	let wonLevel: Level | null = $state(null);
+	let minProgress = $state(0);
+	let selectedList = $state({ value: 'all', label: 'All Levels' });
 
 	interface PollEntry {
 		level: Level;

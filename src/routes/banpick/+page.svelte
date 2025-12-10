@@ -9,18 +9,22 @@
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { isActive } from '$lib/client/isSupporterActive';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
 
-	let banned = Array(data.levels.length).fill(false);
-	let order = Array(data.levels.length).fill(0);
-	let phase = 0;
-	let levels: any[] = [null, null, null];
-	let logs: any[] = Array(data.levels.length).fill(null);
-	let pickedBy: any[] = [null, null, null];
-	let turn = 0;
-	let coinFlipped = false;
-	let isCoinFlipping = false;
-	let isBannerFailedToLoad = [false, false];
+	let { data }: Props = $props();
+
+	let banned = $state(Array(data.levels.length).fill(false));
+	let order = $state(Array(data.levels.length).fill(0));
+	let phase = $state(0);
+	let levels: any[] = $state([null, null, null]);
+	let logs: any[] = $state(Array(data.levels.length).fill(null));
+	let pickedBy: any[] = $state([null, null, null]);
+	let turn = $state(0);
+	let coinFlipped = $state(false);
+	let isCoinFlipping = $state(false);
+	let isBannerFailedToLoad = $state([false, false]);
 
 	function ban(index: number) {
 		banned[index] = true;
@@ -79,7 +83,7 @@
 
 {#if isActive(data.players[0].supporterUntil) && !isBannerFailedToLoad[0]}
 	<img
-		on:error={() => {
+		onerror={() => {
 			isBannerFailedToLoad[0] = true;
 			isBannerFailedToLoad = isBannerFailedToLoad;
 		}}
@@ -92,7 +96,7 @@
 {/if}
 {#if isActive(data.players[1].supporterUntil) && !isBannerFailedToLoad[1]}
 	<img
-		on:error={() => {
+		onerror={() => {
 			isBannerFailedToLoad[1] = true;
 			isBannerFailedToLoad = isBannerFailedToLoad;
 		}}
@@ -233,7 +237,7 @@
 				<div
 					class="coin"
 					class:flipping={isCoinFlipping}
-					on:animationend={() => {
+					onanimationend={() => {
 						coinFlipped = true;
 						toast.info(`${data.players[turn].name} goes first!`);
 					}}
@@ -277,7 +281,7 @@
 	{/if}
 </div>
 
-<div class="pb-[1000px]" />
+<div class="pb-[1000px]"></div>
 
 <style lang="scss">
 	.bgGradient {

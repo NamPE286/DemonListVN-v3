@@ -5,7 +5,11 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { _ } from 'svelte-i18n';
 
-	export let data: any;
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
 
 	function isEventStarted() {
 		return new Date(data.start) <= new Date();

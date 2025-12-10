@@ -3,8 +3,12 @@
 	import { Badge } from '$lib/components/ui/badge';
 	import { Star } from 'svelte-radix';
 
-	export let buyer: any;
-	export let rank: number;
+	interface Props {
+		buyer: any;
+		rank: number;
+	}
+
+	let { buyer, rank }: Props = $props();
 
 	function formatAmount(amount: number): string {
 		return new Intl.NumberFormat('vi-VN', {

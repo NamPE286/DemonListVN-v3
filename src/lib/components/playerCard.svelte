@@ -8,10 +8,14 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { _ } from 'svelte-i18n';
 
-	export let player: any;
+	interface Props {
+		player: any;
+	}
+
+	let { player }: Props = $props();
 
 	let exp = player.exp + player.extraExp;
-	let isBannerFailedToLoad = false;
+	let isBannerFailedToLoad = $state(false);
 </script>
 
 <div
@@ -22,7 +26,7 @@
 >
 	{#if isActive(player.supporterUntil) && !isBannerFailedToLoad}
 		<img
-			on:error={() => {
+			onerror={() => {
 				isBannerFailedToLoad = true;
 			}}
 			class="bgGradient absolute top-[50px] z-[-1] ml-[-15px] h-[80px] w-full rounded object-cover"

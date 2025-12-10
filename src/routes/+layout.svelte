@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import '../app.pcss';
 	import '../app.scss';
 	import 'non.geist';
@@ -6,9 +8,7 @@
 
 	import { ModeWatcher, setMode } from 'mode-watcher';
 
-	import HamburgerMenu from 'svelte-radix/HamburgerMenu.svelte';
-	import MagnifyingGlass from 'svelte-radix/MagnifyingGlass.svelte';
-	import X from 'svelte-radix/Cross2.svelte';
+	import { Menu, Search as SearchIcon, X } from 'lucide-svelte';
 
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Toaster } from '$lib/components/ui/sonner';
@@ -22,7 +22,6 @@
 
 	import supabase from '$lib/client/supabase';
 	import { user } from '$lib/client';
-	import { mediaQuery } from 'svelte-legos';
 	import NotificationButton from '$lib/components/notificationButton.svelte';
 	import { goto } from '$app/navigation';
 	import { onMount } from 'svelte';
@@ -31,8 +30,13 @@
 	import { page } from '$app/stores';
 	import { _, locale } from 'svelte-i18n';
 	import PlayerCard from '$lib/components/playerCard.svelte';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-	$: linkGroup = [
+	let { children }: Props = $props();
+
+	let linkGroup = $derived([
 		{
 			name: 'List',
 			routes: [
@@ -73,18 +77,20 @@
 				}
 			]
 		}
-	];
+	]);
 
-	let searchQuery = '';
-	let searchToggled = false;
-	let isVisible = false;
-	let hideNav = false;
-	let removePad = false;
-	let pathname = '';
-	let supporterAlertDismissed = false;
-	$: pathname = $page.url.pathname;
-
-	const isDesktop = mediaQuery('(min-width: 1350px)');
+	let searchQuery = $state('');
+	let searchToggled = $state(false);
+	let isVisible = $state(false);
+	let hideNav = $state(false);
+	let removePad = $state(false);
+	let pathname = $state('');
+	let supporterAlertDismissed = $state(false);
+	let isDesktop = $state(false);
+	
+	run(() => {
+		pathname = $page.url.pathname;
+	});
 
 	function signIn() {
 		supabase.auth.signInWithOAuth({
@@ -124,6 +130,14 @@
 	}
 
 	onMount(() => {
+		// Set up media query for desktop detection
+		const mediaQueryList = window.matchMedia('(min-width: 1350px)');
+		isDesktop = mediaQueryList.matches;
+		const handleMediaChange = (e: MediaQueryListEvent) => {
+			isDesktop = e.matches;
+		};
+		mediaQueryList.addEventListener('change', handleMediaChange);
+		
 		const savedLocale = localStorage.getItem('locale');
 
 		locale.set(savedLocale || 'vi');
@@ -184,6 +198,10 @@
 				document.head.appendChild(s);
 			}
 		});
+		
+		return () => {
+			mediaQueryList.removeEventListener('change', handleMediaChange);
+		};
 	});
 
 	function dismissSupporterAlert() {
@@ -243,11 +261,13 @@
 			</div>
 			<div class="menu">
 				<DropdownMenu.Root>
-					<DropdownMenu.Trigger asChild let:builder>
-						<Button builders={[builder]} variant="outline" size="icon">
-							<HamburgerMenu size={18} />
-						</Button>
-					</DropdownMenu.Trigger>
+					<DropdownMenu.Trigger asChild >
+						{#snippet children({ builder })}
+												<Button builders={[builder]} variant="outline" size="icon">
+								<Menu size={18} />
+							</Button>
+																	{/snippet}
+										</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end" class="w-64">
 						{#each linkGroup as group}
 							{#if group.routes}
@@ -282,10 +302,10 @@
 			</div>
 		</div>
 		<div class="left">
-			{#if $isDesktop}
-				<Button variant="outline" on:click={() => (searchToggled = true)}>
+			{#if isDesktop}
+				<Button variant="outline" onclick={() => (searchToggled = true)}>
 					<div class="searchBtn">
-						<MagnifyingGlass size={20} />
+						<SearchIcon size={20} />
 						<p>{$_('search.button')}</p>
 						<kbd
 							class="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100"
@@ -295,8 +315,8 @@
 					</div>
 				</Button>
 			{:else}
-				<button class="clickable" on:click={() => (searchToggled = true)}>
-					<MagnifyingGlass size={20} />
+				<button class="clickable" onclick={() => (searchToggled = true)}>
+					<SearchIcon size={20} />
 				</button>
 			{/if}
 
@@ -306,25 +326,27 @@
 				<SubmitButton />
 				<NotificationButton />
 				<DropdownMenu.Root>
-					<DropdownMenu.Trigger asChild let:builder>
-						<Button
-							variant="outline"
-							size="icon"
-							class={`overflow-hidden rounded-full ${isActive($user.data.supporterUntil) ? 'border-[2px] border-yellow-400' : ''}`}
-							builders={[builder]}
-						>
-							<Avatar.Root>
-								<Avatar.Image
-									class="object-cover"
-									src={`https://cdn.demonlistvn.com/avatars/${$user.data.uid}${
-										isActive($user.data.supporterUntil) && $user.data.isAvatarGif ? '.gif' : '.jpg'
-									}?version=${$user.data.avatarVersion}`}
-									alt=""
-								/>
-								<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
-							</Avatar.Root>
-						</Button>
-					</DropdownMenu.Trigger>
+					<DropdownMenu.Trigger asChild >
+						{#snippet children({ builder })}
+												<Button
+								variant="outline"
+								size="icon"
+								class={`overflow-hidden rounded-full ${isActive($user.data.supporterUntil) ? 'border-[2px] border-yellow-400' : ''}`}
+								builders={[builder]}
+							>
+								<Avatar.Root>
+									<Avatar.Image
+										class="object-cover"
+										src={`https://cdn.demonlistvn.com/avatars/${$user.data.uid}${
+											isActive($user.data.supporterUntil) && $user.data.isAvatarGif ? '.gif' : '.jpg'
+										}?version=${$user.data.avatarVersion}`}
+										alt=""
+									/>
+									<Avatar.Fallback>{$user.data.name[0]}</Avatar.Fallback>
+								</Avatar.Root>
+							</Button>
+																	{/snippet}
+										</DropdownMenu.Trigger>
 					<DropdownMenu.Content align="end" class="z-[99999] w-[320px]">
 						<DropdownMenu.Label class="font-normal">
 							{#if $user.loggedIn && isActive($user.data.supporterUntil)}
@@ -386,7 +408,7 @@
 					>
 				</Alert.Description>
 				<button
-					on:click={dismissSupporterAlert}
+					onclick={dismissSupporterAlert}
 					class="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100"
 					aria-label="Dismiss"
 				>
@@ -397,7 +419,7 @@
 	</div>
 {/if}
 
-<slot />
+{@render children?.()}
 
 <footer>
 	<div class="footerFiller"></div>

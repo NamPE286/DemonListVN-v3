@@ -1,10 +1,21 @@
 <script lang="ts">
 	import type { CardConfig } from './types';
 
-	export let cardConfigs: CardConfig[];
-	export let config: CardConfig;
-	export let draggedCard: string | null;
-	export let isCustomizing: boolean = false;
+	interface Props {
+		cardConfigs: CardConfig[];
+		config: CardConfig;
+		draggedCard: string | null;
+		isCustomizing?: boolean;
+		children?: import('svelte').Snippet;
+	}
+
+	let {
+		cardConfigs = $bindable(),
+		config,
+		draggedCard = $bindable(),
+		isCustomizing = false,
+		children
+	}: Props = $props();
 
 	function handleDragStart(e: DragEvent, cardId: string) {
 		if (!isCustomizing) return;
@@ -54,11 +65,11 @@
 	draggable={isCustomizing}
 	role="button"
 	tabindex={isCustomizing ? 0 : -1}
-	on:dragstart={(e) => handleDragStart(e, config.id)}
-	on:dragover={handleDragOver}
-	on:drop={(e) => handleDrop(e, config.id)}
+	ondragstart={(e) => handleDragStart(e, config.id)}
+	ondragover={handleDragOver}
+	ondrop={(e) => handleDrop(e, config.id)}
 >
-	<slot />
+	{@render children?.()}
 </div>
 
 <style>

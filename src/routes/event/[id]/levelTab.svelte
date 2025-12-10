@@ -12,11 +12,15 @@
 	import Button from '$lib/components/ui/button/button.svelte';
 	import { Reload } from 'svelte-radix';
 
-	export let levels: (Level | null)[];
-	export let event: any;
-	export let refresh: () => void;
-	let records: any[] = [];
-	let showDeathCount: boolean = true;
+	interface Props {
+		levels: (Level | null)[];
+		event: any;
+		refresh: () => void;
+	}
+
+	let { levels, event, refresh }: Props = $props();
+	let records: any[] = $state([]);
+	let showDeathCount: boolean = $state(true);
 
 	async function fetchRecord() {
 		if (!$user.loggedIn) {

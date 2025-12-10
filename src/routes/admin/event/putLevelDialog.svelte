@@ -7,14 +7,18 @@
 	import { Switch } from '$lib/components/ui/switch/index.js';
 	import { toast } from 'svelte-sonner';
 
-	export let event: any;
-	export let title: string;
-	export let data: any = {
+	interface Props {
+		event: any;
+		title: string;
+		data?: any;
+	}
+
+	let { event, title, data = $bindable({
 		eventID: event.id,
 		levelID: NaN,
 		point: 0,
 		needRaw: false
-	};
+	}) }: Props = $props();
 
 	async function save() {
 		toast.promise(

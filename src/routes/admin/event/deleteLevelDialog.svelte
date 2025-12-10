@@ -3,8 +3,12 @@
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { toast } from 'svelte-sonner';
 
-	export let eventID: number;
-	export let levelID: number;
+	interface Props {
+		eventID: number;
+		levelID: number;
+	}
+
+	let { eventID, levelID }: Props = $props();
 
 	async function f() {
 		if (!confirm(`Delete ${levelID}?`)) {

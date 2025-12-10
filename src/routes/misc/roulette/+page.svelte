@@ -17,27 +17,27 @@ interface Level {
 }
 
 // State variables
-let currentLevel: Level | null = null;
-let currentType: 'dl' | 'fl' | 'pl' = 'dl';
-let finished = false;
-let message = '';
-let listType: 'all' | 'dl' | 'fl' | 'pl' = 'all';
-let inputValue = '';
-let targetPercent = 2;
-let inputError = '';
-let loading = false;
+let currentLevel: Level | null = $state(null);
+let currentType: 'dl' | 'fl' | 'pl' = $state('dl');
+let finished = $state(false);
+let message = $state('');
+let listType: 'all' | 'dl' | 'fl' | 'pl' = $state('all');
+let inputValue = $state('');
+let targetPercent = $state(2);
+let inputError = $state('');
+let loading = $state(false);
 let playedLevels: number[] = [];
 
 // Range filter state
 let rangeStart: number | '' = '';
 let rangeEnd: number | '' = '';
-let pendingRangeStart: number | '' = '';
-let pendingRangeEnd: number | '' = '';
+let pendingRangeStart: number | '' = $state('');
+let pendingRangeEnd: number | '' = $state('');
 
 // Cache for max values (fetched once)
 let maxDlTop = 0;
 let maxFlTop = 0;
-let isMaxValuesLoaded = false;
+let isMaxValuesLoaded = $state(false);
 
 const MAX_RETRY_ATTEMPTS = 50;
 const CACHE_BUSTER_PARAM = '_';

@@ -1,9 +1,19 @@
 <script lang="ts">
-	export var staffName: string;
-	export var staffYT: string;
-	export var staffFB: string;
-	export var staffGH: string;
-	export var staffAvatar: string;
+	interface Props {
+		staffName: string;
+		staffYT: string;
+		staffFB: string;
+		staffGH: string;
+		staffAvatar: string;
+	}
+
+	let {
+		staffName,
+		staffYT,
+		staffFB,
+		staffGH,
+		staffAvatar
+	}: Props = $props();
 </script>
 
 <div class="staff_Card">
@@ -12,15 +22,15 @@
 		<div class="c_flexCol">
 			<p class="c_name">{staffName}</p>
 			<div class="c_flexRow">
-				<!-- svelte-ignore empty-block -->
+				<!-- svelte-ignore block_empty -->
 				{#if staffYT == "#!" || staffYT == ""}{:else}
 					<a href={staffYT} target="_blank"><img class="c_icon" src="../youtube.svg" alt="youtube" /></a>
 				{/if}
-				<!-- svelte-ignore empty-block -->
+				<!-- svelte-ignore block_empty -->
 				{#if staffFB == "#!" || staffFB == ""}{:else}
 					<a href={staffFB} target="_blank"><img class="c_icon" src="../facebook.svg" alt="facebook" /></a>
 				{/if}
-				<!-- svelte-ignore empty-block -->
+				<!-- svelte-ignore block_empty -->
 				{#if staffGH == "#!" || staffGH == ""}{:else}
 					<a href={staffGH} target="_blank"><img class="c_icon" src="../github.svg" alt="github" /></a>
 				{/if}

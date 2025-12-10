@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import * as Card from '$lib/components/ui/card';
 	import * as Table from '$lib/components/ui/table';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
@@ -14,14 +16,18 @@
 	import { goto } from '$app/navigation';
 	import { _ } from 'svelte-i18n';
 
-	export let data: PageData;
-	let levelAPI: any = null;
-	let records: any[] = [];
-	let deathCount: any[] = [];
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
+	let levelAPI: any = $state(null);
+	let records: any[] = $state([]);
+	let deathCount: any[] = $state([]);
 	let chart: any = null;
 	let loaded = false;
-	let recordDetailOpened = false;
-	let selectedRecord: any = null;
+	let recordDetailOpened = $state(false);
+	let selectedRecord: any = $state(null);
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -103,7 +109,9 @@
 			});
 	}
 
-	$: ($page.params.id, fetchData());
+	run(() => {
+		($page.params.id, fetchData());
+	});
 
 	onMount(() => {
 		loaded = true;
@@ -291,7 +299,7 @@
 			{#if !deathCount.length}
 				<Loading inverted />
 			{:else}
-				<canvas id="chart" use:createChart />
+				<canvas id="chart" use:createChart></canvas>
 			{/if}
 		</div>
 	{/if}

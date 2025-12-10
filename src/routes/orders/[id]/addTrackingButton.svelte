@@ -7,13 +7,17 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import { toast } from 'svelte-sonner';
 
-	export let order: any;
+	interface Props {
+		order: any;
+	}
 
-	let shippingUnit = '',
-		link = '',
-		trackingID = '';
+	let { order }: Props = $props();
 
-	let content: any;
+	let shippingUnit = $state(''),
+		link = $state(''),
+		trackingID = $state('');
+
+	let content: any = $state();
 
 	async function add() {
 		toast.promise(

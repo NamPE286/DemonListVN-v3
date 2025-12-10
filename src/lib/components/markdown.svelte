@@ -2,7 +2,11 @@
 	import { onMount } from 'svelte';
 	import SvelteMarkdown from 'svelte-markdown';
 
-	export let content: string;
+	interface Props {
+		content: string;
+	}
+
+	let { content }: Props = $props();
 
 	function updateMarkdownStyle() {
 		const elem = document.getElementsByClassName('markdown')[0];

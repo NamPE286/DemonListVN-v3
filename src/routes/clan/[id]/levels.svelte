@@ -7,7 +7,11 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { _ } from 'svelte-i18n';
 	
-	export let clan: any;
+	interface Props {
+		clan: any;
+	}
+
+	let { clan }: Props = $props();
 
 	let filter = {
 		dl: {
@@ -27,13 +31,13 @@
 		dl: any[];
 		fl: any[];
 		pl: any[];
-	} = {
+	} = $state({
 		dl: [],
 		fl: [],
 		pl: []
-	};
-	let list: 'dl' | 'pl' | 'fl' = 'dl';
-	let selectedList: 'dl' | 'pl' | 'fl' = 'dl';
+	});
+	let list: 'dl' | 'pl' | 'fl' = $state('dl');
+	let selectedList: 'dl' | 'pl' | 'fl' = $state('dl');
 
 	async function fetchLevels() {
 		fetch(

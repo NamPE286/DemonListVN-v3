@@ -5,11 +5,15 @@
 	import { locale } from 'svelte-i18n';
 	import type { PageData } from './$types';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
 
-	$: generalRules = data.rules.filter((rule: any) => rule.type === 'general' && rule.lang === $locale);
-	$: classicRules = data.rules.filter((rule: any) => rule.type === 'classic' && rule.lang === $locale);
-	$: platformerRules = data.rules.filter((rule: any) => rule.type === 'platformer' && rule.lang === $locale);
+	let { data }: Props = $props();
+
+	let generalRules = $derived(data.rules.filter((rule: any) => rule.type === 'general' && rule.lang === $locale));
+	let classicRules = $derived(data.rules.filter((rule: any) => rule.type === 'classic' && rule.lang === $locale));
+	let platformerRules = $derived(data.rules.filter((rule: any) => rule.type === 'platformer' && rule.lang === $locale));
 </script>
 
 <svelte:head>

@@ -5,8 +5,8 @@
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 
-	let isOpen = false;
-	let userID: any, levelID: any;
+	let isOpen = $state(false);
+	let userID: any = $state(), levelID: any = $state();
 
 	async function retrieve() {
 		toast.promise(

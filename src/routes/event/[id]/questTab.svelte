@@ -7,8 +7,12 @@
 	import { _ } from 'svelte-i18n';
 	import Quest from './quest.svelte';
 
-	export let event: any;
-	let data: any[] = [];
+	interface Props {
+		event: any;
+	}
+
+	let { event }: Props = $props();
+	let data: any[] = $state([]);
 
 	async function fetchData() {
 		const res = await (

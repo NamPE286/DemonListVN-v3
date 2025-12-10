@@ -20,15 +20,19 @@
 	import Ads from '$lib/components/ads.svelte';
 	import { _ } from 'svelte-i18n';
 
-	export let data: PageData;
-	const newClanData = {
+	interface Props {
+		data: PageData;
+	}
+
+	let { data = $bindable() }: Props = $props();
+	const newClanData = $state({
 		name: '',
 		tag: '',
 		memberLimit: NaN,
 		isPublic: false
-	};
-	let invitations: any = [];
-	let searchQuery = '';
+	});
+	let invitations: any = $state([]);
+	let searchQuery = $state('');
 
 	async function createClan() {
 		if (

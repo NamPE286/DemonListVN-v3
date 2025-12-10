@@ -6,23 +6,34 @@
 	import type { CardConfig } from './types';
 	import { getBorderStyle } from './getBorderStyle';
 
-	export let data: any;
-	export let cardConfigs: CardConfig[];
-	export let config: CardConfig;
-	export let draggedCard: string | null;
-	export let isCustomizing: boolean = false;
-	export let onRecordClick: (uid: string, levelID: number) => void;
+	interface Props {
+		data: any;
+		cardConfigs: CardConfig[];
+		config: CardConfig;
+		draggedCard: string | null;
+		isCustomizing?: boolean;
+		onRecordClick: (uid: string, levelID: number) => void;
+	}
 
-	$: dlRecords = data.records.dl || [];
-	$: flRecords = data.records.fl || [];
-	$: plRecords = data.records.pl || [];
-	$: allRecords = [...dlRecords, ...flRecords, ...plRecords];
-	$: recentRecords = allRecords
+	let {
+		data,
+		cardConfigs = $bindable(),
+		config,
+		draggedCard = $bindable(),
+		isCustomizing = $bindable(false),
+		onRecordClick
+	}: Props = $props();
+
+	let dlRecords = $derived(data.records.dl || []);
+	let flRecords = $derived(data.records.fl || []);
+	let plRecords = $derived(data.records.pl || []);
+	let allRecords = $derived([...dlRecords, ...flRecords, ...plRecords]);
+	let recentRecords = $derived(allRecords
 		.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-		.slice(0, 5);
+		.slice(0, 5));
 </script>
 
-<BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
+<BaseCard bind:draggedCard bind:cardConfigs {config} bind:isCustomizing>
 	<Card.Root class="h-full" style={getBorderStyle(data.player)}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.recent_activity')}</Card.Title>
@@ -33,7 +44,7 @@
 					{#each recentRecords as record}
 						<button
 							class="recent-item"
-							on:click={() => onRecordClick(record.userid, record.levelid)}
+							onclick={() => onRecordClick(record.userid, record.levelid)}
 						>
 							<span class="recent-level-name">
 								{record.levels.name}

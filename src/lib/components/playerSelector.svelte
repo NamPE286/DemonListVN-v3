@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { createEventDispatcher } from 'svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Avatar from '$lib/components/ui/avatar';
@@ -9,12 +11,16 @@
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { Search, X } from 'lucide-svelte';
 
-	export let open = false;
-	export let title = 'Select Player';
+	interface Props {
+		open?: boolean;
+		title?: string;
+	}
 
-	let searchValue = '';
-	let searchResults: any[] = [];
-	let isSearching = false;
+	let { open = $bindable(false), title = 'Select Player' }: Props = $props();
+
+	let searchValue = $state('');
+	let searchResults: any[] = $state([]);
+	let isSearching = $state(false);
 	let searchTimeout: any = null;
 
 	const dispatch = createEventDispatcher();
@@ -54,7 +60,9 @@
 		searchResults = [];
 	}
 
-	$: searchValue, handleSearchInput();
+	run(() => {
+		searchValue, handleSearchInput();
+	});
 </script>
 
 <Dialog.Root bind:open onOpenChange={(isOpen) => !isOpen && closeDialog()}>
@@ -74,7 +82,7 @@
 				/>
 				{#if searchValue}
 					<button
-						on:click={() => (searchValue = '')}
+						onclick={() => (searchValue = '')}
 						class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
 					>
 						<X class="h-4 w-4" />
@@ -105,7 +113,7 @@
 							{#each searchResults as player}
 								<button
 									class="player-item"
-									on:click={() => selectPlayer(player)}
+									onclick={() => selectPlayer(player)}
 									type="button"
 								>
 									<Avatar.Root class="h-12 w-12">

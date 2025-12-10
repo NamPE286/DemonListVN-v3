@@ -4,7 +4,7 @@
 	import * as Table from '$lib/components/ui/table/index.js';
 	import { onMount } from 'svelte';
 
-	let data: any[] = [];
+	let data: any[] = $state([]);
 
 	onMount(async () => {
 		data = await (

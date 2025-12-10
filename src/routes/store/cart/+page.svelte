@@ -11,7 +11,7 @@
 	import { ExclamationTriangle } from 'svelte-radix';
 	import { _ } from 'svelte-i18n';
 
-	let data: any[] = [];
+	let data: any[] = $state([]);
 
 	async function fetchData() {
 		if (!$cart.items.length) {

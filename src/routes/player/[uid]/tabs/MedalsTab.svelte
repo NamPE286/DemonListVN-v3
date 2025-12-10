@@ -2,9 +2,13 @@
 	import { onMount } from 'svelte';
 	import Medal from '../medal.svelte';
 
-	export let userID: string;
+	interface Props {
+		userID: string;
+	}
 
-	let medals: any[] = [];
+	let { userID }: Props = $props();
+
+	let medals: any[] = $state([]);
 
 	onMount(async () => {
 		medals = await (await fetch(`${import.meta.env.VITE_API_URL}/players/${userID}/medals`)).json();

@@ -10,7 +10,11 @@
 	import { Calendar, Clock, Star } from 'svelte-radix';
 	import { _ } from 'svelte-i18n';
 
-	export let event: any;
+	interface Props {
+		event: any;
+	}
+
+	let { event }: Props = $props();
 
 	function formatDate(dateString: string) {
 		return new Date(dateString).toLocaleDateString('vi-VN');

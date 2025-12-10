@@ -3,10 +3,14 @@
 	import { user } from '$lib/client';
 	import { isActive } from '$lib/client/isSupporterActive';
 
-	export let dataAdFormat = 'auto';
-	export let unit = 'auto';
+	interface Props {
+		dataAdFormat?: string;
+		unit?: string;
+	}
+
+	let { dataAdFormat = 'auto', unit = 'auto' }: Props = $props();
 	let mounted = false;
-	$: hidden = $user.checked && $user.loggedIn && isActive($user.data.supporterUntil);
+	let hidden = $derived($user.checked && $user.loggedIn && isActive($user.data.supporterUntil));
 
 	onMount(() => {
 		if (mounted) {

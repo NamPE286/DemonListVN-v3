@@ -15,13 +15,17 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { _, locale } from 'svelte-i18n';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
 
-	let isBannerFailedToLoad = false;
+	let { data }: Props = $props();
+
+	let isBannerFailedToLoad = $state(false);
 	let exp = data.owner ? data.players.exp + data.players.extraExp : 0;
-	let editMode = false;
-	let previewMode = false;
-	let editedContent = data.content || '';
+	let editMode = $state(false);
+	let previewMode = $state(false);
+	let editedContent = $state(data.content || '');
 
 	function togglePreview() {
 		previewMode = !previewMode;
@@ -136,7 +140,7 @@
 			>
 				{#if isActive(data.players.supporterUntil) && !isBannerFailedToLoad}
 					<img
-						on:error={() => {
+						onerror={() => {
 							isBannerFailedToLoad = true;
 						}}
 						class="bgGradient absolute z-0 rounded-xl object-cover"

@@ -22,16 +22,20 @@
 	import EventTab from './tabs/EventsTab.svelte';
 	import CardCollectionTab from './tabs/CardCollectionTab.svelte';
 
-	export let data: PageData;
-	let list: 'dl' | 'fl' | 'pl' | '' = '';
-	let recordDetailOpened = false;
-	let selectedRecord: any = null;
-	let filter = {
+	interface Props {
+		data: PageData;
+	}
+
+	let { data = $bindable() }: Props = $props();
+	let list: 'dl' | 'fl' | 'pl' | '' = $state('');
+	let recordDetailOpened = $state(false);
+	let selectedRecord: any = $state(null);
+	let filter = $state({
 		sortBy: 'pt',
 		ascending: false
-	};
+	});
 
-	let isBannerFailedToLoad = false;
+	let isBannerFailedToLoad = $state(false);
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -95,7 +99,7 @@
 <div class="relative" style={getBgColor()}>
 	{#if isActive(data.player.supporterUntil) && !isBannerFailedToLoad}
 		<img
-			on:error={() => {
+			onerror={() => {
 				isBannerFailedToLoad = true;
 			}}
 			style="mask-image: linear-gradient(rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 1) 85%, rgba(0, 0, 0, 0) 100%); position: absolute; z-index: 0; margin-top: -55px; height: 330px; width: 100%; object-fit: cover;"
@@ -132,7 +136,7 @@
 						</a>
 					{/if}
 					<button
-						on:click={() => {
+						onclick={() => {
 							navigator.clipboard.writeText(data.player.uid);
 							toast.success($_('player.copy_uid'));
 						}}
@@ -180,10 +184,10 @@
 						</a>
 					{/if}
 					{#if data.player.discord}
-						<!-- svelte-ignore a11y-click-events-have-key-events -->
+						<!-- svelte-ignore a11y_click_events_have_key_events -->
 						<button
 							class="clickable"
-							on:click={() => {
+							onclick={() => {
 								navigator.clipboard.writeText(data.player.discord);
 								toast('Copied Discord username to clipboard!');
 							}}
@@ -341,7 +345,7 @@
 	<div
 		class="mt-[-10px] h-[100px] w-full"
 		style={`background: linear-gradient(to bottom, ${data.player.bgColor}, transparent);`}
-	/>
+	></div>
 {/if}
 
 <style lang="scss">

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/client';
 	import { page } from '$app/stores';
@@ -32,5 +34,7 @@
 			}
 		);
 	}
-	$: $user.loggedIn && link();
+	run(() => {
+		$user.loggedIn && link();
+	});
 </script>

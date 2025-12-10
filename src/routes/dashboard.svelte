@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { onMount } from 'svelte';
 	import { user } from '$lib/client';
 	import { browser } from '$app/environment';
@@ -20,19 +22,23 @@
 	import { _ } from 'svelte-i18n';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 
-	export let events: any[];
+	interface Props {
+		events: any[];
+	}
 
-	let selectedSubmission: any = null;
-	let recordDetailOpen = false;
+	let { events }: Props = $props();
 
-	let dashboardBg: string = '';
-	let tempBgUrl: string = '';
-	let overlayType: 'none' | 'dark' | 'blur' | 'both' = 'none';
-	let tempOverlayType: 'none' | 'dark' | 'blur' | 'both' = 'none';
-	let settingsOpen = false;
-	let submissions: any[] = [];
-	let loadingSubmissions = true;
-	let currentTime = new Date();
+	let selectedSubmission: any = $state(null);
+	let recordDetailOpen = $state(false);
+
+	let dashboardBg: string = $state('');
+	let tempBgUrl: string = $state('');
+	let overlayType: 'none' | 'dark' | 'blur' | 'both' = $state('none');
+	let tempOverlayType: 'none' | 'dark' | 'blur' | 'both' = $state('none');
+	let settingsOpen = $state(false);
+	let submissions: any[] = $state([]);
+	let loadingSubmissions = $state(true);
+	let currentTime = $state(new Date());
 
 	// Dashboard settings storage keys
 	const DASHBOARD_BG_KEY = 'dashboard.backgroundUrl';
@@ -128,9 +134,11 @@
 		return () => clearInterval(interval);
 	});
 
-	$: if ($user.loggedIn && $user.checked) {
-		fetchSubmissions();
-	}
+	run(() => {
+		if ($user.loggedIn && $user.checked) {
+			fetchSubmissions();
+		}
+	});
 </script>
 
 <!-- Dashboard Settings Dialog -->
@@ -196,7 +204,7 @@
 						src={tempBgUrl}
 						alt="Preview"
 						class="h-full w-full object-cover"
-						on:error={() => toast.error('Invalid image URL')}
+						onerror={() => toast.error('Invalid image URL')}
 					/>
 					<!-- Preview overlay -->
 					{#if tempOverlayType === 'dark' || tempOverlayType === 'both'}
@@ -245,7 +253,7 @@
 			</div>
 			<button
 				class="flex-shrink-0 rounded-full bg-background/60 p-2.5 backdrop-blur-md transition-all hover:bg-background/80 sm:p-3"
-				on:click={() => (settingsOpen = true)}
+				onclick={() => (settingsOpen = true)}
 			>
 				<Gear class="h-4 w-4 sm:h-5 sm:w-5" />
 			</button>
@@ -309,7 +317,7 @@
 							<div class="space-y-1">
 								{#each submissions.slice(0, 3) as submission}
 									<button
-										on:click={() => {
+										onclick={() => {
 											selectedSubmission = submission;
 											recordDetailOpen = true;
 										}}
@@ -409,7 +417,7 @@
 		<!-- Scroll Down Indicator (Mobile) -->
 		<button
 			class="absolute bottom-4 left-1/2 z-20 flex -translate-x-1/2 animate-bounce flex-col items-center gap-1 text-foreground/80 transition-colors hover:text-foreground sm:bottom-6"
-			on:click={scrollToContent}
+			onclick={scrollToContent}
 		>
 			<span class="rounded-full bg-background/60 px-3 py-1 text-xs font-medium backdrop-blur-md sm:px-4 sm:text-sm">{$_('dashboard.scroll_down') || 'Scroll down for more'}</span>
 			<ChevronDown class="h-5 w-5 sm:h-6 sm:w-6" />
@@ -433,7 +441,7 @@
 		<!-- Top Right: Settings Button -->
 		<button
 			class="absolute right-8 top-[70px] z-20 rounded-full bg-background/60 p-3 backdrop-blur-md transition-all hover:bg-background/80"
-			on:click={() => (settingsOpen = true)}
+			onclick={() => (settingsOpen = true)}
 		>
 			<Gear class="h-5 w-5" />
 		</button>
@@ -471,7 +479,7 @@
 							<div class="space-y-1">
 								{#each submissions.slice(0, 3) as submission}
 									<button
-										on:click={() => {
+										onclick={() => {
 											selectedSubmission = submission;
 											recordDetailOpen = true;
 										}}
@@ -597,7 +605,7 @@
 		<!-- Scroll Down Indicator (Desktop) -->
 		<button
 			class="absolute bottom-8 left-1/2 z-20 flex -translate-x-1/2 animate-bounce flex-col items-center gap-1 text-foreground/80 transition-colors hover:text-foreground"
-			on:click={scrollToContent}
+			onclick={scrollToContent}
 		>
 			<span class="rounded-full bg-background/60 px-4 py-1 text-sm font-medium backdrop-blur-md">{$_('dashboard.scroll_down') || 'Scroll down for more'}</span>
 			<ChevronDown class="h-6 w-6" />

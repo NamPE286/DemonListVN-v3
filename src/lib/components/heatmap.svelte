@@ -6,10 +6,14 @@
 	import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
 
-	export let uid: string;
-	let year: number = new Date().getFullYear();
-	let data: number[] = Array(366).fill(0);
-	let splitByMonth = true;
+	interface Props {
+		uid: string;
+	}
+
+	let { uid }: Props = $props();
+	let year: number = $state(new Date().getFullYear());
+	let data: number[] = $state(Array(366).fill(0));
+	let splitByMonth = $state(true);
 
 	function daysInMonth(year: number, month: number) {
 		return new Date(year, month, 0).getDate();
@@ -87,7 +91,7 @@
 				{#each { length: 12 } as _, month}
 					<div class="month">
 						{#each { length: monthOffset(year, month) } as _}
-							<div class="emptyCell" />
+							<div class="emptyCell"></div>
 						{/each}
 						{#each { length: daysInMonth(year, month + 1) } as _, date}
 							<Tooltip.Root>
@@ -95,7 +99,7 @@
 									<div
 										class="cell"
 										style={`background-color: ${getColor(dayOfYear(year, month, date + 1))}`}
-									/>
+									></div>
 								</Tooltip.Trigger>
 								<Tooltip.Content>
 									<p>
@@ -111,7 +115,7 @@
 			{#if !splitByMonth}
 				<div class="month">
 					{#each { length: monthOffset(year, 0) } as _}
-						<div class="emptyCell" />
+						<div class="emptyCell"></div>
 					{/each}
 					{#each { length: 12 } as _, month}
 						{#each { length: daysInMonth(year, month + 1) } as _, date}
@@ -120,7 +124,7 @@
 									<div
 										class="cell"
 										style={`background-color: ${getColor(dayOfYear(year, month, date + 1))}`}
-									/>
+									></div>
 								</Tooltip.Trigger>
 								<Tooltip.Content>
 									<p>

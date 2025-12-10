@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import * as Carousel from '$lib/components/ui/carousel/index.js';
 	import LevelCard from '$lib/components/levelCard.svelte';
 	import { onMount } from 'svelte';
@@ -15,16 +17,16 @@
 
 	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
-	let showDiscordAlert = false;
+	let showDiscordAlert = $state(false);
 	let dashboardEnabled = false;
-	let showDashboard = false;
-	let dashboardVisible = false;
-	let recent: any = {
+	let showDashboard = $state(false);
+	let dashboardVisible = $state(false);
+	let recent: any = $state({
 		dl: null,
 		fl: null,
 		pl: null
-	};
-	let events: any = null;
+	});
+	let events: any = $state(null);
 
 	async function getRecentDemonListLevel() {
 		const query = new URLSearchParams({
@@ -114,20 +116,22 @@
 	}
 
 	// Reactively check if dashboard should be shown and trigger scroll animation
-	$: if (browser && $user.checked) {
-		const isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
-		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
-		const shouldShow = isSupporter && enabled;
-		
-		if (shouldShow && !showDashboard) {
-			showDashboard = true;
-			// Scroll up animation when dashboard becomes visible
-			setTimeout(() => animateScrollUp(), 50);
-		} else if (!shouldShow && showDashboard) {
-			showDashboard = false;
-			dashboardVisible = false;
+	run(() => {
+		if (browser && $user.checked) {
+			const isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
+			const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
+			const shouldShow = isSupporter && enabled;
+			
+			if (shouldShow && !showDashboard) {
+				showDashboard = true;
+				// Scroll up animation when dashboard becomes visible
+				setTimeout(() => animateScrollUp(), 50);
+			} else if (!shouldShow && showDashboard) {
+				showDashboard = false;
+				dashboardVisible = false;
+			}
 		}
-	}
+	});
 </script>
 
 <svelte:head>
@@ -160,7 +164,7 @@
 					>
 				</Alert.Description>
 				<button
-					on:click={dismissDiscordAlert}
+					onclick={dismissDiscordAlert}
 					class="absolute right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100"
 					aria-label="Dismiss"
 				>

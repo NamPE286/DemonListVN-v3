@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import Chart from 'chart.js/auto';
@@ -17,16 +19,20 @@
 	import { page } from '$app/stores';
 	import { _, locale } from 'svelte-i18n';
 
-	export let uid: string;
-	export let levelID: number;
-	export let open: boolean;
+	interface Props {
+		uid: string;
+		levelID: number;
+		open: boolean;
+	}
 
-	let record: any = null;
+	let { uid, levelID, open = $bindable() }: Props = $props();
+
+	let record: any = $state(null);
 	let chart: any = null;
-	let open1 = false;
-	let disableBtn = false;
-	let verdict = '';
-	let cmt = '';
+	let open1 = $state(false);
+	let disableBtn = $state(false);
+	let verdict = $state('');
+	let cmt = $state('');
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -222,7 +228,9 @@
 		return `${$page.url.origin}/level/${record.data.levelid}?record=${record.data.userid}`;
 	}
 
-	$: (open, fetchData());
+	run(() => {
+		(open, fetchData());
+	});
 </script>
 
 <Dialog.Root
@@ -323,7 +331,7 @@
 					</Tabs.Content>
 					<Tabs.Content value="deathCount">
 						<div class="chartWrapper">
-							<canvas id="chart" use:createChart />
+							<canvas id="chart" use:createChart></canvas>
 						</div>
 					</Tabs.Content>
 					<Tabs.Content value="share">

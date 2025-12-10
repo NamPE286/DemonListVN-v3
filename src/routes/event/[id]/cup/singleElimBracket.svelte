@@ -2,7 +2,7 @@
 	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import { _ } from 'svelte-i18n';
 
-	export let data;
+	let { data } = $props();
 </script>
 
 <div class="w-[1800px]">

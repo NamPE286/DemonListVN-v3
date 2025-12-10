@@ -3,7 +3,11 @@
 	import { badgeVariants } from '$lib/components/ui/badge';
 	import { _ } from 'svelte-i18n';
 
-	export let data: any;
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
 </script>
 
 <div class="space-y-4">

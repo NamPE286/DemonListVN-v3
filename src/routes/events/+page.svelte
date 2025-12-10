@@ -4,33 +4,37 @@
 	import EventCard from './eventCard.svelte';
 	import FilterCard from './filterCard.svelte';
 
-	export let data: any;
+	interface Props {
+		data: any;
+	}
 
-	$: currentTime = new Date();
+	let { data = $bindable() }: Props = $props();
 
-	$: upcomingEvents = data.events.filter((event: any) => {
+	let currentTime = $derived(new Date());
+
+	let upcomingEvents = $derived(data.events.filter((event: any) => {
 		const eventStart = new Date(event.start);
 		return eventStart > currentTime;
-	});
+	}));
 
-	$: ongoingEvents = data.events.filter((event: any) => {
+	let ongoingEvents = $derived(data.events.filter((event: any) => {
 		const eventStart = new Date(event.start);
 		const eventEnd = new Date(event.end);
 		return eventStart <= currentTime && eventEnd >= currentTime;
-	});
+	}));
 
-	$: permanentEvents = data.events.filter((event: any) => {
+	let permanentEvents = $derived(data.events.filter((event: any) => {
 		return !event.end;
-	});
+	}));
 
-	$: pastEvents = data.events.filter((event: any) => {
+	let pastEvents = $derived(data.events.filter((event: any) => {
 		if (!event.end) {
 			return false;
 		}
 
 		const eventEnd = new Date(event.end);
 		return eventEnd < currentTime;
-	});
+	}));
 
 	interface Filter {
 		search: string;
@@ -40,13 +44,13 @@
 		end: string;
 	}
 
-	let filter: Filter = {
+	let filter: Filter = $state({
 		search: '',
 		eventType: 'all',
 		contestType: 'all',
 		start: '',
 		end: ''
-	};
+	});
 
 	async function fetchData() {
 		// @ts-ignore

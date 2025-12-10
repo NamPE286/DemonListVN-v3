@@ -14,9 +14,13 @@
 	import { toast } from 'svelte-sonner';
 	import QuestTab from './questTab.svelte';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
 
-	let levels: (Level | null)[] = [];
+	let { data }: Props = $props();
+
+	let levels: (Level | null)[] = $state([]);
 
 	async function refresh() {
 		toast.promise(

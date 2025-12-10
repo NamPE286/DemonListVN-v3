@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import supabase from '$lib/client/supabase';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Select from '$lib/components/ui/select';
@@ -16,25 +18,28 @@
 	import { upload } from '$lib/client/storage';
 	import { _ } from 'svelte-i18n';
 
-	export let data: any;
-	export let open = false;
+	interface Props {
+		data: any;
+		open?: boolean;
+	}
 
-	let player = structuredClone(data);
-	let fileinput: any;
-	let fileinput1: any;
-	let provinces: any = {};
-	let provinceItem = {
+	let { data = $bindable(), open = $bindable(false) }: Props = $props();
+
+	let player = $state(structuredClone(data));
+	let fileinput: any = $state();
+	let fileinput1: any = $state();
+	let provinces: any = $state({});
+	let provinceItem = $state({
 		disabled: false,
 		label: player.province,
 		value: player.province
-	};
-	let cityItem = {
+	});
+	let cityItem = $state({
 		disabled: false,
 		label: player.city,
 		value: player.city
-	};
+	});
 
-	$: (open, reset());
 
 	function reset() {
 		player = structuredClone(data);
@@ -195,13 +200,16 @@
 				provinces = res;
 			});
 	});
+	run(() => {
+		(open, reset());
+	});
 </script>
 
 <input
 	style="display:none"
 	type="file"
 	accept={isActive($user.data.supporterUntil) ? '.jpg, .jpeg, .gif' : '.jpg, .jpeg'}
-	on:change={(e) => getAvatar(e)}
+	onchange={(e) => getAvatar(e)}
 	bind:this={fileinput}
 />
 
@@ -209,7 +217,7 @@
 	style="display:none"
 	type="file"
 	accept={'.jpg, .jpeg, .gif'}
-	on:change={(e) => getBanner(e)}
+	onchange={(e) => getBanner(e)}
 	bind:this={fileinput1}
 />
 

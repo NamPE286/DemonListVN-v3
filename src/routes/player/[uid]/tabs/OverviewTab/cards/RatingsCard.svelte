@@ -9,17 +9,27 @@
 	import type { CardConfig } from './types';
 	import { getBorderStyle } from './getBorderStyle';
 
-	export let data: any;
-	export let cardConfigs: CardConfig[];
-	export let config: CardConfig;
-	export let draggedCard: string | null;
-	export let isCustomizing: boolean = false;
+	interface Props {
+		data: any;
+		cardConfigs: CardConfig[];
+		config: CardConfig;
+		draggedCard: string | null;
+		isCustomizing?: boolean;
+	}
 
-	$: exp = data.player.exp + data.player.extraExp;
-	$: expLevel = getExpLevel(exp);
+	let {
+		data,
+		cardConfigs = $bindable(),
+		config,
+		draggedCard = $bindable(),
+		isCustomizing = $bindable(false)
+	}: Props = $props();
+
+	let exp = $derived(data.player.exp + data.player.extraExp);
+	let expLevel = $derived(getExpLevel(exp));
 </script>
 
-<BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
+<BaseCard bind:draggedCard bind:cardConfigs {config} bind:isCustomizing>
 	<Card.Root class="h-full" style={getBorderStyle(data.player)}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.ratings')}</Card.Title>

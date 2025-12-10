@@ -7,17 +7,27 @@
 	import type { CardConfig } from './types';
 	import { getBorderStyle } from './getBorderStyle';
 
-	export let data: any;
-	export let cardConfigs: CardConfig[];
-	export let config: CardConfig;
-	export let draggedCard: string | null;
-	export let isCustomizing: boolean = false;
+	interface Props {
+		data: any;
+		cardConfigs: CardConfig[];
+		config: CardConfig;
+		draggedCard: string | null;
+		isCustomizing?: boolean;
+	}
 
-	$: dlRecords = data.records.dl || [];
-	$: hardestLevel = dlRecords.length > 0 ? dlRecords[0] : null;
+	let {
+		data,
+		cardConfigs = $bindable(),
+		config,
+		draggedCard = $bindable(),
+		isCustomizing = $bindable(false)
+	}: Props = $props();
+
+	let dlRecords = $derived(data.records.dl || []);
+	let hardestLevel = $derived(dlRecords.length > 0 ? dlRecords[0] : null);
 </script>
 
-<BaseCard bind:draggedCard bind:cardConfigs bind:config bind:isCustomizing>
+<BaseCard bind:draggedCard bind:cardConfigs {config} bind:isCustomizing>
 	<Card.Root class="h-full" style={getBorderStyle(data.player)}>
 		<Card.Header>
 			<Card.Title class="text-lg">{$_('player.overview.hardest_demon')}</Card.Title>

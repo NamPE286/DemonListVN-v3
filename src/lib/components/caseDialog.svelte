@@ -7,18 +7,22 @@
 	import { _ } from 'svelte-i18n';
 	import { get } from 'svelte/store';
 
-	export let inventoryItemId: number;
-	export let item: any;
-	export let caseItems: any[] = [];
+	interface Props {
+		inventoryItemId: number;
+		item: any;
+		caseItems?: any[];
+	}
+
+	let { inventoryItemId, item, caseItems = [] }: Props = $props();
 
 	const dispatch = createEventDispatcher();
 
-	let isRolling = false;
-	let hasRolled = false;
-	let isFetchingResult = false;
-	let rollDisplay: any[] = [];
-	let rollScroll = 0;
-	let rollResult: any = null;
+	let isRolling = $state(false);
+	let hasRolled = $state(false);
+	let isFetchingResult = $state(false);
+	let rollDisplay: any[] = $state([]);
+	let rollScroll = $state(0);
+	let rollResult: any = $state(null);
 
 	function shuffleArray<T>(arr: T[]) {
 		const a = arr.slice();

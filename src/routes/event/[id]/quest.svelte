@@ -9,10 +9,14 @@
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
 	import { toast } from 'svelte-sonner';
 
-	export let quest: any;
-	let claimBtnDisabled = true;
-	let loading = true;
-	let status = '';
+	interface Props {
+		quest: any;
+	}
+
+	let { quest }: Props = $props();
+	let claimBtnDisabled = $state(true);
+	let loading = $state(true);
+	let status = $state('');
 
 	function rarityColor(r: number) {
 		switch (r) {

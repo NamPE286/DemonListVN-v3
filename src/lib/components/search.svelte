@@ -1,3 +1,9 @@
+<!-- @migration-task Error while migrating Svelte code: can't migrate `let result: any = {
+		levels: [],
+		gdBrowserLevels: [],
+		players: []
+	};` to `$state` because there's a variable named state.
+     Rename the variable and try again or migrate by hand. -->
 <script lang="ts">
 	import * as Command from '$lib/components/ui/command';
 	import * as Avatar from '$lib/components/ui/avatar';

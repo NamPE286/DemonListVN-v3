@@ -8,7 +8,11 @@
 	import { goto } from '$app/navigation';
 	import { fade } from 'svelte/transition';
 
-	export let data: any;
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
 
 	function handleIntervalChange(value: string) {
 		goto(`/supporter/top?interval=${value}`);
@@ -22,17 +26,17 @@
 		}).format(total);
 	}
 
-	$: totalRevenue = formatTotalAmount(data.buyers);
-	$: topBuyer = data.buyers[0];
-	$: averageSpending =
-		data.buyers.length > 0
+	let totalRevenue = $derived(formatTotalAmount(data.buyers));
+	let topBuyer = $derived(data.buyers[0]);
+	let averageSpending =
+		$derived(data.buyers.length > 0
 			? new Intl.NumberFormat('vi-VN', {
 					style: 'currency',
 					currency: 'VND'
 				}).format(
 					data.buyers.reduce((sum: number, b: any) => sum + b.totalAmount, 0) / data.buyers.length
 				)
-			: '0 ₫';
+			: '0 ₫');
 </script>
 
 <svelte:head>

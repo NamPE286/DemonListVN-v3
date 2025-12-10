@@ -6,7 +6,7 @@
 	import { Button } from '$lib/components/ui/button';
 	import { user } from '$lib/client';
 
-	const data = {
+	const data = $state({
 		userid: '',
 		levelid: 0,
 		videoLink: '',
@@ -14,7 +14,7 @@
 		progress: 0,
 		mobile: false,
 		isChecked: false
-	};
+	});
 
 	async function add() {
 		fetch(`${import.meta.env.VITE_API_URL}/records`, {

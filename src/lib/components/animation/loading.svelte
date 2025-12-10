@@ -1,23 +1,29 @@
 <script>
-    export var disabled = false;
-    export var inverted = false
+    /**
+     * @typedef {Object} Props
+     * @property {boolean} [disabled]
+     * @property {boolean} [inverted]
+     */
+
+    /** @type {Props} */
+    let { disabled = false, inverted = false } = $props();
 </script>
 
 {#if !disabled}
     <div class={`wrapper`} id={inverted ? 'inverted' : ''}>
         <div class="lds-spinner">
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
-            <div />
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
         </div>
     </div>
 {/if}

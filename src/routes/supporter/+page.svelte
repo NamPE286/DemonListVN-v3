@@ -7,7 +7,11 @@
 	import { _ } from 'svelte-i18n';
 	import TopSupporters from '$lib/components/topSupporters.svelte';
 
-	export let data: any;
+	interface Props {
+		data: any;
+	}
+
+	let { data }: Props = $props();
 </script>
 
 <svelte:head>

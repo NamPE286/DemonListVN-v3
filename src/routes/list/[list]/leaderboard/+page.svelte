@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import * as Pagination from '$lib/components/ui/pagination';
 	import * as Table from '$lib/components/ui/table';
 	import * as Tooltip from '$lib/components/ui/tooltip';
@@ -13,9 +15,13 @@
 	import type { PageData } from './$types';
 	import Ads from '$lib/components/ads.svelte';
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 	let curPage = -1;
-	let calibrated = false;
+	let calibrated = $state(false);
 
 	async function update() {
 		curPage = parseInt($page.url.searchParams.get('page') || '1');
@@ -33,7 +39,9 @@
 		return 'None';
 	}
 
-	$: ($page.url, update());
+	run(() => {
+		($page.url, update());
+	});
 
 	onMount(() => {
 		document.getElementById(`page${curPage}`)?.click();
@@ -98,43 +106,45 @@
 	</Table.Root>
 </div>
 
-<Pagination.Root count={data.count} perPage={50} let:pages let:currentPage>
-	<Pagination.Content>
-		<Pagination.Item>
-			<Pagination.PrevButton
-				on:click={() => goto(`/list/${$page.params.list}/leaderboard?page=${currentPage - 1}`)}
-			/>
-		</Pagination.Item>
-		{#each pages as p (p.key)}
-			{#if p.type === 'ellipsis'}
-				<Pagination.Item>
-					<Pagination.Ellipsis />
-				</Pagination.Item>
-			{:else}
-				<Pagination.Item isVisible={currentPage == p.value}>
-					<Pagination.Link
-						page={p}
-						isActive={currentPage == p.value}
-						on:click={() => {
-							if (!calibrated) {
-								calibrated = true;
-							} else {
-								goto(`/list/${$page.params.list}/leaderboard?page=${p.value}`);
-							}
-						}}
-						id={`page${p.value}`}
-					>
-						{p.value}
-					</Pagination.Link>
-				</Pagination.Item>
-			{/if}
-		{/each}
-		<Pagination.Item>
-			<Pagination.NextButton
-				on:click={() => goto(`/list/${$page.params.list}/leaderboard?page=${currentPage + 1}`)}
-			/>
-		</Pagination.Item>
-	</Pagination.Content>
+<Pagination.Root count={data.count} perPage={50}  >
+	{#snippet children({ pages, currentPage })}
+		<Pagination.Content>
+			<Pagination.Item>
+				<Pagination.PrevButton
+					on:click={() => goto(`/list/${$page.params.list}/leaderboard?page=${currentPage - 1}`)}
+				/>
+			</Pagination.Item>
+			{#each pages as p (p.key)}
+				{#if p.type === 'ellipsis'}
+					<Pagination.Item>
+						<Pagination.Ellipsis />
+					</Pagination.Item>
+				{:else}
+					<Pagination.Item isVisible={currentPage == p.value}>
+						<Pagination.Link
+							page={p}
+							isActive={currentPage == p.value}
+							on:click={() => {
+								if (!calibrated) {
+									calibrated = true;
+								} else {
+									goto(`/list/${$page.params.list}/leaderboard?page=${p.value}`);
+								}
+							}}
+							id={`page${p.value}`}
+						>
+							{p.value}
+						</Pagination.Link>
+					</Pagination.Item>
+				{/if}
+			{/each}
+			<Pagination.Item>
+				<Pagination.NextButton
+					on:click={() => goto(`/list/${$page.params.list}/leaderboard?page=${currentPage + 1}`)}
+				/>
+			</Pagination.Item>
+		</Pagination.Content>
+	{/snippet}
 </Pagination.Root>
 
 <style lang="scss">

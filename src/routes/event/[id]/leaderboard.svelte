@@ -18,15 +18,19 @@
 	import * as Switch from '$lib/components/ui/switch/index.js';
 	import Label from '$lib/components/ui/label/label.svelte';
 
-	export let levels: (Level | null)[];
-	export let event: any;
+	interface Props {
+		levels: (Level | null)[];
+		event: any;
+	}
 
-	let leaderboard: any[] = [];
-	let leaderboard1: any[] = [];
-	let refreshing = false;
-	let revealMode = false;
-	let previousScores: Map<string, number> = new Map();
-	let showPercentage = false;
+	let { levels, event }: Props = $props();
+
+	let leaderboard: any[] = $state([]);
+	let leaderboard1: any[] = $state([]);
+	let refreshing = $state(false);
+	let revealMode = $state(false);
+	let previousScores: Map<string, number> = $state(new Map());
+	let showPercentage = $state(false);
 
 	function indexToRoman(num: number): string {
 		const romanNumerals = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I'];

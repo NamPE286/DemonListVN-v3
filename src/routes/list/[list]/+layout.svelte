@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import * as Tabs from '$lib/components/ui/tabs';
 
 	import BigTitle from '$lib/components/bigTitle.svelte';
@@ -6,14 +8,21 @@
 	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import Ads from '$lib/components/ads.svelte';
+	interface Props {
+		children?: import('svelte').Snippet;
+	}
 
-	let curTab = $page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels';
+	let { children }: Props = $props();
+
+	let curTab = $state($page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels');
 
 	function update() {
 		curTab = $page.url.pathname.split('/').at(-1) == 'leaderboard' ? 'leaderboard' : 'levels';
 	}
 
-	$: ($page.url, update());
+	run(() => {
+		($page.url, update());
+	});
 </script>
 
 {#if $page.params.list == 'dl'}
@@ -45,7 +54,7 @@
 
 <Ads dataAdFormat="auto" unit="leaderboard" />
 
-<slot />
+{@render children?.()}
 
 <style lang="scss">
 	.tabsWrapper {

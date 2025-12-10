@@ -5,8 +5,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import { user } from '$lib/client';
 
-	let uidA = '',
-		uidB = '';
+	let uidA = $state(''),
+		uidB = $state('');
 
 	async function merge() {
 		if (!confirm('Proceed?')) {

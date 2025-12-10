@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { user } from '$lib/client/user';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import * as Card from '$lib/components/ui/card';
@@ -9,20 +11,15 @@
 	import { X } from 'lucide-svelte';
 	import { _ } from 'svelte-i18n';
 
-	let player1: any = null;
-	let player2: any = null;
-	let player1Records: any = null;
-	let player2Records: any = null;
-	let selectorOpen = false;
-	let selectingFor: 1 | 2 = 1;
+	let player1: any = $state(null);
+	let player2: any = $state(null);
+	let player1Records: any = $state(null);
+	let player2Records: any = $state(null);
+	let selectorOpen = $state(false);
+	let selectingFor: 1 | 2 = $state(1);
 
-	let hasAutoLoaded = false;
+	let hasAutoLoaded = $state(false);
 
-	$: if ($user.checked && !player1 && $user.data && !hasAutoLoaded) {
-		// Auto-select current user as player 1 (only once)
-		loadPlayer($user.data.uid, 1);
-		hasAutoLoaded = true;
-	}
 
 	async function loadPlayer(uid: string, playerSlot: 1 | 2) {
 		try {
@@ -108,6 +105,13 @@
 			return v1 < v2 ? 'better' : v1 > v2 ? 'worse' : 'neutral';
 		}
 	}
+	run(() => {
+		if ($user.checked && !player1 && $user.data && !hasAutoLoaded) {
+			// Auto-select current user as player 1 (only once)
+			loadPlayer($user.data.uid, 1);
+			hasAutoLoaded = true;
+		}
+	});
 </script>
 
 <svelte:head>

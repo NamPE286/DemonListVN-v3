@@ -11,7 +11,7 @@
 	import AddTrackingButton from './addTrackingButton.svelte';
 	import { _ } from 'svelte-i18n';
 
-	let data: any = null;
+	let data: any = $state(null);
 
 	function cancellable() {
 		if (data.state == 'CANCELLED' || data.paymentMethod == 'Bank Transfer') {

@@ -8,11 +8,11 @@
 	import Loading from '$lib/components/animation/loading.svelte';
 	import { _ } from 'svelte-i18n';
 
-	let data: any = null;
-	let loading = true;
-	let claiming = false;
-	let claimed = false;
-	let showContent = false;
+	let data: any = $state(null);
+	let loading = $state(true);
+	let claiming = $state(false);
+	let claimed = $state(false);
+	let showContent = $state(false);
 
 	onMount(async () => {
 		try {

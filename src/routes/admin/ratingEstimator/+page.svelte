@@ -7,13 +7,13 @@
 	import Title from '$lib/components/Title.svelte';
 	import Loading from '$lib/components/animation/loading.svelte';
 
-	let l = -1,
-		r = -1;
+	let l = $state(-1),
+		r = $state(-1);
 
-	let lvStart: any = null,
-		lvEnd: any = null;
+	let lvStart: any = $state(null),
+		lvEnd: any = $state(null);
 
-	let level: any = null;
+	let level: any = $state(null);
 
 	function mid() {
 		return Math.floor((l + r) / 2);

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
@@ -12,20 +14,31 @@
 	import { onMount } from 'svelte';
 	import Loading from '$lib/components/animation/loading.svelte';
 
-	export let record: any;
-	export let index: number;
-	export let levels: any[];
-	export let getPoint: (record: any, index: number) => number;
-	export let onUpdate: (record: any) => void;
-	export let type: 'basic' | 'raid';
+	interface Props {
+		record: any;
+		index: number;
+		levels: any[];
+		getPoint: (record: any, index: number) => number;
+		onUpdate: (record: any) => void;
+		type: 'basic' | 'raid';
+	}
 
-	let updateData: any = null;
-	let levelDeathCount: number[] = [];
-	let playerDeathCount: number[] = [];
-	let chart: any = null;
-	let isLoadingDeathCount = false;
-	let showRate = true;
-	let currentTab = 'detail';
+	let {
+		record,
+		index,
+		levels,
+		getPoint,
+		onUpdate,
+		type
+	}: Props = $props();
+
+	let updateData: any = $state(null);
+	let levelDeathCount: number[] = $state([]);
+	let playerDeathCount: number[] = $state([]);
+	let chart: any = $state(null);
+	let isLoadingDeathCount = $state(false);
+	let showRate = $state(true);
+	let currentTab = $state('detail');
 
 	function handleTriggerClick() {
 		updateData = structuredClone(record);
@@ -187,13 +200,15 @@
 			loadDeathCountData();
 		}
 	}
-	$: (showRate,
-	() => {
-		if (chart) {
-			const canvas = chart.canvas;
-			createChart(canvas);
-		}
-	})();
+	run(() => {
+		(showRate,
+		() => {
+			if (chart) {
+				const canvas = chart.canvas;
+				createChart(canvas);
+			}
+		})();
+	});
 </script>
 
 <Dialog.Root>
@@ -323,7 +338,7 @@
 						</div>
 					{:else if levelDeathCount.length > 0 || playerDeathCount.length > 0}
 						<div class="h-[400px] w-full">
-							<canvas use:createChart />
+							<canvas use:createChart></canvas>
 						</div>
 						<div class="mb-2 flex items-center justify-center gap-4">
 							<Label for="chart-toggle" class="cursor-pointer text-sm">

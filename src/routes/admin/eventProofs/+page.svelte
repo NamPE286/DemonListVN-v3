@@ -73,7 +73,11 @@
 		window.location.reload();
 	}
 
-	export let data: PageData;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data }: Props = $props();
 </script>
 
 <Title value="Event proofs" />

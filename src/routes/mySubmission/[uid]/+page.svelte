@@ -12,11 +12,15 @@
 	import Ads from '$lib/components/ads.svelte';
 	import { _ } from 'svelte-i18n';
 
-	export let data: PageData;
-	let alertOpened = false;
-	let lvID: number;
-	let userID: string, levelID: number;
-	let recordDetailOpened = false;
+	interface Props {
+		data: PageData;
+	}
+
+	let { data = $bindable() }: Props = $props();
+	let alertOpened = $state(false);
+	let lvID: number = $state();
+	let userID: string = $state(), levelID: number = $state();
+	let recordDetailOpened = $state(false);
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -143,7 +147,7 @@
 						</Table.Cell>
 						<Table.Cell class="text-center">
 							<button
-								on:click={() => {
+								onclick={() => {
 									lvID = record.levelid;
 									alertOpened = true;
 								}}

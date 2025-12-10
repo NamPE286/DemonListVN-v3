@@ -20,17 +20,22 @@
 		raw: string;
 	}
 
-	export let level: Level | null;
-	export let index: number;
-	export let event: any;
-	export let showDeathCount: boolean = true;
-	export let type: 'basic' | 'raid';
+	interface Props {
+		level: Level | null;
+		index: number;
+		event: any;
+		showDeathCount?: boolean;
+		type: 'basic' | 'raid';
+	}
 
-	$: totalProgress = (level as any)?.totalProgress || 0;
-	$: totalHP = level?.point || 0;
-	$: hpRemaining = Math.max(0, totalHP - totalProgress);
-	$: hpPercentage = totalHP > 0 ? (hpRemaining / totalHP) * 100 : 100;
-	$: isBeaten = !isEventEnded() && level && type === 'raid' && hpRemaining <= 0;
+	let {
+		level,
+		index,
+		event,
+		showDeathCount = true,
+		type
+	}: Props = $props();
+
 
 	let submitData: SubmitData = {
 		levelID: level ? level.id : 0,
@@ -39,10 +44,10 @@
 		raw: ''
 	};
 
-	let deathCount: number[] = [];
+	let deathCount: number[] = $state([]);
 	let smallChart: any = null;
 	let dialogChart: any = null;
-	let chartDialogOpen = false;
+	let chartDialogOpen = $state(false);
 
 	function isEventEnded() {
 		return new Date(event.end) < new Date();
@@ -245,6 +250,11 @@
 			await getDeathCount();
 		}
 	});
+	let totalProgress = $derived((level as any)?.totalProgress || 0);
+	let totalHP = $derived(level?.point || 0);
+	let hpRemaining = $derived(Math.max(0, totalHP - totalProgress));
+	let hpPercentage = $derived(totalHP > 0 ? (hpRemaining / totalHP) * 100 : 100);
+	let isBeaten = $derived(!isEventEnded() && level && type === 'raid' && hpRemaining <= 0);
 </script>
 
 <Card.Root class="flex flex-col p-2 transition-opacity duration-300 {isBeaten ? 'opacity-50' : ''}">
@@ -290,7 +300,7 @@
 						</div>
 						<div class="flex flex-col">
 							by {level ? level.creator : '???'}
-							<button class="flex items-center gap-[5px]" on:click={copyID}>
+							<button class="flex items-center gap-[5px]" onclick={copyID}>
 								ID: {level ? level.levelID : '???'}
 								{#if level}
 									<Copy size={15} />
@@ -305,10 +315,10 @@
 				<div class="flex w-full min-w-0 md:ml-auto md:flex-1 lg:max-w-[300px]">
 					<button
 						class="h-[150px] w-full cursor-pointer lg:h-[115px]"
-						on:click={() => (chartDialogOpen = true)}
+						onclick={() => (chartDialogOpen = true)}
 						type="button"
 					>
-						<canvas use:createChart />
+						<canvas use:createChart></canvas>
 					</button>
 				</div>
 			{/if}
@@ -330,7 +340,7 @@
 						style="width: {hpPercentage}%; background: linear-gradient(90deg, 
 							{hpPercentage > 50 ? '#10b981' : hpPercentage > 25 ? '#f59e0b' : '#ef4444'} 0%, 
 							{hpPercentage > 50 ? '#059669' : hpPercentage > 25 ? '#d97706' : '#dc2626'} 100%)"
-					/>
+					></div>
 					<div
 						class="absolute inset-0 flex items-center justify-center text-xs font-bold text-white"
 					>
@@ -345,7 +355,7 @@
 <Dialog.Root bind:open={chartDialogOpen}>
 	<Dialog.Content class="max-w-4xl">
 		<div class="h-[500px] w-full">
-			<canvas use:createChart={true} />
+			<canvas use:createChart={true}></canvas>
 		</div>
 	</Dialog.Content>
 </Dialog.Root>

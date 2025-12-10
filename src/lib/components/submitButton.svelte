@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { Button, buttonVariants } from '$lib/components/ui/button/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
@@ -15,7 +17,7 @@
 	import { locale } from 'svelte-i18n';
 	import { _ } from 'svelte-i18n';
 
-	const defaultValue: any = {
+	const defaultValue: any = $state({
 		levelid: NaN,
 		userid: $user.data.uid,
 		progress: NaN,
@@ -25,9 +27,9 @@
 		mobile: null,
 		suggestedRating: NaN,
 		comment: ''
-	};
+	});
 
-	let submission: any = {
+	let submission: any = $state({
 		levelid: NaN,
 		userid: $user.data.uid,
 		progress: NaN,
@@ -37,24 +39,24 @@
 		mobile: null,
 		suggestedRating: NaN,
 		comment: ''
-	};
+	});
 
-	let submitLog: string[] = [];
-	let apiLevel: any = null;
-	let level: any = null;
-	let sendStatus = 0;
-	let open = false;
-	let logsOpen = false;
-	let step = 0;
-	let nextDisabled = false;
-	let errorMessage = '';
-	let errorResponse = '';
-	let submitId = 0;
-	let time = {
+	let submitLog: string[] = $state([]);
+	let apiLevel: any = $state(null);
+	let level: any = $state(null);
+	let sendStatus = $state(0);
+	let open = $state(false);
+	let logsOpen = $state(false);
+	let step = $state(0);
+	let nextDisabled = $state(false);
+	let errorMessage = $state('');
+	let errorResponse = $state('');
+	let submitId = $state(0);
+	let time = $state({
 		m: null,
 		s: null,
 		ms: null
-	};
+	});
 
 	function getMs() {
 		return parseInt(time.m! || 0) * 60000 + parseInt(time.s! || 0) * 1000 + parseInt(time.ms! || 0);
@@ -211,9 +213,11 @@
 		}
 	}
 
-	$: if ($navigating) {
-		onRouteChange($navigating.to);
-	}
+	run(() => {
+		if ($navigating) {
+			onRouteChange($navigating.to);
+		}
+	});
 
 	onMount(() => {
 		onRouteChange($page);
@@ -256,7 +260,7 @@
 			<Alert.Root>
 				<Alert.Description>
 					{#if $locale == 'vi'}
-						- Đọc <button on:click={() => (open = false)}><a href="/rules"><u>luật</u></a></button>
+						- Đọc <button onclick={() => (open = false)}><a href="/rules"><u>luật</u></a></button>
 						trước khi nộp.<br />
 						- Điểm đề xuất là điểm của DLVN, không phải sao hay thứ hạng của level.
 						<br />
@@ -267,7 +271,7 @@
 							<u>Demon List VN's geode mod</u>
 						</a> trong khi chơi level để có cơ hội chấp nhận cao hơn.
 					{:else}
-						- Read the <button on:click={() => (open = false)}
+						- Read the <button onclick={() => (open = false)}
 							><a href="/rules"><u>rules</u></a></button
 						>
 						before submitting.<br />
@@ -452,34 +456,36 @@
 		{/if}
 		<Dialog.Footer>
 			<AlertDialog.Root>
-				<AlertDialog.Trigger asChild let:builder>
-					<div class="flex gap-[10px]">
-						{#if step > 0}
-							<Button
-								class="w-full"
-								on:click={() => {
-									step--;
-								}}
-								variant="outline">{$_('submit.back')}</Button
-							>
-						{/if}
-						{#if step == 4}
-							<Button
-								class="w-full"
-								type="submit"
-								builders={[builder]}
-								on:click={() => {
-									sendStatus = 0;
-									submit();
-								}}>{$_('submit.button')}</Button
-							>
-						{:else}
-							<Button class="w-full" on:click={next} bind:disabled={nextDisabled}
-								>{$_('submit.next')}</Button
-							>
-						{/if}
-					</div>
-				</AlertDialog.Trigger>
+				<AlertDialog.Trigger asChild >
+					{#snippet children({ builder })}
+										<div class="flex gap-[10px]">
+							{#if step > 0}
+								<Button
+									class="w-full"
+									on:click={() => {
+										step--;
+									}}
+									variant="outline">{$_('submit.back')}</Button
+								>
+							{/if}
+							{#if step == 4}
+								<Button
+									class="w-full"
+									type="submit"
+									builders={[builder]}
+									on:click={() => {
+										sendStatus = 0;
+										submit();
+									}}>{$_('submit.button')}</Button
+								>
+							{:else}
+								<Button class="w-full" on:click={next} bind:disabled={nextDisabled}
+									>{$_('submit.next')}</Button
+								>
+							{/if}
+						</div>
+														{/snippet}
+								</AlertDialog.Trigger>
 				{#if sendStatus == 0}
 					<AlertDialog.Content>
 						<AlertDialog.Header>

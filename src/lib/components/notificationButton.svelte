@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { Bell } from 'svelte-radix';
+	import { run } from 'svelte/legacy';
+
+	import { Bell } from 'lucide-svelte';
 	import * as Popover from '$lib/components/ui/popover';
 	import * as Card from '$lib/components/ui/card';
 	import { Button } from '$lib/components/ui/button';
 	import { user } from '$lib/client';
 	import supabase from '$lib/client/supabase';
-	import { dateStore } from 'svelte-legos';
 	import { _, locale } from 'svelte-i18n';
-	let notifications: any[] = [];
+	let notifications: any[] = $state([]);
 
 	function timeSince(date: any) {
 		const seconds = Math.floor((new Date().getTime() - new Date(date).getTime()) / 1000);
@@ -79,7 +80,9 @@
 		});
 	}
 
-	$: ($user, fetchNotifications());
+	run(() => {
+		($user, fetchNotifications());
+	});
 </script>
 
 <Popover.Root>
@@ -89,7 +92,7 @@
 				<div>
 					<Bell size={20} />
 					{#if notifications.length != 0}
-						<div class="whiteDot" />
+						<div class="whiteDot"></div>
 					{/if}
 				</div>
 			</Button>

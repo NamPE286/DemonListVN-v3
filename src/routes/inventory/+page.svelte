@@ -25,9 +25,9 @@
 		rarity: number;
 	};
 
-	let items: Item[] = [];
-	let loading = false;
-	let error: string | null = null;
+	let items: Item[] = $state([]);
+	let loading = $state(false);
+	let error: string | null = $state(null);
 
 	async function fetchInventory() {
 		loading = true;
@@ -85,7 +85,7 @@
 			data: any | null;
 			error: string | null;
 		}
-	> = {};
+	> = $state({});
 	
 	function hasExpire(it: any) {
 		return !!(it?.expireAt || selectedItems[it.inventoryId]?.data?.expireAt);
@@ -217,7 +217,7 @@
 				<Dialog.Root>
 					<Dialog.Trigger>
 						<button
-							on:click={() => loadItem(item.itemId, item.inventoryId)}
+							onclick={() => loadItem(item.itemId, item.inventoryId)}
 							class={`relative w-full transform rounded-md border-b-4 bg-white/5 p-0 transition-transform hover:scale-105 ${rarityClass(item.rarity)} cursor-pointer overflow-hidden text-left`}
 							title={item.name}
 							aria-label={`Open ${item.name}`}
