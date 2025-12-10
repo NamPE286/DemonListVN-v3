@@ -11,10 +11,10 @@
 	import { _ } from 'svelte-i18n';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import DashboardSettings from '$lib/components/dashboardSettings.svelte';
-	import DashboardSearch from '$lib/components/dashboardSearch.svelte';
-	import DashboardWeather from '$lib/components/dashboardWeather.svelte';
-	import DashboardSubmissions from '$lib/components/dashboardSubmissions.svelte';
-	import DashboardEvents from '$lib/components/dashboardEvents.svelte';
+	import DashboardSearch from '$lib/components/widgets/dashboardSearch.svelte';
+	import DashboardWeather from '$lib/components/widgets/dashboardWeather.svelte';
+	import DashboardSubmissions from '$lib/components/widgets/dashboardSubmissions.svelte';
+	import DashboardEvents from '$lib/components/widgets/dashboardEvents.svelte';
 
 	export let events: any[];
 
