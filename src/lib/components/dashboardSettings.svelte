@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Button } from '$lib/components/ui/button/index.js';
 	import { Input } from '$lib/components/ui/input';
@@ -22,14 +23,14 @@
 	export let shortcutsVisible = true;
 	export let shortcuts: Array<{ name: string; url: string; icon: string }> = [];
 
-	// Local copies for editing
-	let tempBgUrl = dashboardBg;
-	let tempOverlayType: 'none' | 'dark' | 'blur' | 'both' = overlayType;
-	let tempSearchEnabled = searchEnabled;
-	let tempSearchEngine = searchEngine;
-	let tempSearchPosition = searchPosition;
-	let tempShortcutsVisible = shortcutsVisible;
-	let tempShortcuts = shortcuts.map((s) => ({ ...s }));
+	// Local copies for editing (initialize to safe defaults; sync on mount)
+	let tempBgUrl = '';
+	let tempOverlayType: 'none' | 'dark' | 'blur' | 'both' = 'none';
+	let tempSearchEnabled = true;
+	let tempSearchEngine: 'google' | 'bing' | 'duckduckgo' | 'yahoo' | 'yandex' | 'ecosisa' = 'google';
+	let tempSearchPosition: 'top' | 'center' | 'bottom' = 'center';
+	let tempShortcutsVisible = true;
+	let tempShortcuts: Array<{ name: string; url: string; icon: string }> = [];
 
 	// Shortcut editing
 	let editingShortcutIndex: number | null = null;
@@ -181,18 +182,96 @@
 	}
 
 	function handleOpenChange(newOpen: boolean) {
-		if (newOpen) {
-			// Reset temp values when opening
-			tempBgUrl = dashboardBg;
-			tempOverlayType = overlayType;
-			tempSearchEnabled = searchEnabled;
-			tempSearchEngine = searchEngine;
-			tempSearchPosition = searchPosition;
-			tempShortcutsVisible = shortcutsVisible;
-			tempShortcuts = shortcuts.map((s) => ({ ...s }));
+		if (newOpen && browser) {
+			// Load fresh values from localStorage when opening to ensure current settings are shown
+			const DASHBOARD_BG_KEY = 'dashboard.backgroundUrl';
+			const DASHBOARD_OVERLAY_KEY = 'dashboard.overlayType';
+			const DASHBOARD_SEARCH_ENABLED_KEY = 'dashboard.searchEnabled';
+			const DASHBOARD_SEARCH_ENGINE_KEY = 'dashboard.searchEngine';
+			const DASHBOARD_SEARCH_POSITION_KEY = 'dashboard.searchPosition';
+			const DASHBOARD_SHORTCUTS_VISIBLE_KEY = 'dashboard.shortcutsVisible';
+			const DASHBOARD_SHORTCUTS_KEY = 'dashboard.shortcuts';
+
+			tempBgUrl = localStorage.getItem(DASHBOARD_BG_KEY) || '';
+			tempOverlayType = (localStorage.getItem(DASHBOARD_OVERLAY_KEY) as typeof overlayType) || 'none';
+			
+			const savedSearchEnabled = localStorage.getItem(DASHBOARD_SEARCH_ENABLED_KEY);
+			tempSearchEnabled = savedSearchEnabled === null ? true : savedSearchEnabled === 'true';
+			
+			tempSearchEngine = (localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY) as typeof searchEngine) || 'google';
+			tempSearchPosition = (localStorage.getItem(DASHBOARD_SEARCH_POSITION_KEY) as typeof searchPosition) || 'center';
+			
+			const savedShortcutsVisible = localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY);
+			tempShortcutsVisible = savedShortcutsVisible === null ? true : savedShortcutsVisible === 'true';
+			
+			const savedShortcuts = localStorage.getItem(DASHBOARD_SHORTCUTS_KEY);
+			if (savedShortcuts) {
+				try {
+					tempShortcuts = JSON.parse(savedShortcuts);
+				} catch {
+					tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
+				}
+			} else {
+				tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
+			}
+
+			// Also update parent component props to ensure consistency
+			dashboardBg = tempBgUrl;
+			overlayType = tempOverlayType;
+			searchEnabled = tempSearchEnabled;
+			searchEngine = tempSearchEngine;
+			searchPosition = tempSearchPosition;
+			shortcutsVisible = tempShortcutsVisible;
+			shortcuts = tempShortcuts.map((s) => ({ ...s }));
 		}
 		open = newOpen;
 	}
+
+	// Sync initial state from localStorage on client mount so the component
+	// reflects saved settings after page refresh even before the dialog opens.
+	onMount(() => {
+		if (!browser) return;
+
+		const DASHBOARD_BG_KEY = 'dashboard.backgroundUrl';
+		const DASHBOARD_OVERLAY_KEY = 'dashboard.overlayType';
+		const DASHBOARD_SEARCH_ENABLED_KEY = 'dashboard.searchEnabled';
+		const DASHBOARD_SEARCH_ENGINE_KEY = 'dashboard.searchEngine';
+		const DASHBOARD_SEARCH_POSITION_KEY = 'dashboard.searchPosition';
+		const DASHBOARD_SHORTCUTS_VISIBLE_KEY = 'dashboard.shortcutsVisible';
+		const DASHBOARD_SHORTCUTS_KEY = 'dashboard.shortcuts';
+
+		tempBgUrl = localStorage.getItem(DASHBOARD_BG_KEY) || '';
+		tempOverlayType = (localStorage.getItem(DASHBOARD_OVERLAY_KEY) as typeof tempOverlayType) || 'none';
+
+		const savedSearchEnabled = localStorage.getItem(DASHBOARD_SEARCH_ENABLED_KEY);
+		tempSearchEnabled = savedSearchEnabled === null ? true : savedSearchEnabled === 'true';
+
+		tempSearchEngine = (localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY) as typeof tempSearchEngine) || 'google';
+		tempSearchPosition = (localStorage.getItem(DASHBOARD_SEARCH_POSITION_KEY) as typeof tempSearchPosition) || 'center';
+
+		const savedShortcutsVisible = localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY);
+		tempShortcutsVisible = savedShortcutsVisible === null ? true : savedShortcutsVisible === 'true';
+
+		const savedShortcuts = localStorage.getItem(DASHBOARD_SHORTCUTS_KEY);
+		if (savedShortcuts) {
+			try {
+				tempShortcuts = JSON.parse(savedShortcuts);
+			} catch {
+				tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
+			}
+		} else {
+			tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
+		}
+
+		// Update bound parent props as well so parent UI reflects stored values
+		dashboardBg = tempBgUrl;
+		overlayType = tempOverlayType;
+		searchEnabled = tempSearchEnabled;
+		searchEngine = tempSearchEngine;
+		searchPosition = tempSearchPosition;
+		shortcutsVisible = tempShortcutsVisible;
+		shortcuts = tempShortcuts.map((s) => ({ ...s }));
+	});
 </script>
 
 <!-- Dashboard Settings Dialog -->

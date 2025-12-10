@@ -4,8 +4,6 @@
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { _ } from 'svelte-i18n';
 
-	export let currentTime = new Date();
-
 	let weather: { temp: number; location: string; condition: string; icon: string } | null = null;
 	let weatherLoading = true;
 	let weatherError = false;
@@ -91,6 +89,7 @@
 			console.error('Failed to fetch weather:', e);
 			weatherError = true;
 		} finally {
+			console.log(weather);
 			weatherLoading = false;
 		}
 	}
@@ -99,6 +98,8 @@
 		fetchWeather();
 	});
 </script>
+
+<div class="h-[100px] w-[100px] bg-slate-600"></div>
 
 {#if weatherLoading}
 	<div class="rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
@@ -116,7 +117,9 @@
 			<span class="text-xl sm:text-2xl">{weather.icon}</span>
 			<div>
 				<div class="text-sm font-semibold sm:text-base">{weather.temp}°C</div>
-				<div class="max-w-[80px] truncate text-[10px] text-muted-foreground sm:max-w-[100px] sm:text-xs">
+				<div
+					class="max-w-[80px] truncate text-[10px] text-muted-foreground sm:max-w-[100px] sm:text-xs"
+				>
 					{weather.location}
 				</div>
 			</div>

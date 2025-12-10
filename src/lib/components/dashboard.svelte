@@ -12,7 +12,7 @@
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import DashboardSettings from '$lib/components/dashboardSettings.svelte';
 	import DashboardSearch from '$lib/components/dashboardSearch.svelte';
-	import DashboardClock from '$lib/components/dashboardClock.svelte';
+	import DashboardWeather from '$lib/components/dashboardWeather.svelte';
 	import DashboardSubmissions from '$lib/components/dashboardSubmissions.svelte';
 	import DashboardEvents from '$lib/components/dashboardEvents.svelte';
 
@@ -235,7 +235,7 @@
 			</div>
 			<div class="flex items-start gap-2">
 				<!-- Weather Card -->
-				<DashboardClock bind:currentTime />
+				<DashboardWeather />
 				<button
 					class="flex-shrink-0 rounded-full bg-background/60 p-2.5 backdrop-blur-md transition-all hover:bg-background/80 sm:p-3"
 					on:click={() => (settingsOpen = true)}
