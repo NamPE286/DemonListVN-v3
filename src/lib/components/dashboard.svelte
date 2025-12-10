@@ -80,23 +80,51 @@
 
 	function loadDashboardSettings() {
 		if (browser) {
+			// Initialize dashboard background
+			if (localStorage.getItem(DASHBOARD_BG_KEY) === null) {
+				localStorage.setItem(DASHBOARD_BG_KEY, '');
+			}
 			dashboardBg = localStorage.getItem(DASHBOARD_BG_KEY) || '';
+
+			// Initialize overlay type
+			if (localStorage.getItem(DASHBOARD_OVERLAY_KEY) === null) {
+				localStorage.setItem(DASHBOARD_OVERLAY_KEY, 'none');
+			}
 			overlayType = (localStorage.getItem(DASHBOARD_OVERLAY_KEY) as typeof overlayType) || 'none';
 
-			// Load search settings
+			// Initialize search enabled
+			if (localStorage.getItem(DASHBOARD_SEARCH_ENABLED_KEY) === null) {
+				localStorage.setItem(DASHBOARD_SEARCH_ENABLED_KEY, 'true');
+			}
 			const savedSearchEnabled = localStorage.getItem(DASHBOARD_SEARCH_ENABLED_KEY);
-			searchEnabled = savedSearchEnabled === null ? true : savedSearchEnabled === 'true';
+			searchEnabled = savedSearchEnabled === 'true';
 
+			// Initialize search engine
+			if (localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY) === null) {
+				localStorage.setItem(DASHBOARD_SEARCH_ENGINE_KEY, 'google');
+			}
 			searchEngine =
 				(localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY) as keyof typeof SEARCH_ENGINES) ||
 				'google';
 
+			// Initialize search position
+			if (localStorage.getItem(DASHBOARD_SEARCH_POSITION_KEY) === null) {
+				localStorage.setItem(DASHBOARD_SEARCH_POSITION_KEY, 'center');
+			}
 			searchPosition =
 				(localStorage.getItem(DASHBOARD_SEARCH_POSITION_KEY) as typeof searchPosition) || 'center';
 
+			// Initialize shortcuts visible
+			if (localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY) === null) {
+				localStorage.setItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY, 'true');
+			}
 			const savedShortcutsVisible = localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY);
-			shortcutsVisible = savedShortcutsVisible === null ? true : savedShortcutsVisible === 'true';
+			shortcutsVisible = savedShortcutsVisible === 'true';
 
+			// Initialize shortcuts
+			if (localStorage.getItem(DASHBOARD_SHORTCUTS_KEY) === null) {
+				localStorage.setItem(DASHBOARD_SHORTCUTS_KEY, JSON.stringify(DEFAULT_SHORTCUTS));
+			}
 			const savedShortcuts = localStorage.getItem(DASHBOARD_SHORTCUTS_KEY);
 			if (savedShortcuts) {
 				try {

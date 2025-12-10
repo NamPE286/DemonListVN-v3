@@ -264,15 +264,17 @@
 		const DASHBOARD_SHORTCUTS_KEY = 'dashboard.shortcuts';
 
 		tempBgUrl = localStorage.getItem(DASHBOARD_BG_KEY) || '';
-		tempOverlayType = localStorage.getItem(DASHBOARD_OVERLAY_KEY) as typeof tempOverlayType;
+		const overlay = localStorage.getItem(DASHBOARD_OVERLAY_KEY);
+		tempOverlayType = (overlay === 'none' || overlay === 'dark' || overlay === 'blur' || overlay === 'both') ? overlay as typeof tempOverlayType : 'none';
 
 		const savedSearchEnabled = localStorage.getItem(DASHBOARD_SEARCH_ENABLED_KEY);
 		tempSearchEnabled = savedSearchEnabled === null ? true : savedSearchEnabled === 'true';
 
-		tempSearchEngine = localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY) as typeof tempSearchEngine;
-		tempSearchPosition = localStorage.getItem(
-			DASHBOARD_SEARCH_POSITION_KEY
-		) as typeof tempSearchPosition;
+		const engine = localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY);
+		tempSearchEngine = (engine && engine in SEARCH_ENGINES) ? engine as typeof tempSearchEngine : 'google';
+
+		const position = localStorage.getItem(DASHBOARD_SEARCH_POSITION_KEY);
+		tempSearchPosition = (position === 'top' || position === 'center' || position === 'bottom') ? position as typeof tempSearchPosition : 'center';
 
 		const savedShortcutsVisible = localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY);
 		tempShortcutsVisible = savedShortcutsVisible === null ? true : savedShortcutsVisible === 'true';
