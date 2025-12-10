@@ -18,16 +18,23 @@
 	export let dashboardBg: string = '';
 	export let overlayType: 'none' | 'dark' | 'blur' | 'both' = 'none';
 	export let searchEnabled = true;
-	export let searchEngine: 'google' | 'bing' | 'duckduckgo' | 'yahoo' | 'yandex' | 'ecosisa' = 'google';
+	export let searchEngine: 'google' | 'bing' | 'duckduckgo' | 'yahoo' | 'yandex' | 'ecosisa' =
+		'google';
 	export let searchPosition: 'top' | 'center' | 'bottom' = 'center';
 	export let shortcutsVisible = true;
 	export let shortcuts: Array<{ name: string; url: string; icon: string }> = [];
+
+	// Weather settings (local temp copies)
+	let tempWeatherEnabled = true;
+	let tempWeatherAutoDetect = true;
+	let tempWeatherLocation = '';
 
 	// Local copies for editing (initialize to safe defaults; sync on mount)
 	let tempBgUrl = '';
 	let tempOverlayType: 'none' | 'dark' | 'blur' | 'both' = 'none';
 	let tempSearchEnabled = true;
-	let tempSearchEngine: 'google' | 'bing' | 'duckduckgo' | 'yahoo' | 'yandex' | 'ecosisa' = 'google';
+	let tempSearchEngine: 'google' | 'bing' | 'duckduckgo' | 'yahoo' | 'yandex' | 'ecosisa' =
+		'google';
 	let tempSearchPosition: 'top' | 'center' | 'bottom' = 'center';
 	let tempShortcutsVisible = true;
 	let tempShortcuts: Array<{ name: string; url: string; icon: string }> = [];
@@ -82,7 +89,7 @@
 
 	function saveShortcut() {
 		if (!editingShortcut.name.trim() || !editingShortcut.url.trim()) {
-			toast.error($_('dashboard.settings.shortcut_required') || 'Name and URL are required');
+			toast.error($_('dashboard.settings.shortcut_required'));
 			return;
 		}
 
@@ -121,6 +128,9 @@
 			const DASHBOARD_SEARCH_POSITION_KEY = 'dashboard.searchPosition';
 			const DASHBOARD_SHORTCUTS_VISIBLE_KEY = 'dashboard.shortcutsVisible';
 			const DASHBOARD_SHORTCUTS_KEY = 'dashboard.shortcuts';
+			const DASHBOARD_WEATHER_ENABLED_KEY = 'dashboard.weatherEnabled';
+			const DASHBOARD_WEATHER_AUTODETECT_KEY = 'dashboard.weatherAutoDetect';
+			const DASHBOARD_WEATHER_LOCATION_KEY = 'dashboard.weatherLocation';
 
 			localStorage.setItem(DASHBOARD_BG_KEY, tempBgUrl);
 			localStorage.setItem(DASHBOARD_OVERLAY_KEY, tempOverlayType);
@@ -129,6 +139,14 @@
 			localStorage.setItem(DASHBOARD_SEARCH_POSITION_KEY, tempSearchPosition);
 			localStorage.setItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY, String(tempShortcutsVisible));
 			localStorage.setItem(DASHBOARD_SHORTCUTS_KEY, JSON.stringify(tempShortcuts));
+			localStorage.setItem(DASHBOARD_WEATHER_ENABLED_KEY, String(tempWeatherEnabled));
+			localStorage.setItem(DASHBOARD_WEATHER_AUTODETECT_KEY, String(tempWeatherAutoDetect));
+			localStorage.setItem(DASHBOARD_WEATHER_LOCATION_KEY, tempWeatherLocation);
+
+			// Notify other parts of the app (same-tab listeners) that weather settings changed
+			try {
+				window.dispatchEvent(new Event('dashboard.weather.updated'));
+			} catch {}
 
 			// Emit update
 			dashboardBg = tempBgUrl;
@@ -139,7 +157,9 @@
 			shortcutsVisible = tempShortcutsVisible;
 			shortcuts = tempShortcuts.map((s) => ({ ...s }));
 
-			toast.success($_('dashboard.settings.saved') || 'Settings saved!');
+			// No need to emit weather props here; weather component listens to storage changes
+
+			toast.success($_('dashboard.settings.saved'));
 			open = false;
 		}
 	}
@@ -153,7 +173,7 @@
 			localStorage.removeItem(DASHBOARD_OVERLAY_KEY);
 			tempBgUrl = '';
 			tempOverlayType = 'none';
-			toast.success($_('dashboard.settings.bg_cleared') || 'Background cleared!');
+			toast.success($_('dashboard.settings.bg_cleared'));
 		}
 	}
 
@@ -177,13 +197,12 @@
 			tempShortcutsVisible = true;
 			tempShortcuts = [...DEFAULT_SHORTCUTS];
 
-			toast.success($_('dashboard.settings.search_reset') || 'Search settings reset!');
+			toast.success($_('dashboard.settings.search_reset'));
 		}
 	}
 
 	function handleOpenChange(newOpen: boolean) {
 		if (newOpen && browser) {
-			// Load fresh values from localStorage when opening to ensure current settings are shown
 			const DASHBOARD_BG_KEY = 'dashboard.backgroundUrl';
 			const DASHBOARD_OVERLAY_KEY = 'dashboard.overlayType';
 			const DASHBOARD_SEARCH_ENABLED_KEY = 'dashboard.searchEnabled';
@@ -193,17 +212,20 @@
 			const DASHBOARD_SHORTCUTS_KEY = 'dashboard.shortcuts';
 
 			tempBgUrl = localStorage.getItem(DASHBOARD_BG_KEY) || '';
-			tempOverlayType = (localStorage.getItem(DASHBOARD_OVERLAY_KEY) as typeof overlayType) || 'none';
-			
+			tempOverlayType = localStorage.getItem(DASHBOARD_OVERLAY_KEY) as typeof overlayType;
+
 			const savedSearchEnabled = localStorage.getItem(DASHBOARD_SEARCH_ENABLED_KEY);
 			tempSearchEnabled = savedSearchEnabled === null ? true : savedSearchEnabled === 'true';
-			
-			tempSearchEngine = (localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY) as typeof searchEngine) || 'google';
-			tempSearchPosition = (localStorage.getItem(DASHBOARD_SEARCH_POSITION_KEY) as typeof searchPosition) || 'center';
-			
+
+			tempSearchEngine = localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY) as typeof searchEngine;
+			tempSearchPosition = localStorage.getItem(
+				DASHBOARD_SEARCH_POSITION_KEY
+			) as typeof searchPosition;
+
 			const savedShortcutsVisible = localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY);
-			tempShortcutsVisible = savedShortcutsVisible === null ? true : savedShortcutsVisible === 'true';
-			
+			tempShortcutsVisible =
+				savedShortcutsVisible === null ? true : savedShortcutsVisible === 'true';
+
 			const savedShortcuts = localStorage.getItem(DASHBOARD_SHORTCUTS_KEY);
 			if (savedShortcuts) {
 				try {
@@ -215,7 +237,10 @@
 				tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
 			}
 
-			// Also update parent component props to ensure consistency
+			tempWeatherEnabled = (localStorage.getItem('dashboard.weatherEnabled') ?? 'true') === 'true';
+			tempWeatherAutoDetect =
+				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'true') === 'true';
+			tempWeatherLocation = localStorage.getItem('dashboard.weatherLocation') || '';
 			dashboardBg = tempBgUrl;
 			overlayType = tempOverlayType;
 			searchEnabled = tempSearchEnabled;
@@ -227,8 +252,6 @@
 		open = newOpen;
 	}
 
-	// Sync initial state from localStorage on client mount so the component
-	// reflects saved settings after page refresh even before the dialog opens.
 	onMount(() => {
 		if (!browser) return;
 
@@ -241,13 +264,15 @@
 		const DASHBOARD_SHORTCUTS_KEY = 'dashboard.shortcuts';
 
 		tempBgUrl = localStorage.getItem(DASHBOARD_BG_KEY) || '';
-		tempOverlayType = (localStorage.getItem(DASHBOARD_OVERLAY_KEY) as typeof tempOverlayType) || 'none';
+		tempOverlayType = localStorage.getItem(DASHBOARD_OVERLAY_KEY) as typeof tempOverlayType;
 
 		const savedSearchEnabled = localStorage.getItem(DASHBOARD_SEARCH_ENABLED_KEY);
 		tempSearchEnabled = savedSearchEnabled === null ? true : savedSearchEnabled === 'true';
 
-		tempSearchEngine = (localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY) as typeof tempSearchEngine) || 'google';
-		tempSearchPosition = (localStorage.getItem(DASHBOARD_SEARCH_POSITION_KEY) as typeof tempSearchPosition) || 'center';
+		tempSearchEngine = localStorage.getItem(DASHBOARD_SEARCH_ENGINE_KEY) as typeof tempSearchEngine;
+		tempSearchPosition = localStorage.getItem(
+			DASHBOARD_SEARCH_POSITION_KEY
+		) as typeof tempSearchPosition;
 
 		const savedShortcutsVisible = localStorage.getItem(DASHBOARD_SHORTCUTS_VISIBLE_KEY);
 		tempShortcutsVisible = savedShortcutsVisible === null ? true : savedShortcutsVisible === 'true';
@@ -259,11 +284,15 @@
 			} catch {
 				tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
 			}
+
+			tempWeatherEnabled = (localStorage.getItem('dashboard.weatherEnabled') ?? 'true') === 'true';
+			tempWeatherAutoDetect =
+				(localStorage.getItem('dashboard.weatherAutoDetect') ?? 'true') === 'true';
+			tempWeatherLocation = localStorage.getItem('dashboard.weatherLocation') || '';
 		} else {
 			tempShortcuts = DEFAULT_SHORTCUTS.map((s) => ({ ...s }));
 		}
 
-		// Update bound parent props as well so parent UI reflects stored values
 		dashboardBg = tempBgUrl;
 		overlayType = tempOverlayType;
 		searchEnabled = tempSearchEnabled;
@@ -278,9 +307,9 @@
 <Dialog.Root bind:open onOpenChange={handleOpenChange}>
 	<Dialog.Content class="max-h-[90vh] overflow-y-auto sm:max-w-[600px]">
 		<Dialog.Header>
-			<Dialog.Title>{$_('dashboard.settings.title') || 'Dashboard Settings'}</Dialog.Title>
+			<Dialog.Title>{$_('dashboard.settings.title')}</Dialog.Title>
 			<Dialog.Description>
-				{$_('dashboard.settings.description') || 'Customize your dashboard appearance'}
+				{$_('dashboard.settings.description')}
 			</Dialog.Description>
 		</Dialog.Header>
 		<ScrollArea class="max-h-[60vh] pr-4">
@@ -288,12 +317,16 @@
 				<!-- Background Settings Section -->
 				<div class="space-y-4">
 					<h3 class="text-sm font-semibold">
-						{$_('dashboard.settings.background_section') || 'Background'}
+						{$_('dashboard.settings.background_section')}
 					</h3>
 
 					<div class="grid gap-2">
-						<Label for="bg-url">{$_('dashboard.settings.bg_url') || 'Background Image URL'}</Label>
-						<Input id="bg-url" bind:value={tempBgUrl} placeholder="https://example.com/image.jpg" />
+						<Label for="bg-url">{$_('dashboard.settings.bg_url')}</Label>
+						<Input
+							id="bg-url"
+							bind:value={tempBgUrl}
+							placeholder={$_('dashboard.settings.bg_placeholder')}
+						/>
 						<p class="text-xs text-muted-foreground">
 							{$_('dashboard.settings.bg_hint') ||
 								'Enter a URL to an image for your dashboard background'}
@@ -302,35 +335,35 @@
 
 					<!-- Overlay Options -->
 					<div class="grid gap-2">
-						<Label>{$_('dashboard.settings.overlay') || 'Background Overlay'}</Label>
+						<Label>{$_('dashboard.settings.overlay')}</Label>
 						<div class="flex flex-wrap gap-2">
 							<Button
 								variant={tempOverlayType === 'none' ? 'default' : 'outline'}
 								size="sm"
 								on:click={() => (tempOverlayType = 'none')}
 							>
-								{$_('dashboard.settings.overlay_none') || 'None'}
+								{$_('dashboard.settings.overlay_none')}
 							</Button>
 							<Button
 								variant={tempOverlayType === 'dark' ? 'default' : 'outline'}
 								size="sm"
 								on:click={() => (tempOverlayType = 'dark')}
 							>
-								{$_('dashboard.settings.overlay_dark') || 'Darker'}
+								{$_('dashboard.settings.overlay_dark')}
 							</Button>
 							<Button
 								variant={tempOverlayType === 'blur' ? 'default' : 'outline'}
 								size="sm"
 								on:click={() => (tempOverlayType = 'blur')}
 							>
-								{$_('dashboard.settings.overlay_blur') || 'Blur'}
+								{$_('dashboard.settings.overlay_blur')}
 							</Button>
 							<Button
 								variant={tempOverlayType === 'both' ? 'default' : 'outline'}
 								size="sm"
 								on:click={() => (tempOverlayType = 'both')}
 							>
-								{$_('dashboard.settings.overlay_both') || 'Dark + Blur'}
+								{$_('dashboard.settings.overlay_both')}
 							</Button>
 						</div>
 					</div>
@@ -339,9 +372,9 @@
 						<div class="relative aspect-video w-full overflow-hidden rounded-md border">
 							<img
 								src={tempBgUrl}
-								alt="Preview"
+								alt={$_('dashboard.settings.preview')}
 								class="h-full w-full object-cover"
-								on:error={() => toast.error('Invalid image URL')}
+								on:error={() => toast.error($_('dashboard.settings.invalid_bg_url'))}
 							/>
 							<!-- Preview overlay -->
 							{#if tempOverlayType === 'dark' || tempOverlayType === 'both'}
@@ -354,7 +387,7 @@
 					{/if}
 
 					<Button variant="outline" size="sm" on:click={clearDashboardBackground}>
-						{$_('dashboard.settings.clear_bg') || 'Clear Background'}
+						{$_('dashboard.settings.clear_bg')}
 					</Button>
 				</div>
 
@@ -364,15 +397,15 @@
 				<!-- Web Search Settings Section -->
 				<div class="space-y-4">
 					<h3 class="text-sm font-semibold">
-						{$_('dashboard.settings.search_section') || 'Web Search'}
+						{$_('dashboard.settings.search_section')}
 					</h3>
 
 					<!-- Enable/Disable Search -->
 					<div class="flex items-center justify-between">
 						<div>
-							<Label>{$_('dashboard.settings.enable_search') || 'Enable Web Search'}</Label>
+							<Label>{$_('dashboard.settings.enable_search')}</Label>
 							<p class="text-xs text-muted-foreground">
-								{$_('dashboard.settings.enable_search_hint') || 'Show search bar on dashboard'}
+								{$_('dashboard.settings.enable_search_hint')}
 							</p>
 						</div>
 						<Switch bind:checked={tempSearchEnabled} />
@@ -381,7 +414,7 @@
 					{#if tempSearchEnabled}
 						<!-- Search Engine Selection -->
 						<div class="grid gap-2">
-							<Label>{$_('dashboard.settings.search_engine') || 'Search Engine'}</Label>
+							<Label>{$_('dashboard.settings.search_engine')}</Label>
 							<Select.Root
 								selected={{ value: tempSearchEngine, label: SEARCH_ENGINES[tempSearchEngine].name }}
 								onSelectedChange={(v) => {
@@ -389,7 +422,7 @@
 								}}
 							>
 								<Select.Trigger class="w-full">
-									<Select.Value placeholder="Select search engine" />
+									<Select.Value placeholder={$_('dashboard.settings.select_search_engine')} />
 								</Select.Trigger>
 								<Select.Content>
 									{#each Object.entries(SEARCH_ENGINES) as [key, engine]}
@@ -401,28 +434,28 @@
 
 						<!-- Search Bar Position -->
 						<div class="grid gap-2">
-							<Label>{$_('dashboard.settings.search_position') || 'Search Bar Position'}</Label>
+							<Label>{$_('dashboard.settings.search_position')}</Label>
 							<div class="flex flex-wrap gap-2">
 								<Button
 									variant={tempSearchPosition === 'top' ? 'default' : 'outline'}
 									size="sm"
 									on:click={() => (tempSearchPosition = 'top')}
 								>
-									{$_('dashboard.settings.position_top') || 'Top'}
+									{$_('dashboard.settings.position_top')}
 								</Button>
 								<Button
 									variant={tempSearchPosition === 'center' ? 'default' : 'outline'}
 									size="sm"
 									on:click={() => (tempSearchPosition = 'center')}
 								>
-									{$_('dashboard.settings.position_center') || 'Center'}
+									{$_('dashboard.settings.position_center')}
 								</Button>
 								<Button
 									variant={tempSearchPosition === 'bottom' ? 'default' : 'outline'}
 									size="sm"
 									on:click={() => (tempSearchPosition = 'bottom')}
 								>
-									{$_('dashboard.settings.position_bottom') || 'Bottom'}
+									{$_('dashboard.settings.position_bottom')}
 								</Button>
 							</div>
 						</div>
@@ -430,7 +463,7 @@
 						<!-- Show/Hide Shortcuts -->
 						<div class="flex items-center justify-between">
 							<div>
-								<Label>{$_('dashboard.settings.show_shortcuts') || 'Show Shortcuts'}</Label>
+								<Label>{$_('dashboard.settings.show_shortcuts')}</Label>
 								<p class="text-xs text-muted-foreground">
 									{$_('dashboard.settings.show_shortcuts_hint') ||
 										'Display quick access links below search'}
@@ -443,16 +476,16 @@
 							<!-- Shortcuts Management -->
 							<div class="grid gap-2">
 								<div class="flex items-center justify-between">
-									<Label>{$_('dashboard.settings.shortcuts') || 'Shortcuts'}</Label>
+									<Label>{$_('dashboard.settings.shortcuts')}</Label>
 									<Button variant="outline" size="sm" on:click={() => openShortcutDialog()}>
 										<Plus class="mr-1 h-3 w-3" />
-										{$_('dashboard.settings.add_shortcut') || 'Add'}
+										{$_('dashboard.settings.add_shortcut')}
 									</Button>
 								</div>
 								<div class="space-y-2 rounded-md border p-2">
 									{#if tempShortcuts.length === 0}
 										<p class="py-2 text-center text-xs text-muted-foreground">
-											{$_('dashboard.settings.no_shortcuts') || 'No shortcuts added'}
+											{$_('dashboard.settings.no_shortcuts')}
 										</p>
 									{:else}
 										{#each tempShortcuts as shortcut, index}
@@ -491,18 +524,76 @@
 						{/if}
 
 						<Button variant="outline" size="sm" on:click={resetSearchSettings}>
-							{$_('dashboard.settings.reset_search') || 'Reset Search Settings'}
+							{$_('dashboard.settings.reset_search')}
 						</Button>
 					{/if}
+
+					<!-- Divider -->
+					<div class="border-t"></div>
+
+					<!-- Weather Settings Section -->
+					<div class="space-y-4">
+						<h3 class="text-sm font-semibold">{$_('dashboard.settings.weather_section')}</h3>
+
+						<div class="flex items-center justify-between">
+							<div>
+								<Label>{$_('dashboard.settings.enable_weather')}</Label>
+								<p class="text-xs text-muted-foreground">
+									{$_('dashboard.settings.enable_weather_hint')}
+								</p>
+							</div>
+							<Switch bind:checked={tempWeatherEnabled} />
+						</div>
+
+						<div class="flex items-center justify-between">
+							<div>
+								<Label>{$_('dashboard.settings.weather_autodetect')}</Label>
+								<p class="text-xs text-muted-foreground">
+									{$_('dashboard.settings.weather_autodetect_hint')}
+								</p>
+							</div>
+							<Switch bind:checked={tempWeatherAutoDetect} />
+						</div>
+
+						{#if !tempWeatherAutoDetect}
+							<div class="grid gap-2">
+								<Label for="weather-location">{$_('dashboard.settings.weather_location')}</Label>
+								<Input
+									id="weather-location"
+									bind:value={tempWeatherLocation}
+									placeholder={$_('dashboard.settings.weather_location_placeholder')}
+								/>
+								<p class="text-xs text-muted-foreground">
+									{$_('dashboard.settings.weather_location_hint')}
+								</p>
+							</div>
+						{/if}
+
+						<Button
+							variant="outline"
+							size="sm"
+							on:click={() => {
+								localStorage.removeItem('dashboard.weatherLocation');
+								localStorage.setItem('dashboard.weatherAutoDetect', 'true');
+								localStorage.setItem('dashboard.weatherEnabled', 'true');
+								tempWeatherLocation = '';
+								tempWeatherAutoDetect = true;
+								tempWeatherEnabled = true;
+								toast.success($_('dashboard.settings.weather_reset'));
+							}}
+						>
+							{$_('dashboard.settings.reset_weather')}
+						</Button>
+					</div>
 				</div>
 			</div>
 		</ScrollArea>
 		<Dialog.Footer>
 			<Button variant="outline" on:click={() => (open = false)}>
-				{$_('general.cancel') || 'Cancel'}
+				{$_('general.cancel')}
 			</Button>
 			<Button on:click={saveDashboardSettings}>
-				{$_('dashboard.settings.save') || 'Save'}
+				{$_('dashboard.settings.save')}
 			</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
@@ -514,17 +605,17 @@
 		<Dialog.Header>
 			<Dialog.Title>
 				{editingShortcutIndex !== null
-					? $_('dashboard.settings.edit_shortcut') || 'Edit Shortcut'
-					: $_('dashboard.settings.add_shortcut') || 'Add Shortcut'}
+					? $_('dashboard.settings.edit_shortcut')
+					: $_('dashboard.settings.add_shortcut')}
 			</Dialog.Title>
 		</Dialog.Header>
 		<div class="grid gap-4 py-4">
 			<div class="grid gap-2">
-				<Label for="shortcut-name">{$_('dashboard.settings.shortcut_name') || 'Name'}</Label>
+				<Label for="shortcut-name">{$_('dashboard.settings.shortcut_name')}</Label>
 				<Input id="shortcut-name" bind:value={editingShortcut.name} placeholder="YouTube" />
 			</div>
 			<div class="grid gap-2">
-				<Label for="shortcut-url">{$_('dashboard.settings.shortcut_url') || 'URL'}</Label>
+				<Label for="shortcut-url">{$_('dashboard.settings.shortcut_url')}</Label>
 				<Input
 					id="shortcut-url"
 					bind:value={editingShortcut.url}
@@ -532,9 +623,7 @@
 				/>
 			</div>
 			<div class="grid gap-2">
-				<Label for="shortcut-icon"
-					>{$_('dashboard.settings.shortcut_icon') || 'Icon URL (optional)'}</Label
-				>
+				<Label for="shortcut-icon">{$_('dashboard.settings.shortcut_icon')}</Label>
 				<Input id="shortcut-icon" bind:value={editingShortcut.icon} placeholder="https://..." />
 				<p class="text-xs text-muted-foreground">
 					{$_('dashboard.settings.shortcut_icon_hint') ||
@@ -544,10 +633,10 @@
 		</div>
 		<Dialog.Footer>
 			<Button variant="outline" on:click={() => (shortcutDialogOpen = false)}>
-				{$_('general.cancel') || 'Cancel'}
+				{$_('general.cancel')}
 			</Button>
 			<Button on:click={saveShortcut}>
-				{$_('general.save') || 'Save'}
+				{$_('general.save')}
 			</Button>
 		</Dialog.Footer>
 	</Dialog.Content>

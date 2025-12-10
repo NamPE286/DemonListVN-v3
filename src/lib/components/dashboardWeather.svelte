@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import { Skeleton } from '$lib/components/ui/skeleton';
 	import { _ } from 'svelte-i18n';
@@ -7,6 +7,11 @@
 	let weather: { temp: number; location: string; condition: string; icon: string } | null = null;
 	let weatherLoading = true;
 	let weatherError = false;
+
+	// Settings
+	let weatherEnabled = true;
+	let weatherAutoDetect = true;
+	let weatherLocationManual = '';
 
 	const WEATHER_CODES: Record<number, { condition: string; icon: string }> = {
 		0: { condition: 'Clear', icon: '☀️' },
@@ -35,16 +40,47 @@
 	async function fetchWeather() {
 		if (!browser) return;
 
+		// Respect user setting
+		if (!weatherEnabled) {
+			weather = null;
+			weatherLoading = false;
+			return;
+		}
+
 		try {
 			weatherLoading = true;
 			weatherError = false;
 
-			// Get user's location
-			const position = await new Promise<GeolocationPosition>((resolve, reject) => {
-				navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
-			});
+			let latitude: number | null = null;
+			let longitude: number | null = null;
 
-			const { latitude, longitude } = position.coords;
+			if (weatherAutoDetect) {
+				// Get user's location via Geolocation API
+				const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+					navigator.geolocation.getCurrentPosition(resolve, reject, { timeout: 5000 });
+				});
+
+				latitude = position.coords.latitude;
+				longitude = position.coords.longitude;
+
+			} else if (weatherLocationManual && weatherLocationManual.trim().length > 0) {
+				// Geocode manual location using Nominatim
+				const q = encodeURIComponent(weatherLocationManual.trim());
+				const geoRes = await fetch(
+					`https://nominatim.openstreetmap.org/search?format=json&q=${q}&limit=1`
+				);
+				if (!geoRes.ok) throw new Error('Geocoding failed');
+				const geoJson = await geoRes.json();
+				if (Array.isArray(geoJson) && geoJson.length > 0) {
+					latitude = parseFloat(geoJson[0].lat);
+					longitude = parseFloat(geoJson[0].lon);
+				} else {
+					throw new Error('Could not find location');
+				}
+			} else {
+				// No valid location provided
+				throw new Error('No location available');
+			}
 
 			// Fetch weather data
 			const weatherRes = await fetch(
@@ -55,25 +91,26 @@
 
 			const weatherData = await weatherRes.json();
 
-			// Reverse geocode to get location name
-			let locationName = 'Your Location';
+			// Reverse geocode to get location name (if manual location not provided)
+			let locationName = weatherLocationManual || 'Your Location';
 
-			// Try to get city name from reverse geocoding
-			try {
-				const reverseGeoRes = await fetch(
-					`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
-				);
-				if (reverseGeoRes.ok) {
-					const geoData = await reverseGeoRes.json();
-					locationName =
-						geoData.address?.city ||
-						geoData.address?.town ||
-						geoData.address?.village ||
-						geoData.address?.county ||
-						'Your Location';
+			if (weatherAutoDetect) {
+				try {
+					const reverseGeoRes = await fetch(
+						`https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`
+					);
+					if (reverseGeoRes.ok) {
+						const geoData = await reverseGeoRes.json();
+						locationName =
+							geoData.address?.city ||
+							geoData.address?.town ||
+							geoData.address?.village ||
+							geoData.address?.county ||
+							locationName;
+					}
+				} catch {
+					// Keep provided location name
 				}
-			} catch {
-				// Keep default location name
 			}
 
 			const weatherCode = weatherData.current.weather_code;
@@ -88,19 +125,61 @@
 		} catch (e) {
 			console.error('Failed to fetch weather:', e);
 			weatherError = true;
+			weather = null;
 		} finally {
-			console.log(weather);
 			weatherLoading = false;
 		}
 	}
 
+	function loadSettingsFromStorage() {
+		if (!browser) return;
+		const enabled = localStorage.getItem('dashboard.weatherEnabled');
+		const autoDetect = localStorage.getItem('dashboard.weatherAutoDetect');
+		const manual = localStorage.getItem('dashboard.weatherLocation');
+
+		weatherEnabled = enabled === null ? true : enabled === 'true';
+		weatherAutoDetect = autoDetect === null ? true : autoDetect === 'true';
+		weatherLocationManual = manual || '';
+	}
+
+	let storageHandler: (e: StorageEvent) => void;
+	let customHandler: () => void;
+
 	onMount(() => {
-		fetchWeather();
+		loadSettingsFromStorage();
+		// Only fetch if enabled
+		if (weatherEnabled) fetchWeather();
+
+		// Listen to storage events so settings dialog updates take effect (cross-tab)
+		storageHandler = (e: StorageEvent) => {
+			if (!e.key) return;
+			if (e.key.startsWith('dashboard.weather')) {
+				loadSettingsFromStorage();
+				// Re-fetch when settings change
+				fetchWeather();
+			}
+		};
+		window.addEventListener('storage', storageHandler);
+
+		// Also listen to a custom event for same-tab updates from settings dialog
+		customHandler = () => {
+			loadSettingsFromStorage();
+			fetchWeather();
+		};
+		window.addEventListener('dashboard.weather.updated', customHandler as EventListener);
+	});
+
+	onDestroy(() => {
+		if (storageHandler) window.removeEventListener('storage', storageHandler);
+		if (customHandler) window.removeEventListener('dashboard.weather.updated', customHandler as EventListener);
 	});
 
 </script>
 
-{#if weatherLoading}
+{#if !weatherEnabled}
+    <!-- Weather disabled by user -->
+{:else}
+	{#if weatherLoading}
 	<div class="rounded-xl bg-background/60 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
 		<div class="flex items-center gap-2">
 			<Skeleton class="h-6 w-6 rounded-full" />
@@ -138,4 +217,5 @@
 			</div>
 		</div>
 	</div>
+{/if}
 {/if}
