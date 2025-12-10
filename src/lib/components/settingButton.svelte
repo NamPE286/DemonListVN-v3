@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
@@ -100,6 +101,12 @@
 	}
 
 	$: ($user, fetchAPIKeys());
+
+	onMount(() => {
+		if (browser && localStorage.getItem('settings.dashboardEnabled') === null) {
+			localStorage.setItem('settings.dashboardEnabled', 'false');
+		}
+	});
 
 	function setTheme(theme: string) {
 		document.documentElement.setAttribute('data-theme', theme);

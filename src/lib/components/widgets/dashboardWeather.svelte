@@ -140,12 +140,26 @@
 
 	function loadSettingsFromStorage() {
 		if (!browser) return;
-		const enabled = localStorage.getItem('dashboard.weatherEnabled');
-		const autoDetect = localStorage.getItem('dashboard.weatherAutoDetect');
-		const manual = localStorage.getItem('dashboard.weatherLocation');
 
-		weatherEnabled = enabled === null ? true : enabled === 'true';
-		weatherAutoDetect = autoDetect === null ? true : autoDetect === 'true';
+		// Initialize weather enabled
+		if (localStorage.getItem('dashboard.weatherEnabled') === null) {
+			localStorage.setItem('dashboard.weatherEnabled', 'true');
+		}
+		const enabled = localStorage.getItem('dashboard.weatherEnabled');
+		weatherEnabled = enabled === 'true';
+
+		// Initialize auto detect
+		if (localStorage.getItem('dashboard.weatherAutoDetect') === null) {
+			localStorage.setItem('dashboard.weatherAutoDetect', 'true');
+		}
+		const autoDetect = localStorage.getItem('dashboard.weatherAutoDetect');
+		weatherAutoDetect = autoDetect === 'true';
+
+		// Initialize manual location
+		if (localStorage.getItem('dashboard.weatherLocation') === null) {
+			localStorage.setItem('dashboard.weatherLocation', '');
+		}
+		const manual = localStorage.getItem('dashboard.weatherLocation');
 		weatherLocationManual = manual || '';
 	}
 
