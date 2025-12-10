@@ -408,7 +408,8 @@
       "claim_error": "Nhận thất bại",
       "claimed_success": "Đã nhận! Vui lòng kiểm tra kho đồ của bạn",
       "rarity_label": "Độ hiếm:"
-    }
+    },
+    "ended": "Đẫ kết thúc"
   },
   "event_filter": {
     "title": "Bộ lọc sự kiện",

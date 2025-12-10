@@ -409,7 +409,8 @@
       "claim_error": "Failed to claim",
       "claimed_success": "Claimed! Please check your inventory",
       "rarity_label": "Rarity:"
-    }
+    },
+    "ended": "Ended"
   },
   "event_filter": {
     "title": "Event Filter",
