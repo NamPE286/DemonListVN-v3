@@ -13,6 +13,8 @@
 	import Trash from 'svelte-radix/Trash.svelte';
 	import { toast } from 'svelte-sonner';
 	import { _ } from 'svelte-i18n';
+	import { user } from '$lib/client';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let open = false;
 	export let dashboardBg: string = '';
@@ -54,6 +56,9 @@
 
 	// Drag drop index
 	let dragIndex: number | null = null;
+
+	// Check if user is a supporter
+	$: isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
 
 	function handleDragStart(event: DragEvent, idx: number) {
 		dragIndex = idx;
@@ -482,9 +487,16 @@
 			<div class="grid gap-6 py-4">
 				<!-- Background Settings Section -->
 				<div class="space-y-4">
-					<h3 class="text-sm font-semibold">
-						{$_('dashboard.settings.background_section')}
-					</h3>
+					<div class="flex items-center justify-between">
+						<h3 class="text-sm font-semibold">
+							{$_('dashboard.settings.background_section')}
+						</h3>
+						{#if !isSupporter}
+							<span class="text-xs font-medium text-amber-600 dark:text-amber-400">
+								{$_('dashboard.settings.supporter_only') || '💎 Supporter Only'}
+							</span>
+						{/if}
+					</div>
 
 					<div class="grid gap-2">
 						<Label for="bg-url">{$_('dashboard.settings.bg_url')}</Label>
@@ -492,10 +504,15 @@
 							id="bg-url"
 							bind:value={tempBgUrl}
 							placeholder={$_('dashboard.settings.bg_placeholder')}
+							disabled={!isSupporter}
 						/>
 						<p class="text-xs text-muted-foreground">
-							{$_('dashboard.settings.bg_hint') ||
-								'Enter a URL to an image for your dashboard background'}
+							{#if !isSupporter}
+								{$_('dashboard.settings.bg_supporter_hint') || 'Become a supporter to customize your dashboard background'}
+							{:else}
+								{$_('dashboard.settings.bg_hint') ||
+									'Enter a URL to an image for your dashboard background'}
+							{/if}
 						</p>
 					</div>
 
@@ -507,6 +524,7 @@
 								variant={tempOverlayType === 'none' ? 'default' : 'outline'}
 								size="sm"
 								on:click={() => (tempOverlayType = 'none')}
+								disabled={!isSupporter}
 							>
 								{$_('dashboard.settings.overlay_none')}
 							</Button>
@@ -514,6 +532,7 @@
 								variant={tempOverlayType === 'dark' ? 'default' : 'outline'}
 								size="sm"
 								on:click={() => (tempOverlayType = 'dark')}
+								disabled={!isSupporter}
 							>
 								{$_('dashboard.settings.overlay_dark')}
 							</Button>
@@ -521,6 +540,7 @@
 								variant={tempOverlayType === 'blur' ? 'default' : 'outline'}
 								size="sm"
 								on:click={() => (tempOverlayType = 'blur')}
+								disabled={!isSupporter}
 							>
 								{$_('dashboard.settings.overlay_blur')}
 							</Button>
@@ -528,6 +548,7 @@
 								variant={tempOverlayType === 'both' ? 'default' : 'outline'}
 								size="sm"
 								on:click={() => (tempOverlayType = 'both')}
+								disabled={!isSupporter}
 							>
 								{$_('dashboard.settings.overlay_both')}
 							</Button>
@@ -552,7 +573,7 @@
 						</div>
 					{/if}
 
-					<Button variant="outline" size="sm" on:click={clearDashboardBackground}>
+					<Button variant="outline" size="sm" on:click={clearDashboardBackground} disabled={!isSupporter}>
 						{$_('dashboard.settings.clear_bg')}
 					</Button>
 				</div>
@@ -562,19 +583,30 @@
 
 				<!-- Web Search Settings Section -->
 				<div class="space-y-4">
-					<h3 class="text-sm font-semibold">
-						{$_('dashboard.settings.search_section')}
-					</h3>
+					<div class="flex items-center justify-between">
+						<h3 class="text-sm font-semibold">
+							{$_('dashboard.settings.search_section')}
+						</h3>
+						{#if !isSupporter}
+							<span class="text-xs font-medium text-amber-600 dark:text-amber-400">
+								{$_('dashboard.settings.supporter_only') || '💎 Supporter Only'}
+							</span>
+						{/if}
+					</div>
 
 					<!-- Enable/Disable Search -->
 					<div class="flex items-center justify-between">
 						<div>
 							<Label>{$_('dashboard.settings.enable_search')}</Label>
 							<p class="text-xs text-muted-foreground">
-								{$_('dashboard.settings.enable_search_hint')}
+								{#if !isSupporter}
+									{$_('dashboard.settings.search_supporter_hint') || 'Become a supporter to use web search'}
+								{:else}
+									{$_('dashboard.settings.enable_search_hint')}
+								{/if}
 							</p>
 						</div>
-						<Switch bind:checked={tempSearchEnabled} />
+						<Switch bind:checked={tempSearchEnabled} disabled={!isSupporter} />
 					</div>
 
 					{#if tempSearchEnabled}
@@ -584,10 +616,11 @@
 							<Select.Root
 								selected={{ value: tempSearchEngine, label: SEARCH_ENGINES[tempSearchEngine].name }}
 								onSelectedChange={(v) => {
-									if (v) tempSearchEngine = v.value;
+									if (v && isSupporter) tempSearchEngine = v.value;
 								}}
+								disabled={!isSupporter}
 							>
-								<Select.Trigger class="w-full">
+								<Select.Trigger class="w-full" disabled={!isSupporter}>
 									<Select.Value placeholder={$_('dashboard.settings.select_search_engine')} />
 								</Select.Trigger>
 								<Select.Content>
@@ -606,7 +639,7 @@
 										'Open search results in a new tab by default'}
 								</p>
 							</div>
-							<Switch bind:checked={tempSearchOpenInNewTab} />
+							<Switch bind:checked={tempSearchOpenInNewTab} disabled={!isSupporter} />
 						</div>
 						<!-- Search Bar Position -->
 						<div class="grid gap-2">
@@ -616,6 +649,7 @@
 									variant={tempSearchPosition === 'top' ? 'default' : 'outline'}
 									size="sm"
 									on:click={() => (tempSearchPosition = 'top')}
+									disabled={!isSupporter}
 								>
 									{$_('dashboard.settings.position_top')}
 								</Button>
@@ -623,6 +657,7 @@
 									variant={tempSearchPosition === 'center' ? 'default' : 'outline'}
 									size="sm"
 									on:click={() => (tempSearchPosition = 'center')}
+									disabled={!isSupporter}
 								>
 									{$_('dashboard.settings.position_center')}
 								</Button>
@@ -630,6 +665,7 @@
 									variant={tempSearchPosition === 'bottom' ? 'default' : 'outline'}
 									size="sm"
 									on:click={() => (tempSearchPosition = 'bottom')}
+									disabled={!isSupporter}
 								>
 									{$_('dashboard.settings.position_bottom')}
 								</Button>
@@ -641,11 +677,15 @@
 							<div>
 								<Label>{$_('dashboard.settings.show_shortcuts')}</Label>
 								<p class="text-xs text-muted-foreground">
-									{$_('dashboard.settings.show_shortcuts_hint') ||
-										'Display quick access links below search'}
+									{#if !isSupporter}
+										{$_('dashboard.settings.shortcuts_supporter_hint') || 'Become a supporter to customize shortcuts'}
+									{:else}
+										{$_('dashboard.settings.show_shortcuts_hint') ||
+											'Display quick access links below search'}
+									{/if}
 								</p>
 							</div>
-							<Switch bind:checked={tempShortcutsVisible} />
+							<Switch bind:checked={tempShortcutsVisible} disabled={!isSupporter} />
 						</div>
 
 						{#if tempShortcutsVisible}
@@ -653,7 +693,7 @@
 							<div class="grid gap-2">
 								<div class="flex items-center justify-between">
 									<Label>{$_('dashboard.settings.shortcuts')}</Label>
-									<Button variant="outline" size="sm" on:click={() => openShortcutDialog()}>
+									<Button variant="outline" size="sm" on:click={() => openShortcutDialog()} disabled={!isSupporter}>
 										<Plus class="mr-1 h-3 w-3" />
 										{$_('dashboard.settings.add_shortcut')}
 									</Button>
@@ -681,6 +721,7 @@
 													size="sm"
 													class="h-7 w-7 p-0"
 													on:click={() => openShortcutDialog(index)}
+													disabled={!isSupporter}
 												>
 													<Pencil1 class="h-3 w-3" />
 												</Button>
@@ -689,6 +730,7 @@
 													size="sm"
 													class="h-7 w-7 p-0 text-destructive"
 													on:click={() => deleteShortcut(index)}
+													disabled={!isSupporter}
 												>
 													<Trash class="h-3 w-3" />
 												</Button>
@@ -699,7 +741,7 @@
 							</div>
 						{/if}
 
-						<Button variant="outline" size="sm" on:click={resetSearchSettings}>
+						<Button variant="outline" size="sm" on:click={resetSearchSettings} disabled={!isSupporter}>
 							{$_('dashboard.settings.reset_search')}
 						</Button>
 					{/if}
@@ -768,12 +810,23 @@
 
 					<!-- Bottom Left Widgets Section -->
 					<div class="space-y-4">
-						<h3 class="text-sm font-semibold">
-							{$_('dashboard.settings.widgets_section') || 'Bottom Left Widgets'}
-						</h3>
+						<div class="flex items-center justify-between">
+							<h3 class="text-sm font-semibold">
+								{$_('dashboard.settings.widgets_section') || 'Bottom Left Widgets'}
+							</h3>
+							{#if !isSupporter}
+								<span class="text-xs font-medium text-amber-600 dark:text-amber-400">
+									{$_('dashboard.settings.supporter_only') || '💎 Supporter Only'}
+								</span>
+							{/if}
+						</div>
 						<p class="text-xs text-muted-foreground">
-							{$_('dashboard.settings.widgets_hint') ||
-								'Customize which widgets appear in the bottom left corner and their order. Drag to reorder.'}
+							{#if !isSupporter}
+								{$_('dashboard.settings.widgets_supporter_hint') || 'Become a supporter to customize widget order and visibility'}
+							{:else}
+								{$_('dashboard.settings.widgets_hint') ||
+									'Customize which widgets appear in the bottom left corner and their order. Drag to reorder.'}
+							{/if}
 						</p>
 
 						<div class="space-y-2 rounded-md border p-3" role="list">
@@ -781,19 +834,19 @@
 								<div
 									class="flex items-center gap-2 rounded-md bg-muted/50 p-2"
 									class:opacity-70={dragIndex === index}
-									draggable="true"
+									draggable={isSupporter ? 'true' : 'false'}
 									aria-grabbed={dragIndex === index}
 									role="listitem"
-									on:dragstart={(e) => handleDragStart(e, index)}
+									on:dragstart={(e) => isSupporter && handleDragStart(e, index)}
 									on:dragover={handleDragOver}
-									on:drop={(e) => handleDrop(e, index)}
+									on:drop={(e) => isSupporter && handleDrop(e, index)}
 								>
 									<div class="flex flex-col gap-1">
 										<button
 											class="flex h-5 w-5 items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30"
-											disabled={index === 0}
+											disabled={!isSupporter || index === 0}
 											on:click={() => {
-												if (index > 0) {
+												if (isSupporter && index > 0) {
 													const newWidgets = [...tempBottomLeftWidgets];
 													const temp = newWidgets[index - 1];
 													newWidgets[index - 1] = newWidgets[index];
@@ -806,9 +859,9 @@
 										</button>
 										<button
 											class="flex h-5 w-5 items-center justify-center text-muted-foreground hover:text-foreground disabled:opacity-30"
-											disabled={index === tempBottomLeftWidgets.length - 1}
+											disabled={!isSupporter || index === tempBottomLeftWidgets.length - 1}
 											on:click={() => {
-												if (index < tempBottomLeftWidgets.length - 1) {
+												if (isSupporter && index < tempBottomLeftWidgets.length - 1) {
 													const newWidgets = [...tempBottomLeftWidgets];
 													const temp = newWidgets[index];
 													newWidgets[index] = newWidgets[index + 1];
@@ -831,10 +884,13 @@
 											type="checkbox"
 											class="h-4 w-4 rounded border-muted-foreground text-primary focus:ring-0"
 											checked={widget.enabled}
+											disabled={!isSupporter}
 											on:change={() => {
-												tempBottomLeftWidgets = tempBottomLeftWidgets.map((w, i) =>
-													i === index ? { ...w, enabled: !w.enabled } : w
-												);
+												if (isSupporter) {
+													tempBottomLeftWidgets = tempBottomLeftWidgets.map((w, i) =>
+														i === index ? { ...w, enabled: !w.enabled } : w
+													);
+												}
 											}}
 											aria-label={widget.id === 'profile'
 												? $_('dashboard.settings.widget_profile') || 'Player Profile'
@@ -862,6 +918,7 @@
 											{ id: 'profile', enabled: true }
 										];
 									}}
+									disabled={!isSupporter}
 								>
 									<Plus class="mr-1 h-3 w-3" />
 									{$_('dashboard.settings.add_widget_profile') || 'Add Profile'}
@@ -877,6 +934,7 @@
 											{ id: 'submissions', enabled: true }
 										];
 									}}
+									disabled={!isSupporter}
 								>
 									<Plus class="mr-1 h-3 w-3" />
 									{$_('dashboard.settings.add_widget_submissions') || 'Add Submissions'}
@@ -894,6 +952,7 @@
 								];
 								toast.success($_('dashboard.settings.widgets_reset') || 'Widgets reset to default');
 							}}
+							disabled={!isSupporter}
 						>
 							{$_('dashboard.settings.reset_widgets') || 'Reset to Default'}
 						</Button>

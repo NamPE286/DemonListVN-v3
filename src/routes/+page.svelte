@@ -89,9 +89,8 @@
 
 	$: if (browser && $user.checked && !userChecked) {
 		userChecked = true;
-		const isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
 		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
-		const shouldShow = isSupporter && enabled;
+		const shouldShow = enabled;
 
 		if (!shouldShow) {
 			setTimeout(() => animateScrollDown(), 50);
@@ -115,9 +114,8 @@
 	});
 
 	$: if (userChecked) {
-		const isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
 		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
-		const shouldShow = isSupporter && enabled;
+		const shouldShow = enabled;
 		if (shouldShow) {
 			// If we are on desktop, hide the event banner; on mobile keep it visible
 			showEventBanner = isMobile ? true : false;

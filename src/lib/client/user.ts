@@ -175,5 +175,9 @@ let userData: userType = {
 
 export const user = writable(userData);
 
-userData.refresh();
-userData.syncRole();
+async function upd() {
+	await userData.refresh();
+	await userData.syncRole();
+}
+
+upd();
