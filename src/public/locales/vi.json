@@ -600,6 +600,11 @@
       "title": "Tham gia máy chủ Discord của chúng tôi!",
       "description": "Kết nối với cộng đồng và nhận cập nhật cũng như thông báo mới nhất.",
       "join_now": "Tham gia ngay"
+    },
+    "dashboard_alert": {
+      "title": "Dashboard dành cho Supporter",
+      "description": "Bạn có thể truy cập dashboard để sử dụng các tính năng độc quyền",
+      "link": "Đi tới dashboard"
     }
   },
   "orders": {

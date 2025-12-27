@@ -601,6 +601,11 @@
       "title": "Join our Discord Server!",
       "description": "Connect with the community and get latest updates and annoucements.",
       "join_now": "Join now"
+    },
+    "dashboard_alert": {
+      "title": "Dashboard available for Supporters",
+      "description": "If you are a supporter, you can access the dashboard for extra features.",
+      "link": "Go to dashboard"
     }
   },
   "orders": {

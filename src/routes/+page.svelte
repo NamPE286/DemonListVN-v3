@@ -8,7 +8,7 @@
 	import { _ } from 'svelte-i18n';
 	import * as Alert from '$lib/components/ui/alert';
 	import { X } from 'lucide-svelte';
-	import Dashboard from '$lib/components/dashboard.svelte';
+	import { goto } from '$app/navigation';
 	import { user } from '$lib/client';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { browser } from '$app/environment';
@@ -16,10 +16,7 @@
 	let time = new Date().toLocaleTimeString('vi-VN');
 	let visible = false;
 	let showDiscordAlert = false;
-	// When not running in SSR, default to showing dashboard until the user setting is checked
 	let dashboardEnabled = false;
-	let showDashboard = true; // Show dashboard by default until user is checked
-	let dashboardVisible = true; // Show dashboard by default until user is checked
 	let userChecked = false;
 	let recent: any = {
 		dl: null,
@@ -27,8 +24,19 @@
 		pl: null
 	};
 	let events: any = null;
-	let showEventBanner = true;
-	let isMobile = false;
+	let showDashboardAlert = false;
+
+	function dismissDashboardAlert() {
+		showDashboardAlert = false;
+
+		if (browser) localStorage.setItem('dashboardAlertDismissed', 'true');
+	}
+
+	async function goToDashboard(e: Event) {
+		e.preventDefault();
+		dismissDashboardAlert();
+		await goto('/dashboard');
+	}
 
 	async function getRecentDemonListLevel() {
 		const query = new URLSearchParams({
@@ -75,68 +83,38 @@
 		localStorage.setItem('discordAlertDismissed', 'true');
 	}
 
-	function animateScrollDown() {
-		window.scrollTo({
-			top: window.innerHeight - 50,
-			behavior: 'smooth'
-		});
-		setTimeout(() => {
-			dashboardVisible = false;
-			showDashboard = false;
-			window.scrollTo({ top: 0, behavior: 'instant' });
-		}, 500);
-	}
-
-	$: if (browser && $user.checked && !userChecked) {
-		userChecked = true;
-		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
-		const shouldShow = enabled;
-
-		if (!shouldShow) {
-			setTimeout(() => animateScrollDown(), 50);
-		} else {
-			// If the user is on mobile, still show event banner
-			if (!isMobile) {
-				showEventBanner = false;
-			} else {
-				showEventBanner = true;
-			}
-		}
-	}
-
-	// Keep track of window size so we can update showEventBanner on resize
-	onMount(() => {
-		if (!browser) return;
-		const update = () => (isMobile = window.innerWidth < 1024);
-		update();
-		window.addEventListener('resize', update);
-		return () => window.removeEventListener('resize', update);
-	});
-
-	$: if (userChecked) {
-		const enabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
-		const shouldShow = enabled;
-		if (shouldShow) {
-			// If we are on desktop, hide the event banner; on mobile keep it visible
-			showEventBanner = isMobile ? true : false;
-		} else {
-			showEventBanner = true;
-		}
-	}
-
 	onMount(() => {
 		visible = true;
 
-		const discordAlertDismissed = localStorage.getItem('discordAlertDismissed');
-
-		if (!discordAlertDismissed) {
-			showDiscordAlert = true;
+		if (localStorage.getItem('dashboardAlertDismissed') === null) {
+			localStorage.setItem('dashboardAlertDismissed', 'false');
 		}
 
-		if (browser && localStorage.getItem('settings.dashboardEnabled') === null) {
+		if (localStorage.getItem('discordAlertDismissed') == null) {
+			localStorage.setItem('discordAlertDismissed', 'false');
+		}
+
+		if (localStorage.getItem('settings.dashboardEnabled') === null) {
 			localStorage.setItem('settings.dashboardEnabled', 'true');
 		}
+
+		const dashboardAlertDismissed = localStorage.getItem('dashboardAlertDismissed') === 'true';
+		showDiscordAlert = localStorage.getItem('discordAlertDismissed') == 'false';
 		dashboardEnabled = localStorage.getItem('settings.dashboardEnabled') === 'true';
+
+		user.subscribe((u) => {
+			if (!u.loggedIn) {
+				return;
+			}
+
+			userChecked = true;
+
+			if (!dashboardAlertDismissed && isActive(u.data.supporterUntil)) {
+				showDashboardAlert = true;
+			} else {
+				showDashboardAlert = false;
+			}
+		});
 
 		getRecentDemonListLevel().then((data) => (recent.dl = data));
 		getRecentFeaturedListLevel().then((data) => (recent.fl = data));
@@ -161,8 +139,25 @@
 	/>
 </svelte:head>
 
-{#if dashboardVisible}
-	<Dashboard {events} />
+{#if showDashboardAlert}
+	<div class="px-[5px] pt-[20px] md:px-[55px]">
+		<Alert.Root
+			class="relative flex items-center gap-[10px] border-amber-200 bg-amber-50 pb-[7px] dark:border-amber-800 dark:bg-amber-950"
+		>
+			<div>
+				<Alert.Title class="pr-8">{$_('home.dashboard_alert.title')}</Alert.Title>
+				<Alert.Description>
+					{$_('home.dashboard_alert.description')}
+					<a
+						href="/dashboard"
+						on:click={goToDashboard}
+						class="font-semibold underline hover:text-amber-600"
+						>{$_('home.dashboard_alert.link')}</a
+					>
+				</Alert.Description>
+			</div>
+		</Alert.Root>
+	</div>
 {/if}
 
 {#if showDiscordAlert}
@@ -194,36 +189,34 @@
 	</div>
 {/if}
 
-{#if showEventBanner}
-	<div class="promotionWrapper mt-[20px] w-full pl-[50px] pr-[50px]">
-		<Carousel.Root
-			class="h-fit w-full"
-			plugins={[
-				Autoplay({
-					delay: 10000
-				})
-			]}
-		>
-			<Carousel.Content>
-				{#if events}
-					{#each events as item, index}
-						<Carousel.Item>
-							<a href={`/event/${item.id}`}>
-								<EventBanner data={item} />
-							</a>
-						</Carousel.Item>
-					{/each}
-				{:else}
+<div class="promotionWrapper mt-[20px] w-full pl-[50px] pr-[50px]">
+	<Carousel.Root
+		class="h-fit w-full"
+		plugins={[
+			Autoplay({
+				delay: 10000
+			})
+		]}
+	>
+		<Carousel.Content>
+			{#if events}
+				{#each events as item, index}
 					<Carousel.Item>
-						<EventBanner data={null} />
+						<a href={`/event/${item.id}`}>
+							<EventBanner data={item} />
+						</a>
 					</Carousel.Item>
-				{/if}
-			</Carousel.Content>
-			<Carousel.Previous />
-			<Carousel.Next />
-		</Carousel.Root>
-	</div>
-{/if}
+				{/each}
+			{:else}
+				<Carousel.Item>
+					<EventBanner data={null} />
+				</Carousel.Item>
+			{/if}
+		</Carousel.Content>
+		<Carousel.Previous />
+		<Carousel.Next />
+	</Carousel.Root>
+</div>
 <Ads dataAdFormat="auto" unit="leaderboard" />
 <div class="wrapper">
 	<h4>{$_('home.newest_dl')}</h4>
