@@ -19,6 +19,9 @@
 
 	export let events: any[];
 
+	const DEFAULT_BG_URL =
+		'https://i0.wp.com/picjumbo.com/wp-content/uploads/modern-gradient-background-free-photo.jpg?w=2210&quality=70';
+
 	// Check if user is a supporter
 	$: isSupporter = $user.loggedIn && isActive($user.data?.supporterUntil);
 
@@ -93,7 +96,7 @@
 			if (localStorage.getItem(DASHBOARD_BG_KEY) === null) {
 				localStorage.setItem(DASHBOARD_BG_KEY, '');
 			}
-			dashboardBg = localStorage.getItem(DASHBOARD_BG_KEY) || '';
+			dashboardBg = localStorage.getItem(DASHBOARD_BG_KEY) || DEFAULT_BG_URL;
 
 			// Initialize overlay type
 			if (localStorage.getItem(DASHBOARD_OVERLAY_KEY) === null) {
