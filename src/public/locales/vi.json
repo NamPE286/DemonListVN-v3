@@ -661,7 +661,8 @@
       "medals": "Huy chương",
       "overview": "Tổng quan",
       "events": "Sự kiện",
-      "cards": "Bộ sưu tập thẻ"
+      "cards": "Bộ sưu tập thẻ",
+      "posts": "Bài viết"
     },
     "filter": {
       "sort_by": "Sắp xếp theo",
@@ -1078,5 +1079,42 @@
       "widgets_reset": "Đã đặt lại widget về mặc định"
     },
     "weather_unavailable": "Không khả dụng"
+  },
+  "social": {
+    "title": "Mạng xã hội",
+    "for_you": "Dành cho bạn",
+    "following_tab": "Đang theo dõi",
+    "whats_happening": "Có gì mới?",
+    "image_url_placeholder": "URL hình ảnh",
+    "link_url_placeholder": "URL liên kết",
+    "posting": "Đang đăng...",
+    "post": "Đăng",
+    "post_created": "Đã đăng bài!",
+    "create_failed": "Đăng bài thất bại",
+    "loading": "Đang tải...",
+    "no_posts": "Chưa có bài viết nào",
+    "no_following_posts": "Không có bài viết từ những người bạn theo dõi",
+    "load_more": "Tải thêm",
+    "login_required": "Vui lòng đăng nhập",
+    "action_failed": "Thao tác thất bại",
+    "delete_confirm": "Bạn có chắc muốn xóa bài viết này?",
+    "post_deleted": "Đã xóa bài viết",
+    "comments": "Bình luận",
+    "write_comment": "Viết bình luận...",
+    "reply": "Trả lời",
+    "no_comments": "Chưa có bình luận nào",
+    "load_comments_failed": "Tải bình luận thất bại",
+    "comment_failed": "Bình luận thất bại",
+    "delete_comment_confirm": "Bạn có chắc muốn xóa bình luận này?",
+    "comment_deleted": "Đã xóa bình luận",
+    "follow": "Theo dõi",
+    "following": "Đang theo dõi",
+    "followed": "Đã theo dõi!",
+    "unfollowed": "Đã bỏ theo dõi",
+    "followers": "Người theo dõi",
+    "posts": "Bài viết",
+    "reposts": "Bài chia sẻ lại",
+    "no_reposts": "Chưa có bài chia sẻ lại nào",
+    "reposted": "Đã chia sẻ lại"
   }
 }

@@ -662,7 +662,8 @@
       "medals": "Medal",
       "overview": "Overview",
       "events": "Events",
-      "cards": "Card collection"
+      "cards": "Card collection",
+      "posts": "Posts"
     },
     "filter": {
       "sort_by": "Sort by",
@@ -1079,5 +1080,42 @@
       "widgets_reset": "Widgets reset to default"
     },
     "weather_unavailable": "Not available"
+  },
+  "social": {
+    "title": "Social",
+    "for_you": "For You",
+    "following_tab": "Following",
+    "whats_happening": "What's happening?",
+    "image_url_placeholder": "Image URL",
+    "link_url_placeholder": "Link URL",
+    "posting": "Posting...",
+    "post": "Post",
+    "post_created": "Post created!",
+    "create_failed": "Failed to create post",
+    "loading": "Loading...",
+    "no_posts": "No posts yet",
+    "no_following_posts": "No posts from people you follow",
+    "load_more": "Load more",
+    "login_required": "Please sign in",
+    "action_failed": "Action failed",
+    "delete_confirm": "Are you sure you want to delete this post?",
+    "post_deleted": "Post deleted",
+    "comments": "Comments",
+    "write_comment": "Write a comment...",
+    "reply": "Reply",
+    "no_comments": "No comments yet",
+    "load_comments_failed": "Failed to load comments",
+    "comment_failed": "Failed to post comment",
+    "delete_comment_confirm": "Are you sure you want to delete this comment?",
+    "comment_deleted": "Comment deleted",
+    "follow": "Follow",
+    "following": "Following",
+    "followed": "Followed!",
+    "unfollowed": "Unfollowed",
+    "followers": "Followers",
+    "posts": "Posts",
+    "reposts": "Reposts",
+    "no_reposts": "No reposts yet",
+    "reposted": "Reposted"
   }
 }
