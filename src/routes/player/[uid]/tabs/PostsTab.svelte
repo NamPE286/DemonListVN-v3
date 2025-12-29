@@ -36,7 +36,7 @@
 		if (!hasMorePosts) return;
 
 		isLoadingPosts = reset;
-		isLoadingMorePosts = !reset;
+		isLoadingMorePosts = !reset && posts.length > 0;
 
 		try {
 			const start = reset ? 0 : posts.length;

@@ -75,8 +75,11 @@
 		return 'now';
 	}
 
-	function getAvatarUrl(uid: string): string {
-		return `https://cdn.demonlistvn.com/avatars/${uid}.jpg`;
+	function getAvatarUrl(player: Comment['players']): string {
+		const isSupporter = isActive(player.supporterUntil ?? null);
+		const extension = isSupporter && player.isAvatarGif ? '.gif' : '.jpg';
+		const version = player.avatarVersion ? `?version=${player.avatarVersion}` : '';
+		return `https://cdn.demonlistvn.com/avatars/${player.uid}${extension}${version}`;
 	}
 
 	function canDeleteComment(comment: Comment): boolean {
@@ -136,7 +139,7 @@
 								<Avatar.Root class="h-8 w-8">
 									<Avatar.Image
 										class="object-cover"
-										src={getAvatarUrl(comment.players.uid)}
+										src={getAvatarUrl(comment.players)}
 										alt=""
 									/>
 									<Avatar.Fallback>{comment.players.name[0]}</Avatar.Fallback>

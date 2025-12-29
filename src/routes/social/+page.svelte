@@ -19,13 +19,16 @@
 
 	let commentsOpen = false;
 	let selectedPost: Post | null = null;
+	let initialLoadDone = false;
 
-	$: if (activeTab) {
+	$: if (activeTab && initialLoadDone) {
 		loadPosts(true);
 	}
 
 	onMount(() => {
-		loadPosts(true);
+		loadPosts(true).then(() => {
+			initialLoadDone = true;
+		});
 	});
 
 	async function loadPosts(reset = false) {

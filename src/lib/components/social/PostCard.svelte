@@ -53,17 +53,21 @@
 		}
 		if (isLiking) return;
 		isLiking = true;
+		const wasLiked = isLiked;
+		const prevCount = likeCount;
 		try {
 			if (isLiked) {
-				await unlikePost(post.id);
 				isLiked = false;
 				likeCount--;
+				await unlikePost(post.id);
 			} else {
-				await likePost(post.id);
 				isLiked = true;
 				likeCount++;
+				await likePost(post.id);
 			}
 		} catch {
+			isLiked = wasLiked;
+			likeCount = prevCount;
 			toast.error($_('social.action_failed'));
 		}
 		isLiking = false;
@@ -76,17 +80,21 @@
 		}
 		if (isReposting) return;
 		isReposting = true;
+		const wasReposted = isReposted;
+		const prevCount = repostCount;
 		try {
 			if (isReposted) {
-				await unrepost(post.id);
 				isReposted = false;
 				repostCount--;
+				await unrepost(post.id);
 			} else {
-				await repost(post.id);
 				isReposted = true;
 				repostCount++;
+				await repost(post.id);
 			}
 		} catch {
+			isReposted = wasReposted;
+			repostCount = prevCount;
 			toast.error($_('social.action_failed'));
 		}
 		isReposting = false;
@@ -108,7 +116,10 @@
 	}
 
 	function getAvatarUrl(player: Post['players']): string {
-		return `https://cdn.demonlistvn.com/avatars/${player.uid}.jpg`;
+		const isSupporter = isActive(player.supporterUntil ?? null);
+		const extension = isSupporter && player.isAvatarGif ? '.gif' : '.jpg';
+		const version = player.avatarVersion ? `?version=${player.avatarVersion}` : '';
+		return `https://cdn.demonlistvn.com/avatars/${player.uid}${extension}${version}`;
 	}
 </script>
 

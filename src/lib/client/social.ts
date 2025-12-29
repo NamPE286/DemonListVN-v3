@@ -17,6 +17,8 @@ export interface Post {
 		name: string;
 		profilepic?: string;
 		supporterUntil?: string;
+		isAvatarGif?: boolean;
+		avatarVersion?: number;
 	};
 	postLikes?: [{ count: number }];
 	postComments?: [{ count: number }];
@@ -37,6 +39,9 @@ export interface Comment {
 		uid: string;
 		name: string;
 		profilepic?: string;
+		supporterUntil?: string;
+		isAvatarGif?: boolean;
+		avatarVersion?: number;
 	};
 }
 
