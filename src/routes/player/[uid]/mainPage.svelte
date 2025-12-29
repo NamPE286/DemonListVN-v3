@@ -21,6 +21,10 @@
 	import { onMount } from 'svelte';
 	import EventTab from './tabs/EventsTab.svelte';
 	import CardCollectionTab from './tabs/CardCollectionTab.svelte';
+	import PostsTab from './tabs/PostsTab.svelte';
+	import FollowButton from '$lib/components/social/FollowButton.svelte';
+	import { getFollowStats } from '$lib/client/social';
+	import type { FollowStats } from '$lib/client/social';
 
 	export let data: PageData;
 	let list: 'dl' | 'fl' | 'pl' | '' = '';
@@ -32,6 +36,17 @@
 	};
 
 	let isBannerFailedToLoad = false;
+	let followStats: FollowStats = { followers: 0, following: 0 };
+
+	$: isOwnProfile = $user.loggedIn && $user.data?.uid === data.player.uid;
+
+	onMount(async () => {
+		try {
+			followStats = await getFollowStats(data.player.uid);
+		} catch {
+			// Ignore errors
+		}
+	});
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -152,6 +167,14 @@
 					{#if $user.loggedIn && data.player.uid == $user.data.uid && !$user.data.isBanned}
 						<ProfileEditButton bind:data={data.player} />
 					{/if}
+					{#if !isOwnProfile}
+						<FollowButton userId={data.player.uid} size="sm" />
+					{/if}
+				</div>
+
+				<div class="follow-stats">
+					<span><b>{followStats.followers}</b> {$_('social.followers')}</span>
+					<span><b>{followStats.following}</b> {$_('social.following')}</span>
 				</div>
 
 				{#if data.player.province}
@@ -204,6 +227,9 @@
 					<Tabs.Trigger value="overview" on:click={() => (list = '')}
 						>{$_('player.tabs.overview')}</Tabs.Trigger
 					>
+					<Tabs.Trigger value="posts" on:click={() => (list = '')}
+						>{$_('player.tabs.posts')}</Tabs.Trigger
+					>
 					<Tabs.Trigger value="dl" on:click={() => (list = 'dl')}
 						>{$_('player.tabs.dl')}</Tabs.Trigger
 					>
@@ -228,6 +254,9 @@
 				</Tabs.Content>
 				<Tabs.Content value="overview" class="w-[1200px] max-w-full">
 					<OverviewTab {data} />
+				</Tabs.Content>
+				<Tabs.Content value="posts" class="w-[600px] max-w-full">
+					<PostsTab userId={data.player.uid} />
 				</Tabs.Content>
 				<Tabs.Content value="medals">
 					<MedalsTab userID={data.player.uid} />
@@ -460,6 +489,18 @@
 
 		svg {
 			fill: var(--textColor);
+		}
+	}
+
+	.follow-stats {
+		display: flex;
+		gap: 16px;
+		font-size: 14px;
+		color: var(--textColor2);
+		margin-bottom: 10px;
+
+		b {
+			color: var(--textColor);
 		}
 	}
 
