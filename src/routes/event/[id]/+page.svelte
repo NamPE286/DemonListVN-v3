@@ -13,6 +13,7 @@
 	import { _ } from 'svelte-i18n';
 	import { toast } from 'svelte-sonner';
 	import QuestTab from './questTab.svelte';
+	import { Button } from '$lib/components/ui/button';
 
 	export let data: PageData;
 
@@ -52,7 +53,12 @@
 <Ads dataAdFormat="auto" unit="leaderboard" />
 
 {#if !data.hidden || ($user.loggedIn && $user.data.isAdmin)}
-	<ParticipateButton {data} />
+	<div class="flex items-center justify-center gap-[10px] mt-[10px]">
+		<ParticipateButton {data} />
+		{#if $user.loggedIn && $user.data.isAdmin}
+			<Button href="/admin/event?id={data.id}" variant="outline">Manage Event</Button>
+		{/if}
+	</div>
 	{#if data.isContest}
 		<Tabs.Root value="detail" class="mt-[20px] flex flex-col items-center">
 			<Tabs.List>

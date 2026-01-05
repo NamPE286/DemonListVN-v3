@@ -3,16 +3,14 @@
 	import { Input } from '$lib/components/ui/input';
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
-	import { Textarea } from '$lib/components/ui/textarea';
-	import { Switch } from '$lib/components/ui/switch';
 	import * as Alert from '$lib/components/ui/alert';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 	import { upload } from '$lib/client/storage';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
-	import LevelCard from '../../event/[id]/levelCard.svelte';
-	import PutLevelDialog from './putLevelDialog.svelte';
-	import DeleteLevelDialog from './deleteLevelDialog.svelte';
+	import BasicInfoTab from './basicInfoTab.svelte';
+	import ContestTab from './contestTab.svelte';
+	import ProofsTab from './proofsTab.svelte';
 
 	enum State {
 		DEFAULT,
@@ -23,6 +21,7 @@
 
 	let state = 0;
 	let levels: any[] = [];
+	let proofs: any[] = [];
 	let event = {
 		id: undefined,
 		created_at: '',
@@ -44,7 +43,8 @@
 		data: null,
 		isRanked: false,
 		isCalculated: false,
-		priority: 0
+		priority: 0,
+		type: ''
 	};
 
 	function convertTime(x: string) {
@@ -76,11 +76,14 @@
 			if (event.isContest) {
 				await fetchLevels();
 			}
-		} catch {
+
+			if (event.needProof) {
+				await fetchProofs();
+			}
+		} catch (e) {
 			state = State.NO_EVENT;
 		}
 	}
-
 	function validate() {
 		const missing: string[] = [];
 
@@ -269,6 +272,96 @@
 			})
 		).json();
 	}
+
+	async function fetchProofs() {
+		proofs = await (
+			await fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/proofs?accepted=all`, {
+				method: 'GET',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token())
+				}
+			})
+		).json();
+	}
+
+	async function acceptProof(userid: string) {
+		if (!confirm('Accept this proof?')) {
+			return;
+		}
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/proofs/${userid}`, {
+				method: 'PATCH',
+				body: JSON.stringify({ accepted: true }),
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				}
+			}),
+			{
+				success: () => {
+					fetchProofs();
+					return 'Proof accepted!';
+				},
+				loading: 'Accepting...',
+				error: 'Failed to accept'
+			}
+		);
+	}
+
+	async function rejectProof(userid: string) {
+		if (!confirm('Reject this proof?')) {
+			return;
+		}
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/events/${event.id}/proofs/${userid}`, {
+				method: 'PATCH',
+				body: JSON.stringify({ accepted: false }),
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				}
+			}),
+			{
+				success: () => {
+					fetchProofs();
+					return 'Proof rejected!';
+				},
+				loading: 'Rejecting...',
+				error: 'Failed to reject'
+			}
+		);
+	}
+
+	function exportToCSV() {
+		const headers = ['Created At', 'Player Name', 'Player ID', 'Content', 'Accepted', 'Data', 'Diff'];
+		const rows = proofs.map((proof) => [
+			new Date(proof.created_at).toLocaleString(),
+			proof.players?.name || 'Unknown',
+			proof.userid,
+			proof.content,
+			proof.accepted ? 'Yes' : 'No',
+			proof.data ? JSON.stringify(proof.data) : '',
+			proof.diff || ''
+		]);
+
+		const csvContent = [
+			headers.join(','),
+			...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+		].join('\n');
+
+		const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+		const link = document.createElement('a');
+		const url = URL.createObjectURL(blob);
+		link.setAttribute('href', url);
+		link.setAttribute('download', `event_${event.id}_proofs.csv`);
+		link.style.visibility = 'hidden';
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+		toast.success('CSV exported!');
+	}
 </script>
 
 <Title value="Event manager" />
@@ -303,198 +396,16 @@
 			<Tabs.List>
 				<Tabs.Trigger value="basic">Basic info</Tabs.Trigger>
 				<Tabs.Trigger value="contest">Contest</Tabs.Trigger>
+				<Tabs.Trigger value="proofs">Proofs</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="basic">
-				<div class="flex flex-col gap-[10px]">
-					<div class="input mt-[50px]">
-						<Label for="title" class="w-[100px]">Title</Label>
-						<Input id="title" class="w-[300px]" placeholder="Required" bind:value={event.title} />
-					</div>
-					<div class="input">
-						<Label for="created_at" class="w-[100px]">Created at</Label>
-						<Input
-							id="created_at"
-							type="datetime-local"
-							class="w-[300px]"
-							placeholder="Required"
-							bind:value={event.created_at}
-						/>
-						<span class="text-xs">default to now</span>
-					</div>
-					<div class="input">
-						<Label for="start" class="w-[100px]">Start</Label>
-						<Input
-							id="start"
-							type="datetime-local"
-							class="w-[300px]"
-							placeholder="Required"
-							bind:value={event.start}
-						/>
-						<span class="text-xs">default to now</span>
-					</div>
-					<div class="input">
-						<Label for="end" class="w-[100px]">End</Label>
-						<Input id="end" type="datetime-local" class="w-[300px]" bind:value={event.end} />
-						<span class="text-xs">null for permanent</span>
-					</div>
-					<div class="input">
-						<Label for="description" class="w-[100px]">Description</Label>
-						<Textarea
-							id="description"
-							class="w-[300px] rounded p-2"
-							rows="3"
-							placeholder="Required"
-							bind:value={event.description}
-						/>
-					</div>
-					<div class="input">
-						<Label for="imgUrl" class="w-[100px]">Banner</Label>
-						<Input
-							id="imgUrl"
-							class="w-[195px]"
-							placeholder="image URL"
-							bind:value={event.imgUrl}
-						/>
-						or
-						<input
-							disabled={event.id === undefined}
-							type="file"
-							id="avatar"
-							name="avatar"
-							accept="image/webp"
-							on:change={handleUpload}
-						/>
-						{#if event.id === undefined}
-							<span class="text-xs">can be uploaded after the event is added</span>
-						{/if}
-					</div>
-					<div class="input">
-						<Label for="exp" class="w-[100px]">EXP</Label>
-						<Input id="exp" type="number" step="1" class="w-[300px]" bind:value={event.exp} />
-					</div>
-					<div class="input">
-						<Label for="minExp" class="w-[100px]">Min EXP</Label>
-						<Input
-							id="minExp"
-							type="number"
-							step="1"
-							class="w-[300px]"
-							placeholder="Required"
-							bind:value={event.minExp}
-						/>
-					</div>
-					<div class="input">
-						<Label for="priority" class="w-[100px]">Priority</Label>
-						<Input
-							id="priority"
-							type="number"
-							step="1"
-							class="w-[300px]"
-							placeholder="Required"
-							bind:value={event.priority}
-						/>
-					</div>
-					<div class="input">
-						<Label for="content" class="w-[100px]">Content</Label>
-						<Textarea
-							id="content"
-							class="w-[300px] rounded p-2"
-							rows="4"
-							bind:value={event.content}
-						/>
-					</div>
-					<div class="input">
-						<Label for="redirect" class="w-[100px]">Redirect</Label>
-						<Input
-							id="redirect"
-							class="w-[300px]"
-							placeholder="optional URL"
-							bind:value={event.redirect}
-						/>
-					</div>
-
-					<div class="input">
-						<Label for="data" class="w-[100px]">Data (JSON)</Label>
-						<Textarea id="data" class="w-[300px] rounded p-2" rows="4" bind:value={event.data} />
-					</div>
-					<div class="input">
-						<Label class="w-[100px]">Need proof</Label>
-						<Switch bind:checked={event.needProof} />
-					</div>
-					<div class="input">
-						<Label class="w-[100px]">Supporter only</Label>
-						<Switch bind:checked={event.isSupporterOnly} />
-					</div>
-
-					<div class="input">
-						<Label class="w-[100px]">Hidden</Label>
-						<Switch bind:checked={event.hidden} />
-					</div>
-					<div class="input">
-						<Label class="w-[100px]">External</Label>
-						<Switch bind:checked={event.isExternal} />
-					</div>
-
-					<div class="input">
-						<Label class="w-[100px]">Contest</Label>
-						<Switch bind:checked={event.isContest} />
-					</div>
-					<div class="input mt-[20px]">
-						{#if state == State.NEW_EVENT}
-							<Button on:click={addEvent}>Add</Button>
-						{:else if state == State.EDIT_EVENT}
-							<Button on:click={editEvent}>Edit</Button>
-						{/if}
-					</div>
-				</div>
+				<BasicInfoTab {event} {state} {addEvent} {editEvent} {handleUpload} />
 			</Tabs.Content>
 			<Tabs.Content value="contest">
-				<div class="flex flex-col gap-[10px]">
-					{#if event.id === undefined}
-						Need to be added first
-					{:else if !event.isContest}
-						Event is not contest
-					{:else}
-						<div class="input">
-							<Label class="w-[100px]">Ranked</Label>
-							<Switch bind:checked={event.isRanked} />
-						</div>
-						<div class="input">
-							<Label for="freeze" class="w-[100px]">Freeze</Label>
-							<Input
-								id="freeze"
-								type="datetime-local"
-								class="w-[300px]"
-								bind:value={event.freeze}
-							/>
-						</div>
-						<Button class="w-[100px]" on:click={editEvent}>Save</Button>
-						{#each levels as level, index}
-							{#if level}
-								<div class="flex items-center gap-[10px]">
-									<div class="w-[700px]">
-										<LevelCard {level} {index} records={[]} {event} />
-									</div>
-									<div class="flex flex-col gap-[10px]">
-										<PutLevelDialog
-											{event}
-											data={{
-												id: level.id,
-												eventID: event.id,
-												levelID: level.levelID,
-												point: level.point,
-												needRaw: level.needRaw
-											}}
-											title="Edit"
-										/>
-										<DeleteLevelDialog eventID={event.id} levelID={level.levelID} />
-									</div>
-								</div>
-							{/if}
-						{/each}
-						<PutLevelDialog {event} title="Add" />
-					{/if}
-				</div>
+				<ContestTab {event} {levels} {editEvent} />
+			</Tabs.Content>
+			<Tabs.Content value="proofs">
+				<ProofsTab {event} {proofs} {fetchProofs} {acceptProof} {rejectProof} {exportToCSV} />
 			</Tabs.Content>
 		</Tabs.Root>
 	{/if}
