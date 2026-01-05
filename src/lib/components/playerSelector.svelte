@@ -1,21 +1,22 @@
 <script lang="ts">
-	import { createEventDispatcher } from 'svelte';
-	import * as Dialog from '$lib/components/ui/dialog';
+	import { createEventDispatcher, onMount } from 'svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Input } from '$lib/components/ui/input';
-	import { Button } from '$lib/components/ui/button';
-	import { ScrollArea } from '$lib/components/ui/scroll-area';
 	import Loading from '$lib/components/animation/loading.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
-	import { Search, X } from 'lucide-svelte';
+	import { Search, X, ChevronDown } from 'lucide-svelte';
 
-	export let open = false;
-	export let title = 'Select Player';
+	export let placeholder = 'Search for a player...';
+	export let value: any = null;
+	export let disabled = false;
 
 	let searchValue = '';
 	let searchResults: any[] = [];
 	let isSearching = false;
 	let searchTimeout: any = null;
+	let showDropdown = false;
+	let containerElement: HTMLDivElement;
+	let dropdownElement: HTMLDivElement;
 
 	const dispatch = createEventDispatcher();
 
@@ -38,137 +39,219 @@
 
 	function handleSearchInput() {
 		clearTimeout(searchTimeout);
+		showDropdown = true;
 		searchTimeout = setTimeout(() => {
 			searchPlayers();
 		}, 300);
 	}
 
 	function selectPlayer(player: any) {
+		value = player;
+		searchValue = player.name;
+		showDropdown = false;
 		dispatch('select', player);
-		closeDialog();
 	}
 
-	function closeDialog() {
-		open = false;
+	function clearSelection() {
+		value = null;
 		searchValue = '';
 		searchResults = [];
+		showDropdown = false;
+		dispatch('clear');
 	}
 
-	$: searchValue, handleSearchInput();
+	function handleClickOutside(event: MouseEvent) {
+		if (containerElement && !containerElement.contains(event.target as Node)) {
+			showDropdown = false;
+		}
+	}
+
+	onMount(() => {
+		document.addEventListener('click', handleClickOutside);
+		return () => {
+			document.removeEventListener('click', handleClickOutside);
+		};
+	});
+
+	$: (searchValue, handleSearchInput());
+	$: if (value) {
+		searchValue = value.name;
+	}
 </script>
 
-<Dialog.Root bind:open onOpenChange={(isOpen) => !isOpen && closeDialog()}>
-	<Dialog.Content class="max-w-[600px]">
-		<Dialog.Header>
-			<Dialog.Title>{title}</Dialog.Title>
-			<Dialog.Description>Search for a player by name or Discord ID</Dialog.Description>
-		</Dialog.Header>
-
-		<div class="search-container">
-			<div class="relative">
-				<Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-				<Input
-					bind:value={searchValue}
-					placeholder="Type player name or discord:USER_ID..."
-					class="pl-10 pr-10"
-				/>
-				{#if searchValue}
-					<button
-						on:click={() => (searchValue = '')}
-						class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-					>
-						<X class="h-4 w-4" />
-					</button>
-				{/if}
-			</div>
-
-			<div class="results-container">
-				{#if isSearching}
-					<div class="flex items-center justify-center py-12">
-						<Loading inverted={true} />
-					</div>
-				{:else if searchValue.length < 2}
-					<div class="empty-state">
-						<Search class="h-12 w-12 text-muted-foreground opacity-50" />
-						<p class="text-muted-foreground">Start typing to search for players...</p>
-					</div>
-				{:else if searchResults.length === 0}
-					<div class="empty-state">
-						<p class="text-muted-foreground">No players found</p>
-						<p class="text-sm text-muted-foreground">
-							Try searching with a different name or use <code>discord:USER_ID</code>
-						</p>
-					</div>
-				{:else}
-					<ScrollArea class="h-[400px]">
-						<div class="player-list">
-							{#each searchResults as player}
-								<button
-									class="player-item"
-									on:click={() => selectPlayer(player)}
-									type="button"
-								>
-									<Avatar.Root class="h-12 w-12">
-										<Avatar.Image
-											class="object-cover"
-											src={`https://cdn.demonlistvn.com/avatars/${player.uid}${
-												isActive(player.supporterUntil) && player.isAvatarGif ? '.gif' : '.jpg'
-											}`}
-											alt={player.name}
-										/>
-										<Avatar.Fallback>{player.name[0]}</Avatar.Fallback>
-									</Avatar.Root>
-									<div class="player-info">
-										<h4 class={isActive(player.supporterUntil) ? 'text-yellow-500' : ''}>
-											{player.name}
-											{#if player.clan && player.clans}
-												<span class="clan-tag">[{player.clans.tag}]</span>
-											{/if}
-										</h4>
-										<div class="player-stats">
-											{#if player.rating}
-												<span class="stat">Rating: {player.rating}</span>
-											{/if}
-											{#if player.overallRank}
-												<span class="stat">Rank: #{player.overallRank}</span>
-											{/if}
-											{#if player.province}
-												<span class="stat">{player.province}</span>
-											{/if}
-										</div>
-									</div>
-								</button>
-							{/each}
-						</div>
-					</ScrollArea>
-				{/if}
-			</div>
+<div class="player-selector" bind:this={containerElement}>
+	<div class="input-wrapper">
+		<Search class="absolute top-[7px] left-[10px]" size={18} />
+		<Input
+			bind:value={searchValue}
+			{placeholder}
+			{disabled}
+			class="pl-10 pr-20"
+			on:focus={() => (showDropdown = true)}
+		/>
+		<div class="input-actions">
+			{#if searchValue}
+				<button on:click={clearSelection} class="action-button" type="button" {disabled}>
+					<X class="h-4 w-4" />
+				</button>
+			{/if}
+			<button
+				on:click={() => (showDropdown = !showDropdown)}
+				class="action-button"
+				type="button"
+				{disabled}
+			>
+				<ChevronDown class="h-4 w-4" />
+			</button>
 		</div>
-	</Dialog.Content>
-</Dialog.Root>
+	</div>
+
+	{#if showDropdown}
+		<div bind:this={dropdownElement} class="dropdown">
+			{#if isSearching}
+				<div class="dropdown-loading">
+					<Loading inverted={true} />
+				</div>
+			{:else if searchValue.length < 2}
+				<div class="dropdown-empty">
+					<Search class="h-8 w-8 text-muted-foreground opacity-50" />
+					<p class="text-sm text-muted-foreground">Type at least 2 characters to search...</p>
+				</div>
+			{:else if searchResults.length === 0}
+				<div class="dropdown-empty">
+					<p class="text-sm text-muted-foreground">No players found</p>
+					<p class="text-xs text-muted-foreground">
+						Try a different name or use <code>discord:USER_ID</code>
+					</p>
+				</div>
+			{:else}
+				<div class="dropdown-list">
+					{#each searchResults as player}
+						<button class="dropdown-item" on:click={() => selectPlayer(player)} type="button">
+							<Avatar.Root class="h-10 w-10">
+								<Avatar.Image
+									class="object-cover"
+									src={`https://cdn.demonlistvn.com/avatars/${player.uid}${
+										isActive(player.supporterUntil) && player.isAvatarGif ? '.gif' : '.jpg'
+									}`}
+									alt={player.name}
+								/>
+								<Avatar.Fallback>{player.name[0]}</Avatar.Fallback>
+							</Avatar.Root>
+							<div class="player-info">
+								<h4 class={isActive(player.supporterUntil) ? 'text-yellow-500' : ''}>
+									{player.name}
+									{#if player.clan && player.clans}
+										<span class="clan-tag">[{player.clans.tag}]</span>
+									{/if}
+								</h4>
+								<div class="player-stats">
+									{#if player.rating}
+										<span class="stat">Rating: {player.rating}</span>
+									{/if}
+									{#if player.overallRank}
+										<span class="stat">Rank: #{player.overallRank}</span>
+									{/if}
+									{#if player.province}
+										<span class="stat">{player.province}</span>
+									{/if}
+								</div>
+							</div>
+						</button>
+					{/each}
+				</div>
+			{/if}
+		</div>
+	{/if}
+</div>
 
 <style lang="scss">
-	.search-container {
-		display: flex;
-		flex-direction: column;
-		gap: 1rem;
+	.player-selector {
+		position: relative;
+		width: 100%;
 	}
 
-	.results-container {
-		min-height: 400px;
+	.input-wrapper {
+		position: relative;
+		width: 100%;
+
+		.input-icon {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			pointer-events: none;
+			color: hsl(var(--muted-foreground));
+
+			&.left {
+				left: 0.75rem;
+				width: 1rem;
+				height: 1rem;
+			}
+		}
+
+		.input-actions {
+			position: absolute;
+			right: 0.75rem;
+			top: 50%;
+			transform: translateY(-50%);
+			display: flex;
+			gap: 0.25rem;
+		}
+
+		.action-button {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 0.25rem;
+			border-radius: 0.25rem;
+			background: transparent;
+			border: none;
+			color: hsl(var(--muted-foreground));
+			cursor: pointer;
+			transition: all 0.2s;
+
+			&:hover:not(:disabled) {
+				color: hsl(var(--foreground));
+				background-color: hsl(var(--muted) / 0.5);
+			}
+
+			&:disabled {
+				opacity: 0.5;
+				cursor: not-allowed;
+			}
+		}
+	}
+
+	.dropdown {
+		position: absolute;
+		top: calc(100% + 0.25rem);
+		left: 0;
+		right: 0;
+		background-color: hsl(var(--popover));
 		border: 1px solid hsl(var(--border));
 		border-radius: 0.5rem;
+		box-shadow:
+			0 10px 15px -3px rgb(0 0 0 / 0.1),
+			0 4px 6px -4px rgb(0 0 0 / 0.1);
+		z-index: 50;
+		max-height: 400px;
 		overflow: hidden;
 	}
 
-	.empty-state {
+	.dropdown-loading {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding: 3rem;
+	}
+
+	.dropdown-empty {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
-		height: 400px;
-		gap: 0.5rem;
 		padding: 2rem;
+		gap: 0.5rem;
 		text-align: center;
 
 		code {
@@ -180,19 +263,18 @@
 		}
 	}
 
-	.player-list {
-		display: flex;
-		flex-direction: column;
-		padding: 0.5rem;
-		gap: 0.5rem;
+	.dropdown-list {
+		max-height: 400px;
+		overflow-y: auto;
+		padding: 0.25rem;
 	}
 
-	.player-item {
+	.dropdown-item {
 		display: flex;
 		align-items: center;
-		gap: 1rem;
+		gap: 0.75rem;
 		padding: 0.75rem;
-		border-radius: 0.5rem;
+		border-radius: 0.375rem;
 		border: 1px solid transparent;
 		background-color: transparent;
 		cursor: pointer;
@@ -216,7 +298,7 @@
 
 		h4 {
 			font-weight: 600;
-			font-size: 1rem;
+			font-size: 0.875rem;
 			margin-bottom: 0.25rem;
 			white-space: nowrap;
 			overflow: hidden;
@@ -232,27 +314,31 @@
 
 	.player-stats {
 		display: flex;
-		gap: 0.75rem;
+		gap: 0.5rem;
 		flex-wrap: wrap;
 
 		.stat {
-			font-size: 0.875rem;
+			font-size: 0.75rem;
 			color: hsl(var(--muted-foreground));
 			white-space: nowrap;
 		}
 	}
 
 	@media screen and (max-width: 640px) {
-		.player-item {
-			gap: 0.75rem;
+		.dropdown-item {
+			gap: 0.5rem;
 			padding: 0.5rem;
 		}
 
+		.player-info h4 {
+			font-size: 0.8125rem;
+		}
+
 		.player-stats {
-			gap: 0.5rem;
+			gap: 0.375rem;
 
 			.stat {
-				font-size: 0.75rem;
+				font-size: 0.6875rem;
 			}
 		}
 	}

@@ -1,19 +1,21 @@
 <script lang="ts">
 	import * as Dialog from '$lib/components/ui/dialog';
 	import { Button } from '$lib/components/ui/button';
-	import { Input } from '$lib/components/ui/input/index.js';
+	import PlayerSelector from '$lib/components/playerSelector.svelte';
 	import { toast } from 'svelte-sonner';
 	import { user } from '$lib/client';
 	import { _ } from 'svelte-i18n';
 
-	let invitePlayerUID = '';
 	let opened = false;
+	let selectedPlayer: any = null;
 
 	async function invitePlayer() {
+		if (!selectedPlayer?.uid) return;
+		
 		opened = false;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/clans/invite/${invitePlayerUID}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/clans/invite/${selectedPlayer.uid}`, {
 				method: 'POST',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())
@@ -21,13 +23,17 @@
 			}),
 			{
 				success: () => {
-					invitePlayerUID = '';
+					selectedPlayer = null;
 					return $_('toast.clan_invite.success');
 				},
 				loading: $_('toast.clan_invite.loading'),
 				error: $_('toast.clan_invite.error')
 			}
 		);
+	}
+
+	function handlePlayerSelect(e: CustomEvent) {
+		selectedPlayer = e.detail;
 	}
 </script>
 
@@ -39,7 +45,19 @@
 		<Dialog.Header>
 			<Dialog.Title>{$_('clan.invite.title')}</Dialog.Title>
 		</Dialog.Header>
-			<Input placeholder={$_('clan.invite.placeholder')} bind:value={invitePlayerUID} />
-			<Button on:click={invitePlayer} disabled={invitePlayerUID.length == 0}>{$_('clan.invite.button')}</Button>
+			<div class="flex items-center gap-[10px]">
+				<PlayerSelector 
+					bind:value={selectedPlayer} 
+					on:select={handlePlayerSelect}
+					placeholder={$_('clan.invite.placeholder')}
+				/>
+				<Button 
+					on:click={invitePlayer} 
+					disabled={!selectedPlayer} 
+					class="w-[100px]"
+				>
+					{$_('clan.invite.button')}
+				</Button>
+			</div>
 	</Dialog.Content>
 </Dialog.Root>
