@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { createEventDispatcher, onMount, tick } from 'svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
 	import { Input } from '$lib/components/ui/input';
 	import Loading from '$lib/components/animation/loading.svelte';
 	import { isActive } from '$lib/client/isSupporterActive';
 	import { Search, X, ChevronDown } from 'lucide-svelte';
+	import { t } from 'svelte-i18n';
 
-	export let placeholder = 'Search for a player...';
+	export let placeholder = $t('playerSelector.search_placeholder');
 	export let value: any = null;
 	export let disabled = false;
 
@@ -45,9 +46,13 @@
 		}, 300);
 	}
 
-	function selectPlayer(player: any) {
+	async function selectPlayer(player: any) {
 		value = player;
 		searchValue = player.name;
+		// Blur the input to prevent focus from reopening dropdown
+		const inputEl = containerElement?.querySelector('input');
+		if (inputEl) inputEl.blur();
+		await tick();
 		showDropdown = false;
 		dispatch('select', player);
 	}
@@ -115,13 +120,13 @@
 			{:else if searchValue.length < 2}
 				<div class="dropdown-empty">
 					<Search class="h-8 w-8 text-muted-foreground opacity-50" />
-					<p class="text-sm text-muted-foreground">Type at least 2 characters to search...</p>
+					<p class="text-sm text-muted-foreground">{$t('playerSelector.type_to_search')}</p>
 				</div>
 			{:else if searchResults.length === 0}
 				<div class="dropdown-empty">
-					<p class="text-sm text-muted-foreground">No players found</p>
+					<p class="text-sm text-muted-foreground">{$t('playerSelector.no_players_found')}</p>
 					<p class="text-xs text-muted-foreground">
-						Try a different name or use <code>discord:USER_ID</code>
+						{$t('playerSelector.try_different_name')} <code>discord:USER_ID</code>
 					</p>
 				</div>
 			{:else}
@@ -147,10 +152,10 @@
 								</h4>
 								<div class="player-stats">
 									{#if player.rating}
-										<span class="stat">Rating: {player.rating}</span>
+										<span class="stat">{$t('playerSelector.rating')}: {player.rating}</span>
 									{/if}
 									{#if player.overallRank}
-										<span class="stat">Rank: #{player.overallRank}</span>
+										<span class="stat">{$t('playerSelector.rank')}: #{player.overallRank}</span>
 									{/if}
 									{#if player.province}
 										<span class="stat">{player.province}</span>

@@ -1079,5 +1079,13 @@
       "widgets_reset": "Widgets reset to default"
     },
     "weather_unavailable": "Not available"
+  },
+  "playerSelector": {
+    "search_placeholder": "Search for a player...",
+    "type_to_search": "Type at least 2 characters to search...",
+    "no_players_found": "No players found",
+    "try_different_name": "Try a different name or use",
+    "rating": "Rating",
+    "rank": "Rank"
   }
 }

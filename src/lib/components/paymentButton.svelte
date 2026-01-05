@@ -5,9 +5,7 @@
 	import { toast } from 'svelte-sonner';
 	import { Button } from '$lib/components/ui/button';
 	import { Slider } from '$lib/components/ui/slider';
-	import { Input } from '$lib/components/ui/input';
-	import Loading from '$lib/components/animation/loading.svelte';
-	import PlayerHoverCard from '$lib/components/playerLink.svelte';
+	import PlayerSelector from '$lib/components/playerSelector.svelte';
 	import { _, locale } from 'svelte-i18n';
 	import { get } from 'svelte/store';
 
@@ -46,7 +44,7 @@
 
 		const res: any = await (
 			await fetch(
-				`${import.meta.env.VITE_API_URL}/payment/getPaymentLink/1/${quantity[0]}${giftToUID ? `?giftTo=${giftToUID}` : ''}`,
+				`${import.meta.env.VITE_API_URL}/payment/getPaymentLink/1/${quantity[0]}${giftTo ? `?giftTo=${giftTo.uid}` : ''}`,
 				{
 					method: 'GET',
 					headers: {
@@ -103,23 +101,11 @@
 				<Dialog.Title>{$_("payment.gift.title")}</Dialog.Title>
 			</Dialog.Header>
 			<div>
-				<div class="mb-[20px] flex gap-[10px]">
-					<Input bind:value={giftToUID} placeholder="Player's UID" />
-					<Button on:click={fetchPlayer} disabled={fetchState != 0}>{$_("general.select")}</Button>
-				</div>
-				<div class="flex items-center justify-center">
-					{#if fetchState == 1}
-						<Loading inverted={true} />
-					{:else if fetchState == 2}
-						{$_("payment.gift.confirm")} <span class="ml-[5px] font-bold"
-							><PlayerHoverCard player={giftTo} /></span
-						>
-					{/if}
-				</div>
+				<PlayerSelector bind:value={giftTo} />
 			</div>
 			<Dialog.Footer>
 				<Button
-					disabled={giftTo === undefined}
+					disabled={!giftTo}
 					on:click={() => {
 						state = 2;
 					}}>{$_("general.next")}</Button
@@ -155,9 +141,11 @@
 				<p class="ml-auto">
 					<b>
 						{#if giftTo}
-							<PlayerHoverCard player={giftTo} />
-						{:else}
-							<PlayerHoverCard player={$user.data} />
+							{#if giftTo}
+								<a href="/player/{giftTo.uid}" class="text-blue-500 hover:underline">{giftTo.name}</a>
+							{:else}
+								<a href="/player/{$user.data.uid}" class="text-blue-500 hover:underline">{$user.data.name}</a>
+							{/if}
 						{/if}
 					</b>
 				</p>
