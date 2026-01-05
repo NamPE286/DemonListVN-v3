@@ -11,6 +11,8 @@
 	import BasicInfoTab from './basicInfoTab.svelte';
 	import ContestTab from './contestTab.svelte';
 	import ProofsTab from './proofsTab.svelte';
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 
 	enum State {
 		DEFAULT,
@@ -23,7 +25,7 @@
 	let levels: any[] = [];
 	let proofs: any[] = [];
 	let event = {
-		id: undefined,
+		id: 0,
 		created_at: '',
 		start: '',
 		end: '',
@@ -362,6 +364,14 @@
 		document.body.removeChild(link);
 		toast.success('CSV exported!');
 	}
+
+	onMount(() => {
+		const id = $page.url.searchParams.get('id');
+		if (id) {
+			event.id = Number(id);
+			fetchEvent();
+		}
+	});
 </script>
 
 <Title value="Event manager" />
