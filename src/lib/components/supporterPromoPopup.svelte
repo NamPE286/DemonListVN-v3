@@ -16,25 +16,36 @@
 			return;
 		}
 
+		let timeoutId: ReturnType<typeof setTimeout> | null = null;
+		let unsubscribed = false;
+
 		// Wait for user data to be checked, then show popup after a delay
 		const unsubscribe = user.subscribe((u) => {
-			if (u.checked) {
+			if (u.checked && !unsubscribed) {
 				// Don't show if user is already a supporter
-				if (u.loggedIn && isActive(u.data.supporterUntil)) {
+				if (u.loggedIn && u.data && isActive(u.data.supporterUntil)) {
+					unsubscribed = true;
+					unsubscribe();
 					return;
 				}
 
 				// Show popup after 2 seconds
-				setTimeout(() => {
+				timeoutId = setTimeout(() => {
 					open = true;
 				}, 2000);
 
+				unsubscribed = true;
 				unsubscribe();
 			}
 		});
 
 		return () => {
-			unsubscribe();
+			if (!unsubscribed) {
+				unsubscribe();
+			}
+			if (timeoutId) {
+				clearTimeout(timeoutId);
+			}
 		};
 	});
 
