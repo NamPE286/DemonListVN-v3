@@ -1086,5 +1086,18 @@
     "try_different_name": "Thử tên khác hoặc dùng",
     "rating": "Điểm",
     "rank": "Hạng"
+  },
+  "supporter_promo": {
+    "title": "💖 Ủng hộ Demon List VN",
+    "description": "Mở khóa các đặc quyền độc quyền và giúp chúng tôi phát triển!",
+    "perks": {
+      "highlighted_name": "Tên vàng nổi bật trên bảng xếp hạng",
+      "animated_media": "Ảnh đại diện và banner động",
+      "ads_free": "Trải nghiệm không quảng cáo",
+      "priority_queue": "Hàng đợi nộp bài ưu tiên"
+    },
+    "more_perks": "...và nhiều đặc quyền khác!",
+    "learn_more_button": "Tìm Hiểu Thêm",
+    "maybe_later": "Để Sau"
   }
 }

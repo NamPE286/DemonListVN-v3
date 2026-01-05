@@ -1087,5 +1087,18 @@
     "try_different_name": "Try a different name or use",
     "rating": "Rating",
     "rank": "Rank"
+  },
+  "supporter_promo": {
+    "title": "💖 Support Demon List VN",
+    "description": "Unlock exclusive perks and help us grow!",
+    "perks": {
+      "highlighted_name": "Golden highlighted name on leaderboards",
+      "animated_media": "Animated avatar and banner",
+      "ads_free": "Ad-free browsing experience",
+      "priority_queue": "Priority submission queue"
+    },
+    "more_perks": "...and many more perks!",
+    "learn_more_button": "Learn More",
+    "maybe_later": "Maybe Later"
   }
 }
