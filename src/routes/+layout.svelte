@@ -19,6 +19,7 @@
 	import Search from '$lib/components/search.svelte';
 	import SubmitButton from '$lib/components/submitButton.svelte';
 	import SettingButton from '$lib/components/settingButton.svelte';
+	import SupporterPopup from '$lib/components/supporterPopup.svelte';
 
 	import supabase from '$lib/client/supabase';
 	import { user } from '$lib/client';
@@ -194,6 +195,7 @@
 <ModeWatcher defaultMode="system" />
 <Toaster position="top-center" />
 <Search bind:open={searchToggled} bind:value={searchQuery} />
+<SupporterPopup />
 <LoadingBar
 	--loading-bar-background-color="rgb(0 100 160 / 80%)"
 	--loading-bar-train-background-color="rgb(0 100 220 / 90%)"

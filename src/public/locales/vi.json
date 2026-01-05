@@ -864,6 +864,16 @@
       "non_refundable": "Demon List VN Supporter không thể hoàn tiền.",
       "extension": "Nếu bạn mua Supporter khi vẫn còn Supporter đang hoạt động, thời gian sẽ được cộng thêm thêm.",
       "duration": "1 Tháng = 30 Ngày."
+    },
+    "popup": {
+      "title": "Trở thành Supporter! 💖",
+      "description": "Mở khóa các đặc quyền độc quyền và hỗ trợ phát triển Demon List VN",
+      "perk_no_ads": "Không quảng cáo",
+      "perk_priority": "Hàng đợi ưu tiên",
+      "perk_animated": "Avatar & banner động",
+      "perk_more": "Và nhiều hơn nữa...",
+      "learn_more": "Tìm Hiểu Thêm",
+      "dismiss": "Để Sau"
     }
   },
   "store": {

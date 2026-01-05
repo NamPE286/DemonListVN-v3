@@ -844,6 +844,16 @@
       "non_refundable": "Demon List VN Supporter roles are non-refundable.",
       "extension": "If you buy one while you still have an active roles, it will extend the duration in addition to any remaining time.",
       "duration": "1 Month = 30 Days."
+    },
+    "popup": {
+      "title": "Become a Supporter! 💖",
+      "description": "Unlock exclusive perks and support the development of Demon List VN",
+      "perk_no_ads": "No ads",
+      "perk_priority": "Priority queue",
+      "perk_animated": "Animated avatar & banner",
+      "perk_more": "And much more...",
+      "learn_more": "Learn More",
+      "dismiss": "Maybe Later"
     }
   },
   "store": {
