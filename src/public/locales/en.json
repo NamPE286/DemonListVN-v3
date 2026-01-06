@@ -854,6 +854,32 @@
       "perk_more": "And much more...",
       "learn_more": "Learn More",
       "dismiss": "Maybe Later"
+    },
+    "guides": {
+      "highlighted_name": "💡 Stand out with a golden name!",
+      "animated_media": "💡 Make your profile come alive!",
+      "ads_free": "💡 Browse without interruptions!",
+      "priority_queue": "💡 Get reviewed faster!",
+      "short_url": "💡 Share your profile easily!",
+      "discord_role": "💡 Show off your support!",
+      "discord_notifications": "💡 Never miss an update!",
+      "exclusive_events": "💡 Join exclusive events!",
+      "autofill_level": "💡 Save time when submitting!",
+      "rating_prediction": "💡 Plan your submissions better!",
+      "early_access": "💡 Be the first to try new features!",
+      "discord_bot": "💡 Unlock advanced commands!"
+    },
+    "profile_alert": {
+      "title": "Customize more with Supporter!",
+      "description": "Unlock animated avatar, custom banner, border colors, and more profile customization options."
+    },
+    "discord_alert": {
+      "title": "Supporter Benefits",
+      "description": "Link Discord to join events and access supporter-only features like DM notifications."
+    },
+    "level_autofill": {
+      "title": "💡 Supporter Perk",
+      "description": "With Supporter, the level ID will be automatically filled when you submit from a level page!"
     }
   },
   "store": {

@@ -7,6 +7,7 @@
 	import * as Table from '$lib/components/ui/table';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import * as Select from '$lib/components/ui/select';
+	import * as Alert from '$lib/components/ui/alert';
 	import { user } from '$lib/client';
 	import ProfileEditButton from '$lib/components/profileEditButton.svelte';
 	import RecordDetail from '$lib/components/recordDetail.svelte';
@@ -153,6 +154,16 @@
 						<ProfileEditButton bind:data={data.player} />
 					{/if}
 				</div>
+
+				{#if $user.loggedIn && data.player.uid == $user.data.uid && !isActive($user.data.supporterUntil)}
+					<Alert.Root class="mt-3 border-yellow-500/50 bg-yellow-500/10">
+						<Alert.Title class="text-yellow-500">{$_('supporter.profile_alert.title')}</Alert.Title>
+						<Alert.Description class="text-sm">
+							{$_('supporter.profile_alert.description')}
+							<a href="/supporter" class="ml-1 text-yellow-500 underline hover:text-yellow-400">{$_('supporter.popup.learn_more')}</a>
+						</Alert.Description>
+					</Alert.Root>
+				{/if}
 
 				{#if data.player.province}
 					<div class="location">

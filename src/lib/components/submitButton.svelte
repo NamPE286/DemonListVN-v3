@@ -4,6 +4,7 @@
 	import * as AlertDialog from '$lib/components/ui/alert-dialog/index.js';
 	import * as Select from '$lib/components/ui/select/index.js';
 	import * as Alert from '$lib/components/ui/alert/index.js';
+	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import { Input } from '$lib/components/ui/input/index.js';
 	import { Label } from '$lib/components/ui/label/index.js';
 	import { user } from '$lib/client';
@@ -215,29 +216,35 @@
 		onRouteChange($navigating.to);
 	}
 
+	$: isOnLevelPage = $page.route.id === '/level/[id]';
+	$: showAutofillTooltip = isOnLevelPage && $user.loggedIn && !isActive($user.data?.supporterUntil);
+
 	onMount(() => {
 		onRouteChange($page);
 	});
 </script>
 
-<Dialog.Root bind:open>
-	<Dialog.Trigger
-		class={buttonVariants({ variant: 'outline' })}
-		on:click={() => {
-			for (const i in submission) {
-				// @ts-ignore
-				submission[i] = defaultValue[i];
-				step = 0;
-				apiLevel = null;
-				level = null;
-				time = {
-					m: null,
-					s: null,
-					ms: null
-				};
-			}
-		}}>{$_('submit.button')}</Dialog.Trigger
-	>
+<Tooltip.Root>
+	<Tooltip.Trigger asChild let:builder>
+		<Dialog.Root bind:open>
+			<Dialog.Trigger
+				class={buttonVariants({ variant: 'outline' })}
+				builders={showAutofillTooltip ? [builder] : []}
+				on:click={() => {
+					for (const i in submission) {
+						// @ts-ignore
+						submission[i] = defaultValue[i];
+						step = 0;
+						apiLevel = null;
+						level = null;
+						time = {
+							m: null,
+							s: null,
+							ms: null
+						};
+					}
+				}}>{$_('submit.button')}</Dialog.Trigger
+			>
 	<Dialog.Content class="sm:max-w-[425px]">
 		<Dialog.Header>
 			<Dialog.Title>
@@ -638,3 +645,12 @@
 		</div>
 	</Dialog.Content>
 </Dialog.Root>
+	</Tooltip.Trigger>
+	{#if showAutofillTooltip}
+		<Tooltip.Content class="max-w-[250px] border-yellow-500/50 bg-yellow-500/10">
+			<p class="text-sm font-semibold text-yellow-500">{$_('supporter.level_autofill.title')}</p>
+			<p class="text-xs">{$_('supporter.level_autofill.description')}</p>
+			<a href="/supporter" class="text-xs text-yellow-500 underline hover:text-yellow-400">{$_('supporter.popup.learn_more')}</a>
+		</Tooltip.Content>
+	{/if}
+</Tooltip.Root>

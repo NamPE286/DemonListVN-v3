@@ -67,104 +67,116 @@
 			{$_('supporter.perks.title')}
 		</h1>
 		<div class="flex flex-wrap justify-center gap-[10px]">
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.highlighted_name.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.highlighted_name.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.highlighted_name')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.animated_media.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.animated_media.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.animated_media')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.ads_free.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.ads_free.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.ads_free')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.priority_queue.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.priority_queue.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.priority_queue')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.short_url.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.short_url.description')}<br />
 						Example: <a href="/@NamPE">demonlistvn.com/@NamPE</a>
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.short_url')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.discord_role.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.discord_role.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.discord_role')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.discord_notifications.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.discord_notifications.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.discord_notifications')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.exclusive_events.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.exclusive_events.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.exclusive_events')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.autofill_level.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.autofill_level.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.autofill_level')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.rating_prediction.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.rating_prediction.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.rating_prediction')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.discord_bot.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.discord_bot.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.discord_bot')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.early_access.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.early_access.description')}
 					</Card.Description>
+					<p class="mt-2 text-sm text-yellow-500">{$_('supporter.guides.early_access')}</p>
 				</Card.Header>
 			</Card.Root>
-			<Card.Root class="w-[300px]">
+			<Card.Root class="w-[300px] transition-all hover:scale-105 hover:shadow-lg hover:shadow-yellow-500/20">
 				<Card.Header>
 					<Card.Title>{$_('supporter.perks.more_coming.title')}</Card.Title>
 					<Card.Description class="w-[250px]">

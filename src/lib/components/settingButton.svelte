@@ -3,6 +3,7 @@
 	import * as Dialog from '$lib/components/ui/dialog';
 	import * as Tooltip from '$lib/components/ui/tooltip/index.js';
 	import * as AlertDialog from '$lib/components/ui/alert-dialog';
+	import * as Alert from '$lib/components/ui/alert';
 	import * as Table from '$lib/components/ui/table';
 	import * as Tabs from '$lib/components/ui/tabs';
 	import { Button } from '$lib/components/ui/button/index.js';
@@ -381,6 +382,15 @@
 						>
 							<Button class="w-full" variant="outline">{$_('settings.account.link')}</Button>
 						</a>
+					{/if}
+					{#if !isActive($user.data.supporterUntil)}
+						<Alert.Root class="mt-4 border-yellow-500/50 bg-yellow-500/10">
+							<Alert.Title class="text-yellow-500">{$_('supporter.discord_alert.title')}</Alert.Title>
+							<Alert.Description class="text-sm">
+								{$_('supporter.discord_alert.description')}
+								<a href="/supporter" class="ml-1 text-yellow-500 underline hover:text-yellow-400">{$_('supporter.popup.learn_more')}</a>
+							</Alert.Description>
+						</Alert.Root>
 					{/if}
 				{/if}
 			</Tabs.Content>

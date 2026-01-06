@@ -874,6 +874,32 @@
       "perk_more": "Và nhiều hơn nữa...",
       "learn_more": "Tìm Hiểu Thêm",
       "dismiss": "Để Sau"
+    },
+    "guides": {
+      "highlighted_name": "💡 Nổi bật với tên vàng!",
+      "animated_media": "💡 Làm hồ sơ sống động hơn!",
+      "ads_free": "💡 Duyệt web không gián đoạn!",
+      "priority_queue": "💡 Được duyệt nhanh hơn!",
+      "short_url": "💡 Chia sẻ hồ sơ dễ dàng!",
+      "discord_role": "💡 Khoe sự ủng hộ của bạn!",
+      "discord_notifications": "💡 Không bỏ lỡ cập nhật nào!",
+      "exclusive_events": "💡 Tham gia sự kiện độc quyền!",
+      "autofill_level": "💡 Tiết kiệm thời gian khi nộp!",
+      "rating_prediction": "💡 Lên kế hoạch tốt hơn!",
+      "early_access": "💡 Trải nghiệm tính năng mới đầu tiên!",
+      "discord_bot": "💡 Mở khóa lệnh nâng cao!"
+    },
+    "profile_alert": {
+      "title": "Tùy chỉnh thêm với Supporter!",
+      "description": "Mở khóa avatar động, banner tùy chỉnh, màu viền và nhiều tùy chọn tùy chỉnh hồ sơ khác."
+    },
+    "discord_alert": {
+      "title": "Quyền lợi Supporter",
+      "description": "Liên kết Discord để tham gia sự kiện và truy cập các tính năng dành riêng cho supporter như thông báo DM."
+    },
+    "level_autofill": {
+      "title": "💡 Đặc quyền Supporter",
+      "description": "Với Supporter, ID level sẽ được tự động điền khi bạn nộp từ trang level!"
     }
   },
   "store": {
