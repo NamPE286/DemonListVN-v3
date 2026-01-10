@@ -11,6 +11,7 @@
 	import BasicInfoTab from './basicInfoTab.svelte';
 	import ContestTab from './contestTab.svelte';
 	import ProofsTab from './proofsTab.svelte';
+	import QuestsTab from './questsTab.svelte';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 
@@ -407,6 +408,7 @@
 				<Tabs.Trigger value="basic">Basic info</Tabs.Trigger>
 				<Tabs.Trigger value="contest">Contest</Tabs.Trigger>
 				<Tabs.Trigger value="proofs">Proofs</Tabs.Trigger>
+				<Tabs.Trigger value="quests">Quests</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="basic">
 				<BasicInfoTab {event} {state} {addEvent} {editEvent} {handleUpload} />
@@ -416,6 +418,9 @@
 			</Tabs.Content>
 			<Tabs.Content value="proofs">
 				<ProofsTab {event} {proofs} {fetchProofs} {acceptProof} {rejectProof} {exportToCSV} />
+			</Tabs.Content>
+			<Tabs.Content value="quests">
+				<QuestsTab {event} />
 			</Tabs.Content>
 		</Tabs.Root>
 	{/if}
