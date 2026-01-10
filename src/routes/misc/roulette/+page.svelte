@@ -305,6 +305,21 @@ async function doneRoulette(): Promise<void> {
 }
 
 /**
+ * Skip current level without changing the target percent.
+ */
+function skipLevel(): void {
+  if (!currentLevel) return;
+
+  if (currentLevel?.id) {
+    playedLevels = [...playedLevels, currentLevel.id];
+  }
+
+  // Clear current level and fetch a new one
+  currentLevel = null;
+  void fetchRandomLevel();
+}
+
+/**
  * Applies pending range values and resets roulette.
  */
 function applyRange(): void {
@@ -449,30 +464,41 @@ onMount(() => {
 
         <Button 
           variant="secondary" 
-          class="w-full py-2 text-sm sm:text-base font-medium dark:bg-black bg-white dark:text-white text-black" 
+          class="w-full py-2 text-sm sm:text-base font-normal dark:bg-black bg-white dark:text-white text-black" 
           on:click={applyRange} 
         >
           Apply
         </Button>
 
         <Button 
-          class="w-full py-2 sm:py-3 text-base sm:text-lg font-medium mb-2 dark:bg-white bg-black dark:text-black text-white" 
+          class="w-full py-2 sm:py-3 text-base sm:text-lg font-normal mb-2 dark:bg-white bg-black dark:text-black text-white" 
           on:click={doneRoulette} 
           disabled={finished || targetPercent > 100 || !validateInput(inputValue)}
         >
           Start
         </Button>
-        
-        <Button 
-          variant="secondary" 
-          class="w-full py-2 text-sm sm:text-base font-medium dark:bg-black bg-white dark:text-white text-black" 
-          on:click={resetRoulette}
-        >
-          Reset
-        </Button>
+
+        <div class="flex gap-2 w-full">
+          <Button 
+            variant="secondary" 
+            class="flex-1 py-2 mt-2 text-sm sm:text-base font-normal border dark:bg-black bg-white dark:text-white text-black flex justify-center" 
+            on:click={resetRoulette}
+          >
+            Reset
+          </Button>
+
+          <Button
+            variant="secondary"
+            class="flex-1 mt-2 py-2 text-sm sm:text-base font-normal border dark:bg-black bg-white dark:text-white text-black flex justify-center"
+            on:click={skipLevel}
+            disabled={!currentLevel || loading || finished}
+          >
+            Skip
+          </Button>
+        </div>
       </CardContent>
     </Card>
   </div>
 </div>
 
-<h1 class="text-lg font-medium text-center text-zinc-800">Created by vradient</h1>
+<p class="text-lg font-medium text-center text-zinc-700">Created by vradient</p>
