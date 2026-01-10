@@ -30,7 +30,7 @@
 			return;
 		}
 
-		fetch(`${import.meta.env.VITE_API_URL}/events/${data.id}/proof/${$user.data.uid}`)
+		fetch(`${import.meta.env.VITE_API_URL}/events/${data.id}/proofs/${$user.data.uid}`)
 			.then((res) => {
 				if (!res.ok) {
 					rewardState = 4;
@@ -51,7 +51,7 @@
 		claimOpened = false;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/events/proof`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/proofs`, {
 				method: 'POST',
 				body: JSON.stringify({
 					eventID: data.id,
@@ -67,10 +67,10 @@
 					rewardState = 2;
 					proof = '';
 
-					return 'Sent!';
+					return $_('contest.participate.toast.sent');
 				},
-				loading: 'Sending...',
-				error: 'An error occured'
+				loading: $_('contest.participate.toast.sending'),
+				error: $_('contest.participate.toast.error')
 			}
 		);
 	}
@@ -79,7 +79,7 @@
 		cancelOpened = false;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/events/${data.id}/proof/${$user.data.uid}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/events/${data.id}/proofs/${$user.data.uid}`, {
 				method: 'DELETE',
 				headers: {
 					Authorization: 'Bearer ' + (await $user.token())!
@@ -89,10 +89,10 @@
 				success: () => {
 					rewardState = 4;
 
-					return 'Cancelled';
+					return $_('contest.participate.toast.cancelled');
 				},
-				loading: 'Cancelling...',
-				error: 'An error occured'
+				loading: $_('contest.participate.toast.cancelling'),
+				error: $_('contest.participate.toast.error')
 			}
 		);
 	}
@@ -112,7 +112,7 @@
 			{:else if rewardState == 1}
 				<Button class="w-[200px]" disabled>{$_('contest.participate.reward_claimed')}</Button>
 			{:else if rewardState == 2}
-				{#if !data.isRanked}
+				{#if new Date(data.start) > new Date()}
 					<Dialog.Root bind:open={cancelOpened}>
 						<Dialog.Trigger>
 							<Button class="w-[200px]" variant="destructive">{$_('contest.participate.cancel_participation')}</Button>

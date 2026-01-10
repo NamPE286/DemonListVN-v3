@@ -517,6 +517,14 @@
         "message_placeholder": "Tin nhắn (tuỳ chọn)",
         "continue": "Tiếp tục"
       }
+      ,
+      "toast": {
+        "sent": "Đã gửi!",
+        "sending": "Đang gửi...",
+        "cancelled": "Đã huỷ",
+        "cancelling": "Đang huỷ...",
+        "error": "Đã xảy ra lỗi"
+      }
     },
     "tabs": {
       "detail": "Chi tiết",

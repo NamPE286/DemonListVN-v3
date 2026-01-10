@@ -518,6 +518,14 @@
         "message_placeholder": "Message (optional)",
         "continue": "Continue"
       }
+      ,
+      "toast": {
+        "sent": "Sent!",
+        "sending": "Sending...",
+        "cancelled": "Cancelled",
+        "cancelling": "Cancelling...",
+        "error": "An error occurred"
+      }
     },
     "tabs": {
       "detail": "Detail",
