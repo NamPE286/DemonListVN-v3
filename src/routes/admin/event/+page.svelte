@@ -26,7 +26,7 @@
 	let levels: any[] = [];
 	let proofs: any[] = [];
 	let event = {
-		id: 0,
+		id: NaN,
 		created_at: '',
 		start: '',
 		end: '',
@@ -159,6 +159,11 @@
 		} else {
 			// @ts-ignore
 			delete event.freeze;
+		}
+
+		if(!event.id) {
+			// @ts-ignore
+			delete event.id
 		}
 	}
 
@@ -368,6 +373,7 @@
 
 	onMount(() => {
 		const id = $page.url.searchParams.get('id');
+
 		if (id) {
 			event.id = Number(id);
 			fetchEvent();

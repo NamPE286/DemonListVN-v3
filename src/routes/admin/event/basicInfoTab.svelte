@@ -4,12 +4,15 @@
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from '$lib/components/ui/textarea';
 	import { Switch } from '$lib/components/ui/switch';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
 
 	export let event: any;
 	export let state: number;
 	export let addEvent: () => void;
 	export let editEvent: () => void;
 	export let handleUpload: (e: any) => void;
+
+	$: event.isContest = event.type === 'contest' || event.type === 'raid';
 
 	const State = {
 		DEFAULT: 0,
@@ -135,8 +138,21 @@
 	</div>
 
 	<div class="input">
-		<Label class="w-[100px]">Contest</Label>
-		<Switch bind:checked={event.isContest} />
+		<Label class="w-[100px]">Event Type</Label>
+		<DropdownMenu.Root>
+			<DropdownMenu.Trigger asChild let:builder>
+				<Button builders={[builder]} variant="outline" class="w-[200px] justify-start">
+					{event.type.charAt(0).toUpperCase() + event.type.slice(1)}
+				</Button>
+			</DropdownMenu.Trigger>
+			<DropdownMenu.Content class="w-[200px]">
+				<DropdownMenu.RadioGroup bind:value={event.type}>
+					<DropdownMenu.RadioItem value="basic">Basic</DropdownMenu.RadioItem>
+					<DropdownMenu.RadioItem value="contest">Contest</DropdownMenu.RadioItem>
+					<DropdownMenu.RadioItem value="raid">Raid</DropdownMenu.RadioItem>
+				</DropdownMenu.RadioGroup>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
 	</div>
 	<div class="input mt-[20px]">
 		{#if state == State.NEW_EVENT}
