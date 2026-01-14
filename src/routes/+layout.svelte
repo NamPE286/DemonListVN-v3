@@ -70,6 +70,10 @@
 				{
 					route: '/misc/roulette-v2',
 					name: 'Roulette v2'
+				},
+				{
+					route: '/guess',
+					name: $locale === 'en' ? 'Level Guess' : 'Đoán level'
 				}
 			]
 		}
