@@ -503,5 +503,3 @@ onMount(() => {
     </Card>
   </div>
 </div>
-
-<p class="text-lg font-medium text-center text-zinc-700 mt-4">Guess the level from its thumbnail!</p>
