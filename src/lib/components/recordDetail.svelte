@@ -14,8 +14,10 @@
 	import { Switch } from '$lib/components/ui/switch';
 	import PlayerHoverCard from '$lib/components/playerLink.svelte';
 	import { Button } from '$lib/components/ui/button';
+	import { Slider } from '$lib/components/ui/slider';
 	import { page } from '$app/stores';
 	import { _, locale } from 'svelte-i18n';
+	import { get } from 'svelte/store';
 
 	export let uid: string;
 	export let levelID: number;
@@ -27,6 +29,8 @@
 	let disableBtn = false;
 	let verdict = '';
 	let cmt = '';
+	let skipAheadState = 0;
+	let daysToSkip = [1];
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -200,12 +204,15 @@
 		}
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/records/${record.data.userid}/${record.data.levelid}`, {
-				method: 'DELETE',
-				headers: {
-					Authorization: 'Bearer ' + (await $user.token())!
+			fetch(
+				`${import.meta.env.VITE_API_URL}/records/${record.data.userid}/${record.data.levelid}`,
+				{
+					method: 'DELETE',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token())!
+					}
 				}
-			}),
+			),
 			{
 				success: () => {
 					open = false;
@@ -222,7 +229,40 @@
 		return `${$page.url.origin}/level/${record.data.levelid}?record=${record.data.userid}`;
 	}
 
+	function formatPrice(x: number) {
+		return x.toLocaleString('vi-VN');
+	}
+
+	function resetSkipAhead() {
+		skipAheadState = 0;
+		daysToSkip = [1];
+	}
+
+	async function purchaseQueueBoost() {
+		toast.loading(get(_)('toast.payment.redirect'));
+
+		const res: any = await (
+			await fetch(
+				`${import.meta.env.VITE_API_URL}/payment/getPaymentLink/5/${daysToSkip[0]}`,
+				{
+					method: 'POST',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token()),
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						userID: record.data.userid,
+						levelID: record.data.levelid
+					})
+				}
+			)
+		).json();
+
+		window.location.href = res.checkoutUrl;
+	}
+
 	$: (open, fetchData());
+	$: if (!open) resetSkipAhead();
 </script>
 
 <Dialog.Root
@@ -248,6 +288,9 @@
 						<Tabs.Trigger value="detail">{$_('record_detail.tabs.detail')}</Tabs.Trigger>
 						<Tabs.Trigger value="deathCount">{$_('record_detail.tabs.death_count')}</Tabs.Trigger>
 						<Tabs.Trigger value="share">{$_('record_detail.tabs.share')}</Tabs.Trigger>
+						{#if !record.data.isChecked && $user.loggedIn && $user.data.uid == record.data.userid}
+							<Tabs.Trigger value="skipAhead">{$_('record_detail.tabs.skip_ahead')}</Tabs.Trigger>
+						{/if}
 						{#if record.data.reviewer != null && $user.loggedIn && record.data.reviewer.uid == $user.data.uid && record.data.needMod == false}
 							<Tabs.Trigger value="review">{$_('record_detail.tabs.review')}</Tabs.Trigger>
 						{/if}
@@ -315,9 +358,7 @@
 							</div>
 							{#if $user.loggedIn && $user.data.isAdmin}
 								<b>{$_('record_detail.reviewer_cmt')}:</b>
-								{record.data.reviewerComment
-									? record.data.reviewerComment
-									: 'N/a'}<br />
+								{record.data.reviewerComment ? record.data.reviewerComment : 'N/a'}<br />
 							{/if}
 						</div>
 					</Tabs.Content>
@@ -336,6 +377,80 @@
 								}}>Copy</Button
 							>
 						</div>
+					</Tabs.Content>
+					<Tabs.Content value="skipAhead">
+						{#if skipAheadState == 0}
+							<div class="flex flex-col gap-[15px]">
+								<ul class="list-inside list-disc space-y-2 text-sm">
+									<li>{$_('record_detail.skip_ahead.description')[0]}</li>
+									<li>{$_('record_detail.skip_ahead.description')[1]}</li>
+									<li>{$_('record_detail.skip_ahead.description')[2]}</li>
+								</ul>
+								<div>
+									<Label for="daysInput" class="mb-2">
+										{$_('record_detail.skip_ahead.days_label')}
+									</Label>
+									<div class="flex items-center gap-[10px]">
+										<Input
+											id="daysInput"
+											type="number"
+											inputmode="numeric"
+											min="1"
+											bind:value={daysToSkip[0]}
+											class="w-[100px]"
+										/>
+										<span class="text-sm">
+											{daysToSkip[0] > 1 && $locale == 'en'
+												? $_('record_detail.skip_ahead.days')
+												: $_('record_detail.skip_ahead.day')}
+										</span>
+									</div>
+								</div>
+								<div class="flex items-center justify-between">
+									<p class="text-lg"><b>{$_('record_detail.skip_ahead.total')}</b></p>
+									<p class="text-lg"><b>{formatPrice(5000 * daysToSkip[0])}₫</b></p>
+								</div>
+								<Button
+									on:click={() => {
+										skipAheadState = 1;
+									}}>{$_('general.next')}</Button
+								>
+							</div>
+						{:else if skipAheadState == 1}
+							<div class="flex flex-col gap-[15px]">
+								<h3 class="text-lg font-semibold">{$_('payment.review.title')}</h3>
+								<div class="flex text-sm">
+									<p>
+										{$_('record_detail.skip_ahead.queue_boost')} ({daysToSkip[0]}
+										{daysToSkip[0] > 1 && $locale == 'en'
+											? $_('record_detail.skip_ahead.days')
+											: $_('record_detail.skip_ahead.day')})
+									</p>
+									<p class="ml-auto"><b>{formatPrice(5000 * daysToSkip[0])}₫</b></p>
+								</div>
+								<hr />
+								<div class="flex text-sm">
+									<p>{$_('record_detail.skip_ahead.for_record')}</p>
+									<p class="ml-auto">
+										<b>{record.data.levels.name}</b>
+									</p>
+								</div>
+								<p class="text-sm italic text-gray-500">
+									{$_('payment.review.caution')}
+								</p>
+								<div class="flex gap-[10px]">
+									<Button
+										variant="outline"
+										on:click={() => {
+											skipAheadState = 0;
+										}}>{$_('general.back')}</Button
+									>
+									<Button class="flex-1" on:click={purchaseQueueBoost}
+										>{$_('payment.review.proceed')}</Button
+									>
+								</div>
+							</div>
+						{/if}
 					</Tabs.Content>
 					<Tabs.Content value="review">
 						<RadioGroup.Root bind:value={verdict}>

@@ -46,7 +46,7 @@
 			await fetch(
 				`${import.meta.env.VITE_API_URL}/payment/getPaymentLink/1/${quantity[0]}${giftTo ? `?giftTo=${giftTo.uid}` : ''}`,
 				{
-					method: 'GET',
+					method: 'POST',
 					headers: {
 						Authorization: 'Bearer ' + (await $user.token()),
 						'Content-Type': 'application/json'

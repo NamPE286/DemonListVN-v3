@@ -302,7 +302,8 @@
       "death_count": "Lần chết",
       "share": "Chia sẻ",
       "edit": "Chỉnh sửa",
-      "review": "Đánh giá"
+      "review": "Đánh giá",
+      "skip_ahead": "Nhảy Hàng"
     },
     "title": "Chi tiết bản ghi",
     "raw": "Raw",
@@ -314,7 +315,20 @@
     "rating_change": "Thay đổi điểm đề xuất",
     "comment": "Bình luận",
     "reviewed_by": "Đánh giá bởi",
-    "reviewer_cmt": "Bình luận của người đánh giá"
+    "reviewer_cmt": "Bình luận của người đánh giá",
+    "skip_ahead": {
+      "description": [
+        "Coi bản nộp như được nộp sớm hơn.",
+        "Bản ghi của bạn sẽ được ưu tiên trong hàng chờ duyệt.",
+        "Số ngày thừa sẽ không được trả lại. Nếu bản nộp bị từ chối, số ngày sẽ được chuyển thành vé và trả lại vào kho đồ."
+      ],
+      "days_label": "Số ngày cần nộp sớm",
+      "day": "ngày",
+      "days": "ngày",
+      "total": "Tổng cộng",
+      "queue_boost": "Tăng tốc hàng chờ",
+      "for_record": "Cho bản ghi"
+    }
   },
   "search": {
     "button": "Tìm kiếm",

@@ -303,7 +303,8 @@
       "death_count": "Death",
       "share": "Share",
       "edit": "Edit",
-      "review": "Review"
+      "review": "Review",
+      "skip_ahead": "Skip Ahead"
     },
     "title": "Record's detail",
     "raw": "Raw",
@@ -315,7 +316,20 @@
     "rating_change": "Change suggested rating",
     "comment": "Comment",
     "reviewed_by": "Reviewed by",
-    "reviewer_cmt": "Reviewer's comment"
+    "reviewer_cmt": "Reviewer's comment",
+    "skip_ahead": {
+      "description": [
+        "Treat your submission as if it was submitted earlier.",
+        "Your record will be prioritized in the review queue.",
+        "Unused days cannot be refunded. If your submission is rejected, days will be converted to tickets and returned to your inventory."
+      ],
+      "days_label": "Days to skip ahead",
+      "day": "day",
+      "days": "days",
+      "total": "Total",
+      "queue_boost": "Queue Boost",
+      "for_record": "For record"
+    }
   },
   "search": {
     "button": "Search",

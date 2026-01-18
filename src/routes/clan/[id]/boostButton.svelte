@@ -29,7 +29,7 @@
 			await fetch(
 				`${import.meta.env.VITE_API_URL}/payment/getPaymentLink/3/${quantity[0]}${data.id ? `?targetClanID=${data.id}` : ''}`,
 				{
-					method: 'GET',
+					method: 'POST',
 					headers: {
 						Authorization: 'Bearer ' + (await $user.token()),
 						'Content-Type': 'application/json'
