@@ -14,7 +14,6 @@
 	type Item = {
 		userID: string;
 		itemId: number;
-		content: any;
 		created_at: string;
 		inventoryId: number;
 		name: string;
@@ -23,6 +22,9 @@
 		productId: number | null;
 		description: string | null;
 		rarity: number;
+		stackable?: boolean;
+		quantity?: number;
+		inventoryQuantity: number;
 	};
 
 	let items: Item[] = [];
@@ -46,7 +48,7 @@
 			items = Array.isArray(res) ? res : [];
 		} catch (e) {
 			console.error(e);
-			error = get(_ )('inventory.failed_load');
+			error = get(_)('inventory.failed_load');
 		} finally {
 			loading = false;
 		}
@@ -86,7 +88,7 @@
 			error: string | null;
 		}
 	> = {};
-	
+
 	function hasExpire(it: any) {
 		return !!(it?.expireAt || selectedItems[it.inventoryId]?.data?.expireAt);
 	}
@@ -107,7 +109,7 @@
 			console.error(e);
 			selectedItems = {
 				...selectedItems,
-				[inventoryId]: { loading: false, data: null, error: get(_ )('inventory.failed_load_item') }
+				[inventoryId]: { loading: false, data: null, error: get(_)('inventory.failed_load_item') }
 			};
 		}
 	}
@@ -149,15 +151,15 @@
 	function rarityName(r: number) {
 		switch (r) {
 			case 1:
-				return get(_ )('inventory.rarity_names.uncommon');
+				return get(_)('inventory.rarity_names.uncommon');
 			case 2:
-				return get(_ )('inventory.rarity_names.rare');
+				return get(_)('inventory.rarity_names.rare');
 			case 3:
-				return get(_ )('inventory.rarity_names.epic');
+				return get(_)('inventory.rarity_names.epic');
 			case 4:
-				return get(_ )('inventory.rarity_names.legendary');
+				return get(_)('inventory.rarity_names.legendary');
 			default:
-				return get(_ )('inventory.rarity_names.common');
+				return get(_)('inventory.rarity_names.common');
 		}
 	}
 
@@ -187,10 +189,10 @@
 			{
 				success: () => {
 					goto(redirect);
-					return get(_ )('inventory.redirect_success');
+					return get(_)('inventory.redirect_success');
 				},
-				loading: get(_ )('inventory.redirecting'),
-				error: get(_ )('inventory.redirect_error')
+				loading: get(_)('inventory.redirecting'),
+				error: get(_)('inventory.redirect_error')
 			}
 		);
 	}
@@ -263,7 +265,13 @@
 									</svg>
 								</div>
 							{/if}
-
+							{#if item.inventoryQuantity > 1}
+								<div
+									class="absolute bottom-2 right-2 z-10 rounded-full bg-black/80 px-2 py-1 text-xs font-bold text-white"
+								>
+									x{item.inventoryQuantity}
+								</div>
+							{/if}
 							<div class="p-2">
 								<div class="truncate text-sm font-medium text-white">{item.name}</div>
 							</div>
@@ -280,13 +288,20 @@
 						{:else if selectedItems[item.inventoryId]?.data}
 							<div class="flex items-start gap-4">
 								<div
-									class={`h-40 w-40 flex-shrink-0 overflow-hidden rounded-md border-b-4 ${rarityClass(selectedItems[item.inventoryId].data.rarity ?? item.rarity)} bg-neutral-800 p-2`}
+									class={`relative h-40 w-40 flex-shrink-0 overflow-hidden rounded-md border-b-4 ${rarityClass(selectedItems[item.inventoryId].data.rarity ?? item.rarity)} bg-neutral-800 p-2`}
 								>
 									<img
 										src={`https://cdn.demonlistvn.com/items/${item.itemId}.webp`}
 										alt={selectedItems[item.inventoryId].data.name ?? item.name}
 										class="h-full w-full object-cover"
 									/>
+									{#if item.inventoryQuantity > 1}
+										<div
+											class="absolute bottom-2 right-2 z-10 rounded-full bg-black/80 px-2 py-1 text-xs font-bold text-white"
+										>
+											x{item.inventoryQuantity}
+										</div>
+									{/if}
 								</div>
 								<div class="h-full flex-1">
 									<div class="flex h-full flex-1 flex-col">
@@ -302,7 +317,8 @@
 												>
 											</Dialog.Header>
 											<div class="mt-3 text-sm text-gray-300">
-												{$_('inventory.rarity')}: <span
+												{$_('inventory.rarity')}:
+												<span
 													class="font-semibold"
 													style="color: {rarityColor(
 														selectedItems[item.inventoryId].data.rarity ?? item.rarity
