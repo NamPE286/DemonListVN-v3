@@ -5,6 +5,7 @@
     "close": "Đóng",
     "select": "Chọn",
     "month": "Tháng",
+    "day": "ngày",
     "cancel": "Huỷ bỏ",
     "continue": "Tiếp tục",
     "accept": "Chấp nhận",
@@ -316,11 +317,13 @@
     "comment": "Bình luận",
     "reviewed_by": "Đánh giá bởi",
     "reviewer_cmt": "Bình luận của người đánh giá",
+    "prioritized_by": "Được ưu tiên bởi",
     "skip_ahead": {
       "description": [
         "Coi bản nộp như được nộp sớm hơn.",
         "Bản ghi của bạn sẽ được ưu tiên trong hàng chờ duyệt.",
-        "Số ngày thừa sẽ không được trả lại. Nếu bản nộp bị từ chối, số ngày sẽ được chuyển thành vé và trả lại vào kho đồ."
+        "Số ngày thừa sẽ không được trả lại. Nếu bản nộp bị từ chối, số ngày sẽ được chuyển thành vé và trả lại vào kho đồ.",
+        "Số thứ tự cần một lúc để cập nhật"
       ],
       "days_label": "Số ngày cần nộp sớm",
       "day": "ngày",

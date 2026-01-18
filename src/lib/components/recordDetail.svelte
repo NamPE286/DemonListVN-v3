@@ -242,20 +242,17 @@
 		toast.loading(get(_)('toast.payment.redirect'));
 
 		const res: any = await (
-			await fetch(
-				`${import.meta.env.VITE_API_URL}/payment/getPaymentLink/5/${daysToSkip[0]}`,
-				{
-					method: 'POST',
-					headers: {
-						Authorization: 'Bearer ' + (await $user.token()),
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						userID: record.data.userid,
-						levelID: record.data.levelid
-					})
-				}
-			)
+			await fetch(`${import.meta.env.VITE_API_URL}/payment/getPaymentLink/5/${daysToSkip[0]}`, {
+				method: 'POST',
+				headers: {
+					Authorization: 'Bearer ' + (await $user.token()),
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					userID: record.data.userid,
+					levelID: record.data.levelid
+				})
+			})
 		).json();
 
 		window.location.href = res.checkoutUrl;
@@ -311,6 +308,14 @@
 							{/if}
 							<b>{$_('record_detail.submit')}:</b>
 							{new Date(record.data.timestamp).toLocaleString('vi-VN')}<br />
+
+							<b>{$_('record_detail.prioritized_by')}:</b>
+							{Math.floor(record.data.prioritizedBy / (1000 * 60 * 60 * 24))}
+							{$_('general.day')}{Math.floor(record.data.prioritizedBy / (1000 * 60 * 60 * 24)) >
+								1 && $locale == 'en'
+								? 's'
+								: ''}<br />
+
 							<b>{$_('record_detail.device')}:</b>
 							{record.data.mobile ? 'Mobile' : 'PC'}
 							{#if record.data.refreshRate}
@@ -385,6 +390,7 @@
 									<li>{$_('record_detail.skip_ahead.description')[0]}</li>
 									<li>{$_('record_detail.skip_ahead.description')[1]}</li>
 									<li>{$_('record_detail.skip_ahead.description')[2]}</li>
+									<li>{$_('record_detail.skip_ahead.description')[3]}</li>
 								</ul>
 								<div>
 									<Label for="daysInput" class="mb-2">

@@ -5,6 +5,7 @@
     "close": "Close",
     "select": "Select",
     "month": "Month",
+    "day": "day",
     "cancel": "Cancel",
     "continue": "Continue",
     "accept": "Accept",
@@ -317,11 +318,13 @@
     "comment": "Comment",
     "reviewed_by": "Reviewed by",
     "reviewer_cmt": "Reviewer's comment",
+    "prioritized_by": "Prioritized by",
     "skip_ahead": {
       "description": [
         "Treat your submission as if it was submitted earlier.",
         "Your record will be prioritized in the review queue.",
-        "Unused days cannot be refunded. If your submission is rejected, days will be converted to tickets and returned to your inventory."
+        "Unused days cannot be refunded. If your submission is rejected, days will be converted to tickets and returned to your inventory.",
+        "The queue takes a while to update."
       ],
       "days_label": "Days to skip ahead",
       "day": "day",
