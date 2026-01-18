@@ -338,7 +338,7 @@
 		</div>
 
 		<!-- Left Side: Player Profile + Pending Submissions (Customizable) -->
-		<div class="absolute bottom-24 left-8 z-20 hidden flex-col gap-4 lg:flex">
+		<div class="absolute bottom-24 left-8 z-20 hidden flex-col gap-4 xl:flex">
 			{#each bottomLeftWidgets as widget}
 				{#if widget === 'submissions' && $user.loggedIn}
 					<div class="w-[350px] xl:w-[380px]">
@@ -374,7 +374,7 @@
 		</div>
 
 		<!-- Bottom Right: Event Carousel -->
-		<div class="absolute bottom-24 right-8 z-20 w-[380px] xl:w-[420px] hidden lg:block">
+		<div class="absolute bottom-24 right-8 z-20 w-[380px] xl:w-[420px] hidden xl:block">
 			<DashboardEvents bind:events bind:currentTime />
 		</div>
 
