@@ -331,7 +331,8 @@
       "days": "days",
       "total": "Total",
       "queue_boost": "Queue Boost",
-      "for_record": "For record"
+      "for_record": "For record",
+      "estimated_queue": "Estimated queue position after boost"
     }
   },
   "search": {

@@ -304,7 +304,7 @@
       "share": "Chia sẻ",
       "edit": "Chỉnh sửa",
       "review": "Đánh giá",
-      "skip_ahead": "Nhảy Hàng"
+      "skip_ahead": "Tăng tốc duyệt"
     },
     "title": "Chi tiết bản ghi",
     "raw": "Raw",
@@ -330,7 +330,8 @@
       "days": "ngày",
       "total": "Tổng cộng",
       "queue_boost": "Tăng tốc hàng chờ",
-      "for_record": "Cho bản ghi"
+      "for_record": "Cho bản ghi",
+      "estimated_queue": "Vị trí hàng chờ dự kiến sau khi tăng tốc"
     }
   },
   "search": {

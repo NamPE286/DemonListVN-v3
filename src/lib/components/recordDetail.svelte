@@ -31,6 +31,8 @@
 	let cmt = '';
 	let skipAheadState = 0;
 	let daysToSkip = [1];
+	let estimatedQueueNo: number | null = null;
+	let estimatedQueueLoading = false;
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -112,6 +114,25 @@
 
 		//@ts-ignore
 		record = tmp;
+	}
+	async function getEstimatedQueueNo(
+		userID: string,
+		levelID: number,
+		prioritizedBy: number
+	): Promise<number> {
+		const res = await (
+			await fetch(
+				`${import.meta.env.VITE_API_URL}/records/${userID}/${levelID}/getEstimatedQueue/${prioritizedBy}`,
+				{
+					method: 'GET',
+					headers: {
+						'Content-Type': 'application/json'
+					}
+				}
+			)
+		).json();
+
+		return res.no;
 	}
 
 	async function change() {
@@ -236,6 +257,20 @@
 	function resetSkipAhead() {
 		skipAheadState = 0;
 		daysToSkip = [1];
+		estimatedQueueNo = null;
+		estimatedQueueLoading = false;
+	}
+
+	async function goToReview() {
+		estimatedQueueLoading = true;
+		try {
+			const prioritizedMs = daysToSkip[0] * 1000 * 60 * 60 * 24;
+			estimatedQueueNo = await getEstimatedQueueNo(record.data.userid, record.data.levelid, prioritizedMs);
+			skipAheadState = 1;
+		} catch (error) {
+			toast.error('Failed to get estimated queue position');
+			estimatedQueueLoading = false;
+		}
 	}
 
 	async function purchaseQueueBoost() {
@@ -417,9 +452,9 @@
 									<p class="text-lg"><b>{formatPrice(5000 * daysToSkip[0])}₫</b></p>
 								</div>
 								<Button
-									on:click={() => {
-										skipAheadState = 1;
-									}}>{$_('general.next')}</Button
+								disabled={estimatedQueueLoading}
+								on:click={goToReview}
+								>{estimatedQueueLoading ? 'Loading...' : $_('general.next')}</Button
 								>
 							</div>
 						{:else if skipAheadState == 1}
@@ -440,8 +475,12 @@
 									<p class="ml-auto">
 										<b>{record.data.levels.name}</b>
 									</p>
+								</div>							{#if estimatedQueueNo !== null}
+								<div class="flex text-sm bg-blue-50 dark:bg-blue-950 p-3 rounded">
+									<p>{$_('record_detail.skip_ahead.estimated_queue')}</p>
+									<p class="ml-auto"><b>#{estimatedQueueNo}</b></p>
 								</div>
-								<p class="text-sm italic text-gray-500">
+							{/if}								<p class="text-sm italic text-gray-500">
 									{$_('payment.review.caution')}
 								</p>
 								<div class="flex gap-[10px]">
