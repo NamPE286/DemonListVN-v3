@@ -18,7 +18,9 @@
     "pending": "Đang chờ",
     "save": "Lưu",
     "saving": "Đang lưu",
-    "delete": "Xóa"
+    "delete": "Xóa",
+    "yes": "Có",
+    "no": "Không"
   },
   "time_unit": {
     "second": "giây",
@@ -318,6 +320,7 @@
     "reviewed_by": "Đánh giá bởi",
     "reviewer_cmt": "Bình luận của người đánh giá",
     "prioritized_by": "Được ưu tiên bởi",
+    "need_mod_inspection": "Cần kiểm tra thêm bởi Mod",
     "skip_ahead": {
       "description": [
         "Coi bản nộp như được nộp sớm hơn.",

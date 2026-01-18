@@ -265,7 +265,11 @@
 		estimatedQueueLoading = true;
 		try {
 			const prioritizedMs = daysToSkip[0] * 1000 * 60 * 60 * 24;
-			estimatedQueueNo = await getEstimatedQueueNo(record.data.userid, record.data.levelid, prioritizedMs);
+			estimatedQueueNo = await getEstimatedQueueNo(
+				record.data.userid,
+				record.data.levelid,
+				prioritizedMs
+			);
 			skipAheadState = 1;
 		} catch (error) {
 			toast.error('Failed to get estimated queue position');
@@ -331,75 +335,146 @@
 						{/if}
 					</Tabs.List>
 					<Tabs.Content value="detail">
-						<div class="detailWrapper">
-							<b>{$_('record_detail.title')}:</b>
-							<a href={record.data.videoLink} target="_blank"
-								>{record.data.videoLink.slice(0, 25)}...</a
-							><br />
-							{#if $user.loggedIn && ($user.data.isAdmin || $user.data.isTrusted)}
-								<b>Raw:</b>
-								<a href={record.data.raw} target="_blank">{record.data.raw.slice(0, 25)}...</a><br
-								/>
-							{/if}
-							<b>{$_('record_detail.submit')}:</b>
-							{new Date(record.data.timestamp).toLocaleString('vi-VN')}<br />
-
-							<b>{$_('record_detail.prioritized_by')}:</b>
-							{Math.floor(record.data.prioritizedBy / (1000 * 60 * 60 * 24))}
-							{$_('general.day')}{Math.floor(record.data.prioritizedBy / (1000 * 60 * 60 * 24)) >
-								1 && $locale == 'en'
-								? 's'
-								: ''}<br />
-
-							<b>{$_('record_detail.device')}:</b>
-							{record.data.mobile ? 'Mobile' : 'PC'}
-							{#if record.data.refreshRate}
-								({record.data.refreshRate}fps)
-							{/if} <br />
-							{#if !record.data.levels.isPlatformer}
-								<b>{$_('record_detail.progress')}:</b>
-								{record.data.progress}% <br />
-							{:else}
-								<b>{$_('record_detail.time')}:</b>
-								{getTimeString(record.data.progress)} <br />
-							{/if}
-							<b>{$_('record_detail.rating')}:</b>
-							{record.data.suggestedRating ? record.data.suggestedRating : 'N/a'}
-							{#if record.data.progress == 100 && $user.loggedIn && $user.data.uid == record.data.players.uid}
-								<Dialog.Root bind:open={open1}>
-									<Dialog.Trigger>
-										<Button variant="outline" size="icon" class="h-[30px]"
-											><Pencil1 size={18} /></Button
-										>
-									</Dialog.Trigger>
-									<Dialog.Content>
-										<Dialog.Header>
-											<Dialog.Title>{$_('record_detail.rating_change')}</Dialog.Title>
-											<Input
-												type="number"
-												inputmode="numeric"
-												bind:value={record.data.suggestedRating}
-											/>
-										</Dialog.Header>
-										<Button bind:disable={disableBtn} on:click={change}>Change</Button>
-									</Dialog.Content>
-								</Dialog.Root>
-							{/if}
-							<br />
-							<b>{$_('record_detail.comment')}:</b>
-							{record.data.comment ? record.data.comment : '(No comment provided)'}<br />
-							<div class="flex gap-[5px]">
-								<b>{$_('record_detail.reviewed_by')}:</b>
-								{#if record.data.reviewer != null}
-									<PlayerHoverCard player={record.data.reviewer} />
-								{:else}
-									Moderator
+						<div class="detail-container">
+							<!-- Video Links Section -->
+							<div class="detail-section">
+								<div class="detail-row">
+									<span class="detail-label">{$_('record_detail.title')}</span>
+									<a href={record.data.videoLink} target="_blank" class="detail-link">
+										{record.data.videoLink.slice(0, 40)}...
+									</a>
+								</div>
+								{#if $user.loggedIn && ($user.data.isAdmin || $user.data.isTrusted)}
+									<div class="detail-row">
+										<span class="detail-label">Raw</span>
+										<a href={record.data.raw} target="_blank" class="detail-link">
+											{record.data.raw.slice(0, 40)}...
+										</a>
+									</div>
 								{/if}
 							</div>
-							{#if $user.loggedIn && $user.data.isAdmin}
-								<b>{$_('record_detail.reviewer_cmt')}:</b>
-								{record.data.reviewerComment ? record.data.reviewerComment : 'N/a'}<br />
+
+							<!-- Submission Info Section -->
+							<div class="detail-section">
+								<div class="detail-row">
+									<span class="detail-label">{$_('record_detail.submit')}</span>
+									<span class="detail-value"
+										>{new Date(record.data.timestamp).toLocaleString('vi-VN')}</span
+									>
+								</div>
+								{#if $user.loggedIn && $user.data.uid == record.data.userid}
+									<div class="detail-row">
+										<span class="detail-label">{$_('record_detail.prioritized_by')}</span>
+										<span class="detail-value detail-badge">
+											{Math.floor(record.data.prioritizedBy / (1000 * 60 * 60 * 24))}
+											{$_('general.day')}{Math.floor(
+												record.data.prioritizedBy / (1000 * 60 * 60 * 24)
+											) > 1 && $locale == 'en'
+												? 's'
+												: ''}
+										</span>
+									</div>
+								{/if}
+							</div>
+
+							<!-- Performance Details Section -->
+							<div class="detail-section">
+								<div class="detail-row">
+									<span class="detail-label">{$_('record_detail.device')}</span>
+									<span class="detail-value">
+										<span class="device-badge {record.data.mobile ? 'mobile' : 'pc'}">
+											{record.data.mobile ? 'Mobile' : 'PC'}
+										</span>
+										{#if record.data.refreshRate}
+											<span class="fps-badge">{record.data.refreshRate}fps</span>
+										{/if}
+									</span>
+								</div>
+								<div class="detail-row">
+									<span class="detail-label">
+										{#if !record.data.levels.isPlatformer}
+											{$_('record_detail.progress')}
+										{:else}
+											{$_('record_detail.time')}
+										{/if}
+									</span>
+									<span class="detail-value detail-highlight">
+										{#if !record.data.levels.isPlatformer}
+											{record.data.progress}%
+										{:else}
+											{getTimeString(record.data.progress)}
+										{/if}
+									</span>
+								</div>
+								<div class="detail-row">
+									<span class="detail-label">{$_('record_detail.rating')}</span>
+									<div class="flex items-center gap-2">
+										<span class="detail-value detail-highlight">
+											{record.data.suggestedRating ? record.data.suggestedRating : 'N/a'}
+										</span>
+										{#if record.data.progress == 100 && $user.loggedIn && $user.data.uid == record.data.players.uid}
+											<Dialog.Root bind:open={open1}>
+												<Dialog.Trigger>
+													<Button variant="outline" size="icon" class="h-[28px] w-[28px]">
+														<Pencil1 size={16} />
+													</Button>
+												</Dialog.Trigger>
+												<Dialog.Content>
+													<Dialog.Header>
+														<Dialog.Title>{$_('record_detail.rating_change')}</Dialog.Title>
+														<Input
+															type="number"
+															inputmode="numeric"
+															bind:value={record.data.suggestedRating}
+														/>
+													</Dialog.Header>
+													<Button bind:disable={disableBtn} on:click={change}>Change</Button>
+												</Dialog.Content>
+											</Dialog.Root>
+										{/if}
+									</div>
+								</div>
+							</div>
+
+							<!-- Comment Section -->
+							{#if record.data.comment}
+								<div class="detail-section comment-section">
+									<span class="detail-label">{$_('record_detail.comment')}</span>
+									{record.data.comment}
+								</div>
 							{/if}
+
+							<!-- Review Info Section -->
+							<div class="detail-section">
+								<div class="detail-row">
+									<span class="detail-label">{$_('record_detail.reviewed_by')}</span>
+									<div class="detail-value">
+										{#if !record.data.isChecked && record.data.reviewer == null}
+											?
+										{:else if record.data.reviewer != null}
+											<PlayerHoverCard player={record.data.reviewer} />
+										{:else}
+											<span class="moderator-badge">Moderator</span>
+										{/if}
+									</div>
+								</div>
+								<div class="detail-row">
+									<span class="detail-label">{$_('record_detail.need_mod_inspection')}</span>
+									<div class="detail-value">
+										{#if record.data.needMod}
+											{$_('general.yes')}
+										{:else}
+											{$_('general.no')}
+										{/if}
+									</div>
+								</div>
+								{#if $user.loggedIn && $user.data.isAdmin && record.data.reviewerComment}
+									<div class="detail-row">
+										<span class="detail-label">{$_('record_detail.reviewer_cmt')}</span>
+										<p class="reviewer-comment">{record.data.reviewerComment}</p>
+									</div>
+								{/if}
+							</div>
 						</div>
 					</Tabs.Content>
 					<Tabs.Content value="deathCount">
@@ -451,10 +526,8 @@
 									<p class="text-lg"><b>{$_('record_detail.skip_ahead.total')}</b></p>
 									<p class="text-lg"><b>{formatPrice(5000 * daysToSkip[0])}₫</b></p>
 								</div>
-								<Button
-								disabled={estimatedQueueLoading}
-								on:click={goToReview}
-								>{estimatedQueueLoading ? 'Loading...' : $_('general.next')}</Button
+								<Button disabled={estimatedQueueLoading} on:click={goToReview}
+									>{estimatedQueueLoading ? 'Loading...' : $_('general.next')}</Button
 								>
 							</div>
 						{:else if skipAheadState == 1}
@@ -475,12 +548,14 @@
 									<p class="ml-auto">
 										<b>{record.data.levels.name}</b>
 									</p>
-								</div>							{#if estimatedQueueNo !== null}
-								<div class="flex text-sm bg-blue-50 dark:bg-blue-950 p-3 rounded">
-									<p>{$_('record_detail.skip_ahead.estimated_queue')}</p>
-									<p class="ml-auto"><b>#{estimatedQueueNo}</b></p>
 								</div>
-							{/if}								<p class="text-sm italic text-gray-500">
+								{#if estimatedQueueNo !== null}
+									<div class="flex rounded bg-blue-50 p-3 text-sm dark:bg-blue-950">
+										<p>{$_('record_detail.skip_ahead.estimated_queue')}</p>
+										<p class="ml-auto"><b>#{estimatedQueueNo}</b></p>
+									</div>
+								{/if}
+								<p class="text-sm italic text-gray-500">
 									{$_('payment.review.caution')}
 								</p>
 								<div class="flex gap-[10px]">
@@ -559,13 +634,209 @@
 </Dialog.Root>
 
 <style lang="scss">
-	.detailWrapper {
+	.detail-container {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
 		width: 100%;
-		word-wrap: break-word;
 	}
-	a {
-		text-decoration: underline;
-		color: #99c3ff;
+
+	.detail-section {
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 1rem;
+		background: rgba(0, 0, 0, 0.02);
+		border-radius: 0.5rem;
+		border: 1px solid rgba(0, 0, 0, 0.05);
+
+		:global(.dark) & {
+			background: rgba(255, 255, 255, 0.02);
+			border-color: rgba(255, 255, 255, 0.05);
+		}
+	}
+
+	.detail-row {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: 1rem;
+		min-height: 1.5rem;
+	}
+
+	.detail-label {
+		font-weight: 600;
+		font-size: 0.875rem;
+		color: rgba(255, 255, 255, 0.9);
+		min-width: 120px;
+		flex-shrink: 0;
+
+		:global(.dark) & {
+			color: rgba(255, 255, 255, 0.9);
+		}
+	}
+
+	.detail-value {
+		font-size: 0.875rem;
+		text-align: right;
+		word-break: break-word;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+		color: rgba(255, 255, 255, 0.95);
+	}
+
+	.detail-link {
+		text-decoration: none;
+		color: rgba(255, 255, 255, 0.85);
+		font-size: 0.875rem;
+		word-break: break-all;
+		transition: all 0.2s;
+
+		&:hover {
+			color: rgba(255, 255, 255, 1);
+			text-decoration: underline;
+		}
+
+		:global(.dark) & {
+			color: rgba(255, 255, 255, 0.85);
+
+			&:hover {
+				color: rgba(255, 255, 255, 1);
+			}
+		}
+	}
+
+	.detail-highlight {
+		font-weight: 600;
+		font-size: 1rem;
+		color: rgba(255, 255, 255, 1);
+
+		:global(.dark) & {
+			color: rgba(255, 255, 255, 1);
+		}
+	}
+
+	.detail-badge {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25rem 0.75rem;
+		background: rgba(255, 255, 255, 0.1);
+		border-radius: 9999px;
+		font-weight: 500;
+		color: rgba(255, 255, 255, 0.95);
+
+		:global(.dark) & {
+			background: rgba(255, 255, 255, 0.15);
+			color: rgba(255, 255, 255, 0.95);
+		}
+	}
+
+	.device-badge {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25rem 0.625rem;
+		border-radius: 0.375rem;
+		font-size: 0.75rem;
+		font-weight: 600;
+		text-transform: uppercase;
+		letter-spacing: 0.025em;
+
+		&.mobile {
+			background: rgba(255, 255, 255, 0.15);
+			color: rgba(255, 255, 255, 0.95);
+
+			:global(.dark) & {
+				background: rgba(255, 255, 255, 0.15);
+				color: rgba(255, 255, 255, 0.95);
+			}
+		}
+
+		&.pc {
+			background: rgba(255, 255, 255, 0.15);
+			color: rgba(255, 255, 255, 0.95);
+
+			:global(.dark) & {
+				background: rgba(255, 255, 255, 0.15);
+				color: rgba(255, 255, 255, 0.95);
+			}
+		}
+	}
+
+	.fps-badge {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25rem 0.625rem;
+		background: rgba(255, 255, 255, 0.15);
+		border-radius: 0.375rem;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: rgba(255, 255, 255, 0.95);
+
+		:global(.dark) & {
+			background: rgba(255, 255, 255, 0.15);
+			color: rgba(255, 255, 255, 0.95);
+		}
+	}
+
+	.moderator-badge {
+		display: inline-flex;
+		align-items: center;
+		padding: 0.25rem 0.75rem;
+		background: rgba(255, 255, 255, 0.15);
+		border-radius: 9999px;
+		font-size: 0.75rem;
+		font-weight: 600;
+		color: rgba(255, 255, 255, 0.95);
+
+		:global(.dark) & {
+			background: rgba(255, 255, 255, 0.15);
+			color: rgba(255, 255, 255, 0.95);
+		}
+	}
+
+	.comment-section {
+		flex-direction: column;
+		gap: 0.5rem;
+
+		.detail-label {
+			min-width: auto;
+		}
+	}
+
+	.comment-text {
+		font-size: 0.875rem;
+		line-height: 1.5;
+		padding: 0.75rem;
+		background: rgba(0, 0, 0, 0.02);
+		border-radius: 0.375rem;
+		border-left: 3px solid rgba(255, 255, 255, 0.5);
+		margin: 0;
+		color: rgba(255, 255, 255, 0.9);
+
+		:global(.dark) & {
+			background: rgba(255, 255, 255, 0.02);
+			border-left-color: rgba(255, 255, 255, 0.5);
+			color: rgba(255, 255, 255, 0.9);
+		}
+	}
+
+	.reviewer-comment {
+		font-size: 0.875rem;
+		line-height: 1.5;
+		padding: 0.75rem;
+		background: rgba(0, 0, 0, 0.02);
+		border-radius: 0.375rem;
+		margin: 0;
+		font-style: italic;
+		color: rgba(255, 255, 255, 0.85);
+
+		:global(.dark) & {
+			background: rgba(255, 255, 255, 0.02);
+			color: rgba(255, 255, 255, 0.85);
+		}
 	}
 
 	.chartWrapper {

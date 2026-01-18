@@ -18,7 +18,9 @@
     "pending": "Pending",
     "save": "Save",
     "saving": "Saving",
-    "delete": "Delete"
+    "delete": "Delete",
+    "yes": "Yes",
+    "no": "No"
   },
   "time_unit": {
     "second": "second",
@@ -319,6 +321,7 @@
     "reviewed_by": "Reviewed by",
     "reviewer_cmt": "Reviewer's comment",
     "prioritized_by": "Prioritized by",
+    "need_mod_inspection": "Need further inspection by Moderator",
     "skip_ahead": {
       "description": [
         "Treat your submission as if it was submitted earlier.",
