@@ -33,6 +33,9 @@
 	let daysToSkip = [1];
 	let estimatedQueueNo: number | null = null;
 	let estimatedQueueLoading = false;
+	let queueBoostInventory: any[] = [];
+	let loadingInventory = false;
+	let currentQueuePosition: number | null = null;
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -114,6 +117,15 @@
 
 		//@ts-ignore
 		record = tmp;
+
+		// Fetch current queue position if record is not checked yet
+		if (!tmp.data.isChecked && $user.loggedIn && $user.data.uid === tmp.data.userid) {
+			try {
+				currentQueuePosition = await getEstimatedQueueNo(tmp.data.userid, tmp.data.levelid, 0);
+			} catch {
+				currentQueuePosition = null;
+			}
+		}
 	}
 	async function getEstimatedQueueNo(
 		userID: string,
@@ -133,6 +145,27 @@
 		).json();
 
 		return res.no;
+	}
+
+	async function fetchQueueBoostInventory() {
+		loadingInventory = true;
+		try {
+			const res = await (
+				await fetch(`${import.meta.env.VITE_API_URL}/inventory?itemId=15`, {
+					method: 'GET',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token())
+					}
+				})
+			).json();
+
+			queueBoostInventory = Array.isArray(res) ? res : [];
+		} catch (error) {
+			console.error('Error fetching inventory:', error);
+			queueBoostInventory = [];
+		} finally {
+			loadingInventory = false;
+		}
 	}
 
 	async function change() {
@@ -259,6 +292,7 @@
 		daysToSkip = [1];
 		estimatedQueueNo = null;
 		estimatedQueueLoading = false;
+		currentQueuePosition = null;
 	}
 
 	async function goToReview() {
@@ -271,10 +305,44 @@
 				prioritizedMs
 			);
 			skipAheadState = 1;
+			estimatedQueueLoading = false;
 		} catch (error) {
 			toast.error('Failed to get estimated queue position');
 			estimatedQueueLoading = false;
 		}
+	}
+
+	async function consumeQueueBoost() {
+		toast.promise(
+			(async () => {
+				const res = await fetch(`${import.meta.env.VITE_API_URL}/inventory/item/15/consume`, {
+					method: 'DELETE',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token()),
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						levelID: record.data.levelid,
+						quantity: daysToSkip[0]
+					})
+				});
+
+				if (res.ok) {
+					await fetchQueueBoostInventory();
+				} else {
+					const error = await res.text();
+					throw new Error(error);
+				}
+			})(),
+			{
+				loading: get(_)('record_detail.skip_ahead.consuming'),
+				success: () => {
+					open = false;
+					return get(_)('record_detail.skip_ahead.queue_boost_used');
+				},
+				error: get(_)('record_detail.skip_ahead.queue_boost_error')
+			}
+		);
 	}
 
 	async function purchaseQueueBoost() {
@@ -299,6 +367,7 @@
 
 	$: (open, fetchData());
 	$: if (!open) resetSkipAhead();
+	$: if (open && $user.loggedIn) fetchQueueBoostInventory();
 </script>
 
 <Dialog.Root
@@ -374,6 +443,12 @@
 												: ''}
 										</span>
 									</div>
+									{#if !record.data.isChecked && currentQueuePosition !== null}
+										<div class="detail-row">
+											<span class="detail-label">{$_('record_detail.current_queue')}</span>
+											<span class="detail-value detail-badge">#{currentQueuePosition}</span>
+										</div>
+									{/if}
 								{/if}
 							</div>
 
@@ -502,6 +577,25 @@
 									<li>{$_('record_detail.skip_ahead.description')[2]}</li>
 									<li>{$_('record_detail.skip_ahead.description')[3]}</li>
 								</ul>
+								{#if queueBoostInventory.length > 0}
+									<div class="rounded bg-green-50 p-3 dark:bg-green-950">
+										<p class="text-sm font-medium text-green-700 dark:text-green-300">
+											{$_('record_detail.skip_ahead.inventory_available')}:
+											<b
+												>{queueBoostInventory.reduce(
+													(sum, item) => sum + (item.inventoryQuantity || 1),
+													0
+												)}</b
+											>
+											{queueBoostInventory.reduce(
+												(sum, item) => sum + (item.inventoryQuantity || 1),
+												0
+											) > 1
+												? $_('record_detail.skip_ahead.boosts')
+												: $_('record_detail.skip_ahead.boost_singular')}
+										</p>
+									</div>
+								{/if}
 								<div>
 									<Label for="daysInput" class="mb-2">
 										{$_('record_detail.skip_ahead.days_label')}
@@ -558,6 +652,27 @@
 								<p class="text-sm italic text-gray-500">
 									{$_('payment.review.caution')}
 								</p>
+
+								{#if queueBoostInventory.length > 0}
+									<div class="rounded bg-green-50 p-3 dark:bg-green-950">
+										<p class="text-sm font-medium text-green-700 dark:text-green-300">
+											{$_('record_detail.skip_ahead.inventory_available')}:
+											<b
+												>{queueBoostInventory.reduce(
+													(sum, item) => sum + (item.inventoryQuantity || 1),
+													0
+												)}</b
+											>
+											{queueBoostInventory.reduce(
+												(sum, item) => sum + (item.inventoryQuantity || 1),
+												0
+											) > 1
+												? $_('record_detail.skip_ahead.boosts')
+												: $_('record_detail.skip_ahead.boost_singular')}
+										</p>
+									</div>
+								{/if}
+
 								<div class="flex gap-[10px]">
 									<Button
 										variant="outline"
@@ -565,9 +680,18 @@
 											skipAheadState = 0;
 										}}>{$_('general.back')}</Button
 									>
-									<Button class="flex-1" on:click={purchaseQueueBoost}
-										>{$_('payment.review.proceed')}</Button
-									>
+									{#if queueBoostInventory.length > 0 && queueBoostInventory.reduce((sum, item) => sum + (item.inventoryQuantity || 1), 0) >= daysToSkip[0]}
+										<Button class="flex-1" variant="secondary" on:click={consumeQueueBoost}>
+											{$_('record_detail.skip_ahead.use_inventory')}
+										</Button>
+										<Button class="flex-1" on:click={purchaseQueueBoost}
+											>{$_('record_detail.skip_ahead.purchase')}</Button
+										>
+									{:else}
+										<Button class="flex-1" on:click={purchaseQueueBoost}
+											>{$_('payment.review.proceed')}</Button
+										>
+									{/if}
 								</div>
 							</div>
 						{/if}

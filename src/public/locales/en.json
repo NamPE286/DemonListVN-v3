@@ -321,6 +321,7 @@
     "reviewed_by": "Reviewed by",
     "reviewer_cmt": "Reviewer's comment",
     "prioritized_by": "Prioritized by",
+    "current_queue": "Current queue position",
     "need_mod_inspection": "Need further inspection by Moderator",
     "skip_ahead": {
       "description": [
@@ -335,7 +336,15 @@
       "total": "Total",
       "queue_boost": "Queue Boost",
       "for_record": "For record",
-      "estimated_queue": "Estimated queue position after boost"
+      "estimated_queue": "Estimated queue position after boost",
+      "inventory_available": "You have queue boosts in your inventory",
+      "boost_singular": "day",
+      "boosts": "days",
+      "use_inventory": "Use from Inventory",
+      "purchase": "Purchase",
+      "consuming": "Consuming boost...",
+      "queue_boost_used": "Queue boost successfully applied!",
+      "queue_boost_error": "Failed to use queue boost. Please try again."
     }
   },
   "search": {

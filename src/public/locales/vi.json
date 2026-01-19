@@ -320,6 +320,7 @@
     "reviewed_by": "Đánh giá bởi",
     "reviewer_cmt": "Bình luận của người đánh giá",
     "prioritized_by": "Được ưu tiên bởi",
+    "current_queue": "Vị trí hàng chờ hiện tại",
     "need_mod_inspection": "Cần kiểm tra thêm bởi Mod",
     "skip_ahead": {
       "description": [
@@ -334,7 +335,15 @@
       "total": "Tổng cộng",
       "queue_boost": "Tăng tốc hàng chờ",
       "for_record": "Cho bản ghi",
-      "estimated_queue": "Vị trí hàng chờ dự kiến sau khi tăng tốc"
+      "estimated_queue": "Vị trí hàng chờ dự kiến sau khi tăng tốc",
+      "inventory_available": "Bạn có lượt tăng tốc trong kho đồ",
+      "boost_singular": "ngày",
+      "boosts": "ngày",
+      "use_inventory": "Dùng từ Kho đồ",
+      "purchase": "Mua",
+      "consuming": "Đang sử dụng tăng tốc...",
+      "queue_boost_used": "Đã áp dụng tăng tốc hàng chờ thành công!",
+      "queue_boost_error": "Không thể sử dụng tăng tốc hàng chờ. Vui lòng thử lại."
     }
   },
   "search": {
