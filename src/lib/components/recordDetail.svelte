@@ -117,15 +117,6 @@
 
 		//@ts-ignore
 		record = tmp;
-
-		// Fetch current queue position if record is not checked yet
-		if (!tmp.data.isChecked && $user.loggedIn && $user.data.uid === tmp.data.userid) {
-			try {
-				currentQueuePosition = await getEstimatedQueueNo(tmp.data.userid, tmp.data.levelid, 0);
-			} catch {
-				currentQueuePosition = null;
-			}
-		}
 	}
 	async function getEstimatedQueueNo(
 		userID: string,
@@ -443,12 +434,6 @@
 												: ''}
 										</span>
 									</div>
-									{#if !record.data.isChecked && currentQueuePosition !== null}
-										<div class="detail-row">
-											<span class="detail-label">{$_('record_detail.current_queue')}</span>
-											<span class="detail-value detail-badge">#{currentQueuePosition}</span>
-										</div>
-									{/if}
 								{/if}
 							</div>
 
