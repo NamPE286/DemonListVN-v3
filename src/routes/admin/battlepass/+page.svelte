@@ -19,6 +19,8 @@
 	import Trash2 from 'lucide-svelte/icons/trash-2';
 	import Edit from 'lucide-svelte/icons/pencil';
 	import RefreshCw from 'lucide-svelte/icons/refresh-cw';
+	import Info from 'lucide-svelte/icons/info';
+	import { MAP_PACK_DIFFICULTY_OPTIONS, MISSION_CONDITION_TYPES } from '$lib/battlepass/constants';
 
 	// State
 	let seasons: any[] = [];
@@ -103,13 +105,6 @@
 		order: 0
 	};
 
-	const difficultyOptions = [
-		{ value: 'easier', label: 'Easier' },
-		{ value: 'harder', label: 'Harder' },
-		{ value: 'medium_demon', label: 'Medium Demon' },
-		{ value: 'insane_demon', label: 'Insane Demon' }
-	];
-
 	function convertTime(x: string) {
 		if (!x) return '';
 		const d = new Date(x);
@@ -148,7 +143,9 @@
 	async function fetchLevels() {
 		if (!selectedSeason) return;
 		try {
-			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/levels`);
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/levels`
+			);
 			if (res.ok) levels = await res.json();
 		} catch (e) {
 			console.error('Failed to fetch levels:', e);
@@ -158,9 +155,12 @@
 	async function fetchBattlePassMapPacks() {
 		if (!selectedSeason) return;
 		try {
-			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/mappacks`, {
-				headers: { Authorization: `Bearer ${await $user.token()}` }
-			});
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/mappacks`,
+				{
+					headers: { Authorization: `Bearer ${await $user.token()}` }
+				}
+			);
 			if (res.ok) battlePassMapPacks = await res.json();
 		} catch (e) {
 			console.error('Failed to fetch battle pass map packs:', e);
@@ -170,7 +170,9 @@
 	async function fetchRewards() {
 		if (!selectedSeason) return;
 		try {
-			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/rewards`);
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/rewards`
+			);
 			if (res.ok) rewards = await res.json();
 		} catch (e) {
 			console.error('Failed to fetch rewards:', e);
@@ -180,7 +182,9 @@
 	async function fetchMissions() {
 		if (!selectedSeason) return;
 		try {
-			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/missions`);
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/missions`
+			);
 			if (res.ok) missions = await res.json();
 		} catch (e) {
 			console.error('Failed to fetch missions:', e);
@@ -199,10 +203,10 @@
 	// Season CRUD
 	async function saveSeason() {
 		const isNew = !seasonForm.id;
-		const url = isNew 
+		const url = isNew
 			? `${import.meta.env.VITE_API_URL}/battlepass/season`
 			: `${import.meta.env.VITE_API_URL}/battlepass/season/${seasonForm.id}`;
-		
+
 		const body: any = {
 			title: seasonForm.title,
 			description: seasonForm.description
@@ -256,7 +260,7 @@
 		if (!selectedSeason) return;
 
 		const isNew = !levelForm.id;
-		const url = isNew 
+		const url = isNew
 			? `${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/levels`
 			: `${import.meta.env.VITE_API_URL}/battlepass/level/${levelForm.id}`;
 
@@ -408,7 +412,7 @@
 		if (!selectedSeason) return;
 
 		const isNew = !missionForm.id;
-		const url = isNew 
+		const url = isNew
 			? `${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/missions`
 			: `${import.meta.env.VITE_API_URL}/battlepass/mission/${missionForm.id}`;
 
@@ -471,18 +475,21 @@
 		if (!missionRewardForm.missionId) return;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/battlepass/mission/${missionRewardForm.missionId}/reward`, {
-				method: 'POST',
-				body: JSON.stringify({
-					itemId: Number(missionRewardForm.itemId),
-					quantity: missionRewardForm.quantity,
-					expireAfter: missionRewardForm.expireAfter
-				}),
-				headers: {
-					Authorization: `Bearer ${await $user.token()}`,
-					'Content-Type': 'application/json'
+			fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/mission/${missionRewardForm.missionId}/reward`,
+				{
+					method: 'POST',
+					body: JSON.stringify({
+						itemId: Number(missionRewardForm.itemId),
+						quantity: missionRewardForm.quantity,
+						expireAfter: missionRewardForm.expireAfter
+					}),
+					headers: {
+						Authorization: `Bearer ${await $user.token()}`,
+						'Content-Type': 'application/json'
+					}
 				}
-			}),
+			),
 			{
 				success: () => {
 					showMissionRewardDialog = false;
@@ -517,7 +524,7 @@
 	// General Map Pack CRUD
 	async function saveGeneralMapPack() {
 		const isNew = !generalMapPackForm.id;
-		const url = isNew 
+		const url = isNew
 			? `${import.meta.env.VITE_API_URL}/battlepass/mappacks/general`
 			: `${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${generalMapPackForm.id}`;
 
@@ -571,17 +578,20 @@
 		if (!mapPackLevelForm.mapPackId) return;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${mapPackLevelForm.mapPackId}/level`, {
-				method: 'POST',
-				body: JSON.stringify({
-					levelID: Number(mapPackLevelForm.levelID),
-					order: mapPackLevelForm.order
-				}),
-				headers: {
-					Authorization: `Bearer ${await $user.token()}`,
-					'Content-Type': 'application/json'
+			fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${mapPackLevelForm.mapPackId}/level`,
+				{
+					method: 'POST',
+					body: JSON.stringify({
+						levelID: Number(mapPackLevelForm.levelID),
+						order: mapPackLevelForm.order
+					}),
+					headers: {
+						Authorization: `Bearer ${await $user.token()}`,
+						'Content-Type': 'application/json'
+					}
 				}
-			}),
+			),
 			{
 				success: () => {
 					showMapPackLevelDialog = false;
@@ -598,10 +608,13 @@
 		if (!confirm('Remove this level?')) return;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${mapPackId}/level/${levelId}`, {
-				method: 'DELETE',
-				headers: { Authorization: `Bearer ${await $user.token()}` }
-			}),
+			fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${mapPackId}/level/${levelId}`,
+				{
+					method: 'DELETE',
+					headers: { Authorization: `Bearer ${await $user.token()}` }
+				}
+			),
 			{
 				success: () => {
 					fetchGeneralMapPacks();
@@ -710,7 +723,14 @@
 	<div class="mb-6 flex items-center gap-4">
 		<Crown class="h-8 w-8 text-yellow-400" />
 		<h1 class="text-2xl font-bold">Battle Pass Manager</h1>
-		<Button variant="outline" size="icon" on:click={() => { fetchSeasons(); if (selectedSeason) fetchSeasonData(); }}>
+		<Button
+			variant="outline"
+			size="icon"
+			on:click={() => {
+				fetchSeasons();
+				if (selectedSeason) fetchSeasonData();
+			}}
+		>
 			<RefreshCw class="h-4 w-4" />
 		</Button>
 	</div>
@@ -780,7 +800,11 @@
 												<Button variant="outline" size="icon" on:click={() => openEditLevel(level)}>
 													<Edit class="h-4 w-4" />
 												</Button>
-												<Button variant="destructive" size="icon" on:click={() => deleteLevel(level.id)}>
+												<Button
+													variant="destructive"
+													size="icon"
+													on:click={() => deleteLevel(level.id)}
+												>
 													<Trash2 class="h-4 w-4" />
 												</Button>
 											</div>
@@ -832,7 +856,11 @@
 										<Table.Cell>Week {pack.unlockWeek}</Table.Cell>
 										<Table.Cell>{pack.order}</Table.Cell>
 										<Table.Cell>
-											<Button variant="destructive" size="icon" on:click={() => unlinkMapPack(pack.id)}>
+											<Button
+												variant="destructive"
+												size="icon"
+												on:click={() => unlinkMapPack(pack.id)}
+											>
 												<Trash2 class="h-4 w-4" />
 											</Button>
 										</Table.Cell>
@@ -892,7 +920,11 @@
 										<Table.Cell>{reward.quantity}</Table.Cell>
 										<Table.Cell>{reward.description || '-'}</Table.Cell>
 										<Table.Cell>
-											<Button variant="destructive" size="icon" on:click={() => deleteReward(reward.id)}>
+											<Button
+												variant="destructive"
+												size="icon"
+												on:click={() => deleteReward(reward.id)}
+											>
 												<Trash2 class="h-4 w-4" />
 											</Button>
 										</Table.Cell>
@@ -941,12 +973,14 @@
 												{#if mission.battlePassMissionRewards?.length}
 													<div class="mt-2 flex gap-2">
 														{#each mission.battlePassMissionRewards as reward}
-															<div class="flex items-center gap-1 rounded bg-muted px-2 py-1 text-xs">
+															<div
+																class="flex items-center gap-1 rounded bg-muted px-2 py-1 text-xs"
+															>
 																<span>Item: {reward.itemId}</span>
 																<span>x{reward.quantity}</span>
-																<Button 
-																	variant="ghost" 
-																	size="icon" 
+																<Button
+																	variant="ghost"
+																	size="icon"
 																	class="h-4 w-4"
 																	on:click={() => deleteMissionReward(mission.id, reward.id)}
 																>
@@ -958,14 +992,26 @@
 												{/if}
 											</div>
 											<div class="flex gap-2">
-												<Button variant="outline" size="sm" on:click={() => openAddMissionReward(mission.id)}>
+												<Button
+													variant="outline"
+													size="sm"
+													on:click={() => openAddMissionReward(mission.id)}
+												>
 													<Plus class="mr-1 h-4 w-4" />
 													Reward
 												</Button>
-												<Button variant="outline" size="icon" on:click={() => openEditMission(mission)}>
+												<Button
+													variant="outline"
+													size="icon"
+													on:click={() => openEditMission(mission)}
+												>
 													<Edit class="h-4 w-4" />
 												</Button>
-												<Button variant="destructive" size="icon" on:click={() => deleteMission(mission.id)}>
+												<Button
+													variant="destructive"
+													size="icon"
+													on:click={() => deleteMission(mission.id)}
+												>
 													<Trash2 class="h-4 w-4" />
 												</Button>
 											</div>
@@ -1006,11 +1052,13 @@
 												{#if pack.mapPackLevels?.length}
 													<div class="mt-2 flex flex-wrap gap-2">
 														{#each pack.mapPackLevels as level}
-															<div class="flex items-center gap-1 rounded bg-muted px-2 py-1 text-xs">
+															<div
+																class="flex items-center gap-1 rounded bg-muted px-2 py-1 text-xs"
+															>
 																<span>{level.levels?.name || level.levelID}</span>
-																<Button 
-																	variant="ghost" 
-																	size="icon" 
+																<Button
+																	variant="ghost"
+																	size="icon"
 																	class="h-4 w-4"
 																	on:click={() => deleteMapPackLevel(pack.id, level.id)}
 																>
@@ -1022,14 +1070,26 @@
 												{/if}
 											</div>
 											<div class="flex gap-2">
-												<Button variant="outline" size="sm" on:click={() => openAddMapPackLevel(pack.id)}>
+												<Button
+													variant="outline"
+													size="sm"
+													on:click={() => openAddMapPackLevel(pack.id)}
+												>
 													<Plus class="mr-1 h-4 w-4" />
 													Level
 												</Button>
-												<Button variant="outline" size="icon" on:click={() => openEditGeneralMapPack(pack)}>
+												<Button
+													variant="outline"
+													size="icon"
+													on:click={() => openEditGeneralMapPack(pack)}
+												>
 													<Edit class="h-4 w-4" />
 												</Button>
-												<Button variant="destructive" size="icon" on:click={() => deleteGeneralMapPack(pack.id)}>
+												<Button
+													variant="destructive"
+													size="icon"
+													on:click={() => deleteGeneralMapPack(pack.id)}
+												>
 													<Trash2 class="h-4 w-4" />
 												</Button>
 											</div>
@@ -1065,7 +1125,11 @@
 			</div>
 			<div>
 				<Label for="seasonDesc">Description</Label>
-				<Textarea id="seasonDesc" bind:value={seasonForm.description} placeholder="The first battle pass season" />
+				<Textarea
+					id="seasonDesc"
+					bind:value={seasonForm.description}
+					placeholder="The first battle pass season"
+				/>
 			</div>
 			<div class="grid grid-cols-2 gap-4">
 				<div>
@@ -1079,7 +1143,7 @@
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button variant="outline" on:click={() => showSeasonDialog = false}>Cancel</Button>
+			<Button variant="outline" on:click={() => (showSeasonDialog = false)}>Cancel</Button>
 			<Button on:click={saveSeason}>Save</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
@@ -1108,11 +1172,17 @@
 			</div>
 			<div>
 				<Label for="levelMinProgress">Min Progress (%)</Label>
-				<Input id="levelMinProgress" type="number" bind:value={levelForm.minProgress} min="0" max="100" />
+				<Input
+					id="levelMinProgress"
+					type="number"
+					bind:value={levelForm.minProgress}
+					min="0"
+					max="100"
+				/>
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button variant="outline" on:click={() => showLevelDialog = false}>Cancel</Button>
+			<Button variant="outline" on:click={() => (showLevelDialog = false)}>Cancel</Button>
 			<Button on:click={saveLevel}>Save</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
@@ -1127,7 +1197,7 @@
 		<div class="flex flex-col gap-4">
 			<div>
 				<Label for="mapPackId">Map Pack</Label>
-				<Select.Root onSelectedChange={(v) => mapPackLinkForm.mapPackId = v?.value || ''}>
+				<Select.Root onSelectedChange={(v) => (mapPackLinkForm.mapPackId = v?.value || '')}>
 					<Select.Trigger>
 						<Select.Value placeholder="Select a map pack" />
 					</Select.Trigger>
@@ -1150,7 +1220,7 @@
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button variant="outline" on:click={() => showLinkMapPackDialog = false}>Cancel</Button>
+			<Button variant="outline" on:click={() => (showLinkMapPackDialog = false)}>Cancel</Button>
 			<Button on:click={linkMapPack}>Link</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
@@ -1189,7 +1259,7 @@
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button variant="outline" on:click={() => showRewardDialog = false}>Cancel</Button>
+			<Button variant="outline" on:click={() => (showRewardDialog = false)}>Cancel</Button>
 			<Button on:click={saveReward}>Save</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
@@ -1208,19 +1278,31 @@
 			</div>
 			<div>
 				<Label for="missionDesc">Description</Label>
-				<Textarea id="missionDesc" bind:value={missionForm.description} placeholder="Complete the featured extreme demon" />
+				<Textarea
+					id="missionDesc"
+					bind:value={missionForm.description}
+					placeholder="Complete the featured extreme demon"
+				/>
 			</div>
 			<div>
 				<Label for="missionCondition">Condition (JSON)</Label>
-				<Textarea 
-					id="missionCondition" 
-					bind:value={missionForm.condition} 
-					placeholder={'[{"type": "clear_level", "targetId": 123}]'}
+				<Textarea
+					id="missionCondition"
+					bind:value={missionForm.condition}
+					placeholder={'[{"type": "clear_level", "targetId": 123456}]'}
 					rows={4}
 				/>
-				<p class="mt-1 text-xs text-muted-foreground">
-					Types: clear_level, clear_mappack, reach_tier, earn_xp, clear_level_count, clear_mappack_count
-				</p>
+				<div class="mt-2 rounded-lg bg-muted/50 p-3 text-xs">
+					<p class="mb-2 font-medium">Available condition types:</p>
+					<ul class="space-y-1 text-muted-foreground">
+						{#each MISSION_CONDITION_TYPES as condType}
+							<li>
+								<code class="rounded bg-muted px-1">{condType.type}</code>
+								<span class="ml-1">- {condType.description}</span>
+							</li>
+						{/each}
+					</ul>
+				</div>
 			</div>
 			<div class="grid grid-cols-2 gap-4">
 				<div>
@@ -1234,7 +1316,7 @@
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button variant="outline" on:click={() => showMissionDialog = false}>Cancel</Button>
+			<Button variant="outline" on:click={() => (showMissionDialog = false)}>Cancel</Button>
 			<Button on:click={saveMission}>Save</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
@@ -1263,7 +1345,7 @@
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button variant="outline" on:click={() => showMissionRewardDialog = false}>Cancel</Button>
+			<Button variant="outline" on:click={() => (showMissionRewardDialog = false)}>Cancel</Button>
 			<Button on:click={addMissionReward}>Add</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
@@ -1282,17 +1364,23 @@
 			</div>
 			<div>
 				<Label for="packDesc">Description</Label>
-				<Textarea id="packDesc" bind:value={generalMapPackForm.description} placeholder="A collection of harder levels" />
+				<Textarea
+					id="packDesc"
+					bind:value={generalMapPackForm.description}
+					placeholder="A collection of harder levels"
+				/>
 			</div>
 			<div class="grid grid-cols-2 gap-4">
 				<div>
 					<Label for="packDifficulty">Difficulty</Label>
-					<Select.Root onSelectedChange={(v) => generalMapPackForm.difficulty = v?.value || 'harder'}>
+					<Select.Root
+						onSelectedChange={(v) => (generalMapPackForm.difficulty = v?.value || 'harder')}
+					>
 						<Select.Trigger>
 							<Select.Value placeholder={generalMapPackForm.difficulty} />
 						</Select.Trigger>
 						<Select.Content>
-							{#each difficultyOptions as opt}
+							{#each MAP_PACK_DIFFICULTY_OPTIONS as opt}
 								<Select.Item value={opt.value}>{opt.label}</Select.Item>
 							{/each}
 						</Select.Content>
@@ -1305,7 +1393,7 @@
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button variant="outline" on:click={() => showGeneralMapPackDialog = false}>Cancel</Button>
+			<Button variant="outline" on:click={() => (showGeneralMapPackDialog = false)}>Cancel</Button>
 			<Button on:click={saveGeneralMapPack}>Save</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
@@ -1320,7 +1408,12 @@
 		<div class="flex flex-col gap-4">
 			<div>
 				<Label for="mpLevelID">Level ID</Label>
-				<Input id="mpLevelID" type="number" bind:value={mapPackLevelForm.levelID} placeholder="12345678" />
+				<Input
+					id="mpLevelID"
+					type="number"
+					bind:value={mapPackLevelForm.levelID}
+					placeholder="12345678"
+				/>
 			</div>
 			<div>
 				<Label for="mpLevelOrder">Order</Label>
@@ -1328,7 +1421,7 @@
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button variant="outline" on:click={() => showMapPackLevelDialog = false}>Cancel</Button>
+			<Button variant="outline" on:click={() => (showMapPackLevelDialog = false)}>Cancel</Button>
 			<Button on:click={addMapPackLevel}>Add</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
