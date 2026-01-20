@@ -1,5 +1,6 @@
 <script lang="ts">
 	import LevelCard from '$lib/components/levelCard.svelte';
+	import ListFilter from '$lib/components/listFilter.svelte';
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
 	import { onDestroy, onMount, tick } from 'svelte';
@@ -14,17 +15,34 @@
 	let curPage = 1;
 	let loaded = true;
 	let unsubscribeUser: (() => void) | null = null;
+	let filters = {
+		topStart: null as string | null,
+		topEnd: null as string | null,
+		ratingMin: null as string | null,
+		ratingMax: null as string | null,
+		nameSearch: '',
+		creatorSearch: ''
+	};
+
+	$: currentListType = ($page.params.list as 'dl' | 'pl' | 'fl') || 'dl';
 
 	function getCacheKey() {
-		return `${$page.params.list}|${$page.url.searchParams.get('uid') ?? ''}`;
+		const filtersKey = JSON.stringify(filters);
+		return `${$page.params.list}|${$page.url.searchParams.get('uid') ?? ''}|${filtersKey}`;
 	}
 
-	async function fetchData() {
-		if (!loaded) {
+	async function fetchData(resetList = false) {
+		if (!loaded && !resetList) {
 			return;
 		}
 
-		curPage++;
+		if (resetList) {
+			curPage = 1;
+			data.levels = [];
+		} else {
+			curPage++;
+		}
+
 		loaded = false;
 
 		const query = new URLSearchParams({
@@ -35,12 +53,29 @@
 			uid: $user.loggedIn ? $user.data.uid : ''
 		});
 
+		// Add filter parameters
+		if (filters.topStart) query.set('topStart', filters.topStart);
+		if (filters.topEnd) query.set('topEnd', filters.topEnd);
+		if (filters.ratingMin) query.set('ratingMin', filters.ratingMin);
+		if (filters.ratingMax) query.set('ratingMax', filters.ratingMax);
+		if (filters.nameSearch) query.set('nameSearch', filters.nameSearch);
+		if (filters.creatorSearch) query.set('creatorSearch', filters.creatorSearch);
+
 		const res = await (
 			await fetch(`${import.meta.env.VITE_API_URL}/list/${$page.params.list}?${query.toString()}`)
 		).json();
 
-		data.levels = data.levels.concat(res);
+		if (resetList) {
+			data.levels = res;
+		} else {
+			data.levels = data.levels.concat(res);
+		}
 		loaded = true;
+	}
+
+	async function handleFilterChange(event: CustomEvent) {
+		filters = event.detail;
+		await fetchData(true);
 	}
 
 	function redirect() {
@@ -124,6 +159,7 @@
 </svelte:head>
 
 <div class="levelsWrapper">
+	<ListFilter listType={currentListType} on:filter={handleFilterChange} />
 	<div class="levels">
 		{#each data.levels as level, index}
 			<LevelCard {level} type={$page.params.list || 'dl'} />
