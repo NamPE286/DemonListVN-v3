@@ -1194,6 +1194,8 @@
     "levels_list": "Levels",
     "missions": "Missions",
     "missions_desc": "Complete special objectives for bonus XP and rewards",
-    "no_missions": "No missions available yet"
+    "no_missions": "No missions available yet",
+    "placeholder_daily_level": "Sample Daily Level",
+    "placeholder_weekly_demon": "Sample Weekly Demon"
   }
 }

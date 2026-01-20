@@ -41,9 +41,10 @@
 	let missionStatus: Record<number, { completed: boolean; claimed: boolean }> = {};
 	
 	// Hardcoded Daily and Weekly levels (API not available)
-	const dailyLevel = {
+	// Names will be replaced by actual level names from API
+	$: dailyLevel = {
 		id: 12345678,
-		name: 'Daily Level',
+		name: $_('battlepass.placeholder_daily_level'),
 		difficulty: 'harder',
 		progress: 0,
 		completed: false,
@@ -51,9 +52,9 @@
 		xp: 25
 	};
 	
-	const weeklyDemon = {
+	$: weeklyDemon = {
 		id: 87654321,
-		name: 'Weekly Demon',
+		name: $_('battlepass.placeholder_weekly_demon'),
 		difficulty: 'medium_demon',
 		progress: 0,
 		completed: false,
