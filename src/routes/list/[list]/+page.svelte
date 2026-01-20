@@ -2,15 +2,22 @@
 	import LevelCard from '$lib/components/levelCard.svelte';
 	import { page } from '$app/stores';
 	import type { PageData } from './$types';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount, tick } from 'svelte';
 	import Ads from '$lib/components/ads.svelte';
 	import { user } from '$lib/client';
 	import { goto } from '$app/navigation';
+	import { getListCache, setListCache } from '$lib/client/listCache';
+	import { browser } from '$app/environment';
 
 	export let data: PageData;
 	let prefix = data.levels.slice(0, 4);
 	let curPage = 1;
 	let loaded = true;
+	let unsubscribeUser: (() => void) | null = null;
+
+	function getCacheKey() {
+		return `${$page.params.list}|${$page.url.searchParams.get('uid') ?? ''}`;
+	}
 
 	async function fetchData() {
 		if (!loaded) {
@@ -70,7 +77,19 @@
 	$: (data, update());
 
 	onMount(() => {
-		user.subscribe((value) => {
+		if (!browser) {
+			return;
+		}
+
+		const key = getCacheKey();
+		const cached = getListCache(key);
+		
+		if (cached) {
+			data.levels = cached.levels as PageData['levels'];
+			curPage = cached.curPage;
+		}
+
+		unsubscribeUser = user.subscribe((value) => {
 			if (value.loggedIn) {
 				redirect();
 			}
@@ -81,6 +100,22 @@
 				fetchData();
 			}
 		};
+	});
+
+	onDestroy(() => {
+		if (!browser) return;
+
+		const key = getCacheKey();
+		setListCache(key, {
+			levels: data.levels as unknown[],
+			curPage
+		});
+
+		if (unsubscribeUser) {
+			unsubscribeUser();
+		}
+
+		window.onscroll = null;
 	});
 </script>
 
