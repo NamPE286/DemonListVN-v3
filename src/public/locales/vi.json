@@ -883,6 +883,10 @@
         "title": "Là người đầu tiên trải nghiệm tính năng mới nhất",
         "description": "Có quyền truy cập sớm vào các bản phát hành mới với tính năng mới trước khi công bố!"
       },
+      "advanced_filtering": {
+        "title": "Lọc Level Nâng Cao",
+        "description": "Lọc level với độ chính xác cao - tìm kiếm theo phạm vi top, điểm số, tên level hoặc creator. Tìm chính xác những gì bạn đang tìm kiếm!"
+      },
       "more_coming": {
         "title": "Ừm... đó là tất cả",
         "description": "Đừng lo lắng. Sẽ có thêm nhiều tính năng cho supporter trong tương lai."
@@ -1124,5 +1128,26 @@
     "try_different_name": "Thử tên khác hoặc dùng",
     "rating": "Điểm",
     "rank": "Hạng"
+  },
+  "list_filter": {
+    "title": "Lọc Levels",
+    "pin": "Ghim bộ lọc",
+    "unpin": "Bỏ ghim bộ lọc",
+    "expand": "Mở rộng bộ lọc",
+    "collapse": "Thu gọn bộ lọc",
+    "supporter_exclusive": "Dành cho Supporter",
+    "supporter_only": "Tính năng lọc nâng cao chỉ dành cho supporter. Trở thành supporter để mở khóa tính năng này!",
+    "top_range": "Phạm vi Top",
+    "from": "Từ",
+    "to": "Đến",
+    "rating_range": "Phạm vi Điểm",
+    "min": "Tối thiểu",
+    "max": "Tối đa",
+    "level_name": "Tên Level",
+    "search_by_name": "Tìm theo tên",
+    "creator_name": "Tên Creator",
+    "search_by_creator": "Tìm theo creator",
+    "apply": "Áp dụng",
+    "clear": "Xóa bộ lọc"
   }
 }

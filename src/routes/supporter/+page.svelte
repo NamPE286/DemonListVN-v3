@@ -150,6 +150,14 @@
 			</Card.Root>
 			<Card.Root class="w-[300px]">
 				<Card.Header>
+				<Card.Title>{$_('supporter.perks.advanced_filtering.title')}</Card.Title>
+				<Card.Description class="w-[250px]">
+					{$_('supporter.perks.advanced_filtering.description')}
+					</Card.Description>
+				</Card.Header>
+			</Card.Root>
+			<Card.Root class="w-[300px]">
+				<Card.Header>
 					<Card.Title>{$_('supporter.perks.discord_bot.title')}</Card.Title>
 					<Card.Description class="w-[250px]">
 						{$_('supporter.perks.discord_bot.description')}

@@ -4,6 +4,12 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
 	import { createEventDispatcher } from 'svelte';
+	import { Pin, ChevronDown, ChevronUp, Lock, Filter, Funnel } from 'lucide-svelte';
+	import { browser } from '$app/environment';
+	import { user } from '$lib/client';
+	import { isActive } from '$lib/client/isSupporterActive';
+	import { toast } from 'svelte-sonner';
+	import { _ } from 'svelte-i18n';
 
 	export let listType: 'dl' | 'pl' | 'fl' = 'dl';
 
@@ -13,8 +19,23 @@
 	let ratingMax = '';
 	let nameSearch = '';
 	let creatorSearch = '';
+	let isPinned = false;
+	let isCollapsed = true;
 
 	const dispatch = createEventDispatcher();
+
+	function togglePin() {
+		isPinned = !isPinned;
+	}
+
+	function toggleCollapse() {
+		if (isCollapsed && (!$user.loggedIn || !isActive($user.data?.supporterUntil))) {
+			toast.error($_('list_filter.supporter_only'));
+			return;
+		}
+
+		isCollapsed = !isCollapsed;
+	}
 
 	function handleApplyFilters() {
 		dispatch('filter', {
@@ -43,26 +64,57 @@
 			creatorSearch: ''
 		});
 	}
-
-	function getTopLabel() {
-		return listType === 'fl' ? 'FL Top' : 'DL Top';
-	}
 </script>
 
-<Card.Root class="filterCard">
-	<Card.Header>
-		<Card.Title>Filter Levels</Card.Title>
+<div class="filterWrapper" class:pinned={isPinned}>
+	<Card.Root class="filterCard">
+		<Card.Header>
+			<div class="headerContent">
+				<div class="headerTitle">
+					<span>{$_('list_filter.title')}</span>
+				</div>
+				<div class="headerButtons">
+					<button
+						class="iconButton"
+						class:active={isPinned}
+						on:click={togglePin}
+						title={isPinned ? $_('list_filter.unpin') : $_('list_filter.pin')}
+					>
+						<div class="pinIcon" class:pinned={isPinned}>
+							<Pin size={18} />
+						</div>
+					</button>
+					<button
+					class="iconButton collapseButton"
+					class:locked={isCollapsed && (!$user.loggedIn || !isActive($user.data?.supporterUntil))}
+					class:expanded={!isCollapsed}
+					on:click={toggleCollapse}
+					title={isCollapsed ? (!$user.loggedIn || !isActive($user.data?.supporterUntil) ? $_('list_filter.supporter_exclusive') : $_('list_filter.expand')) : $_('list_filter.collapse')}
+				>
+					{#if isCollapsed}
+						{#if !$user.loggedIn || !isActive($user.data?.supporterUntil)}
+							<Lock size={18} />
+						{:else}
+							<ChevronDown size={18} />
+						{/if}
+					{:else}
+						<ChevronUp size={18} />
+					{/if}
+				</button>
+			</div>
+		</div>
 	</Card.Header>
-	<Card.Content>
+	{#if !isCollapsed}
+		<Card.Content>
 		<div class="filterGrid">
 			<div class="filterRow">
 				<div class="filterGroup">
-					<Label for="topStart">Top Range</Label>
+					<Label for="topStart">{$_('list_filter.top_range')}</Label>
 					<div class="rangeInputs">
 						<Input
 							id="topStart"
 							type="number"
-							placeholder="From"
+							placeholder={$_('list_filter.from')}
 							bind:value={topStart}
 							on:keypress={(e) => e.key === 'Enter' && handleApplyFilters()}
 						/>
@@ -70,19 +122,19 @@
 						<Input
 							id="topEnd"
 							type="number"
-							placeholder="To"
+							placeholder={$_('list_filter.to')}
 							bind:value={topEnd}
 							on:keypress={(e) => e.key === 'Enter' && handleApplyFilters()}
 						/>
 					</div>
 				</div>
 				<div class="filterGroup">
-					<Label for="ratingMin">Rating Range</Label>
+					<Label for="ratingMin">{$_('list_filter.rating_range')}</Label>
 					<div class="rangeInputs">
 						<Input
 							id="ratingMin"
 							type="number"
-							placeholder="Min"
+							placeholder={$_('list_filter.min')}
 							bind:value={ratingMin}
 							on:keypress={(e) => e.key === 'Enter' && handleApplyFilters()}
 						/>
@@ -90,7 +142,7 @@
 						<Input
 							id="ratingMax"
 							type="number"
-							placeholder="Max"
+							placeholder={$_('list_filter.max')}
 							bind:value={ratingMax}
 							on:keypress={(e) => e.key === 'Enter' && handleApplyFilters()}
 						/>
@@ -99,39 +151,125 @@
 			</div>
 			<div class="filterRow">
 				<div class="filterGroup">
-					<Label for="nameSearch">Level Name</Label>
+					<Label for="nameSearch">{$_('list_filter.level_name')}</Label>
 					<Input
 						id="nameSearch"
 						type="text"
-						placeholder="Search by name..."
+						placeholder={$_('list_filter.search_by_name')}
 						bind:value={nameSearch}
 						on:keypress={(e) => e.key === 'Enter' && handleApplyFilters()}
 					/>
 				</div>
 				<div class="filterGroup">
-					<Label for="creatorSearch">Creator Name</Label>
+					<Label for="creatorSearch">{$_('list_filter.creator_name')}</Label>
 					<Input
 						id="creatorSearch"
 						type="text"
-						placeholder="Search by creator..."
+						placeholder={$_('list_filter.search_by_creator')}
 						bind:value={creatorSearch}
 						on:keypress={(e) => e.key === 'Enter' && handleApplyFilters()}
 					/>
 				</div>
 			</div>
 		</div>
-		<div class="filterActions">
-			<Button on:click={handleApplyFilters}>Apply Filters</Button>
-			<Button variant="outline" on:click={handleClearFilters}>Clear</Button>
-		</div>
-	</Card.Content>
-</Card.Root>
+			<div class="filterActions">
+				<Button on:click={handleApplyFilters}>{$_('list_filter.apply')}</Button>
+				<Button variant="outline" on:click={handleClearFilters}>{$_('list_filter.clear')}</Button>
+			</div>
+		</Card.Content>
+	{/if}
+	</Card.Root>
+</div>
 
 <style lang="scss">
-	:global(.filterCard) {
+	.filterWrapper {
 		margin-bottom: 20px;
-		max-width: 1020px;
+		max-width: 1010px;
+		width: 100%;
 		margin-inline: auto;
+		transition: all 0.3s ease;
+	}
+
+	.filterWrapper.pinned {
+		position: sticky;
+		top: 80px;
+		z-index: 100;
+		margin-bottom: 20px;
+	}
+
+	:global(.filterCard) {
+		width: 100%;
+	}
+
+	.headerContent {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.headerTitle {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 1.125rem;
+		font-weight: 600;
+	}
+
+	.headerButtons {
+		display: flex;
+		gap: 8px;
+	}
+
+	.iconButton {
+		background: none;
+		border: none;
+		cursor: pointer;
+		padding: 4px;
+		border-radius: 4px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--muted-foreground);
+		transition: all 0.2s ease;
+	}
+
+	.iconButton:hover {
+		background: var(--accent);
+		color: var(--accent-foreground);
+	}
+
+	.iconButton.active {
+		color: var(--primary);
+		background: var(--accent);
+	}
+
+	.iconButton.locked {
+		color: var(--muted-foreground);
+		opacity: 0.6;
+	}
+
+	.iconButton.locked:hover {
+		color: var(--destructive);
+		opacity: 1;
+	}
+
+	.pinIcon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: transform 0.3s ease;
+	}
+
+	.pinIcon.pinned {
+		transform: rotate(90deg);
+	}
+
+	.collapseButton {
+		transition: transform 0.3s ease, all 0.2s ease;
+	}
+
+	.collapseButton.expanded {
+		transform: rotate(180deg);
 	}
 
 	.filterGrid {

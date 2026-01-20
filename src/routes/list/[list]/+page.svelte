@@ -9,12 +9,16 @@
 	import { goto } from '$app/navigation';
 	import { getListCache, setListCache } from '$lib/client/listCache';
 	import { browser } from '$app/environment';
+	import { ChevronUp } from 'lucide-svelte';
+	import { fly, slide } from 'svelte/transition';
+	import { isActive } from '$lib/client/isSupporterActive';
 
 	export let data: PageData;
 	let prefix = data.levels.slice(0, 4);
 	let curPage = 1;
 	let loaded = true;
 	let unsubscribeUser: (() => void) | null = null;
+	let showScrollToTop = false;
 	let filters = {
 		topStart: null as string | null,
 		topEnd: null as string | null,
@@ -109,6 +113,22 @@
 		return 'None';
 	}
 
+	function scrollToTop() {
+		if (browser) {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		}
+	}
+
+	function handleScroll() {
+		if (browser) {
+			showScrollToTop = window.pageYOffset > 300;
+
+			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1500) {
+				fetchData();
+			}
+		}
+	}
+
 	$: (data, update());
 
 	onMount(() => {
@@ -118,7 +138,7 @@
 
 		const key = getCacheKey();
 		const cached = getListCache(key);
-		
+
 		if (cached) {
 			data.levels = cached.levels as PageData['levels'];
 			curPage = cached.curPage;
@@ -130,11 +150,7 @@
 			}
 		});
 
-		window.onscroll = function (ev) {
-			if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight - 1500) {
-				fetchData();
-			}
-		};
+		window.addEventListener('scroll', handleScroll);
 	});
 
 	onDestroy(() => {
@@ -150,7 +166,7 @@
 			unsubscribeUser();
 		}
 
-		window.onscroll = null;
+		window.removeEventListener('scroll', handleScroll);
 	});
 </script>
 
@@ -166,6 +182,17 @@
 		{/each}
 	</div>
 </div>
+
+{#if showScrollToTop}
+	<button
+		class="scrollToTop"
+		on:click={scrollToTop}
+		title="Scroll to top"
+		transition:fly={{ y: 20, duration: 300 }}
+	>
+		<ChevronUp size={24} />
+	</button>
+{/if}
 
 <style lang="scss">
 	.levelsWrapper {
@@ -188,5 +215,35 @@
 		.levels {
 			grid-template-columns: 100%;
 		}
+	}
+
+	.scrollToTop {
+		position: fixed;
+		bottom: 24px;
+		right: 24px;
+		width: 48px;
+		height: 48px;
+		border-radius: 50%;
+		background: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+		border: none;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+		transition: all 0.3s ease;
+		z-index: 999;
+		opacity: 0.9;
+	}
+
+	.scrollToTop:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 6px 16px rgba(0, 0, 0, 0.6);
+		opacity: 1;
+	}
+
+	.scrollToTop:active {
+		transform: translateY(-2px);
 	}
 </style>

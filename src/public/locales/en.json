@@ -863,6 +863,10 @@
         "title": "Be the first to try our newest feature",
         "description": "Gain early access to new releases with new features before they go public!"
       },
+      "advanced_filtering": {
+        "title": "Advanced Level Filtering",
+        "description": "Filter levels with precision - search by top range, rating, level name, or creator. Find exactly what you're looking for!"
+      },
       "more_coming": {
         "title": "Umm... that pretty much it",
         "description": "Don't worry. More feature for supporters will be added in the future."
@@ -1125,5 +1129,26 @@
     "try_different_name": "Try a different name or use",
     "rating": "Rating",
     "rank": "Rank"
+  },
+  "list_filter": {
+    "title": "Filter Levels",
+    "pin": "Pin filter",
+    "unpin": "Unpin filter",
+    "expand": "Expand filter",
+    "collapse": "Collapse filter",
+    "supporter_exclusive": "Supporter Exclusive",
+    "supporter_only": "Advanced filtering is available for supporters only. Become a supporter to unlock this feature!",
+    "top_range": "Top Range",
+    "from": "From",
+    "to": "To",
+    "rating_range": "Rating Range",
+    "min": "Min",
+    "max": "Max",
+    "level_name": "Level Name",
+    "search_by_name": "Search by name",
+    "creator_name": "Creator Name",
+    "search_by_creator": "Search by creator",
+    "apply": "Apply Filters",
+    "clear": "Clear Filters"
   }
 }
