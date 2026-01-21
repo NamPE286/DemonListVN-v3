@@ -186,83 +186,62 @@
 <Title value="Map Pack Manager" />
 
 <div class="wrapper">
-	<Card.Root>
-		<Card.Header class="flex flex-row items-center justify-between">
-			<Card.Title>General Map Packs</Card.Title>
-			<Button size="sm" on:click={openNewGeneralMapPack}>
-				<Plus class="mr-1 h-4 w-4" />
-				Create Map Pack
-			</Button>
-		</Card.Header>
-		<Card.Content>
-			<div class="flex flex-col gap-4">
-				{#each generalMapPacks as pack}
-					<Card.Root class="border">
-						<Card.Content class="p-4">
-							<div class="flex items-start justify-between">
-								<div class="flex-1">
-									<h4 class="font-bold">{pack.name} (ID: {pack.id})</h4>
-									<p class="text-sm text-muted-foreground">{pack.description || '-'}</p>
-									<div class="mt-2 flex items-center gap-4 text-sm">
-										<span class="capitalize">{pack.difficulty}</span>
-										<span class="text-yellow-400">+{pack.xp} XP</span>
-									</div>
-									{#if pack.mapPackLevels?.length}
-										<div class="mt-2 flex flex-wrap gap-2">
-											{#each pack.mapPackLevels as level}
-												<div
-													class="flex items-center gap-1 rounded bg-muted px-2 py-1 text-xs"
-												>
-													<span>{level.levels?.name || level.levelID}</span>
-													{#if level.levels?.creator}
-														<span class="text-muted-foreground">by {level.levels.creator}</span>
-													{/if}
-													<Button
-														variant="ghost"
-														size="icon"
-														class="h-4 w-4"
-														on:click={() => deleteMapPackLevel(pack.id, level.id)}
-													>
-														<Trash2 class="h-3 w-3" />
-													</Button>
-												</div>
-											{/each}
-										</div>
-									{/if}
-								</div>
-								<div class="flex gap-2">
-									<Button
-										variant="outline"
-										size="sm"
-										on:click={() => openAddMapPackLevel(pack.id)}
-									>
-										<Plus class="mr-1 h-4 w-4" />
-										Level
-									</Button>
-									<Button
-										variant="outline"
-										size="icon"
-										on:click={() => openEditGeneralMapPack(pack)}
-									>
-										<Edit class="h-4 w-4" />
-									</Button>
-									<Button
-										variant="destructive"
-										size="icon"
-										on:click={() => deleteGeneralMapPack(pack.id)}
-									>
-										<Trash2 class="h-4 w-4" />
-									</Button>
-								</div>
+	<div class="flex flex-col gap-4">
+		{#each generalMapPacks as pack}
+			<Card.Root class="border">
+				<Card.Content class="p-4">
+					<div class="flex items-start justify-between">
+						<div class="flex-1">
+							<h4 class="font-bold">{pack.name} (ID: {pack.id})</h4>
+							<p class="text-sm text-muted-foreground">{pack.description || '-'}</p>
+							<div class="mt-2 flex items-center gap-4 text-sm">
+								<span class="capitalize">{pack.difficulty}</span>
+								<span class="text-yellow-400">+{pack.xp} XP</span>
 							</div>
-						</Card.Content>
-					</Card.Root>
-				{:else}
-					<p class="py-8 text-center text-muted-foreground">No map packs created</p>
-				{/each}
-			</div>
-		</Card.Content>
-	</Card.Root>
+							{#if pack.mapPackLevels?.length}
+								<div class="mt-2 flex flex-wrap gap-2">
+									{#each pack.mapPackLevels as level}
+										<div class="flex items-center gap-1 rounded bg-muted px-2 py-1 text-xs">
+											<a href={`/level/${level.levelID}`}>{level.levels?.name}</a>
+											{#if level.levels?.creator}
+												<span class="text-muted-foreground">by {level.levels.creator}</span>
+											{/if}
+											<Button
+												variant="ghost"
+												size="icon"
+												class="h-4 w-4"
+												on:click={() => deleteMapPackLevel(pack.id, level.id)}
+											>
+												<Trash2 class="h-3 w-3" />
+											</Button>
+										</div>
+									{/each}
+								</div>
+							{/if}
+						</div>
+						<div class="flex gap-2">
+							<Button variant="outline" size="sm" on:click={() => openAddMapPackLevel(pack.id)}>
+								<Plus class="mr-1 h-4 w-4" />
+								Level
+							</Button>
+							<Button variant="outline" size="icon" on:click={() => openEditGeneralMapPack(pack)}>
+								<Edit class="h-4 w-4" />
+							</Button>
+							<Button
+								variant="destructive"
+								size="icon"
+								on:click={() => deleteGeneralMapPack(pack.id)}
+							>
+								<Trash2 class="h-4 w-4" />
+							</Button>
+						</div>
+					</div>
+				</Card.Content>
+			</Card.Root>
+		{:else}
+			<p class="py-8 text-center text-muted-foreground">No map packs created</p>
+		{/each}
+	</div>
 </div>
 
 <!-- General Map Pack Dialog -->

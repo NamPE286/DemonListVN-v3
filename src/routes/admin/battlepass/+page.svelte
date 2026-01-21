@@ -11,6 +11,7 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Switch } from '$lib/components/ui/switch/index.js';
+	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
@@ -20,7 +21,15 @@
 	import Edit from 'lucide-svelte/icons/pencil';
 	import RefreshCw from 'lucide-svelte/icons/refresh-cw';
 	import Info from 'lucide-svelte/icons/info';
-	import { MAP_PACK_DIFFICULTY_OPTIONS, MISSION_CONDITION_TYPES } from '$lib/battlepass/constants';
+	import Gift from 'lucide-svelte/icons/gift';
+	import Search from 'lucide-svelte/icons/search';
+	import X from 'lucide-svelte/icons/x';
+	import {
+		MAP_PACK_DIFFICULTY_OPTIONS,
+		MISSION_CONDITION_TYPES,
+		MAX_TIER,
+		XP_PER_TIER
+	} from '$lib/battlepass/constants';
 
 	// State
 	let seasons: any[] = [];
@@ -79,6 +88,13 @@
 		description: ''
 	};
 
+	// Item search state
+	let itemSearchQuery = '';
+	let itemSearchResults: any[] = [];
+	let selectedItem: any = null;
+	let itemSearchLoading = false;
+	let itemSearchTimeout: any;
+
 	let missionForm = {
 		id: null as number | null,
 		title: '',
@@ -100,6 +116,36 @@
 		const d = new Date(x);
 		d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
 		return d.toISOString().slice(0, 16);
+	}
+
+	function rarityColor(r: number) {
+		switch (r) {
+			case 1:
+				return '#3b82f6';
+			case 2:
+				return '#a855f7';
+			case 3:
+				return '#ec4899';
+			case 4:
+				return '#dc2626';
+			default:
+				return '#9ca3af';
+		}
+	}
+
+	function rarityName(r: number) {
+		switch (r) {
+			case 1:
+				return 'Uncommon';
+			case 2:
+				return 'Rare';
+			case 3:
+				return 'Epic';
+			case 4:
+				return 'Legendary';
+			default:
+				return 'Common';
+		}
 	}
 
 	// Fetch functions
@@ -390,8 +436,14 @@
 		);
 	}
 
-	async function deleteReward(id: number) {
-		if (!confirm('Delete this reward?')) return;
+	async function deleteReward(id: number | null) {
+		if (id == null) {
+			return;
+		}
+
+		if (!confirm('Delete this reward?')) {
+			return;
+		}
 
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/battlepass/reward/${id}`, {
@@ -558,7 +610,76 @@
 
 	function openNewReward() {
 		rewardForm = { id: null, tier: 1, isPremium: false, itemId: '', quantity: 1, description: '' };
+		selectedItem = null;
+		itemSearchQuery = '';
+		itemSearchResults = [];
 		showRewardDialog = true;
+	}
+
+	function openEditReward(reward: any) {
+		rewardForm = {
+			id: reward.id,
+			tier: reward.tier,
+			isPremium: reward.isPremium,
+			itemId: reward.itemId,
+			quantity: reward.quantity,
+			description: reward.description
+		};
+		// Set selected item if editing
+		if (reward.items) {
+			selectedItem = reward.items;
+		}
+		showRewardDialog = true;
+	}
+
+	async function searchItems() {
+		if (!itemSearchQuery.trim()) {
+			itemSearchResults = [];
+			return;
+		}
+
+		itemSearchLoading = true;
+		try {
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/item/search?q=${encodeURIComponent(itemSearchQuery)}`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token())
+					}
+				}
+			);
+			itemSearchResults = await res.json();
+		} catch (e) {
+			console.error(e);
+			itemSearchResults = [];
+		} finally {
+			itemSearchLoading = false;
+		}
+	}
+
+	function handleItemSearchInput() {
+		clearTimeout(itemSearchTimeout);
+		itemSearchTimeout = setTimeout(() => {
+			searchItems();
+		}, 300);
+	}
+
+	function selectItem(item: any) {
+		selectedItem = item;
+		rewardForm.itemId = item.id;
+		rewardForm.description = item.name;
+	}
+
+	function clearItemSelection() {
+		selectedItem = null;
+		rewardForm.itemId = '';
+	}
+
+	function resetRewardDialog() {
+		selectedItem = null;
+		itemSearchQuery = '';
+		itemSearchResults = [];
 	}
 
 	function openNewMission() {
@@ -791,67 +912,151 @@
 			</Tabs.Content>
 
 			<!-- Tier Rewards Tab -->
-			<Tabs.Content value="rewards">
-				<Card.Root>
-					<Card.Header class="flex flex-row items-center justify-between">
-						<Card.Title>Tier Rewards</Card.Title>
-						<Button size="sm" on:click={openNewReward}>
-							<Plus class="mr-1 h-4 w-4" />
-							Add Reward
-						</Button>
-					</Card.Header>
-					<Card.Content>
-						<Table.Root>
-							<Table.Header>
-								<Table.Row>
-									<Table.Head>ID</Table.Head>
-									<Table.Head>Tier</Table.Head>
-									<Table.Head>Type</Table.Head>
-									<Table.Head>Item ID</Table.Head>
-									<Table.Head>Quantity</Table.Head>
-									<Table.Head>Description</Table.Head>
-									<Table.Head>Actions</Table.Head>
-								</Table.Row>
-							</Table.Header>
-							<Table.Body>
-								{#each rewards.sort((a, b) => a.tier - b.tier) as reward}
-									<Table.Row>
-										<Table.Cell>{reward.id}</Table.Cell>
-										<Table.Cell>{reward.tier}</Table.Cell>
-										<Table.Cell>
-											{#if reward.isPremium}
-												<span class="flex items-center gap-1 text-yellow-400">
-													<Crown class="h-4 w-4" />
-													Premium
+			<Tabs.Content value="rewards" class="w-full">
+				<div class="mb-4 flex items-center justify-between">
+					<div>
+						<h2 class="text-2xl font-bold">Tier Rewards</h2>
+						<p class="text-sm text-muted-foreground">
+							Manage rewards for each tier. Click on a tier slot to edit.
+						</p>
+					</div>
+					<Button size="sm" on:click={openNewReward}>
+						<Plus class="mr-1 h-4 w-4" />
+						Add Reward
+					</Button>
+				</div>
+
+				<div class="tier-track-container overflow-x-auto pb-4">
+					<div class="flex flex-col gap-2 px-4" style="min-width: max-content;">
+						<!-- Premium Rewards Row -->
+						<div class="flex gap-4">
+							{#each Array(MAX_TIER) as _, i}
+								{@const tier = i + 1}
+								{@const tierRewards = rewards.filter((r) => r.tier === tier)}
+								{@const premiumRewards = tierRewards.filter((r) => r.isPremium)}
+								<div class="flex w-20 flex-col items-center gap-1">
+									{#each premiumRewards as premiumReward}
+										<button
+											class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 border-yellow-500 bg-yellow-500/10 transition-all hover:scale-105 hover:bg-yellow-500/20"
+											on:click={() => openEditReward(premiumReward)}
+										>
+											<Crown class="absolute -right-1 -top-1 h-5 w-5 text-yellow-500" />
+											{#if premiumReward.quantity > 1}
+												<span
+													class="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white"
+												>
+													{premiumReward.quantity}
 												</span>
-											{:else}
-												<span class="text-blue-400">Free</span>
 											{/if}
-										</Table.Cell>
-										<Table.Cell>{reward.itemId}</Table.Cell>
-										<Table.Cell>{reward.quantity}</Table.Cell>
-										<Table.Cell>{reward.description || '-'}</Table.Cell>
-										<Table.Cell>
-											<Button
-												variant="destructive"
-												size="icon"
-												on:click={() => deleteReward(reward.id)}
-											>
-												<Trash2 class="h-4 w-4" />
-											</Button>
-										</Table.Cell>
-									</Table.Row>
-								{:else}
-									<Table.Row>
-										<Table.Cell colspan={7} class="text-center text-muted-foreground">
-											No rewards added
-										</Table.Cell>
-									</Table.Row>
-								{/each}
-							</Table.Body>
-						</Table.Root>
-					</Card.Content>
-				</Card.Root>
+											<div class="flex items-center justify-center p-2">
+												{#if premiumReward.items?.id || premiumReward.itemId}
+													<img
+														class="h-12 w-12 object-contain"
+														src={`https://cdn.demonlistvn.com/items/${premiumReward.items?.id || premiumReward.itemId}.webp`}
+														alt={premiumReward.description}
+													/>
+												{:else}
+													<Gift class="h-8 w-8" />
+												{/if}
+											</div>
+										</button>
+									{/each}
+									<!-- Add Premium Reward Button -->
+									<button
+										class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 border-yellow-500/30 bg-yellow-500/5 transition-all hover:scale-105 hover:bg-yellow-500/10"
+										on:click={() => {
+											selectedItem = null;
+											itemSearchQuery = '';
+											itemSearchResults = [];
+											showRewardDialog = true;
+											rewardForm = {
+												id: null,
+												tier: tier,
+												isPremium: true,
+												itemId: '',
+												quantity: 1,
+												description: ''
+											};
+										}}
+									>
+										<Crown class="absolute -right-1 -top-1 h-5 w-5 text-yellow-500" />
+										<Plus class="h-8 w-8 text-yellow-500/50" />
+									</button>
+								</div>
+							{/each}
+						</div>
+
+						<!-- Tier Numbers Row -->
+						<div class="flex gap-4">
+							{#each Array(MAX_TIER) as _, i}
+								{@const tier = i + 1}
+								<div class="flex w-20 items-center justify-center">
+									<div
+										class="tier-number flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 text-sm font-bold text-black"
+									>
+										{tier}
+									</div>
+								</div>
+							{/each}
+						</div>
+
+						<!-- Free Rewards Row -->
+						<div class="flex gap-4">
+							{#each Array(MAX_TIER) as _, i}
+								{@const tier = i + 1}
+								{@const tierRewards = rewards.filter((r) => r.tier === tier)}
+								{@const freeRewards = tierRewards.filter((r) => !r.isPremium)}
+								<div class="flex w-20 flex-col items-center gap-1">
+									{#each freeRewards as freeReward}
+										<button
+											class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 border-blue-500 bg-blue-500/10 transition-all hover:scale-105 hover:bg-blue-500/20"
+											on:click={() => openEditReward(freeReward)}
+										>
+											{#if freeReward.quantity > 1}
+												<span
+													class="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white"
+												>
+													{freeReward.quantity}
+												</span>
+											{/if}
+											<div class="flex items-center justify-center p-2">
+												{#if freeReward.items?.id || freeReward.itemId}
+													<img
+														class="h-12 w-12 object-contain"
+														src={`https://cdn.demonlistvn.com/items/${freeReward.items?.id || freeReward.itemId}.webp`}
+														alt={freeReward.description}
+													/>
+												{:else}
+													<Gift class="h-8 w-8" />
+												{/if}
+											</div>
+										</button>
+									{/each}
+									<!-- Add Free Reward Button -->
+									<button
+										class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 border-muted bg-muted/30 transition-all hover:scale-105 hover:bg-muted/50"
+										on:click={() => {
+											selectedItem = null;
+											itemSearchQuery = '';
+											itemSearchResults = [];
+											showRewardDialog = true;
+											rewardForm = {
+												id: null,
+												tier: tier,
+												isPremium: false,
+												itemId: '',
+												quantity: 1,
+												description: ''
+											};
+										}}
+									>
+										<Plus class="h-8 w-8 text-muted-foreground/50" />
+									</button>
+								</div>
+							{/each}
+						</div>
+					</div>
+				</div>
 			</Tabs.Content>
 
 			<!-- Missions Tab -->
@@ -1057,10 +1262,10 @@
 </Dialog.Root>
 
 <!-- Reward Dialog -->
-<Dialog.Root bind:open={showRewardDialog}>
+<Dialog.Root bind:open={showRewardDialog} onOpenChange={(open) => !open && resetRewardDialog()}>
 	<Dialog.Content class="max-w-lg">
 		<Dialog.Header>
-			<Dialog.Title>Add Tier Reward</Dialog.Title>
+			<Dialog.Title>{rewardForm.id ? 'Edit' : 'Add'} Tier Reward</Dialog.Title>
 		</Dialog.Header>
 		<div class="flex flex-col gap-4">
 			<div class="grid grid-cols-2 gap-4">
@@ -1073,24 +1278,111 @@
 					<Label>Premium Reward</Label>
 				</div>
 			</div>
-			<div class="grid grid-cols-2 gap-4">
-				<div>
-					<Label for="rewardItem">Item ID</Label>
-					<Input id="rewardItem" type="number" bind:value={rewardForm.itemId} />
+
+			<!-- Item Selection -->
+			{#if selectedItem}
+				<div class="flex items-center gap-3 rounded-lg border p-3">
+					<div
+						class="flex h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-md bg-neutral-800"
+						style="border-bottom: 3px solid {rarityColor(selectedItem.rarity)};"
+					>
+						<img
+							class="max-h-full max-w-full object-contain p-1"
+							src={`https://cdn.demonlistvn.com/items/${selectedItem.id}.webp`}
+							alt={selectedItem.name}
+						/>
+					</div>
+					<div class="flex-1">
+						<div class="font-medium">{selectedItem.name}</div>
+						<div class="text-sm" style="color: {rarityColor(selectedItem.rarity)}">
+							{rarityName(selectedItem.rarity)}
+						</div>
+					</div>
+					<Button variant="ghost" size="sm" on:click={clearItemSelection}>
+						<X class="h-4 w-4" />
+					</Button>
 				</div>
+			{:else}
 				<div>
-					<Label for="rewardQty">Quantity</Label>
-					<Input id="rewardQty" type="number" bind:value={rewardForm.quantity} min="1" />
+					<Label>Search Item</Label>
+					<div class="relative mt-2">
+						<Search
+							class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+						/>
+						<Input
+							placeholder="Search items by name or ID..."
+							bind:value={itemSearchQuery}
+							on:input={handleItemSearchInput}
+							class="pl-9"
+						/>
+					</div>
 				</div>
-			</div>
+				{#if itemSearchLoading}
+					<p class="text-center text-sm text-muted-foreground">Searching...</p>
+				{:else if itemSearchResults.length > 0}
+					<ScrollArea class="h-[250px] rounded-md border">
+						<div class="p-2">
+							{#each itemSearchResults as item}
+								<button
+									class="flex w-full items-center gap-3 rounded-lg p-2 text-left transition-colors hover:bg-accent"
+									on:click={() => selectItem(item)}
+								>
+									<div
+										class="flex h-[50px] w-[50px] items-center justify-center overflow-hidden rounded-md bg-neutral-800"
+										style="border-bottom: 3px solid {rarityColor(item.rarity)};"
+									>
+										<img
+											class="max-h-full max-w-full object-contain p-1"
+											src={`https://cdn.demonlistvn.com/items/${item.id}.webp`}
+											alt={item.name}
+										/>
+									</div>
+									<div>
+										<div class="font-medium">{item.name}</div>
+										<div class="text-xs text-muted-foreground">
+											ID: {item.id} •
+											<span style="color: {rarityColor(item.rarity)}"
+												>{rarityName(item.rarity)}</span
+											>
+										</div>
+									</div>
+								</button>
+							{/each}
+						</div>
+					</ScrollArea>
+				{:else if itemSearchQuery}
+					<p class="text-center text-sm text-muted-foreground">No items found</p>
+				{:else}
+					<p class="text-center text-sm text-muted-foreground">Start typing to search for items</p>
+				{/if}
+			{/if}
+
 			<div>
-				<Label for="rewardDesc">Description</Label>
-				<Input id="rewardDesc" bind:value={rewardForm.description} placeholder="Basic Crate" />
+				<Label for="rewardQty">Quantity</Label>
+				<Input id="rewardQty" type="number" bind:value={rewardForm.quantity} min="1" />
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button variant="outline" on:click={() => (showRewardDialog = false)}>Cancel</Button>
-			<Button on:click={saveReward}>Save</Button>
+			<div class="flex w-full items-center justify-between">
+				<div>
+					{#if rewardForm.id}
+						<Button
+							variant="destructive"
+							on:click={() => {
+								deleteReward(rewardForm.id);
+								showRewardDialog = false;
+							}}
+						>
+							<Trash2 class="mr-1 h-4 w-4" />
+							Delete
+						</Button>
+					{/if}
+				</div>
+				<div class="flex gap-2">
+					<Button variant="outline" on:click={() => (showRewardDialog = false)}>Cancel</Button>
+					<Button on:click={saveReward} disabled={!selectedItem && !rewardForm.itemId}>Save</Button>
+				</div>
+			</div>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>
