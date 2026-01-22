@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Gift from 'lucide-svelte/icons/gift';
 	import Lock from 'lucide-svelte/icons/lock';
+	import Crown from 'lucide-svelte/icons/crown';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import RewardItemDetails from '$lib/components/RewardItemDetails.svelte';
 	import { get } from 'svelte/store';
@@ -20,6 +21,33 @@
 	$: shouldReduceOpacity = !isClaimable && !isPremiumLocked;
 
 	$: itemData = reward?.items || reward;
+
+	function rarityColor(r: number) {
+		switch (r) {
+			case 1:
+				return '#3b82f6';
+			case 2:
+				return '#a855f7';
+			case 3:
+				return '#ec4899';
+			case 4:
+				return '#dc2626';
+			default:
+				return '#9ca3af';
+		}
+	}
+
+	function hexToRgba(hex: string, alpha: number) {
+		const normalized = hex.replace('#', '');
+		const r = parseInt(normalized.slice(0, 2), 16);
+		const g = parseInt(normalized.slice(2, 4), 16);
+		const b = parseInt(normalized.slice(4, 6), 16);
+		return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+	}
+
+	$: borderColor = rarityColor(itemData?.rarity ?? 0);
+	$: borderOpacity = (isPremiumLocked || shouldReduceOpacity) ? 0.3 : 1;
+	$: borderColorRgba = hexToRgba(borderColor, borderOpacity);
 </script>
 
 {#if !editable}
@@ -29,15 +57,7 @@
 				{...builder}
 				use:builder.action
 				class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 transition-all"
-				class:border-yellow-500={isPremiumTrack && !isPremiumLocked}
-				class:bg-yellow-500-10={isPremiumTrack && !isPremiumLocked}
-				class:border-yellow-500-30={isPremiumTrack && isPremiumLocked}
-				class:bg-yellow-500-5={isPremiumTrack && isPremiumLocked}
-				class:border-blue-500={!isPremiumTrack && isClaimable}
-				class:bg-blue-500-10={!isPremiumTrack && isClaimable}
-				class:border-muted={!isPremiumTrack && !isClaimable}
-				class:bg-muted-30={!isPremiumTrack && !isClaimable}
-				class:opacity-50={shouldReduceOpacity}
+				style="border-color: {borderColorRgba}; background-color: {isPremiumTrack ? 'rgb(234 179 8 / 0.1)' : 'transparent'}"
 				class:hover:scale-105={isClaimable}
 				class:reward-claimable={isClaimable}
 				on:click={() => {
@@ -46,27 +66,29 @@
 					}
 				}}
 			>
+				{#if isPremiumLocked}
+					<div class="absolute right-0.5 top-0.5 z-30">
+						<Crown class="h-5 w-5 text-yellow-400 fill-yellow-400" />
+					</div>
+				{/if}
 				{#if reward.quantity > 1}
 					<span
 						class="quantity-badge absolute bottom-0.5 right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-bold"
-						class:bg-yellow-500={isPremiumTrack}
-						class:text-black={isPremiumTrack}
-						class:bg-blue-500={!isPremiumTrack}
-						class:text-white={!isPremiumTrack}
+						style="background-color: {borderColor}; color: white;"
 					>
 						{reward.quantity}
 					</span>
 				{/if}
-				{#if isPremiumLocked}
-					<div class="absolute inset-0 flex items-center justify-center rounded-xl bg-black/50">
-						<Lock class="h-6 w-6 text-muted-foreground" />
+				{#if isPremiumLocked || !isClaimable}
+					<div class="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/50">
+						<Lock class="h-6 w-6" />
 					</div>
 				{:else if isClaimable}
 					<div class="absolute inset-0 flex items-center justify-center rounded-xl bg-green-500/20">
 						<Gift class="h-8 w-8 text-green-400" />
 					</div>
 				{/if}
-				<div class="flex items-center justify-center p-2">
+				<div class="relative z-0 flex items-center justify-center p-2" class:opacity-50={shouldReduceOpacity}>
 					{#if reward.items?.id || reward.itemId}
 						<img
 							class="h-12 w-12 object-contain"
@@ -88,13 +110,8 @@
 {:else}
 	<button
 		class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 transition-all"
-		class:border-yellow-500={isPremiumTrack}
-		class:bg-yellow-500-10={isPremiumTrack}
-		class:border-blue-500={!isPremiumTrack}
-		class:bg-blue-500-10={!isPremiumTrack}
+		style="border-color: {borderColorRgba}; background-color: {isPremiumTrack ? 'rgb(234 179 8 / 0.1)' : 'transparent'}"
 		class:hover:scale-105={true}
-		class:hover:bg-yellow-500-20={isPremiumTrack}
-		class:hover:bg-blue-500-20={!isPremiumTrack}
 		on:click={() => {
 			if (onRewardClick) {
 				onRewardClick();
@@ -104,10 +121,7 @@
 		{#if reward.quantity > 1}
 			<span
 				class="quantity-badge absolute bottom-0.5 right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-bold"
-				class:bg-yellow-500={isPremiumTrack}
-				class:text-black={isPremiumTrack}
-				class:bg-blue-500={!isPremiumTrack}
-				class:text-white={!isPremiumTrack}
+				style="background-color: {borderColor}; color: white;"
 			>
 				{reward.quantity}
 			</span>
