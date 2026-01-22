@@ -28,6 +28,7 @@
 		DIFFICULTY_COLORS,
 		DIFFICULTY_NAMES
 	} from '$lib/battlepass/constants';
+	import TierRewardTrack from '$lib/components/TierRewardTrack.svelte';
 
 	export let data: PageData;
 
@@ -224,26 +225,6 @@
 		return DIFFICULTY_NAMES[difficulty?.toLowerCase()] || difficulty || 'Unknown';
 	}
 
-	function getTierRewards(tier: number) {
-		return data.rewards.filter((r: any) => r.tier === tier);
-	}
-
-	function getFreeRewards(tierRewards: any[]) {
-		return tierRewards.filter((r: any) => !r.isPremium);
-	}
-
-	function getPremiumRewards(tierRewards: any[]) {
-		return tierRewards.filter((r: any) => r.isPremium);
-	}
-
-	function isTierUnlocked(tier: number) {
-		return currentTier >= tier;
-	}
-
-	function isRewardClaimable(reward: any) {
-		return reward && claimableRewards.some((r) => r.id === reward.id);
-	}
-
 	onMount(async () => {
 		loading = true;
 		if ($user.loggedIn) {
@@ -426,152 +407,14 @@
 					<p class="text-muted-foreground">{$_('battlepass.tier_rewards_desc')}</p>
 				</div>
 
-				<div class="tier-track-container overflow-x-auto pb-4">
-					<div class="flex flex-col gap-2 px-4" style="min-width: max-content;">
-						<!-- Premium Rewards Row -->
-						<div class="flex gap-4">
-							{#each Array(MAX_TIER) as _, i}
-								{@const tier = i + 1}
-								{@const tierRewards = getTierRewards(tier)}
-								{@const premiumRewards = getPremiumRewards(tierRewards)}
-								{@const isUnlocked = isTierUnlocked(tier)}
-								<div class="flex w-20 flex-col items-center gap-1">
-									{#each premiumRewards as premiumReward}
-										<div
-											class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 transition-all {isUnlocked &&
-											isPremium
-												? 'border-yellow-500 bg-yellow-500/10'
-												: 'border-yellow-500/30 bg-yellow-500/5'}"
-											class:opacity-50={!isUnlocked || !isPremium}
-										>
-											<Crown class="absolute -right-1 -top-1 h-5 w-5 text-yellow-500" />
-											{#if premiumReward.quantity > 1}
-												<span
-													class="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white"
-												>
-													{premiumReward.quantity}
-												</span>
-											{/if}
-											{#if isRewardClaimable(premiumReward)}
-												<button
-													class="reward-claimable absolute inset-0 flex items-center justify-center rounded-xl bg-green-500/20"
-													on:click={() => claimReward(premiumReward.id)}
-												>
-													<Gift class="h-8 w-8 animate-bounce text-green-400" />
-												</button>
-											{:else}
-												<Popover.Root>
-													<Popover.Trigger>
-														<div class="flex items-center justify-center p-2">
-															{#if premiumReward.items?.id}
-																<img
-																	class="h-12 w-12 object-contain"
-																	src={`https://cdn.demonlistvn.com/items/${premiumReward.items.id}.webp`}
-																	alt={premiumReward.description}
-																/>
-															{:else}
-																<Gift class="h-8 w-8" />
-															{/if}
-														</div>
-													</Popover.Trigger>
-													<Popover.Content class="w-48">
-														<div class="text-center">
-															<p class="font-medium">
-																{premiumReward.description || 'Premium Reward'}
-															</p>
-															{#if premiumReward.quantity > 1}
-																<p class="text-sm text-blue-400">x{premiumReward.quantity}</p>
-															{/if}
-															<p class="text-sm text-yellow-500">Premium Only</p>
-														</div>
-													</Popover.Content>
-												</Popover.Root>
-											{/if}
-										</div>
-									{/each}
-								</div>
-							{/each}
-						</div>
-
-						<!-- Tier Numbers Row -->
-						<div class="flex gap-4">
-							{#each Array(MAX_TIER) as _, i}
-								{@const tier = i + 1}
-								{@const isUnlocked = isTierUnlocked(tier)}
-								<div class="flex w-20 items-center justify-center">
-									<div
-										class="tier-number flex h-10 w-10 items-center justify-center rounded-full text-sm font-bold transition-all {isUnlocked
-											? 'bg-gradient-to-br from-yellow-400 to-orange-500 text-black'
-											: 'bg-muted text-muted-foreground'}"
-									>
-										{tier}
-									</div>
-								</div>
-							{/each}
-						</div>
-
-						<!-- Free Rewards Row -->
-						<div class="flex gap-4">
-							{#each Array(MAX_TIER) as _, i}
-								{@const tier = i + 1}
-								{@const tierRewards = getTierRewards(tier)}
-								{@const freeRewards = getFreeRewards(tierRewards)}
-								{@const isUnlocked = isTierUnlocked(tier)}
-								<div class="flex w-20 flex-col items-center gap-1">
-									{#each freeRewards as freeReward}
-										<div
-											class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 transition-all {isUnlocked
-												? 'border-blue-500 bg-blue-500/10'
-												: 'border-muted bg-muted/30'}"
-											class:opacity-50={!isUnlocked}
-										>
-											{#if freeReward.quantity > 1}
-												<span
-													class="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white"
-												>
-													{freeReward.quantity}
-												</span>
-											{/if}
-											{#if isRewardClaimable(freeReward)}
-												<button
-													class="reward-claimable absolute inset-0 flex items-center justify-center rounded-xl bg-green-500/20"
-													on:click={() => claimReward(freeReward.id)}
-												>
-													<Gift class="h-8 w-8 animate-bounce text-green-400" />
-												</button>
-											{:else}
-												<Popover.Root>
-													<Popover.Trigger>
-														<div class="flex items-center justify-center p-2">
-															{#if freeReward.items?.id}
-																<img
-																	class="h-12 w-12 object-contain"
-																	src={`https://cdn.demonlistvn.com/items/${freeReward.items.id}.webp`}
-																	alt={freeReward.description}
-																/>
-															{:else}
-																<Gift class="h-8 w-8" />
-															{/if}
-														</div>
-													</Popover.Trigger>
-													<Popover.Content class="w-48">
-														<div class="text-center">
-															<p class="font-medium">{freeReward.description || 'Free Reward'}</p>
-															{#if freeReward.quantity > 1}
-																<p class="text-sm text-blue-400">x{freeReward.quantity}</p>
-															{/if}
-															<p class="text-sm text-blue-400">Free Tier</p>
-														</div>
-													</Popover.Content>
-												</Popover.Root>
-											{/if}
-										</div>
-									{/each}
-								</div>
-							{/each}
-						</div>
-					</div>
-				</div>
+				<TierRewardTrack
+					rewards={data.rewards}
+					{currentTier}
+					{isPremium}
+					{claimableRewards}
+					editable={false}
+					onClaimReward={claimReward}
+				/>
 			</Tabs.Content>
 
 			<!-- Daily/Weekly Tab -->
@@ -1071,36 +914,5 @@
 
 	.xp-bar {
 		box-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
-	}
-
-	.tier-track-container {
-		scrollbar-width: thin;
-		scrollbar-color: hsl(var(--muted)) transparent;
-	}
-
-	.tier-track-container::-webkit-scrollbar {
-		height: 8px;
-	}
-
-	.tier-track-container::-webkit-scrollbar-track {
-		background: transparent;
-	}
-
-	.tier-track-container::-webkit-scrollbar-thumb {
-		background-color: hsl(var(--muted));
-		border-radius: 4px;
-	}
-
-	.reward-claimable {
-		cursor: pointer;
-		transition: all 0.2s;
-
-		&:hover {
-			background-color: rgba(34, 197, 94, 0.3);
-		}
-	}
-
-	.tier-column {
-		min-width: 80px;
 	}
 </style>

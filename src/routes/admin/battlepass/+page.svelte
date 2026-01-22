@@ -30,6 +30,7 @@
 		MAX_TIER,
 		XP_PER_TIER
 	} from '$lib/battlepass/constants';
+	import TierRewardTrack from '$lib/components/TierRewardTrack.svelte';
 
 	// State
 	let seasons: any[] = [];
@@ -207,6 +208,21 @@
 		} catch (e) {
 			console.error('Failed to fetch rewards:', e);
 		}
+	}
+
+	function handleAddReward(tier: number, isPremium: boolean) {
+		selectedItem = null;
+		itemSearchQuery = '';
+		itemSearchResults = [];
+		showRewardDialog = true;
+		rewardForm = {
+			id: null,
+			tier: tier,
+			isPremium: isPremium,
+			itemId: '',
+			quantity: 1,
+			description: ''
+		};
 	}
 
 	async function fetchMissions() {
@@ -732,6 +748,10 @@
 		).sort(([a], [b]) => Number(a) - Number(b));
 	}
 
+	$: if (selectedSeason) {
+		fetchSeasonData();
+	}
+
 	onMount(() => {
 		fetchSeasons();
 	});
@@ -926,137 +946,15 @@
 					</Button>
 				</div>
 
-				<div class="tier-track-container overflow-x-auto pb-4">
-					<div class="flex flex-col gap-2 px-4" style="min-width: max-content;">
-						<!-- Premium Rewards Row -->
-						<div class="flex gap-4">
-							{#each Array(MAX_TIER) as _, i}
-								{@const tier = i + 1}
-								{@const tierRewards = rewards.filter((r) => r.tier === tier)}
-								{@const premiumRewards = tierRewards.filter((r) => r.isPremium)}
-								<div class="flex w-20 flex-col items-center gap-1">
-									{#each premiumRewards as premiumReward}
-										<button
-											class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 border-yellow-500 bg-yellow-500/10 transition-all hover:scale-105 hover:bg-yellow-500/20"
-											on:click={() => openEditReward(premiumReward)}
-										>
-											<Crown class="absolute -right-1 -top-1 h-5 w-5 text-yellow-500" />
-											{#if premiumReward.quantity > 1}
-												<span
-													class="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white"
-												>
-													{premiumReward.quantity}
-												</span>
-											{/if}
-											<div class="flex items-center justify-center p-2">
-												{#if premiumReward.items?.id || premiumReward.itemId}
-													<img
-														class="h-12 w-12 object-contain"
-														src={`https://cdn.demonlistvn.com/items/${premiumReward.items?.id || premiumReward.itemId}.webp`}
-														alt={premiumReward.description}
-													/>
-												{:else}
-													<Gift class="h-8 w-8" />
-												{/if}
-											</div>
-										</button>
-									{/each}
-									<!-- Add Premium Reward Button -->
-									<button
-										class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 border-yellow-500/30 bg-yellow-500/5 transition-all hover:scale-105 hover:bg-yellow-500/10"
-										on:click={() => {
-											selectedItem = null;
-											itemSearchQuery = '';
-											itemSearchResults = [];
-											showRewardDialog = true;
-											rewardForm = {
-												id: null,
-												tier: tier,
-												isPremium: true,
-												itemId: '',
-												quantity: 1,
-												description: ''
-											};
-										}}
-									>
-										<Crown class="absolute -right-1 -top-1 h-5 w-5 text-yellow-500" />
-										<Plus class="h-8 w-8 text-yellow-500/50" />
-									</button>
-								</div>
-							{/each}
-						</div>
-
-						<!-- Tier Numbers Row -->
-						<div class="flex gap-4">
-							{#each Array(MAX_TIER) as _, i}
-								{@const tier = i + 1}
-								<div class="flex w-20 items-center justify-center">
-									<div
-										class="tier-number flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 text-sm font-bold text-black"
-									>
-										{tier}
-									</div>
-								</div>
-							{/each}
-						</div>
-
-						<!-- Free Rewards Row -->
-						<div class="flex gap-4">
-							{#each Array(MAX_TIER) as _, i}
-								{@const tier = i + 1}
-								{@const tierRewards = rewards.filter((r) => r.tier === tier)}
-								{@const freeRewards = tierRewards.filter((r) => !r.isPremium)}
-								<div class="flex w-20 flex-col items-center gap-1">
-									{#each freeRewards as freeReward}
-										<button
-											class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 border-blue-500 bg-blue-500/10 transition-all hover:scale-105 hover:bg-blue-500/20"
-											on:click={() => openEditReward(freeReward)}
-										>
-											{#if freeReward.quantity > 1}
-												<span
-													class="absolute -left-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-blue-500 text-xs font-bold text-white"
-												>
-													{freeReward.quantity}
-												</span>
-											{/if}
-											<div class="flex items-center justify-center p-2">
-												{#if freeReward.items?.id || freeReward.itemId}
-													<img
-														class="h-12 w-12 object-contain"
-														src={`https://cdn.demonlistvn.com/items/${freeReward.items?.id || freeReward.itemId}.webp`}
-														alt={freeReward.description}
-													/>
-												{:else}
-													<Gift class="h-8 w-8" />
-												{/if}
-											</div>
-										</button>
-									{/each}
-									<!-- Add Free Reward Button -->
-									<button
-										class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 border-muted bg-muted/30 transition-all hover:scale-105 hover:bg-muted/50"
-										on:click={() => {
-											selectedItem = null;
-											itemSearchQuery = '';
-											itemSearchResults = [];
-											showRewardDialog = true;
-											rewardForm = {
-												id: null,
-												tier: tier,
-												isPremium: false,
-												itemId: '',
-												quantity: 1,
-												description: ''
-											};
-										}}
-									>
-										<Plus class="h-8 w-8 text-muted-foreground/50" />
-									</button>
-								</div>
-							{/each}
-						</div>
-					</div>
-				</div>
+				<TierRewardTrack
+					bind:rewards
+					currentTier={0}
+					isPremium={false}
+					claimableRewards={[]}
+					editable={true}
+					onRewardClick={openEditReward}
+					onAddRewardClick={handleAddReward}
+				/>
 			</Tabs.Content>
 
 			<!-- Missions Tab -->
