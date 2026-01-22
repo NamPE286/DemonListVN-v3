@@ -31,13 +31,24 @@
 	function isRewardClaimable(reward: any) {
 		return reward && claimableRewards.some((r) => r.id === reward.id);
 	}
+
+	function getMaxTierWithRewards(allRewards: any[]) {
+		if (!allRewards || allRewards.length === 0) return 1;
+		const maxTier = allRewards.reduce((max, reward) => {
+			const tier = typeof reward?.tier === 'number' ? reward.tier : 0;
+			return tier > max ? tier : max;
+		}, 0);
+		return Math.min(Math.max(1, maxTier), MAX_TIER);
+	}
+
+	$: maxTierToShow = getMaxTierWithRewards(rewards);
 </script>
 
 <div class="tier-track-container overflow-x-auto pb-4">
 	<div class="flex flex-col gap-2 px-4" style="min-width: max-content;">
 		<!-- Premium Rewards Row -->
 		<div class="flex gap-4">
-			{#each Array(MAX_TIER) as _, i}
+			{#each Array(maxTierToShow) as _, i}
 				{@const tier = i + 1}
 				{@const tierRewards = getTierRewards(tier, rewards)}
 				{@const premiumRewards = getPremiumRewards(tierRewards)}
@@ -69,7 +80,7 @@
 
 		<!-- Tier Numbers Row -->
 		<div class="flex gap-4">
-			{#each Array(MAX_TIER) as _, i}
+			{#each Array(maxTierToShow) as _, i}
 				{@const tier = i + 1}
 				{@const isUnlocked = isTierUnlocked(tier)}
 				<div class="flex w-20 items-center justify-center">
@@ -86,7 +97,7 @@
 
 		<!-- Free Rewards Row -->
 		<div class="flex gap-4">
-			{#each Array(MAX_TIER) as _, i}
+			{#each Array(maxTierToShow) as _, i}
 				{@const tier = i + 1}
 				{@const tierRewards = getTierRewards(tier, rewards)}
 				{@const freeRewards = getFreeRewards(tierRewards)}

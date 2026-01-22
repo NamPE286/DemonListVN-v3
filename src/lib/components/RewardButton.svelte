@@ -46,8 +46,9 @@
 	}
 
 	$: borderColor = rarityColor(itemData?.rarity ?? 0);
-	$: borderOpacity = (isPremiumLocked || shouldReduceOpacity) ? 0.3 : 1;
+	$: borderOpacity = (!editable && (isPremiumLocked || shouldReduceOpacity)) ? 0.3 : 1;
 	$: borderColorRgba = hexToRgba(borderColor, borderOpacity);
+	$: badgeBackground = hexToRgba(borderColor, 0.2);
 </script>
 
 {#if !editable}
@@ -74,7 +75,7 @@
 				{#if reward.quantity > 1}
 					<span
 						class="quantity-badge absolute bottom-0.5 right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-bold"
-						style="background-color: {borderColor}; color: white;"
+						style="background-color: {badgeBackground}; color: {borderColor};"
 					>
 						{reward.quantity}
 					</span>
@@ -121,7 +122,7 @@
 		{#if reward.quantity > 1}
 			<span
 				class="quantity-badge absolute bottom-0.5 right-0.5 flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-xs font-bold"
-				style="background-color: {borderColor}; color: white;"
+				style="background-color: {badgeBackground}; color: {borderColor};"
 			>
 				{reward.quantity}
 			</span>
