@@ -15,8 +15,8 @@
 	export let onAddRewardClick: ((tier: number, isPremium: boolean) => void) | null = null;
 	export let onClaimReward: ((rewardId: number) => void) | null = null;
 
-	function getTierRewards(tier: number) {
-		return rewards.filter((r: any) => r.tier === tier);
+	function getTierRewards(tier: number, allRewards: any[]) {
+		return allRewards.filter((r: any) => r.tier === tier);
 	}
 
 	function getFreeRewards(tierRewards: any[]) {
@@ -42,7 +42,7 @@
 		<div class="flex gap-4">
 			{#each Array(MAX_TIER) as _, i}
 				{@const tier = i + 1}
-				{@const tierRewards = getTierRewards(tier)}
+				{@const tierRewards = getTierRewards(tier, rewards)}
 				{@const premiumRewards = getPremiumRewards(tierRewards)}
 				{@const isUnlocked = isTierUnlocked(tier)}
 				<div class="flex w-20 flex-col items-center gap-1">
@@ -135,7 +135,7 @@
 		<div class="flex gap-4">
 			{#each Array(MAX_TIER) as _, i}
 				{@const tier = i + 1}
-				{@const tierRewards = getTierRewards(tier)}
+				{@const tierRewards = getTierRewards(tier, rewards)}
 				{@const freeRewards = getFreeRewards(tierRewards)}
 				{@const isUnlocked = isTierUnlocked(tier)}
 				<div class="flex w-20 flex-col items-center gap-1">
