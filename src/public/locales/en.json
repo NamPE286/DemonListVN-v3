@@ -439,7 +439,9 @@
       "claiming": "Claiming...",
       "claim_error": "Failed to claim",
       "claimed_success": "Claimed! Please check your inventory",
-      "rarity_label": "Rarity:"
+      "rarity_label": "Rarity:",
+      "quantity_label": "Quantity",
+      "description_label": "Description"
     },
     "ended": "Ended"
   },
@@ -547,8 +549,7 @@
         "proof_placeholder": "Provide proof",
         "message_placeholder": "Message (optional)",
         "continue": "Continue"
-      }
-      ,
+      },
       "toast": {
         "sent": "Sent!",
         "sending": "Sending...",
