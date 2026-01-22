@@ -11,6 +11,7 @@
 	import * as Select from '$lib/components/ui/select/index.js';
 	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { Switch } from '$lib/components/ui/switch/index.js';
+	import { ScrollArea } from '$lib/components/ui/scroll-area/index.js';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
 	import { onMount } from 'svelte';
@@ -20,7 +21,16 @@
 	import Edit from 'lucide-svelte/icons/pencil';
 	import RefreshCw from 'lucide-svelte/icons/refresh-cw';
 	import Info from 'lucide-svelte/icons/info';
-	import { MAP_PACK_DIFFICULTY_OPTIONS, MISSION_CONDITION_TYPES } from '$lib/battlepass/constants';
+	import Gift from 'lucide-svelte/icons/gift';
+	import Search from 'lucide-svelte/icons/search';
+	import X from 'lucide-svelte/icons/x';
+	import {
+		MAP_PACK_DIFFICULTY_OPTIONS,
+		MISSION_CONDITION_TYPES,
+		MAX_TIER,
+		XP_PER_TIER
+	} from '$lib/battlepass/constants';
+	import TierRewardTrack from '$lib/components/TierRewardTrack.svelte';
 
 	// State
 	let seasons: any[] = [];
@@ -30,7 +40,6 @@
 	let battlePassMapPacks: any[] = [];
 	let rewards: any[] = [];
 	let missions: any[] = [];
-	let generalMapPacks: any[] = [];
 
 	// Dialog states
 	let showSeasonDialog = false;
@@ -38,10 +47,9 @@
 	let showMapPackDialog = false;
 	let showRewardDialog = false;
 	let showMissionDialog = false;
-	let showGeneralMapPackDialog = false;
 	let showLinkMapPackDialog = false;
+	let showEditMapPackDialog = false;
 	let showMissionRewardDialog = false;
-	let showMapPackLevelDialog = false;
 
 	// Form states
 	let seasonForm = {
@@ -61,7 +69,13 @@
 	};
 
 	let mapPackLinkForm = {
-		mapPackId: '',
+		mapPackId: '' as any,
+		unlockWeek: 1,
+		order: 0
+	};
+
+	let mapPackEditForm = {
+		id: null as number | null,
 		unlockWeek: 1,
 		order: 0
 	};
@@ -75,6 +89,13 @@
 		description: ''
 	};
 
+	// Item search state
+	let itemSearchQuery = '';
+	let itemSearchResults: any[] = [];
+	let selectedItem: any = null;
+	let itemSearchLoading = false;
+	let itemSearchTimeout: any;
+
 	let missionForm = {
 		id: null as number | null,
 		title: '',
@@ -84,14 +105,6 @@
 		order: 0
 	};
 
-	let generalMapPackForm = {
-		id: null as number | null,
-		name: '',
-		description: '',
-		difficulty: 'harder',
-		xp: 200
-	};
-
 	let missionRewardForm = {
 		missionId: null as number | null,
 		itemId: '',
@@ -99,17 +112,41 @@
 		expireAfter: 7
 	};
 
-	let mapPackLevelForm = {
-		mapPackId: null as number | null,
-		levelID: '',
-		order: 0
-	};
-
 	function convertTime(x: string) {
 		if (!x) return '';
 		const d = new Date(x);
 		d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
 		return d.toISOString().slice(0, 16);
+	}
+
+	function rarityColor(r: number) {
+		switch (r) {
+			case 1:
+				return '#3b82f6';
+			case 2:
+				return '#a855f7';
+			case 3:
+				return '#ec4899';
+			case 4:
+				return '#dc2626';
+			default:
+				return '#9ca3af';
+		}
+	}
+
+	function rarityName(r: number) {
+		switch (r) {
+			case 1:
+				return 'Uncommon';
+			case 2:
+				return 'Rare';
+			case 3:
+				return 'Epic';
+			case 4:
+				return 'Legendary';
+			default:
+				return 'Common';
+		}
 	}
 
 	// Fetch functions
@@ -131,13 +168,7 @@
 
 	async function fetchSeasonData() {
 		if (!selectedSeason) return;
-		await Promise.all([
-			fetchLevels(),
-			fetchBattlePassMapPacks(),
-			fetchRewards(),
-			fetchMissions(),
-			fetchGeneralMapPacks()
-		]);
+		await Promise.all([fetchLevels(), fetchBattlePassMapPacks(), fetchRewards(), fetchMissions()]);
 	}
 
 	async function fetchLevels() {
@@ -179,6 +210,21 @@
 		}
 	}
 
+	function handleAddReward(tier: number, isPremium: boolean) {
+		selectedItem = null;
+		itemSearchQuery = '';
+		itemSearchResults = [];
+		showRewardDialog = true;
+		rewardForm = {
+			id: null,
+			tier: tier,
+			isPremium: isPremium,
+			itemId: '',
+			quantity: 1,
+			description: ''
+		};
+	}
+
 	async function fetchMissions() {
 		if (!selectedSeason) return;
 		try {
@@ -188,15 +234,6 @@
 			if (res.ok) missions = await res.json();
 		} catch (e) {
 			console.error('Failed to fetch missions:', e);
-		}
-	}
-
-	async function fetchGeneralMapPacks() {
-		try {
-			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general`);
-			if (res.ok) generalMapPacks = await res.json();
-		} catch (e) {
-			console.error('Failed to fetch general map packs:', e);
 		}
 	}
 
@@ -357,6 +394,33 @@
 		);
 	}
 
+	async function updateMapPack() {
+		if (!mapPackEditForm.id) return;
+
+		toast.promise(
+			fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappack/${mapPackEditForm.id}`, {
+				method: 'PATCH',
+				body: JSON.stringify({
+					unlockWeek: mapPackEditForm.unlockWeek,
+					order: mapPackEditForm.order
+				}),
+				headers: {
+					Authorization: `Bearer ${await $user.token()}`,
+					'Content-Type': 'application/json'
+				}
+			}),
+			{
+				success: () => {
+					showEditMapPackDialog = false;
+					fetchBattlePassMapPacks();
+					return 'Map pack updated!';
+				},
+				loading: 'Updating...',
+				error: 'Failed to update map pack'
+			}
+		);
+	}
+
 	// Reward CRUD
 	async function saveReward() {
 		if (!selectedSeason) return;
@@ -388,8 +452,14 @@
 		);
 	}
 
-	async function deleteReward(id: number) {
-		if (!confirm('Delete this reward?')) return;
+	async function deleteReward(id: number | null) {
+		if (id == null) {
+			return;
+		}
+
+		if (!confirm('Delete this reward?')) {
+			return;
+		}
 
 		toast.promise(
 			fetch(`${import.meta.env.VITE_API_URL}/battlepass/reward/${id}`, {
@@ -521,111 +591,6 @@
 		);
 	}
 
-	// General Map Pack CRUD
-	async function saveGeneralMapPack() {
-		const isNew = !generalMapPackForm.id;
-		const url = isNew
-			? `${import.meta.env.VITE_API_URL}/battlepass/mappacks/general`
-			: `${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${generalMapPackForm.id}`;
-
-		toast.promise(
-			fetch(url, {
-				method: isNew ? 'POST' : 'PATCH',
-				body: JSON.stringify({
-					name: generalMapPackForm.name,
-					description: generalMapPackForm.description,
-					difficulty: generalMapPackForm.difficulty,
-					xp: generalMapPackForm.xp
-				}),
-				headers: {
-					Authorization: `Bearer ${await $user.token()}`,
-					'Content-Type': 'application/json'
-				}
-			}),
-			{
-				success: () => {
-					showGeneralMapPackDialog = false;
-					fetchGeneralMapPacks();
-					return isNew ? 'Map pack created!' : 'Map pack updated!';
-				},
-				loading: 'Saving...',
-				error: 'Failed to save map pack'
-			}
-		);
-	}
-
-	async function deleteGeneralMapPack(id: number) {
-		if (!confirm('Delete this map pack?')) return;
-
-		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${id}`, {
-				method: 'DELETE',
-				headers: { Authorization: `Bearer ${await $user.token()}` }
-			}),
-			{
-				success: () => {
-					fetchGeneralMapPacks();
-					return 'Map pack deleted!';
-				},
-				loading: 'Deleting...',
-				error: 'Failed to delete'
-			}
-		);
-	}
-
-	// Map Pack Level
-	async function addMapPackLevel() {
-		if (!mapPackLevelForm.mapPackId) return;
-
-		toast.promise(
-			fetch(
-				`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${mapPackLevelForm.mapPackId}/level`,
-				{
-					method: 'POST',
-					body: JSON.stringify({
-						levelID: Number(mapPackLevelForm.levelID),
-						order: mapPackLevelForm.order
-					}),
-					headers: {
-						Authorization: `Bearer ${await $user.token()}`,
-						'Content-Type': 'application/json'
-					}
-				}
-			),
-			{
-				success: () => {
-					showMapPackLevelDialog = false;
-					fetchGeneralMapPacks();
-					return 'Level added!';
-				},
-				loading: 'Adding...',
-				error: 'Failed to add level'
-			}
-		);
-	}
-
-	async function deleteMapPackLevel(mapPackId: number, levelId: number) {
-		if (!confirm('Remove this level?')) return;
-
-		toast.promise(
-			fetch(
-				`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${mapPackId}/level/${levelId}`,
-				{
-					method: 'DELETE',
-					headers: { Authorization: `Bearer ${await $user.token()}` }
-				}
-			),
-			{
-				success: () => {
-					fetchGeneralMapPacks();
-					return 'Level removed!';
-				},
-				loading: 'Removing...',
-				error: 'Failed to remove'
-			}
-		);
-	}
-
 	// Reset form functions
 	function openNewSeason() {
 		seasonForm = { id: null, title: '', description: '', start: '', end: '' };
@@ -661,7 +626,76 @@
 
 	function openNewReward() {
 		rewardForm = { id: null, tier: 1, isPremium: false, itemId: '', quantity: 1, description: '' };
+		selectedItem = null;
+		itemSearchQuery = '';
+		itemSearchResults = [];
 		showRewardDialog = true;
+	}
+
+	function openEditReward(reward: any) {
+		rewardForm = {
+			id: reward.id,
+			tier: reward.tier,
+			isPremium: reward.isPremium,
+			itemId: reward.itemId,
+			quantity: reward.quantity,
+			description: reward.description
+		};
+		// Set selected item if editing
+		if (reward.items) {
+			selectedItem = reward.items;
+		}
+		showRewardDialog = true;
+	}
+
+	async function searchItems() {
+		if (!itemSearchQuery.trim()) {
+			itemSearchResults = [];
+			return;
+		}
+
+		itemSearchLoading = true;
+		try {
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/item/search?q=${encodeURIComponent(itemSearchQuery)}`,
+				{
+					method: 'GET',
+					headers: {
+						Authorization: 'Bearer ' + (await $user.token())
+					}
+				}
+			);
+			itemSearchResults = await res.json();
+		} catch (e) {
+			console.error(e);
+			itemSearchResults = [];
+		} finally {
+			itemSearchLoading = false;
+		}
+	}
+
+	function handleItemSearchInput() {
+		clearTimeout(itemSearchTimeout);
+		itemSearchTimeout = setTimeout(() => {
+			searchItems();
+		}, 300);
+	}
+
+	function selectItem(item: any) {
+		selectedItem = item;
+		rewardForm.itemId = item.id;
+		rewardForm.description = item.name;
+	}
+
+	function clearItemSelection() {
+		selectedItem = null;
+		rewardForm.itemId = '';
+	}
+
+	function resetRewardDialog() {
+		selectedItem = null;
+		itemSearchQuery = '';
+		itemSearchResults = [];
 	}
 
 	function openNewMission() {
@@ -681,25 +715,18 @@
 		showMissionDialog = true;
 	}
 
-	function openNewGeneralMapPack() {
-		generalMapPackForm = { id: null, name: '', description: '', difficulty: 'harder', xp: 200 };
-		showGeneralMapPackDialog = true;
-	}
-
-	function openEditGeneralMapPack(pack: any) {
-		generalMapPackForm = {
-			id: pack.id,
-			name: pack.name,
-			description: pack.description,
-			difficulty: pack.difficulty,
-			xp: pack.xp
-		};
-		showGeneralMapPackDialog = true;
-	}
-
 	function openLinkMapPack() {
 		mapPackLinkForm = { mapPackId: '', unlockWeek: 1, order: 0 };
 		showLinkMapPackDialog = true;
+	}
+
+	function openEditMapPack(pack: any) {
+		mapPackEditForm = {
+			id: pack.id,
+			unlockWeek: pack.unlockWeek,
+			order: pack.order
+		};
+		showEditMapPackDialog = true;
 	}
 
 	function openAddMissionReward(missionId: number) {
@@ -707,9 +734,22 @@
 		showMissionRewardDialog = true;
 	}
 
-	function openAddMapPackLevel(mapPackId: number) {
-		mapPackLevelForm = { mapPackId, levelID: '', order: 0 };
-		showMapPackLevelDialog = true;
+	function getMapPackRenderData(battlePassMapPacks: any) {
+		return Object.entries<any>(
+			battlePassMapPacks.reduce((acc: any, pack: any) => {
+				if (!acc[pack.unlockWeek]) {
+					acc[pack.unlockWeek] = [];
+				}
+
+				acc[pack.unlockWeek].push(pack);
+
+				return acc;
+			}, {})
+		).sort(([a], [b]) => Number(a) - Number(b));
+	}
+
+	$: if (selectedSeason) {
+		fetchSeasonData();
 	}
 
 	onMount(() => {
@@ -760,7 +800,6 @@
 				<Tabs.Trigger value="mappacks">Map Packs</Tabs.Trigger>
 				<Tabs.Trigger value="rewards">Tier Rewards</Tabs.Trigger>
 				<Tabs.Trigger value="missions">Missions</Tabs.Trigger>
-				<Tabs.Trigger value="general">General Map Packs</Tabs.Trigger>
 			</Tabs.List>
 
 			<!-- Levels Tab -->
@@ -825,121 +864,97 @@
 
 			<!-- Map Packs Tab -->
 			<Tabs.Content value="mappacks">
-				<Card.Root>
-					<Card.Header class="flex flex-row items-center justify-between">
-						<Card.Title>Season Map Packs</Card.Title>
-						<Button size="sm" on:click={openLinkMapPack}>
-							<Plus class="mr-1 h-4 w-4" />
-							Link Map Pack
-						</Button>
-					</Card.Header>
-					<Card.Content>
-						<Table.Root>
-							<Table.Header>
-								<Table.Row>
-									<Table.Head>ID</Table.Head>
-									<Table.Head>Map Pack</Table.Head>
-									<Table.Head>Difficulty</Table.Head>
-									<Table.Head>XP</Table.Head>
-									<Table.Head>Unlock Week</Table.Head>
-									<Table.Head>Order</Table.Head>
-									<Table.Head>Actions</Table.Head>
-								</Table.Row>
-							</Table.Header>
-							<Table.Body>
-								{#each battlePassMapPacks as pack}
-									<Table.Row>
-										<Table.Cell>{pack.id}</Table.Cell>
-										<Table.Cell>{pack.mapPacks?.name || '-'}</Table.Cell>
-										<Table.Cell>{pack.mapPacks?.difficulty || '-'}</Table.Cell>
-										<Table.Cell class="text-yellow-400">{pack.mapPacks?.xp || 0}</Table.Cell>
-										<Table.Cell>Week {pack.unlockWeek}</Table.Cell>
-										<Table.Cell>{pack.order}</Table.Cell>
-										<Table.Cell>
-											<Button
-												variant="destructive"
-												size="icon"
-												on:click={() => unlinkMapPack(pack.id)}
-											>
-												<Trash2 class="h-4 w-4" />
-											</Button>
-										</Table.Cell>
-									</Table.Row>
-								{:else}
-									<Table.Row>
-										<Table.Cell colspan={7} class="text-center text-muted-foreground">
-											No map packs linked
-										</Table.Cell>
-									</Table.Row>
-								{/each}
-							</Table.Body>
-						</Table.Root>
-					</Card.Content>
-				</Card.Root>
+				<div class="mb-4 flex items-center justify-between">
+					<h2 class="text-2xl font-bold">Season Map Packs</h2>
+					<Button size="sm" on:click={openLinkMapPack}>
+						<Plus class="mr-1 h-4 w-4" />
+						Link Map Pack
+					</Button>
+				</div>
+				<div class="flex flex-col gap-4">
+					{#each getMapPackRenderData(battlePassMapPacks) as [week, packs]}
+						<Card.Root>
+							<Card.Header>
+								<Card.Title>Week {week}</Card.Title>
+							</Card.Header>
+							<Card.Content>
+								<Table.Root>
+									<Table.Header>
+										<Table.Row>
+											<Table.Head class="w-[50px]">ID</Table.Head>
+											<Table.Head>Map Pack</Table.Head>
+											<Table.Head class="w-[150px]">Difficulty</Table.Head>
+											<Table.Head class="w-[100px]">XP</Table.Head>
+											<Table.Head class="w-[75px]">Order</Table.Head>
+											<Table.Head class="w-[100px]">Actions</Table.Head>
+										</Table.Row>
+									</Table.Header>
+									<Table.Body>
+										{#each packs as pack}
+											<Table.Row>
+												<Table.Cell>{pack.id}</Table.Cell>
+												<Table.Cell>{pack.mapPacks?.name || '-'}</Table.Cell>
+												<Table.Cell>{pack.mapPacks?.difficulty || '-'}</Table.Cell>
+												<Table.Cell class="text-yellow-400">{pack.mapPacks?.xp || 0}</Table.Cell>
+												<Table.Cell>{pack.order}</Table.Cell>
+												<Table.Cell>
+													<div class="flex gap-2">
+														<Button
+															variant="outline"
+															size="icon"
+															on:click={() => openEditMapPack(pack)}
+														>
+															<Edit class="h-4 w-4" />
+														</Button>
+														<Button
+															variant="destructive"
+															size="icon"
+															on:click={() => unlinkMapPack(pack.id)}
+														>
+															<Trash2 class="h-4 w-4" />
+														</Button>
+													</div>
+												</Table.Cell>
+											</Table.Row>
+										{/each}
+									</Table.Body>
+								</Table.Root>
+							</Card.Content>
+						</Card.Root>
+					{:else}
+						<Card.Root>
+							<Card.Content class="p-8 text-center text-muted-foreground">
+								No map packs linked
+							</Card.Content>
+						</Card.Root>
+					{/each}
+				</div>
 			</Tabs.Content>
 
 			<!-- Tier Rewards Tab -->
-			<Tabs.Content value="rewards">
-				<Card.Root>
-					<Card.Header class="flex flex-row items-center justify-between">
-						<Card.Title>Tier Rewards</Card.Title>
-						<Button size="sm" on:click={openNewReward}>
-							<Plus class="mr-1 h-4 w-4" />
-							Add Reward
-						</Button>
-					</Card.Header>
-					<Card.Content>
-						<Table.Root>
-							<Table.Header>
-								<Table.Row>
-									<Table.Head>ID</Table.Head>
-									<Table.Head>Tier</Table.Head>
-									<Table.Head>Type</Table.Head>
-									<Table.Head>Item ID</Table.Head>
-									<Table.Head>Quantity</Table.Head>
-									<Table.Head>Description</Table.Head>
-									<Table.Head>Actions</Table.Head>
-								</Table.Row>
-							</Table.Header>
-							<Table.Body>
-								{#each rewards.sort((a, b) => a.tier - b.tier) as reward}
-									<Table.Row>
-										<Table.Cell>{reward.id}</Table.Cell>
-										<Table.Cell>{reward.tier}</Table.Cell>
-										<Table.Cell>
-											{#if reward.isPremium}
-												<span class="flex items-center gap-1 text-yellow-400">
-													<Crown class="h-4 w-4" />
-													Premium
-												</span>
-											{:else}
-												<span class="text-blue-400">Free</span>
-											{/if}
-										</Table.Cell>
-										<Table.Cell>{reward.itemId}</Table.Cell>
-										<Table.Cell>{reward.quantity}</Table.Cell>
-										<Table.Cell>{reward.description || '-'}</Table.Cell>
-										<Table.Cell>
-											<Button
-												variant="destructive"
-												size="icon"
-												on:click={() => deleteReward(reward.id)}
-											>
-												<Trash2 class="h-4 w-4" />
-											</Button>
-										</Table.Cell>
-									</Table.Row>
-								{:else}
-									<Table.Row>
-										<Table.Cell colspan={7} class="text-center text-muted-foreground">
-											No rewards added
-										</Table.Cell>
-									</Table.Row>
-								{/each}
-							</Table.Body>
-						</Table.Root>
-					</Card.Content>
-				</Card.Root>
+			<Tabs.Content value="rewards" class="w-full">
+				<div class="mb-4 flex items-center justify-between">
+					<div>
+						<h2 class="text-2xl font-bold">Tier Rewards</h2>
+						<p class="text-sm text-muted-foreground">
+							Manage rewards for each tier. Click on a tier slot to edit.
+						</p>
+					</div>
+					<Button size="sm" on:click={openNewReward}>
+						<Plus class="mr-1 h-4 w-4" />
+						Add Reward
+					</Button>
+				</div>
+
+				<TierRewardTrack
+					bind:rewards
+					currentTier={0}
+					isPremium={false}
+					claimableRewards={[]}
+					editable={true}
+					onRewardClick={openEditReward}
+					onAddRewardClick={handleAddReward}
+				/>
 			</Tabs.Content>
 
 			<!-- Missions Tab -->
@@ -1020,84 +1035,6 @@
 								</Card.Root>
 							{:else}
 								<p class="py-8 text-center text-muted-foreground">No missions added</p>
-							{/each}
-						</div>
-					</Card.Content>
-				</Card.Root>
-			</Tabs.Content>
-
-			<!-- General Map Packs Tab -->
-			<Tabs.Content value="general">
-				<Card.Root>
-					<Card.Header class="flex flex-row items-center justify-between">
-						<Card.Title>General Map Packs</Card.Title>
-						<Button size="sm" on:click={openNewGeneralMapPack}>
-							<Plus class="mr-1 h-4 w-4" />
-							Create Map Pack
-						</Button>
-					</Card.Header>
-					<Card.Content>
-						<div class="flex flex-col gap-4">
-							{#each generalMapPacks as pack}
-								<Card.Root class="border">
-									<Card.Content class="p-4">
-										<div class="flex items-start justify-between">
-											<div class="flex-1">
-												<h4 class="font-bold">{pack.name}</h4>
-												<p class="text-sm text-muted-foreground">{pack.description || '-'}</p>
-												<div class="mt-2 flex items-center gap-4 text-sm">
-													<span class="capitalize">{pack.difficulty}</span>
-													<span class="text-yellow-400">+{pack.xp} XP</span>
-												</div>
-												{#if pack.mapPackLevels?.length}
-													<div class="mt-2 flex flex-wrap gap-2">
-														{#each pack.mapPackLevels as level}
-															<div
-																class="flex items-center gap-1 rounded bg-muted px-2 py-1 text-xs"
-															>
-																<span>{level.levels?.name || level.levelID}</span>
-																<Button
-																	variant="ghost"
-																	size="icon"
-																	class="h-4 w-4"
-																	on:click={() => deleteMapPackLevel(pack.id, level.id)}
-																>
-																	<Trash2 class="h-3 w-3" />
-																</Button>
-															</div>
-														{/each}
-													</div>
-												{/if}
-											</div>
-											<div class="flex gap-2">
-												<Button
-													variant="outline"
-													size="sm"
-													on:click={() => openAddMapPackLevel(pack.id)}
-												>
-													<Plus class="mr-1 h-4 w-4" />
-													Level
-												</Button>
-												<Button
-													variant="outline"
-													size="icon"
-													on:click={() => openEditGeneralMapPack(pack)}
-												>
-													<Edit class="h-4 w-4" />
-												</Button>
-												<Button
-													variant="destructive"
-													size="icon"
-													on:click={() => deleteGeneralMapPack(pack.id)}
-												>
-													<Trash2 class="h-4 w-4" />
-												</Button>
-											</div>
-										</div>
-									</Card.Content>
-								</Card.Root>
-							{:else}
-								<p class="py-8 text-center text-muted-foreground">No map packs created</p>
 							{/each}
 						</div>
 					</Card.Content>
@@ -1196,17 +1133,13 @@
 		</Dialog.Header>
 		<div class="flex flex-col gap-4">
 			<div>
-				<Label for="mapPackId">Map Pack</Label>
-				<Select.Root onSelectedChange={(v) => (mapPackLinkForm.mapPackId = v?.value || '')}>
-					<Select.Trigger>
-						<Select.Value placeholder="Select a map pack" />
-					</Select.Trigger>
-					<Select.Content>
-						{#each generalMapPacks as pack}
-							<Select.Item value={String(pack.id)}>{pack.name} ({pack.difficulty})</Select.Item>
-						{/each}
-					</Select.Content>
-				</Select.Root>
+				<Label for="mapPackId">Map Pack ID</Label>
+				<Input
+					id="mapPackId"
+					type="number"
+					bind:value={mapPackLinkForm.mapPackId}
+					placeholder="Enter map pack ID"
+				/>
 			</div>
 			<div class="grid grid-cols-2 gap-4">
 				<div>
@@ -1227,10 +1160,10 @@
 </Dialog.Root>
 
 <!-- Reward Dialog -->
-<Dialog.Root bind:open={showRewardDialog}>
+<Dialog.Root bind:open={showRewardDialog} onOpenChange={(open) => !open && resetRewardDialog()}>
 	<Dialog.Content class="max-w-lg">
 		<Dialog.Header>
-			<Dialog.Title>Add Tier Reward</Dialog.Title>
+			<Dialog.Title>{rewardForm.id ? 'Edit' : 'Add'} Tier Reward</Dialog.Title>
 		</Dialog.Header>
 		<div class="flex flex-col gap-4">
 			<div class="grid grid-cols-2 gap-4">
@@ -1243,24 +1176,111 @@
 					<Label>Premium Reward</Label>
 				</div>
 			</div>
-			<div class="grid grid-cols-2 gap-4">
-				<div>
-					<Label for="rewardItem">Item ID</Label>
-					<Input id="rewardItem" type="number" bind:value={rewardForm.itemId} />
+
+			<!-- Item Selection -->
+			{#if selectedItem}
+				<div class="flex items-center gap-3 rounded-lg border p-3">
+					<div
+						class="flex h-[60px] w-[60px] items-center justify-center overflow-hidden rounded-md bg-neutral-800"
+						style="border-bottom: 3px solid {rarityColor(selectedItem.rarity)};"
+					>
+						<img
+							class="max-h-full max-w-full object-contain p-1"
+							src={`https://cdn.demonlistvn.com/items/${selectedItem.id}.webp`}
+							alt={selectedItem.name}
+						/>
+					</div>
+					<div class="flex-1">
+						<div class="font-medium">{selectedItem.name}</div>
+						<div class="text-sm" style="color: {rarityColor(selectedItem.rarity)}">
+							{rarityName(selectedItem.rarity)}
+						</div>
+					</div>
+					<Button variant="ghost" size="sm" on:click={clearItemSelection}>
+						<X class="h-4 w-4" />
+					</Button>
 				</div>
+			{:else}
 				<div>
-					<Label for="rewardQty">Quantity</Label>
-					<Input id="rewardQty" type="number" bind:value={rewardForm.quantity} min="1" />
+					<Label>Search Item</Label>
+					<div class="relative mt-2">
+						<Search
+							class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+						/>
+						<Input
+							placeholder="Search items by name or ID..."
+							bind:value={itemSearchQuery}
+							on:input={handleItemSearchInput}
+							class="pl-9"
+						/>
+					</div>
 				</div>
-			</div>
+				{#if itemSearchLoading}
+					<p class="text-center text-sm text-muted-foreground">Searching...</p>
+				{:else if itemSearchResults.length > 0}
+					<ScrollArea class="h-[250px] rounded-md border">
+						<div class="p-2">
+							{#each itemSearchResults as item}
+								<button
+									class="flex w-full items-center gap-3 rounded-lg p-2 text-left transition-colors hover:bg-accent"
+									on:click={() => selectItem(item)}
+								>
+									<div
+										class="flex h-[50px] w-[50px] items-center justify-center overflow-hidden rounded-md bg-neutral-800"
+										style="border-bottom: 3px solid {rarityColor(item.rarity)};"
+									>
+										<img
+											class="max-h-full max-w-full object-contain p-1"
+											src={`https://cdn.demonlistvn.com/items/${item.id}.webp`}
+											alt={item.name}
+										/>
+									</div>
+									<div>
+										<div class="font-medium">{item.name}</div>
+										<div class="text-xs text-muted-foreground">
+											ID: {item.id} •
+											<span style="color: {rarityColor(item.rarity)}"
+												>{rarityName(item.rarity)}</span
+											>
+										</div>
+									</div>
+								</button>
+							{/each}
+						</div>
+					</ScrollArea>
+				{:else if itemSearchQuery}
+					<p class="text-center text-sm text-muted-foreground">No items found</p>
+				{:else}
+					<p class="text-center text-sm text-muted-foreground">Start typing to search for items</p>
+				{/if}
+			{/if}
+
 			<div>
-				<Label for="rewardDesc">Description</Label>
-				<Input id="rewardDesc" bind:value={rewardForm.description} placeholder="Basic Crate" />
+				<Label for="rewardQty">Quantity</Label>
+				<Input id="rewardQty" type="number" bind:value={rewardForm.quantity} min="1" />
 			</div>
 		</div>
 		<Dialog.Footer>
-			<Button variant="outline" on:click={() => (showRewardDialog = false)}>Cancel</Button>
-			<Button on:click={saveReward}>Save</Button>
+			<div class="flex w-full items-center justify-between">
+				<div>
+					{#if rewardForm.id}
+						<Button
+							variant="destructive"
+							on:click={() => {
+								deleteReward(rewardForm.id);
+								showRewardDialog = false;
+							}}
+						>
+							<Trash2 class="mr-1 h-4 w-4" />
+							Delete
+						</Button>
+					{/if}
+				</div>
+				<div class="flex gap-2">
+					<Button variant="outline" on:click={() => (showRewardDialog = false)}>Cancel</Button>
+					<Button on:click={saveReward} disabled={!selectedItem && !rewardForm.itemId}>Save</Button>
+				</div>
+			</div>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>
@@ -1322,6 +1342,29 @@
 	</Dialog.Content>
 </Dialog.Root>
 
+<!-- Edit Map Pack Dialog -->
+<Dialog.Root bind:open={showEditMapPackDialog}>
+	<Dialog.Content class="max-w-md">
+		<Dialog.Header>
+			<Dialog.Title>Edit Map Pack</Dialog.Title>
+		</Dialog.Header>
+		<div class="flex flex-col gap-4">
+			<div>
+				<Label for="editUnlockWeek">Unlock Week</Label>
+				<Input id="editUnlockWeek" type="number" min="1" bind:value={mapPackEditForm.unlockWeek} />
+			</div>
+			<div>
+				<Label for="editOrder">Order</Label>
+				<Input id="editOrder" type="number" min="0" bind:value={mapPackEditForm.order} />
+			</div>
+		</div>
+		<Dialog.Footer>
+			<Button variant="outline" on:click={() => (showEditMapPackDialog = false)}>Cancel</Button>
+			<Button on:click={updateMapPack}>Update</Button>
+		</Dialog.Footer>
+	</Dialog.Content>
+</Dialog.Root>
+
 <!-- Mission Reward Dialog -->
 <Dialog.Root bind:open={showMissionRewardDialog}>
 	<Dialog.Content class="max-w-md">
@@ -1347,82 +1390,6 @@
 		<Dialog.Footer>
 			<Button variant="outline" on:click={() => (showMissionRewardDialog = false)}>Cancel</Button>
 			<Button on:click={addMissionReward}>Add</Button>
-		</Dialog.Footer>
-	</Dialog.Content>
-</Dialog.Root>
-
-<!-- General Map Pack Dialog -->
-<Dialog.Root bind:open={showGeneralMapPackDialog}>
-	<Dialog.Content class="max-w-lg">
-		<Dialog.Header>
-			<Dialog.Title>{generalMapPackForm.id ? 'Edit Map Pack' : 'Create Map Pack'}</Dialog.Title>
-		</Dialog.Header>
-		<div class="flex flex-col gap-4">
-			<div>
-				<Label for="packName">Name</Label>
-				<Input id="packName" bind:value={generalMapPackForm.name} placeholder="Harder Pack 1" />
-			</div>
-			<div>
-				<Label for="packDesc">Description</Label>
-				<Textarea
-					id="packDesc"
-					bind:value={generalMapPackForm.description}
-					placeholder="A collection of harder levels"
-				/>
-			</div>
-			<div class="grid grid-cols-2 gap-4">
-				<div>
-					<Label for="packDifficulty">Difficulty</Label>
-					<Select.Root
-						onSelectedChange={(v) => (generalMapPackForm.difficulty = v?.value || 'harder')}
-					>
-						<Select.Trigger>
-							<Select.Value placeholder={generalMapPackForm.difficulty} />
-						</Select.Trigger>
-						<Select.Content>
-							{#each MAP_PACK_DIFFICULTY_OPTIONS as opt}
-								<Select.Item value={opt.value}>{opt.label}</Select.Item>
-							{/each}
-						</Select.Content>
-					</Select.Root>
-				</div>
-				<div>
-					<Label for="packXP">XP</Label>
-					<Input id="packXP" type="number" bind:value={generalMapPackForm.xp} />
-				</div>
-			</div>
-		</div>
-		<Dialog.Footer>
-			<Button variant="outline" on:click={() => (showGeneralMapPackDialog = false)}>Cancel</Button>
-			<Button on:click={saveGeneralMapPack}>Save</Button>
-		</Dialog.Footer>
-	</Dialog.Content>
-</Dialog.Root>
-
-<!-- Map Pack Level Dialog -->
-<Dialog.Root bind:open={showMapPackLevelDialog}>
-	<Dialog.Content class="max-w-md">
-		<Dialog.Header>
-			<Dialog.Title>Add Level to Map Pack</Dialog.Title>
-		</Dialog.Header>
-		<div class="flex flex-col gap-4">
-			<div>
-				<Label for="mpLevelID">Level ID</Label>
-				<Input
-					id="mpLevelID"
-					type="number"
-					bind:value={mapPackLevelForm.levelID}
-					placeholder="12345678"
-				/>
-			</div>
-			<div>
-				<Label for="mpLevelOrder">Order</Label>
-				<Input id="mpLevelOrder" type="number" bind:value={mapPackLevelForm.order} min="0" />
-			</div>
-		</div>
-		<Dialog.Footer>
-			<Button variant="outline" on:click={() => (showMapPackLevelDialog = false)}>Cancel</Button>
-			<Button on:click={addMapPackLevel}>Add</Button>
 		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>
