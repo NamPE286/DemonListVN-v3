@@ -1196,6 +1196,14 @@
     "missions_desc": "Hoàn thành nhiệm vụ đặc biệt để nhận XP và phần thưởng bonus",
     "no_missions": "Chưa có nhiệm vụ",
     "placeholder_daily_level": "Level hàng ngày mẫu",
-    "placeholder_weekly_demon": "Demon hàng tuần mẫu"
+    "placeholder_weekly_demon": "Demon hàng tuần mẫu",
+    "upgrade_to_premium": "Nâng cấp lên Premium",
+    "premium_pass": "Pass Premium",
+    "premium_description": "Mở khóa tất cả phần thưởng premium và nhận ngay các vật phẩm độc quyền!",
+    "premium_benefits": {
+      "instant_rewards": "Nhận ngay tất cả phần thưởng đến cấp hiện tại",
+      "exclusive_items": "Vật phẩm và trang phục độc quyền premium",
+      "double_rewards": "Nhận gấp đôi phần thưởng ở mỗi cấp"
+    }
   }
 }

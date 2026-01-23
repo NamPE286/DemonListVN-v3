@@ -1197,6 +1197,14 @@
     "missions_desc": "Complete special objectives for bonus XP and rewards",
     "no_missions": "No missions available yet",
     "placeholder_daily_level": "Sample Daily Level",
-    "placeholder_weekly_demon": "Sample Weekly Demon"
+    "placeholder_weekly_demon": "Sample Weekly Demon",
+    "upgrade_to_premium": "Upgrade to Premium",
+    "premium_pass": "Premium Pass",
+    "premium_description": "Unlock all premium rewards and get instant access to exclusive items!",
+    "premium_benefits": {
+      "instant_rewards": "Instant access to all current tier rewards",
+      "exclusive_items": "Exclusive premium items and cosmetics",
+      "double_rewards": "Double rewards at every tier"
+    }
   }
 }

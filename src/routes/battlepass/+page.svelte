@@ -29,6 +29,7 @@
 		DIFFICULTY_NAMES
 	} from '$lib/battlepass/constants';
 	import TierRewardTrack from '$lib/components/TierRewardTrack.svelte';
+	import PremiumPurchaseDialog from './PremiumPurchaseDialog.svelte';
 
 	export let data: PageData;
 
@@ -40,6 +41,7 @@
 	let loading = true;
 	let claimableRewards: any[] = [];
 	let missionStatus: Record<number, { completed: boolean; claimed: boolean }> = {};
+	let purchaseDialogOpen = false;
 
 	// Primary color from season (default to purple if not set)
 	$: primaryColor = data.season?.primaryColor || '#8b5cf6';
@@ -342,6 +344,7 @@
 										<Button
 											class="text-black"
 											style="background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.8));"
+											on:click={() => (purchaseDialogOpen = true)}
 										>
 											<Crown class="mr-2 h-4 w-4" />
 											{$_('battlepass.upgrade')} - {formatCurrency(PREMIUM_PRICE)}
@@ -906,6 +909,12 @@
 			{/if}
 		</Dialog.Content>
 	</Dialog.Root>
+
+	<!-- Premium Purchase Dialog -->
+	<PremiumPurchaseDialog
+		bind:open={purchaseDialogOpen}
+		seasonTitle={data.season?.title || ''}
+	/>
 {/if}
 
 <style lang="scss">
