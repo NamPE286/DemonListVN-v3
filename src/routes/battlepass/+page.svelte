@@ -7,41 +7,43 @@
 	import * as Card from '$lib/components/ui/card/index.js';
 	import * as Tabs from '$lib/components/ui/tabs/index.js';
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
-	import * as Popover from '$lib/components/ui/popover/index.js';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
 	import { _ } from 'svelte-i18n';
 	import Crown from 'lucide-svelte/icons/crown';
 	import Star from 'lucide-svelte/icons/star';
 	import Gift from 'lucide-svelte/icons/gift';
 	import Lock from 'lucide-svelte/icons/lock';
-	import Check from 'lucide-svelte/icons/check';
 	import Zap from 'lucide-svelte/icons/zap';
 	import Target from 'lucide-svelte/icons/target';
 	import Map from 'lucide-svelte/icons/map';
-	import Sparkles from 'lucide-svelte/icons/sparkles';
-	import Calendar from 'lucide-svelte/icons/calendar';
 	import Sun from 'lucide-svelte/icons/sun';
 	import {
 		XP_PER_TIER,
 		MAX_TIER,
-		PREMIUM_PRICE,
-		DIFFICULTY_COLORS,
-		DIFFICULTY_NAMES
+		PREMIUM_PRICE
 	} from '$lib/battlepass/constants';
-	import TierRewardTrack from '$lib/components/TierRewardTrack.svelte';
 	import PremiumPurchaseDialog from './PremiumPurchaseDialog.svelte';
+	import RewardsTab from './RewardsTab.svelte';
+	import DailyTab from './DailyTab.svelte';
+	import LevelsTab from './LevelsTab.svelte';
+	import MapPacksTab from './MapPacksTab.svelte';
+	import MissionsTab from './MissionsTab.svelte';
 
 	export let data: PageData;
-
-	// Map Pack Dialog state
-	let selectedMapPack: any = null;
-	let mapPackDialogOpen = false;
 
 	let progress: any = null;
 	let loading = true;
 	let claimableRewards: any[] = [];
 	let missionStatus: Record<number, { completed: boolean; claimed: boolean }> = {};
 	let purchaseDialogOpen = false;
+	
+	// Level progress tracking (battlePassLevelId -> progress percentage)
+	let levelProgress: Record<number, number> = {};
+	
+	// Map pack progress tracking (battlePassMapPackId -> { completedLevels, claimed })
+	let mapPackProgress: Record<number, { completedLevels: number[]; claimed: boolean }> = {};
+	
+	// Map pack level progress tracking (battlePassMapPackId_levelID -> progress percentage)
+	let mapPackLevelProgress: Record<string, number> = {};
 
 	// Primary color from season (default to purple if not set)
 	$: primaryColor = data.season?.primaryColor || '#8b5cf6';
@@ -87,11 +89,6 @@
 		xp: 100
 	};
 
-	function openMapPackDialog(pack: any) {
-		selectedMapPack = pack;
-		mapPackDialogOpen = true;
-	}
-
 	$: currentTier = progress ? Math.min(Math.floor(progress.xp / XP_PER_TIER), MAX_TIER) : 0;
 	$: tierProgress = progress ? progress.xp % XP_PER_TIER : 0;
 	$: isPremium = progress?.isPremium ?? false;
@@ -106,7 +103,7 @@
 		if (!$user.loggedIn || !data.season) {
 			return;
 		}
-		
+
 		loading = true;
 
 		try {
@@ -162,6 +159,98 @@
 			}
 		} catch (e) {
 			console.error('Failed to fetch mission status:', e);
+		}
+	}
+
+	async function fetchLevelProgress() {
+		if (!$user.loggedIn || !data.season) return;
+
+		try {
+			// Fetch level progress in batch
+			const levelIds = data.levels.map((l: any) => l.id);
+			if (levelIds.length === 0) return;
+
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/levels/progress/batch?ids=${levelIds.join(',')}`,
+				{
+					headers: {
+						Authorization: `Bearer ${await $user.token()}`
+					}
+				}
+			);
+
+			if (res.ok) {
+				const progressData = await res.json();
+				progressData.forEach((p: any) => {
+					levelProgress[p.battlePassLevelId] = p.progress ?? 0;
+				});
+				levelProgress = levelProgress; // Trigger reactivity
+			}
+		} catch (e) {
+			console.error('Failed to fetch level progress:', e);
+		}
+	}
+
+	async function fetchMapPackProgress() {
+		if (!$user.loggedIn || !data.season) return;
+
+		try {
+			// Fetch all map pack progress in batch
+			const mapPackIds = data.mapPacks.map((mp: any) => mp.id);
+			if (mapPackIds.length === 0) return;
+
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/mappacks/progress/batch?ids=${mapPackIds.join(',')}`,
+				{
+					headers: {
+						Authorization: `Bearer ${await $user.token()}`
+					}
+				}
+			);
+
+			if (res.ok) {
+				const progressData = await res.json();
+				progressData.forEach((p: any) => {
+					mapPackProgress[p.battlePassMapPackId] = {
+						completedLevels: p.completedLevels ?? [],
+						claimed: p.claimed ?? false
+					};
+				});
+				mapPackProgress = mapPackProgress; // Trigger reactivity
+			}
+
+			// Fetch map pack level progress in batch
+			const levelRequests: { mapPackId: number; levelID: number }[] = [];
+			data.mapPacks.forEach((mp: any) => {
+				mp.mapPacks?.mapPackLevels?.forEach((level: any) => {
+					levelRequests.push({ mapPackId: mp.id, levelID: level.levelID });
+				});
+			});
+
+			if (levelRequests.length > 0) {
+				const levelRes = await fetch(
+					`${import.meta.env.VITE_API_URL}/battlepass/mappacks/levels/progress/batch`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+							Authorization: `Bearer ${await $user.token()}`
+						},
+						body: JSON.stringify({ levels: levelRequests })
+					}
+				);
+
+				if (levelRes.ok) {
+					const levelProgressData = await levelRes.json();
+					levelProgressData.forEach((p: any) => {
+						const key = `${p.battlePassMapPackId}_${p.levelID}`;
+						mapPackLevelProgress[key] = p.progress ?? 0;
+					});
+					mapPackLevelProgress = mapPackLevelProgress; // Trigger reactivity
+				}
+			}
+		} catch (e) {
+			console.error('Failed to fetch map pack progress:', e);
 		}
 	}
 
@@ -231,6 +320,7 @@
 				const result = await res.json();
 				toast.success(`Claimed ${result.xp} XP!`);
 				await fetchProgress();
+				await fetchMapPackProgress();
 			} else {
 				const error = await res.text();
 				toast.error(error || 'Failed to claim map pack');
@@ -247,17 +337,15 @@
 		}).format(amount);
 	}
 
-	function getDifficultyColor(difficulty: string): string {
-		return DIFFICULTY_COLORS[difficulty?.toLowerCase()] || '#6b7280';
-	}
-
-	function getDifficultyName(difficulty: string): string {
-		return DIFFICULTY_NAMES[difficulty?.toLowerCase()] || difficulty || 'Unknown';
-	}
-
 	onMount(async () => {
 		if ($user.loggedIn) {
-			await Promise.all([fetchProgress(), fetchClaimableRewards(), fetchMissionStatus()]);
+			await Promise.all([
+				fetchProgress(),
+				fetchClaimableRewards(),
+				fetchMissionStatus(),
+				fetchLevelProgress(),
+				fetchMapPackProgress()
+			]);
 		}
 	});
 
@@ -265,6 +353,8 @@
 		fetchProgress();
 		fetchClaimableRewards();
 		fetchMissionStatus();
+		fetchLevelProgress();
+		fetchMapPackProgress();
 	}
 </script>
 
@@ -434,485 +524,58 @@
 
 			<!-- Rewards Tab -->
 			<Tabs.Content value="rewards" class="w-full">
-				<div class="mb-4 text-center">
-					<h2 class="text-2xl font-bold">{$_('battlepass.tier_rewards')}</h2>
-					<p class="text-muted-foreground">{$_('battlepass.tier_rewards_desc')}</p>
-				</div>
-
-				<TierRewardTrack
+				<RewardsTab
 					rewards={data.rewards}
 					{currentTier}
 					{isPremium}
 					{claimableRewards}
-					editable={false}
 					onClaimReward={claimReward}
 				/>
 			</Tabs.Content>
 
 			<!-- Daily/Weekly Tab -->
 			<Tabs.Content value="daily" class="w-full">
-				<div class="mb-4 text-center">
-					<h2 class="text-2xl font-bold">{$_('battlepass.daily_weekly')}</h2>
-					<p class="text-muted-foreground">{$_('battlepass.daily_weekly_desc')}</p>
-				</div>
-
-				<div class="grid gap-6 md:grid-cols-2">
-					<!-- Daily Level Card -->
-					<Card.Root
-						class="overflow-hidden border-2 border-blue-500/30 bg-gradient-to-br from-blue-500/5 to-cyan-500/5"
-					>
-						<Card.Header>
-							<div class="flex items-center gap-3">
-								<div
-									class="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500"
-								>
-									<Sun class="h-7 w-7 text-white" />
-								</div>
-								<div>
-									<Card.Title class="text-xl">{$_('battlepass.daily_level')}</Card.Title>
-									<p class="text-sm text-muted-foreground">{$_('battlepass.resets_daily')}</p>
-								</div>
-							</div>
-						</Card.Header>
-						<Card.Content>
-							<div class="flex flex-col gap-4">
-								<div class="rounded-lg bg-muted/30 p-4">
-									<div class="mb-2 flex items-center justify-between">
-										<span class="font-medium">{dailyLevel.name}</span>
-										<span class="text-sm text-muted-foreground">ID: {dailyLevel.id}</span>
-									</div>
-									<div
-										class="flex items-center gap-2 text-sm"
-										style="color: {getDifficultyColor(dailyLevel.difficulty)};"
-									>
-										<div
-											class="h-3 w-3 rounded-full"
-											style="background-color: {getDifficultyColor(dailyLevel.difficulty)};"
-										></div>
-										<span>{getDifficultyName(dailyLevel.difficulty)}</span>
-									</div>
-								</div>
-
-								<div class="flex flex-col gap-2">
-									<div class="flex justify-between text-sm">
-										<span class="text-muted-foreground">{$_('battlepass.progress')}</span>
-										<span>{dailyLevel.progress}%</span>
-									</div>
-									<div class="h-3 overflow-hidden rounded-full bg-muted">
-										<div
-											class="h-full rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 transition-all"
-											style="width: {dailyLevel.progress}%"
-										/>
-									</div>
-								</div>
-
-								<div class="flex items-center justify-between">
-									<div class="flex items-center gap-2">
-										<Zap class="h-5 w-5" style="color: {primaryColor}" />
-										<span class="font-bold" style="color: {primaryColor}">+{dailyLevel.xp} XP</span>
-									</div>
-									{#if $user.loggedIn}
-										{#if dailyLevel.claimed}
-											<Button variant="outline" disabled class="w-28">
-												<Check class="mr-1 h-4 w-4" />
-												{$_('battlepass.claimed')}
-											</Button>
-										{:else if dailyLevel.completed}
-											<Button class="w-28 bg-green-500 hover:bg-green-600">
-												{$_('battlepass.claim')}
-											</Button>
-										{:else}
-											<Button variant="outline" disabled class="w-28">
-												<Lock class="mr-1 h-4 w-4" />
-												{$_('battlepass.locked')}
-											</Button>
-										{/if}
-									{/if}
-								</div>
-							</div>
-						</Card.Content>
-					</Card.Root>
-
-					<!-- Weekly Demon Card -->
-					<Card.Root
-						class="overflow-hidden border-2 border-purple-500/30 bg-gradient-to-br from-purple-500/5 to-pink-500/5"
-					>
-						<Card.Header>
-							<div class="flex items-center gap-3">
-								<div
-									class="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-pink-500"
-								>
-									<Calendar class="h-7 w-7 text-white" />
-								</div>
-								<div>
-									<Card.Title class="text-xl">{$_('battlepass.weekly_demon')}</Card.Title>
-									<p class="text-sm text-muted-foreground">{$_('battlepass.resets_weekly')}</p>
-								</div>
-							</div>
-						</Card.Header>
-						<Card.Content>
-							<div class="flex flex-col gap-4">
-								<div class="rounded-lg bg-muted/30 p-4">
-									<div class="mb-2 flex items-center justify-between">
-										<span class="font-medium">{weeklyDemon.name}</span>
-										<span class="text-sm text-muted-foreground">ID: {weeklyDemon.id}</span>
-									</div>
-									<div
-										class="flex items-center gap-2 text-sm"
-										style="color: {getDifficultyColor(weeklyDemon.difficulty)};"
-									>
-										<div
-											class="h-3 w-3 rounded-full"
-											style="background-color: {getDifficultyColor(weeklyDemon.difficulty)};"
-										></div>
-										<span>{getDifficultyName(weeklyDemon.difficulty)}</span>
-									</div>
-								</div>
-
-								<div class="flex flex-col gap-2">
-									<div class="flex justify-between text-sm">
-										<span class="text-muted-foreground">{$_('battlepass.progress')}</span>
-										<span>{weeklyDemon.progress}%</span>
-									</div>
-									<div class="h-3 overflow-hidden rounded-full bg-muted">
-										<div
-											class="h-full rounded-full bg-gradient-to-r from-purple-400 to-pink-400 transition-all"
-											style="width: {weeklyDemon.progress}%"
-										/>
-									</div>
-								</div>
-
-								<div class="flex items-center justify-between">
-									<div class="flex items-center gap-2">
-										<Zap class="h-5 w-5" style="color: {primaryColor}" />
-										<span class="font-bold" style="color: {primaryColor}">+{weeklyDemon.xp} XP</span
-										>
-									</div>
-									{#if $user.loggedIn}
-										{#if weeklyDemon.claimed}
-											<Button variant="outline" disabled class="w-28">
-												<Check class="mr-1 h-4 w-4" />
-												{$_('battlepass.claimed')}
-											</Button>
-										{:else if weeklyDemon.completed}
-											<Button class="w-28 bg-green-500 hover:bg-green-600">
-												{$_('battlepass.claim')}
-											</Button>
-										{:else}
-											<Button variant="outline" disabled class="w-28">
-												<Lock class="mr-1 h-4 w-4" />
-												{$_('battlepass.locked')}
-											</Button>
-										{/if}
-									{/if}
-								</div>
-							</div>
-						</Card.Content>
-					</Card.Root>
-				</div>
+				<DailyTab
+					{primaryColor}
+					isLoggedIn={$user.loggedIn}
+					{dailyLevel}
+					{weeklyDemon}
+				/>
 			</Tabs.Content>
 
 			<!-- Levels Tab -->
 			<Tabs.Content value="levels" class="w-full">
-				<div class="mb-4 text-center">
-					<h2 class="text-2xl font-bold">{$_('battlepass.featured_levels')}</h2>
-					<p class="text-muted-foreground">{$_('battlepass.featured_levels_desc')}</p>
-				</div>
-
-				<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-					{#each data.levels as level}
-						<Card.Root
-							class="overflow-hidden border-2 border-red-500/30 bg-gradient-to-br from-red-500/5 to-orange-500/5 transition-all hover:border-red-500/50"
-						>
-							<Card.Header class="pb-2">
-								<div class="flex items-center gap-3">
-									<div class="flex h-12 w-12 items-center justify-center rounded-lg bg-red-500/20">
-										<Star class="h-6 w-6 text-red-400" />
-									</div>
-									<div>
-										<Card.Title class="text-lg"
-											>{level.levels?.name || `Level ${level.levelID}`}</Card.Title
-										>
-										<p class="text-sm text-muted-foreground">ID: {level.levelID}</p>
-									</div>
-								</div>
-							</Card.Header>
-							<Card.Content>
-								<div class="flex flex-col gap-3">
-									<div class="flex items-center justify-between rounded-lg bg-muted/50 p-3">
-										<span class="text-sm text-muted-foreground">Completion XP</span>
-										<span class="font-bold" style="color: {primaryColor}">+{level.xp} XP</span>
-									</div>
-									{#if level.minProgress && level.minProgressXp}
-										<div class="flex items-center justify-between rounded-lg bg-muted/30 p-3">
-											<span class="text-sm text-muted-foreground"
-												>{$_('battlepass.progress')} ({level.minProgress}%)</span
-											>
-											<span class="font-medium text-blue-400">+{level.minProgressXp} XP</span>
-										</div>
-									{/if}
-								</div>
-							</Card.Content>
-						</Card.Root>
-					{:else}
-						<div class="col-span-full flex flex-col items-center gap-2 py-12 text-muted-foreground">
-							<Star class="h-12 w-12" />
-							<p>{$_('battlepass.no_featured_levels')}</p>
-						</div>
-					{/each}
-				</div>
+				<LevelsTab
+					levels={data.levels}
+					{levelProgress}
+					{primaryColor}
+				/>
 			</Tabs.Content>
 
 			<!-- Map Packs Tab -->
 			<Tabs.Content value="mappacks" class="w-full">
-				<div class="mb-4 text-center">
-					<h2 class="text-2xl font-bold">{$_('battlepass.map_packs')}</h2>
-					<p class="text-muted-foreground">{$_('battlepass.map_packs_desc')}</p>
-				</div>
-
-				<div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-					{#each data.mapPacks as pack}
-						{@const mapPack = pack.mapPacks}
-						<button class="text-left" on:click={() => openMapPackDialog(pack)}>
-							<Card.Root
-								class="h-full cursor-pointer overflow-hidden border-2 transition-all hover:border-primary/50"
-								style="border-color: {getDifficultyColor(mapPack?.difficulty)}40;"
-							>
-								<Card.Header class="pb-2">
-									<div class="flex items-center justify-between">
-										<div class="flex items-center gap-3">
-											<div
-												class="flex h-12 w-12 items-center justify-center rounded-lg"
-												style="background-color: {getDifficultyColor(mapPack?.difficulty)}20;"
-											>
-												<Map
-													class="h-6 w-6"
-													style="color: {getDifficultyColor(mapPack?.difficulty)};"
-												/>
-											</div>
-											<div>
-												<Card.Title class="text-lg">{mapPack?.name || 'Map Pack'}</Card.Title>
-												<p
-													class="text-sm"
-													style="color: {getDifficultyColor(mapPack?.difficulty)};"
-												>
-													{getDifficultyName(mapPack?.difficulty)}
-												</p>
-											</div>
-										</div>
-										<div
-											class="rounded-full px-3 py-1 text-sm font-bold"
-											style="background-color: rgba(var(--primary-color), 0.2); color: {primaryColor}"
-										>
-											+{mapPack?.xp || 0} XP
-										</div>
-									</div>
-								</Card.Header>
-								<Card.Content>
-									{#if mapPack?.description}
-										<p class="mb-3 text-sm text-muted-foreground">{mapPack.description}</p>
-									{/if}
-									<div class="flex items-center justify-between">
-										<span class="text-sm text-muted-foreground">
-											{mapPack?.mapPackLevels?.length || 0}
-											{$_('battlepass.levels_in_pack')}
-										</span>
-										{#if pack.unlockWeek > 1}
-											<div class="flex items-center gap-2 text-sm text-muted-foreground">
-												<Lock class="h-4 w-4" />
-												<span
-													>{$_('battlepass.unlocks_week', {
-														values: { week: pack.unlockWeek }
-													})}</span
-												>
-											</div>
-										{/if}
-									</div>
-								</Card.Content>
-							</Card.Root>
-						</button>
-					{:else}
-						<div class="col-span-full flex flex-col items-center gap-2 py-12 text-muted-foreground">
-							<Map class="h-12 w-12" />
-							<p>{$_('battlepass.no_map_packs')}</p>
-						</div>
-					{/each}
-				</div>
+				<MapPacksTab
+					mapPacks={data.mapPacks}
+					{mapPackProgress}
+					{mapPackLevelProgress}
+					{primaryColor}
+					isLoggedIn={$user.loggedIn}
+					onClaimMapPack={claimMapPack}
+				/>
 			</Tabs.Content>
 
 			<!-- Missions Tab -->
 			<Tabs.Content value="missions" class="w-full">
-				<div class="mb-4 text-center">
-					<h2 class="text-2xl font-bold">{$_('battlepass.missions')}</h2>
-					<p class="text-muted-foreground">{$_('battlepass.missions_desc')}</p>
-				</div>
-
-				<div class="flex flex-col gap-4">
-					{#each data.missions as mission}
-						{@const status = missionStatus[mission.id]}
-						{@const isCompleted = status?.completed ?? mission.completed}
-						{@const isClaimed = status?.claimed ?? mission.claimed}
-
-						<Card.Root
-							class="overflow-hidden border-2 transition-all {isCompleted && !isClaimed
-								? 'border-green-500/50 bg-green-500/5'
-								: isClaimed
-									? 'border-muted opacity-60'
-									: 'border-muted'}"
-						>
-							<Card.Content class="flex items-center gap-4 p-4">
-								<div
-									class="flex h-14 w-14 items-center justify-center rounded-xl {isCompleted
-										? 'bg-green-500/20'
-										: 'bg-muted'}"
-								>
-									{#if isClaimed}
-										<Check class="h-7 w-7 text-green-400" />
-									{:else if isCompleted}
-										<Sparkles class="h-7 w-7 text-green-400" />
-									{:else}
-										<Target class="h-7 w-7 text-muted-foreground" />
-									{/if}
-								</div>
-								<div class="flex-1">
-									<h4 class="font-bold {isClaimed ? 'line-through' : ''}">{mission.title}</h4>
-									<p class="text-sm text-muted-foreground">{mission.description}</p>
-								</div>
-								<div class="flex items-center gap-4">
-									<div class="text-right">
-										<span class="font-bold" style="color: {primaryColor}">+{mission.xp} XP</span>
-										{#if mission.battlePassMissionRewards?.length}
-											<div class="mt-1 flex justify-end gap-1">
-												{#each mission.battlePassMissionRewards.slice(0, 3) as reward}
-													<div class="h-6 w-6 rounded bg-muted">
-														{#if reward.itemId}
-															<img
-																class="h-full w-full object-contain"
-																src={`https://cdn.demonlistvn.com/items/${reward.itemId}.webp`}
-																alt="Reward"
-															/>
-														{/if}
-													</div>
-												{/each}
-											</div>
-										{/if}
-									</div>
-									{#if $user.loggedIn}
-										{#if isClaimed}
-											<Button variant="outline" disabled class="w-24">
-												<Check class="mr-1 h-4 w-4" />
-												{$_('battlepass.claimed')}
-											</Button>
-										{:else if isCompleted}
-											<Button
-												class="w-24 bg-green-500 hover:bg-green-600"
-												on:click={() => claimMission(mission.id)}
-											>
-												{$_('battlepass.claim')}
-											</Button>
-										{:else}
-											<Button variant="outline" disabled class="w-24">
-												<Lock class="mr-1 h-4 w-4" />
-												{$_('battlepass.locked')}
-											</Button>
-										{/if}
-									{/if}
-								</div>
-							</Card.Content>
-						</Card.Root>
-					{:else}
-						<div class="flex flex-col items-center gap-2 py-12 text-muted-foreground">
-							<Target class="h-12 w-12" />
-							<p>{$_('battlepass.no_missions')}</p>
-						</div>
-					{/each}
-				</div>
+				<MissionsTab
+					missions={data.missions}
+					{missionStatus}
+					{primaryColor}
+					isLoggedIn={$user.loggedIn}
+					onClaimMission={claimMission}
+				/>
 			</Tabs.Content>
 		</Tabs.Root>
 	</div>
-
-	<!-- Map Pack Detail Dialog -->
-	<Dialog.Root bind:open={mapPackDialogOpen}>
-		<Dialog.Content class="max-w-lg">
-			{#if selectedMapPack}
-				{@const mapPack = selectedMapPack.mapPacks}
-				<Dialog.Header>
-					<Dialog.Title class="flex items-center gap-3">
-						<div
-							class="flex h-10 w-10 items-center justify-center rounded-lg"
-							style="background-color: {getDifficultyColor(mapPack?.difficulty)}20;"
-						>
-							<Map class="h-5 w-5" style="color: {getDifficultyColor(mapPack?.difficulty)};" />
-						</div>
-						<div>
-							<span>{mapPack?.name || 'Map Pack'}</span>
-							<p
-								class="text-sm font-normal"
-								style="color: {getDifficultyColor(mapPack?.difficulty)};"
-							>
-								{getDifficultyName(mapPack?.difficulty)}
-							</p>
-						</div>
-					</Dialog.Title>
-				</Dialog.Header>
-
-				<div class="mt-4 flex flex-col gap-4">
-					{#if mapPack?.description}
-						<p class="text-sm text-muted-foreground">{mapPack.description}</p>
-					{/if}
-
-					<div
-						class="flex items-center justify-between rounded-lg p-3"
-						style="background-color: rgba(var(--primary-color), 0.1);"
-					>
-						<span class="text-sm">{$_('battlepass.completion_xp')}</span>
-						<span class="font-bold" style="color: {primaryColor}">+{mapPack?.xp || 0} XP</span>
-					</div>
-
-					<div>
-						<h4 class="mb-2 font-medium">{$_('battlepass.levels_list')}</h4>
-						<div class="flex flex-col gap-2">
-							{#each mapPack?.mapPackLevels || [] as level, i}
-								<div class="flex items-center justify-between rounded-lg bg-muted/30 p-3">
-									<div class="flex items-center gap-3">
-										<div
-											class="flex h-8 w-8 items-center justify-center rounded-full bg-muted text-sm font-medium"
-										>
-											{i + 1}
-										</div>
-										<div>
-											<span class="font-medium"
-												>{level.levels?.name || `Level ${level.levelID}`}</span
-											>
-											<p class="text-xs text-muted-foreground">ID: {level.levelID}</p>
-										</div>
-									</div>
-									<div class="h-3 w-3 rounded-full bg-muted-foreground/30" />
-								</div>
-							{/each}
-						</div>
-					</div>
-
-					{#if selectedMapPack.unlockWeek > 1}
-						<div class="flex items-center gap-2 text-sm text-muted-foreground">
-							<Lock class="h-4 w-4" />
-							<span
-								>{$_('battlepass.unlocks_week', {
-									values: { week: selectedMapPack.unlockWeek }
-								})}</span
-							>
-						</div>
-					{/if}
-				</div>
-
-				<Dialog.Footer class="mt-4">
-					<Button variant="outline" on:click={() => (mapPackDialogOpen = false)}>
-						{$_('general.close')}
-					</Button>
-				</Dialog.Footer>
-			{/if}
-		</Dialog.Content>
-	</Dialog.Root>
 
 	<!-- Premium Purchase Dialog -->
 	<PremiumPurchaseDialog bind:open={purchaseDialogOpen} seasonTitle={data.season?.title || ''} />

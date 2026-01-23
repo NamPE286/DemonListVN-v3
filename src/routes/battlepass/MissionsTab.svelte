@@ -1,0 +1,101 @@
+<script lang="ts">
+	import { _ } from 'svelte-i18n';
+	import { Button } from '$lib/components/ui/button';
+	import * as Card from '$lib/components/ui/card/index.js';
+	import Target from 'lucide-svelte/icons/target';
+	import Sparkles from 'lucide-svelte/icons/sparkles';
+	import Check from 'lucide-svelte/icons/check';
+	import Lock from 'lucide-svelte/icons/lock';
+
+	export let missions: any[] = [];
+	export let missionStatus: Record<number, { completed: boolean; claimed: boolean }> = {};
+	export let primaryColor: string = '#8b5cf6';
+	export let isLoggedIn: boolean = false;
+	export let onClaimMission: (missionId: number) => void;
+</script>
+
+<div class="mb-4 text-center">
+	<h2 class="text-2xl font-bold">{$_('battlepass.missions')}</h2>
+	<p class="text-muted-foreground">{$_('battlepass.missions_desc')}</p>
+</div>
+
+<div class="flex flex-col gap-4">
+	{#each missions as mission}
+		{@const status = missionStatus[mission.id]}
+		{@const isCompleted = status?.completed ?? mission.completed}
+		{@const isClaimed = status?.claimed ?? mission.claimed}
+
+		<Card.Root
+			class="overflow-hidden border-2 transition-all {isCompleted && !isClaimed
+				? 'border-green-500/50 bg-green-500/5'
+				: isClaimed
+					? 'border-muted opacity-60'
+					: 'border-muted'}"
+		>
+			<Card.Content class="flex items-center gap-4 p-4">
+				<div
+					class="flex h-14 w-14 items-center justify-center rounded-xl {isCompleted
+						? 'bg-green-500/20'
+						: 'bg-muted'}"
+				>
+					{#if isClaimed}
+						<Check class="h-7 w-7 text-green-400" />
+					{:else if isCompleted}
+						<Sparkles class="h-7 w-7 text-green-400" />
+					{:else}
+						<Target class="h-7 w-7 text-muted-foreground" />
+					{/if}
+				</div>
+				<div class="flex-1">
+					<h4 class="font-bold {isClaimed ? 'line-through' : ''}">{mission.title}</h4>
+					<p class="text-sm text-muted-foreground">{mission.description}</p>
+				</div>
+				<div class="flex items-center gap-4">
+					<div class="text-right">
+						<span class="font-bold" style="color: {primaryColor}">+{mission.xp} XP</span>
+						{#if mission.battlePassMissionRewards?.length}
+							<div class="mt-1 flex justify-end gap-1">
+								{#each mission.battlePassMissionRewards.slice(0, 3) as reward}
+									<div class="h-6 w-6 rounded bg-muted">
+										{#if reward.itemId}
+											<img
+												class="h-full w-full object-contain"
+												src={`https://cdn.demonlistvn.com/items/${reward.itemId}.webp`}
+												alt="Reward"
+											/>
+										{/if}
+									</div>
+								{/each}
+							</div>
+						{/if}
+					</div>
+					{#if isLoggedIn}
+						{#if isClaimed}
+							<Button variant="outline" disabled class="w-24">
+								<Check class="mr-1 h-4 w-4" />
+								{$_('battlepass.claimed')}
+							</Button>
+						{:else if isCompleted}
+							<Button
+								class="w-24 bg-green-500 hover:bg-green-600"
+								on:click={() => onClaimMission(mission.id)}
+							>
+								{$_('battlepass.claim')}
+							</Button>
+						{:else}
+							<Button variant="outline" disabled class="w-24">
+								<Lock class="mr-1 h-4 w-4" />
+								{$_('battlepass.locked')}
+							</Button>
+						{/if}
+					{/if}
+				</div>
+			</Card.Content>
+		</Card.Root>
+	{:else}
+		<div class="flex flex-col items-center gap-2 py-12 text-muted-foreground">
+			<Target class="h-12 w-12" />
+			<p>{$_('battlepass.no_missions')}</p>
+		</div>
+	{/each}
+</div>
