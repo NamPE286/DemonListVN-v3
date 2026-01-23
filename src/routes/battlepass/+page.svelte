@@ -255,8 +255,7 @@
 	<div class="hero-section relative overflow-hidden">
 		<div class="hero-bg-image absolute inset-0">
 			<img
-				src={data.season.backgroundUrl ||
-					'https://via.placeholder.com/1920x600/1a1a2e/eab308?text=Battle+Pass+Season'}
+				src={data.season.backgroundUrl || `https://cdn.demonlistvn.com/battlepasses/${data.season.id}.webp`}
 				alt="Season Background"
 				class="h-full w-full object-cover opacity-30"
 			/>
