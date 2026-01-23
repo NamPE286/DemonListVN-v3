@@ -4,6 +4,7 @@
 	import { Label } from '$lib/components/ui/label';
 	import { Button } from '$lib/components/ui/button';
 	import { Textarea } from '$lib/components/ui/textarea';
+	import PlayerSelector from '$lib/components/playerSelector.svelte';
 	import * as Alert from '$lib/components/ui/alert';
 	import { user } from '$lib/client';
 	import { toast } from 'svelte-sonner';
@@ -16,6 +17,9 @@
 	};
 
 	let isLoading = false;
+	let selectedPlayer: any = null;
+
+	$: notification.to = selectedPlayer ? selectedPlayer.uid : '';
 
 	function validate() {
 		const missing: string[] = [];
@@ -49,7 +53,7 @@
 				payload.redirect = notification.redirect.trim();
 			}
 
-			const response = await fetch(`${import.meta.env.VITE_API_URL}/notification`, {
+			const response = await fetch(`${import.meta.env.VITE_API_URL}/notifications`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
@@ -86,25 +90,11 @@
 <Title value="Send Notification" />
 
 <div class="wrapper">
-	<Alert.Root>
-		<Alert.Title>Admin Notification Tool</Alert.Title>
-		<Alert.Description>
-			Send notifications to users. The notification will be saved to the database and sent via
-			Discord DM.
-		</Alert.Description>
-	</Alert.Root>
-
 	<div class="form-container">
 		<div class="form-group">
-			<Label for="to">Recipient UID *</Label>
-			<Input
-				id="to"
-				type="text"
-				bind:value={notification.to}
-				placeholder="Enter user UID"
-				disabled={isLoading}
-			/>
-			<p class="helper-text">The UID of the user who will receive this notification</p>
+			<Label for="to">Recipient *</Label>
+			<PlayerSelector bind:value={selectedPlayer} bind:disabled={isLoading} />
+			<p class="helper-text">Select a user who will receive this notification</p>
 		</div>
 
 		<div class="form-group">
