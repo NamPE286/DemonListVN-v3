@@ -103,7 +103,11 @@
 		: 0;
 
 	async function fetchProgress() {
-		if (!$user.loggedIn || !data.season) return;
+		if (!$user.loggedIn || !data.season) {
+			return;
+		}
+		
+		loading = true;
 
 		try {
 			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/progress`, {
@@ -118,6 +122,8 @@
 		} catch (e) {
 			console.error('Failed to fetch progress:', e);
 		}
+
+		loading = false;
 	}
 
 	async function fetchClaimableRewards() {
@@ -250,14 +256,12 @@
 	}
 
 	onMount(async () => {
-		loading = true;
 		if ($user.loggedIn) {
 			await Promise.all([fetchProgress(), fetchClaimableRewards(), fetchMissionStatus()]);
 		}
-		loading = false;
 	});
 
-	$: if ($user.checked && $user.loggedIn && !progress) {
+	$: if ($user.loggedIn) {
 		fetchProgress();
 		fetchClaimableRewards();
 		fetchMissionStatus();
@@ -911,10 +915,7 @@
 	</Dialog.Root>
 
 	<!-- Premium Purchase Dialog -->
-	<PremiumPurchaseDialog
-		bind:open={purchaseDialogOpen}
-		seasonTitle={data.season?.title || ''}
-	/>
+	<PremiumPurchaseDialog bind:open={purchaseDialogOpen} seasonTitle={data.season?.title || ''} />
 {/if}
 
 <style lang="scss">
