@@ -283,7 +283,7 @@
 			/>
 		</div>
 		<div class="hero-bg-overlay absolute inset-0" />
-		<div class="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-12">
+		<div class="relative z-10 mx-auto flex max-w-6xl w-full flex-col items-center gap-6 px-4 py-12">
 			<div class="flex items-center gap-3">
 				<Crown class="h-10 w-10" style="color: {primaryColor}" />
 				<h1 class="text-4xl font-bold md:text-5xl">{data.season.title}</h1>
@@ -301,7 +301,7 @@
 			<!-- User Progress Card -->
 			{#if $user.loggedIn}
 				<Card.Root
-					class="w-full max-w-2xl overflow-hidden backdrop-blur-sm"
+					class="w-full max-w-[500px] overflow-hidden backdrop-blur-sm"
 					style="border: 2px solid rgba(var(--primary-color), 0.3); background: linear-gradient(to bottom right, rgba(var(--primary-color), 0.1), rgba(var(--primary-color), 0.05));"
 				>
 					<Card.Content class="p-6">
