@@ -43,6 +43,7 @@
 	<a href="/admin/newLevels">New levels</a><br />
 	<a href="/admin/battlepass">Battlepass</a><br />
 	<a href="/admin/mappack">Map pack</a><br />
+	<a href="/admin/notification">Send Notification</a><br />
 </div>
 
 <style lang="scss">
