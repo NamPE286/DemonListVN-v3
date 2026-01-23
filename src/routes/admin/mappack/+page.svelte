@@ -40,7 +40,7 @@
 	// Fetch functions
 	async function fetchGeneralMapPacks() {
 		try {
-			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general`);
+			const res = await fetch(`${import.meta.env.VITE_API_URL}/mappacks`);
 			if (res.ok) generalMapPacks = await res.json();
 		} catch (e) {
 			console.error('Failed to fetch general map packs:', e);
@@ -51,8 +51,8 @@
 	async function saveGeneralMapPack() {
 		const isNew = !generalMapPackForm.id;
 		const url = isNew
-			? `${import.meta.env.VITE_API_URL}/battlepass/mappacks/general`
-			: `${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${generalMapPackForm.id}`;
+			? `${import.meta.env.VITE_API_URL}/mappacks`
+			: `${import.meta.env.VITE_API_URL}/mappacks/${generalMapPackForm.id}`;
 
 		toast.promise(
 			fetch(url, {
@@ -84,7 +84,7 @@
 		if (!confirm('Delete this map pack?')) return;
 
 		toast.promise(
-			fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${id}`, {
+			fetch(`${import.meta.env.VITE_API_URL}/mappacks/${id}`, {
 				method: 'DELETE',
 				headers: { Authorization: `Bearer ${await $user.token()}` }
 			}),
@@ -105,7 +105,7 @@
 
 		toast.promise(
 			fetch(
-				`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${mapPackLevelForm.mapPackId}/level`,
+				`${import.meta.env.VITE_API_URL}/mappacks/${mapPackLevelForm.mapPackId}/level`,
 				{
 					method: 'POST',
 					body: JSON.stringify({
@@ -135,7 +135,7 @@
 
 		toast.promise(
 			fetch(
-				`${import.meta.env.VITE_API_URL}/battlepass/mappacks/general/${mapPackId}/level/${levelId}`,
+				`${import.meta.env.VITE_API_URL}/mappacks/${mapPackId}/level/${levelId}`,
 				{
 					method: 'DELETE',
 					headers: { Authorization: `Bearer ${await $user.token()}` }
