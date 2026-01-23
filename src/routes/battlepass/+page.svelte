@@ -24,7 +24,7 @@
 	import {
 		XP_PER_TIER,
 		MAX_TIER,
-		DEFAULT_PREMIUM_PRICE,
+		PREMIUM_PRICE,
 		DIFFICULTY_COLORS,
 		DIFFICULTY_NAMES
 	} from '$lib/battlepass/constants';
@@ -43,7 +43,7 @@
 
 	// Primary color from season (default to purple if not set)
 	$: primaryColor = data.season?.primaryColor || '#8b5cf6';
-	
+
 	// Helper function to convert hex to RGB
 	function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
 		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -277,13 +277,14 @@
 	<div class="hero-section relative overflow-hidden" style={cssVars}>
 		<div class="hero-bg-image absolute inset-0">
 			<img
-				src={data.season.backgroundUrl || `https://cdn.demonlistvn.com/battlepasses/${data.season.id}.webp`}
+				src={data.season.backgroundUrl ||
+					`https://cdn.demonlistvn.com/battlepasses/${data.season.id}.webp`}
 				alt="Season Background"
 				class="h-full w-full object-cover opacity-30"
 			/>
 		</div>
 		<div class="hero-bg-overlay absolute inset-0" />
-		<div class="relative z-10 mx-auto flex max-w-6xl w-full flex-col items-center gap-6 px-4 py-12">
+		<div class="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-4 py-12">
 			<div class="flex items-center gap-3">
 				<Crown class="h-10 w-10" style="color: {primaryColor}" />
 				<h1 class="text-4xl font-bold md:text-5xl">{data.season.title}</h1>
@@ -340,11 +341,10 @@
 									{:else}
 										<Button
 											class="text-black"
-											style="background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.8));">
+											style="background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.8));"
+										>
 											<Crown class="mr-2 h-4 w-4" />
-											{$_('battlepass.upgrade')} - {formatCurrency(
-												data.season.premiumPrice || DEFAULT_PREMIUM_PRICE
-											)}
+											{$_('battlepass.upgrade')} - {formatCurrency(PREMIUM_PRICE)}
 										</Button>
 									{/if}
 								</div>
@@ -362,7 +362,8 @@
 									<div class="xp-bar-container h-4 overflow-hidden rounded-full bg-muted">
 										<div
 											class="xp-bar h-full rounded-full transition-all duration-500"
-											style="width: {(tierProgress / XP_PER_TIER) * 100}%; background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.7));"
+											style="width: {(tierProgress / XP_PER_TIER) *
+												100}%; background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.7));"
 										/>
 									</div>
 								</div>
@@ -577,7 +578,8 @@
 								<div class="flex items-center justify-between">
 									<div class="flex items-center gap-2">
 										<Zap class="h-5 w-5" style="color: {primaryColor}" />
-										<span class="font-bold" style="color: {primaryColor}">+{weeklyDemon.xp} XP</span>
+										<span class="font-bold" style="color: {primaryColor}">+{weeklyDemon.xp} XP</span
+										>
 									</div>
 									{#if $user.loggedIn}
 										{#if weeklyDemon.claimed}
@@ -632,7 +634,7 @@
 								<div class="flex flex-col gap-3">
 									<div class="flex items-center justify-between rounded-lg bg-muted/50 p-3">
 										<span class="text-sm text-muted-foreground">Completion XP</span>
-												<span class="font-bold" style="color: {primaryColor}">+{level.xp} XP</span>
+										<span class="font-bold" style="color: {primaryColor}">+{level.xp} XP</span>
 									</div>
 									{#if level.minProgress && level.minProgressXp}
 										<div class="flex items-center justify-between rounded-lg bg-muted/30 p-3">
@@ -771,7 +773,7 @@
 								</div>
 								<div class="flex items-center gap-4">
 									<div class="text-right">
-												<span class="font-bold" style="color: {primaryColor}">+{mission.xp} XP</span>
+										<span class="font-bold" style="color: {primaryColor}">+{mission.xp} XP</span>
 										{#if mission.battlePassMissionRewards?.length}
 											<div class="mt-1 flex justify-end gap-1">
 												{#each mission.battlePassMissionRewards.slice(0, 3) as reward}
