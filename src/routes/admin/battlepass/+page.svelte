@@ -57,7 +57,8 @@
 		title: '',
 		description: '',
 		start: '',
-		end: ''
+		end: '',
+		primaryColor: '#8b5cf6'
 	};
 
 	let levelForm = {
@@ -246,7 +247,8 @@
 
 		const body: any = {
 			title: seasonForm.title,
-			description: seasonForm.description
+			description: seasonForm.description,
+			primaryColor: seasonForm.primaryColor
 		};
 
 		if (seasonForm.start) body.start = new Date(seasonForm.start).toISOString();
@@ -593,7 +595,7 @@
 
 	// Reset form functions
 	function openNewSeason() {
-		seasonForm = { id: null, title: '', description: '', start: '', end: '' };
+		seasonForm = { id: null, title: '', description: '', start: '', end: '', primaryColor: '#8b5cf6' };
 		showSeasonDialog = true;
 	}
 
@@ -603,7 +605,8 @@
 			title: season.title,
 			description: season.description,
 			start: convertTime(season.start),
-			end: convertTime(season.end)
+			end: convertTime(season.end),
+			primaryColor: season.primaryColor || '#8b5cf6'
 		};
 		showSeasonDialog = true;
 	}
@@ -1076,6 +1079,23 @@
 				<div>
 					<Label for="seasonEnd">End Date</Label>
 					<Input id="seasonEnd" type="datetime-local" bind:value={seasonForm.end} />
+				</div>
+			</div>
+			<div>
+				<Label for="seasonColor">Primary Color</Label>
+				<div class="flex gap-2 items-center">
+					<Input
+						id="seasonColor"
+						type="color"
+						bind:value={seasonForm.primaryColor}
+						class="h-10 w-20 cursor-pointer"
+					/>
+					<Input
+						type="text"
+						bind:value={seasonForm.primaryColor}
+						placeholder="#8b5cf6"
+						class="flex-1"
+					/>
 				</div>
 			</div>
 		</div>

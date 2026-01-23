@@ -41,6 +41,28 @@
 	let claimableRewards: any[] = [];
 	let missionStatus: Record<number, { completed: boolean; claimed: boolean }> = {};
 
+	// Primary color from season (default to purple if not set)
+	$: primaryColor = data.season?.primaryColor || '#8b5cf6';
+	
+	// Helper function to convert hex to RGB
+	function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		return result
+			? {
+					r: parseInt(result[1], 16),
+					g: parseInt(result[2], 16),
+					b: parseInt(result[3], 16)
+				}
+			: null;
+	}
+
+	// Generate CSS variable strings
+	$: cssVars = (() => {
+		const rgb = hexToRgb(primaryColor);
+		if (!rgb) return '';
+		return `--primary-color: ${rgb.r}, ${rgb.g}, ${rgb.b};`;
+	})();
+
 	// Hardcoded Daily and Weekly levels (API not available)
 	// Names will be replaced by actual level names from API
 	$: dailyLevel = {
@@ -252,7 +274,7 @@
 	</div>
 {:else}
 	<!-- Hero Section with Background Image -->
-	<div class="hero-section relative overflow-hidden">
+	<div class="hero-section relative overflow-hidden" style={cssVars}>
 		<div class="hero-bg-image absolute inset-0">
 			<img
 				src={data.season.backgroundUrl || `https://cdn.demonlistvn.com/battlepasses/${data.season.id}.webp`}
@@ -263,14 +285,14 @@
 		<div class="hero-bg-overlay absolute inset-0" />
 		<div class="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-12">
 			<div class="flex items-center gap-3">
-				<Crown class="h-10 w-10 text-yellow-400" />
+				<Crown class="h-10 w-10" style="color: {primaryColor}" />
 				<h1 class="text-4xl font-bold md:text-5xl">{data.season.title}</h1>
 			</div>
 			<p class="max-w-2xl text-center text-lg text-muted-foreground">{data.season.description}</p>
 
 			<!-- Season Timer -->
 			<div class="flex items-center gap-2 rounded-full bg-muted/50 px-6 py-2 backdrop-blur-sm">
-				<Zap class="h-5 w-5 text-yellow-400" />
+				<Zap class="h-5 w-5" style="color: {primaryColor}" />
 				<span class="font-medium"
 					>{$_('battlepass.days_remaining', { values: { count: daysRemaining } })}</span
 				>
@@ -279,7 +301,8 @@
 			<!-- User Progress Card -->
 			{#if $user.loggedIn}
 				<Card.Root
-					class="w-full max-w-2xl overflow-hidden border-2 border-yellow-500/30 bg-gradient-to-br from-yellow-500/10 to-orange-500/10 backdrop-blur-sm"
+					class="w-full max-w-2xl overflow-hidden backdrop-blur-sm"
+					style="border: 2px solid rgba(var(--primary-color), 0.3); background: linear-gradient(to bottom right, rgba(var(--primary-color), 0.1), rgba(var(--primary-color), 0.05));"
 				>
 					<Card.Content class="p-6">
 						{#if loading}
@@ -294,7 +317,8 @@
 								<div class="flex items-center justify-between">
 									<div class="flex items-center gap-3">
 										<div
-											class="tier-badge flex h-16 w-16 items-center justify-center rounded-xl bg-gradient-to-br from-yellow-400 to-orange-500 text-2xl font-bold text-black shadow-lg"
+											class="tier-badge flex h-16 w-16 items-center justify-center rounded-xl text-2xl font-bold text-black shadow-lg"
+											style="background: linear-gradient(to bottom right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.7));"
 										>
 											{currentTier}
 										</div>
@@ -307,15 +331,16 @@
 									</div>
 									{#if isPremium}
 										<div
-											class="flex items-center gap-2 rounded-full bg-gradient-to-r from-yellow-500 to-orange-500 px-4 py-2 text-black"
+											class="flex items-center gap-2 rounded-full px-4 py-2 text-black"
+											style="background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.8));"
 										>
 											<Crown class="h-5 w-5" />
 											<span class="font-bold">PREMIUM</span>
 										</div>
 									{:else}
 										<Button
-											class="bg-gradient-to-r from-yellow-500 to-orange-500 text-black hover:from-yellow-600 hover:to-orange-600"
-										>
+											class="text-black"
+											style="background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.8));">
 											<Crown class="mr-2 h-4 w-4" />
 											{$_('battlepass.upgrade')} - {formatCurrency(
 												data.season.premiumPrice || DEFAULT_PREMIUM_PRICE
@@ -336,8 +361,8 @@
 									</div>
 									<div class="xp-bar-container h-4 overflow-hidden rounded-full bg-muted">
 										<div
-											class="xp-bar h-full rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 transition-all duration-500"
-											style="width: {(tierProgress / XP_PER_TIER) * 100}%"
+											class="xp-bar h-full rounded-full transition-all duration-500"
+											style="width: {(tierProgress / XP_PER_TIER) * 100}%; background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.7));"
 										/>
 									</div>
 								</div>
@@ -475,8 +500,8 @@
 
 								<div class="flex items-center justify-between">
 									<div class="flex items-center gap-2">
-										<Zap class="h-5 w-5 text-yellow-400" />
-										<span class="font-bold text-yellow-400">+{dailyLevel.xp} XP</span>
+										<Zap class="h-5 w-5" style="color: {primaryColor}" />
+										<span class="font-bold" style="color: {primaryColor}">+{dailyLevel.xp} XP</span>
 									</div>
 									{#if $user.loggedIn}
 										{#if dailyLevel.claimed}
@@ -551,8 +576,8 @@
 
 								<div class="flex items-center justify-between">
 									<div class="flex items-center gap-2">
-										<Zap class="h-5 w-5 text-yellow-400" />
-										<span class="font-bold text-yellow-400">+{weeklyDemon.xp} XP</span>
+										<Zap class="h-5 w-5" style="color: {primaryColor}" />
+										<span class="font-bold" style="color: {primaryColor}">+{weeklyDemon.xp} XP</span>
 									</div>
 									{#if $user.loggedIn}
 										{#if weeklyDemon.claimed}
@@ -607,7 +632,7 @@
 								<div class="flex flex-col gap-3">
 									<div class="flex items-center justify-between rounded-lg bg-muted/50 p-3">
 										<span class="text-sm text-muted-foreground">Completion XP</span>
-										<span class="font-bold text-yellow-400">+{level.xp} XP</span>
+												<span class="font-bold" style="color: {primaryColor}">+{level.xp} XP</span>
 									</div>
 									{#if level.minProgress && level.minProgressXp}
 										<div class="flex items-center justify-between rounded-lg bg-muted/30 p-3">
@@ -667,7 +692,8 @@
 											</div>
 										</div>
 										<div
-											class="rounded-full bg-yellow-500/20 px-3 py-1 text-sm font-bold text-yellow-400"
+											class="rounded-full px-3 py-1 text-sm font-bold"
+											style="background-color: rgba(var(--primary-color), 0.2); color: {primaryColor}"
 										>
 											+{mapPack?.xp || 0} XP
 										</div>
@@ -745,7 +771,7 @@
 								</div>
 								<div class="flex items-center gap-4">
 									<div class="text-right">
-										<span class="font-bold text-yellow-400">+{mission.xp} XP</span>
+												<span class="font-bold" style="color: {primaryColor}">+{mission.xp} XP</span>
 										{#if mission.battlePassMissionRewards?.length}
 											<div class="mt-1 flex justify-end gap-1">
 												{#each mission.battlePassMissionRewards.slice(0, 3) as reward}
@@ -826,9 +852,12 @@
 						<p class="text-sm text-muted-foreground">{mapPack.description}</p>
 					{/if}
 
-					<div class="flex items-center justify-between rounded-lg bg-yellow-500/10 p-3">
+					<div
+						class="flex items-center justify-between rounded-lg p-3"
+						style="background-color: rgba(var(--primary-color), 0.1);"
+					>
 						<span class="text-sm">{$_('battlepass.completion_xp')}</span>
-						<span class="font-bold text-yellow-400">+{mapPack?.xp || 0} XP</span>
+						<span class="font-bold" style="color: {primaryColor}">+{mapPack?.xp || 0} XP</span>
 					</div>
 
 					<div>
@@ -888,9 +917,9 @@
 	.hero-bg-overlay {
 		background: linear-gradient(
 			135deg,
-			rgba(234, 179, 8, 0.1) 0%,
-			rgba(249, 115, 22, 0.1) 50%,
-			rgba(220, 38, 38, 0.05) 100%
+			rgba(var(--primary-color), 0.15) 0%,
+			rgba(var(--primary-color), 0.1) 50%,
+			rgba(var(--primary-color), 0.05) 100%
 		);
 	}
 
@@ -900,10 +929,10 @@
 
 	@keyframes tier-glow {
 		from {
-			box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+			box-shadow: 0 0 15px rgba(var(--primary-color), 0.3);
 		}
 		to {
-			box-shadow: 0 0 25px rgba(234, 179, 8, 0.5);
+			box-shadow: 0 0 25px rgba(var(--primary-color), 0.5);
 		}
 	}
 
@@ -912,6 +941,6 @@
 	}
 
 	.xp-bar {
-		box-shadow: 0 0 10px rgba(234, 179, 8, 0.5);
+		box-shadow: 0 0 10px rgba(var(--primary-color), 0.5);
 	}
 </style>
