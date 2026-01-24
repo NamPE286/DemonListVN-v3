@@ -58,7 +58,7 @@
 							<span class="font-bold" style="color: {primaryColor}">+{level.xp} XP</span>
 						</div>
 					</div>
-					{#if level.minProgress && level.minProgressXp}
+					{#if level.minProgress && level.minProgressXp && level.minProgress !== 100}
 						<div class="flex items-center justify-between rounded-lg bg-muted/30 p-3">
 							<span class="text-sm text-muted-foreground"
 								>{$_('battlepass.progress')} ({level.minProgress}%)</span

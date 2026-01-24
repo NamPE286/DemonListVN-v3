@@ -67,27 +67,66 @@
 		return `--primary-color: ${rgb.r}, ${rgb.g}, ${rgb.b};`;
 	})();
 
-	// Hardcoded Daily and Weekly levels (API not available)
-	// Names will be replaced by actual level names from API
-	$: dailyLevel = {
-		id: 12345678,
-		name: $_('battlepass.placeholder_daily_level'),
-		difficulty: 'harder',
-		progress: 0,
-		completed: false,
-		claimed: false,
-		xp: 25
-	};
+	// Daily and Weekly levels from API
+	let dailyWeeklyData: { daily: any; weekly: any } = data.dailyWeekly || { daily: null, weekly: null };
 
-	$: weeklyDemon = {
-		id: 87654321,
-		name: $_('battlepass.placeholder_weekly_demon'),
-		difficulty: 'medium_demon',
-		progress: 0,
-		completed: false,
-		claimed: false,
-		xp: 100
-	};
+	// Computed daily level data
+	$: dailyLevel = dailyWeeklyData.daily
+		? {
+				id: dailyWeeklyData.daily.id,
+				levelId: dailyWeeklyData.daily.levelID,
+				name: dailyWeeklyData.daily.levels?.name || $_('battlepass.placeholder_daily_level'),
+				difficulty: dailyWeeklyData.daily.levels?.difficulty || 'harder',
+				progress: dailyWeeklyData.daily.progress ?? 0,
+				completed: (dailyWeeklyData.daily.progress ?? 0) >= 100,
+				claimed: dailyWeeklyData.daily.completionClaimed ?? false,
+				minProgressClaimed: dailyWeeklyData.daily.minProgressClaimed ?? false,
+				minProgress: dailyWeeklyData.daily.minProgress ?? 50,
+				minProgressXp: dailyWeeklyData.daily.minProgressXp ?? 500,
+				xp: dailyWeeklyData.daily.xp ?? 1000
+			}
+		: {
+				id: 0,
+				levelId: 0,
+				name: $_('battlepass.no_daily_level'),
+				difficulty: 'harder',
+				progress: 0,
+				completed: false,
+				claimed: false,
+				minProgressClaimed: false,
+				minProgress: 50,
+				minProgressXp: 500,
+				xp: 1000
+			};
+
+	// Computed weekly level data
+	$: weeklyDemon = dailyWeeklyData.weekly
+		? {
+				id: dailyWeeklyData.weekly.id,
+				levelId: dailyWeeklyData.weekly.levelID,
+				name: dailyWeeklyData.weekly.levels?.name || $_('battlepass.placeholder_weekly_demon'),
+				difficulty: dailyWeeklyData.weekly.levels?.difficulty || 'medium_demon',
+				progress: dailyWeeklyData.weekly.progress ?? 0,
+				completed: (dailyWeeklyData.weekly.progress ?? 0) >= 100,
+				claimed: dailyWeeklyData.weekly.completionClaimed ?? false,
+				minProgressClaimed: dailyWeeklyData.weekly.minProgressClaimed ?? false,
+				minProgress: dailyWeeklyData.weekly.minProgress ?? 50,
+				minProgressXp: dailyWeeklyData.weekly.minProgressXp ?? 500,
+				xp: dailyWeeklyData.weekly.xp ?? 1000
+			}
+		: {
+				id: 0,
+				levelId: 0,
+				name: $_('battlepass.no_weekly_level'),
+				difficulty: 'medium_demon',
+				progress: 0,
+				completed: false,
+				claimed: false,
+				minProgressClaimed: false,
+				minProgress: 50,
+				minProgressXp: 500,
+				xp: 1000
+			};
 
 	$: currentTier = progress ? Math.min(Math.floor(progress.xp / XP_PER_TIER), MAX_TIER) : 0;
 	$: tierProgress = progress ? progress.xp % XP_PER_TIER : 0;
@@ -330,6 +369,52 @@
 		}
 	}
 
+	async function fetchDailyWeeklyProgress() {
+		if (!$user.loggedIn || !data.season) return;
+
+		try {
+			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/daily-weekly`, {
+				headers: {
+					Authorization: `Bearer ${await $user.token()}`
+				}
+			});
+
+			if (res.ok) {
+				dailyWeeklyData = await res.json();
+			}
+		} catch (e) {
+			console.error('Failed to fetch daily/weekly progress:', e);
+		}
+	}
+
+	async function claimDailyWeeklyReward(levelId: number, claimType: 'minProgress' | 'completion') {
+		if (!$user.loggedIn) return;
+
+		try {
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/level/${levelId}/claim/${claimType}`,
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${await $user.token()}`
+					}
+				}
+			);
+
+			if (res.ok) {
+				const result = await res.json();
+				toast.success($_('battlepass.xp_claimed', { values: { xp: result.xp } }));
+				await fetchProgress();
+				await fetchDailyWeeklyProgress();
+			} else {
+				const errorData = await res.json();
+				toast.error(errorData.message || $_('battlepass.claim_failed'));
+			}
+		} catch (e) {
+			toast.error($_('battlepass.claim_failed'));
+		}
+	}
+
 	function formatCurrency(amount: number): string {
 		return new Intl.NumberFormat('vi-VN', {
 			style: 'currency',
@@ -344,7 +429,8 @@
 				fetchClaimableRewards(),
 				fetchMissionStatus(),
 				fetchLevelProgress(),
-				fetchMapPackProgress()
+				fetchMapPackProgress(),
+				fetchDailyWeeklyProgress()
 			]);
 		}
 	});
@@ -355,6 +441,7 @@
 		fetchMissionStatus();
 		fetchLevelProgress();
 		fetchMapPackProgress();
+		fetchDailyWeeklyProgress();
 	}
 </script>
 
@@ -540,6 +627,7 @@
 					isLoggedIn={$user.loggedIn}
 					{dailyLevel}
 					{weeklyDemon}
+					on:claim={(e) => claimDailyWeeklyReward(e.detail.levelId, e.detail.claimType)}
 				/>
 			</Tabs.Content>
 
