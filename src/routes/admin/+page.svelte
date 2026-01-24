@@ -44,6 +44,7 @@
 	<a href="/admin/battlepass">Battlepass</a><br />
 	<a href="/admin/mappack">Map pack</a><br />
 	<a href="/admin/notification">Send Notification</a><br />
+	<a href="/admin/apiSimulator">API Simulator</a><br />
 </div>
 
 <style lang="scss">
