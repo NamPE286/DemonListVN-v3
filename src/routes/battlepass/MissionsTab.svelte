@@ -6,6 +6,7 @@
 	import Sparkles from 'lucide-svelte/icons/sparkles';
 	import Check from 'lucide-svelte/icons/check';
 	import Lock from 'lucide-svelte/icons/lock';
+	import RefreshCw from 'lucide-svelte/icons/refresh-cw';
 
 	export let missions: any[] = [];
 	export let missionStatus: Record<number, { completed: boolean; claimed: boolean }> = {};
@@ -47,7 +48,15 @@
 					{/if}
 				</div>
 				<div class="flex-1">
-					<h4 class="font-bold {isClaimed ? 'line-through' : ''}">{mission.title}</h4>
+					<div class="flex items-center gap-2">
+						<h4 class="font-bold {isClaimed ? 'line-through' : ''}">{mission.title}</h4>
+						{#if mission.refreshType && mission.refreshType !== 'none'}
+							<span class="flex items-center gap-1 rounded px-1.5 py-0.5 text-xs font-medium {mission.refreshType === 'daily' ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}">
+								<RefreshCw class="h-3 w-3" />
+								{mission.refreshType === 'daily' ? $_('battlepass.daily') : $_('battlepass.weekly')}
+							</span>
+						{/if}
+					</div>
 					<p class="text-sm text-muted-foreground">{mission.description}</p>
 				</div>
 				<div class="flex items-center gap-4">

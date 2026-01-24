@@ -27,6 +27,7 @@
 	import {
 		MAP_PACK_DIFFICULTY_OPTIONS,
 		MISSION_CONDITION_TYPES,
+		MISSION_REFRESH_TYPES,
 		MAX_TIER,
 		XP_PER_TIER
 	} from '$lib/battlepass/constants';
@@ -103,7 +104,8 @@
 		description: '',
 		condition: '[]',
 		xp: 100,
-		order: 0
+		order: 0,
+		refreshType: 'none' as 'none' | 'daily' | 'weekly'
 	};
 
 	let conditionBuilderMode = true; // Toggle between UI builder and raw JSON
@@ -516,7 +518,8 @@
 					description: missionForm.description,
 					condition,
 					xp: missionForm.xp,
-					order: missionForm.order
+					order: missionForm.order,
+					refreshType: missionForm.refreshType
 				}),
 				headers: {
 					Authorization: `Bearer ${await $user.token()}`,
@@ -714,7 +717,7 @@
 	}
 
 	function openNewMission() {
-		missionForm = { id: null, title: '', description: '', condition: '[]', xp: 100, order: 0 };
+		missionForm = { id: null, title: '', description: '', condition: '[]', xp: 100, order: 0, refreshType: 'none' };
 		conditionBuilderMode = true;
 		conditionList = [];
 		newCondition = { type: 'clear_level', targetId: null, value: null };
@@ -728,7 +731,8 @@
 			description: mission.description,
 			condition: JSON.stringify(mission.condition || [], null, 2),
 			xp: mission.xp,
-			order: mission.order
+			order: mission.order,
+			refreshType: mission.refreshType || 'none'
 		};
 		conditionBuilderMode = true;
 		conditionList = Array.isArray(mission.condition) ? [...mission.condition] : [];
@@ -1037,6 +1041,11 @@
 												<div class="mt-2 flex items-center gap-4 text-sm">
 													<span class="text-yellow-400">+{mission.xp} XP</span>
 													<span class="text-muted-foreground">Order: {mission.order}</span>
+													{#if mission.refreshType && mission.refreshType !== 'none'}
+														<span class="rounded px-2 py-0.5 text-xs font-medium {mission.refreshType === 'daily' ? 'bg-blue-500/20 text-blue-400' : 'bg-purple-500/20 text-purple-400'}">
+															{mission.refreshType === 'daily' ? '🔄 Daily' : '📅 Weekly'}
+														</span>
+													{/if}
 												</div>
 												<div class="mt-2">
 													<code class="rounded bg-muted px-2 py-1 text-xs">
@@ -1535,6 +1544,43 @@
 						<Label for="missionOrder">Order</Label>
 						<Input id="missionOrder" type="number" bind:value={missionForm.order} />
 					</div>
+				</div>
+
+				<!-- Refresh Type -->
+				<div>
+					<Label for="missionRefreshType">Refresh Schedule</Label>
+					<Select.Root
+						selected={{ 
+							value: missionForm.refreshType, 
+							label: MISSION_REFRESH_TYPES.find(t => t.value === missionForm.refreshType)?.label || 'No Refresh' 
+						}}
+						onSelectedChange={(v) => {
+							if (v) missionForm.refreshType = v.value;
+						}}
+					>
+						<Select.Trigger id="missionRefreshType">
+							<Select.Value placeholder="Select refresh schedule" />
+						</Select.Trigger>
+						<Select.Content>
+							{#each MISSION_REFRESH_TYPES as refreshType}
+								<Select.Item value={refreshType.value} label={refreshType.label}>
+									<div class="flex flex-col">
+										<span>{refreshType.label}</span>
+										<span class="text-xs text-muted-foreground">{refreshType.description}</span>
+									</div>
+								</Select.Item>
+							{/each}
+						</Select.Content>
+					</Select.Root>
+					<p class="mt-1 text-xs text-muted-foreground">
+						{#if missionForm.refreshType === 'daily'}
+							Mission progress will reset every day at midnight (UTC+7).
+						{:else if missionForm.refreshType === 'weekly'}
+							Mission progress will reset every Monday at midnight (UTC+7).
+						{:else}
+							Mission does not reset automatically. Progress is permanent.
+						{/if}
+					</p>
 				</div>
 			</div>
 		</ScrollArea>

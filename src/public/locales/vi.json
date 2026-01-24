@@ -1195,6 +1195,8 @@
     "missions": "Nhiệm vụ",
     "missions_desc": "Hoàn thành nhiệm vụ đặc biệt để nhận XP và phần thưởng bonus",
     "no_missions": "Chưa có nhiệm vụ",
+    "daily": "Hàng ngày",
+    "weekly": "Hàng tuần",
     "placeholder_daily_level": "Level hàng ngày mẫu",
     "placeholder_weekly_demon": "Demon hàng tuần mẫu",
     "upgrade_to_premium": "Nâng cấp lên Premium",

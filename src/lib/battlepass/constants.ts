@@ -21,6 +21,13 @@ export const DIFFICULTY_NAMES: Record<string, string> = {
 	extreme_demon: 'Extreme Demon'
 };
 
+// Mission refresh type options
+export const MISSION_REFRESH_TYPES = [
+	{ value: 'none', label: 'No Refresh', description: 'Mission does not reset automatically' },
+	{ value: 'daily', label: 'Daily', description: 'Resets every day at 0:00 AM UTC+7' },
+	{ value: 'weekly', label: 'Weekly', description: 'Resets every Monday at 0:00 AM UTC+7' }
+];
+
 // Mission condition types documentation
 export const MISSION_CONDITION_TYPES = [
 	{
