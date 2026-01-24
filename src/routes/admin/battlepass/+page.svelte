@@ -106,6 +106,14 @@
 		order: 0
 	};
 
+	let conditionBuilderMode = true; // Toggle between UI builder and raw JSON
+	let conditionList: any[] = [];
+	let newCondition = {
+		type: 'clear_level' as any,
+		targetId: null as number | null,
+		value: null as number | null
+	};
+
 	let missionRewardForm = {
 		missionId: null as number | null,
 		itemId: '',
@@ -489,11 +497,15 @@
 			: `${import.meta.env.VITE_API_URL}/battlepass/mission/${missionForm.id}`;
 
 		let condition;
-		try {
-			condition = JSON.parse(missionForm.condition);
-		} catch (e) {
-			toast.error('Invalid condition JSON');
-			return;
+		if (conditionBuilderMode) {
+			condition = conditionList;
+		} else {
+			try {
+				condition = JSON.parse(missionForm.condition);
+			} catch (e) {
+				toast.error('Invalid condition JSON');
+				return;
+			}
 		}
 
 		toast.promise(
@@ -703,6 +715,9 @@
 
 	function openNewMission() {
 		missionForm = { id: null, title: '', description: '', condition: '[]', xp: 100, order: 0 };
+		conditionBuilderMode = true;
+		conditionList = [];
+		newCondition = { type: 'clear_level', targetId: null, value: null };
 		showMissionDialog = true;
 	}
 
@@ -715,7 +730,47 @@
 			xp: mission.xp,
 			order: mission.order
 		};
+		conditionBuilderMode = true;
+		conditionList = Array.isArray(mission.condition) ? [...mission.condition] : [];
+		newCondition = { type: 'clear_level', targetId: null, value: null };
 		showMissionDialog = true;
+	}
+
+	function addConditionToList() {
+		const cond: any = { type: newCondition.type };
+		
+		if (newCondition.type === 'clear_level' || newCondition.type === 'clear_mappack') {
+			if (!newCondition.targetId) {
+				toast.error('Please enter a target ID');
+				return;
+			}
+			cond.targetId = Number(newCondition.targetId);
+		} else {
+			if (!newCondition.value) {
+				toast.error('Please enter a value');
+				return;
+			}
+			cond.value = Number(newCondition.value);
+		}
+
+		conditionList = [...conditionList, cond];
+		newCondition = { type: newCondition.type, targetId: null, value: null };
+	}
+
+	function removeConditionFromList(index: number) {
+		conditionList = conditionList.filter((_, i) => i !== index);
+	}
+
+	function syncConditionsToJSON() {
+		missionForm.condition = JSON.stringify(conditionList, null, 2);
+	}
+
+	function syncJSONToConditions() {
+		try {
+			conditionList = JSON.parse(missionForm.condition);
+		} catch (e) {
+			toast.error('Invalid JSON format');
+		}
 	}
 
 	function openLinkMapPack() {
@@ -1307,54 +1362,182 @@
 
 <!-- Mission Dialog -->
 <Dialog.Root bind:open={showMissionDialog}>
-	<Dialog.Content class="max-w-lg">
+	<Dialog.Content class="max-w-2xl max-h-[90vh]">
 		<Dialog.Header>
 			<Dialog.Title>{missionForm.id ? 'Edit Mission' : 'Add Mission'}</Dialog.Title>
 		</Dialog.Header>
-		<div class="flex flex-col gap-4">
-			<div>
-				<Label for="missionTitle">Title</Label>
-				<Input id="missionTitle" bind:value={missionForm.title} placeholder="Beat Extreme Level" />
-			</div>
-			<div>
-				<Label for="missionDesc">Description</Label>
-				<Textarea
-					id="missionDesc"
-					bind:value={missionForm.description}
-					placeholder="Complete the featured extreme demon"
-				/>
-			</div>
-			<div>
-				<Label for="missionCondition">Condition (JSON)</Label>
-				<Textarea
-					id="missionCondition"
-					bind:value={missionForm.condition}
-					placeholder={'[{"type": "clear_level", "targetId": 123456}]'}
-					rows={4}
-				/>
-				<div class="mt-2 rounded-lg bg-muted/50 p-3 text-xs">
-					<p class="mb-2 font-medium">Available condition types:</p>
-					<ul class="space-y-1 text-muted-foreground">
-						{#each MISSION_CONDITION_TYPES as condType}
-							<li>
-								<code class="rounded bg-muted px-1">{condType.type}</code>
-								<span class="ml-1">- {condType.description}</span>
-							</li>
-						{/each}
-					</ul>
-				</div>
-			</div>
-			<div class="grid grid-cols-2 gap-4">
+		<ScrollArea class="max-h-[calc(90vh-180px)] pr-4">
+			<div class="flex flex-col gap-4">
 				<div>
-					<Label for="missionXP">XP Reward</Label>
-					<Input id="missionXP" type="number" bind:value={missionForm.xp} />
+					<Label for="missionTitle">Title</Label>
+					<Input id="missionTitle" bind:value={missionForm.title} placeholder="Beat Extreme Level" />
 				</div>
 				<div>
-					<Label for="missionOrder">Order</Label>
-					<Input id="missionOrder" type="number" bind:value={missionForm.order} />
+					<Label for="missionDesc">Description</Label>
+					<Textarea
+						id="missionDesc"
+						bind:value={missionForm.description}
+						placeholder="Complete the featured extreme demon"
+					/>
+				</div>
+
+				<!-- Condition Builder Toggle -->
+				<div class="flex items-center justify-between rounded-lg border p-3">
+					<div class="flex items-center gap-2">
+						<Label>Condition Editor Mode</Label>
+						<Switch 
+							bind:checked={conditionBuilderMode} 
+							onCheckedChange={() => {
+								if (conditionBuilderMode) {
+									syncJSONToConditions();
+								} else {
+									syncConditionsToJSON();
+								}
+							}}
+						/>
+						<span class="text-sm text-muted-foreground">
+							{conditionBuilderMode ? 'UI Builder' : 'Raw JSON'}
+						</span>
+					</div>
+				</div>
+
+				{#if conditionBuilderMode}
+					<!-- UI Builder Mode -->
+					<div class="space-y-4">
+						<div>
+							<Label>Conditions</Label>
+							{#if conditionList.length > 0}
+								<div class="mt-2 space-y-2">
+									{#each conditionList as cond, index}
+										<div class="flex items-center gap-2 rounded-lg border bg-muted/30 p-3">
+											<div class="flex-1">
+												<div class="text-sm font-medium">
+													{MISSION_CONDITION_TYPES.find((t) => t.type === cond.type)?.description || cond.type}
+												</div>
+												<code class="text-xs text-muted-foreground">
+													{JSON.stringify(cond)}
+												</code>
+											</div>
+											<Button
+												variant="ghost"
+												size="icon"
+												on:click={() => removeConditionFromList(index)}
+											>
+												<Trash2 class="h-4 w-4" />
+											</Button>
+										</div>
+									{/each}
+								</div>
+							{:else}
+								<p class="mt-2 text-sm text-muted-foreground">No conditions added yet</p>
+							{/if}
+						</div>
+
+						<!-- Add New Condition -->
+						<div class="rounded-lg border p-4 space-y-3">
+							<Label class="text-base font-semibold">Add Condition</Label>
+							
+							<div>
+								<Label for="condType">Condition Type</Label>
+								<Select.Root
+									selected={{ value: newCondition.type, label: MISSION_CONDITION_TYPES.find(t => t.type === newCondition.type)?.description || newCondition.type }}
+									onSelectedChange={(v) => {
+										if (v) {
+											newCondition.type = v.value;
+											newCondition.targetId = null;
+											newCondition.value = null;
+										}
+									}}
+								>
+									<Select.Trigger id="condType">
+										<Select.Value placeholder="Select condition type" />
+									</Select.Trigger>
+									<Select.Content>
+										{#each MISSION_CONDITION_TYPES as condType}
+											<Select.Item value={condType.type} label={condType.description}>
+												{condType.description}
+											</Select.Item>
+										{/each}
+									</Select.Content>
+								</Select.Root>
+							</div>
+
+							{#if newCondition.type === 'clear_level' || newCondition.type === 'clear_mappack'}
+								<div>
+									<Label for="condTarget">
+										{newCondition.type === 'clear_level' ? 'Level ID' : 'Map Pack ID'}
+									</Label>
+									<Input
+										id="condTarget"
+										type="number"
+										bind:value={newCondition.targetId}
+										placeholder="Enter ID"
+									/>
+								</div>
+							{:else}
+								<div>
+									<Label for="condValue">
+										{newCondition.type === 'reach_tier' ? 'Tier Number' : 
+										 newCondition.type === 'earn_xp' ? 'XP Amount' : 
+										 'Count'}
+									</Label>
+									<Input
+										id="condValue"
+										type="number"
+										bind:value={newCondition.value}
+										placeholder="Enter value"
+									/>
+								</div>
+							{/if}
+
+							<Button size="sm" class="w-full" on:click={addConditionToList}>
+								<Plus class="mr-1 h-4 w-4" />
+								Add Condition
+							</Button>
+
+							<div class="rounded bg-muted/50 p-2 text-xs">
+								<span class="font-medium">Example: </span>
+								<code>{JSON.stringify(MISSION_CONDITION_TYPES.find((t) => t.type === newCondition.type)?.example)}</code>
+							</div>
+						</div>
+					</div>
+				{:else}
+					<!-- Raw JSON Mode -->
+					<div>
+						<Label for="missionCondition">Condition (JSON)</Label>
+						<Textarea
+							id="missionCondition"
+							bind:value={missionForm.condition}
+							placeholder={'[{"type": "clear_level", "targetId": 123456}]'}
+							rows={6}
+							class="font-mono text-xs"
+						/>
+						<div class="mt-2 rounded-lg bg-muted/50 p-3 text-xs">
+							<p class="mb-2 font-medium">Available condition types:</p>
+							<ul class="space-y-1 text-muted-foreground">
+								{#each MISSION_CONDITION_TYPES as condType}
+									<li>
+										<code class="rounded bg-muted px-1">{condType.type}</code>
+										<span class="ml-1">- {condType.description}</span>
+									</li>
+								{/each}
+							</ul>
+						</div>
+					</div>
+				{/if}
+
+				<div class="grid grid-cols-2 gap-4">
+					<div>
+						<Label for="missionXP">XP Reward</Label>
+						<Input id="missionXP" type="number" bind:value={missionForm.xp} />
+					</div>
+					<div>
+						<Label for="missionOrder">Order</Label>
+						<Input id="missionOrder" type="number" bind:value={missionForm.order} />
+					</div>
 				</div>
 			</div>
-		</div>
+		</ScrollArea>
 		<Dialog.Footer>
 			<Button variant="outline" on:click={() => (showMissionDialog = false)}>Cancel</Button>
 			<Button on:click={saveMission}>Save</Button>
