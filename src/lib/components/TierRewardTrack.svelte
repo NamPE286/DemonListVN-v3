@@ -41,7 +41,9 @@
 		return Math.min(Math.max(1, maxTier), MAX_TIER);
 	}
 
-	$: maxTierToShow = getMaxTierWithRewards(rewards);
+	$: maxTierToShow = editable 
+		? Math.min(getMaxTierWithRewards(rewards) + 1, MAX_TIER)
+		: getMaxTierWithRewards(rewards);
 </script>
 
 <div class="tier-track-container overflow-x-auto pb-4">
