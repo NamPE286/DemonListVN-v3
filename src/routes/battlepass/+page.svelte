@@ -171,7 +171,7 @@
 			if (levelIds.length === 0) return;
 
 			const res = await fetch(
-				`${import.meta.env.VITE_API_URL}/battlepass/levels/progress/batch?ids=${levelIds.join(',')}`,
+				`${import.meta.env.VITE_API_URL}/battlepass/levels/progress?ids=${levelIds.join(',')}`,
 				{
 					headers: {
 						Authorization: `Bearer ${await $user.token()}`
@@ -200,7 +200,7 @@
 			if (mapPackIds.length === 0) return;
 
 			const res = await fetch(
-				`${import.meta.env.VITE_API_URL}/battlepass/mappacks/progress/batch?ids=${mapPackIds.join(',')}`,
+				`${import.meta.env.VITE_API_URL}/battlepass/mappacks/progress?ids=${mapPackIds.join(',')}`,
 				{
 					headers: {
 						Authorization: `Bearer ${await $user.token()}`
@@ -229,7 +229,7 @@
 
 			if (levelRequests.length > 0) {
 				const levelRes = await fetch(
-					`${import.meta.env.VITE_API_URL}/battlepass/mappacks/levels/progress/batch`,
+					`${import.meta.env.VITE_API_URL}/battlepass/mappacks/levels/progress`,
 					{
 						method: 'POST',
 						headers: {
