@@ -22,64 +22,48 @@
 	// Computed daily level data
 	$: dailyLevel = dailyWeeklyData.daily
 		? {
-				id: dailyWeeklyData.daily.id,
-				levelId: dailyWeeklyData.daily.levelID,
-				name: dailyWeeklyData.daily.levels?.name || $_('battlepass.placeholder_daily_level'),
-				difficulty: dailyWeeklyData.daily.levels?.difficulty || 'harder',
-				progress: dailyWeeklyData.daily.progress ?? 0,
-				completed: (dailyWeeklyData.daily.progress ?? 0) >= 100,
-				claimed: dailyWeeklyData.daily.completionClaimed ?? false,
-				minProgressClaimed: dailyWeeklyData.daily.minProgressClaimed ?? false,
-				minProgress: dailyWeeklyData.daily.minProgress ?? 50,
-				minProgressXp: dailyWeeklyData.daily.minProgressXp ?? 500,
-				xp: dailyWeeklyData.daily.xp ?? 1000
-			}
+			id: dailyWeeklyData.daily.id,
+			levelId: dailyWeeklyData.daily.levelID,
+			name: dailyWeeklyData.daily.levels?.name || $_('battlepass.placeholder_daily_level'),
+			difficulty: dailyWeeklyData.daily.levels?.difficulty || 'harder',
+			progress: dailyWeeklyData.daily.progress ?? 0,
+			completed: (dailyWeeklyData.daily.progress ?? 0) >= 100,
+			claimed: dailyWeeklyData.daily.completionClaimed ?? false,
+			xp: dailyWeeklyData.daily.xp ?? 1000
+		}
 		: {
-				id: 0,
-				levelId: 0,
-				name: $_('battlepass.no_daily_level'),
-				difficulty: 'harder',
-				progress: 0,
-				completed: false,
-				claimed: false,
-				minProgressClaimed: false,
-				minProgress: 50,
-				minProgressXp: 500,
-				xp: 1000
-			};
+			id: 0,
+			levelId: 0,
+			name: $_('battlepass.no_daily_level'),
+			difficulty: 'harder',
+			progress: 0,
+			completed: false,
+			claimed: false,
+			xp: 1000
+		};
 
 	// Computed weekly level data
 	$: weeklyDemon = dailyWeeklyData.weekly
 		? {
-				id: dailyWeeklyData.weekly.id,
-				levelId: dailyWeeklyData.weekly.levelID,
-				name: dailyWeeklyData.weekly.levels?.name || $_('battlepass.placeholder_weekly_demon'),
-				difficulty: dailyWeeklyData.weekly.levels?.difficulty || 'medium_demon',
-				progress: dailyWeeklyData.weekly.progress ?? 0,
-				completed: (dailyWeeklyData.weekly.progress ?? 0) >= 100,
-				claimed: dailyWeeklyData.weekly.completionClaimed ?? false,
-				minProgressClaimed: dailyWeeklyData.weekly.minProgressClaimed ?? false,
-				minProgress: dailyWeeklyData.weekly.minProgress ?? 50,
-				minProgressXp: dailyWeeklyData.weekly.minProgressXp ?? 500,
-				xp: dailyWeeklyData.weekly.xp ?? 1000
-			}
+			id: dailyWeeklyData.weekly.id,
+			levelId: dailyWeeklyData.weekly.levelID,
+			name: dailyWeeklyData.weekly.levels?.name || $_('battlepass.placeholder_weekly_demon'),
+			difficulty: dailyWeeklyData.weekly.levels?.difficulty || 'medium_demon',
+			progress: dailyWeeklyData.weekly.progress ?? 0,
+			completed: (dailyWeeklyData.weekly.progress ?? 0) >= 100,
+			claimed: dailyWeeklyData.weekly.completionClaimed ?? false,
+			xp: dailyWeeklyData.weekly.xp ?? 1000
+		}
 		: {
-				id: 0,
-				levelId: 0,
-				name: $_('battlepass.no_weekly_level'),
-				difficulty: 'medium_demon',
-				progress: 0,
-				completed: false,
-				claimed: false,
-				minProgressClaimed: false,
-				minProgress: 50,
-				minProgressXp: 500,
-				xp: 1000
-			};
-
-	// Check if min progress is reached
-	$: dailyMinProgressReached = dailyLevel.progress >= dailyLevel.minProgress;
-	$: weeklyMinProgressReached = weeklyDemon.progress >= weeklyDemon.minProgress;
+			id: 0,
+			levelId: 0,
+			name: $_('battlepass.no_weekly_level'),
+			difficulty: 'medium_demon',
+			progress: 0,
+			completed: false,
+			claimed: false,
+			xp: 1000
+		};
 
 	function getDifficultyColor(difficulty: string): string {
 		return DIFFICULTY_COLORS[difficulty?.toLowerCase()] || '#6b7280';
@@ -108,12 +92,12 @@
 		}
 	}
 
-	async function claimDailyWeeklyReward(levelId: number, claimType: 'minProgress' | 'completion') {
+	async function claimDailyWeeklyReward(levelId: number) {
 		if (!$user.loggedIn) return;
 
 		try {
 			const res = await fetch(
-				`${import.meta.env.VITE_API_URL}/battlepass/level/${levelId}/claim/${claimType}`,
+				`${import.meta.env.VITE_API_URL}/battlepass/level/${levelId}/claim/completion`,
 				{
 					method: 'POST',
 					headers: {
@@ -229,36 +213,6 @@
 						</div>
 					</div>
 
-					<!-- Min Progress Reward (hidden when minProgress === 100) -->
-					{#if dailyLevel.minProgress && dailyLevel.minProgress !== 100}
-						<div class="flex items-center justify-between rounded-lg bg-muted/20 p-3">
-							<div class="flex flex-col">
-								<span class="text-sm text-muted-foreground">{$_('battlepass.min_progress_reward', { values: { progress: dailyLevel.minProgress } })}</span>
-								<div class="flex items-center gap-1">
-									<Zap class="h-4 w-4" style="color: {primaryColor}" />
-							<span class="font-bold" style="color: {primaryColor}">+{dailyLevel.minProgressXp} XP</span>
-								</div>
-							</div>
-							{#if $user.loggedIn}
-								{#if dailyLevel.minProgressClaimed}
-									<Button variant="outline" disabled size="sm">
-										<Check class="mr-1 h-4 w-4" />
-										{$_('battlepass.claimed')}
-									</Button>
-								{:else if dailyMinProgressReached}
-								<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(dailyLevel.id, 'minProgress')}>
-										{$_('battlepass.claim')}
-									</Button>
-								{:else}
-									<Button variant="outline" disabled size="sm">
-										<Lock class="mr-1 h-4 w-4" />
-										{dailyLevel.progress}/{dailyLevel.minProgress}%
-									</Button>
-								{/if}
-							{/if}
-						</div>
-					{/if}
-
 					<!-- Completion Reward -->
 					<div class="flex items-center justify-between rounded-lg bg-muted/20 p-3">
 						<div class="flex flex-col">
@@ -275,7 +229,7 @@
 								{$_('battlepass.claimed')}
 							</Button>
 						{:else if dailyLevel.completed}
-							<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(dailyLevel.id, 'completion')}>
+							<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(dailyLevel.id)}>
 									{$_('battlepass.claim')}
 								</Button>
 							{:else}
@@ -346,36 +300,6 @@
 						</div>
 					</div>
 
-					<!-- Min Progress Reward (hidden when minProgress === 100) -->
-					{#if weeklyDemon.minProgress && weeklyDemon.minProgress !== 100}
-						<div class="flex items-center justify-between rounded-lg bg-muted/20 p-3">
-							<div class="flex flex-col">
-								<span class="text-sm text-muted-foreground">{$_('battlepass.min_progress_reward', { values: { progress: weeklyDemon.minProgress } })}</span>
-								<div class="flex items-center gap-1">
-									<Zap class="h-4 w-4" style="color: {primaryColor}" />
-							<span class="font-bold" style="color: {primaryColor}">+{weeklyDemon.minProgressXp} XP</span>
-								</div>
-							</div>
-							{#if $user.loggedIn}
-								{#if weeklyDemon.minProgressClaimed}
-									<Button variant="outline" disabled size="sm">
-										<Check class="mr-1 h-4 w-4" />
-										{$_('battlepass.claimed')}
-									</Button>
-								{:else if weeklyMinProgressReached}
-								<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(weeklyDemon.id, 'minProgress')}>
-										{$_('battlepass.claim')}
-									</Button>
-								{:else}
-									<Button variant="outline" disabled size="sm">
-										<Lock class="mr-1 h-4 w-4" />
-										{weeklyDemon.progress}/{weeklyDemon.minProgress}%
-									</Button>
-								{/if}
-							{/if}
-						</div>
-					{/if}
-
 					<!-- Completion Reward -->
 					<div class="flex items-center justify-between rounded-lg bg-muted/20 p-3">
 						<div class="flex flex-col">
@@ -392,7 +316,7 @@
 								{$_('battlepass.claimed')}
 							</Button>
 						{:else if weeklyDemon.completed}
-							<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(weeklyDemon.id, 'completion')}>
+							<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(weeklyDemon.id)}>
 									{$_('battlepass.claim')}
 								</Button>
 							{:else}
