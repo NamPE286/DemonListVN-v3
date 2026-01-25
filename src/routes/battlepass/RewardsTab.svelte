@@ -12,7 +12,6 @@
 	let currentTier: number = 0;
 	let isPremium: boolean = false;
 	let loading = true;
-	let mounted = false;
 
 	async function fetchRewards() {
 		try {
@@ -25,13 +24,13 @@
 		}
 	}
 
-	async function fetchProgress() {
-		if (!$user.loggedIn) return;
+	async function fetchProgress(userInfo = $user) {
+		if (!userInfo.loggedIn) return;
 
 		try {
 			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/progress`, {
 				headers: {
-					Authorization: `Bearer ${await $user.token()}`
+					Authorization: `Bearer ${await userInfo.token()}`
 				}
 			});
 
@@ -45,13 +44,13 @@
 		}
 	}
 
-	async function fetchClaimableRewards() {
-		if (!$user.loggedIn) return;
+	async function fetchClaimableRewards(userInfo = $user) {
+		if (!userInfo.loggedIn) return;
 
 		try {
 			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/rewards/claimable`, {
 				headers: {
-					Authorization: `Bearer ${await $user.token()}`
+					Authorization: `Bearer ${await userInfo.token()}`
 				}
 			});
 
@@ -88,36 +87,14 @@
 		}
 	}
 
-	async function loadData() {
-		loading = true;
-		await Promise.all([
-			fetchRewards(),
-			fetchProgress(),
-			fetchClaimableRewards()
-		]);
-		loading = false;
-	}
-
-	onMount(() => {
-	 	mounted = true;
-	 	loadData();
-
-		const unsubscribe = user.subscribe(async (value) => {
-			if (!mounted) return;
-
-			if (value.loggedIn) {
-				await Promise.all([fetchProgress(), fetchClaimableRewards()]);
-			} else {
-				currentTier = 0;
-				isPremium = false;
-				claimableRewards = [];
+	onMount(async () => {
+		user.subscribe(async (value) => {
+			if (value.checked) {
+				loading = true;
+				await Promise.all([fetchRewards(), fetchProgress(), fetchClaimableRewards()]);
+				loading = false;
 			}
 		});
-
-		return () => {
-			mounted = false;
-			unsubscribe();
-		};
 	});
 </script>
 

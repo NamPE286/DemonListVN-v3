@@ -74,28 +74,10 @@
 		}
 	}
 
-	async function fetchClaimableRewards() {
-		if (!$user.loggedIn) return;
-
-		try {
-			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/rewards/claimable`, {
-				headers: {
-					Authorization: `Bearer ${await $user.token()}`
-				}
-			});
-
-			if (res.ok) {
-				claimableRewards = await res.json();
-			}
-		} catch (e) {
-			console.error('Failed to fetch claimable rewards:', e);
-		}
-	}
-
 	async function loadData() {
 		loading = true;
 		if ($user.loggedIn) {
-			await Promise.all([fetchProgress(), fetchClaimableRewards()]);
+			fetchProgress();
 		}
 		loading = false;
 	}
@@ -108,7 +90,7 @@
             if (!mounted) return;
 
             if (value.loggedIn) {
-                await Promise.all([fetchProgress(), fetchClaimableRewards()]);
+                fetchProgress();
             } else {
                 progress = null;
                 claimableRewards = [];
