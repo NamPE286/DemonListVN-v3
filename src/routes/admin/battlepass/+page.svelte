@@ -498,16 +498,24 @@
 			? `${import.meta.env.VITE_API_URL}/battlepass/season/${selectedSeason.id}/missions`
 			: `${import.meta.env.VITE_API_URL}/battlepass/mission/${missionForm.id}`;
 
-		let condition;
+		let condition: any[];
 		if (conditionBuilderMode) {
 			condition = conditionList;
 		} else {
 			try {
-				condition = JSON.parse(missionForm.condition);
+				const parsed = JSON.parse(missionForm.condition);
+				// Ensure condition is always an array
+				condition = Array.isArray(parsed) ? parsed : [];
 			} catch (e) {
 				toast.error('Invalid condition JSON');
 				return;
 			}
+		}
+
+		// Validate that condition is an array
+		if (!Array.isArray(condition)) {
+			toast.error('Condition must be an array');
+			return;
 		}
 
 		toast.promise(
@@ -725,17 +733,20 @@
 	}
 
 	function openEditMission(mission: any) {
+		// Ensure condition is always an array
+		const conditions = Array.isArray(mission.condition) ? mission.condition : [];
+		
 		missionForm = {
 			id: mission.id,
 			title: mission.title,
 			description: mission.description,
-			condition: JSON.stringify(mission.condition || [], null, 2),
+			condition: JSON.stringify(conditions, null, 2),
 			xp: mission.xp,
 			order: mission.order,
 			refreshType: mission.refreshType || 'none'
 		};
 		conditionBuilderMode = true;
-		conditionList = Array.isArray(mission.condition) ? [...mission.condition] : [];
+		conditionList = [...conditions];
 		newCondition = { type: 'clear_level', targetId: null, value: null };
 		showMissionDialog = true;
 	}
