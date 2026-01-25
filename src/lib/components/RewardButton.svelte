@@ -46,7 +46,7 @@
 	}
 
 	$: borderColor = rarityColor(itemData?.rarity ?? 0);
-	$: borderOpacity = (!editable && (isPremiumLocked || shouldReduceOpacity)) ? 0.3 : 1;
+	$: borderOpacity = !editable && (isPremiumLocked || shouldReduceOpacity) ? 0.3 : 1;
 	$: borderColorRgba = hexToRgba(borderColor, borderOpacity);
 	$: badgeBackground = hexToRgba(borderColor, 0.2);
 </script>
@@ -58,7 +58,9 @@
 				{...builder}
 				use:builder.action
 				class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 transition-all"
-				style="border-color: {borderColorRgba}; background-color: {isPremiumTrack ? 'rgb(234 179 8 / 0.1)' : 'transparent'}"
+				style="border-color: {borderColorRgba}; background-color: {isPremiumTrack
+					? 'rgb(234 179 8 / 0.1)'
+					: 'transparent'}"
 				class:hover:scale-105={isClaimable}
 				class:reward-claimable={isClaimable}
 				on:click={() => {
@@ -69,7 +71,7 @@
 			>
 				{#if isPremiumLocked}
 					<div class="absolute right-0.5 top-0.5 z-30">
-						<Crown class="h-5 w-5 text-yellow-400 fill-yellow-400" />
+						<Crown class="h-5 w-5 fill-yellow-400 text-yellow-400" />
 					</div>
 				{/if}
 				{#if reward.quantity > 1}
@@ -81,15 +83,22 @@
 					</span>
 				{/if}
 				{#if isPremiumLocked || !isClaimable}
-					<div class="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/50">
+					<div
+						class="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/50"
+					>
 						<Lock class="h-6 w-6" />
 					</div>
 				{:else if isClaimable}
-					<div class="absolute inset-0 flex items-center justify-center rounded-xl bg-green-500/20">
-						<Gift class="h-8 w-8 text-green-400" />
+					<div
+						class="absolute inset-0 left-1 top-1 z-20 h-fit w-fit items-center justify-center rounded-xl bg-green-500/50 p-1 pl-[4px]"
+					>
+						<Gift size={16} />
 					</div>
 				{/if}
-				<div class="relative z-0 flex items-center justify-center p-2" class:opacity-50={shouldReduceOpacity}>
+				<div
+					class="relative z-0 flex items-center justify-center p-2"
+					class:opacity-50={shouldReduceOpacity}
+				>
 					{#if reward.items?.id || reward.itemId}
 						<img
 							class="h-12 w-12 object-contain"
@@ -104,14 +113,16 @@
 		</Popover.Trigger>
 		{#if itemData}
 			<Popover.Content>
-				<RewardItemDetails itemData={itemData} quantity={reward.quantity} />
+				<RewardItemDetails {itemData} quantity={reward.quantity} />
 			</Popover.Content>
 		{/if}
 	</Popover.Root>
 {:else}
 	<button
 		class="reward-slot relative flex h-20 w-20 items-center justify-center rounded-xl border-2 transition-all"
-		style="border-color: {borderColorRgba}; background-color: {isPremiumTrack ? 'rgb(234 179 8 / 0.1)' : 'transparent'}"
+		style="border-color: {borderColorRgba}; background-color: {isPremiumTrack
+			? 'rgb(234 179 8 / 0.1)'
+			: 'transparent'}"
 		class:hover:scale-105={true}
 		on:click={() => {
 			if (onRewardClick) {
