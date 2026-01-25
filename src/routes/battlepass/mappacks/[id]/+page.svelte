@@ -11,15 +11,18 @@
   import Lock from 'lucide-svelte/icons/lock';
   import Check from 'lucide-svelte/icons/check';
   import { DIFFICULTY_COLORS, DIFFICULTY_NAMES } from '$lib/battlepass/constants';
+  import type { PageData } from './$types';
 
+  export let data: PageData;
   export let primaryColor: string = '#8b5cf6';
 
-  let loading = true;
+  let loading = false;
   let mounted = false;
 
-  let mapPackWrapper: any = null; // battlepass map pack wrapper (contains id, unlockWeek, mapPacks)
   let mapPackProgress: { completedLevels: number[]; claimed: boolean } | null = null;
   let mapPackLevelProgress: Record<string, number> = {};
+
+  $: mapPackWrapper = data.mapPackWrapper;
 
   $: mapPack = mapPackWrapper?.mapPacks;
 
@@ -66,17 +69,6 @@
     const totalLevels = mapPack?.mapPackLevels?.length || 0;
     if (totalLevels === 0) return 0;
     return Math.round(((mapPackProgress?.completedLevels?.length ?? 0) / totalLevels) * 100);
-  }
-
-  async function fetchDetail(id: number) {
-    // Try dedicated detail endpoint first
-    const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappack/${id}`);
-    if (res.ok) return res.json();
-    // Fallback: fetch list and pick by id
-    const listRes = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappacks`);
-    if (!listRes.ok) throw new Error('Failed to load map pack');
-    const packs = await listRes.json();
-    return packs.find((p: any) => p?.id === id);
   }
 
   async function fetchProgress(id: number) {
@@ -144,27 +136,14 @@
     }
   }
 
-  // Use Svelte store auto-subscription `$user` directly (no custom wrapper)
-
-  async function loadData() {
-    loading = true;
-    const idStr = $page.params.id;
-    const id = Number(idStr);
-    try {
-      mapPackWrapper = await fetchDetail(id);
-      if ($user.loggedIn) {
-        await fetchProgress(id);
-      }
-    } catch (e) {
-      console.error('Failed to load map pack detail:', e);
-    } finally {
-      loading = false;
-    }
-  }
-
   onMount(() => {
     mounted = true;
-    loadData();
+    
+    // Load progress for logged-in users
+    if ($user.loggedIn && mapPackWrapper?.id) {
+      fetchProgress(mapPackWrapper.id);
+    }
+    
     const unsub = user.subscribe(async (value) => {
       if (!mounted) return;
       if (value.loggedIn && mapPackWrapper?.id) {
@@ -179,16 +158,7 @@
 </script>
 
 <div class="mx-auto max-w-6xl mt-10">
-  {#if loading}
-    <div class="space-y-6">
-      <Skeleton class="h-64 w-full rounded-2xl" />
-      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Skeleton class="h-40 w-full rounded-xl" />
-        <Skeleton class="h-40 w-full rounded-xl" />
-        <Skeleton class="h-40 w-full rounded-xl" />
-      </div>
-    </div>
-  {:else if mapPackWrapper && mapPack}
+  {#if mapPackWrapper && mapPack}
     <div style={cssVars} class="space-y-8">
       <!-- Hero Header Card -->
       <div class="relative overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-background via-background to-muted/20 shadow-xl">
