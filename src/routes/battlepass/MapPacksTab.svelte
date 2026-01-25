@@ -5,7 +5,7 @@
 	import { toast } from 'svelte-sonner';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card/index.js';
-	import * as Dialog from '$lib/components/ui/dialog/index.js';
+	/* Removed dialog import; detail moved to dedicated page */
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
 	import Map from 'lucide-svelte/icons/map';
 	import Lock from 'lucide-svelte/icons/lock';
@@ -32,13 +32,12 @@
 		return `--primary-color: ${rgb.r}, ${rgb.g}, ${rgb.b};`;
 	})();
 
-	let selectedMapPack: any = null;
-	let mapPackDialogOpen = false;
-
-	function openMapPackDialog(pack: any) {
-		selectedMapPack = pack;
-		mapPackDialogOpen = true;
-	}
+		// Navigate to dedicated map pack page
+		function openMapPackPage(pack: any) {
+			const id = pack?.id;
+			if (!id) return;
+			window.location.href = `/battlepass/mappacks/${id}`;
+		}
 
 	function getDifficultyColor(difficulty: string): string {
 		return DIFFICULTY_COLORS[difficulty?.toLowerCase()] || '#6b7280';
@@ -218,7 +217,7 @@
 		{#each mapPacks as pack}
 			{@const mapPack = pack.mapPacks}
 			{@const completionPercent = getMapPackCompletionPercent(pack)}
-			<button class="text-left" on:click={() => openMapPackDialog(pack)}>
+			<button class="text-left" on:click={() => openMapPackPage(pack)}>
 				<Card.Root
 					class="h-full cursor-pointer overflow-hidden border-2 transition-all hover:border-primary/50"
 					style="border-color: {getDifficultyColor(mapPack?.difficulty)}40;"
@@ -302,122 +301,4 @@
 	</div>
 {/if}
 
-<!-- Map Pack Detail Dialog -->
-<Dialog.Root bind:open={mapPackDialogOpen}>
-	<Dialog.Content class="max-w-lg" style={cssVars}>
-		{#if selectedMapPack}
-			{@const mapPack = selectedMapPack.mapPacks}
-			{@const isCompleted = isMapPackCompleted(selectedMapPack)}
-			{@const isClaimed = isMapPackClaimed(selectedMapPack)}
-			<Dialog.Header>
-				<Dialog.Title class="flex items-center gap-3">
-					<div
-						class="flex h-10 w-10 items-center justify-center rounded-lg"
-						style="background-color: {getDifficultyColor(mapPack?.difficulty)}20;"
-					>
-						<Map class="h-5 w-5" style="color: {getDifficultyColor(mapPack?.difficulty)};" />
-					</div>
-					<div>
-						<span>{mapPack?.name || 'Map Pack'}</span>
-						<p
-							class="text-sm font-normal"
-							style="color: {getDifficultyColor(mapPack?.difficulty)};"
-						>
-							{getDifficultyName(mapPack?.difficulty)}
-						</p>
-					</div>
-				</Dialog.Title>
-			</Dialog.Header>
-
-			<div class="mt-4 flex flex-col gap-4">
-				{#if mapPack?.description}
-					<p class="text-sm text-muted-foreground">{mapPack.description}</p>
-				{/if}
-
-				<div
-					class="flex items-center justify-between rounded-lg p-3"
-					style="background-color: rgba(var(--primary-color), 0.1);"
-				>
-					<span class="text-sm">{$_('battlepass.completion_xp')}</span>
-					<span class="font-bold" style="color: {primaryColor}">+{mapPack?.xp || 0} XP</span>
-				</div>
-
-				<div>
-					<h4 class="mb-2 font-medium">{$_('battlepass.levels_list')}</h4>
-					<div class="flex flex-col gap-2">
-						{#each mapPack?.mapPackLevels || [] as level, i}
-							{@const levelCompleted = isLevelCompleted(selectedMapPack.id, level.levelID)}
-							{@const levelProg = getMapPackLevelProgress(selectedMapPack.id, level.levelID)}
-							<div class="flex flex-col gap-2 rounded-lg bg-muted/30 p-3">
-								<div class="flex items-center justify-between">
-									<div class="flex items-center gap-3">
-										<div
-											class="flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium {levelCompleted ? 'bg-green-500 text-white' : 'bg-muted'}"
-										>
-											{#if levelCompleted}
-												<Check class="h-4 w-4" />
-											{:else}
-												{i + 1}
-											{/if}
-										</div>
-										<div>
-											<span class="font-medium"
-												>{level.levels?.name || `Level ${level.levelID}`}</span
-											>
-											<p class="text-xs text-muted-foreground">ID: {level.levelID}</p>
-										</div>
-									</div>
-								</div>
-								<!-- Level Progress Bar -->
-								{#if $user.loggedIn && !levelCompleted}
-									<div class="flex items-center gap-2">
-										<div class="h-2 flex-1 overflow-hidden rounded-full bg-muted">
-											<div
-												class="h-full rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 transition-all"
-												style="width: {levelProg}%"
-											/>
-										</div>
-										<span class="text-xs text-muted-foreground">{levelProg}%</span>
-									</div>
-								{/if}
-							</div>
-						{/each}
-					</div>
-				</div>
-
-				{#if selectedMapPack.unlockWeek > 1}
-					<div class="flex items-center gap-2 text-sm text-muted-foreground">
-						<Lock class="h-4 w-4" />
-						<span
-							>{$_('battlepass.unlocks_week', {
-								values: { week: selectedMapPack.unlockWeek }
-							})}</span
-						>
-					</div>
-				{/if}
-			</div>
-
-			<Dialog.Footer class="mt-4">
-				{#if $user.loggedIn && isCompleted && !isClaimed}
-					<Button 
-						class="bg-green-500 hover:bg-green-600"
-						on:click={() => {
-							claimMapPack(selectedMapPack.id);
-							mapPackDialogOpen = false;
-						}}
-					>
-						{$_('battlepass.claim')} +{mapPack?.xp || 0} XP
-					</Button>
-				{:else if isClaimed}
-					<Button variant="outline" disabled>
-						<Check class="mr-1 h-4 w-4" />
-						{$_('battlepass.claimed')}
-					</Button>
-				{/if}
-				<Button variant="outline" on:click={() => (mapPackDialogOpen = false)}>
-					{$_('general.close')}
-				</Button>
-			</Dialog.Footer>
-		{/if}
-	</Dialog.Content>
-</Dialog.Root>
+<!-- Map Pack detail moved to dedicated page at /battlepass/mappacks/[id] -->
