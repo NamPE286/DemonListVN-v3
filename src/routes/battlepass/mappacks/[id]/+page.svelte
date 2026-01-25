@@ -19,12 +19,19 @@
   let loading = false;
   let mounted = false;
 
-  let mapPackProgress: { completedLevels: number[]; claimed: boolean } | null = null;
-  let mapPackLevelProgress: Record<string, number> = {};
+  let localMapPackWrapper: any = null;
+  $: mapPackWrapper = localMapPackWrapper || data.mapPackWrapper;
 
-  $: mapPackWrapper = data.mapPackWrapper;
+  $: mapPackProgress = mapPackWrapper?.progress || null;
+  $: mapPackLevelProgress = mapPackWrapper?.levelProgress || {};
 
   $: mapPack = mapPackWrapper?.mapPacks;
+
+  $: completedLevelsCount = mapPack?.mapPackLevels?.filter((level: any) => 
+    (mapPackLevelProgress[level?.levelID] ?? 0) >= 100
+  ).length || 0;
+
+  $: totalLevelsCount = mapPack?.mapPackLevels?.length || 0;
 
   // Generate CSS variable strings for primary color rgba
   $: cssVars = (() => {
@@ -47,110 +54,58 @@
   }
 
   function getMapPackLevelProgress(levelID: number): number {
-    if (!mapPackWrapper) return 0;
-    const key = `${mapPackWrapper.id}_${levelID}`;
-    return mapPackLevelProgress[key] ?? 0;
+    return mapPackLevelProgress[levelID] ?? 0;
   }
 
   function isLevelCompleted(levelID: number): boolean {
-    return mapPackProgress?.completedLevels?.includes(levelID) ?? false;
+    return (mapPackLevelProgress[levelID] ?? 0) >= 100;
   }
 
   function isMapPackCompleted(): boolean {
-    const totalLevels = mapPack?.mapPackLevels?.length || 0;
-    return (mapPackProgress?.completedLevels?.length ?? 0) >= totalLevels;
+    const p = mapPackProgress?.progress ?? 0;
+    if (p >= 100) return true;
+    return totalLevelsCount > 0 && completedLevelsCount === totalLevelsCount;
   }
 
   function isMapPackClaimed(): boolean {
     return mapPackProgress?.claimed ?? false;
   }
 
-  function getMapPackCompletionPercent(): number {
-    const totalLevels = mapPack?.mapPackLevels?.length || 0;
-    if (totalLevels === 0) return 0;
-    return Math.round(((mapPackProgress?.completedLevels?.length ?? 0) / totalLevels) * 100);
-  }
-
-  async function fetchProgress(id: number) {
-    const token = $user.loggedIn ? await $user.token() : null;
-    if (!token) return;
-
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/battlepass/mappacks/progress?ids=${id}`,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    if (res.ok) {
-      const data = await res.json();
-      const p = data?.[0];
-      if (p) {
-        mapPackProgress = {
-          completedLevels: p.completedLevels ?? [],
-          claimed: p.claimed ?? false
-        };
-      }
-    }
-
-    // level progress
-    const levelIDs = (mapPack?.mapPackLevels || []).map((l: any) => l.levelID);
-    if (levelIDs.length > 0) {
-      const body = { levels: levelIDs.map((levelID: number) => ({ mapPackId: id, levelID })) };
-      const levelRes = await fetch(
-        `${import.meta.env.VITE_API_URL}/battlepass/mappacks/levels/progress`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify(body)
-        }
-      );
-      if (levelRes.ok) {
-        const levelData = await levelRes.json();
-        levelData.forEach((p: any) => {
-          const key = `${p.battlePassMapPackId}_${p.levelID}`;
-          mapPackLevelProgress[key] = p.progress ?? 0;
-        });
-        mapPackLevelProgress = mapPackLevelProgress; // trigger reactivity
-      }
-    }
-  }
-
-  async function claimMapPack() {
+  async function fetchMapPackData() {
     if (!mapPackWrapper?.id) return;
+    const token = $user.loggedIn ? await $user.token() : null;
+    if (!token) {
+        localMapPackWrapper = null; // Revert to data.mapPackWrapper (which likely has no progress)
+        return;
+    }
+
     try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}/battlepass/mappack/${mapPackWrapper.id}/claim`,
-        { method: 'POST', headers: { Authorization: `Bearer ${await $user.token()}` } }
-      );
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappack/${mapPackWrapper.id}`, {
+          headers: {
+              Authorization: `Bearer ${token}`
+          }
+      });
       if (res.ok) {
-        const result = await res.json();
-        toast.success($_('battlepass.xp_claimed', { values: { xp: result.xp } }));
-        await fetchProgress(mapPackWrapper.id);
-      } else {
-        const error = await res.text();
-        toast.error(error || $_('battlepass.claim_failed'));
+          localMapPackWrapper = await res.json();
       }
     } catch (e) {
-      toast.error($_('battlepass.claim_failed'));
+      console.error(e);
     }
   }
 
   onMount(() => {
     mounted = true;
     
-    // Load progress for logged-in users
     if ($user.loggedIn && mapPackWrapper?.id) {
-      fetchProgress(mapPackWrapper.id);
+      fetchMapPackData();
     }
     
     const unsub = user.subscribe(async (value) => {
       if (!mounted) return;
       if (value.loggedIn && mapPackWrapper?.id) {
-        await fetchProgress(mapPackWrapper.id);
+        await fetchMapPackData();
       } else if (!value.loggedIn) {
-        mapPackProgress = null;
-        mapPackLevelProgress = {};
+        localMapPackWrapper = null;
       }
     });
     return () => { mounted = false; unsub(); };
@@ -219,13 +174,13 @@
             <div class="mt-8 space-y-3">
               <div class="flex items-center justify-between">
                 <span class="text-sm font-medium">{$_('battlepass.progress')}</span>
-                <span class="text-2xl font-bold" style="color: {getDifficultyColor(mapPack?.difficulty)};">{getMapPackCompletionPercent()}%</span>
+                <span class="text-2xl font-bold" style="color: {getDifficultyColor(mapPack?.difficulty)};">{localMapPackWrapper?.progress?.progress ?? 0}%</span>
               </div>
               <div class="relative h-4 overflow-hidden rounded-full bg-muted/50 shadow-inner">
-                <div class="h-full rounded-full shadow-lg transition-all duration-700 ease-out" style="width: {getMapPackCompletionPercent()}%; background: linear-gradient(90deg, {getDifficultyColor(mapPack?.difficulty)}, {primaryColor});" />
+                <div class="h-full rounded-full shadow-lg transition-all duration-700 ease-out" style="width: {localMapPackWrapper?.progress?.progress ?? 0}%; background: linear-gradient(90deg, {getDifficultyColor(mapPack?.difficulty)}, {primaryColor});" />
               </div>
               <div class="flex items-center justify-between text-xs text-muted-foreground">
-                <span>{mapPackProgress?.completedLevels?.length || 0} / {mapPack?.mapPackLevels?.length || 0} {$_('battlepass.levels_in_pack')}</span>
+                <span>{completedLevelsCount} / {totalLevelsCount} {$_('battlepass.levels_in_pack')}</span>
                 {#if isMapPackCompleted() && !isMapPackClaimed()}
                   <span class="font-semibold text-green-500">Ready to claim!</span>
                 {/if}
@@ -242,7 +197,7 @@
           {#if $user.loggedIn}
             <div class="rounded-full bg-muted px-4 py-1.5 text-sm font-medium">
               <span class="text-muted-foreground">Completed:</span>
-              <span class="ml-2 font-bold">{mapPackProgress?.completedLevels?.length || 0}/{mapPack?.mapPackLevels?.length || 0}</span>
+              <span class="ml-2 font-bold">{completedLevelsCount}/{totalLevelsCount}</span>
             </div>
           {/if}
         </div>
@@ -280,7 +235,7 @@
                   {/if}
                 </div>
 
-                {#if $user.loggedIn && !levelCompleted}
+                {#if $user.loggedIn}
                   <div class="space-y-2">
                     <div class="flex items-center justify-between text-xs">
                       <span class="text-muted-foreground">Progress</span>
@@ -297,25 +252,6 @@
         </div>
       </div>
 
-      <!-- Action Buttons -->
-      <div class="flex flex-wrap gap-3 rounded-xl">
-        {#if $user.loggedIn}
-          {#if isMapPackCompleted() && !isMapPackClaimed()}
-            <Button class="h-12 flex-1 bg-gradient-to-r from-green-500 to-emerald-600 text-lg font-semibold shadow-lg shadow-green-500/30 transition-all hover:scale-[1.02] hover:shadow-xl hover:shadow-green-500/40 sm:flex-none sm:px-8" on:click={claimMapPack}>
-              <Check class="mr-2 h-5 w-5" />
-              {$_('battlepass.claim')} +{mapPack?.xp || 0} XP
-            </Button>
-          {:else if isMapPackClaimed()}
-            <Button variant="outline" disabled class="h-12 flex-1 sm:flex-none sm:px-8">
-              <Check class="mr-2 h-5 w-5 text-green-500" />
-              {$_('battlepass.claimed')}
-            </Button>
-          {/if}
-        {/if}
-        <Button variant="outline" class="h-12 flex-1 sm:flex-none sm:px-8" on:click={() => (window.location.href = '/battlepass')}>
-          {$_('general.back')}
-        </Button>
-      </div>
     </div>
   {:else}
     <div class="flex min-h-[400px] items-center justify-center rounded-2xl border border-dashed">

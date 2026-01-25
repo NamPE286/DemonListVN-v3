@@ -15,8 +15,6 @@
 	export let primaryColor: string = '#8b5cf6';
 
 	let mapPacks: any[] = [];
-	let mapPackProgress: Record<number, { completedLevels: number[]; claimed: boolean }> = {};
-	let mapPackLevelProgress: Record<string, number> = {};
 	let loading = true;
 	let mounted = false;
 
@@ -48,100 +46,36 @@
 	}
 
 	function getMapPackLevelProgress(battlePassMapPackId: number, levelID: number): number {
-		const key = `${battlePassMapPackId}_${levelID}`;
-		return mapPackLevelProgress[key] ?? 0;
+		return 0;
 	}
 
 	function isLevelCompleted(battlePassMapPackId: number, levelID: number): boolean {
-		const progress = mapPackProgress[battlePassMapPackId];
-		return progress?.completedLevels?.includes(levelID) ?? false;
+		return false;
 	}
 
 	function isMapPackCompleted(pack: any): boolean {
-		const progress = mapPackProgress[pack.id];
-		const totalLevels = pack.mapPacks?.mapPackLevels?.length || 0;
-		return (progress?.completedLevels?.length ?? 0) >= totalLevels;
+		return (pack.progress?.progress ?? 0) >= 1;
 	}
 
 	function isMapPackClaimed(pack: any): boolean {
-		return mapPackProgress[pack.id]?.claimed ?? false;
+		return pack.progress?.claimed ?? false;
 	}
 
 	function getMapPackCompletionPercent(pack: any): number {
-		const progress = mapPackProgress[pack.id];
-		const totalLevels = pack.mapPacks?.mapPackLevels?.length || 0;
-		if (totalLevels === 0) return 0;
-		return Math.round(((progress?.completedLevels?.length ?? 0) / totalLevels) * 100);
+		return Math.round((pack.progress?.progress ?? 0));
 	}
 
 	async function fetchMapPacks() {
 		try {
-			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappacks`);
+            const token = $user.loggedIn ? await $user.token() : null;
+            const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+
+			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/mappacks`, { headers });
 			if (res.ok) {
 				mapPacks = await res.json();
 			}
 		} catch (e) {
 			console.error('Failed to fetch map packs:', e);
-		}
-	}
-
-	async function fetchMapPackProgress() {
-		if (!$user.loggedIn || mapPacks.length === 0) return;
-
-		try {
-			const mapPackIds = mapPacks.map((mp: any) => mp.id);
-			const res = await fetch(
-				`${import.meta.env.VITE_API_URL}/battlepass/mappacks/progress?ids=${mapPackIds.join(',')}`,
-				{
-					headers: {
-						Authorization: `Bearer ${await $user.token()}`
-					}
-				}
-			);
-
-			if (res.ok) {
-				const progressData = await res.json();
-				progressData.forEach((p: any) => {
-					mapPackProgress[p.battlePassMapPackId] = {
-						completedLevels: p.completedLevels ?? [],
-						claimed: p.claimed ?? false
-					};
-				});
-				mapPackProgress = mapPackProgress; // Trigger reactivity
-			}
-
-			// Fetch map pack level progress in batch
-			const levelRequests: { mapPackId: number; levelID: number }[] = [];
-			mapPacks.forEach((mp: any) => {
-				mp.mapPacks?.mapPackLevels?.forEach((level: any) => {
-					levelRequests.push({ mapPackId: mp.id, levelID: level.levelID });
-				});
-			});
-
-			if (levelRequests.length > 0) {
-				const levelRes = await fetch(
-					`${import.meta.env.VITE_API_URL}/battlepass/mappacks/levels/progress`,
-					{
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json',
-							Authorization: `Bearer ${await $user.token()}`
-						},
-						body: JSON.stringify({ levels: levelRequests })
-					}
-				);
-
-				if (levelRes.ok) {
-					const levelProgressData = await levelRes.json();
-					levelProgressData.forEach((p: any) => {
-						const key = `${p.battlePassMapPackId}_${p.levelID}`;
-						mapPackLevelProgress[key] = p.progress ?? 0;
-					});
-					mapPackLevelProgress = mapPackLevelProgress; // Trigger reactivity
-				}
-			}
-		} catch (e) {
-			console.error('Failed to fetch map pack progress:', e);
 		}
 	}
 
@@ -160,7 +94,7 @@
 			if (res.ok) {
 				const result = await res.json();
 				toast.success($_('battlepass.xp_claimed', { values: { xp: result.xp } }));
-				await fetchMapPackProgress();
+				await fetchMapPacks();
 			} else {
 				const error = await res.text();
 				toast.error(error || $_('battlepass.claim_failed'));
@@ -173,9 +107,6 @@
 	async function loadData() {
 		loading = true;
 		await fetchMapPacks();
-		if ($user.loggedIn) {
-			await fetchMapPackProgress();
-		}
 		loading = false;
 	}
 
@@ -186,12 +117,9 @@
 		const unsubscribe = user.subscribe(async (value) => {
 			if (!mounted) return;
 
-			if (value.loggedIn && mapPacks.length > 0) {
-				await fetchMapPackProgress();
-			} else if (!value.loggedIn) {
-				mapPackProgress = {};
-				mapPackLevelProgress = {};
-			}
+			// Reload when login state changes to get/clear progress
+            // Always fetch map packs to get updated progress data
+            await fetchMapPacks();
 		});
 
 		return () => {
