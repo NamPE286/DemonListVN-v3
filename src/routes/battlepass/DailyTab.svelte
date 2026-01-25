@@ -195,7 +195,7 @@
 						<div class="flex flex-col gap-2">
 							<div class="flex justify-between text-sm">
 								<span class="text-muted-foreground">{$_('battlepass.progress')}</span>
-								<span>{dailyLevel.progress}%</span>
+								<span>{dailyLevel.xp} XP</span>
 							</div>
 							<div class="h-3 overflow-hidden rounded-full bg-muted">
 								<div
@@ -290,7 +290,7 @@
 						<div class="flex flex-col gap-2">
 							<div class="flex justify-between text-sm">
 								<span class="text-muted-foreground">{$_('battlepass.progress')}</span>
-								<span>{weeklyDemon.progress}%</span>
+								<span>{weeklyDemon.xp} XP</span>
 							</div>
 							<div class="h-3 overflow-hidden rounded-full bg-muted">
 								<div
