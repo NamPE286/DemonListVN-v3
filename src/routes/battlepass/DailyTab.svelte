@@ -18,52 +18,42 @@
 	let loading = true;
 	let dailyWeeklyData: { daily: any; weekly: any } = { daily: null, weekly: null };
 	let mounted = false;
+	const defaultLevel = {
+		id: 0,
+		levelId: 0,
+		name: $_('battlepass.no_daily_level'),
+		difficulty: '',
+		progress: 0,
+		completed: false,
+		claimed: false,
+		xp: 0
+	};
 
-	// Computed daily level data
 	$: dailyLevel = dailyWeeklyData.daily
 		? {
-			id: dailyWeeklyData.daily.id,
-			levelId: dailyWeeklyData.daily.levelID,
-			name: dailyWeeklyData.daily.levels?.name || $_('battlepass.placeholder_daily_level'),
-			difficulty: dailyWeeklyData.daily.levels?.difficulty || 'harder',
-			progress: dailyWeeklyData.daily.progress ?? 0,
-			completed: (dailyWeeklyData.daily.progress ?? 0) >= 100,
-			claimed: dailyWeeklyData.daily.completionClaimed ?? false,
-			xp: dailyWeeklyData.daily.xp ?? 1000
-		}
-		: {
-			id: 0,
-			levelId: 0,
-			name: $_('battlepass.no_daily_level'),
-			difficulty: 'harder',
-			progress: 0,
-			completed: false,
-			claimed: false,
-			xp: 1000
-		};
+				id: dailyWeeklyData.daily.id,
+				levelId: dailyWeeklyData.daily.levelID,
+				name: dailyWeeklyData.daily.levels?.name,
+				difficulty: dailyWeeklyData.daily.levels?.difficulty,
+				progress: dailyWeeklyData.daily.progress,
+				completed: dailyWeeklyData.daily.progress >= 100,
+				claimed: dailyWeeklyData.daily.completionClaimed,
+				xp: dailyWeeklyData.daily.xp
+			}
+		: defaultLevel;
 
-	// Computed weekly level data
 	$: weeklyDemon = dailyWeeklyData.weekly
 		? {
-			id: dailyWeeklyData.weekly.id,
-			levelId: dailyWeeklyData.weekly.levelID,
-			name: dailyWeeklyData.weekly.levels?.name || $_('battlepass.placeholder_weekly_demon'),
-			difficulty: dailyWeeklyData.weekly.levels?.difficulty || 'medium_demon',
-			progress: dailyWeeklyData.weekly.progress ?? 0,
-			completed: (dailyWeeklyData.weekly.progress ?? 0) >= 100,
-			claimed: dailyWeeklyData.weekly.completionClaimed ?? false,
-			xp: dailyWeeklyData.weekly.xp ?? 1000
-		}
-		: {
-			id: 0,
-			levelId: 0,
-			name: $_('battlepass.no_weekly_level'),
-			difficulty: 'medium_demon',
-			progress: 0,
-			completed: false,
-			claimed: false,
-			xp: 1000
-		};
+				id: dailyWeeklyData.weekly.id,
+				levelId: dailyWeeklyData.weekly.levelID,
+				name: dailyWeeklyData.weekly.levels?.name,
+				difficulty: dailyWeeklyData.weekly.levels?.difficulty,
+				progress: dailyWeeklyData.weekly.progress,
+				completed: dailyWeeklyData.weekly.progress >= 100,
+				claimed: dailyWeeklyData.weekly.completionClaimed,
+				xp: dailyWeeklyData.weekly.xp
+			}
+		: defaultLevel;
 
 	function getDifficultyColor(difficulty: string): string {
 		return DIFFICULTY_COLORS[difficulty?.toLowerCase()] || '#6b7280';
@@ -157,179 +147,195 @@
 		<Skeleton class="h-64 w-full" />
 	</div>
 {:else}
-<div class="grid gap-6 md:grid-cols-2">
-	<!-- Daily Level Card -->
-	<Card.Root
-		class="overflow-hidden border-2 border-blue-500/30 bg-gradient-to-br from-blue-500/5 to-cyan-500/5"
-	>
-		<Card.Header>
-			<div class="flex items-center gap-3">
-				<div
-					class="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500"
-				>
-					<Sun class="h-7 w-7 text-white" />
-				</div>
-				<div>
-					<Card.Title class="text-xl">{$_('battlepass.daily_level')}</Card.Title>
-					<p class="text-sm text-muted-foreground">{$_('battlepass.resets_daily')}</p>
-				</div>
-			</div>
-		</Card.Header>
-		<Card.Content>
-			{#if dailyLevel.id === 0}
-				<div class="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
-					<Sun class="mb-2 h-12 w-12 opacity-50" />
-					<p>{$_('battlepass.no_daily_level')}</p>
-				</div>
-			{:else}
-				<div class="flex flex-col gap-4">
-					<div class="rounded-lg bg-muted/30 p-4">
-						<div class="mb-2 flex items-center justify-between">
-							<span class="font-medium">{dailyLevel.name}</span>
-							<span class="text-sm text-muted-foreground">ID: {dailyLevel.levelId}</span>
-						</div>
-						<div
-							class="flex items-center gap-2 text-sm"
-							style="color: {getDifficultyColor(dailyLevel.difficulty)};"
-						>
-							<div
-								class="h-3 w-3 rounded-full"
-								style="background-color: {getDifficultyColor(dailyLevel.difficulty)};"
-							></div>
-							<span>{getDifficultyName(dailyLevel.difficulty)}</span>
-						</div>
+	<div class="grid gap-6 md:grid-cols-2">
+		<!-- Daily Level Card -->
+		<Card.Root
+			class="overflow-hidden border-2 border-blue-500/30 bg-gradient-to-br from-blue-500/5 to-cyan-500/5"
+		>
+			<Card.Header>
+				<div class="flex items-center gap-3">
+					<div
+						class="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500"
+					>
+						<Sun class="h-7 w-7 text-white" />
 					</div>
-
-					<div class="flex flex-col gap-2">
-						<div class="flex justify-between text-sm">
-							<span class="text-muted-foreground">{$_('battlepass.progress')}</span>
-							<span>{dailyLevel.progress}%</span>
-						</div>
-						<div class="h-3 overflow-hidden rounded-full bg-muted">
-							<div
-								class="h-full rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 transition-all"
-								style="width: {dailyLevel.progress}%"
-							/>
-						</div>
+					<div>
+						<Card.Title class="text-xl">{$_('battlepass.daily_level')}</Card.Title>
+						<p class="text-sm text-muted-foreground">{$_('battlepass.resets_daily')}</p>
 					</div>
-
-					<!-- Completion Reward -->
-					<div class="flex items-center justify-between rounded-lg bg-muted/20 p-3">
-						<div class="flex flex-col">
-							<span class="text-sm text-muted-foreground">{$_('battlepass.completion_reward')}</span>
-							<div class="flex items-center gap-1">
-								<Zap class="h-4 w-4" style="color: {primaryColor}" />
-								<span class="font-bold" style="color: {primaryColor}">+{dailyLevel.xp} XP</span>
+				</div>
+			</Card.Header>
+			<Card.Content>
+				{#if dailyLevel.id === 0}
+					<div
+						class="flex flex-col items-center justify-center py-8 text-center text-muted-foreground"
+					>
+						<Sun class="mb-2 h-12 w-12 opacity-50" />
+						<p>{$_('battlepass.no_daily_level')}</p>
+					</div>
+				{:else}
+					<div class="flex flex-col gap-4">
+						<div class="rounded-lg bg-muted/30 p-4">
+							<div class="mb-2 flex items-center justify-between">
+								<span class="font-medium">{dailyLevel.name}</span>
+								<span class="text-sm text-muted-foreground">ID: {dailyLevel.levelId}</span>
+							</div>
+							<div
+								class="flex items-center gap-2 text-sm"
+								style="color: {getDifficultyColor(dailyLevel.difficulty)};"
+							>
+								<div
+									class="h-3 w-3 rounded-full"
+									style="background-color: {getDifficultyColor(dailyLevel.difficulty)};"
+								></div>
+								<span>{getDifficultyName(dailyLevel.difficulty)}</span>
 							</div>
 						</div>
-					{#if $user.loggedIn}
-						{#if dailyLevel.claimed}
-							<Button variant="outline" disabled size="sm">
-								<Check class="mr-1 h-4 w-4" />
-								{$_('battlepass.claimed')}
-							</Button>
-						{:else if dailyLevel.completed}
-							<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(dailyLevel.id)}>
-									{$_('battlepass.claim')}
-								</Button>
-							{:else}
-								<Button variant="outline" disabled size="sm">
-									<Lock class="mr-1 h-4 w-4" />
-									{dailyLevel.progress}/100%
-								</Button>
-							{/if}
-						{/if}
-					</div>
-				</div>
-			{/if}
-		</Card.Content>
-	</Card.Root>
 
-	<!-- Weekly Demon Card -->
-	<Card.Root
-		class="overflow-hidden border-2 border-purple-500/30 bg-gradient-to-br from-purple-500/5 to-pink-500/5"
-	>
-		<Card.Header>
-			<div class="flex items-center gap-3">
-				<div
-					class="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-pink-500"
-				>
-					<Calendar class="h-7 w-7 text-white" />
-				</div>
-				<div>
-					<Card.Title class="text-xl">{$_('battlepass.weekly_demon')}</Card.Title>
-					<p class="text-sm text-muted-foreground">{$_('battlepass.resets_weekly')}</p>
-				</div>
-			</div>
-		</Card.Header>
-		<Card.Content>
-			{#if weeklyDemon.id === 0}
-				<div class="flex flex-col items-center justify-center py-8 text-center text-muted-foreground">
-					<Calendar class="mb-2 h-12 w-12 opacity-50" />
-					<p>{$_('battlepass.no_weekly_level')}</p>
-				</div>
-			{:else}
-				<div class="flex flex-col gap-4">
-					<div class="rounded-lg bg-muted/30 p-4">
-						<div class="mb-2 flex items-center justify-between">
-							<span class="font-medium">{weeklyDemon.name}</span>
-							<span class="text-sm text-muted-foreground">ID: {weeklyDemon.levelId}</span>
-						</div>
-						<div
-							class="flex items-center gap-2 text-sm"
-							style="color: {getDifficultyColor(weeklyDemon.difficulty)};"
-						>
-							<div
-								class="h-3 w-3 rounded-full"
-								style="background-color: {getDifficultyColor(weeklyDemon.difficulty)};"
-							></div>
-							<span>{getDifficultyName(weeklyDemon.difficulty)}</span>
-						</div>
-					</div>
-
-					<div class="flex flex-col gap-2">
-						<div class="flex justify-between text-sm">
-							<span class="text-muted-foreground">{$_('battlepass.progress')}</span>
-							<span>{weeklyDemon.progress}%</span>
-						</div>
-						<div class="h-3 overflow-hidden rounded-full bg-muted">
-							<div
-								class="h-full rounded-full bg-gradient-to-r from-purple-400 to-pink-400 transition-all"
-								style="width: {weeklyDemon.progress}%"
-							/>
-						</div>
-					</div>
-
-					<!-- Completion Reward -->
-					<div class="flex items-center justify-between rounded-lg bg-muted/20 p-3">
-						<div class="flex flex-col">
-							<span class="text-sm text-muted-foreground">{$_('battlepass.completion_reward')}</span>
-							<div class="flex items-center gap-1">
-								<Zap class="h-4 w-4" style="color: {primaryColor}" />
-								<span class="font-bold" style="color: {primaryColor}">+{weeklyDemon.xp} XP</span>
+						<div class="flex flex-col gap-2">
+							<div class="flex justify-between text-sm">
+								<span class="text-muted-foreground">{$_('battlepass.progress')}</span>
+								<span>{dailyLevel.progress}%</span>
+							</div>
+							<div class="h-3 overflow-hidden rounded-full bg-muted">
+								<div
+									class="h-full rounded-full bg-gradient-to-r from-blue-400 to-cyan-400 transition-all"
+									style="width: {dailyLevel.progress}%"
+								/>
 							</div>
 						</div>
-					{#if $user.loggedIn}
-						{#if weeklyDemon.claimed}
-							<Button variant="outline" disabled size="sm">
-								<Check class="mr-1 h-4 w-4" />
-								{$_('battlepass.claimed')}
-							</Button>
-						{:else if weeklyDemon.completed}
-							<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(weeklyDemon.id)}>
-									{$_('battlepass.claim')}
-								</Button>
-							{:else}
-								<Button variant="outline" disabled size="sm">
-									<Lock class="mr-1 h-4 w-4" />
-									{weeklyDemon.progress}/100%
-								</Button>
+
+						<!-- Completion Reward -->
+						<div class="flex items-center justify-between rounded-lg bg-muted/20 p-3">
+							<div class="flex flex-col">
+								<span class="text-sm text-muted-foreground"
+									>{$_('battlepass.completion_reward')}</span
+								>
+								<div class="flex items-center gap-1">
+									<Zap class="h-4 w-4" style="color: {primaryColor}" />
+									<span class="font-bold" style="color: {primaryColor}">+{dailyLevel.xp} XP</span>
+								</div>
+							</div>
+							{#if $user.loggedIn}
+								{#if dailyLevel.claimed}
+									<Button variant="outline" disabled size="sm">
+										<Check class="mr-1 h-4 w-4" />
+										{$_('battlepass.claimed')}
+									</Button>
+								{:else if dailyLevel.completed}
+									<Button
+										size="sm"
+										class="bg-green-500 hover:bg-green-600"
+										on:click={() => claimDailyWeeklyReward(dailyLevel.id)}
+									>
+										{$_('battlepass.claim')}
+									</Button>
+								{:else}
+									<Button variant="outline" disabled size="sm">
+										<Lock class="mr-1 h-4 w-4" />
+										{dailyLevel.progress}/100%
+									</Button>
+								{/if}
 							{/if}
-						{/if}
+						</div>
+					</div>
+				{/if}
+			</Card.Content>
+		</Card.Root>
+
+		<!-- Weekly Demon Card -->
+		<Card.Root
+			class="overflow-hidden border-2 border-purple-500/30 bg-gradient-to-br from-purple-500/5 to-pink-500/5"
+		>
+			<Card.Header>
+				<div class="flex items-center gap-3">
+					<div
+						class="flex h-14 w-14 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-pink-500"
+					>
+						<Calendar class="h-7 w-7 text-white" />
+					</div>
+					<div>
+						<Card.Title class="text-xl">{$_('battlepass.weekly_demon')}</Card.Title>
+						<p class="text-sm text-muted-foreground">{$_('battlepass.resets_weekly')}</p>
 					</div>
 				</div>
-			{/if}
-		</Card.Content>
-	</Card.Root>
-</div>
+			</Card.Header>
+			<Card.Content>
+				{#if weeklyDemon.id === 0}
+					<div
+						class="flex flex-col items-center justify-center py-8 text-center text-muted-foreground"
+					>
+						<Calendar class="mb-2 h-12 w-12 opacity-50" />
+						<p>{$_('battlepass.no_weekly_level')}</p>
+					</div>
+				{:else}
+					<div class="flex flex-col gap-4">
+						<div class="rounded-lg bg-muted/30 p-4">
+							<div class="mb-2 flex items-center justify-between">
+								<span class="font-medium">{weeklyDemon.name}</span>
+								<span class="text-sm text-muted-foreground">ID: {weeklyDemon.levelId}</span>
+							</div>
+							<div
+								class="flex items-center gap-2 text-sm"
+								style="color: {getDifficultyColor(weeklyDemon.difficulty)};"
+							>
+								<div
+									class="h-3 w-3 rounded-full"
+									style="background-color: {getDifficultyColor(weeklyDemon.difficulty)};"
+								></div>
+								<span>{getDifficultyName(weeklyDemon.difficulty)}</span>
+							</div>
+						</div>
+
+						<div class="flex flex-col gap-2">
+							<div class="flex justify-between text-sm">
+								<span class="text-muted-foreground">{$_('battlepass.progress')}</span>
+								<span>{weeklyDemon.progress}%</span>
+							</div>
+							<div class="h-3 overflow-hidden rounded-full bg-muted">
+								<div
+									class="h-full rounded-full bg-gradient-to-r from-purple-400 to-pink-400 transition-all"
+									style="width: {weeklyDemon.progress}%"
+								/>
+							</div>
+						</div>
+
+						<!-- Completion Reward -->
+						<div class="flex items-center justify-between rounded-lg bg-muted/20 p-3">
+							<div class="flex flex-col">
+								<span class="text-sm text-muted-foreground"
+									>{$_('battlepass.completion_reward')}</span
+								>
+								<div class="flex items-center gap-1">
+									<Zap class="h-4 w-4" style="color: {primaryColor}" />
+									<span class="font-bold" style="color: {primaryColor}">+{weeklyDemon.xp} XP</span>
+								</div>
+							</div>
+							{#if $user.loggedIn}
+								{#if weeklyDemon.claimed}
+									<Button variant="outline" disabled size="sm">
+										<Check class="mr-1 h-4 w-4" />
+										{$_('battlepass.claimed')}
+									</Button>
+								{:else if weeklyDemon.completed}
+									<Button
+										size="sm"
+										class="bg-green-500 hover:bg-green-600"
+										on:click={() => claimDailyWeeklyReward(weeklyDemon.id)}
+									>
+										{$_('battlepass.claim')}
+									</Button>
+								{:else}
+									<Button variant="outline" disabled size="sm">
+										<Lock class="mr-1 h-4 w-4" />
+										{weeklyDemon.progress}/100%
+									</Button>
+								{/if}
+							{/if}
+						</div>
+					</div>
+				{/if}
+			</Card.Content>
+		</Card.Root>
+	</div>
 {/if}
