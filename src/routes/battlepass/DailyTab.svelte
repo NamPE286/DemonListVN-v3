@@ -1,47 +1,85 @@
 <script lang="ts">
 	import { _ } from 'svelte-i18n';
+	import { user } from '$lib/client';
+	import { onMount } from 'svelte';
+	import { toast } from 'svelte-sonner';
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card/index.js';
+	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
 	import Sun from 'lucide-svelte/icons/sun';
 	import Calendar from 'lucide-svelte/icons/calendar';
 	import Zap from 'lucide-svelte/icons/zap';
 	import Check from 'lucide-svelte/icons/check';
 	import Lock from 'lucide-svelte/icons/lock';
 	import { DIFFICULTY_COLORS, DIFFICULTY_NAMES } from '$lib/battlepass/constants';
-	import { createEventDispatcher } from 'svelte';
-
-	const dispatch = createEventDispatcher<{
-		claim: { levelId: number; claimType: 'minProgress' | 'completion' }
-	}>();
 
 	export let primaryColor: string = '#8b5cf6';
-	export let isLoggedIn: boolean = false;
-	export let dailyLevel: {
-		id: number;
-		levelId: number;
-		name: string;
-		difficulty: string;
-		progress: number;
-		completed: boolean;
-		claimed: boolean;
-		minProgressClaimed: boolean;
-		minProgress: number;
-		minProgressXp: number;
-		xp: number;
-	};
-	export let weeklyDemon: {
-		id: number;
-		levelId: number;
-		name: string;
-		difficulty: string;
-		progress: number;
-		completed: boolean;
-		claimed: boolean;
-		minProgressClaimed: boolean;
-		minProgress: number;
-		minProgressXp: number;
-		xp: number;
-	};
+
+	let loading = true;
+	let dailyWeeklyData: { daily: any; weekly: any } = { daily: null, weekly: null };
+	let mounted = false;
+
+	// Computed daily level data
+	$: dailyLevel = dailyWeeklyData.daily
+		? {
+				id: dailyWeeklyData.daily.id,
+				levelId: dailyWeeklyData.daily.levelID,
+				name: dailyWeeklyData.daily.levels?.name || $_('battlepass.placeholder_daily_level'),
+				difficulty: dailyWeeklyData.daily.levels?.difficulty || 'harder',
+				progress: dailyWeeklyData.daily.progress ?? 0,
+				completed: (dailyWeeklyData.daily.progress ?? 0) >= 100,
+				claimed: dailyWeeklyData.daily.completionClaimed ?? false,
+				minProgressClaimed: dailyWeeklyData.daily.minProgressClaimed ?? false,
+				minProgress: dailyWeeklyData.daily.minProgress ?? 50,
+				minProgressXp: dailyWeeklyData.daily.minProgressXp ?? 500,
+				xp: dailyWeeklyData.daily.xp ?? 1000
+			}
+		: {
+				id: 0,
+				levelId: 0,
+				name: $_('battlepass.no_daily_level'),
+				difficulty: 'harder',
+				progress: 0,
+				completed: false,
+				claimed: false,
+				minProgressClaimed: false,
+				minProgress: 50,
+				minProgressXp: 500,
+				xp: 1000
+			};
+
+	// Computed weekly level data
+	$: weeklyDemon = dailyWeeklyData.weekly
+		? {
+				id: dailyWeeklyData.weekly.id,
+				levelId: dailyWeeklyData.weekly.levelID,
+				name: dailyWeeklyData.weekly.levels?.name || $_('battlepass.placeholder_weekly_demon'),
+				difficulty: dailyWeeklyData.weekly.levels?.difficulty || 'medium_demon',
+				progress: dailyWeeklyData.weekly.progress ?? 0,
+				completed: (dailyWeeklyData.weekly.progress ?? 0) >= 100,
+				claimed: dailyWeeklyData.weekly.completionClaimed ?? false,
+				minProgressClaimed: dailyWeeklyData.weekly.minProgressClaimed ?? false,
+				minProgress: dailyWeeklyData.weekly.minProgress ?? 50,
+				minProgressXp: dailyWeeklyData.weekly.minProgressXp ?? 500,
+				xp: dailyWeeklyData.weekly.xp ?? 1000
+			}
+		: {
+				id: 0,
+				levelId: 0,
+				name: $_('battlepass.no_weekly_level'),
+				difficulty: 'medium_demon',
+				progress: 0,
+				completed: false,
+				claimed: false,
+				minProgressClaimed: false,
+				minProgress: 50,
+				minProgressXp: 500,
+				xp: 1000
+			};
+
+	// Check if min progress is reached
+	$: dailyMinProgressReached = dailyLevel.progress >= dailyLevel.minProgress;
+	$: weeklyMinProgressReached = weeklyDemon.progress >= weeklyDemon.minProgress;
 
 	function getDifficultyColor(difficulty: string): string {
 		return DIFFICULTY_COLORS[difficulty?.toLowerCase()] || '#6b7280';
@@ -51,13 +89,77 @@
 		return DIFFICULTY_NAMES[difficulty?.toLowerCase()] || difficulty || 'Unknown';
 	}
 
-	function handleClaim(levelId: number, claimType: 'minProgress' | 'completion') {
-		dispatch('claim', { levelId, claimType });
+	async function fetchDailyWeeklyProgress() {
+		try {
+			const headers: Record<string, string> = {};
+			if ($user.loggedIn) {
+				headers['Authorization'] = `Bearer ${await $user.token()}`;
+			}
+
+			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/daily-weekly`, {
+				headers
+			});
+
+			if (res.ok) {
+				dailyWeeklyData = await res.json();
+			}
+		} catch (e) {
+			console.error('Failed to fetch daily/weekly progress:', e);
+		}
 	}
 
-	// Check if min progress is reached
-	$: dailyMinProgressReached = dailyLevel.progress >= dailyLevel.minProgress;
-	$: weeklyMinProgressReached = weeklyDemon.progress >= weeklyDemon.minProgress;
+	async function claimDailyWeeklyReward(levelId: number, claimType: 'minProgress' | 'completion') {
+		if (!$user.loggedIn) return;
+
+		try {
+			const res = await fetch(
+				`${import.meta.env.VITE_API_URL}/battlepass/level/${levelId}/claim/${claimType}`,
+				{
+					method: 'POST',
+					headers: {
+						Authorization: `Bearer ${await $user.token()}`
+					}
+				}
+			);
+
+			if (res.ok) {
+				const result = await res.json();
+				toast.success($_('battlepass.xp_claimed', { values: { xp: result.xp } }));
+				await fetchDailyWeeklyProgress();
+			} else {
+				const errorData = await res.json();
+				toast.error(errorData.message || $_('battlepass.claim_failed'));
+			}
+		} catch (e) {
+			toast.error($_('battlepass.claim_failed'));
+		}
+	}
+
+	async function loadData() {
+		loading = true;
+		await fetchDailyWeeklyProgress();
+		loading = false;
+	}
+
+	onMount(() => {
+		mounted = true;
+		loadData();
+
+		const unsubscribe = user.subscribe(async (value) => {
+			if (!mounted) return;
+
+			if (value.loggedIn) {
+				await fetchDailyWeeklyProgress();
+			} else {
+				dailyWeeklyData = { daily: null, weekly: null };
+			}
+		});
+
+		return () => {
+			mounted = false;
+			unsubscribe();
+		};
+	});
 </script>
 
 <div class="mb-4 text-center">
@@ -65,6 +167,12 @@
 	<p class="text-muted-foreground">{$_('battlepass.daily_weekly_desc')}</p>
 </div>
 
+{#if loading}
+	<div class="grid gap-6 md:grid-cols-2">
+		<Skeleton class="h-64 w-full" />
+		<Skeleton class="h-64 w-full" />
+	</div>
+{:else}
 <div class="grid gap-6 md:grid-cols-2">
 	<!-- Daily Level Card -->
 	<Card.Root
@@ -128,17 +236,17 @@
 								<span class="text-sm text-muted-foreground">{$_('battlepass.min_progress_reward', { values: { progress: dailyLevel.minProgress } })}</span>
 								<div class="flex items-center gap-1">
 									<Zap class="h-4 w-4" style="color: {primaryColor}" />
-									<span class="font-bold" style="color: {primaryColor}">+{dailyLevel.minProgressXp} XP</span>
+							<span class="font-bold" style="color: {primaryColor}">+{dailyLevel.minProgressXp} XP</span>
 								</div>
 							</div>
-							{#if isLoggedIn}
+							{#if $user.loggedIn}
 								{#if dailyLevel.minProgressClaimed}
 									<Button variant="outline" disabled size="sm">
 										<Check class="mr-1 h-4 w-4" />
 										{$_('battlepass.claimed')}
 									</Button>
 								{:else if dailyMinProgressReached}
-									<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => handleClaim(dailyLevel.id, 'minProgress')}>
+								<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(dailyLevel.id, 'minProgress')}>
 										{$_('battlepass.claim')}
 									</Button>
 								{:else}
@@ -160,14 +268,14 @@
 								<span class="font-bold" style="color: {primaryColor}">+{dailyLevel.xp} XP</span>
 							</div>
 						</div>
-						{#if isLoggedIn}
-							{#if dailyLevel.claimed}
-								<Button variant="outline" disabled size="sm">
-									<Check class="mr-1 h-4 w-4" />
-									{$_('battlepass.claimed')}
-								</Button>
-							{:else if dailyLevel.completed}
-								<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => handleClaim(dailyLevel.id, 'completion')}>
+					{#if $user.loggedIn}
+						{#if dailyLevel.claimed}
+							<Button variant="outline" disabled size="sm">
+								<Check class="mr-1 h-4 w-4" />
+								{$_('battlepass.claimed')}
+							</Button>
+						{:else if dailyLevel.completed}
+							<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(dailyLevel.id, 'completion')}>
 									{$_('battlepass.claim')}
 								</Button>
 							{:else}
@@ -245,17 +353,17 @@
 								<span class="text-sm text-muted-foreground">{$_('battlepass.min_progress_reward', { values: { progress: weeklyDemon.minProgress } })}</span>
 								<div class="flex items-center gap-1">
 									<Zap class="h-4 w-4" style="color: {primaryColor}" />
-									<span class="font-bold" style="color: {primaryColor}">+{weeklyDemon.minProgressXp} XP</span>
+							<span class="font-bold" style="color: {primaryColor}">+{weeklyDemon.minProgressXp} XP</span>
 								</div>
 							</div>
-							{#if isLoggedIn}
+							{#if $user.loggedIn}
 								{#if weeklyDemon.minProgressClaimed}
 									<Button variant="outline" disabled size="sm">
 										<Check class="mr-1 h-4 w-4" />
 										{$_('battlepass.claimed')}
 									</Button>
 								{:else if weeklyMinProgressReached}
-									<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => handleClaim(weeklyDemon.id, 'minProgress')}>
+								<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(weeklyDemon.id, 'minProgress')}>
 										{$_('battlepass.claim')}
 									</Button>
 								{:else}
@@ -277,14 +385,14 @@
 								<span class="font-bold" style="color: {primaryColor}">+{weeklyDemon.xp} XP</span>
 							</div>
 						</div>
-						{#if isLoggedIn}
-							{#if weeklyDemon.claimed}
-								<Button variant="outline" disabled size="sm">
-									<Check class="mr-1 h-4 w-4" />
-									{$_('battlepass.claimed')}
-								</Button>
-							{:else if weeklyDemon.completed}
-								<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => handleClaim(weeklyDemon.id, 'completion')}>
+					{#if $user.loggedIn}
+						{#if weeklyDemon.claimed}
+							<Button variant="outline" disabled size="sm">
+								<Check class="mr-1 h-4 w-4" />
+								{$_('battlepass.claimed')}
+							</Button>
+						{:else if weeklyDemon.completed}
+							<Button size="sm" class="bg-green-500 hover:bg-green-600" on:click={() => claimDailyWeeklyReward(weeklyDemon.id, 'completion')}>
 									{$_('battlepass.claim')}
 								</Button>
 							{:else}
@@ -300,3 +408,4 @@
 		</Card.Content>
 	</Card.Root>
 </div>
+{/if}

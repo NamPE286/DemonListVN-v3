@@ -2,7 +2,8 @@
 	import { Button } from '$lib/components/ui/button';
 	import * as Card from '$lib/components/ui/card/index.js';
 	import { Skeleton } from '$lib/components/ui/skeleton/index.js';
-    import { user } from '$lib/client';
+	import { user } from '$lib/client';
+    import { onMount } from 'svelte';
 	import { _ } from 'svelte-i18n';
 	import Crown from 'lucide-svelte/icons/crown';
 	import Gift from 'lucide-svelte/icons/gift';
@@ -11,17 +12,114 @@
 	import { XP_PER_TIER, MAX_TIER, PREMIUM_PRICE } from '$lib/battlepass/constants';
 
 	export let season: any;
-	export let cssVars = '';
 	export let primaryColor = '#8b5cf6';
-	export let daysRemaining = 0;
-	export let loading = true;
-	export let progress: any = null;
-	export let claimableRewards: any[] = [];
-	export let currentTier = 0;
-	export let tierProgress = 0;
-	export let isPremium = false;
 	export let purchaseDialogOpen = false; // bindable from parent
-	export let formatCurrency: (amount: number) => string;
+
+	let loading = true;
+	let progress: any = null;
+	let claimableRewards: any[] = [];
+    let mounted = false;
+
+	// Helper function to convert hex to RGB
+	function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+		const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+		return result
+			? {
+					r: parseInt(result[1], 16),
+					g: parseInt(result[2], 16),
+					b: parseInt(result[3], 16)
+				}
+			: null;
+	}
+
+	// Generate CSS variable strings
+	$: cssVars = (() => {
+		const rgb = hexToRgb(primaryColor);
+		if (!rgb) return '';
+		return `--primary-color: ${rgb.r}, ${rgb.g}, ${rgb.b};`;
+	})();
+
+	$: currentTier = progress ? Math.min(Math.floor(progress.xp / XP_PER_TIER), MAX_TIER) : 0;
+	$: tierProgress = progress ? progress.xp % XP_PER_TIER : 0;
+	$: isPremium = progress?.isPremium ?? false;
+	$: daysRemaining = season
+		? Math.max(
+				0,
+				Math.ceil((new Date(season.end).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+			)
+		: 0;
+
+	function formatCurrency(amount: number): string {
+		return new Intl.NumberFormat('vi-VN', {
+			style: 'currency',
+			currency: 'VND'
+		}).format(amount);
+	}
+
+	async function fetchProgress() {
+		if (!$user.loggedIn || !season) return;
+
+		try {
+			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/progress`, {
+				headers: {
+					Authorization: `Bearer ${await $user.token()}`
+				}
+			});
+
+			if (res.ok) {
+				progress = await res.json();
+			}
+		} catch (e) {
+			console.error('Failed to fetch progress:', e);
+		}
+	}
+
+	async function fetchClaimableRewards() {
+		if (!$user.loggedIn) return;
+
+		try {
+			const res = await fetch(`${import.meta.env.VITE_API_URL}/battlepass/rewards/claimable`, {
+				headers: {
+					Authorization: `Bearer ${await $user.token()}`
+				}
+			});
+
+			if (res.ok) {
+				claimableRewards = await res.json();
+			}
+		} catch (e) {
+			console.error('Failed to fetch claimable rewards:', e);
+		}
+	}
+
+	async function loadData() {
+		loading = true;
+		if ($user.loggedIn) {
+			await Promise.all([fetchProgress(), fetchClaimableRewards()]);
+		}
+		loading = false;
+	}
+
+	onMount(() => {
+        mounted = true;
+        loadData();
+
+        const unsubscribe = user.subscribe(async (value) => {
+            if (!mounted) return;
+
+            if (value.loggedIn) {
+                await Promise.all([fetchProgress(), fetchClaimableRewards()]);
+            } else {
+                progress = null;
+                claimableRewards = [];
+            }
+        });
+
+        return () => {
+            mounted = false;
+            unsubscribe();
+        };
+	});
 </script>
 
 <div class="hero-section relative overflow-hidden" style={cssVars}>
