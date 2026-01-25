@@ -45,12 +45,12 @@
 		}
 
 		// Add count to the array at the percent index
-		deathCountArray[attemptPercent] += attemptCount;
+		deathCountArray[attemptPercent] += Number(attemptCount);
 		
 		// Log the attempt
 		attempts = [...attempts, {
-			percent: attemptPercent,
-			count: attemptCount,
+			percent: Number(attemptPercent),
+			count: Number(attemptCount),
 			timestamp: new Date()
 		}];
 		
@@ -182,6 +182,79 @@
 			eventSubmitLoading = false;
 		}
 	}
+
+// Build and copy cURL commands
+async function buildCurlCommand(method: string, url: string, headers: Record<string, string | undefined> = {}, body?: string) {
+	const parts: string[] = ['curl', '-X', method.toUpperCase(), `"${url}"`];
+
+	for (const key in headers) {
+		const val = headers[key];
+		if (!val) continue;
+		// escape double quotes in header values
+		const safeVal = String(val).replace(/"/g, '\\"');
+		parts.push('-H', `"${key}: ${safeVal}"`);
+	}
+
+	if (body) {
+		// escape single quotes for shell-safe single-quoted string
+		const escaped = body.replace(/'/g, "'\\''");
+		parts.push("--data-raw", `'${escaped}'`);
+	}
+
+	return parts.join(' ');
+}
+
+async function copyToClipboard(text: string) {
+	if (navigator.clipboard && navigator.clipboard.writeText) {
+		return navigator.clipboard.writeText(text);
+	}
+	// fallback for older environments
+	const ta = document.createElement('textarea');
+	ta.value = text;
+	document.body.appendChild(ta);
+	ta.select();
+	try {
+		document.execCommand('copy');
+	} finally {
+		document.body.removeChild(ta);
+	}
+	return Promise.resolve();
+}
+
+async function copyDeathCountAsCurl() {
+	try {
+		if (!deathCountData.levelID) {
+			toast.error('Level ID is required');
+			return;
+		}
+		const countString = deathCountArray.join('|');
+		const url = `${import.meta.env.VITE_API_URL}/deathCount/${deathCountData.levelID}/${countString}${deathCountData.completed ? '?completed=true' : ''}`;
+		const token = await $user.token();
+		const cmd = await buildCurlCommand('POST', url, { Authorization: 'Bearer ' + token });
+		await copyToClipboard(cmd);
+		toast.success('Copied cURL to clipboard');
+	} catch (err) {
+		console.error(err);
+		toast.error('Failed to copy cURL');
+	}
+}
+
+async function copyEventSubmitAsCurl() {
+	try {
+		if (!eventSubmitData.levelID || !eventSubmitData.progress || !eventSubmitData.password) {
+			toast.error('Level ID, Progress, and Password are required');
+			return;
+		}
+		const url = `${import.meta.env.VITE_API_URL}/events/submitLevel/${eventSubmitData.levelID}?progress=${eventSubmitData.progress}&password=${encodeURIComponent(eventSubmitData.password)}`;
+		const token = await $user.token();
+		const cmd = await buildCurlCommand('PUT', url, { Authorization: 'Bearer ' + token });
+		await copyToClipboard(cmd);
+		toast.success('Copied cURL to clipboard');
+	} catch (err) {
+		console.error(err);
+		toast.error('Failed to copy cURL');
+	}
+}
 
 	function clearDeathCount() {
 		deathCountData = {
@@ -346,9 +419,14 @@
 					<Button variant="outline" on:click={clearDeathCount} disabled={deathCountLoading}>
 						Clear
 					</Button>
-					<Button on:click={simulateDeathCount} disabled={deathCountLoading}>
-						{deathCountLoading ? 'Simulating...' : 'Send'}
-					</Button>
+					<div class="flex items-center space-x-2">
+						<Button variant="outline" on:click={copyDeathCountAsCurl} disabled={deathCountLoading}>
+							Copy as cURL
+						</Button>
+						<Button on:click={simulateDeathCount} disabled={deathCountLoading}>
+							{deathCountLoading ? 'Simulating...' : 'Send'}
+						</Button>
+					</div>
 				</Card.Footer>
 			</Card.Root>
 		</Tabs.Content>
@@ -412,9 +490,14 @@
 					<Button variant="outline" on:click={clearEventSubmit} disabled={eventSubmitLoading}>
 						Clear
 					</Button>
-					<Button on:click={simulateEventSubmit} disabled={eventSubmitLoading}>
-						{eventSubmitLoading ? 'Simulating...' : 'Send'}
-					</Button>
+					<div class="flex items-center space-x-2">
+						<Button variant="outline" on:click={copyEventSubmitAsCurl} disabled={eventSubmitLoading}>
+							Copy as cURL
+						</Button>
+						<Button on:click={simulateEventSubmit} disabled={eventSubmitLoading}>
+							{eventSubmitLoading ? 'Simulating...' : 'Send'}
+						</Button>
+					</div>
 				</Card.Footer>
 			</Card.Root>
 		</Tabs.Content>
@@ -469,7 +552,6 @@
 		justify-content: space-between;
 		align-items: center;
 		padding: 0.5rem;
-		background: white;
 		border-radius: 0.25rem;
 		border: 1px solid rgba(0, 0, 0, 0.1);
 	}
@@ -497,7 +579,6 @@
 	.array-value {
 		display: inline-block;
 		padding: 0.25rem 0.5rem;
-		background: white;
 		border-radius: 0.25rem;
 		font-size: 0.75rem;
 		font-weight: 500;
