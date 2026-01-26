@@ -12,6 +12,7 @@
 	let currentTier: number = 0;
 	let isPremium: boolean = false;
 	let loading = true;
+	let claimingRewardIds = new Set<number>();
 
 	async function fetchRewards() {
 		try {
@@ -63,27 +64,46 @@
 	}
 
 	async function claimReward(rewardId: number) {
-		try {
-			const res = await fetch(
-				`${import.meta.env.VITE_API_URL}/battlepass/reward/${rewardId}/claim`,
-				{
-					method: 'POST',
-					headers: {
-						Authorization: `Bearer ${await $user.token()}`
-					}
-				}
-			);
+		if (claimingRewardIds.has(rewardId)) return;
+		claimingRewardIds = new Set([...claimingRewardIds, rewardId]);
 
-			if (res.ok) {
-				toast.success($_('battlepass.reward_claimed'));
+		try {
+			const claimPromise = (async () => {
+				const res = await fetch(
+					`${import.meta.env.VITE_API_URL}/battlepass/reward/${rewardId}/claim`,
+					{
+						method: 'POST',
+						headers: {
+							Authorization: `Bearer ${await $user.token()}`
+						}
+					}
+				);
+
+				if (!res.ok) {
+					const error = await res.text();
+					throw new Error(error || $_('battlepass.claim_failed'));
+				}
+
+				claimableRewards = claimableRewards.filter((reward) => reward.id !== rewardId);
 				await fetchClaimableRewards();
 				await fetchProgress();
-			} else {
-				const error = await res.text();
-				toast.error(error || $_('battlepass.claim_failed'));
-			}
+				return true;
+			})();
+
+			toast.promise(claimPromise, {
+				loading: $_('battlepass.claiming'),
+				success: $_('battlepass.reward_claimed'),
+				error: (err: unknown) =>
+					err instanceof Error ? err.message : $_('battlepass.claim_failed')
+			});
+
+			await claimPromise;
 		} catch (e) {
-			toast.error($_('battlepass.claim_failed'));
+			console.error('Failed to claim reward:', e);
+		} finally {
+			const next = new Set(claimingRewardIds);
+			next.delete(rewardId);
+			claimingRewardIds = next;
 		}
 	}
 
@@ -114,6 +134,7 @@
 		{currentTier}
 		{isPremium}
 		{claimableRewards}
+		{claimingRewardIds}
 		editable={false}
 		onClaimReward={claimReward}
 	/>

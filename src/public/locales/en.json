@@ -1182,6 +1182,8 @@
     "progress": "Progress",
     "claim": "Claim",
     "claimed": "Claimed",
+    "claiming": "Claiming...",
+    "reward_claimed": "Reward claimed!",
     "locked": "Locked",
     "featured_levels": "Featured Levels",
     "featured_levels_desc": "Complete these Extreme Demons for massive XP",

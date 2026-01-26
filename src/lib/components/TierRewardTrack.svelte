@@ -11,6 +11,7 @@
 	export let onRewardClick: ((reward: any) => void) | null = null;
 	export let onAddRewardClick: ((tier: number, isPremium: boolean) => void) | null = null;
 	export let onClaimReward: ((rewardId: number) => void) | null = null;
+	export let claimingRewardIds: Set<number> = new Set();
 
 	function getTierRewards(tier: number, allRewards: any[]) {
 		return allRewards.filter((r: any) => r.tier === tier);
@@ -30,6 +31,17 @@
 
 	function isRewardClaimable(reward: any) {
 		return reward && claimableRewards.some((r) => r.id === reward.id);
+	}
+
+	function isRewardClaimed(reward: any) {
+		if (!reward) return false;
+		if (reward.tier > currentTier) return false;
+		if (reward.isPremium && !isPremium) return false;
+		return !isRewardClaimable(reward);
+	}
+
+	function isRewardClaiming(reward: any) {
+		return reward && claimingRewardIds?.has?.(reward.id);
 	}
 
 	function getMaxTierWithRewards(allRewards: any[]) {
@@ -62,6 +74,8 @@
 							isPremiumActivated={isPremium}
 							isPremiumTrack={true}
 							isClaimable={isRewardClaimable(premiumReward)}
+							isClaimed={isRewardClaimed(premiumReward)}
+							isClaiming={isRewardClaiming(premiumReward)}
 							{editable}
 							onRewardClick={() => onRewardClick?.(premiumReward)}
 							onClaimReward={() => onClaimReward?.(premiumReward.id)}
@@ -111,6 +125,8 @@
 							isPremiumActivated={true}
 							isPremiumTrack={false}
 							isClaimable={isRewardClaimable(freeReward)}
+							isClaimed={isRewardClaimed(freeReward)}
+							isClaiming={isRewardClaiming(freeReward)}
 							{editable}
 							onRewardClick={() => onRewardClick?.(freeReward)}
 							onClaimReward={() => onClaimReward?.(freeReward.id)}

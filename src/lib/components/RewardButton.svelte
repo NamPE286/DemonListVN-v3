@@ -2,6 +2,7 @@
 	import Gift from 'lucide-svelte/icons/gift';
 	import Lock from 'lucide-svelte/icons/lock';
 	import Crown from 'lucide-svelte/icons/crown';
+	import Check from 'lucide-svelte/icons/check';
 	import * as Popover from '$lib/components/ui/popover/index.js';
 	import RewardItemDetails from '$lib/components/RewardItemDetails.svelte';
 	import { get } from 'svelte/store';
@@ -11,9 +12,13 @@
 	export let isPremiumActivated: boolean = false;
 	export let isPremiumTrack: boolean = false;
 	export let isClaimable: boolean = false;
+	export let isClaimed: boolean = false;
+	export let isClaiming: boolean = false;
 	export let editable: boolean = false;
 	export let onRewardClick: (() => void) | null = null;
 	export let onClaimReward: (() => void) | null = null;
+
+	let open = false;
 
 	// Determine if item is locked due to premium requirement
 	$: isPremiumLocked = isPremiumTrack && !isPremiumActivated;
@@ -52,7 +57,7 @@
 </script>
 
 {#if !editable}
-	<Popover.Root>
+	<Popover.Root bind:open>
 		<Popover.Trigger asChild let:builder>
 			<button
 				{...builder}
@@ -61,11 +66,14 @@
 				style="border-color: {borderColorRgba}; background-color: {isPremiumTrack
 					? 'rgb(234 179 8 / 0.1)'
 					: 'transparent'}"
-				class:hover:scale-105={isClaimable}
-				class:reward-claimable={isClaimable}
-				on:click={() => {
-					if (isClaimable && onClaimReward) {
+				class:hover:scale-105={isClaimable && !isClaiming}
+				class:reward-claimable={isClaimable && !isClaiming}
+				disabled={isClaiming}
+				on:click={async () => {
+					if (!isClaiming && isClaimable && onClaimReward) {
+						open = false;
 						onClaimReward();
+						isClaimed = true;
 					}
 				}}
 			>
@@ -82,7 +90,19 @@
 						{reward.quantity}
 					</span>
 				{/if}
-				{#if isPremiumLocked || !isClaimable}
+				{#if isPremiumLocked}
+					<div
+						class="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/50"
+					>
+						<Lock class="h-6 w-6" />
+					</div>
+				{:else if isClaimed}
+					<div
+						class="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/50"
+					>
+						<Check class="h-6 w-6" />
+					</div>
+				{:else if !isClaimable}
 					<div
 						class="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/50"
 					>

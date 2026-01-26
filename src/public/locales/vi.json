@@ -1181,6 +1181,8 @@
     "progress": "Tiến độ",
     "claim": "Nhận",
     "claimed": "Đã nhận",
+    "claiming": "Đang nhận...",
+    "reward_claimed": "Đã nhận phần thưởng!",
     "locked": "Khóa",
     "featured_levels": "Level nổi bật",
     "featured_levels_desc": "Hoàn thành các Extreme Demon này để nhận XP lớn",
