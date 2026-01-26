@@ -66,7 +66,6 @@
 				style="border-color: {borderColorRgba}; background-color: {isPremiumTrack
 					? 'rgb(234 179 8 / 0.1)'
 					: 'transparent'}"
-				class:hover:scale-105={isClaimable && !isClaiming}
 				class:reward-claimable={isClaimable && !isClaiming}
 				disabled={isClaiming}
 				on:click={async () => {
@@ -74,6 +73,7 @@
 						open = false;
 						onClaimReward();
 						isClaimed = true;
+						isClaimable = false;
 					}
 				}}
 			>
@@ -143,7 +143,6 @@
 		style="border-color: {borderColorRgba}; background-color: {isPremiumTrack
 			? 'rgb(234 179 8 / 0.1)'
 			: 'transparent'}"
-		class:hover:scale-105={true}
 		on:click={() => {
 			if (onRewardClick) {
 				onRewardClick();
