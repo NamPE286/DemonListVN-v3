@@ -43,7 +43,7 @@
 	<!-- Main Content Tabs -->
 	<div class="mx-auto max-w-6xl px-4 py-8">
 		<Tabs.Root value="rewards" class="flex flex-col items-center">
-			<Tabs.List class="mb-6 grid w-full max-w-2xl grid-cols-5">
+			<Tabs.List class="mb-6 grid w-full max-w-2xl grid-cols-4">
 				<Tabs.Trigger value="rewards" class="flex items-center gap-2">
 					<Gift class="h-4 w-4" />
 					<span class="hidden sm:inline">{$_('battlepass.tabs.rewards')}</span>
@@ -60,10 +60,10 @@
 					<Map class="h-4 w-4" />
 					<span class="hidden sm:inline">{$_('battlepass.tabs.mappacks')}</span>
 				</Tabs.Trigger>
-				<Tabs.Trigger value="missions" class="flex items-center gap-2">
+				<!-- <Tabs.Trigger value="missions" class="flex items-center gap-2">
 					<Target class="h-4 w-4" />
 					<span class="hidden sm:inline">{$_('battlepass.tabs.missions')}</span>
-				</Tabs.Trigger>
+				</Tabs.Trigger> -->
 			</Tabs.List>
 
 			<!-- Rewards Tab -->
@@ -86,10 +86,10 @@
 				<MapPacksTab {primaryColor} />
 			</Tabs.Content>
 
-			<!-- Missions Tab -->
-			<Tabs.Content value="missions" class="w-full">
+			<!-- Missions Tab (Planned) -->
+			<!-- <Tabs.Content value="missions" class="w-full">
 				<MissionsTab {primaryColor} seasonId={data.season?.id} />
-			</Tabs.Content>
+			</Tabs.Content> -->
 		</Tabs.Root>
 	</div>
 
