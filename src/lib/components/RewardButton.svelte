@@ -94,25 +94,25 @@
 					<div
 						class="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/50"
 					>
-						<Lock class="h-6 w-6" />
+						<Lock class="h-6 w-6" color="white" />
 					</div>
 				{:else if isClaimed}
 					<div
 						class="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/50"
 					>
-						<Check class="h-6 w-6" />
+						<Check class="h-6 w-6" color="white" />
 					</div>
 				{:else if !isClaimable}
 					<div
 						class="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-black/50"
 					>
-						<Lock class="h-6 w-6" />
+						<Lock class="h-6 w-6" color="white" />
 					</div>
 				{:else if isClaimable}
 					<div
 						class="absolute inset-0 left-1 top-1 z-20 h-fit w-fit items-center justify-center rounded-xl bg-green-500/50 p-1 pl-[4px]"
 					>
-						<Gift size={16} />
+						<Gift size={16} color="white" />
 					</div>
 				{/if}
 				<div
