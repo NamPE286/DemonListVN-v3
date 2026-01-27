@@ -131,7 +131,7 @@
 				class="w-full max-w-[500px] overflow-hidden backdrop-blur-md"
 				style="border: 2px solid rgba(var(--primary-color), 0.3); background: linear-gradient(to bottom right, rgba(var(--primary-color), 0.22), rgba(var(--primary-color), 0.12));"
 			>
-				<Card.Content class="p-6">
+				<Card.Content class="p-6 text-white">
 					{#if loading}
 						<div class="flex flex-col gap-4">
 							<Skeleton class="h-8 w-48" />
@@ -151,7 +151,7 @@
 									</div>
 									<div>
 										<h3 class="text-xl font-bold">{$_('battlepass.tier')} {currentTier}</h3>
-										<p class="text-sm text-muted-foreground">
+										<p class="text-sm text-white">
 											{progress?.xp ?? 0} XP {$_('battlepass.total')}
 										</p>
 									</div>
@@ -208,7 +208,7 @@
 
 							<!-- Claimable Rewards -->
 							{#if claimableRewards.length > 0}
-								<div class="flex items-center gap-2 rounded-lg bg-green-500/20 p-3 text-green-400">
+								<div class="flex items-center gap-2 rounded-lg bg-green-500/20 p-3 text-white">
 									<Gift class="h-5 w-5" />
 									<span class="font-medium"
 										>{$_('battlepass.rewards_ready', {
