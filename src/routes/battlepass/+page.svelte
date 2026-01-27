@@ -94,7 +94,7 @@
 	</div>
 
 	<!-- Premium Purchase Dialog -->
-	<PremiumPurchaseDialog bind:open={purchaseDialogOpen} seasonTitle={data.season?.title || ''} />
+	<PremiumPurchaseDialog bind:open={purchaseDialogOpen} seasonTitle={data.season?.title || ''} seasonId={data.season?.id} />
 {/if}
 
 <style lang="scss">
