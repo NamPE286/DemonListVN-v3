@@ -32,7 +32,8 @@
 			items: [
 				{ name: 'Refresh', action: refresh, type: 'button' },
 				{ name: 'Copy Token', action: copyToken, type: 'button' },
-				{ name: 'API Simulator', href: '/admin/apiSimulator' }
+				{ name: 'API Simulator', href: '/admin/apiSimulator' },
+				{ name: 'Send Notification', href: '/admin/notification' }
 			]
 		},
 		{
@@ -64,17 +65,12 @@
 		{
 			title: 'User Management',
 			icon: '👥',
-			items: [
-				{ name: 'Account Merger', href: '/admin/accountMerger' }
-			]
+			items: [{ name: 'Account Merger', href: '/admin/accountMerger' }]
 		},
 		{
 			title: 'Features',
 			icon: '✨',
-			items: [
-				{ name: 'Battlepass', href: '/admin/battlepass' },
-				{ name: 'Send Notification', href: '/admin/notification' }
-			]
+			items: [{ name: 'Battlepass', href: '/admin/battlepass' }]
 		}
 	];
 </script>
@@ -84,11 +80,6 @@
 <Title value="Admin Dashboard" />
 
 <div class="wrapper">
-	<div class="header">
-		<h1>Admin Dashboard</h1>
-		<p class="subtitle">Manage your Demon List VN platform</p>
-	</div>
-
 	<div class="categories-grid">
 		{#each categories as category}
 			<div class="category-card">
@@ -99,11 +90,7 @@
 				<div class="category-items">
 					{#each category.items as item}
 						{#if item.type === 'button'}
-							<Button 
-								on:click={item.action} 
-								class="admin-button"
-								variant="outline"
-							>
+							<Button on:click={item.action} class="admin-button" variant="outline">
 								{item.name}
 							</Button>
 						{:else}
@@ -159,12 +146,6 @@
 		padding: 1.5rem;
 		transition: all 0.3s ease;
 
-		&:hover {
-			background: rgba(255, 255, 255, 0.05);
-			border-color: rgba(118, 75, 162, 0.5);
-			transform: translateY(-2px);
-			box-shadow: 0 8px 24px rgba(118, 75, 162, 0.15);
-		}
 	}
 
 	.category-header {
@@ -200,10 +181,7 @@
 		font-size: 0.95rem;
 		transition: all 0.2s ease;
 
-		&:hover {
-			background: rgba(118, 75, 162, 0.2);
-			border-color: rgba(118, 75, 162, 0.5);
-		}
+
 	}
 
 	.admin-link {
@@ -224,16 +202,6 @@
 			transition: all 0.2s ease;
 		}
 
-		&:hover {
-			background: rgba(124, 180, 248, 0.1);
-			border-color: rgba(124, 180, 248, 0.3);
-			padding-left: 1.25rem;
-
-			.link-arrow {
-				opacity: 1;
-				transform: translateX(0);
-			}
-		}
 	}
 
 	@media (max-width: 768px) {
