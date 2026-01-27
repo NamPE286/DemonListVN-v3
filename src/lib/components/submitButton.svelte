@@ -14,6 +14,7 @@
 	import { onMount } from 'svelte';
 	import { locale } from 'svelte-i18n';
 	import { _ } from 'svelte-i18n';
+	import { Lightbulb } from 'lucide-svelte';
 
 	const defaultValue: any = {
 		levelid: NaN,
@@ -286,6 +287,22 @@
 		{#if step > 0}
 			<div class="grid gap-4 py-4">
 				{#if step == 1}
+					<Alert.Root>
+						<Alert.Description class="flex gap-[10px] items-center">
+							<Lightbulb size={24} />
+							<span>
+								{#if $locale == 'vi'}
+									Mẹo: Vào trang level và bấm Nộp để tự động điền ID. (Dành cho <a href="/supporter"
+										>Supporter</a
+									>)
+								{:else}
+									Tip: Go to the level page and click Submit to auto-fill the ID. (For <a
+										href="/supporter">Supporter</a
+									>)
+								{/if}
+							</span>
+						</Alert.Description>
+					</Alert.Root>
 					<div class="grid grid-cols-4 items-center gap-4">
 						<Label for="name" class="text-right">Level ID</Label>
 						<Input
@@ -639,3 +656,9 @@
 		</div>
 	</Dialog.Content>
 </Dialog.Root>
+
+<style lang="scss">
+	a {
+		text-decoration: underline;
+	}
+</style>
