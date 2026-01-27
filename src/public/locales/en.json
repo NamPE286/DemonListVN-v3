@@ -345,6 +345,8 @@
       "consuming": "Consuming boost...",
       "queue_boost_used": "Queue boost successfully applied!",
       "queue_boost_error": "Failed to use queue boost. Please try again."
+      ,
+      "supporter_note": "All Supporters' submissions are prioritized by 30 days"
     }
   },
   "search": {
@@ -625,6 +627,8 @@
     "time": "Time",
     "queue_no": "Queue no.",
     "forwarded": "Forwarded",
+    "detail": "Detail",
+    "boost": "Boost",
     "cancel": {
       "title": "Cancel submission?",
       "description": "This action cannot be undone."

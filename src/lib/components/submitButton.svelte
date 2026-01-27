@@ -288,7 +288,7 @@
 			<div class="grid gap-4 py-4">
 				{#if step == 1}
 					<Alert.Root>
-						<Alert.Description class="flex gap-[10px] items-center">
+						<Alert.Description class="flex items-center gap-[10px]">
 							<Lightbulb size={24} />
 							<span>
 								{#if $locale == 'vi'}
@@ -513,19 +513,21 @@
 								{/if}
 							</AlertDialog.Description>
 						</AlertDialog.Header>
-						<Alert.Root class="border-yellow-400">
-							<Alert.Description>
-								{#if $locale == 'vi'}
-									Bản nộp của <a class="underline" href="/supporter">Supporter</a> được ưu tiên duyệt.
-									Những bản nộp này được coi như nộp sớm hơn 30 ngày (bỏ qua khoảng hơn 1 nghìn bản nộp
-									khác).
-								{:else}
-									<a class="underline" href="/supporter">Supporters'</a> submissions are prioritized
-									in the review queue. Their records are treated as if they were submitted 30 days earlier
-									(skip ahead by about 1K+ submissions).
-								{/if}
-							</Alert.Description>
-						</Alert.Root>
+						{#if !isActive($user.data.supporterUntil)}
+							<Alert.Root class="border-yellow-400">
+								<Alert.Description>
+									{#if $locale == 'vi'}
+										Bản nộp của <a class="underline" href="/supporter">Supporter</a> được ưu tiên duyệt.
+										Những bản nộp này được coi như nộp sớm hơn 30 ngày (bỏ qua khoảng hơn 1 nghìn bản
+										nộp khác).
+									{:else}
+										<a class="underline" href="/supporter">Supporters'</a> submissions are prioritized
+										in the review queue. Their records are treated as if they were submitted 30 days
+										earlier (skip ahead by about 1K+ submissions).
+									{/if}
+								</Alert.Description>
+							</Alert.Root>
+						{/if}
 						<AlertDialog.Footer class="gap-[5px] lg:gap-0">
 							{#if submitLog && submitLog.length > 0}
 								<Button on:click={() => (logsOpen = true)} variant="outline">

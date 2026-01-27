@@ -11,12 +11,16 @@
 	import RecordDetail from '$lib/components/recordDetail.svelte';
 	import Ads from '$lib/components/ads.svelte';
 	import { _ } from 'svelte-i18n';
+	import { EllipsisIcon, Hamburger, SkipForward, SkipForwardIcon } from 'lucide-svelte';
+	import { HamburgerMenu } from 'svelte-radix';
+	import { Ellipsis } from '$lib/components/ui/pagination';
 
 	export let data: PageData;
 	let alertOpened = false;
 	let lvID: number;
 	let userID: string, levelID: number;
 	let recordDetailOpened = false;
+	let recordDetailTab: string = 'detail';
 
 	function getTimeString(ms: number) {
 		const minutes = Math.floor(ms / 60000);
@@ -52,6 +56,39 @@
 			}
 		);
 	}
+
+	let boosting: number[] = [];
+
+	function isBoosting(id: number) {
+		return boosting.includes(id);
+	}
+
+	async function boostSubmission(levelid: number) {
+		const { uid } = $user.data;
+		const token = await $user.token();
+
+		boosting = [...boosting, levelid];
+
+		try {
+			await toast.promise(
+				fetch(`${import.meta.env.VITE_API_URL}/records/${uid}/${levelid}/boost`, {
+					method: 'POST',
+					headers: {
+						Authorization: 'Bearer ' + token
+					}
+				}),
+				{
+					loading: 'Boosting...',
+					success: 'Boost successful',
+					error: (err) => 'Boost failed'
+				}
+			);
+		} catch (e) {
+			// error handled by toast
+		} finally {
+			boosting = boosting.filter((x) => x !== levelid);
+		}
+	}
 </script>
 
 <svelte:head>
@@ -59,7 +96,7 @@
 </svelte:head>
 
 <Ads unit="leaderboard" />
-<RecordDetail bind:open={recordDetailOpened} uid={userID} {levelID} />
+<RecordDetail bind:open={recordDetailOpened} uid={userID} {levelID} selectedTab={recordDetailTab} />
 
 <AlertDialog.Root bind:open={alertOpened}>
 	<AlertDialog.Content>
@@ -87,6 +124,8 @@
 					<Table.Head class="w-[80px] text-center">{$_('submissions.progress')}</Table.Head>
 					<Table.Head class="w-[80px] text-center">{$_('submissions.time')}</Table.Head>
 					<Table.Head class="w-[80px] text-center">{$_('submissions.queue_no')}</Table.Head>
+					<Table.Head class="w-[80px] text-center">{$_('submissions.detail') || 'Detail'}</Table.Head>
+					<Table.Head class="w-[80px] text-center">{$_('submissions.boost') || 'Boost'}</Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
 					<Table.Head class="w-[0px] text-center"></Table.Head>
 				</Table.Row>
@@ -133,6 +172,16 @@
 							{:else}
 								{record.queueNo}
 							{/if}
+						</Table.Cell>
+						<Table.Cell class="text-center">
+							<button on:click|stopPropagation={() => { userID = record.userid; levelID = record.levels.id; recordDetailOpened = true; }}>
+								<EllipsisIcon size={16}/>
+							</button>
+						</Table.Cell>
+						<Table.Cell class="text-center">
+							<button disabled={isBoosting(record.levelid)} on:click|stopPropagation={() => { userID = record.userid; levelID = record.levels.id; recordDetailTab = 'skipAhead'; recordDetailOpened = true; }}>
+								<SkipForward size={16} />
+							</button>
 						</Table.Cell>
 						<Table.Cell class="text-center">
 							<button>
