@@ -279,10 +279,10 @@ async function copyEventSubmitAsCurl() {
 </script>
 
 <svelte:head>
-	<title>API Simulator - Admin</title>
+	<title>API Tester - Admin</title>
 </svelte:head>
 
-<Title value="API Simulator" />
+<Title value="API Tester" />
 
 <div class="wrapper">
 	<Tabs.Root value="deathCount" class="w-full">
@@ -424,7 +424,7 @@ async function copyEventSubmitAsCurl() {
 							Copy as cURL
 						</Button>
 						<Button on:click={simulateDeathCount} disabled={deathCountLoading}>
-							{deathCountLoading ? 'Simulating...' : 'Send'}
+							{deathCountLoading ? 'Sending...' : 'Send'}
 						</Button>
 					</div>
 				</Card.Footer>

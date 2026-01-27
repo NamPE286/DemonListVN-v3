@@ -32,7 +32,7 @@
 			items: [
 				{ name: 'Refresh', action: refresh, type: 'button' },
 				{ name: 'Copy Token', action: copyToken, type: 'button' },
-				{ name: 'API Simulator', href: '/admin/apiSimulator' },
+				{ name: 'API Tester', href: '/admin/api' },
 				{ name: 'Send Notification', href: '/admin/notification' }
 			]
 		},

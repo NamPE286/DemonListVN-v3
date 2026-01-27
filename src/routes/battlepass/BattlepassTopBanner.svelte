@@ -10,6 +10,7 @@
 	import Lock from 'lucide-svelte/icons/lock';
 	import Zap from 'lucide-svelte/icons/zap';
 	import { XP_PER_TIER, MAX_TIER, PREMIUM_PRICE } from '$lib/battlepass/constants';
+	import { Clock } from 'lucide-svelte';
 
 	export let season: any;
 	export let primaryColor = '#8b5cf6';
@@ -113,13 +114,9 @@
 		<div class="flex items-center gap-3">
 			<h1 class="title-shadow text-4xl font-bold md:text-5xl">{season?.title}</h1>
 		</div>
-		<p class="desc-shadow max-w-2xl text-center text-lg text-muted-foreground">
-			{season?.description}
-		</p>
-
 		<!-- Season Timer -->
 		<div class="flex items-center gap-2 rounded-full bg-muted/50 px-6 py-2 backdrop-blur-sm">
-			<Zap class="h-5 w-5" style="color: {primaryColor}" />
+			<Clock size={18} />
 			<span class="font-medium"
 				>{$_('battlepass.days_remaining', { values: { count: daysRemaining } })}</span
 			>
