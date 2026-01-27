@@ -75,9 +75,7 @@
 				</div>
 			</Tabs.Content>
 			<Tabs.Content value="levels" class="mt-[20px] w-full pl-[10px] pr-[10px]">
-				{#key levels}
-					<LevelTab {levels} event={data} {refresh} />
-				{/key}
+				<LevelTab {levels} event={data} {refresh} />
 			</Tabs.Content>
 			<Tabs.Content value="leaderboard" class="mt-[20px] w-full pl-[10px] pr-[10px]">
 				{#if levels.length}

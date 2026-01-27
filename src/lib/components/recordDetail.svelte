@@ -22,6 +22,7 @@
 	export let uid: string;
 	export let levelID: number;
 	export let open: boolean;
+	export let selectedTab: string = 'detail';
 
 	let record: any = null;
 	let chart: any = null;
@@ -379,7 +380,7 @@
 					{/if}
 				</DialogDescription>
 
-				<Tabs.Root value="detail" class="w-100">
+				<Tabs.Root value={selectedTab} class="w-100">
 					<Tabs.List>
 						<Tabs.Trigger value="detail">{$_('record_detail.tabs.detail')}</Tabs.Trigger>
 						<Tabs.Trigger value="deathCount">{$_('record_detail.tabs.death_count')}</Tabs.Trigger>
@@ -562,6 +563,9 @@
 									<li>{$_('record_detail.skip_ahead.description')[2]}</li>
 									<li>{$_('record_detail.skip_ahead.description')[3]}</li>
 								</ul>
+								<div class="flex rounded bg-yellow-50 p-3 text-sm dark:bg-pink-950">
+									<p>{$_('record_detail.skip_ahead.supporter_note')}</p>
+								</div>
 								{#if queueBoostInventory.length > 0}
 									<div class="rounded bg-green-50 p-3 dark:bg-green-950">
 										<p class="text-sm font-medium text-green-700 dark:text-green-300">
