@@ -106,16 +106,16 @@
 		<img
 			src={season?.backgroundUrl || `https://cdn.demonlistvn.com/battlepasses/${season?.id}.webp`}
 			alt="Season Background"
-			class="h-full w-full object-cover opacity-30"
+			class="h-full w-full object-cover"
 		/>
 	</div>
-	<div class="hero-bg-overlay absolute inset-0" />
 	<div class="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center gap-6 px-4 py-12">
 		<div class="flex items-center gap-3">
-			<Crown class="h-10 w-10" style="color: {primaryColor}" />
-			<h1 class="text-4xl font-bold md:text-5xl">{season?.title}</h1>
+			<h1 class="title-shadow text-4xl font-bold md:text-5xl">{season?.title}</h1>
 		</div>
-		<p class="max-w-2xl text-center text-lg text-muted-foreground">{season?.description}</p>
+		<p class="desc-shadow max-w-2xl text-center text-lg text-muted-foreground">
+			{season?.description}
+		</p>
 
 		<!-- Season Timer -->
 		<div class="flex items-center gap-2 rounded-full bg-muted/50 px-6 py-2 backdrop-blur-sm">
@@ -128,8 +128,8 @@
 		<!-- User Progress Card -->
 		{#if $user.loggedIn}
 			<Card.Root
-				class="w-full max-w-[500px] overflow-hidden backdrop-blur-sm"
-				style="border: 2px solid rgba(var(--primary-color), 0.3); background: linear-gradient(to bottom right, rgba(var(--primary-color), 0.1), rgba(var(--primary-color), 0.05));"
+				class="w-full max-w-[500px] overflow-hidden backdrop-blur-md"
+				style="border: 2px solid rgba(var(--primary-color), 0.3); background: linear-gradient(to bottom right, rgba(var(--primary-color), 0.22), rgba(var(--primary-color), 0.12));"
 			>
 				<Card.Content class="p-6">
 					{#if loading}
@@ -144,7 +144,7 @@
 							<div class="flex items-center justify-between">
 								<div class="flex items-center gap-3">
 									<div
-										class="tier-badge flex h-16 w-16 items-center justify-center rounded-xl text-2xl font-bold text-black shadow-lg"
+										class="tier-badge flex h-16 w-16 items-center justify-center rounded-xl text-2xl font-bold text-white shadow-lg"
 										style="background: linear-gradient(to bottom right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.7));"
 									>
 										{currentTier}
@@ -157,16 +157,16 @@
 									</div>
 								</div>
 								{#if isPremium}
-									<div class='flex gap-[5px]'>
+									<div class="flex gap-[5px]">
 										<div
-											class="flex items-center gap-2 rounded-full px-4 py-2 text-black"
+											class="flex items-center gap-2 rounded-full px-4 py-2 text-white"
 											style="background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.8));"
 										>
 											<Crown class="h-5 w-5" />
 											<span class="font-bold">PREMIUM</span>
 										</div>
 										<Button
-											class="text-black h-full rounded-full"
+											class="h-full rounded-full text-white"
 											style="background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.8));"
 											on:click={() => (purchaseDialogOpen = true)}
 										>
@@ -175,7 +175,7 @@
 									</div>
 								{:else}
 									<Button
-										class="text-black"
+										class="text-white"
 										style="background: linear-gradient(to right, rgba(var(--primary-color), 1), rgba(var(--primary-color), 0.8));"
 										on:click={() => (purchaseDialogOpen = true)}
 									>
@@ -222,7 +222,7 @@
 				</Card.Content>
 			</Card.Root>
 		{:else}
-			<Card.Root class="w-full max-w-2xl border-2 border-muted backdrop-blur-sm">
+			<Card.Root class="w-full max-w-2xl border-2 border-muted backdrop-blur-md">
 				<Card.Content class="flex flex-col items-center gap-4 p-8">
 					<Lock class="h-12 w-12 text-muted-foreground" />
 					<h3 class="text-xl font-medium">{$_('battlepass.sign_in_to_track')}</h3>
@@ -239,15 +239,6 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-	}
-
-	.hero-bg-overlay {
-		background: linear-gradient(
-			135deg,
-			rgba(var(--primary-color), 0.15) 0%,
-			rgba(var(--primary-color), 0.1) 50%,
-			rgba(var(--primary-color), 0.05) 100%
-		);
 	}
 
 	.tier-badge {
@@ -268,5 +259,19 @@
 	}
 	.xp-bar {
 		box-shadow: 0 0 10px rgba(var(--primary-color), 0.5);
+	}
+
+	/* Text shadow styles for title and description */
+	.title-shadow {
+		/* white glow + very subtle dark offset */
+		text-shadow:
+			0 8px 22px rgba(0, 0, 0, 0.42),
+			0 2px 6px rgba(0, 0, 0, 0.08);
+	}
+
+	.desc-shadow {
+		text-shadow:
+			0 4px 12px rgba(0, 0, 0, 0.18),
+			0 1px 3px rgba(0, 0, 0, 0.06);
 	}
 </style>
