@@ -73,12 +73,6 @@ function clearCachedUserData() {
 }
 
 async function addNewUser() {
-	const { data, error } = await supabase.auth.getUser();
-
-	if (error) {
-		throw error;
-	}
-
 	await fetch(`${import.meta.env.VITE_API_URL}/players`, {
 		method: 'POST',
 		headers: {
@@ -92,7 +86,13 @@ let userData: userType = {
 	data: undefined,
 	ratings: [],
 	token: async () => {
-		return (await supabase.auth.getSession()).data.session?.access_token;
+		const { data, error } = await supabase.auth.getClaims();
+
+		if (error) {
+			throw new Error(error.message);
+		}
+
+		return data?.claims.sub;
 	},
 	loggedIn: false,
 	checked: false,
