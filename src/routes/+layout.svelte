@@ -273,7 +273,7 @@
 									>{$_('nav.supporter')}</a
 								>
 							{:else}
-								<Button class="bg-yellow-400 hover:bg-yellow-500" href="/supporter">
+								<Button class="bg-yellow-400 hover:bg-yellow-500 w-full" href="/supporter">
 									{$_('nav.supporter')}
 								</Button>
 							{/if}
@@ -380,7 +380,7 @@
 {#if !supporterAlertDismissed && $user.checked && isVisible && (!$user.loggedIn || !isActive($user.data.supporterUntil)) && pathname !== '/supporter' && !pathname.startsWith('/player/') && !pathname.startsWith('/@')}
 	<div class="px-[5px] pt-[20px] md:px-[55px]">
 		<Alert.Root
-			class="relative flex items-center gap-[10px] border-pink-200 bg-pink-50 pb-[7px] dark:border-pink-800 dark:bg-pink-950"
+			class="relative flex items-center gap-[10px] border-pink-200 bg-pink-50 pb-[7px] mb-[10px] dark:border-pink-800 dark:bg-pink-950"
 		>
 			<div class="mt-[-8px] text-3xl">💖</div>
 			<div>
